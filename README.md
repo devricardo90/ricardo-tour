@@ -1,149 +1,158 @@
 # Rick Travel
 
-Rick Travel is a tourism web platform focused on presenting travel experiences and supporting a modern booking flow for public users.
+Rick Travel is a production tourism web platform for showcasing tours, handling booking requests, and managing basic admin operations for a real tourism business.
 
-This project is being developed as a real-world MVP with a strong delivery and validation process, using a structured execution framework called **Protocolo Rick**.
+[Live demo](https://rick-travel.vercel.app)
 
-## Project Status
+![Rick Travel production showcase](docs/assets/rick-travel-hero.png)
 
-**Current stage:** MVP publicly deployed and under active stabilization.
+## Overview
 
-Current focus:
-- public experience
-- tours catalog
-- booking core
-- authentication base
-- deployment hardening
-- technical cleanup after first deployment
+Rick Travel is a real tourism application used as both a product foundation and a professional portfolio project. It is not a generic clone or isolated study project: the repository contains the public tourism experience, booking flow, authentication, protected admin area, operational documentation, and validation evidence for a production deployment.
 
-Temporarily out of scope for this public MVP stage:
-- admin module
-- Mercado Pago integration
-- E2E pipeline in deployment flow
+The project is intentionally treated as an evolving product. The current goal is to keep the public booking journey stable while expanding administrative capabilities in controlled slices.
 
-## Goals
+## What the project does
 
-The project aims to provide:
-- a public travel and tours experience
-- multilingual content support
-- a booking-oriented user flow
-- a scalable base for future operational and payment features
+- Public tour catalog
+- Tour detail pages with localized public routes
+- Booking request flow for authenticated users
+- Email/password authentication through Better Auth
+- Protected admin area
+- Admin tour visibility
+- Admin bookings management
+- Booking confirmation and cancellation actions for admins
+- Contact submissions visibility in the protected admin area
+
+## Current Production Status
+
+- Production app is deployed on Vercel.
+- Public tour browsing is validated.
+- Booking request flow exists and has been validated through the manual-confirmation product path.
+- Admin area is protected.
+- Admin booking confirm/cancel flow exists.
+- Contact submissions can be viewed in the protected admin area.
+- Some visual, content, and operational polish may continue as the product evolves.
+
+The project is production-oriented, but it should still be read as a real product under active improvement rather than a finished commercial platform with every workflow fully automated.
+
+## Key Validated Flows
+
+- Public homepage loads
+- Tour catalog and public navigation work
+- Tour detail pages open
+- Booking request flow works
+- Login and admin protection work
+- Admin dashboard and admin routes are protected
+- Admin bookings list is available
+- Admin can confirm pending bookings
+- Admin can cancel eligible bookings
+- Admin can view contact submissions
+
+## Live Demo
+
+- **Web App:** [https://rick-travel.vercel.app](https://rick-travel.vercel.app)
 
 ## Tech Stack
 
-- **Next.js**
-- **React**
-- **TypeScript**
-- **Prisma**
-- **PostgreSQL**
-- **Vercel**
+- Next.js App Router
+- React
+- TypeScript
+- Tailwind CSS
+- Prisma
+- PostgreSQL / Neon
+- Better Auth
+- Vercel
+- Server Actions
 
-## Main Features
+## Architecture
 
-### Public MVP
-- public pages for travel experiences
-- multilingual routing structure
-- tour listing and presentation
-- core booking flow
-- sitemap generation
-- deployment on Vercel
+```text
+app/
+  [locale]/(public)/  Public localized tourism routes
+  [locale]/admin/     Protected admin area
+  actions/            Server Actions for admin and contact workflows
+  api/                Public and authenticated API routes
+lib/
+  auth.ts             Better Auth server configuration
+  auth-client.ts      Client-side auth integration
+  authz.ts            Session and admin authorization guards
+  services/           Business and data services
+prisma/
+  schema.prisma       Prisma data model
+  migrations/         Database migrations
+docs/ops/             Operational evidence and execution tracking
+```
 
-### In Progress / Planned
-- stronger runtime validation
-- admin redesign and reintroduction
-- payment integration reactivation
-- technical cleanup and architecture hardening
-- broader automated validation coverage
+The public web routes handle the tourism storefront, tour discovery, booking journey, and localized content. The authentication and authorization layer protects private user and admin areas. Prisma owns the data access layer, PostgreSQL stores product and operational data, and Vercel runs the deployed Next.js application against managed environment configuration.
 
-## Development Approach
+## Delivery Discipline - Protocolo Rick
 
-This project follows a disciplined execution model with emphasis on:
-- evidence-based delivery
-- minimal, reversible changes
-- scope control
-- validation before claiming completion
-- separation between active MVP scope and deferred modules
+This project follows the Protocolo Rick execution model:
 
-That means the repository may contain modules that are intentionally frozen or temporarily excluded from the active deployment scope while the public MVP is stabilized.
+- No implementation starts without minimum discovery and planning artifacts
+- Backlog is treated as the source of truth
+- Documentation evolves together with code
+- Features are delivered in controlled slices with explicit validation criteria
+- Deploy decisions, scope changes, and deferred items are documented before execution
 
-## Deployment Notes
+Source of truth:
 
-The project is currently deployed on Vercel.
-
-The first public deployment focused on getting the **public MVP** online while isolating unstable or incomplete modules that should not block delivery.
-
-Operational release and rollback steps are documented in [docs/ops/release-rollback-runbook.md](docs/ops/release-rollback-runbook.md).
-
-## Repository Philosophy
-
-This is not just a demo repository.  
-It is being treated as a real product foundation.
-
-The strategy is:
-1. deploy the public core
-2. validate the runtime
-3. stabilize the technical base
-4. reintroduce frozen modules with better quality standards
-
-## Roadmap
-
-### Short Term
-- stabilize public runtime
-- improve environment handling
-- clean up remaining warnings
-- validate booking flows more deeply
-
-### Mid Term
-- redesign and re-enable admin
-- re-enable payment integration
-- improve data and operational flows
-
-### Long Term
-- evolve into a more complete travel operations platform
-- strengthen observability, testing, and maintainability
-- improve business-facing workflows
+- [docs/ops/backlog.md](docs/ops/backlog.md)
+- [docs/ops/status.md](docs/ops/status.md)
 
 ## Local Development
 
-Clone the repository and install dependencies:
+### Requirements
 
-```bash
+- Node.js 22
+- npm
+- PostgreSQL-compatible database for full local runtime behavior
+
+### Install and Run
+
+```powershell
 npm install
-Run Prisma generation:
-
-npx prisma generate
-
-Run the development server:
-
 npm run dev
+```
 
-Build locally:
+Local development requires environment variables for database access, authentication, email/provider configuration, and deployment-specific URLs. Use `.env.example` as the reference contract and do not commit real `.env` files or production secrets.
 
+### Build and Validate
+
+```powershell
 npm run build
-
-Type check:
-
-npm run typecheck
-
-Lint:
-
 npm run lint
-Environment Variables
+npm run typecheck
+npm test
+```
 
-The project uses environment variables for runtime services such as:
+`npm install` runs Prisma generation through the configured `postinstall` script. Prisma migrations and seed execution should only be run against an explicitly selected local or controlled environment.
 
-database connection
-authentication
-email provider
-deployment-specific configuration
+## Useful Commands
 
-A local .env is required for full runtime behavior.
+```powershell
+npm run dev
+npm run build
+npm run lint
+npm run typecheck
+npm test
+npm run test:e2e
+npm run check:env -- --target=local
+npm run check:db
+npm run optimize-images
+```
 
-Important Note
+Some commands depend on a correctly configured database and provider environment.
 
-Some modules may exist in the repository but may not be part of the active public deployment scope at a given moment.
-This is intentional and follows the current MVP stabilization strategy.
+## Limitations
 
-Author
+- Production-oriented portfolio project
+- Admin workflow is intentionally basic and evolving
+- Payment processing is not part of the active validated MVP flow
+- External provider behavior depends on environment configuration
+- Some content and images may continue to be refined
 
-Built by Ricardo Souza as part of a real-world product and portfolio journey focused on shipping structured, maintainable digital products.
+## Author
+
+Ricardo Souza | [devricardo90](https://github.com/devricardo90)

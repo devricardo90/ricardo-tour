@@ -6,6 +6,20 @@ Data: 2026-05-01
 
 Sessao atualizada ate a Fase 3 - Operacao publica controlada do MVP seguindo o Protocolo Rick.
 
+## RT-023A Portfolio README Showcase
+
+Estado: REVIEW local, aguardando autorizacao de commit.
+
+Resultado:
+- README principal reescrito em ingles como vitrine profissional de portfolio.
+- Imagem principal copiada para `docs/assets/rick-travel-hero.png`.
+- README usa apenas caminho relativo `docs/assets/rick-travel-hero.png`.
+- Conteudo cobre overview, capacidades do produto, status de producao, fluxos validados, live demo, stack, arquitetura, Protocolo Rick, desenvolvimento local, comandos uteis, limitacoes e autor.
+- Validacao local concluida com diff restrito aos arquivos autorizados e `git diff --check` PASS com avisos LF/CRLF conhecidos.
+
+Restricoes mantidas:
+- Nenhum codigo, schema, migration, seed, env, banco, deploy, `package.json` ou lockfile foi alterado.
+
 RT-015A DONE: auditoria de catalogo concluida.
 RT-015B DONE: seed de producao criado e executado manualmente.
 RT-015C-FIX DONE: bug critico de click interception corrigido.

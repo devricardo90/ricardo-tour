@@ -954,6 +954,27 @@ Evidencia atual: implementacao local sem commit/push; review aceita somente como
 
 Proximo passo obrigatorio: preparar ambiente local/admin controlado para smoke mutavel com dados de teste ou abrir task separada de validacao para verificar com seguranca o ciclo admin de reserva.
 
+## RT-023A Create Rick Travel Portfolio README Showcase
+
+Estado: REVIEW local
+
+Objetivo: criar/atualizar o `README.md` principal como vitrine profissional de portfolio do Rick Travel, seguindo o padrao Protocolo Rick.
+
+Tarefas:
+
+- RT-023A.1 Confirmar diretorio, repositorio, `.git`, status, branch e historico antes de editar. Estado: DONE.
+- RT-023A.2 Confirmar que `main` esta sincronizada com a referencia local `origin/main`. Estado: DONE.
+- RT-023A.3 Copiar imagem principal para `docs/assets/rick-travel-hero.png`. Estado: DONE.
+- RT-023A.4 Reescrever `README.md` em ingles com visao de produto, status, fluxos, demo, stack, arquitetura, Protocolo Rick, desenvolvimento local, comandos uteis, limitacoes e autor. Estado: DONE.
+- RT-023A.5 Atualizar documentacao operacional permitida. Estado: DONE.
+- RT-023A.6 Validar diff, escopo e checks documentais. Estado: DONE.
+
+Criterios de aceite: README renderiza com imagem relativa; sem caminho local Windows; sem segredos; sem claims exagerados; comandos documentados refletem `package.json`; somente arquivos autorizados alterados/adicionados; nenhum codigo, schema, migration, seed, env, deploy, package ou lockfile alterado.
+
+Evidencia: `git status --short --untracked-files=all` mostra somente arquivos autorizados; `git diff --name-only` mostra somente arquivos documentais rastreados; `git diff --check` PASS com avisos LF/CRLF conhecidos; revisao manual do README confirmou imagem relativa, fences fechados, ausencia de caminho local Windows e ausencia de segredos.
+
+Restricoes: sem commit ate autorizacao explicita.
+
 ## Proxima Discussion Gate
 
 Nenhuma nova READY task alem da RT-022A. Proxima Discussion Gate recomendada apos RT-022A: evoluir o admin existente para edicao/publicacao de tours, sem recriar o admin do zero.

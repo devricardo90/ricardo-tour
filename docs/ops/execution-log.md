@@ -5,6 +5,39 @@ Nao registrar operacoes de codigo ou commits rotineiros — apenas execucoes com
 
 ---
 
+## 2026-05-06 - RT-023A Portfolio README Showcase
+
+**Executado por:** Codex
+**Ambiente:** local; documentacao apenas
+**Base local:** `b0e4d4a feat: add admin booking confirm and cancel flow`
+**Status:** REVIEW local, aguardando autorizacao de commit
+
+**Objetivo:**
+Criar uma vitrine profissional de portfolio no README principal do Rick Travel, seguindo o padrao Protocolo Rick.
+
+**Resultado local:**
+- `README.md` reescrito em ingles com foco em produto real, status de producao, fluxos validados, arquitetura, stack, desenvolvimento local, limitacoes e autoria.
+- Imagem principal copiada para `docs/assets/rick-travel-hero.png`.
+- Documentacao operacional permitida atualizada para registrar a RT-023A.
+
+**Validacoes locais:**
+- `git status --short --untracked-files=all`: somente arquivos autorizados alterados/adicionados.
+- `git diff --name-only`: somente arquivos documentais rastreados no diff.
+- `git diff --check`: PASS com avisos LF/CRLF conhecidos.
+- README: imagem relativa confirmada; fences fechados; sem caminho local Windows; sem segredos.
+
+**Restricoes mantidas:**
+- Nenhum codigo da aplicacao alterado.
+- Nenhum schema Prisma alterado.
+- Nenhuma migration executada.
+- Nenhum seed executado.
+- Nenhum env alterado.
+- Nenhum banco alterado.
+- Nenhum deploy executado.
+- Nenhum `package.json` ou lockfile alterado.
+
+---
+
 ## 2026-05-01 - RT-022A Admin Booking Actions
 
 **Executado por:** Codex (implementacao local)

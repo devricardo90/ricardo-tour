@@ -1,6 +1,6 @@
 # Status Operacional - Rick Travel
 
-Data: 2026-05-01
+Data: 2026-05-06
 
 ## Protocolo Rick
 
@@ -18,6 +18,30 @@ Leitura objetiva da fase:
 - Mercado Pago continua fora do escopo atual.
 
 Fase 1 permanece: REVIEW.
+
+## Atualizacao 2026-05-06 - RT-023A Portfolio README Showcase
+
+Estado: REVIEW local, aguardando autorizacao de commit.
+
+Objetivo: criar uma vitrine profissional de portfolio para o README principal do Rick Travel, alinhada ao padrao Protocolo Rick e aos projetos de referencia do Ricardo.
+
+Resultado local:
+
+- `README.md` reescrito em ingles com foco em produto real, status de producao, fluxos validados, arquitetura, stack, desenvolvimento local, limitacoes e autoria.
+- Imagem principal copiada para `docs/assets/rick-travel-hero.png`.
+- README referencia somente caminho relativo do repositorio para a imagem.
+- Task limitada a documentacao e asset de portfolio.
+- Validacao documental local concluida: escopo do diff restrito aos arquivos autorizados, `git diff --check` PASS com avisos LF/CRLF conhecidos, README sem caminho local Windows e sem segredos.
+
+Restricoes mantidas:
+
+- Nenhum codigo da aplicacao alterado.
+- Nenhum schema Prisma alterado.
+- Nenhuma migration executada.
+- Nenhum seed executado.
+- Nenhum env alterado.
+- Nenhum deploy executado.
+- Nenhum `package.json` ou lockfile alterado.
 
 ## Estado reconstruido
 
