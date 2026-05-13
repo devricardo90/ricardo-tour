@@ -57,7 +57,7 @@ export default function RegisterPage() {
               </h1>
 
               <p className="mt-5 max-w-3xl text-[15px] leading-8 text-white/68 md:text-lg">
-                Cadastre-se para acompanhar reservas, iniciar pagamentos e manter seu planejamento de viagem organizado em um só lugar.
+                Cadastre-se para enviar pre-reservas e acompanhar a confirmacao manual da equipe Rick Travel.
               </p>
 
               <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -67,7 +67,7 @@ export default function RegisterPage() {
                 </span>
                 <span className="chip-dark">
                   <UserRound className="h-3.5 w-3.5" />
-                  Acesso ao histórico de reservas
+                  Acesso ao historico de pre-reservas
                 </span>
               </div>
             </div>

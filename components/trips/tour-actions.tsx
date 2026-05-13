@@ -36,24 +36,32 @@ function getTourActionCopy(locale: string) {
         case "en":
             return {
                 selectDate: "Choose a date",
+                reserveCta: "Send pre-booking",
+                manualNotice: "No online payment starts here. The team confirms availability and payment details manually.",
                 whatsappQuote: "Ask for itinerary on WhatsApp",
                 whatsappHelpText: "Use WhatsApp if you want to confirm dates, trip format or personalized support.",
             };
         case "es":
             return {
                 selectDate: "Elige la fecha",
+                reserveCta: "Enviar pre-reserva",
+                manualNotice: "Aqui no se inicia ningun pago online. El equipo confirma disponibilidad y detalles de pago manualmente.",
                 whatsappQuote: "Solicitar itinerario por WhatsApp",
                 whatsappHelpText: "Usa WhatsApp si quieres validar fecha, formato del paseo o soporte personalizado.",
             };
         case "sv":
             return {
                 selectDate: "Valj datum",
+                reserveCta: "Skicka forbokning",
+                manualNotice: "Ingen onlinebetalning startar har. Teamet bekraftar tillganglighet och betalningsdetaljer manuellt.",
                 whatsappQuote: "Begar resplan pa WhatsApp",
                 whatsappHelpText: "Anvand WhatsApp om du vill bekrfta datum, upplagg eller fa personlig hjalp.",
             };
         default:
             return {
                 selectDate: "Escolha a data",
+                reserveCta: "Enviar pre-reserva",
+                manualNotice: "Nenhum pagamento online e iniciado aqui. A equipe confirma disponibilidade, valor e proximos passos manualmente.",
                 whatsappQuote: "Solicitar roteiro no WhatsApp",
                 whatsappHelpText: "Use o WhatsApp se quiser validar agenda, formato do passeio ou atendimento personalizado.",
             };
@@ -173,6 +181,10 @@ export function TourActions({ tripId, priceCents, tripTitle, city, schedules = [
             )}
 
             <div className="mt-5 space-y-3">
+                <p className="rounded-2xl border border-[#d8c18f]/15 bg-[#d8c18f]/10 px-4 py-3 text-xs leading-6 text-[#f0ddaf]">
+                    {copy.manualNotice}
+                </p>
+
                 <Button
                     className="h-12 w-full rounded-2xl"
                     size="lg"
@@ -185,7 +197,7 @@ export function TourActions({ tripId, priceCents, tripTitle, city, schedules = [
                             {t('processing')}
                         </>
                     ) : (
-                        t('reserveNow')
+                        copy.reserveCta
                     )}
                 </Button>
 

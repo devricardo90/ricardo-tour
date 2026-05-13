@@ -5,7 +5,7 @@ Data: 2026-05-13 (atualizado por RT-FINAL-00A - Align Operational Docs With Remo
 ## Contexto
 
 Sessao atualizada ate a Fase 3 - Operacao publica controlada do MVP seguindo o Protocolo Rick.
-RT-FINAL-DG aprovada. RT-FINAL-00 concluida como auditoria pura. RT-FINAL-00A Local DONE para reconciliar documentacao com estado real do Git; commit documental autorizado pelo Trigger.
+RT-FINAL-DG aprovada. RT-FINAL-00 concluida como auditoria pura. RT-FINAL-00A Remote DONE confirmado. RT-FINAL-03A executada manualmente em producao pelo Trigger; documentacao local pendente de commit autorizado. RT-FINAL-04B executada localmente para revisao do Trigger, sem commit e sem push.
 
 ## RT-023A Portfolio README Showcase
 
@@ -141,6 +141,8 @@ Evidencias:
 - RT-023A: DONE remoto - commit `67584b6 docs: create Rick Travel portfolio README showcase` publicado em `origin/main` em 2026-05-06.
 - RT-FINAL-00: DONE (auditoria pura, 2026-05-13) - nenhum arquivo alterado.
 - RT-FINAL-00A: Local DONE - commit documental autorizado pelo Trigger.
+- RT-FINAL-03A: Manual production validation DONE by Trigger - admin login PASS; admin booking list PASS; status CONFIRMED/PENDING/CANCELED visiveis; confirm/cancel admin flow validated manually by Trigger; nenhum erro visivel reportado no navegador; screenshot nao commitado por conter dados pessoais/e-mails.
+- RT-FINAL-04B: Local REVIEW - footer, contato, detalhe de tour e auth copy ajustados para reforcar WhatsApp/formulario, pre-reserva manual e ausencia de pagamento online; redes sociais e e-mail publico direto nao foram inventados; aguardando revisao do Trigger.
 - Vercel production: ativo; healthcheck database ok; 2 tours publicados; RT-018E Production Smoke PASS; RT-019A Production Seed/Smoke PASS.
 - Neon production: 2 Trips publicadas no catalogo (`Cristo Redentor + Mirante Dona Marta` e `Pao de Acucar ao Entardecer`), agendas futuras ativas, sem duplicacao de Pao de Acucar, 1 Booking de teste (CANCELED) e 1 booking de auditoria criado pelo fluxo publico normal (`cmoli78ld000204js1agra4il`).
 - Dominio proprio: nao configurado.
@@ -156,21 +158,23 @@ Evidencias:
 - Nenhuma migration executada.
 - Seed de RT-019A executado uma unica vez; nao foi executado novamente apos a documentacao.
 - RT-021A corrigiu UX publica: Hero Search locale-aware sem locale duplicado, busca real por `search`, Nossos Tours sem filtro lateral, card levando ao detalhe/agenda, footer sem links falsos; lint/typecheck/test/build/git diff --check PASS; Production UX Smoke PASS.
-- RT-022A DONE remoto (reconciliado por RT-FINAL-00A): commit `b0e4d4a` publicado em `origin/main`; adiciona `confirmBookingByAdmin` e `confirmBookingByAdminAction`; botao de confirmacao no detalhe admin; labels legiveis de status e paymentStatus; testes unitarios; E2E spec com guard local; smoke mutavel de confirmacao admin em producao ainda pendente.
+- RT-022A DONE remoto (reconciliado por RT-FINAL-00A): commit `b0e4d4a` publicado em `origin/main`; adiciona `confirmBookingByAdmin` e `confirmBookingByAdminAction`; botao de confirmacao no detalhe admin; labels legiveis de status e paymentStatus; testes unitarios; E2E spec com guard local.
+- RT-FINAL-03A manual production validation: admin booking actions validated manually by Trigger; lista admin mostrou reservas CONFIRMED/PENDING/CANCELED e fluxo confirm/cancel foi considerado funcional, sem erro visivel reportado.
+- RT-FINAL-04B local: link publico "Reservas" removido do footer; WhatsApp oficial e formulario seguro destacados; textos publicos agora tratam reserva como pre-reserva com confirmacao manual; pagamento online segue v2/bloqueado.
 
 ## O que continua pendente
 
-- Smoke mutavel de confirmacao admin (PENDING -> CONFIRMED) em producao - candidata RT-FINAL-03A.
 - Janela controlada para o residual de `npm audit` em Prisma dev tooling.
 - Dominio proprio nao configurado.
 - Guia de operacao para o dono (handoff operacional) nao existe.
 - Imagem do tour Cristo Redentor usa asset do Pao de Acucar - conteudo comercial incorreto.
+- Minimo de 4 tours reais segue pendente; RT-FINAL-04C nao foi aberta.
+- E-mail publico direto e redes sociais reais seguem pendentes de confirmacao do owner.
 - React hydration error #418 sem task de investigacao aberta.
 - Observacao futura opcional: empty state de busca sem resultado usa copy generica aceitavel; nao corrigir microcopy agora.
 
 ## Proximas candidatas (sem READY automatica)
 
-- RT-FINAL-03A - Validate Admin Booking Actions in Production
 - RT-FINAL-01 - Define Delivery Scope and Acceptance Criteria
 - RT-FINAL-02 - Stabilize Public Tour and Booking Flow
 - RT-FINAL-04 - Polish Commercial Content and Trust Layer

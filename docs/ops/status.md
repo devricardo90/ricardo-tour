@@ -19,6 +19,64 @@ Leitura objetiva da fase:
 
 Fase 1 permanece: REVIEW.
 
+## Atualizacao 2026-05-13 - RT-FINAL-04B Public Commercial Trust Baseline
+
+Estado: Local REVIEW - aguardando revisao do Trigger; sem commit e sem push.
+
+Objetivo: melhorar a camada publica de confianca, clareza comercial e contato direto sem criar tours, banco, pagamento ou deploy.
+
+Resultado local:
+- Footer remove link publico confuso para `Reservas`.
+- Footer destaca WhatsApp oficial, formulario seguro e pre-reserva manual.
+- Pagina de contato destaca WhatsApp oficial, formulario com e-mail/telefone de retorno e ausencia de pagamento online nesta versao.
+- Detalhe de tour e CTA de reserva passam a reforcar pre-reserva com confirmacao manual antes de pagamento.
+- Login/register deixam de sugerir inicio ou acompanhamento de pagamento online.
+- Redes sociais nao foram adicionadas porque nao ha URLs reais confirmadas.
+- E-mail publico direto nao foi inventado; o canal de e-mail segue via formulario ate o owner confirmar um endereco publico.
+
+Restricoes mantidas:
+- Nenhum tour criado.
+- Nenhum banco alterado.
+- Nenhum seed ou migration executado.
+- Nenhum pagamento online implementado.
+- Nenhuma integracao Mercado Pago/Stripe alterada.
+- Nenhuma auth ou admin flow alterado.
+- Nenhum deploy, commit ou push executado.
+- RT-FINAL-04C nao foi aberta.
+
+---
+
+## Atualizacao 2026-05-13 - RT-FINAL-03A Validate Admin Booking Actions in Production
+
+Estado: Manual production validation DONE by Trigger; documentacao local pendente de commit autorizado.
+
+Objetivo: validar em producao que o admin minimo consegue operar reservas controladas sem erro visivel.
+
+Resultado observado pelo Trigger:
+- Admin login PASS.
+- Pagina de reservas admin PASS.
+- Lista de reservas visivel PASS.
+- Reserva CONFIRMED visivel PASS.
+- Reserva PENDING visivel PASS.
+- Reserva CANCELED visivel PASS.
+- Confirm/cancel admin flow validated manually by Trigger.
+- Nenhum erro visivel reportado no navegador.
+
+Restricoes mantidas:
+- Nenhum codigo alterado.
+- Nenhum README alterado.
+- Nenhuma imagem alterada ou screenshot commitado.
+- Nenhum schema alterado.
+- Nenhuma migration executada.
+- Nenhum seed executado.
+- Nenhum env alterado.
+- Nenhum banco alterado pelo agente.
+- Nenhum deploy manual executado.
+- Nenhum commit ou push executado nesta atualizacao.
+- Nenhuma nova READY promovida automaticamente.
+
+---
+
 ## Atualizacao 2026-05-13 - RT-FINAL-00A Align Operational Docs With Remote Reality
 
 Estado: Local DONE - commit documental autorizado pelo Trigger.
@@ -117,6 +175,7 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - RT-019A Remote DONE + Production Seed/Smoke PASS: Publicar Pao de Acucar com caminho controlado de dados; seed detectou tour existente pelo titulo "Pao de Acucar ao Entardecer" e reutilizou o ID `cmolfs9eu000004l2trz4q8bf`, evitando duplicacao; `isPublished` setado para `true`; imagem correta aplicada; agenda futura criada; `/pt/tours` exibe 2 tours; fluxo de reserva validado; mantida imagem atual do Cristo (`/images/trips/imagem-morro-pao-de-acucar.jpg`) como pendencia visual para task futura.
 - RT-021A Remote DONE + Production UX Smoke PASS: Revisao de UX, Navegacao e Busca Publica; commit `69379fe fix: polish public tour navigation UX`; Hero Search nao gera `/pt/pt`; `?search=Pao` mostra Pao de Acucar e nao mostra Cristo; busca sem resultado mostra empty state generico aceitavel; cards levam ao detalhe, nao ao booking direto; detalhes dos 2 tours retornam `200`; CTA de reserva no detalhe redireciona anonimo para login com redirect seguro, sem criar booking; footer sem `href="#"`; menu desktop/mobile preserva locale; sem admin, auth/logout, seed, banco, migration, pagamento, schema ou regra de booking.
 - RT-022A REVIEW local, nao DONE: Admin Booking Actions promovida pelo Trigger como unica task ativa; implementacao local adiciona confirmacao admin de reservas pendentes e preserva cancelamento admin para reservas pendentes/confirmadas; lint/typecheck/test/build/git diff --check PASS; smoke manual mutavel BLOCKED porque `check:db` carregou `.env` com banco remoto/gerenciado e `.env.local` nao possui credenciais admin; sem commit/push ate existir autorizacao explicita.
+- RT-FINAL-03A Manual production validation DONE by Trigger: admin login PASS; admin booking list PASS; reservas CONFIRMED/PENDING/CANCELED visiveis; confirm/cancel admin flow validated manually by Trigger; nenhum erro visivel reportado no navegador; evidencia visual nao commitada por conter dados pessoais/e-mails.
 - GitHub `main` remoto esta em `8b3c2cc docs: record RT-021A production UX smoke` antes do commit da RT-022A.
 - Vercel production validada com RT-018E smoke e RT-019A production seed/smoke.
 
@@ -158,7 +217,9 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - RT-023A DONE remoto: commit `67584b6 docs: create Rick Travel portfolio README showcase` publicado em `origin/main` desde 2026-05-06.
 - RT-FINAL-00 concluida como auditoria pura (2026-05-13): nenhuma alteracao de arquivos; divergencia documental identificada e encaminhada para RT-FINAL-00A.
 - RT-FINAL-00A Local DONE: correcao documental das divergencias identificadas; commit documental autorizado pelo Trigger.
-- Proximas candidatas (sem READY automatica): RT-FINAL-03A (validate admin booking actions in production), RT-FINAL-01 (define delivery scope), RT-FINAL-02 (stabilize public flow), RT-FINAL-04 (polish commercial content), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
+- RT-FINAL-03A validada manualmente em producao pelo Trigger; documentacao local pendente de commit autorizado.
+- RT-FINAL-04B Local REVIEW: camada publica de confianca e pre-reserva manual ajustada localmente; aguardando revisao do Trigger.
+- Proximas candidatas (sem READY automatica): RT-FINAL-01 (define delivery scope), RT-FINAL-02 (stabilize public flow), RT-FINAL-04 (polish commercial content), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
 
 
 ### Medio prazo
@@ -173,7 +234,6 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 
 ## Riscos remanescentes
 
-- P1: smoke mutavel de confirmacao admin (PENDING -> CONFIRMED) em producao nunca executado - RT-022A esta no remoto mas sem validacao real de comportamento em producao.
 - P1: a credencial de bootstrap ADMIN removida deve ser considerada potencialmente exposta; rotacao nao confirmada.
 - P1: `npm audit` residual em Prisma dev tooling segue pendente para janela controlada.
 - P1: dominio proprio nao configurado - produto em URL temporaria da Vercel.

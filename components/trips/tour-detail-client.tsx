@@ -44,28 +44,28 @@ function getReserveConfidenceCopy(locale: string) {
             return {
                 title: "Why book with Rick Travel",
                 item1: "Licensed guide operation with support before your tour",
-                item2: "Booking flow with clear payment confirmation and live status",
+                item2: "Pre-booking flow with manual confirmation before payment",
                 item3: "If you prefer, our team can shape the itinerary with you on WhatsApp",
             };
         case "es":
             return {
                 title: "Por que reservar con Rick Travel",
                 item1: "Operacion con guia acreditado y soporte antes del tour",
-                item2: "Reserva con confirmacion clara del pago y seguimiento del estado",
+                item2: "Pre-reserva con confirmacion manual antes del pago",
                 item3: "Si prefieres, nuestro equipo puede montar el itinerario contigo por WhatsApp",
             };
         case "sv":
             return {
                 title: "Varfor boka med Rick Travel",
                 item1: "Certifierad guideverksamhet med support innan din tur",
-                item2: "Bokning med tydlig betalningsbekraftelse och statusuppfoljning",
+                item2: "Forbokning med manuell bekraftelse innan betalning",
                 item3: "Om du foredrar det kan vart team forma resplanen med dig via WhatsApp",
             };
         default:
             return {
                 title: "Por que reservar com a Rick Travel",
                 item1: "Operacao com guia credenciado e suporte antes do passeio",
-                item2: "Reserva com confirmacao clara de pagamento e acompanhamento do status",
+                item2: "Pre-reserva com confirmacao manual antes do pagamento",
                 item3: "Se preferir, nossa equipe monta um roteiro e tira duvidas pelo WhatsApp",
             };
     }
@@ -142,7 +142,7 @@ export function TourDetailClient({ trip, startDate, schedules }: TourDetailClien
                             </div>
                             <div className="rounded-[22px] border border-white/8 bg-[#091d2c] px-4 py-4">
                                 <div className="text-xs font-semibold uppercase tracking-[0.14em] text-[#d8c18f]">Reserva</div>
-                                <div className="mt-2 text-sm leading-6 text-white/72">Fluxo claro com seleção de agenda e confirmação de pagamento.</div>
+                                <div className="mt-2 text-sm leading-6 text-white/72">Pre-reserva com selecao de agenda e confirmacao manual pela equipe.</div>
                             </div>
                             <div className="rounded-[22px] border border-white/8 bg-[#091d2c] px-4 py-4">
                                 <div className="text-xs font-semibold uppercase tracking-[0.14em] text-[#d8c18f]">Atendimento</div>

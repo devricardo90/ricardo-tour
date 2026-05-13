@@ -5,6 +5,75 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-05-13 - RT-FINAL-04B Public Commercial Trust Baseline
+
+**Executado por:** Codex
+**Ambiente:** local; camada publica e documentacao operacional
+**Status:** Local REVIEW - aguardando revisao do Trigger; sem commit e sem push
+
+**Objetivo:**
+Melhorar confianca publica, clareza comercial e contato direto sem criar tours, banco, pagamento ou deploy.
+
+**Resultado local:**
+- Footer remove link publico confuso para `Reservas`.
+- Footer destaca WhatsApp oficial, formulario seguro e pre-reserva manual.
+- Pagina de contato destaca WhatsApp oficial e orienta uso do formulario com e-mail/telefone de retorno.
+- Detalhe de tour e CTA de reserva reforcam pre-reserva com confirmacao manual antes de pagamento.
+- Login/register deixam de sugerir inicio ou acompanhamento de pagamento online.
+- Redes sociais nao foram adicionadas porque nao ha URLs reais confirmadas.
+- E-mail publico direto nao foi inventado; canal de e-mail segue via formulario ate confirmacao do owner.
+
+**Restricoes mantidas:**
+- Nenhum tour criado.
+- Nenhum banco alterado.
+- Nenhum seed executado.
+- Nenhuma migration executada.
+- Nenhum pagamento online implementado.
+- Nenhuma integracao Mercado Pago ou Stripe alterada.
+- Nenhuma auth ou admin flow alterado.
+- Nenhum deploy executado.
+- Nenhum commit ou push executado.
+- RT-FINAL-04C nao foi aberta automaticamente.
+
+---
+
+## 2026-05-13 - RT-FINAL-03A Validate Admin Booking Actions in Production
+
+**Executado por:** Trigger (manual, browser em producao)
+**Ambiente:** `https://rick-travel.vercel.app`
+**Status:** Manual production validation DONE by Trigger; documentacao local pendente de commit autorizado
+
+**Objetivo:**
+Validar em producao que o admin minimo do Rick Travel consegue operar reservas reais/controladas sem erro visivel.
+
+**Resultado observado pelo Trigger:**
+- Admin login PASS.
+- Pagina de reservas admin PASS.
+- Lista de reservas visivel PASS.
+- Reserva CONFIRMED visivel PASS.
+- Reserva PENDING visivel PASS.
+- Reserva CANCELED visivel PASS.
+- Confirm/cancel admin flow validated manually by Trigger.
+- Nenhum erro visivel reportado no navegador.
+
+**Evidencia:**
+Evidencia visual foi fornecida pelo Trigger, mas nao foi commitada porque contem dados pessoais/e-mails e precisaria de redacao previa.
+
+**Restricoes mantidas:**
+- Nenhum codigo alterado.
+- Nenhum README alterado.
+- Nenhuma imagem alterada ou screenshot commitado.
+- Nenhum schema alterado.
+- Nenhuma migration executada.
+- Nenhum seed executado.
+- Nenhum env alterado.
+- Nenhum banco alterado pelo agente.
+- Nenhum deploy manual executado.
+- Nenhum commit ou push executado nesta atualizacao.
+- Nenhuma READY task promovida automaticamente.
+
+---
+
 ## 2026-05-13 - RT-FINAL-00A Align Operational Docs With Remote Reality
 
 **Executado por:** Claude Code (Protocolo Rick - RT-FINAL-00A)

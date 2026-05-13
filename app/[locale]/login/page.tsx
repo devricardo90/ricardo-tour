@@ -65,7 +65,7 @@ export default function LoginPage() {
               </h1>
 
               <p className="mt-5 max-w-3xl text-[15px] leading-8 text-white/68 md:text-lg">
-                Faça login para visualizar reservas, acompanhar pagamentos pendentes e continuar seu planejamento de viagem com mais clareza.
+                Faca login para visualizar suas pre-reservas e acompanhar a confirmacao manual da equipe Rick Travel.
               </p>
 
               <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -75,7 +75,7 @@ export default function LoginPage() {
                 </span>
                 <span className="chip-dark">
                   <KeyRound className="h-3.5 w-3.5" />
-                  Acesso às suas reservas
+                  Acesso as suas pre-reservas
                 </span>
               </div>
             </div>

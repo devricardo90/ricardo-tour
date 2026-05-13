@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { ShieldCheck, Clock3, MessageCircleMore, MapPin } from "lucide-react";
 import { ContactForm } from "@/components/contact-form";
 import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
+import { buildWhatsAppQuoteUrl } from "@/lib/whatsapp";
 
 export async function generateMetadata({
   params,
@@ -52,6 +53,8 @@ const trustItems = [
 ];
 
 export default function ContatoPage() {
+  const whatsappUrl = buildWhatsAppQuoteUrl({ locale: "pt", source: "home" });
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#071826] text-white">
       <div
@@ -83,13 +86,22 @@ export default function ContatoPage() {
               </p>
 
               <div className="mt-6 flex flex-wrap items-center gap-3">
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="chip-dark transition-colors hover:text-white"
+                >
+                  <MessageCircleMore className="h-3.5 w-3.5" />
+                  WhatsApp oficial
+                </a>
                 <span className="chip-dark">
                   <ShieldCheck className="h-3.5 w-3.5" />
                   Guias credenciados
                 </span>
                 <span className="chip-dark">
                   <Clock3 className="h-3.5 w-3.5" />
-                  Atendimento para orcamento e agenda
+                  Orcamento e agenda sem pagamento online
                 </span>
                 <span className="chip-dark">
                   <MapPin className="h-3.5 w-3.5" />
@@ -121,20 +133,20 @@ export default function ContatoPage() {
 
             <div className="rounded-[28px] border border-white/8 bg-[#0d2436] p-6 md:p-8">
               <h2 className="text-xl font-semibold tracking-[-0.03em] text-white">
-                Quando usar esta pagina
+                Como o atendimento funciona
               </h2>
               <div className="mt-5 grid gap-3 sm:grid-cols-2">
                 <div className="rounded-[22px] border border-white/8 bg-[#091d2c] px-4 py-4 text-sm leading-7 text-white/70">
-                  Pedir orcamento para passeio privado, city tour ou pacote de varios dias.
+                  Fale pelo WhatsApp para tirar duvidas rapidas sobre agenda, roteiro e formato do passeio.
                 </div>
                 <div className="rounded-[22px] border border-white/8 bg-[#091d2c] px-4 py-4 text-sm leading-7 text-white/70">
-                  Confirmar detalhes antes de reservar, como formato do roteiro, agenda e atendimento.
+                  Use o formulario para enviar nome, e-mail e telefone de retorno com mais contexto da viagem.
                 </div>
                 <div className="rounded-[22px] border border-white/8 bg-[#091d2c] px-4 py-4 text-sm leading-7 text-white/70">
-                  Ajustar a experiencia para casal, familia, grupo ou viagem com necessidades especificas.
+                  A reserva feita no site funciona como pre-reserva: a equipe confirma disponibilidade e proximos passos manualmente.
                 </div>
                 <div className="rounded-[22px] border border-white/8 bg-[#091d2c] px-4 py-4 text-sm leading-7 text-white/70">
-                  Receber contato da equipe para montar um plano mais alinhado ao seu perfil de viagem.
+                  Nenhum pagamento online e iniciado nesta versao; valores e forma de pagamento sao alinhados pela equipe.
                 </div>
               </div>
             </div>

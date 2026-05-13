@@ -1000,9 +1000,41 @@ Tarefas:
 - RT-FINAL-00A.3 Atualizar `docs/ops/session-handoff.md`. Estado: DONE local.
 - RT-FINAL-00A.4 Atualizar `docs/ops/execution-log.md`. Estado: DONE local.
 
+## RT-FINAL-03A Validate Admin Booking Actions in Production
+
+Estado: Manual production validation DONE by Trigger; documentacao local pendente de commit autorizado.
+
+Objetivo: validar em producao que o admin minimo consegue operar reservas controladas sem erro visivel.
+
+Resultado observado pelo Trigger:
+- Admin login PASS.
+- Admin booking list PASS.
+- Lista de reservas visivel PASS.
+- Status CONFIRMED/PENDING/CANCELED visiveis PASS.
+- Confirm/cancel admin flow validated manually by Trigger.
+- Nenhum erro visivel reportado no navegador.
+
+Evidencia: validacao manual em navegador executada pelo Trigger. Evidencia visual fornecida, mas screenshot nao deve ser commitado sem redigir dados pessoais/e-mails.
+
+Restricoes mantidas: sem codigo, README, imagem, schema, migration, seed, deploy, env, banco manual pelo agente, commit, push ou nova READY automatica.
+
+## RT-FINAL-04B Public Commercial Trust Baseline
+
+Estado: Local REVIEW - aguardando revisao do Trigger; sem commit e sem push.
+
+Objetivo: melhorar confianca publica, clareza comercial e contato direto sem criar tours, banco, pagamento ou deploy.
+
+Tarefas:
+- RT-FINAL-04B.1 Revisar footer e remover link publico confuso para `Reservas`. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+- RT-FINAL-04B.2 Destacar WhatsApp oficial e formulario seguro como canais de atendimento. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+- RT-FINAL-04B.3 Explicar pre-reserva com confirmacao manual e sem pagamento online. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+- RT-FINAL-04B.4 Revisar copy de login/register para nao prometer pagamento online. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+- RT-FINAL-04B.5 Registrar pendencias de e-mail publico direto e redes sociais sem inventar dados. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+
+Restricoes mantidas: nenhum tour criado; sem banco, seed, migration, pagamento, Mercado Pago, Stripe, auth, admin flow, deploy, commit, push ou RT-FINAL-04C.
+
 ## Proximas candidatas (sem READY automatica)
 
-- RT-FINAL-03A - Validate Admin Booking Actions in Production
 - RT-FINAL-01 - Define Delivery Scope and Acceptance Criteria
 - RT-FINAL-02 - Stabilize Public Tour and Booking Flow
 - RT-FINAL-04 - Polish Commercial Content and Trust Layer
