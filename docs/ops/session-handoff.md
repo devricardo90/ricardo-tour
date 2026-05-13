@@ -1,14 +1,17 @@
 # Session Handoff - Rick Travel
 
-Data: 2026-05-01
+Data: 2026-05-13 (atualizado por RT-FINAL-00A - Align Operational Docs With Remote Reality)
 
 ## Contexto
 
 Sessao atualizada ate a Fase 3 - Operacao publica controlada do MVP seguindo o Protocolo Rick.
+RT-FINAL-DG aprovada. RT-FINAL-00 concluida como auditoria pura. RT-FINAL-00A Local DONE para reconciliar documentacao com estado real do Git; commit documental autorizado pelo Trigger.
 
 ## RT-023A Portfolio README Showcase
 
-Estado: REVIEW local, aguardando autorizacao de commit.
+Estado: DONE remoto - commit `67584b6 docs: create Rick Travel portfolio README showcase` publicado em `origin/main` em 2026-05-06.
+
+Nota de reconciliacao (RT-FINAL-00A): este registro declarava "REVIEW local, aguardando autorizacao de commit". O Git prova que o commit foi publicado.
 
 Resultado:
 - README principal reescrito em ingles como vitrine profissional de portfolio.
@@ -29,12 +32,12 @@ RT-016B DONE remoto + production smoke validated: Home consolidada no catalogo r
 RT-016C DONE remoto + production smoke validated: seed controlado executado; imagem real aplicada ao tour existente; agenda renovada; smoke PASS em producao.
 RT-017A DONE: regras e fatiamento do Admin Tour Manager MVP documentados em `docs/ops/admin-tour-manager-rules.md`.
 RT-017B DONE remoto + production smoke validated: listagem somente leitura de tours implementada e validada visualmente em producao; link "Tours" ativo; tour real exibido com contagem de agendas.
-RT-017C DONE remoto + production smoke manual validated: criação de novos tours (rascunho) via formulário em `/[locale]/admin/tours/new` funcional e validada em producao pelo Trigger.
+RT-017C DONE remoto + production smoke manual validated: criacao de novos tours (rascunho) via formulario em `/[locale]/admin/tours/new` funcional e validada em producao pelo Trigger.
 
 RT-018A DONE: Production Product Smoke Check executado em producao no commit `6b59c92`; fluxo publico PASS; admin anonimo PASS; admin non-admin FAIL; login ADMIN BLOCKED por ausencia de credencial no ambiente.
 RT-018B DONE remoto + production non-admin smoke validated: Fix Admin Non-Admin Authorization Handling publicado no commit `bcf8119`; usuario comum recebe "Acesso negado" nas rotas admin, sem 500.
-RT-018C DONE remoto + production admin smoke validated: Production Admin Access validation concluída via RT-018D.
-RT-018D DONE: Validate Existing Production Admin User executado em produção; login ADMIN PASS; rotas admin PASS; booking de auditoria visível PASS.
+RT-018C DONE remoto + production admin smoke validated: Production Admin Access validation concluida via RT-018D.
+RT-018D DONE: Validate Existing Production Admin User executado em producao; login ADMIN PASS; rotas admin PASS; booking de auditoria visivel PASS.
 ## RT-019A DONE: Publicar Pao de Acucar com caminho controlado de dados
 Estado: Remote DONE + Production Seed/Smoke PASS
 Objetivo: Fazer o tour Pao de Acucar aparecer no catalogo publico de forma controlada, segura e reproduzivel.
@@ -60,11 +63,11 @@ Evidencias:
   - Credenciais fornecidas manualmente pelo Trigger (nao expostas em logs/docs).
   - Login ADMIN PASS (200 OK).
   - `/pt/admin`, `/pt/admin/tours`, `/pt/admin/bookings`, `/pt/admin/contacts` PASS (200 OK).
-  - Booking `cmoli78ld000204js1agra4il` visível em `/pt/admin/bookings` PASS.
-  - Sem alteração de código, banco, schema ou deploy manual.
-- RT-018C desbloqueada e concluída.
+  - Booking `cmoli78ld000204js1agra4il` visivel em `/pt/admin/bookings` PASS.
+  - Sem alteracao de codigo, banco, schema ou deploy manual.
+- RT-018C desbloqueada e concluida.
 
-- RT-017C: criada `createTripAction` protegida em `admin.ts`; implementada página de criação com formulário, validação de Título PT e conversão de preço; botão "Novo Tour" adicionado à listagem; commit remoto `4c3e3fe`.
+- RT-017C: criada `createTripAction` protegida em `admin.ts`; implementada pagina de criacao com formulario, validacao de Titulo PT e conversao de preco; botao "Novo Tour" adicionado a listagem; commit remoto `4c3e3fe`.
 - RT-017C production smoke manual: Vercel production estava no commit `4c3e3fe`; Trigger executou o smoke com credencial ADMIN privada; credenciais nao foram compartilhadas com o agente; tour real "Pao de Acucar ao Entardecer" criado como rascunho com ID `cmolfs9eu000004l2trz4q8bf`, cidade `rio de janeiro`, preco R$ 245,00, status RASCUNHO / `isPublished=false` e 0 agendas; tour aparece em `/pt/admin/tours`; tour nao aparece em `/pt/tours`, que exibe apenas "Cristo Redentor + Mirante Dona Marta"; nenhum deploy manual, migration, seed ou alteracao direta no banco foi executado pelo agente.
 - Observacoes do smoke RT-017C: preco planejado anteriormente era R$ 295,00, mas o tour foi criado com R$ 245,00; cidade ficou em minusculo (`rio de janeiro`); nao corrigir agora; ajustes futuros devem aguardar task de edicao/admin update.
 - RT-018A production product smoke:
@@ -101,7 +104,7 @@ Evidencias:
 
 - RT-015A: auditoria confirmou 0 trips em Neon production; causa do vazio: ausencia de dados (schema correto, filtro correto); campo `slug` inexistente em `Trip`.
 - RT-015B: criado `prisma/seed.ts` com IDs deterministicos (`seed-001-cristo-dona-marta`, `seed-001-schedule-001`); adicionado `prisma.seed` em `package.json`; commit `cf0f96f feat: add idempotent minimal seed for RT-015B` publicado; seed executado manualmente pelo Trigger contra Neon production.
-- RT-015C-FIX: diagnosticado bug critico — `MobileMenu` bottom sheet com `position: fixed; z-index: 50; opacity: 0` interceptava cliques em toda a regiao inferior de cada pagina publica porque nao tinha `pointer-events: none`; a GSAP nao setava `sheet.style.pointerEvents = "none"` no branch de fechar; fix: (1) `pointer-events-none` no className inicial do sheet, (2) `sheet.style.pointerEvents = "auto"` no branch open, (3) `sheet.style.pointerEvents = "none"` no branch close; lint PASS, typecheck PASS, build PASS antes do commit; commit `fa83e02 fix: prevent invisible mobile menu sheet from intercepting page clicks (RT-015C)` publicado.
+- RT-015C-FIX: diagnosticado bug critico - `MobileMenu` bottom sheet com `position: fixed; z-index: 50; opacity: 0` interceptava cliques em toda a regiao inferior de cada pagina publica porque nao tinha `pointer-events: none`; a GSAP nao setava `sheet.style.pointerEvents = "none"` no branch de fechar; fix: (1) `pointer-events-none` no className inicial do sheet, (2) `sheet.style.pointerEvents = "auto"` no branch open, (3) `sheet.style.pointerEvents = "none"` no branch close; lint PASS, typecheck PASS, build PASS antes do commit; commit `fa83e02 fix: prevent invisible mobile menu sheet from intercepting page clicks (RT-015C)` publicado.
 - RT-015C smoke completo validado em producao pelo Trigger:
   - `/pt/tours`: tour Cristo Redentor + Mirante Dona Marta visivel.
   - Tour detail: abre corretamente apos fix.
@@ -132,11 +135,15 @@ Evidencias:
 
 ## Estado atual do repositorio
 
-- GitHub `main`: `8b3c2cc docs: record RT-021A production UX smoke`.
+- GitHub `main`: `67584b6 docs: create Rick Travel portfolio README showcase` (topo real em 2026-05-13).
 - RT-021A: Remote DONE + Production UX Smoke PASS no commit `69379fe fix: polish public tour navigation UX`.
-- RT-022A: REVIEW local, nao DONE, sem commit; lint/typecheck/test/build/git diff --check PASS; smoke manual mutavel BLOCKED porque `check:db` carregou `.env` com banco remoto/gerenciado e `.env.local` nao possui credenciais admin.
-- Vercel production: RT-018E Production Smoke PASS; RT-019A Production Seed/Smoke PASS.
+- RT-022A: DONE remoto - commit `b0e4d4a feat: add admin booking confirm and cancel flow` publicado em `origin/main` em 2026-05-01. Smoke mutavel de confirmacao admin (PENDING -> CONFIRMED) em producao ainda pendente de validacao.
+- RT-023A: DONE remoto - commit `67584b6 docs: create Rick Travel portfolio README showcase` publicado em `origin/main` em 2026-05-06.
+- RT-FINAL-00: DONE (auditoria pura, 2026-05-13) - nenhum arquivo alterado.
+- RT-FINAL-00A: Local DONE - commit documental autorizado pelo Trigger.
+- Vercel production: ativo; healthcheck database ok; 2 tours publicados; RT-018E Production Smoke PASS; RT-019A Production Seed/Smoke PASS.
 - Neon production: 2 Trips publicadas no catalogo (`Cristo Redentor + Mirante Dona Marta` e `Pao de Acucar ao Entardecer`), agendas futuras ativas, sem duplicacao de Pao de Acucar, 1 Booking de teste (CANCELED) e 1 booking de auditoria criado pelo fluxo publico normal (`cmoli78ld000204js1agra4il`).
+- Dominio proprio: nao configurado.
 
 ## Evidencias importantes
 
@@ -149,14 +156,23 @@ Evidencias:
 - Nenhuma migration executada.
 - Seed de RT-019A executado uma unica vez; nao foi executado novamente apos a documentacao.
 - RT-021A corrigiu UX publica: Hero Search locale-aware sem locale duplicado, busca real por `search`, Nossos Tours sem filtro lateral, card levando ao detalhe/agenda, footer sem links falsos; lint/typecheck/test/build/git diff --check PASS; Production UX Smoke PASS.
-- RT-022A promovida pelo Trigger como unica task ativa; implementacao local em REVIEW, nao DONE, adiciona confirmacao admin de reservas pendentes e mantem cancelamento admin de pendentes/confirmadas; sem commit/push ate autorizacao.
+- RT-022A DONE remoto (reconciliado por RT-FINAL-00A): commit `b0e4d4a` publicado em `origin/main`; adiciona `confirmBookingByAdmin` e `confirmBookingByAdminAction`; botao de confirmacao no detalhe admin; labels legiveis de status e paymentStatus; testes unitarios; E2E spec com guard local; smoke mutavel de confirmacao admin em producao ainda pendente.
 
 ## O que continua pendente
 
+- Smoke mutavel de confirmacao admin (PENDING -> CONFIRMED) em producao - candidata RT-FINAL-03A.
 - Janela controlada para o residual de `npm audit` em Prisma dev tooling.
-- RT-022A e a unica task ativa; nenhuma outra READY aberta.
+- Dominio proprio nao configurado.
+- Guia de operacao para o dono (handoff operacional) nao existe.
+- Imagem do tour Cristo Redentor usa asset do Pao de Acucar - conteudo comercial incorreto.
+- React hydration error #418 sem task de investigacao aberta.
 - Observacao futura opcional: empty state de busca sem resultado usa copy generica aceitavel; nao corrigir microcopy agora.
 
-## Proxima acao recomendada
+## Proximas candidatas (sem READY automatica)
 
-Preparar ambiente local/admin controlado para smoke mutavel da RT-022A com dados de teste ou abrir task separada de validacao; manter sem commit/push ate autorizacao explicita. Depois da RT-022A, discutir admin tour edit/publish como task separada.
+- RT-FINAL-03A - Validate Admin Booking Actions in Production
+- RT-FINAL-01 - Define Delivery Scope and Acceptance Criteria
+- RT-FINAL-02 - Stabilize Public Tour and Booking Flow
+- RT-FINAL-04 - Polish Commercial Content and Trust Layer
+- RT-FINAL-05 - Configure Custom Domain and Final Production Smoke
+- RT-FINAL-06 - Owner Handoff Package

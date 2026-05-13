@@ -199,7 +199,7 @@ Tarefas:
 
 - RT-011.1 Executar smoke pos-deploy focado no fluxo publico. Estado: DONE.
 - RT-011.2 Revisar logs, healthchecks e erros do ambiente publicado. Estado: DONE.
-- RT-011.3 Registrar incidentes e regressões reais observadas apos deploy. Estado: DONE.
+- RT-011.3 Registrar incidentes e regressoes reais observadas apos deploy. Estado: DONE.
 - RT-011.4 Alinhar dominio canonico publico com a URL operacional real. Estado: DONE.
 - RT-011.5 Diagnosticar catalogo publico vazio. Estado: DONE.
 - RT-011.6 Corrigir exposicao publica do catalogo se houver incidente funcional. Estado: BLOCKED.
@@ -458,7 +458,7 @@ Tarefas:
 Criterios de aceite: pagina de detalhe existe; rota protegida por admin; listagem aponta para detalhe; nenhuma mutation criada.
 Dependencias: RT-013F.
 Risco: baixo.
-Evidencia esperada: rota `ƒ /[locale]/admin/bookings/[id]` no build; commit `09ffcb0` em `origin/main`.
+Evidencia esperada: rota `/[locale]/admin/bookings/[id]` no build; commit `09ffcb0` em `origin/main`.
 
 ## RT-014A Admin Booking Cancellation Rules
 
@@ -481,7 +481,7 @@ Dependencias: RT-013G.
 Risco: baixo.
 Evidencia esperada: este registro em `docs/ops/backlog.md`; commit documental em `origin/main`.
 
-Notas operacionais — Regras decididas pelo Trigger:
+Notas operacionais - Regras decididas pelo Trigger:
 
 Status cancelaveis pelo admin:
 - PENDING: permitido.
@@ -619,7 +619,7 @@ Tarefas:
 - RT-015C.7 Verificar detalhe da reserva no admin. Estado: DONE.
 - RT-015C.8 Cancelar reserva de teste e confirmar status = CANCELED e ausencia de tentativas de pagamento. Estado: DONE.
 
-Criterios de aceite: fluxo completo publico → admin → cancelamento validado em producao sem regressao.
+Criterios de aceite: fluxo completo publico -> admin -> cancelamento validado em producao sem regressao.
 Dependencias: RT-015B, RT-015C-FIX.
 Risco: medio.
 Evidencia esperada: reserva de teste com Ricardo / ricardo@gmail.com; R$ 245,00; 1 hospede; data 29/07/2026; status CANCELED apos cancelamento admin; nenhuma tentativa de pagamento registrada.
@@ -758,7 +758,7 @@ Objetivo: implementar criacao de novos tours via admin como rascunho.
 
 Tarefas:
 
-- RT-017C.1 Criar Server Action de criacao protegida forçando `isPublished: false`. Estado: DONE.
+- RT-017C.1 Criar Server Action de criacao protegida forcando `isPublished: false`. Estado: DONE.
 - RT-017C.2 Criar formulario em `/[locale]/admin/tours/new` com validacao de campos Json. Estado: DONE.
 - RT-017C.3 Adicionar botao "Novo Tour" na listagem. Estado: DONE.
 
@@ -864,27 +864,27 @@ Tarefas:
 Criterios de aceite: ADMIN real consegue acessar painel e rotas principais; booking de smoke fica visivel em admin bookings ou detalhe equivalente; nenhuma acao destrutiva executada.
 Dependencias: RT-018D.
 Risco: medio.
-Evidencia: login ADMIN PASS; rotas admin PASS; booking visível PASS em produção.
+Evidencia: login ADMIN PASS; rotas admin PASS; booking visivel PASS em producao.
 
 ## RT-018D Validate Existing Production Admin User
 
 Estado: DONE
 
-Objetivo: validar o usuário administrador existente em produção utilizando as credenciais fornecidas pelo Trigger.
+Objetivo: validar o usuario administrador existente em producao utilizando as credenciais fornecidas pelo Trigger.
 
 Tarefas:
 
 - RT-018D.1 Verificar estado Git. Estado: DONE.
-- RT-018D.2 Confirmar produção acessível. Estado: DONE.
+- RT-018D.2 Confirmar producao acessivel. Estado: DONE.
 - RT-018D.3 Validar login ADMIN sem expor credenciais. Estado: DONE.
 - RT-018D.4 Testar rotas `/pt/admin`, `/pt/admin/tours`, `/pt/admin/bookings`, `/pt/admin/contacts`. Estado: DONE.
 - RT-018D.5 Validar visibilidade do booking `cmoli78ld000204js1agra4il`. Estado: DONE.
-- RT-018D.6 Registrar resultados e atualizar documentação operacional. Estado: DONE.
+- RT-018D.6 Registrar resultados e atualizar documentacao operacional. Estado: DONE.
 
-Criterios de aceite: Todas as validações concluídas com sucesso (PASS); nenhuma exposição de credenciais; nenhuma alteração destrutiva ou no banco realizada.
+Criterios de aceite: Todas as validacoes concluidas com sucesso (PASS); nenhuma exposicao de credenciais; nenhuma alteracao destrutiva ou no banco realizada.
 Dependencias: RT-018B.
 Risco: baixo.
-Evidencia: Login Status 200; Rotas Status 200; Booking visível: True.
+Evidencia: Login Status 200; Rotas Status 200; Booking visivel: True.
 
 ## RT-019A Publicar Pao de Acucar com caminho controlado de dados
 Estado: DONE
@@ -932,7 +932,11 @@ Restricoes mantidas: sem admin, auth/logout, seed, banco, migration, pagamento, 
 
 ## RT-022A Admin Booking Actions
 
-Estado: REVIEW
+Estado: DONE remoto
+
+Commit: `b0e4d4a feat: add admin booking confirm and cancel flow` - publicado em `origin/main` em 2026-05-01.
+
+Nota de reconciliacao (RT-FINAL-00A): este registro declarava "Estado: REVIEW" e "implementacao local sem commit/push". O Git prova que o commit `b0e4d4a` foi publicado. Status corrigido para DONE remoto.
 
 Objetivo: tornar o fluxo operacional basico de reservas no admin seguro para o ciclo PENDING -> CONFIRMED/CANCELED, sem tocar em checkout, pagamento, schema, seed, tour ou schedule.
 
@@ -941,22 +945,24 @@ Decisao: implementar acoes de reserva primeiro. Admin tour edit/publish, schedul
 Tarefas:
 
 - RT-022A.1 Promover a task como unica ativa e confirmar repo limpo/sincronizado. Estado: DONE.
-- RT-022A.2 Adicionar `confirmBookingByAdmin` no service central de reservas. Estado: DONE local.
-- RT-022A.3 Adicionar Server Action admin protegida por `requireAdminSession()`. Estado: DONE local.
-- RT-022A.4 Exibir no detalhe apenas acoes validas por status. Estado: DONE local.
-- RT-022A.5 Alinhar copy/listagem/status do admin. Estado: DONE local.
-- RT-022A.6 Adicionar/atualizar testes aplicaveis. Estado: DONE local.
-- RT-022A.7 Rodar lint/typecheck/test/build/git diff --check e smoke admin possivel. Estado: DONE automatizado; smoke manual mutavel BLOCKED sem ambiente local/admin controlado (`check:db` carregou `.env` com banco remoto/gerenciado; `.env.local` nao possui credenciais admin).
+- RT-022A.2 Adicionar `confirmBookingByAdmin` no service central de reservas. Estado: DONE remoto.
+- RT-022A.3 Adicionar Server Action admin protegida por `requireAdminSession()`. Estado: DONE remoto.
+- RT-022A.4 Exibir no detalhe apenas acoes validas por status. Estado: DONE remoto.
+- RT-022A.5 Alinhar copy/listagem/status do admin. Estado: DONE remoto.
+- RT-022A.6 Adicionar/atualizar testes aplicaveis. Estado: DONE remoto.
+- RT-022A.7 Rodar lint/typecheck/test/build/git diff --check e smoke admin possivel. Estado: DONE automatizado; smoke manual mutavel de confirmacao admin (PENDING -> CONFIRMED) em producao PENDENTE - sem evidencia registrada de smoke mutavel real em producao.
 
 Criterios de aceite: ADMIN confirma apenas reserva PENDING; ADMIN cancela apenas PENDING/CONFIRMED; CANCELED nao mostra acoes; CONFIRMED nao mostra confirmar novamente; transicoes invalidas bloqueadas server-side; confirmar nao altera `paymentStatus`; cancelar nao aciona refund; sem schema, migration, seed, banco manual, auth, payment, checkout, tour, schedule ou deploy manual.
 
-Evidencia atual: implementacao local sem commit/push; review aceita somente como REVIEW, nao DONE; lint/typecheck/test/build/git diff --check PASS; smoke manual de confirmar/cancelar BLOCKED para evitar alteracao de banco remoto/gerenciado e porque nao ha credenciais admin locais em `.env.local`.
-
-Proximo passo obrigatorio: preparar ambiente local/admin controlado para smoke mutavel com dados de teste ou abrir task separada de validacao para verificar com seguranca o ciclo admin de reserva.
+Evidencia: commit `b0e4d4a` publicado em `origin/main`; lint/typecheck/test/build/git diff --check PASS; smoke mutavel de confirmacao admin em producao pendente de validacao (candidata RT-FINAL-03A).
 
 ## RT-023A Create Rick Travel Portfolio README Showcase
 
-Estado: REVIEW local
+Estado: DONE remoto
+
+Commit: `67584b6 docs: create Rick Travel portfolio README showcase` - publicado em `origin/main` em 2026-05-06.
+
+Nota de reconciliacao (RT-FINAL-00A): este registro declarava "Estado: REVIEW local" e "Restricoes: sem commit ate autorizacao explicita". O Git prova que o commit `67584b6` foi publicado. Status corrigido para DONE remoto.
 
 Objetivo: criar/atualizar o `README.md` principal como vitrine profissional de portfolio do Rick Travel, seguindo o padrao Protocolo Rick.
 
@@ -964,17 +970,41 @@ Tarefas:
 
 - RT-023A.1 Confirmar diretorio, repositorio, `.git`, status, branch e historico antes de editar. Estado: DONE.
 - RT-023A.2 Confirmar que `main` esta sincronizada com a referencia local `origin/main`. Estado: DONE.
-- RT-023A.3 Copiar imagem principal para `docs/assets/rick-travel-hero.png`. Estado: DONE.
-- RT-023A.4 Reescrever `README.md` em ingles com visao de produto, status, fluxos, demo, stack, arquitetura, Protocolo Rick, desenvolvimento local, comandos uteis, limitacoes e autor. Estado: DONE.
-- RT-023A.5 Atualizar documentacao operacional permitida. Estado: DONE.
-- RT-023A.6 Validar diff, escopo e checks documentais. Estado: DONE.
+- RT-023A.3 Copiar imagem principal para `docs/assets/rick-travel-hero.png`. Estado: DONE remoto.
+- RT-023A.4 Reescrever `README.md` em ingles com visao de produto, status, fluxos, demo, stack, arquitetura, Protocolo Rick, desenvolvimento local, comandos uteis, limitacoes e autor. Estado: DONE remoto.
+- RT-023A.5 Atualizar documentacao operacional permitida. Estado: DONE remoto.
+- RT-023A.6 Validar diff, escopo e checks documentais. Estado: DONE remoto.
 
 Criterios de aceite: README renderiza com imagem relativa; sem caminho local Windows; sem segredos; sem claims exagerados; comandos documentados refletem `package.json`; somente arquivos autorizados alterados/adicionados; nenhum codigo, schema, migration, seed, env, deploy, package ou lockfile alterado.
 
-Evidencia: `git status --short --untracked-files=all` mostra somente arquivos autorizados; `git diff --name-only` mostra somente arquivos documentais rastreados; `git diff --check` PASS com avisos LF/CRLF conhecidos; revisao manual do README confirmou imagem relativa, fences fechados, ausencia de caminho local Windows e ausencia de segredos.
+Evidencia: commit `67584b6` publicado em `origin/main`; diff restrito a `README.md`, `docs/assets/rick-travel-hero.png` e docs operacionais; nenhum arquivo de aplicacao alterado.
 
-Restricoes: sem commit ate autorizacao explicita.
+## RT-FINAL-00 Audit Current Production State
 
-## Proxima Discussion Gate
+Estado: DONE (auditoria pura, 2026-05-13)
 
-Nenhuma nova READY task alem da RT-022A. Proxima Discussion Gate recomendada apos RT-022A: evoluir o admin existente para edicao/publicacao de tours, sem recriar o admin do zero.
+Objetivo: auditar o estado real do Rick Travel em producao e no repositorio para preparar a entrega final.
+
+Evidencia: relatorio de auditoria retornado em 2026-05-13; divergencia documental RT-022A/RT-023A identificada; estado de producao verificado (2 tours, healthcheck ok, rotas publicas 200, admin anonimo protegido); nenhum arquivo alterado durante a task.
+
+## RT-FINAL-00A Align Operational Docs With Remote Reality
+
+Estado: Local DONE - commit documental autorizado pelo Trigger.
+
+Objetivo: corrigir documentacao operacional para refletir o estado real do Git apos auditoria RT-FINAL-00.
+
+Tarefas:
+
+- RT-FINAL-00A.1 Atualizar `docs/ops/status.md`. Estado: DONE local.
+- RT-FINAL-00A.2 Atualizar `docs/ops/backlog.md`. Estado: DONE local.
+- RT-FINAL-00A.3 Atualizar `docs/ops/session-handoff.md`. Estado: DONE local.
+- RT-FINAL-00A.4 Atualizar `docs/ops/execution-log.md`. Estado: DONE local.
+
+## Proximas candidatas (sem READY automatica)
+
+- RT-FINAL-03A - Validate Admin Booking Actions in Production
+- RT-FINAL-01 - Define Delivery Scope and Acceptance Criteria
+- RT-FINAL-02 - Stabilize Public Tour and Booking Flow
+- RT-FINAL-04 - Polish Commercial Content and Trust Layer
+- RT-FINAL-05 - Configure Custom Domain and Final Production Smoke
+- RT-FINAL-06 - Owner Handoff Package

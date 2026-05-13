@@ -19,9 +19,32 @@ Leitura objetiva da fase:
 
 Fase 1 permanece: REVIEW.
 
+## Atualizacao 2026-05-13 - RT-FINAL-00A Align Operational Docs With Remote Reality
+
+Estado: Local DONE - commit documental autorizado pelo Trigger.
+
+Objetivo: corrigir documentacao operacional para refletir estado real do Git e da producao apos auditoria RT-FINAL-00.
+
+Divergencias identificadas pela auditoria (RT-FINAL-00, 2026-05-13):
+- RT-022A declarada "REVIEW local, sem commit" em todos os docs operacionais; Git prova commit `b0e4d4a` publicado em `origin/main` desde 2026-05-01.
+- RT-023A declarada "REVIEW local, aguardando autorizacao" em todos os docs operacionais; Git prova commit `67584b6` publicado em `origin/main` desde 2026-05-06.
+
+Restricoes mantidas:
+- Nenhum codigo da aplicacao alterado.
+- Nenhum schema Prisma alterado.
+- Nenhuma migration executada.
+- Nenhum seed executado.
+- Nenhum env alterado.
+- Nenhum banco alterado.
+- Nenhum deploy executado.
+
+---
+
 ## Atualizacao 2026-05-06 - RT-023A Portfolio README Showcase
 
-Estado: REVIEW local, aguardando autorizacao de commit.
+Estado: DONE remoto - commit `67584b6 docs: create Rick Travel portfolio README showcase` publicado em `origin/main` em 2026-05-06.
+
+Nota de reconciliacao (RT-FINAL-00A): os documentos operacionais declaravam esta task como "REVIEW local, aguardando autorizacao de commit". O Git prova que o commit foi publicado. Esta entrada e corrigida para refletir o estado real.
 
 Objetivo: criar uma vitrine profissional de portfolio para o README principal do Rick Travel, alinhada ao padrao Protocolo Rick e aos projetos de referencia do Ricardo.
 
@@ -78,18 +101,18 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - RT-014B DONE remoto: acao de cancelamento admin implementada; commit `08a3de2` no topo de `main`/`origin/main`.
 - RT-015A DONE: auditoria de catalogo confirmou 0 trips em Neon production; causa do vazio identificada (ausencia de dados, nao bug de codigo).
 - RT-015B DONE: seed idempotente criado (`prisma/seed.ts`); commit `cf0f96f` em `origin/main`; seed executado manualmente pelo Trigger contra Neon production; 1 Trip (Cristo Redentor + Mirante Dona Marta, R$ 245,00) e 1 TripSchedule OPEN (29/07/2026) criados.
-- RT-015C-FIX DONE: bug critico corrigido — bottom sheet do mobile-menu interceptava cliques invisivelmente (`opacity: 0` sem `pointer-events: none`); commit `fa83e02 fix: prevent invisible mobile menu sheet from intercepting page clicks (RT-015C)` em `origin/main`.
-- RT-015C DONE: smoke completo validado em producao pelo Trigger — tour visivel em `/pt/tours`, reserva criada (Ricardo / ricardo@gmail.com, R$ 245,00, 1 hospede, 29/07/2026), listagem e detalhe admin corretos, cancelamento admin confirmado (status = CANCELED na listagem; detalhe pos-cancelamento: "Nenhuma tentativa de pagamento registrada."; payment attempts remained absent — no payment gateway/refund/payment mutation was triggered in the MVP flow).
+- RT-015C-FIX DONE: bug critico corrigido - bottom sheet do mobile-menu interceptava cliques invisivelmente (`opacity: 0` sem `pointer-events: none`); commit `fa83e02 fix: prevent invisible mobile menu sheet from intercepting page clicks (RT-015C)` em `origin/main`.
+- RT-015C DONE: smoke completo validado em producao pelo Trigger - tour visivel em `/pt/tours`, reserva criada (Ricardo / ricardo@gmail.com, R$ 245,00, 1 hospede, 29/07/2026), listagem e detalhe admin corretos, cancelamento admin confirmado (status = CANCELED na listagem; detalhe pos-cancelamento: "Nenhuma tentativa de pagamento registrada."; payment attempts remained absent - no payment gateway/refund/payment mutation was triggered in the MVP flow).
 - RT-016A DONE remoto + production smoke validated: commit `799698c feat: polish booking confirmation flow`; fluxo user-side pos-reserva polido para pre-reserva com confirmacao manual; redirect para `/pt/reservas/{bookingId}` validado em producao; `/pt/reservas` lista a reserva e "Ver detalhes" abre o detalhe; payment status nao aparece mais como enum cru `UNPAID`; admin booking list permanece funcional; nenhum gateway, schema, migration, seed, env ou regra admin alterados.
 - RT-016B DONE remoto + production smoke validated: commit `5e120a4 chore: simplify home catalog entry point`; Home deixou de renderizar os package cards comerciais antigos que apontavam para contato; `Passeios disponiveis` permanece como catalogo real principal; seed preparado para usar imagem real local `/images/trips/imagem-morro-pao-de-acucar.jpg`; seed nao executado; sem schema, migration, Neon, gateway, admin, auth/env/provider.
 - RT-016C DONE remoto + production smoke validated: seed controlado executado manualmente pelo Trigger contra Neon production para aplicar imagem real ao tour existente; imagem `/images/trips/imagem-morro-pao-de-acucar.jpg` validada em producao na Home e tours; agenda renovada para 90 dias; nenhum novo tour adicionado; sem schema, migration ou code change.
 - RT-017A DONE: regras e escopo do Admin Tour Manager MVP definidos e documentados em `docs/ops/admin-tour-manager-rules.md`; backlog fatiado em RT-017B/C/D/E.
-- RT-017B DONE remoto + production smoke validated: listagem somente leitura de tours implementada no admin; acesso via `/[locale]/admin/tours`; link "Tours" ativo no menu; tour "Cristo Redentor + Mirante Dona Marta" exibido com imagem, preco R$ 245,00 e 1 agenda; status PUBLICADO; sem acoes mutaveis (create/edit/delete/publish/schedule); deploy automatico Vercel verificado; proteção herdada do AdminLayout (teste explícito com não-admin pendente).
+- RT-017B DONE remoto + production smoke validated: listagem somente leitura de tours implementada no admin; acesso via `/[locale]/admin/tours`; link "Tours" ativo no menu; tour "Cristo Redentor + Mirante Dona Marta" exibido com imagem, preco R$ 245,00 e 1 agenda; status PUBLICADO; sem acoes mutaveis (create/edit/delete/publish/schedule); deploy automatico Vercel verificado; protecao herdada do AdminLayout (teste explicito com nao-admin pendente).
 - RT-017C DONE remoto + production smoke manual validated: commit `4c3e3fe feat: add admin tour draft creation` publicado em producao Vercel; smoke manual executado pelo Trigger com credencial ADMIN privada, sem compartilhar credenciais com agente; tour real "Pao de Acucar ao Entardecer" criado como rascunho; ID `cmolfs9eu000004l2trz4q8bf`; cidade `rio de janeiro`; preco R$ 245,00; status RASCUNHO / `isPublished=false`; 0 agendas; aparece em `/pt/admin/tours`; nao aparece em `/pt/tours`, onde permanece visivel apenas o tour publicado "Cristo Redentor + Mirante Dona Marta"; nenhum deploy manual, migration, seed ou alteracao direta no banco executado pelo agente.
 - RT-018A DONE: Production Product Smoke Check executado em producao no commit `6b59c92`; fluxo publico PASS ate confirmacao manual (`/pt/reservas/cmoli78ld000204js1agra4il`, status Pendente, R$ 245,00, pagamento "A combinar com a equipe"); admin anonimo PASS com redirect para `/pt/login`; admin com usuario comum autenticado FAIL com 500 nas rotas `/pt/admin`, `/pt/admin/tours`, `/pt/admin/bookings` e `/pt/admin/contacts` (`ERROR 2933230167`); login ADMIN BLOCKED por ausencia de credencial no ambiente; checkout externo NOT TESTED/nao iniciado; alinhamento de imagem WARN; React hydration `#418` WARN.
 - RT-018B DONE remoto + production non-admin smoke validated: commit `bcf8119`; bug de autorizacao admin non-admin corrigido no `AdminLayout`; `FORBIDDEN` agora renderiza tela controlada "Acesso negado"; `UNAUTHENTICATED` continua redirecionando para login; ADMIN continua renderizando o painel; teste unitario cobre os tres cenarios; smoke em producao confirmou usuario comum sem 500 nas rotas admin; sem schema, seed, migration, deploy manual ou alteracao manual de banco.
-- RT-018C DONE: Production Admin Access validation concluída via RT-018D; login ADMIN, rotas admin e visibilidade de booking validados em produção com sucesso.
-- RT-018D DONE: Validate Existing Production Admin User executado em produção; login ADMIN PASS; rotas admin PASS; booking `cmoli78ld000204js1agra4il` visível PASS.
+- RT-018C DONE: Production Admin Access validation concluida via RT-018D; login ADMIN, rotas admin e visibilidade de booking validados em producao com sucesso.
+- RT-018D DONE: Validate Existing Production Admin User executado em producao; login ADMIN PASS; rotas admin PASS; booking `cmoli78ld000204js1agra4il` visivel PASS.
 - RT-018E DONE + Production Smoke PASS: Fix Logout Flow; causa raiz: rota customizada `app/api/auth/sign-out/route.ts` interceptava o handler Better Auth e limpava cookies sem invalidar sessao no banco; solucao: rota removida, `authClient.signOut()` agora atinge `[...all]` corretamente; commit `837694b`; lint/typecheck/test/build PASS; push para `origin/main` concluido; smoke em producao validou header `X-Matched-Path: /api/auth/[...all]`, clear cookies e redirect para locale.
 - RT-019A Remote DONE + Production Seed/Smoke PASS: Publicar Pao de Acucar com caminho controlado de dados; seed detectou tour existente pelo titulo "Pao de Acucar ao Entardecer" e reutilizou o ID `cmolfs9eu000004l2trz4q8bf`, evitando duplicacao; `isPublished` setado para `true`; imagem correta aplicada; agenda futura criada; `/pt/tours` exibe 2 tours; fluxo de reserva validado; mantida imagem atual do Cristo (`/images/trips/imagem-morro-pao-de-acucar.jpg`) como pendencia visual para task futura.
 - RT-021A Remote DONE + Production UX Smoke PASS: Revisao de UX, Navegacao e Busca Publica; commit `69379fe fix: polish public tour navigation UX`; Hero Search nao gera `/pt/pt`; `?search=Pao` mostra Pao de Acucar e nao mostra Cristo; busca sem resultado mostra empty state generico aceitavel; cards levam ao detalhe, nao ao booking direto; detalhes dos 2 tours retornam `200`; CTA de reserva no detalhe redireciona anonimo para login com redirect seguro, sem criar booking; footer sem `href="#"`; menu desktop/mobile preserva locale; sem admin, auth/logout, seed, banco, migration, pagamento, schema ou regra de booking.
@@ -131,8 +154,11 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 
 ### Curto prazo
 
-- RT-022A e a unica task ativa, em REVIEW local, nao DONE, com validacoes automatizadas PASS; smoke manual mutavel BLOCKED ate existir ambiente local/admin controlado ou task separada de validacao; nenhuma outra READY task aberta;
-- apos RT-022A, candidata futura separada: evoluir o admin existente para edicao/publicacao de tours, sem recriar o admin do zero.
+- RT-022A DONE remoto: commit `b0e4d4a feat: add admin booking confirm and cancel flow` publicado em `origin/main` desde 2026-05-01; smoke mutavel de confirmacao admin (PENDING -> CONFIRMED) em producao ainda pendente de validacao - nenhuma evidencia de smoke mutavel em producao registrada.
+- RT-023A DONE remoto: commit `67584b6 docs: create Rick Travel portfolio README showcase` publicado em `origin/main` desde 2026-05-06.
+- RT-FINAL-00 concluida como auditoria pura (2026-05-13): nenhuma alteracao de arquivos; divergencia documental identificada e encaminhada para RT-FINAL-00A.
+- RT-FINAL-00A Local DONE: correcao documental das divergencias identificadas; commit documental autorizado pelo Trigger.
+- Proximas candidatas (sem READY automatica): RT-FINAL-03A (validate admin booking actions in production), RT-FINAL-01 (define delivery scope), RT-FINAL-02 (stabilize public flow), RT-FINAL-04 (polish commercial content), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
 
 
 ### Medio prazo
@@ -147,7 +173,11 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 
 ## Riscos remanescentes
 
-- P1: estabilizacao pos-deploy ainda depende de evidencias operacionais continuas no ambiente publicado.
+- P1: smoke mutavel de confirmacao admin (PENDING -> CONFIRMED) em producao nunca executado - RT-022A esta no remoto mas sem validacao real de comportamento em producao.
+- P1: a credencial de bootstrap ADMIN removida deve ser considerada potencialmente exposta; rotacao nao confirmada.
 - P1: `npm audit` residual em Prisma dev tooling segue pendente para janela controlada.
-- P1: a credencial de bootstrap ADMIN removida deve ser considerada potencialmente exposta.
+- P1: dominio proprio nao configurado - produto em URL temporaria da Vercel.
+- P2: imagem do tour Cristo Redentor usa asset do Pao de Acucar - conteudo comercial incorreto visivel ao usuario.
+- P2: React hydration error #418 sem task de investigacao aberta.
+- P2: sem guia de operacao para o dono (handoff operacional pendente).
 - P2: reabrir Mercado Pago agora ampliaria escopo sem justificativa operacional desta fase.
