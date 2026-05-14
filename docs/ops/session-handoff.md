@@ -1,11 +1,11 @@
 # Session Handoff - Rick Travel
 
-Data: 2026-05-13 (atualizado por RT-FINAL-00A - Align Operational Docs With Remote Reality)
+Data: 2026-05-14 (atualizado por RT-FINAL-04C2 - Add Final Catalog Assets and Seed Definition)
 
 ## Contexto
 
 Sessao atualizada ate a Fase 3 - Operacao publica controlada do MVP seguindo o Protocolo Rick.
-RT-FINAL-DG aprovada. RT-FINAL-00 concluida como auditoria pura. RT-FINAL-00A Remote DONE confirmado. RT-FINAL-03A executada manualmente em producao pelo Trigger; documentacao local pendente de commit autorizado. RT-FINAL-04B executada localmente para revisao do Trigger, sem commit e sem push.
+RT-FINAL-DG aprovada. RT-FINAL-00 concluida como auditoria pura. RT-FINAL-00A Remote DONE confirmado. RT-FINAL-03A executada manualmente em producao pelo Trigger. RT-FINAL-04B Remote DONE (commit c7a1d47). RT-FINAL-04C1 CLOSED (Discussion Gate). RT-FINAL-04C2 executada localmente; assets adicionados e seed preparado; aguardando aprovacao do Trigger para commit; seed nao executado em producao.
 
 ## RT-023A Portfolio README Showcase
 
@@ -142,7 +142,9 @@ Evidencias:
 - RT-FINAL-00: DONE (auditoria pura, 2026-05-13) - nenhum arquivo alterado.
 - RT-FINAL-00A: Local DONE - commit documental autorizado pelo Trigger.
 - RT-FINAL-03A: Manual production validation DONE by Trigger - admin login PASS; admin booking list PASS; status CONFIRMED/PENDING/CANCELED visiveis; confirm/cancel admin flow validated manually by Trigger; nenhum erro visivel reportado no navegador; screenshot nao commitado por conter dados pessoais/e-mails.
-- RT-FINAL-04B: Local REVIEW - footer, contato, detalhe de tour e auth copy ajustados para reforcar WhatsApp/formulario, pre-reserva manual e ausencia de pagamento online; redes sociais e e-mail publico direto nao foram inventados; aguardando revisao do Trigger.
+- RT-FINAL-04B: Remote DONE - commit `c7a1d47 feat: improve public trust and manual booking copy` publicado em `origin/main`.
+- RT-FINAL-04C1: CLOSED (Discussion Gate) - catalogo final de 6 tours aprovado pelo Trigger; pacote de decisao sem execucao de repositorio.
+- RT-FINAL-04C2: Local REVIEW - 2 assets JPEG adicionados (`imagem-helicoptero-cristo.jpg`, `imagem-floresta-tijuca.jpg`); `prisma/seed.ts` reescrito com catalogo final de 6 tours; seed NAO executado; aguardando aprovacao do Trigger para commit.
 - Vercel production: ativo; healthcheck database ok; 2 tours publicados; RT-018E Production Smoke PASS; RT-019A Production Seed/Smoke PASS.
 - Neon production: 2 Trips publicadas no catalogo (`Cristo Redentor + Mirante Dona Marta` e `Pao de Acucar ao Entardecer`), agendas futuras ativas, sem duplicacao de Pao de Acucar, 1 Booking de teste (CANCELED) e 1 booking de auditoria criado pelo fluxo publico normal (`cmoli78ld000204js1agra4il`).
 - Dominio proprio: nao configurado.
@@ -160,7 +162,8 @@ Evidencias:
 - RT-021A corrigiu UX publica: Hero Search locale-aware sem locale duplicado, busca real por `search`, Nossos Tours sem filtro lateral, card levando ao detalhe/agenda, footer sem links falsos; lint/typecheck/test/build/git diff --check PASS; Production UX Smoke PASS.
 - RT-022A DONE remoto (reconciliado por RT-FINAL-00A): commit `b0e4d4a` publicado em `origin/main`; adiciona `confirmBookingByAdmin` e `confirmBookingByAdminAction`; botao de confirmacao no detalhe admin; labels legiveis de status e paymentStatus; testes unitarios; E2E spec com guard local.
 - RT-FINAL-03A manual production validation: admin booking actions validated manually by Trigger; lista admin mostrou reservas CONFIRMED/PENDING/CANCELED e fluxo confirm/cancel foi considerado funcional, sem erro visivel reportado.
-- RT-FINAL-04B local: link publico "Reservas" removido do footer; WhatsApp oficial e formulario seguro destacados; textos publicos agora tratam reserva como pre-reserva com confirmacao manual; pagamento online segue v2/bloqueado.
+- RT-FINAL-04B Remote DONE: commit `c7a1d47`; link "Reservas" removido do footer; WhatsApp e formulario destacados; copy de pre-reserva manual aplicada.
+- RT-FINAL-04C2 local: assets JPEG adicionados via conversao sharp (PNG RGBA → JPEG quality 92); `prisma/seed.ts` reescrito com 6 tours finais + despublicacao de seed-001 via updateMany; seed nao executado.
 
 ## O que continua pendente
 

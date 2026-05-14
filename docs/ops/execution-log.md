@@ -5,6 +5,37 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-05-14 - RT-FINAL-04C2 Add Final Catalog Assets and Seed Definition
+
+**Executado por:** Claude Code (Protocolo Rick - RT-FINAL-04C2)
+**Ambiente:** local; assets e seed definition
+**Status:** Local REVIEW - aguardando aprovacao do Trigger para commit; sem seed em producao
+
+**Objetivo:**
+Adicionar os 2 assets obrigatorios e preparar seed definitivo do catalogo final de 6 tours sem alterar banco.
+
+**Operacoes locais:**
+- PNG RGBA `publicimagestripsimagem-helicoptero-cristo.jpg.png` convertido para JPEG via sharp (quality 92, progressive) → `public/images/trips/imagem-helicoptero-cristo.jpg` (1792x2390, 712KB).
+- PNG RGBA `publicimagestripsimagem-floresta-tijuca.jpg.png` convertido para JPEG via sharp (quality 92, progressive) → `public/images/trips/imagem-floresta-tijuca.jpg` (2352x1792, 1.7MB).
+- `prisma/seed.ts` reescrito com:
+  - updateMany para despublicar `seed-001-cristo-dona-marta` (nao deleta, preserva bookings existentes).
+  - upsert idempotente para os 6 tours do catalogo final com IDs determiniscos.
+  - upsert idempotente para schedules de cada tour (+90/+95/+100/+105/+110 dias).
+- Documentacao operacional atualizada (status, backlog, session-handoff, execution-log).
+
+**Restricoes mantidas:**
+- Seed NAO foi executado.
+- DATABASE_URL de producao NAO foi usada.
+- Banco NAO foi alterado.
+- Schema Prisma NAO foi alterado.
+- Nenhuma migration executada.
+- Nenhuma UI alterada.
+- Nenhum deploy executado.
+- Nenhum commit ou push executado.
+- RT-FINAL-04C3 nao foi aberta automaticamente.
+
+---
+
 ## 2026-05-13 - RT-FINAL-04B Public Commercial Trust Baseline
 
 **Executado por:** Codex

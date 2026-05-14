@@ -1033,10 +1033,31 @@ Tarefas:
 
 Restricoes mantidas: nenhum tour criado; sem banco, seed, migration, pagamento, Mercado Pago, Stripe, auth, admin flow, deploy, commit, push ou RT-FINAL-04C.
 
+## RT-FINAL-04C2 Add Final Catalog Assets and Seed Definition
+
+Estado: Local REVIEW - aguardando aprovacao do Trigger para commit; seed nao executado em producao.
+
+Objetivo: adicionar os 2 assets obrigatorios e preparar seed definitivo do catalogo final de 6 tours.
+
+Tarefas:
+- RT-FINAL-04C2.1 Converter e salvar `imagem-helicoptero-cristo.jpg` em `public/images/trips/`. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+- RT-FINAL-04C2.2 Converter e salvar `imagem-floresta-tijuca.jpg` em `public/images/trips/`. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+- RT-FINAL-04C2.3 Reescrever `prisma/seed.ts` com catalogo final de 6 tours e despublicacao de seed-001. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+- RT-FINAL-04C2.4 Atualizar documentacao operacional. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+
+Restricoes mantidas: seed NAO executado; DATABASE_URL producao NAO usada; banco NAO alterado; schema NAO alterado; nenhuma migration; nenhuma UI alterada; nenhum deploy; nenhum commit; nenhum push; RT-FINAL-04C3 nao aberta automaticamente.
+
+## RT-FINAL-04C3 Run Production Catalog Seed and Smoke
+
+Estado: BLOCKED — aguarda commit autorizado de RT-FINAL-04C2 e autorizacao explicita do Trigger para rodar seed.
+
+Objetivo: executar seed em producao, despublicar seed-001, validar catalogo de 6 tours em /pt/tours.
+
+Restricoes: somente apos RT-FINAL-04C2 commitada e push autorizado; seed mutavel de banco exige autorizacao explicita.
+
 ## Proximas candidatas (sem READY automatica)
 
+- RT-FINAL-04C3 - Run Production Catalog Seed and Smoke
 - RT-FINAL-01 - Define Delivery Scope and Acceptance Criteria
-- RT-FINAL-02 - Stabilize Public Tour and Booking Flow
-- RT-FINAL-04 - Polish Commercial Content and Trust Layer
 - RT-FINAL-05 - Configure Custom Domain and Final Production Smoke
 - RT-FINAL-06 - Owner Handoff Package

@@ -19,6 +19,39 @@ Leitura objetiva da fase:
 
 Fase 1 permanece: REVIEW.
 
+## Atualizacao 2026-05-14 - RT-FINAL-04C2 Add Final Catalog Assets and Seed Definition
+
+Estado: Local REVIEW - aguardando aprovacao do Trigger para commit; sem seed em producao, sem deploy.
+
+Objetivo: adicionar os 2 assets obrigatorios e preparar seed definitivo do catalogo final de 6 tours sem alterar banco.
+
+Resultado local:
+- `public/images/trips/imagem-helicoptero-cristo.jpg` adicionado (convertido de PNG RGBA para JPEG, 1792x2390, 712KB).
+- `public/images/trips/imagem-floresta-tijuca.jpg` adicionado (convertido de PNG RGBA para JPEG, 2352x1792, 1.7MB).
+- `prisma/seed.ts` reescrito com catalogo final de 6 tours:
+  - seed-001-cristo-dona-marta: despublicado via updateMany (nao deletado).
+  - seed-002-pao-de-acucar: upsert alinhado, precos e imagem corrigidos.
+  - seed-003-selaron-lapa: upsert novo.
+  - seed-004-centro-porto: upsert novo.
+  - seed-005-favela-rocinha: upsert novo.
+  - seed-006-floresta-tijuca: upsert novo.
+  - seed-007-helicoptero-cristo: upsert novo.
+  - Schedules idempotentes para cada tour ativo (+90/+95/+100/+105/+110 dias).
+- Documentacao operacional atualizada.
+
+Restricoes mantidas:
+- Seed NAO foi executado.
+- DATABASE_URL de producao NAO foi usada.
+- Banco NAO foi alterado.
+- Schema Prisma NAO foi alterado.
+- Nenhuma migration executada.
+- Nenhuma UI alterada.
+- Nenhum deploy executado.
+- Nenhum commit ou push executado.
+- RT-FINAL-04C3 nao foi aberta automaticamente.
+
+---
+
 ## Atualizacao 2026-05-13 - RT-FINAL-04B Public Commercial Trust Baseline
 
 Estado: Local REVIEW - aguardando revisao do Trigger; sem commit e sem push.
@@ -218,8 +251,10 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - RT-FINAL-00 concluida como auditoria pura (2026-05-13): nenhuma alteracao de arquivos; divergencia documental identificada e encaminhada para RT-FINAL-00A.
 - RT-FINAL-00A Local DONE: correcao documental das divergencias identificadas; commit documental autorizado pelo Trigger.
 - RT-FINAL-03A validada manualmente em producao pelo Trigger; documentacao local pendente de commit autorizado.
-- RT-FINAL-04B Local REVIEW: camada publica de confianca e pre-reserva manual ajustada localmente; aguardando revisao do Trigger.
-- Proximas candidatas (sem READY automatica): RT-FINAL-01 (define delivery scope), RT-FINAL-02 (stabilize public flow), RT-FINAL-04 (polish commercial content), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
+- RT-FINAL-04B Remote DONE: commit `c7a1d47 feat: improve public trust and manual booking copy` publicado em `origin/main`.
+- RT-FINAL-04C1 CLOSED (Discussion Gate): catalogo final de 6 tours aprovado pelo Trigger; pacote de decisao sem execucao de repositorio.
+- RT-FINAL-04C2 Local REVIEW: assets adicionados, seed preparado; aguardando aprovacao do Trigger para commit; seed nao executado.
+- Proximas candidatas (sem READY automatica): RT-FINAL-04C3 (run production catalog seed and smoke), RT-FINAL-01 (define delivery scope), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
 
 
 ### Medio prazo
@@ -237,7 +272,7 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - P1: a credencial de bootstrap ADMIN removida deve ser considerada potencialmente exposta; rotacao nao confirmada.
 - P1: `npm audit` residual em Prisma dev tooling segue pendente para janela controlada.
 - P1: dominio proprio nao configurado - produto em URL temporaria da Vercel.
-- P2: imagem do tour Cristo Redentor usa asset do Pao de Acucar - conteudo comercial incorreto visivel ao usuario.
+- P2: imagem do tour Cristo Redentor usa asset do Pao de Acucar — correcao pendente de RT-FINAL-04C3 (seed em producao).
 - P2: React hydration error #418 sem task de investigacao aberta.
 - P2: sem guia de operacao para o dono (handoff operacional pendente).
 - P2: reabrir Mercado Pago agora ampliaria escopo sem justificativa operacional desta fase.
