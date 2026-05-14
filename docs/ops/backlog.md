@@ -1035,15 +1035,39 @@ Restricoes mantidas: nenhum tour criado; sem banco, seed, migration, pagamento, 
 
 ## RT-FINAL-04C2B Reconcile Final Catalog Schedule Updates
 
-Estado: Local REVIEW - aguardando aprovacao do Trigger para commit; sem seed em producao.
+Estado: Remote DONE — commit `0d9e0c5 fix: reconcile final catalog schedule updates` publicado em `origin/main`; smoke de producao completo PASS pelo Trigger; P2 registrado; documentacao de closure Local DONE — push pendente.
 
 Objetivo: corrigir os 6 blocos `update` de TripSchedule em `prisma/seed.ts` para incluir `capacity` e `pricePerPersonCents`.
 
 Tarefas:
-- RT-FINAL-04C2B.1 Corrigir bloco `update` dos 6 schedules em `prisma/seed.ts`. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
-- RT-FINAL-04C2B.2 Atualizar documentacao operacional. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+- RT-FINAL-04C2B.1 Corrigir bloco `update` dos 6 schedules em `prisma/seed.ts`. Estado: DONE — commit `0d9e0c5`.
+- RT-FINAL-04C2B.2 Atualizar documentacao operacional com smoke completo e P2 registrado. Estado: Local DONE — push pendente.
 
-Restricoes mantidas: seed NAO executado; banco NAO alterado; schema NAO alterado; nenhuma migration; nenhuma UI; nenhum deploy; nenhum commit; nenhum push.
+Smoke de producao completo validado pelo Trigger (RT-FINAL-04C3, 2026-05-14):
+- Seed executado em producao sem erro PASS.
+- /pt/tours exibe exatamente 6 tours publicados PASS.
+- seed-001-cristo-dona-marta ausente do catalogo publico e de /api/trips PASS.
+- Todos os 6 detalhes de tour publicado retornam HTTP 200 PASS.
+- Todos os 6 precos e imagens corretos PASS.
+- Assets de imagem retornam HTTP 200 PASS.
+- /pt/admin anonimo redireciona para login PASS.
+- /pt/login retorna HTTP 200 PASS.
+- /pt/register retorna HTTP 200 PASS.
+- /pt/contato retorna HTTP 200 PASS.
+- /pt/quem-somos retorna HTTP 200 PASS.
+- Mobile catalog layout com 6 cards sem quebra visual (manual Trigger) PASS.
+- Booking publico submetido com sucesso de tour publicado (manual Trigger) PASS.
+- Booking submetido visivel no admin (manual Trigger) PASS.
+
+Pendencia P2: `TourDetailsPage` usa `findUnique` sem filtro `isPublished` — URL direta de tour despublicado retorna HTTP 200 e exibe CTA. Tour nao aparece em nenhuma superficie navegavel publica. Registrado para RT-FINAL-HARDENING-01; nao corrigir dentro desta closure.
+
+## RT-FINAL-HARDENING-01 Filter isPublished in Tour Detail Page
+
+Estado: BACKLOG — pendente de abertura formal.
+
+Objetivo: adicionar filtro `isPublished: true` na query `prisma.trip.findUnique` de `TourDetailsPage` para que tours despublicados retornem `notFound()` em vez de HTTP 200.
+
+Restricoes: nao abrir automaticamente; aguarda autorizacao do Trigger.
 
 ## RT-FINAL-04C2 Add Final Catalog Assets and Seed Definition
 
@@ -1061,11 +1085,15 @@ Restricoes mantidas: seed NAO executado; DATABASE_URL producao NAO usada; banco 
 
 ## RT-FINAL-04C3 Run Production Catalog Seed and Smoke
 
-Estado: BLOCKED — aguarda commit autorizado de RT-FINAL-04C2 e autorizacao explicita do Trigger para rodar seed.
+Estado: Production DONE by Trigger (2026-05-14) — seed executado; /pt/tours exibe 6 tours publicados; seed-001-cristo-dona-marta despublicado e ausente do catalogo; smoke completo PASS.
 
 Objetivo: executar seed em producao, despublicar seed-001, validar catalogo de 6 tours em /pt/tours.
 
-Restricoes: somente apos RT-FINAL-04C2 commitada e push autorizado; seed mutavel de banco exige autorizacao explicita.
+Resultado:
+- Seed executado pelo Trigger contra Neon producao sem erro.
+- 6 tours publicados: Pao de Acucar, Selaron + Lapa, Centro Historico + Porto Maravilha, Favela Rocinha, Floresta da Tijuca, Helicoptero com Cristo.
+- seed-001-cristo-dona-marta: isPublished=false; ausente do catalogo publico e de /api/trips.
+- Smoke completo PASS — ver RT-FINAL-04C2B para lista detalhada.
 
 ## Proximas candidatas (sem READY automatica)
 

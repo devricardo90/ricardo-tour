@@ -19,22 +19,30 @@ Leitura objetiva da fase:
 
 Fase 1 permanece: REVIEW.
 
-## Atualizacao 2026-05-14 - RT-FINAL-04C2B Reconcile Final Catalog Schedule Updates
+## Atualizacao 2026-05-14 - RT-FINAL-04C2B + RT-FINAL-04C3 Production Closure
 
-Estado: Local REVIEW - aguardando aprovacao do Trigger para commit; sem seed em producao, sem deploy.
+RT-FINAL-04C2B Estado: Remote DONE — commit `0d9e0c5 fix: reconcile final catalog schedule updates` publicado em `origin/main`; smoke de producao completo PASS; P2 registrado; documentacao de closure Local DONE — push pendente.
 
-Objetivo: corrigir os 6 blocos `update` de TripSchedule em `prisma/seed.ts` para incluir `capacity` e `pricePerPersonCents`, tornando o upsert reconciliador completo.
+RT-FINAL-04C3 Estado: Production DONE by Trigger — seed executado em producao; catalogo de 6 tours publicado; smoke completo PASS pelo Trigger; documentacao de closure Local DONE — push pendente.
 
-Resultado local:
-- s2 (Pao de Acucar): update agora inclui `capacity: 12, pricePerPersonCents: 29500`.
-- s3 (Selaron + Lapa): update agora inclui `capacity: 10, pricePerPersonCents: 18000`.
-- s4 (Centro Porto): update agora inclui `capacity: 10, pricePerPersonCents: 22000`.
-- s5 (Favela Rocinha): update agora inclui `capacity: 8, pricePerPersonCents: 23000`.
-- s6 (Floresta Tijuca): update agora inclui `capacity: 8, pricePerPersonCents: 29000`.
-- s7 (Helicoptero Cristo): update agora inclui `capacity: 4, pricePerPersonCents: 149000`.
-- Documentacao operacional atualizada.
+Smoke de producao completo validado pelo Trigger (2026-05-14):
+- Seed executado em producao sem erro PASS.
+- /pt/tours mostra exatamente 6 tours publicados PASS.
+- seed-001-cristo-dona-marta ausente do catalogo publico e de /api/trips PASS.
+- Todos os 6 detalhes de tour publicado retornam HTTP 200 PASS.
+- Todos os 6 precos e imagens corretos PASS.
+- Assets de imagem retornam HTTP 200 PASS.
+- /pt/admin anonimo redireciona para login PASS.
+- /pt/login retorna HTTP 200 PASS.
+- /pt/register retorna HTTP 200 PASS.
+- /pt/contato retorna HTTP 200 PASS.
+- /pt/quem-somos retorna HTTP 200 PASS.
+- Mobile catalog layout com 6 cards sem quebra visual (validado manualmente pelo Trigger) PASS.
+- Booking publico submetido com sucesso de tour publicado (validado manualmente pelo Trigger) PASS.
+- Booking submetido aparece no admin (validado manualmente pelo Trigger) PASS.
 
-Restricoes mantidas: seed NAO executado; DATABASE_URL producao NAO usada; banco NAO alterado; schema NAO alterado; nenhuma migration; nenhuma UI alterada; nenhum deploy; nenhum commit; nenhum push.
+Pendencia P2 registrada:
+- `TourDetailsPage` usa `findUnique` sem filtro `isPublished` — URL direta de tour despublicado (`/pt/tours/seed-001-cristo-dona-marta`) retorna HTTP 200 e exibe CTA. Tour nao aparece em nenhuma superficie navegavel publica, mas URL direta funciona. Correcao registrada em RT-FINAL-HARDENING-01; nao corrigir dentro desta closure.
 
 ---
 
@@ -231,7 +239,7 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - GitHub `main` remoto esta em `8b3c2cc docs: record RT-021A production UX smoke` antes do commit da RT-022A.
 - Vercel production validada com RT-018E smoke e RT-019A production seed/smoke.
 
-- Neon production: 2 Trips publicadas no catalogo (`Cristo Redentor + Mirante Dona Marta` e `Pao de Acucar ao Entardecer`), agendas futuras ativas, sem duplicacao de Pao de Acucar, 1 Booking de teste (status CANCELED) e 1 booking de auditoria criado pelo fluxo publico normal (`cmoli78ld000204js1agra4il`).
+- Neon production (apos RT-FINAL-04C3, 2026-05-14): 6 Trips publicadas no catalogo (Pao de Acucar, Selaron + Lapa, Centro Historico + Porto Maravilha, Favela Rocinha, Floresta da Tijuca, Helicoptero com Cristo); seed-001-cristo-dona-marta com `isPublished=false` (despublicado, nao deletado); agendas futuras ativas para todos os 6 tours; bookings historicos preservados.
 - Neon production: usuario `ricardo@gmail.com` com `role = ADMIN` e `emailVerified = true` (alteracao manual anterior).
 
 ## Novo status geral do projeto
@@ -260,6 +268,7 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - `GET /sitemap.xml`: `200`.
 - RT-016A production smoke PASS: `/pt/tours` abre; detalhe do tour abre; booking cria; usuario redireciona para `/pt/reservas/{bookingId}`; pagina de confirmacao funciona; mensagem de pre-reserva/confirmacao manual esta clara; `/pt/reservas` lista a reserva; "Ver detalhes" abre o detalhe; payment status nao exibe enum cru; admin booking list segue funcional.
 - RT-021A Production UX Smoke PASS: `/pt`, `/pt/tours`, `/pt/contato` e detalhes dos 2 tours retornam `200`; Hero Search navega para `/pt/tours/cmolfs9eu000004l2trz4q8bf` sem locale duplicado; `?search=Pao` filtra corretamente; busca sem resultado exibe empty state generico aceitavel; card CTAs apontam para `/pt/tours/{id}`; reserva anonima no detalhe redireciona para login com redirect seguro; footer sem links falsos; menu desktop/mobile preserva locale.
+- RT-FINAL-04C3 Production Smoke PASS (2026-05-14, validado pelo Trigger): seed executado sem erro; `/pt/tours` exibe exatamente 6 tours publicados; `seed-001-cristo-dona-marta` ausente do catalogo publico e de `/api/trips`; todos os 6 detalhes de tour publicado retornam HTTP 200; todos os 6 precos e imagens corretos; assets de imagem retornam HTTP 200; `/pt/admin` anonimo redireciona para login; `/pt/login`, `/pt/register`, `/pt/contato` e `/pt/quem-somos` retornam HTTP 200; mobile catalog layout com 6 cards sem quebra visual (manual Trigger); booking publico submetido com sucesso (manual Trigger); booking visivel no admin (manual Trigger). P2 residual: URL direta de tour despublicado retorna 200 — registrado para RT-FINAL-HARDENING-01.
 
 ## Foco atual
 
@@ -272,8 +281,10 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - RT-FINAL-03A validada manualmente em producao pelo Trigger; documentacao local pendente de commit autorizado.
 - RT-FINAL-04B Remote DONE: commit `c7a1d47 feat: improve public trust and manual booking copy` publicado em `origin/main`.
 - RT-FINAL-04C1 CLOSED (Discussion Gate): catalogo final de 6 tours aprovado pelo Trigger; pacote de decisao sem execucao de repositorio.
-- RT-FINAL-04C2 Local REVIEW: assets adicionados, seed preparado; aguardando aprovacao do Trigger para commit; seed nao executado.
-- Proximas candidatas (sem READY automatica): RT-FINAL-04C3 (run production catalog seed and smoke), RT-FINAL-01 (define delivery scope), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
+- RT-FINAL-04C2 Remote DONE: commit `dfa7489 feat: define final tour catalog seed` publicado em `origin/main`.
+- RT-FINAL-04C2B Remote DONE: commit `0d9e0c5 fix: reconcile final catalog schedule updates` publicado em `origin/main`; smoke de producao completo PASS; P2 isPublished registrado.
+- RT-FINAL-04C3 Production DONE by Trigger: seed executado; /pt/tours exibe 6 tours publicados; seed-001-cristo-dona-marta ausente do catalogo e de /api/trips; smoke completo PASS; documentacao de closure Local DONE — push pendente.
+- Proximas candidatas (sem READY automatica): RT-FINAL-HARDENING-01 (filtrar isPublished no detalhe de tour), RT-FINAL-01 (define delivery scope), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
 
 
 ### Medio prazo
@@ -291,7 +302,8 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - P1: a credencial de bootstrap ADMIN removida deve ser considerada potencialmente exposta; rotacao nao confirmada.
 - P1: `npm audit` residual em Prisma dev tooling segue pendente para janela controlada.
 - P1: dominio proprio nao configurado - produto em URL temporaria da Vercel.
-- P2: imagem do tour Cristo Redentor usa asset do Pao de Acucar — correcao pendente de RT-FINAL-04C3 (seed em producao).
+- P2: `TourDetailsPage` nao filtra `isPublished` — URL direta de tour despublicado retorna HTTP 200; corrigir em RT-FINAL-HARDENING-01.
+- P2: imagem do tour Cristo Redentor (seed-001, despublicado) usava asset do Pao de Acucar — tour despublicado e ausente do catalogo; item residual encerrado.
 - P2: React hydration error #418 sem task de investigacao aberta.
 - P2: sem guia de operacao para o dono (handoff operacional pendente).
 - P2: reabrir Mercado Pago agora ampliaria escopo sem justificativa operacional desta fase.

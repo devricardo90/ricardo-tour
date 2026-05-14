@@ -5,11 +5,48 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-05-14 - RT-FINAL-04C3 Production Catalog Seed and Smoke
+
+**Executado por:** Trigger (manual, producao)
+**Ambiente:** `https://rick-travel.vercel.app` + Neon producao
+**Status:** Production DONE — seed executado; catalogo 6 tours publicado; smoke completo PASS
+
+**Objetivo:**
+Executar seed em producao para publicar catalogo final de 6 tours e despublicar seed-001-cristo-dona-marta.
+
+**Resultado observado pelo Trigger (smoke completo, 2026-05-14):**
+- Seed executado em producao sem erro PASS.
+- /pt/tours exibe exatamente 6 tours publicados PASS.
+- seed-001-cristo-dona-marta ausente do catalogo publico e de /api/trips PASS.
+- Todos os 6 detalhes de tour publicado retornam HTTP 200 PASS.
+- Todos os 6 precos e imagens corretos PASS.
+- Assets de imagem retornam HTTP 200 PASS.
+- /pt/admin anonimo redireciona para login PASS.
+- /pt/login retorna HTTP 200 PASS.
+- /pt/register retorna HTTP 200 PASS.
+- /pt/contato retorna HTTP 200 PASS.
+- /pt/quem-somos retorna HTTP 200 PASS.
+- Mobile catalog layout com 6 cards sem quebra visual (validado manualmente pelo Trigger) PASS.
+- Booking publico submetido com sucesso de tour publicado (validado manualmente pelo Trigger) PASS.
+- Booking submetido visivel no admin (validado manualmente pelo Trigger) PASS.
+
+**Pendencia P2 identificada:**
+- `TourDetailsPage` usa `findUnique` sem filtro `isPublished` — URL direta de tour despublicado (`/pt/tours/seed-001-cristo-dona-marta`) retorna HTTP 200 e exibe CTA. Tour nao aparece em nenhuma superficie navegavel publica (catalogo, busca, home). Registrado para RT-FINAL-HARDENING-01; nao corrigir dentro desta closure.
+
+**Restricoes mantidas:**
+- Nenhum codigo alterado nesta execucao.
+- Nenhum schema alterado.
+- Nenhuma migration executada.
+- Nenhuma UI alterada.
+- Nenhum commit ou push desta execucao.
+
+---
+
 ## 2026-05-14 - RT-FINAL-04C2B Reconcile Final Catalog Schedule Updates
 
 **Executado por:** Claude Code (Protocolo Rick - RT-FINAL-04C2B)
 **Ambiente:** local; somente prisma/seed.ts e documentacao operacional
-**Status:** Local REVIEW - aguardando aprovacao do Trigger para commit; sem seed em producao
+**Status:** Remote DONE — commit `0d9e0c5 fix: reconcile final catalog schedule updates` publicado em `origin/main`; smoke de producao completo PASS pelo Trigger (ver RT-FINAL-04C3 acima)
 
 **Objetivo:**
 Corrigir os 6 blocos `update` de TripSchedule em `prisma/seed.ts` para incluir `capacity` e `pricePerPersonCents`, garantindo que re-execucoes do seed reconciliem todos os campos, nao apenas `startAt` e `status`.
