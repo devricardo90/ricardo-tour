@@ -1,7 +1,6 @@
 import { ShieldCheck, MapPin, BadgeCheck } from 'lucide-react'
 import { OurStory } from '@/components/about/our-story'
 import { MissionVisionValues } from '@/components/about/mission-vision-values'
-import { SecuritySection } from '@/components/about/security-section'
 
 export default function QuemSomosPage() {
   return (
@@ -50,7 +49,6 @@ export default function QuemSomosPage() {
 
         <OurStory />
         <MissionVisionValues />
-        <SecuritySection />
       </main>
     </div>
   )

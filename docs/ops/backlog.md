@@ -1198,6 +1198,28 @@ Validacao local:
 
 Restricoes mantidas: sem seed; sem banco; sem schema; sem migration; sem deploy; sem commit; sem push; sem logica admin, booking, auth ou pagamento alterada; sem nova dependencia; sem numero inventado; nenhum dado sensivel adicionado; public/cadastro/cadastur.png nao exibido.
 
+## RT-FINAL-05D Simplify About Page to Minimal Story Layout
+
+Estado: Local REVIEW — implementacao concluida; aguardando autorizacao do Trigger para commit.
+
+Objetivo: remover SecuritySection da pagina Quem Somos; pagina deve renderizar apenas hero inline + OurStory + MissionVisionValues.
+
+Tarefas:
+- RT-FINAL-05D.1 Remover import SecuritySection de quem-somos/page.tsx. Estado: DONE local.
+- RT-FINAL-05D.2 Remover uso <SecuritySection /> do JSX da pagina. Estado: DONE local.
+- RT-FINAL-05D.3 Atualizar documentacao operacional. Estado: DONE local.
+
+Arquivos alterados:
+- `app/[locale]/(public)/quem-somos/page.tsx`
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+
+Validacao local:
+- lint PASS.
+- typecheck PASS.
+
+Restricoes mantidas: sem seed; sem banco; sem schema; sem migration; sem deploy; sem commit; sem push; sem logica admin, booking, auth ou pagamento alterada; sem nova dependencia; sem novo card ou claim adicionado; SecuritySection nao deletada, apenas removida da renderizacao.
+
 ## RT-FINAL-HARDENING-01 Filter isPublished in Tour Detail Page
 
 Estado: SUPERSEDED — corrigido em RT-FINAL-04D.
