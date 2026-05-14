@@ -361,7 +361,7 @@ async function main() {
 
     const s2 = await prisma.tripSchedule.upsert({
       where: { id: SEED_SCHEDULE_ID_002 },
-      update: { startAt: futureScheduleDate(90), status: 'OPEN' },
+      update: { startAt: futureScheduleDate(90), capacity: 12, pricePerPersonCents: 29500, status: 'OPEN' },
       create: {
         id: SEED_SCHEDULE_ID_002,
         tripId: trip2.id,
@@ -375,7 +375,7 @@ async function main() {
 
     const s3 = await prisma.tripSchedule.upsert({
       where: { id: SEED_SCHEDULE_ID_003 },
-      update: { startAt: futureScheduleDate(90), status: 'OPEN' },
+      update: { startAt: futureScheduleDate(90), capacity: 10, pricePerPersonCents: 18000, status: 'OPEN' },
       create: {
         id: SEED_SCHEDULE_ID_003,
         tripId: trip3.id,
@@ -389,7 +389,7 @@ async function main() {
 
     const s4 = await prisma.tripSchedule.upsert({
       where: { id: SEED_SCHEDULE_ID_004 },
-      update: { startAt: futureScheduleDate(95), status: 'OPEN' },
+      update: { startAt: futureScheduleDate(95), capacity: 10, pricePerPersonCents: 22000, status: 'OPEN' },
       create: {
         id: SEED_SCHEDULE_ID_004,
         tripId: trip4.id,
@@ -403,7 +403,7 @@ async function main() {
 
     const s5 = await prisma.tripSchedule.upsert({
       where: { id: SEED_SCHEDULE_ID_005 },
-      update: { startAt: futureScheduleDate(100), status: 'OPEN' },
+      update: { startAt: futureScheduleDate(100), capacity: 8, pricePerPersonCents: 23000, status: 'OPEN' },
       create: {
         id: SEED_SCHEDULE_ID_005,
         tripId: trip5.id,
@@ -417,7 +417,7 @@ async function main() {
 
     const s6 = await prisma.tripSchedule.upsert({
       where: { id: SEED_SCHEDULE_ID_006 },
-      update: { startAt: futureScheduleDate(105), status: 'OPEN' },
+      update: { startAt: futureScheduleDate(105), capacity: 8, pricePerPersonCents: 29000, status: 'OPEN' },
       create: {
         id: SEED_SCHEDULE_ID_006,
         tripId: trip6.id,
@@ -431,7 +431,7 @@ async function main() {
 
     const s7 = await prisma.tripSchedule.upsert({
       where: { id: SEED_SCHEDULE_ID_007 },
-      update: { startAt: futureScheduleDate(110), status: 'OPEN' },
+      update: { startAt: futureScheduleDate(110), capacity: 4, pricePerPersonCents: 149000, status: 'OPEN' },
       create: {
         id: SEED_SCHEDULE_ID_007,
         tripId: trip7.id,

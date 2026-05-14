@@ -19,6 +19,25 @@ Leitura objetiva da fase:
 
 Fase 1 permanece: REVIEW.
 
+## Atualizacao 2026-05-14 - RT-FINAL-04C2B Reconcile Final Catalog Schedule Updates
+
+Estado: Local REVIEW - aguardando aprovacao do Trigger para commit; sem seed em producao, sem deploy.
+
+Objetivo: corrigir os 6 blocos `update` de TripSchedule em `prisma/seed.ts` para incluir `capacity` e `pricePerPersonCents`, tornando o upsert reconciliador completo.
+
+Resultado local:
+- s2 (Pao de Acucar): update agora inclui `capacity: 12, pricePerPersonCents: 29500`.
+- s3 (Selaron + Lapa): update agora inclui `capacity: 10, pricePerPersonCents: 18000`.
+- s4 (Centro Porto): update agora inclui `capacity: 10, pricePerPersonCents: 22000`.
+- s5 (Favela Rocinha): update agora inclui `capacity: 8, pricePerPersonCents: 23000`.
+- s6 (Floresta Tijuca): update agora inclui `capacity: 8, pricePerPersonCents: 29000`.
+- s7 (Helicoptero Cristo): update agora inclui `capacity: 4, pricePerPersonCents: 149000`.
+- Documentacao operacional atualizada.
+
+Restricoes mantidas: seed NAO executado; DATABASE_URL producao NAO usada; banco NAO alterado; schema NAO alterado; nenhuma migration; nenhuma UI alterada; nenhum deploy; nenhum commit; nenhum push.
+
+---
+
 ## Atualizacao 2026-05-14 - RT-FINAL-04C2 Add Final Catalog Assets and Seed Definition
 
 Estado: Local REVIEW - aguardando aprovacao do Trigger para commit; sem seed em producao, sem deploy.

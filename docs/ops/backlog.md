@@ -1033,6 +1033,18 @@ Tarefas:
 
 Restricoes mantidas: nenhum tour criado; sem banco, seed, migration, pagamento, Mercado Pago, Stripe, auth, admin flow, deploy, commit, push ou RT-FINAL-04C.
 
+## RT-FINAL-04C2B Reconcile Final Catalog Schedule Updates
+
+Estado: Local REVIEW - aguardando aprovacao do Trigger para commit; sem seed em producao.
+
+Objetivo: corrigir os 6 blocos `update` de TripSchedule em `prisma/seed.ts` para incluir `capacity` e `pricePerPersonCents`.
+
+Tarefas:
+- RT-FINAL-04C2B.1 Corrigir bloco `update` dos 6 schedules em `prisma/seed.ts`. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+- RT-FINAL-04C2B.2 Atualizar documentacao operacional. Estado: executada localmente; aguardando aprovacao do Trigger para commit.
+
+Restricoes mantidas: seed NAO executado; banco NAO alterado; schema NAO alterado; nenhuma migration; nenhuma UI; nenhum deploy; nenhum commit; nenhum push.
+
 ## RT-FINAL-04C2 Add Final Catalog Assets and Seed Definition
 
 Estado: Local REVIEW - aguardando aprovacao do Trigger para commit; seed nao executado em producao.

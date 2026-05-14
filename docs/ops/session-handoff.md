@@ -5,7 +5,7 @@ Data: 2026-05-14 (atualizado por RT-FINAL-04C2 - Add Final Catalog Assets and Se
 ## Contexto
 
 Sessao atualizada ate a Fase 3 - Operacao publica controlada do MVP seguindo o Protocolo Rick.
-RT-FINAL-DG aprovada. RT-FINAL-00 concluida como auditoria pura. RT-FINAL-00A Remote DONE confirmado. RT-FINAL-03A executada manualmente em producao pelo Trigger. RT-FINAL-04B Remote DONE (commit c7a1d47). RT-FINAL-04C1 CLOSED (Discussion Gate). RT-FINAL-04C2 executada localmente; assets adicionados e seed preparado; aguardando aprovacao do Trigger para commit; seed nao executado em producao.
+RT-FINAL-DG aprovada. RT-FINAL-00 concluida como auditoria pura. RT-FINAL-00A Remote DONE confirmado. RT-FINAL-03A executada manualmente em producao pelo Trigger. RT-FINAL-04B Remote DONE (commit c7a1d47). RT-FINAL-04C1 CLOSED (Discussion Gate). RT-FINAL-04C2 Remote DONE (commit dfa7489). RT-FINAL-04C2B executada localmente; blocos `update` dos 6 schedules corrigidos para incluir `capacity` e `pricePerPersonCents`; aguardando aprovacao do Trigger para commit; seed nao executado em producao.
 
 ## RT-023A Portfolio README Showcase
 
@@ -163,7 +163,8 @@ Evidencias:
 - RT-022A DONE remoto (reconciliado por RT-FINAL-00A): commit `b0e4d4a` publicado em `origin/main`; adiciona `confirmBookingByAdmin` e `confirmBookingByAdminAction`; botao de confirmacao no detalhe admin; labels legiveis de status e paymentStatus; testes unitarios; E2E spec com guard local.
 - RT-FINAL-03A manual production validation: admin booking actions validated manually by Trigger; lista admin mostrou reservas CONFIRMED/PENDING/CANCELED e fluxo confirm/cancel foi considerado funcional, sem erro visivel reportado.
 - RT-FINAL-04B Remote DONE: commit `c7a1d47`; link "Reservas" removido do footer; WhatsApp e formulario destacados; copy de pre-reserva manual aplicada.
-- RT-FINAL-04C2 local: assets JPEG adicionados via conversao sharp (PNG RGBA → JPEG quality 92); `prisma/seed.ts` reescrito com 6 tours finais + despublicacao de seed-001 via updateMany; seed nao executado.
+- RT-FINAL-04C2 Remote DONE (commit dfa7489): assets JPEG adicionados; `prisma/seed.ts` reescrito com 6 tours finais + despublicacao de seed-001 via updateMany.
+- RT-FINAL-04C2B local: blocos `update` dos 6 schedules corrigidos para incluir `capacity` e `pricePerPersonCents`; seed nao executado.
 
 ## O que continua pendente
 

@@ -5,6 +5,35 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-05-14 - RT-FINAL-04C2B Reconcile Final Catalog Schedule Updates
+
+**Executado por:** Claude Code (Protocolo Rick - RT-FINAL-04C2B)
+**Ambiente:** local; somente prisma/seed.ts e documentacao operacional
+**Status:** Local REVIEW - aguardando aprovacao do Trigger para commit; sem seed em producao
+
+**Objetivo:**
+Corrigir os 6 blocos `update` de TripSchedule em `prisma/seed.ts` para incluir `capacity` e `pricePerPersonCents`, garantindo que re-execucoes do seed reconciliem todos os campos, nao apenas `startAt` e `status`.
+
+**Operacoes locais:**
+- s2 Pao de Acucar: `update` agora inclui `capacity: 12, pricePerPersonCents: 29500`.
+- s3 Selaron + Lapa: `update` agora inclui `capacity: 10, pricePerPersonCents: 18000`.
+- s4 Centro Porto: `update` agora inclui `capacity: 10, pricePerPersonCents: 22000`.
+- s5 Favela Rocinha: `update` agora inclui `capacity: 8, pricePerPersonCents: 23000`.
+- s6 Floresta Tijuca: `update` agora inclui `capacity: 8, pricePerPersonCents: 29000`.
+- s7 Helicoptero Cristo: `update` agora inclui `capacity: 4, pricePerPersonCents: 149000`.
+
+**Restricoes mantidas:**
+- Seed NAO foi executado.
+- DATABASE_URL de producao NAO foi usada.
+- Banco NAO foi alterado.
+- Schema Prisma NAO foi alterado.
+- Nenhuma migration executada.
+- Nenhuma UI alterada.
+- Nenhum deploy executado.
+- Nenhum commit ou push executado.
+
+---
+
 ## 2026-05-14 - RT-FINAL-04C2 Add Final Catalog Assets and Seed Definition
 
 **Executado por:** Claude Code (Protocolo Rick - RT-FINAL-04C2)
