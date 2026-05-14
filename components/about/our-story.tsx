@@ -11,12 +11,12 @@ export function OurStory() {
             <div className="mx-auto max-w-7xl px-5 lg:px-12">
                 <div className="grid items-center gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
                     <div className="overflow-hidden rounded-[30px] border border-white/8 bg-[#0d2436] shadow-[0_22px_70px_rgba(0,0,0,0.24)]">
-                        <div className="relative aspect-[1.1] overflow-hidden md:aspect-[1.2]">
+                        <div className="relative aspect-[3/4] overflow-hidden md:aspect-[4/5]">
                             <Image
-                                src="/images/about/founder-team.jpg"
+                                src="/images/about/ricardo-guia-cracha.webp"
                                 alt={t('imageAlt')}
                                 fill
-                                className="object-cover"
+                                className="object-cover object-top"
                                 sizes="(max-width: 1024px) 100vw, 42vw"
                             />
                             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(0,0,0,0.08),rgba(0,0,0,0.08),rgba(0,0,0,0.5))]" />

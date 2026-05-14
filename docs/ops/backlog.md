@@ -1242,6 +1242,38 @@ Validacao local:
 
 Restricoes mantidas: sem alteracao em ContactForm, server actions, validacao de formulario, logica de envio, banco, schema, auth, admin, booking, tours, pagamento ou deploy; nenhum card novo adicionado.
 
+## RT-FINAL-05F Add Real About Photo and Testimonial Photos
+
+Estado: Local REVIEW — implementacao concluida; aguardando autorizacao do Trigger para commit.
+
+Objetivo: substituir foto placeholder na pagina Quem Somos pela foto real do guia com cracha; atualizar nomes e fotos dos 3 depoimentos; adicionar selos Cadastur e logo-turismo ao footer global.
+
+Tarefas:
+- RT-FINAL-05F.1 Copiar 4 imagens de Downloads para public/. Estado: DONE local.
+- RT-FINAL-05F.2 Atualizar our-story.tsx: src → ricardo-guia-cracha.webp; aspect-ratio portrait-friendly; object-top. Estado: DONE local.
+- RT-FINAL-05F.3 Atualizar testimonials.tsx: Danyela Viana/Carlos Moura/Beyjamin Bonfim com fotos reais; remover Camila Ferraz e Julia Cortez. Estado: DONE local.
+- RT-FINAL-05F.4 Atualizar footer.tsx: Image import; selos cadastur.png e logo-turismo.webp no rodape. Estado: DONE local.
+- RT-FINAL-05F.5 Atualizar documentacao operacional. Estado: DONE local.
+
+Arquivos alterados:
+- `public/images/about/ricardo-guia-cracha.webp` (novo)
+- `public/images/testimonials/danyela-viana.webp` (novo)
+- `public/images/testimonials/carlos-moura.webp` (novo)
+- `public/images/testimonials/beyjamin-bonfim.webp` (novo)
+- `components/about/our-story.tsx`
+- `components/testimonials.tsx`
+- `components/footer.tsx`
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+
+Validacao local:
+- lint PASS.
+- typecheck PASS.
+- test PASS.
+- build PASS.
+
+Restricoes mantidas: sem Cadastur numerico; sem CNPJ; sem badge de rede social; sem claims novas; sem alteracao em admin, booking, auth, pagamento, banco, schema, seed, migration ou deploy.
+
 ## RT-FINAL-HARDENING-01 Filter isPublished in Tour Detail Page
 
 Estado: SUPERSEDED — corrigido em RT-FINAL-04D.

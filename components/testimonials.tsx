@@ -35,26 +35,26 @@ export default function Testimonials() {
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <TestimonialCard
-            author="Camila Ferraz"
-            role="Turista · São Paulo"
-            initials="CF"
-            avatarUrl="/avatars/camila.jpg"
-            text="Experiência incrível! Atendimento impecável e roteiro muito bem planejado. O guia foi extremamente profissional e atencioso, tornando o passeio leve, seguro e enriquecedor. Recomendo para quem quer conhecer o Rio com qualidade."
-          />
-
-          <TestimonialCard
             author="Danyela Viana"
             role="Turista · Rio de Janeiro"
             initials="DV"
-            avatarUrl="/avatars/dany.jpg"
+            avatarUrl="/images/testimonials/danyela-viana.webp"
             text="O passeio de helicóptero foi simplesmente surreal! A vista aérea do Cristo Redentor e da Baía de Guanabara é algo que nunca vou esquecer. Organização, segurança e profissionalismo impecáveis."
           />
 
           <TestimonialCard
-            author="Julia Cortez"
-            role="Turista · Brasília"
-            initials="JC"
-            avatarUrl="/avatars/julia.jpg"
+            author="Carlos Moura"
+            role="Turista · São Paulo"
+            initials="CM"
+            avatarUrl="/images/testimonials/carlos-moura.webp"
+            text="Experiência incrível! Atendimento impecável e roteiro muito bem planejado. O guia foi extremamente profissional e atencioso, tornando o passeio leve, seguro e enriquecedor. Recomendo para quem quer conhecer o Rio com qualidade."
+          />
+
+          <TestimonialCard
+            author="Beyjamin Bonfim"
+            role="Turista · Minas Gerais"
+            initials="BB"
+            avatarUrl="/images/testimonials/beyjamin-bonfim.webp"
             text="Roteiro cultural riquíssimo e muito bem explicado. O guia demonstrou domínio total da história do Rio, tornando o passeio envolvente e educativo. Experiência de altíssimo nível."
           />
         </div>

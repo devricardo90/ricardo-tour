@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { Mail, MessageCircleMore, ShieldCheck } from "lucide-react";
+import Image from "next/image";
 
 import { RickTravelLogo } from "@/components/rick-travel-logo";
 import { Link } from "@/i18n/routing";
@@ -97,7 +98,23 @@ export default function FooterSection() {
 
                 <div className="my-10 border-t border-white/8" />
 
-                <div className="flex items-center justify-center">
+                <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+                    <div className="flex items-center gap-5">
+                        <Image
+                            src="/cadastro/cadastur.png"
+                            alt="Cadastur - Ministério do Turismo"
+                            width={72}
+                            height={40}
+                            className="object-contain opacity-70"
+                        />
+                        <Image
+                            src="/logos/logo-turismo.webp"
+                            alt="Ministério do Turismo"
+                            width={72}
+                            height={40}
+                            className="object-contain opacity-70"
+                        />
+                    </div>
                     <span className="text-center text-sm text-white/50">
                         &copy; {new Date().getFullYear()} <strong className="text-white">Rick Travel</strong>. {t("copyright")}
                     </span>

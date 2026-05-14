@@ -290,6 +290,7 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - RT-FINAL-05C Local REVIEW: pagina Quem Somos lapidada; claim "10 anos" removido; repeticao em story reduzida; bloco Rick Travel com CNPJ/Instagram/WhatsApp/Email/Idiomas/Horario adicionado; numeros fake Cadastur removidos; pendencia: numeros reais Cadastur e revisao public/cadastro/cadastur.png; lint/typecheck/test/build PASS; aguardando commit autorizado.
 - RT-FINAL-05D Local REVIEW: SecuritySection removida da pagina Quem Somos; pagina agora renderiza apenas hero + OurStory + MissionVisionValues; lint/typecheck PASS; aguardando commit autorizado.
 - RT-FINAL-05E Local REVIEW: pagina Contatos simplificada; cards trustItems e secao "Como o atendimento funciona" removidos; pagina renderiza apenas hero + formulario ContactForm; lint/typecheck PASS; aguardando commit autorizado.
+- RT-FINAL-05F Local REVIEW: foto real do guia (ricardo-guia-cracha.webp) adicionada ao OurStory; depoimentos atualizados para Danyela Viana/Carlos Moura/Beyjamin Bonfim com fotos reais; selos Cadastur e logo-turismo adicionados ao footer; lint/typecheck/test/build PASS; aguardando commit autorizado.
 - Proximas candidatas (sem READY automatica): RT-FINAL-01 (define delivery scope), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
 
 
