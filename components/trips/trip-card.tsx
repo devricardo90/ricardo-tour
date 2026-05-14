@@ -129,32 +129,23 @@ export function TripCard({ trip }: TripCardProps) {
                     </div>
                 ) : null}
 
-                <div className="mt-6 rounded-[22px] border border-white/8 bg-[#091d2c] p-4">
-                    <div className="flex items-end justify-between gap-3">
-                        <div>
-                            <p className="text-xs text-white/52">{t("pricePerPerson")}</p>
-                            <p className="mt-1 text-3xl font-semibold leading-none text-white">
-                                R$ {(trip.priceCents / 100).toFixed(2).replace(".", ",")}
-                            </p>
-                        </div>
-
-                        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                            <Button
-                                asChild
-                                className="shrink-0 rounded-xl bg-white text-slate-900 transition-all duration-200 hover:bg-white/92"
-                            >
-                                <Link href={`/tours/${trip.id}`}>{getCardCtaLabel(locale)}</Link>
-                            </Button>
-                        </motion.div>
+                <div className="mt-5 flex items-center justify-between gap-3 border-t border-white/8 pt-5">
+                    <div>
+                        <p className="text-xs text-white/50">{t("pricePerPerson")}</p>
+                        <p className="mt-1 text-2xl font-semibold leading-none tracking-[-0.02em] text-white">
+                            R$ {(trip.priceCents / 100).toFixed(2).replace(".", ",")}
+                        </p>
                     </div>
-                </div>
 
-                <Link
-                    href={`/tours/${trip.id}`}
-                    className="mt-4 block rounded-sm text-center text-sm text-white/72 transition-colors duration-150 hover:text-white hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
-                >
-                    {t("viewDetails")}
-                </Link>
+                    <motion.div whileHover={{ scale: 1.04 }} whileTap={{ scale: 0.96 }}>
+                        <Button
+                            asChild
+                            className="shrink-0 rounded-xl bg-white text-slate-900 transition-all duration-200 hover:bg-white/92"
+                        >
+                            <Link href={`/tours/${trip.id}`}>{getCardCtaLabel(locale)}</Link>
+                        </Button>
+                    </motion.div>
+                </div>
             </div>
         </div>
     );

@@ -1088,6 +1088,35 @@ Validacao de rota (estatica/por codigo):
 
 Restricoes mantidas: seed nao executado; banco nao alterado; schema nao alterado; nenhuma migration; nenhum deploy; nenhum commit; nenhum push; nenhuma logica admin ou booking alterada.
 
+## RT-FINAL-05A Clean Public Home and Trust UI Polish
+
+Estado: Local REVIEW — implementacao e validacao local concluidas; aguardando autorizacao do Trigger para commit.
+
+Objetivo: simplificar homepage para Hero + Passeios + 3 Depoimentos + Footer; melhorar visual cards e testimonials para direcao luxury concierge.
+
+Tarefas:
+- RT-FINAL-05A.1 Remover FAQsTwo da homepage. Estado: DONE local.
+- RT-FINAL-05A.2 Remover MyBookings da homepage (rota /reservas preservada). Estado: DONE local.
+- RT-FINAL-05A.3 Atualizar badge de secao de "Reservas e planejamento" para "Passeios disponíveis". Estado: DONE local.
+- RT-FINAL-05A.4 Reduzir testimonials de 6 para 3 cards; polish visual (quote mark maior, opacidade de texto, hover gold border). Estado: DONE local.
+- RT-FINAL-05A.5 Simplificar bloco de preco do TripCard (remover box-in-box; remover link duplicado "Ver detalhes"). Estado: DONE local.
+- RT-FINAL-05A.6 Atualizar documentacao operacional. Estado: DONE local.
+
+Arquivos alterados:
+- `app/[locale]/(public)/page.tsx`
+- `components/reservations-section.tsx`
+- `components/reservation-headers.tsx`
+- `components/testimonials.tsx`
+- `components/trips/trip-card.tsx`
+
+Validacao local:
+- lint PASS.
+- typecheck PASS.
+- test PASS (4 arquivos, 18 testes).
+- build PASS.
+
+Restricoes mantidas: sem seed; sem banco; sem schema; sem migration; sem deploy; sem commit; sem push; sem logica admin, booking, auth ou pagamento alterada; sem nova dependencia; sem fake links; /reservas route preservada.
+
 ## RT-FINAL-HARDENING-01 Filter isPublished in Tour Detail Page
 
 Estado: SUPERSEDED — corrigido em RT-FINAL-04D.

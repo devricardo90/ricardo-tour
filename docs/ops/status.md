@@ -284,7 +284,8 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - RT-FINAL-04C2 Remote DONE: commit `dfa7489 feat: define final tour catalog seed` publicado em `origin/main`.
 - RT-FINAL-04C2B Remote DONE: commit `0d9e0c5 fix: reconcile final catalog schedule updates` publicado em `origin/main`; smoke de producao completo PASS; P2 isPublished registrado.
 - RT-FINAL-04C3 Remote DONE: commit `fe56fd2 docs: record final catalog production smoke` publicado em `origin/main`; seed executado; 6 tours publicados; smoke completo PASS.
-- RT-FINAL-04D Local REVIEW: `findUnique` substituido por `findFirst({ id, isPublished: true })` em `generateMetadata` e `TourDetailsPage`; lint/typecheck/test/build PASS; tours despublicados retornam notFound() localmente provado por codigo; aguardando commit autorizado.
+- RT-FINAL-04D Remote DONE: commit `ee3e33c fix: block unpublished public tour details` publicado em `origin/main`; tours despublicados retornam notFound() em producao apos deploy Vercel.
+- RT-FINAL-05A Local REVIEW: homepage simplificada (sem FAQ, sem MyBookings na home); 3 testimonials com polish; TripCard preco limpo; lint/typecheck/test/build PASS; aguardando commit autorizado.
 - Proximas candidatas (sem READY automatica): RT-FINAL-01 (define delivery scope), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
 
 

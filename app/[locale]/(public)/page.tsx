@@ -8,10 +8,6 @@ const Testimonials = dynamic(() => import("@/components/testimonials"), {
     loading: () => <div className="section-spacing h-96 animate-pulse" />,
 });
 
-const FAQsTwo = dynamic(() => import("@/components/faqs-2"), {
-    loading: () => <div className="section-spacing h-96 animate-pulse" />,
-});
-
 const FooterSection = dynamic(() => import("@/components/footer"));
 
 function getHomeMetadataCopy(locale: string) {
@@ -85,10 +81,6 @@ export default function Home() {
 
                 <FadeInSection delay={0.2}>
                     <Testimonials />
-                </FadeInSection>
-
-                <FadeInSection delay={0.2}>
-                    <FAQsTwo />
                 </FadeInSection>
 
                 <FooterSection />
