@@ -1220,6 +1220,28 @@ Validacao local:
 
 Restricoes mantidas: sem seed; sem banco; sem schema; sem migration; sem deploy; sem commit; sem push; sem logica admin, booking, auth ou pagamento alterada; sem nova dependencia; sem novo card ou claim adicionado; SecuritySection nao deletada, apenas removida da renderizacao.
 
+## RT-FINAL-05E Simplify Contact Page Layout
+
+Estado: Local REVIEW — implementacao concluida; aguardando autorizacao do Trigger para commit.
+
+Objetivo: remover cards explicativos da pagina Contatos; pagina deve renderizar apenas hero "Fale com a Rick Travel sobre sua viagem no Rio" + formulario ContactForm.
+
+Tarefas:
+- RT-FINAL-05E.1 Remover array trustItems e grid de 3 cards da pagina. Estado: DONE local.
+- RT-FINAL-05E.2 Remover secao "Como o atendimento funciona" e seus 4 cards. Estado: DONE local.
+- RT-FINAL-05E.3 Atualizar documentacao operacional. Estado: DONE local.
+
+Arquivos alterados:
+- `app/[locale]/(public)/contato/page.tsx`
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+
+Validacao local:
+- lint PASS.
+- typecheck PASS.
+
+Restricoes mantidas: sem alteracao em ContactForm, server actions, validacao de formulario, logica de envio, banco, schema, auth, admin, booking, tours, pagamento ou deploy; nenhum card novo adicionado.
+
 ## RT-FINAL-HARDENING-01 Filter isPublished in Tour Detail Page
 
 Estado: SUPERSEDED — corrigido em RT-FINAL-04D.
