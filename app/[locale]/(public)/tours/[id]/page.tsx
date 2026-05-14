@@ -19,8 +19,8 @@ type PublicTourSchedule = {
 
 export async function generateMetadata(props: PageProps): Promise<Metadata> {
     const params = await props.params;
-    const trip = await prisma.trip.findUnique({
-        where: { id: params.id },
+    const trip = await prisma.trip.findFirst({
+        where: { id: params.id, isPublished: true },
         select: { title: true, description: true, imageUrl: true },
     });
 
@@ -55,8 +55,8 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
 
 export default async function TourDetailsPage(props: PageProps) {
     const params = await props.params;
-    const trip = await prisma.trip.findUnique({
-        where: { id: params.id },
+    const trip = await prisma.trip.findFirst({
+        where: { id: params.id, isPublished: true },
         include: {
             schedules: {
                 where: { status: "OPEN" },

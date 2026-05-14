@@ -1061,13 +1061,36 @@ Smoke de producao completo validado pelo Trigger (RT-FINAL-04C3, 2026-05-14):
 
 Pendencia P2: `TourDetailsPage` usa `findUnique` sem filtro `isPublished` — URL direta de tour despublicado retorna HTTP 200 e exibe CTA. Tour nao aparece em nenhuma superficie navegavel publica. Registrado para RT-FINAL-HARDENING-01; nao corrigir dentro desta closure.
 
+## RT-FINAL-04D Block Direct Access to Unpublished Public Tour Details
+
+Estado: Local REVIEW — implementacao e validacao local concluidas; aguardando autorizacao do Trigger para commit.
+
+Objetivo: impedir que tours despublicados sejam acessiveis via URL direta no detalhe publico.
+
+Causa raiz: `TourDetailsPage` usava `findUnique({ where: { id } })` sem filtrar `isPublished: true`, permitindo HTTP 200 para tours despublicados.
+
+Tarefas:
+- RT-FINAL-04D.1 Substituir `findUnique` por `findFirst` com `isPublished: true` em `generateMetadata` de `app/[locale]/(public)/tours/[id]/page.tsx`. Estado: executada localmente; aguardando commit.
+- RT-FINAL-04D.2 Substituir `findUnique` por `findFirst` com `isPublished: true` em `TourDetailsPage` de `app/[locale]/(public)/tours/[id]/page.tsx`. Estado: executada localmente; aguardando commit.
+- RT-FINAL-04D.3 Atualizar documentacao operacional. Estado: executada localmente; aguardando commit.
+
+Validacao local:
+- lint PASS.
+- typecheck PASS.
+- test PASS (4 arquivos, 18 testes).
+- build PASS (`/[locale]/tours/[id]` compilada como rota dinamica).
+
+Validacao de rota (estatica/por codigo):
+- Tours publicados: `findFirst` com `{ id, isPublished: true }` retorna o tour — HTTP 200 preservado.
+- Tours despublicados: `findFirst` com `{ id, isPublished: true }` retorna `null` — `notFound()` chamado — comportamento Next.js 404.
+- Catalogo publico `/pt/tours`: sem alteracao (query de listagem nao foi tocada).
+- Validacao manual em producao: pendente de commit autorizado e deploy Vercel automatico.
+
+Restricoes mantidas: seed nao executado; banco nao alterado; schema nao alterado; nenhuma migration; nenhum deploy; nenhum commit; nenhum push; nenhuma logica admin ou booking alterada.
+
 ## RT-FINAL-HARDENING-01 Filter isPublished in Tour Detail Page
 
-Estado: BACKLOG — pendente de abertura formal.
-
-Objetivo: adicionar filtro `isPublished: true` na query `prisma.trip.findUnique` de `TourDetailsPage` para que tours despublicados retornem `notFound()` em vez de HTTP 200.
-
-Restricoes: nao abrir automaticamente; aguarda autorizacao do Trigger.
+Estado: SUPERSEDED — corrigido em RT-FINAL-04D.
 
 ## RT-FINAL-04C2 Add Final Catalog Assets and Seed Definition
 

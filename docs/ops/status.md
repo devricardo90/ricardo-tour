@@ -283,8 +283,9 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - RT-FINAL-04C1 CLOSED (Discussion Gate): catalogo final de 6 tours aprovado pelo Trigger; pacote de decisao sem execucao de repositorio.
 - RT-FINAL-04C2 Remote DONE: commit `dfa7489 feat: define final tour catalog seed` publicado em `origin/main`.
 - RT-FINAL-04C2B Remote DONE: commit `0d9e0c5 fix: reconcile final catalog schedule updates` publicado em `origin/main`; smoke de producao completo PASS; P2 isPublished registrado.
-- RT-FINAL-04C3 Production DONE by Trigger: seed executado; /pt/tours exibe 6 tours publicados; seed-001-cristo-dona-marta ausente do catalogo e de /api/trips; smoke completo PASS; documentacao de closure Local DONE — push pendente.
-- Proximas candidatas (sem READY automatica): RT-FINAL-HARDENING-01 (filtrar isPublished no detalhe de tour), RT-FINAL-01 (define delivery scope), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
+- RT-FINAL-04C3 Remote DONE: commit `fe56fd2 docs: record final catalog production smoke` publicado em `origin/main`; seed executado; 6 tours publicados; smoke completo PASS.
+- RT-FINAL-04D Local REVIEW: `findUnique` substituido por `findFirst({ id, isPublished: true })` em `generateMetadata` e `TourDetailsPage`; lint/typecheck/test/build PASS; tours despublicados retornam notFound() localmente provado por codigo; aguardando commit autorizado.
+- Proximas candidatas (sem READY automatica): RT-FINAL-01 (define delivery scope), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
 
 
 ### Medio prazo
@@ -302,7 +303,7 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - P1: a credencial de bootstrap ADMIN removida deve ser considerada potencialmente exposta; rotacao nao confirmada.
 - P1: `npm audit` residual em Prisma dev tooling segue pendente para janela controlada.
 - P1: dominio proprio nao configurado - produto em URL temporaria da Vercel.
-- P2: `TourDetailsPage` nao filtra `isPublished` — URL direta de tour despublicado retorna HTTP 200; corrigir em RT-FINAL-HARDENING-01.
+- P2: `TourDetailsPage` sem filtro `isPublished` — CORRIGIDO localmente em RT-FINAL-04D (findFirst + isPublished: true); aguardando commit e deploy para fechar em producao.
 - P2: imagem do tour Cristo Redentor (seed-001, despublicado) usava asset do Pao de Acucar — tour despublicado e ausente do catalogo; item residual encerrado.
 - P2: React hydration error #418 sem task de investigacao aberta.
 - P2: sem guia de operacao para o dono (handoff operacional pendente).
