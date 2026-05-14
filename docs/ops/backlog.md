@@ -1117,6 +1117,36 @@ Validacao local:
 
 Restricoes mantidas: sem seed; sem banco; sem schema; sem migration; sem deploy; sem commit; sem push; sem logica admin, booking, auth ou pagamento alterada; sem nova dependencia; sem fake links; /reservas route preservada.
 
+## RT-FINAL-05B Remove Unsupported Public Trust Claims
+
+Estado: Local REVIEW — implementacao e validacao local concluidas; aguardando autorizacao do Trigger para commit.
+
+Objetivo: remover claims publicos nao suportados pela operacao atual — "24/7", "100% roteiro privado", "time local" — por honestidade comercial e credibilidade.
+
+Claims encontrados e removidos:
+- hero-section.tsx: array `highlights` com 3 badges por locale (24/7, 100%, Rio/time-local) — grid inteiro removido.
+- messages/pt.json: "Atendimento profissional 24/7" → "Atendimento profissional".
+- messages/en.json: "Professional 24/7 service" → "Professional service".
+
+Claims mantidos (fora do escopo):
+- data/real-trips.json: "guia privado", "tour-privado-rio" — nome de produto real.
+- messages/pt.json e es.json FAQ L73: "24 horas" — tempo de confirmacao de reserva (processo operacional, nao claim de atendimento).
+- app/page.tsx: "Tours privados en Rio de Janeiro" — titulo SEO de produto.
+- contato/page.tsx: "grupos privados" — descricao de tipo de tour.
+
+Arquivos alterados:
+- `components/hero-section.tsx`
+- `messages/en.json`
+- `messages/pt.json`
+
+Validacao local:
+- lint PASS.
+- typecheck PASS.
+- test PASS (4 arquivos, 18 testes).
+- build PASS.
+
+Restricoes mantidas: sem seed; sem banco; sem schema; sem migration; sem deploy; sem commit; sem push; sem logica admin, booking, auth ou pagamento alterada; sem nova dependencia; sem badge de redes sociais, Cadastur ou CNPJ adicionado.
+
 ## RT-FINAL-HARDENING-01 Filter isPublished in Tour Detail Page
 
 Estado: SUPERSEDED — corrigido em RT-FINAL-04D.

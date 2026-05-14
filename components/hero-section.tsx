@@ -25,11 +25,6 @@ function getHeroSupportCopy(locale: string) {
           "4.9 average guest rating",
           "Licensed guides and secure operation",
         ],
-        highlights: [
-          { value: "24/7", label: "concierge support" },
-          { value: "100%", label: "private planning" },
-          { value: "Rio", label: "local specialists" },
-        ],
       };
     case "es":
       return {
@@ -39,11 +34,6 @@ function getHeroSupportCopy(locale: string) {
           "500+ tours realizados",
           "4,9 de valoracion media",
           "Guias acreditados y operacion segura",
-        ],
-        highlights: [
-          { value: "24/7", label: "soporte directo" },
-          { value: "100%", label: "ruta privada" },
-          { value: "Rio", label: "equipo local" },
         ],
       };
     case "sv":
@@ -55,11 +45,6 @@ function getHeroSupportCopy(locale: string) {
           "4,9 i genomsnittligt betyg",
           "Certifierade guider och trygg drift",
         ],
-        highlights: [
-          { value: "24/7", label: "direkt support" },
-          { value: "100%", label: "privat planering" },
-          { value: "Rio", label: "lokala experter" },
-        ],
       };
     default:
       return {
@@ -69,11 +54,6 @@ function getHeroSupportCopy(locale: string) {
           "500+ tours realizados",
           "4,9 de avaliacao media",
           "Guias credenciados e operacao segura",
-        ],
-        highlights: [
-          { value: "24/7", label: "suporte humano" },
-          { value: "100%", label: "roteiro privado" },
-          { value: "Rio", label: "time local" },
         ],
       };
   }
@@ -171,17 +151,6 @@ function HeroContent() {
 
         <TrustBar badges={supportCopy.trustBadges} />
 
-        <div className="mx-auto mt-10 grid max-w-4xl gap-3 sm:grid-cols-3">
-          {supportCopy.highlights.map((item) => (
-            <div
-              key={item.label}
-              className="rounded-[22px] border border-white/10 bg-white/[0.06] px-5 py-4 text-left shadow-[0_20px_60px_rgba(0,0,0,0.18)] backdrop-blur-md"
-            >
-              <div className="text-xl font-semibold text-white">{item.value}</div>
-              <div className="mt-1 text-sm leading-6 text-white/66">{item.label}</div>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
