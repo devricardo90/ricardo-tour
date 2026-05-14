@@ -1147,6 +1147,57 @@ Validacao local:
 
 Restricoes mantidas: sem seed; sem banco; sem schema; sem migration; sem deploy; sem commit; sem push; sem logica admin, booking, auth ou pagamento alterada; sem nova dependencia; sem badge de redes sociais, Cadastur ou CNPJ adicionado.
 
+## RT-FINAL-05C Polish About Page and Real Credibility Layout
+
+Estado: Local REVIEW — implementacao e validacao local concluidas; aguardando autorizacao do Trigger para commit.
+
+Objetivo: lapidar pagina Quem Somos; remover claim "10 anos de experiencia" sem evidencia; reduzir repeticao em story; adicionar bloco de identificacao e contato com dados reais; remover numeros fake de Cadastur; preparar secao de credibilidade oficial.
+
+Discovery:
+- Pagina: app/[locale]/(public)/quem-somos/page.tsx
+- Componentes ativos: OurStory, MissionVisionValues, SecuritySection
+- Componentes existentes mas nao usados na pagina: AboutHero, WhyChooseUs, CtaFinal
+- Assets encontrados: public/cadastro/cadastur.png, public/images/seals/cadastur-official.png, public/images/about/guide-ricardo.jpg, public/images/about/founder-team.jpg
+
+Tarefas:
+- RT-FINAL-05C.1 Remover linha JSX Cadastur do card de certificacao. Estado: DONE local.
+- RT-FINAL-05C.2 Remover linhas JSX de cadasturNumber e credential do card do guia. Estado: DONE local.
+- RT-FINAL-05C.3 Limpar valores placeholder em messages/pt.json e messages/en.json. Estado: DONE local.
+- RT-FINAL-05C.4 Remover claim "mais de 10 anos de experiencia" de story.paragraph1 (PT/EN); substituir por texto neutro. Estado: DONE local.
+- RT-FINAL-05C.5 Reduzir repeticao em story.paragraph2 (PT/EN). Estado: DONE local.
+- RT-FINAL-05C.6 Adicionar bloco identidade/contato em security-section com CNPJ, Instagram, WhatsApp, Email, Idiomas, Horario. Estado: DONE local.
+- RT-FINAL-05C.7 Mover todos os textos hardcoded do bloco identidade para chaves em messages (identity.*). Estado: DONE local.
+- RT-FINAL-05C.8 Corrigir encoding informa��es → informações em ctaFinal.subtitle (pt.json). Estado: DONE local.
+- RT-FINAL-05C.9 Corrigir claim plural "nossos guias" → singular em whyChoose.certified (PT/EN). Estado: DONE local.
+- RT-FINAL-05C.10 Atualizar documentacao operacional. Estado: DONE local.
+
+Arquivos alterados:
+- `components/about/security-section.tsx`
+- `messages/pt.json`
+- `messages/en.json`
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+
+Dados reais adicionados (autorizados pelo Trigger):
+- CNPJ: 49.142.341/0001-90
+- Instagram: @ricktravelbrasil
+- WhatsApp: +55 21 97116-8114
+- Email: contact@travelrick.com
+- Idiomas: Portugues, Ingles e Espanhol
+- Atendimento: Diario, 08h as 18h
+
+Pendencias para o Trigger:
+- public/cadastro/cadastur.png: arquivo existe; pode ser o documento real de Cadastur. Trigger deve revisar se e seguro exibir publicamente.
+- Numeros reais de Cadastur da empresa e do guia a fornecer para as chaves vazias em messages (certification.cadasturNumber, guide.cadasturNumber, guide.credential).
+
+Validacao local:
+- lint PASS.
+- typecheck PASS.
+- test PASS (4 arquivos, 18 testes).
+- build PASS.
+
+Restricoes mantidas: sem seed; sem banco; sem schema; sem migration; sem deploy; sem commit; sem push; sem logica admin, booking, auth ou pagamento alterada; sem nova dependencia; sem numero inventado; nenhum dado sensivel adicionado; public/cadastro/cadastur.png nao exibido.
+
 ## RT-FINAL-HARDENING-01 Filter isPublished in Tour Detail Page
 
 Estado: SUPERSEDED — corrigido em RT-FINAL-04D.

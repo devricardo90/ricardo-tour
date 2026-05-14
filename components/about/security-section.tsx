@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl'
 import Image from 'next/image'
-import { ShieldCheck, Car, Clock, CheckCircle2 } from 'lucide-react'
+import { ShieldCheck, Car, Clock, CheckCircle2, Phone, Mail, Globe, Building2, Instagram } from 'lucide-react'
 
 export function SecuritySection() {
     const t = useTranslations('AboutPage.security')
@@ -40,9 +40,6 @@ export function SecuritySection() {
                             <p className="text-sm font-medium text-white/76">
                                 {t('certification.registered')}
                             </p>
-                            <p className="mt-2 text-base font-semibold text-[#d8c18f]">
-                                Cadastur nº {t('certification.cadasturNumber')}
-                            </p>
 
                             <div className="mt-5 space-y-3 text-xs text-white/58">
                                 <div className="flex items-center justify-center gap-2">
@@ -74,12 +71,6 @@ export function SecuritySection() {
                             <p className="mt-2 text-sm font-medium text-[#d8c18f]">{t('guide.title')}</p>
                             <p className="mt-1 text-xs text-white/48">{t('guide.subtitle')}</p>
 
-                            <div className="mt-5 space-y-2 text-xs">
-                                <p className="font-semibold text-white/74">
-                                    Cadastur nº {t('guide.cadasturNumber')}
-                                </p>
-                                <p className="text-white/48">{t('guide.credential')}</p>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -124,6 +115,63 @@ export function SecuritySection() {
                             <p className="mt-2 text-xs leading-6 text-white/58">
                                 {t('operational.support.description')}
                             </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="mt-6 rounded-[30px] border border-white/8 bg-[#0d2436] p-7 shadow-[0_18px_45px_rgba(0,0,0,0.18)] md:p-8">
+                    <h3 className="mb-2 text-center text-lg font-semibold tracking-[-0.03em] text-white">
+                        {t('identity.businessName')}
+                    </h3>
+                    <p className="mb-8 text-center text-xs text-white/48">{t('identity.serviceFocus')}</p>
+
+                    <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                        <div className="flex items-center gap-3">
+                            <Building2 className="h-4 w-4 shrink-0 text-[#d8c18f]" />
+                            <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-white/40">{t('identity.companyDocumentLabel')}</p>
+                                <p className="text-sm text-white/80">49.142.341/0001-90</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Instagram className="h-4 w-4 shrink-0 text-[#d8c18f]" />
+                            <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-white/40">{t('identity.instagramLabel')}</p>
+                                <p className="text-sm text-white/80">@ricktravelbrasil</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Phone className="h-4 w-4 shrink-0 text-[#d8c18f]" />
+                            <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-white/40">{t('identity.whatsappLabel')}</p>
+                                <p className="text-sm text-white/80">+55 21 97116-8114</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Mail className="h-4 w-4 shrink-0 text-[#d8c18f]" />
+                            <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-white/40">{t('identity.emailLabel')}</p>
+                                <p className="text-sm text-white/80">contact@travelrick.com</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Globe className="h-4 w-4 shrink-0 text-[#d8c18f]" />
+                            <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-white/40">{t('identity.languagesLabel')}</p>
+                                <p className="text-sm text-white/80">{t('identity.languagesValue')}</p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                            <Clock className="h-4 w-4 shrink-0 text-[#d8c18f]" />
+                            <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.1em] text-white/40">{t('identity.serviceHoursLabel')}</p>
+                                <p className="text-sm text-white/80">{t('identity.serviceHoursValue')}</p>
+                            </div>
                         </div>
                     </div>
                 </div>

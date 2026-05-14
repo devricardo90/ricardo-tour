@@ -287,6 +287,7 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - RT-FINAL-04D Remote DONE: commit `ee3e33c fix: block unpublished public tour details` publicado em `origin/main`; tours despublicados retornam notFound() em producao apos deploy Vercel.
 - RT-FINAL-05A Remote DONE: commit `20c1ff5 refactor: simplify public homepage sections` publicado em `origin/main`; homepage simplificada (sem FAQ, sem MyBookings na home); 3 testimonials com polish; TripCard preco limpo.
 - RT-FINAL-05B Local REVIEW: claims 24/7, 100% roteiro privado e time local removidos do hero; mensagens EN/PT de suporte ajustadas; lint/typecheck/test/build PASS; aguardando commit autorizado.
+- RT-FINAL-05C Local REVIEW: pagina Quem Somos lapidada; claim "10 anos" removido; repeticao em story reduzida; bloco Rick Travel com CNPJ/Instagram/WhatsApp/Email/Idiomas/Horario adicionado; numeros fake Cadastur removidos; pendencia: numeros reais Cadastur e revisao public/cadastro/cadastur.png; lint/typecheck/test/build PASS; aguardando commit autorizado.
 - Proximas candidatas (sem READY automatica): RT-FINAL-01 (define delivery scope), RT-FINAL-05 (custom domain), RT-FINAL-06 (owner handoff).
 
 

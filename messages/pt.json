@@ -124,19 +124,19 @@
         "story": {
             "title": "Nossa História",
             "imageAlt": "Ricardo, fundador da Rick Travel",
-            "paragraph1": "A Rick Travel nasceu da paixão pelo Rio de Janeiro e do desejo de proporcionar experiências autênticas aos nossos visitantes. Fundada por Ricardo, guia credenciado com mais de 10 anos de experiência, nossa empresa começou com um sonho simples: mostrar o Rio de forma segura e memorável.",
-            "paragraph2": "Nossa equipe é formada por guias credenciados, apaixonados pelo Rio e comprometidos com a excelência. Trabalhamos com veículos vistoriados e seguros, sempre priorizando a segurança e o bem-estar dos clientes."
+            "paragraph1": "A Rick Travel nasceu da paixão pelo Rio de Janeiro e do desejo de proporcionar experiências autênticas aos visitantes. Fundada por Ricardo, guia credenciado com experiência prática em turismo, atendimento e planejamento de passeios no Rio de Janeiro, a empresa tem um objetivo simples: mostrar o Rio com segurança, organização e atenção aos detalhes.",
+            "paragraph2": "Operamos com veículos vistoriados e seguros, priorizando a segurança e o bem-estar de cada cliente em todos os passeios."
         },
         "whyChoose": {
             "title": "Por Que Escolher a Rick Travel",
-            "subtitle": "Seis razões que fazem da Rick Travel a melhor escolha para conhecer o Rio de Janeiro",
+            "subtitle": "Razões práticas para escolher a Rick Travel no Rio de Janeiro",
             "personalized": {
                 "title": "Atendimento Personalizado",
                 "description": "Roteiros adaptados aos seus interesses, ritmo e preferências. Cada cliente é único para nós."
             },
             "certified": {
-                "title": "Guias Credenciados Cadastur",
-                "description": "Todos os nossos guias são certificados pelo Ministério do Turismo, garantindo profissionalismo e conhecimento."
+                "title": "Guia Credenciado Cadastur",
+                "description": "Guia certificado pelo Ministério do Turismo, com profissionalismo e conhecimento em cada passeio."
             },
             "security": {
                 "title": "Segurança Certificada",
@@ -148,7 +148,7 @@
             },
             "multilingual": {
                 "title": "Suporte Multilíngue Completo",
-                "description": "Atendimento em português, inglês, espanhol e sueco. Comunicação clara e fluida para todos."
+                "description": "Atendimento em português, inglês e espanhol. Comunicação clara antes, durante e depois do passeio."
             },
             "optimized": {
                 "title": "Roteiros Otimizados",
@@ -175,7 +175,7 @@
             "subtitle": "Viaje com tranquilidade e respaldo legal",
             "certification": {
                 "registered": "Empresa registrada no Ministério do Turismo",
-                "cadasturNumber": "12.345678.90.0001-2",
+                "cadasturNumber": "",
                 "activeStatus": "Registro ativo",
                 "federalCompliance": "Regularizada federalmente"
             },
@@ -183,8 +183,8 @@
                 "name": "Ricardo Francisco",
                 "title": "Guia Credenciado",
                 "subtitle": "Ministério do Turismo",
-                "cadasturNumber": "12.345678",
-                "credential": "Credencial nº 987654",
+                "cadasturNumber": "",
+                "credential": "",
                 "imageAlt": "Ricardo, guia credenciado Rick Travel"
             },
             "operational": {
@@ -201,11 +201,23 @@
                     "title": "Pontualidade e Suporte",
                     "description": "Atendimento profissional"
                 }
+            },
+            "identity": {
+                "businessName": "Rick Travel",
+                "serviceFocus": "City Tour Rio de Janeiro",
+                "companyDocumentLabel": "CNPJ",
+                "instagramLabel": "Instagram",
+                "whatsappLabel": "WhatsApp",
+                "emailLabel": "Email",
+                "languagesLabel": "Idiomas",
+                "languagesValue": "Português, Inglês e Espanhol",
+                "serviceHoursLabel": "Atendimento",
+                "serviceHoursValue": "Diário, 08h às 18h"
             }
         },
         "ctaFinal": {
             "title": "Pronto para viver o melhor do Rio?",
-            "subtitle": "Junte-se a milhares de viajantes satisfeitos e descubra o Rio de Janeiro com a Rick Travel.",
+            "subtitle": "Fale com a equipe Rick Travel e planeje seu passeio no Rio de Janeiro com informações claras e atendimento profissional.",
             "button": "Reserve seu tour agora"
         }
     },

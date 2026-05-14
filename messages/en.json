@@ -124,19 +124,19 @@
         "story": {
             "title": "Our Story",
             "imageAlt": "Ricardo, founder of Rick Travel",
-            "paragraph1": "Rick Travel was born from a passion for Rio de Janeiro and the desire to provide authentic experiences to our visitors. Founded by Ricardo, a certified guide with over 10 years of experience, our company started with a simple dream: to showcase Rio safely and memorably.",
-            "paragraph2": "Our team consists of certified guides, passionate about Rio and committed to excellence. We work with inspected and insured vehicles, always prioritizing the safety and well-being of our clients."
+            "paragraph1": "Rick Travel was born from a passion for Rio de Janeiro and the desire to provide authentic experiences to visitors. Founded by Ricardo, a certified guide with hands-on experience in tourism, service, and trip planning across Rio de Janeiro, the company has a simple goal: to show Rio safely, organized, and with attention to detail.",
+            "paragraph2": "We operate with inspected and insured vehicles, prioritizing the safety and well-being of each client on every tour."
         },
         "whyChoose": {
             "title": "Why Choose Rick Travel",
-            "subtitle": "Six reasons that make Rick Travel the best choice to discover Rio de Janeiro",
+            "subtitle": "Practical reasons to choose Rick Travel in Rio de Janeiro",
             "personalized": {
                 "title": "Personalized Service",
                 "description": "Itineraries adapted to your interests, pace, and preferences. Each client is unique to us."
             },
             "certified": {
-                "title": "Cadastur Certified Guides",
-                "description": "All our guides are certified by the Ministry of Tourism, ensuring professionalism and knowledge."
+                "title": "Cadastur Certified Guide",
+                "description": "Certified by the Ministry of Tourism, ensuring professionalism and knowledge on every tour."
             },
             "security": {
                 "title": "Certified Safety",
@@ -148,7 +148,7 @@
             },
             "multilingual": {
                 "title": "Complete Multilingual Support",
-                "description": "Service in Portuguese, English, Spanish, and Swedish. Clear and fluent communication for everyone."
+                "description": "Service in Portuguese, English, and Spanish. Clear communication before, during, and after the tour."
             },
             "optimized": {
                 "title": "Optimized Routes",
@@ -175,7 +175,7 @@
             "subtitle": "Travel with peace of mind and legal support",
             "certification": {
                 "registered": "Registered with the Ministry of Tourism",
-                "cadasturNumber": "12.345678.90.0001-2",
+                "cadasturNumber": "",
                 "activeStatus": "Active registration",
                 "federalCompliance": "Federally compliant"
             },
@@ -183,8 +183,8 @@
                 "name": "Ricardo Francisco",
                 "title": "Certified Guide",
                 "subtitle": "Ministry of Tourism",
-                "cadasturNumber": "12.345678",
-                "credential": "Credential #987654",
+                "cadasturNumber": "",
+                "credential": "",
                 "imageAlt": "Ricardo, Rick Travel certified guide"
             },
             "operational": {
@@ -201,11 +201,23 @@
                     "title": "Punctuality & Support",
                     "description": "Professional service"
                 }
+            },
+            "identity": {
+                "businessName": "Rick Travel",
+                "serviceFocus": "City Tour Rio de Janeiro",
+                "companyDocumentLabel": "CNPJ",
+                "instagramLabel": "Instagram",
+                "whatsappLabel": "WhatsApp",
+                "emailLabel": "Email",
+                "languagesLabel": "Languages",
+                "languagesValue": "Portuguese, English and Spanish",
+                "serviceHoursLabel": "Service hours",
+                "serviceHoursValue": "Daily, 08:00–18:00"
             }
         },
         "ctaFinal": {
             "title": "Ready to experience the best of Rio?",
-            "subtitle": "Join thousands of satisfied travelers and discover Rio de Janeiro with Rick Travel.",
+            "subtitle": "Contact the Rick Travel team and plan your Rio de Janeiro tour with clear information and professional service.",
             "button": "Book your tour now"
         }
     },
