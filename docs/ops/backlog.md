@@ -1310,3 +1310,53 @@ Resultado:
 - RT-FINAL-01 - Define Delivery Scope and Acceptance Criteria
 - RT-FINAL-05 - Configure Custom Domain and Final Production Smoke
 - RT-FINAL-06 - Owner Handoff Package
+
+## RT-AI-001 Define Rick Travel AI Concierge Scope and Safety Rules
+
+Estado: READY.
+
+Objetivo: definir documentacao de escopo, arquitetura inicial e regras de seguranca para o Rick Travel AI Concierge, um agente publico para turistas interessados no Rio de Janeiro.
+
+Tipo: DISCOVERY/ARCHITECTURE. Esta task nao implementa chatbot, rota, banco vetorial, dependencia de IA ou alteracao de produto.
+
+Arquivos permitidos na futura execucao:
+- `docs/product/ai-concierge-scope.md`
+- `docs/architecture/ai-concierge-rag-strategy.md`
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Escopo permitido:
+- Definir objetivo do agente.
+- Definir usuarios-alvo.
+- Definir intencoes principais.
+- Definir fontes permitidas de conhecimento.
+- Definir limites do agente.
+- Definir riscos de alucinacao.
+- Definir regras comerciais.
+- Definir regras de seguranca turistica.
+- Definir quando encaminhar para atendimento humano.
+- Definir arquitetura inicial RAG.
+- Definir relacao futura com LangChain.
+- Definir relacao futura com LangGraph.
+- Definir separacao entre AI Concierge publico e RIC Studio interno.
+
+Fora de escopo:
+- Nao instalar LangChain.
+- Nao instalar LangGraph.
+- Nao criar chat.
+- Nao criar rota API.
+- Nao criar banco vetorial.
+- Nao alterar schema Prisma.
+- Nao alterar seed.
+- Nao alterar frontend.
+- Nao alterar admin.
+- Nao alterar pagamento, reserva, login ou producao.
+- Nao criar `STATUS.md` ou `backlog.md` na raiz.
+
+Criterios de aceite: documentacao futura define escopo, fontes, limites, riscos, regras comerciais, seguranca turistica, handoff humano, arquitetura RAG inicial e separacao entre Rick Travel AI Concierge publico e RIC Studio interno; nenhum codigo, frontend, backend, schema, seed, admin, reservas, pagamentos ou producao alterado.
+
+Risco: medio, principalmente por alucinacao, promessa comercial indevida, orientacao turistica insegura e mistura indevida entre produto publico e governanca interna futura.
+
+Evidencia esperada: `docs/product/ai-concierge-scope.md`, `docs/architecture/ai-concierge-rag-strategy.md` e documentacao operacional atualizada.

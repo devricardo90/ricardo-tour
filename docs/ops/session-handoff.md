@@ -184,3 +184,42 @@ Evidencias:
 - RT-FINAL-04 - Polish Commercial Content and Trust Layer
 - RT-FINAL-05 - Configure Custom Domain and Final Production Smoke
 - RT-FINAL-06 - Owner Handoff Package
+
+## RT-AI-001 READY - AI Concierge Scope and Safety Rules
+
+Estado: READY em 2026-06-03.
+
+Objetivo: definir documentacao de escopo, arquitetura inicial e regras de seguranca para o Rick Travel AI Concierge, um agente publico para turistas interessados no Rio de Janeiro.
+
+A futura execucao pode criar:
+- `docs/product/ai-concierge-scope.md`
+- `docs/architecture/ai-concierge-rag-strategy.md`
+
+Tambem pode atualizar apenas os docs operacionais permitidos:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Criterios de validacao da futura task:
+- Definir objetivo do agente.
+- Definir usuarios-alvo.
+- Definir intencoes principais.
+- Definir fontes permitidas.
+- Definir limites do agente.
+- Definir riscos de alucinacao.
+- Definir regras comerciais.
+- Definir regras de seguranca turistica.
+- Definir quando encaminhar para humano.
+- Definir arquitetura inicial RAG.
+- Definir relacao futura com LangChain.
+- Definir relacao futura com LangGraph.
+- Definir separacao entre AI Concierge publico e RIC Studio interno.
+- Nao alterar codigo, frontend, backend, schema, seed, admin, reservas, pagamentos ou producao.
+
+Restricoes mantidas na abertura da READY:
+- Nenhum documento de produto/arquitetura criado ainda.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhuma dependencia instalada.
+- Nenhum chat, rota API, banco vetorial, schema, seed, frontend, admin, pagamento, reserva, login ou producao alterado.
+- Nenhum commit ou push executado.

@@ -5,6 +5,30 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-03 - RT-AI-001 READY Documentation Gate
+
+**Executado por:** Codex
+**Ambiente:** local; documentacao operacional apenas
+**Status:** READY aberto; sem efeito em producao
+
+**Objetivo:**
+Registrar RT-AI-001 como task DISCOVERY/ARCHITECTURE para definir escopo, arquitetura inicial e regras de seguranca do Rick Travel AI Concierge publico para turistas interessados no Rio de Janeiro.
+
+**Resultado:**
+- RT-AI-001 marcada como READY no backlog operacional.
+- Escopo futuro limitado a documentacao de produto, estrategia RAG inicial e docs operacionais.
+- Arquivos futuros permitidos: `docs/product/ai-concierge-scope.md` e `docs/architecture/ai-concierge-rag-strategy.md`.
+- Separacao obrigatoria registrada: Rick Travel AI Concierge e produto publico; RIC Studio / Protocolo RIC permanece camada interna futura.
+
+**Restricoes mantidas:**
+- Nenhum documento de produto ou arquitetura criado nesta abertura de READY.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhuma dependencia instalada.
+- Nenhum codigo, frontend, backend, schema, seed, admin, reserva, pagamento, login ou producao alterado.
+- Nenhum commit ou push executado.
+
+---
+
 ## 2026-05-14 - RT-FINAL-04C3 Production Catalog Seed and Smoke
 
 **Executado por:** Trigger (manual, producao)

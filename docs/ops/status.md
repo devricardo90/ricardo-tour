@@ -314,3 +314,41 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 - P2: React hydration error #418 sem task de investigacao aberta.
 - P2: sem guia de operacao para o dono (handoff operacional pendente).
 - P2: reabrir Mercado Pago agora ampliaria escopo sem justificativa operacional desta fase.
+
+## Atualizacao 2026-06-03 - RT-AI-001 AI Concierge Scope and Safety Rules
+
+Estado: READY.
+
+RT-AI-001 foi aberta como task exclusivamente DISCOVERY/ARCHITECTURE para definir documentacao de escopo, arquitetura inicial e regras de seguranca do Rick Travel AI Concierge, um agente publico para turistas interessados no Rio de Janeiro.
+
+Arquivos permitidos na futura execucao:
+- `docs/product/ai-concierge-scope.md`
+- `docs/architecture/ai-concierge-rag-strategy.md`
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Criterios da futura task:
+- Define objetivo do agente.
+- Define usuarios-alvo.
+- Define intencoes principais.
+- Define fontes permitidas.
+- Define limites do agente.
+- Define riscos de alucinacao.
+- Define regras comerciais.
+- Define regras de seguranca turistica.
+- Define quando encaminhar para humano.
+- Define arquitetura inicial RAG.
+- Define relacao futura com LangChain.
+- Define relacao futura com LangGraph.
+- Define separacao entre AI Concierge publico e RIC Studio interno.
+- Nao altera codigo, frontend, backend, schema, seed, admin, reservas, pagamentos ou producao.
+
+Restricoes mantidas nesta abertura de READY:
+- Nenhum `docs/product/ai-concierge-scope.md` criado ainda.
+- Nenhum `docs/architecture/ai-concierge-rag-strategy.md` criado ainda.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhuma dependencia instalada.
+- Nenhum chat, rota API, banco vetorial, schema, seed, frontend, admin, pagamento, reserva, login ou producao alterado.
+- Nenhum commit ou push executado.
