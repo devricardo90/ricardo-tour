@@ -185,17 +185,21 @@ Evidencias:
 - RT-FINAL-05 - Configure Custom Domain and Final Production Smoke
 - RT-FINAL-06 - Owner Handoff Package
 
-## RT-AI-001 READY - AI Concierge Scope and Safety Rules
+## RT-AI-001 REVIEW - AI Concierge Scope and Safety Rules
 
-Estado: READY em 2026-06-03.
+Estado: REVIEW em 2026-06-03.
 
 Objetivo: definir documentacao de escopo, arquitetura inicial e regras de seguranca para o Rick Travel AI Concierge, um agente publico para turistas interessados no Rio de Janeiro.
 
-A futura execucao pode criar:
+Resultado local:
+- `docs/product/ai-concierge-scope.md` criado com visao de produto, objetivo, usuarios-alvo, casos de uso, intencoes, respostas permitidas/bloqueadas, regras comerciais, seguranca turistica, handoff humano, limites contra alucinacao, separacao com RIC Studio, MVP inicial e criterios de sucesso.
+- `docs/architecture/ai-concierge-rag-strategy.md` criado com arquitetura inicial, justificativa de RAG controlado, fontes permitidas, tipos de conteudo, chunking, recuperacao, embeddings/vector search futuros, relacao futura com LangChain/LangGraph/RIC Studio, guardrails, riscos e etapas futuras.
+
+Arquivos criados:
 - `docs/product/ai-concierge-scope.md`
 - `docs/architecture/ai-concierge-rag-strategy.md`
 
-Tambem pode atualizar apenas os docs operacionais permitidos:
+Docs operacionais atualizados:
 - `docs/ops/backlog.md`
 - `docs/ops/status.md`
 - `docs/ops/session-handoff.md`
@@ -217,8 +221,7 @@ Criterios de validacao da futura task:
 - Definir separacao entre AI Concierge publico e RIC Studio interno.
 - Nao alterar codigo, frontend, backend, schema, seed, admin, reservas, pagamentos ou producao.
 
-Restricoes mantidas na abertura da READY:
-- Nenhum documento de produto/arquitetura criado ainda.
+Restricoes mantidas na execucao documental:
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
 - Nenhuma dependencia instalada.
 - Nenhum chat, rota API, banco vetorial, schema, seed, frontend, admin, pagamento, reserva, login ou producao alterado.

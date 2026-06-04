@@ -1313,7 +1313,7 @@ Resultado:
 
 ## RT-AI-001 Define Rick Travel AI Concierge Scope and Safety Rules
 
-Estado: READY.
+Estado: REVIEW.
 
 Objetivo: definir documentacao de escopo, arquitetura inicial e regras de seguranca para o Rick Travel AI Concierge, um agente publico para turistas interessados no Rio de Janeiro.
 
@@ -1359,4 +1359,6 @@ Criterios de aceite: documentacao futura define escopo, fontes, limites, riscos,
 
 Risco: medio, principalmente por alucinacao, promessa comercial indevida, orientacao turistica insegura e mistura indevida entre produto publico e governanca interna futura.
 
-Evidencia esperada: `docs/product/ai-concierge-scope.md`, `docs/architecture/ai-concierge-rag-strategy.md` e documentacao operacional atualizada.
+Evidencia criada: `docs/product/ai-concierge-scope.md`, `docs/architecture/ai-concierge-rag-strategy.md` e documentacao operacional atualizada.
+
+Estado de execucao: documentacao criada localmente; aguardando revisao. Nenhum codigo, dependencia, schema, seed, frontend, admin, reservas, pagamentos, login ou producao foi alterado.

@@ -5,6 +5,41 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-03 - RT-AI-001 Scope and RAG Strategy Documentation
+
+**Executado por:** Codex
+**Ambiente:** local; documentacao apenas
+**Status:** Local REVIEW; sem commit e sem push
+
+**Objetivo:**
+Executar RT-AI-001 como task exclusivamente documental, criando o escopo de produto e a estrategia inicial de RAG para o Rick Travel AI Concierge publico.
+
+**Arquivos criados:**
+- `docs/product/ai-concierge-scope.md`
+- `docs/architecture/ai-concierge-rag-strategy.md`
+
+**Documentacao operacional atualizada:**
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+**Resultado:**
+- Escopo do Rick Travel AI Concierge definido.
+- Regras comerciais, seguranca turistica, bloqueios, handoff humano e limites contra alucinacao documentados.
+- Estrategia inicial de RAG controlado documentada.
+- Relacao futura com LangChain, LangGraph e RIC Studio registrada sem instalar dependencias ou criar runtime.
+- RT-AI-001 movida para REVIEW.
+
+**Restricoes mantidas:**
+- Nenhuma dependencia instalada.
+- Nenhum chat, rota API ou banco vetorial criado.
+- Nenhum codigo, frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao alterado.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.
+
+---
+
 ## 2026-06-03 - RT-AI-001 READY Documentation Gate
 
 **Executado por:** Codex

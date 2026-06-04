@@ -317,9 +317,9 @@ O projeto nao esta mais na etapa de bloqueio de build nem na etapa de preparo de
 
 ## Atualizacao 2026-06-03 - RT-AI-001 AI Concierge Scope and Safety Rules
 
-Estado: READY.
+Estado: REVIEW.
 
-RT-AI-001 foi aberta como task exclusivamente DISCOVERY/ARCHITECTURE para definir documentacao de escopo, arquitetura inicial e regras de seguranca do Rick Travel AI Concierge, um agente publico para turistas interessados no Rio de Janeiro.
+RT-AI-001 foi executada localmente como task exclusivamente DISCOVERY/ARCHITECTURE para definir documentacao de escopo, arquitetura inicial e regras de seguranca do Rick Travel AI Concierge, um agente publico para turistas interessados no Rio de Janeiro.
 
 Arquivos permitidos na futura execucao:
 - `docs/product/ai-concierge-scope.md`
@@ -345,9 +345,12 @@ Criterios da futura task:
 - Define separacao entre AI Concierge publico e RIC Studio interno.
 - Nao altera codigo, frontend, backend, schema, seed, admin, reservas, pagamentos ou producao.
 
-Restricoes mantidas nesta abertura de READY:
-- Nenhum `docs/product/ai-concierge-scope.md` criado ainda.
-- Nenhum `docs/architecture/ai-concierge-rag-strategy.md` criado ainda.
+Resultado local:
+- `docs/product/ai-concierge-scope.md` criado.
+- `docs/architecture/ai-concierge-rag-strategy.md` criado.
+- RT-AI-001 movida para REVIEW.
+
+Restricoes mantidas nesta execucao documental:
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
 - Nenhuma dependencia instalada.
 - Nenhum chat, rota API, banco vetorial, schema, seed, frontend, admin, pagamento, reserva, login ou producao alterado.
