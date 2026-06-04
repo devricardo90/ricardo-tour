@@ -227,20 +227,20 @@ Restricoes mantidas na execucao documental:
 - Nenhum chat, rota API, banco vetorial, schema, seed, frontend, admin, pagamento, reserva, login ou producao alterado.
 - Nenhum commit ou push executado.
 
-## RT-AI-002 READY - AI Concierge Knowledge Base Inventory
+## RT-AI-002 REVIEW - AI Concierge Knowledge Base Inventory
 
-Estado: READY em 2026-06-04.
+Estado: REVIEW em 2026-06-04.
 
-Objetivo da futura task: criar `docs/product/ai-concierge-knowledge-base-inventory.md` para inventariar fontes existentes e classifica-las como permitidas, condicionais ou bloqueadas antes de qualquer etapa tecnica de RAG.
+Resultado local: `docs/product/ai-concierge-knowledge-base-inventory.md` criado para inventariar fontes existentes e classifica-las como ALLOWED, CONDITIONAL ou BLOCKED antes de qualquer etapa tecnica de RAG.
 
-Arquivos permitidos na futura execucao:
+Arquivos da execucao:
 - `docs/product/ai-concierge-knowledge-base-inventory.md`
 - `docs/ops/backlog.md`
 - `docs/ops/status.md`
 - `docs/ops/session-handoff.md`
 - `docs/ops/execution-log.md`
 
-Conteudo obrigatorio do inventario:
+Conteudo registrado no inventario:
 - caminho ou origem, tipo, prioridade, autoridade e idiomas;
 - classificacao publico versus interno e responsavel pela aprovacao;
 - risco de desatualizacao, gatilho de revisao e relacao com futuras etapas RAG;
@@ -254,8 +254,11 @@ Regras registradas:
 - Dados privados, bookings, pagamentos, contatos, admin, analytics, e-mails, logs, `.env`, segredos e backups sao bloqueados.
 - Claims sem evidencia e politicas de pagamento, cancelamento, reembolso ou disponibilidade sem aprovacao explicita nao entram na base.
 
-Restricoes da READY:
-- `docs/product/ai-concierge-knowledge-base-inventory.md` ainda nao foi criado.
+Proximos passos:
+- Revisar e aprovar o inventario antes de qualquer formato canonico ou prototipo de retrieval.
+- Resolver politicas comerciais, claims e FAQ pendentes com o owner.
+
+Restricoes da execucao:
 - Nenhuma implementacao tecnica, dependencia, base vetorial, embedding, chat ou rota API.
 - Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao.
 - Nenhum commit ou push.

@@ -356,13 +356,13 @@ Restricoes mantidas nesta execucao documental:
 - Nenhum chat, rota API, banco vetorial, schema, seed, frontend, admin, pagamento, reserva, login ou producao alterado.
 - Nenhum commit ou push executado.
 
-## Atualizacao 2026-06-04 - RT-AI-002 Knowledge Base Inventory READY
+## Atualizacao 2026-06-04 - RT-AI-002 Knowledge Base Inventory
 
-Estado: READY.
+Estado: REVIEW.
 
-RT-AI-002 foi aberta como task exclusivamente documental para inventariar e classificar as fontes existentes que poderao ou nao alimentar futuramente o Rick Travel AI Concierge.
+RT-AI-002 foi executada localmente como task exclusivamente documental para inventariar e classificar as fontes existentes que poderao ou nao alimentar futuramente o Rick Travel AI Concierge.
 
-Arquivo futuro permitido:
+Arquivo criado:
 - `docs/product/ai-concierge-knowledge-base-inventory.md`
 
 Classificacoes obrigatorias:
@@ -382,8 +382,13 @@ Decisoes da READY:
 - Dados privados e fontes internas sensiveis sao bloqueados.
 - Claims e politicas comerciais exigem evidencia ou aprovacao explicita.
 
-Restricoes desta abertura:
-- O documento de inventario ainda nao foi criado.
+Resultado local:
+- Inventario de fontes existentes criado.
+- Fontes classificadas como ALLOWED, CONDITIONAL ou BLOCKED.
+- Precedencia, conflitos, lacunas, aprovacoes pendentes e regras futuras de RAG documentadas.
+- RT-AI-002 movida para REVIEW.
+
+Restricoes desta execucao:
 - Nenhuma base vetorial, dependencia, embedding, chat, rota API ou implementacao tecnica foi criada.
 - Nenhum frontend, backend, schema, seed, admin, reserva, pagamento, login ou producao foi alterado.
 - Nenhum commit ou push executado.

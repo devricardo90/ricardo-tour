@@ -5,6 +5,40 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-04 - RT-AI-002 Knowledge Base Inventory Documentation
+
+**Executado por:** Codex
+**Ambiente:** local; documentacao apenas
+**Status:** Local REVIEW; sem commit e sem push
+
+**Objetivo:**
+Executar RT-AI-002 como task exclusivamente documental, criando o inventario de fontes permitidas, condicionais e bloqueadas do futuro Rick Travel AI Concierge.
+
+**Arquivo criado:**
+- `docs/product/ai-concierge-knowledge-base-inventory.md`
+
+**Documentacao operacional atualizada:**
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+**Resultado:**
+- Fontes existentes classificadas como ALLOWED, CONDITIONAL ou BLOCKED.
+- Prioridade, autoridade, publico/interno, idiomas, aprovador, risco, revisao e uso futuro em RAG registrados.
+- Precedencia entre fontes e resolucao de conflitos documentadas.
+- Conflitos comerciais, catalogo legado e claims sem evidencia registrados.
+- Lacunas, aprovacoes pendentes e regras obrigatorias para futuras etapas RAG definidas.
+- RT-AI-002 movida para REVIEW.
+
+**Restricoes mantidas:**
+- Nenhuma dependencia, base vetorial, embedding, chat ou rota API criada.
+- Nenhum codigo, frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao alterado.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.
+
+---
+
 ## 2026-06-04 - RT-AI-002 READY Documentation Gate
 
 **Executado por:** Codex

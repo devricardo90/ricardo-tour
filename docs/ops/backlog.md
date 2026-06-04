@@ -1365,7 +1365,7 @@ Estado de execucao: documentacao criada localmente; aguardando revisao. Nenhum c
 
 ## RT-AI-002 Define AI Concierge Knowledge Base Inventory
 
-Estado: READY.
+Estado: REVIEW.
 
 Objetivo: criar um inventario documental das fontes existentes que poderao ou nao alimentar futuramente o Rick Travel AI Concierge, sem criar base de conhecimento executavel, retrieval, embeddings, chat ou runtime.
 
@@ -1418,3 +1418,7 @@ Criterios de aceite da futura task:
 - Nenhuma implementacao tecnica, dependencia ou alteracao de produto realizada.
 
 Risco: medio, principalmente por divergencia entre fontes, conteudo legado, claims sem evidencia, regras comerciais contraditorias, desatualizacao e exposicao acidental de dados internos ou privados.
+
+Evidencia criada: `docs/product/ai-concierge-knowledge-base-inventory.md` e documentacao operacional atualizada.
+
+Estado de execucao: inventario documental criado localmente; aguardando revisao. Nenhuma base vetorial, dependencia, embedding, chat, rota API, codigo, frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao foi alterado.
