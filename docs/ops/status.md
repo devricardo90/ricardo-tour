@@ -393,6 +393,33 @@ Restricoes desta execucao:
 - Nenhum frontend, backend, schema, seed, admin, reserva, pagamento, login ou producao foi alterado.
 - Nenhum commit ou push executado.
 
+## Atualizacao 2026-06-04 - RT-AI-003 Approved FAQ and Answer Matrix Documentation
+
+Estado: REVIEW.
+
+RT-AI-003 foi executada localmente como task exclusivamente documental para criar a matriz de respostas e handoff do Rick Travel AI Concierge.
+
+Arquivo criado:
+- `docs/product/ai-concierge-answer-matrix.md`
+- O arquivo `docs/product/ai-concierge-approved-faq.md` nao foi criado para evitar divergência.
+
+Decisoes da execucao:
+- Criados os 20 cenarios exigidos abrangendo planejamento, preco, pagamentos, seguranca, comunidades, acessibilidade, etc.
+- Respostas que envolvam confirmacao final de preco, agendas ou reservas ativam handoff.
+- Assuntos de seguranca e acessibilidade acionam handoff e proíbem IA de dar garantia.
+- Conflitos comerciais mantidos como PENDING_OWNER_APPROVAL.
+
+Resultado local:
+- Matriz criada.
+- RT-AI-003 movida para REVIEW.
+
+Restricoes desta execucao:
+- Nenhuma implementacao tecnica, dependencia, base vetorial, embedding, chat ou rota API.
+- Nenhum frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao foi alterado.
+- Nenhum commit ou push executado.
+
+---
+
 ## Atualizacao 2026-06-04 - RT-AI-003 Approved FAQ and Answer Examples READY
 
 Estado: READY.

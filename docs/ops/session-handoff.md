@@ -263,11 +263,11 @@ Restricoes da execucao:
 - Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao.
 - Nenhum commit ou push.
 
-## RT-AI-003 READY - Approved FAQ and Answer Examples
+## RT-AI-003 REVIEW - Approved FAQ and Answer Matrix
 
-Estado: READY em 2026-06-04.
+Estado: REVIEW em 2026-06-04.
 
-Objetivo da futura execucao: criar uma matriz documental aprovada de perguntas, respostas esperadas, respostas bloqueadas e criterios de handoff humano para validar futuramente o Rick Travel AI Concierge.
+Objetivo: criar uma matriz documental aprovada de perguntas, respostas esperadas, respostas bloqueadas e criterios de handoff humano para validar futuramente o Rick Travel AI Concierge.
 
 Arquivo de produto permitido:
 - `docs/product/ai-concierge-answer-matrix.md`
@@ -288,13 +288,17 @@ Escopo da futura matriz:
 - Exigir handoff para decisoes comerciais, seguranca, acessibilidade, baixa confianca, conflito entre fontes e pedido explicito de humano.
 - Manter conflitos comerciais sem resolucao como `PENDING_OWNER_APPROVAL`, nunca como FAQ factual aprovada.
 
+Resultado local:
+- Matriz de cenários criada em `docs/product/ai-concierge-answer-matrix.md`.
+- `docs/product/ai-concierge-approved-faq.md` não foi criado.
+- 20 cenários mínimos estabelecidos com critérios claros de respostas esperadas, bloqueadas e handoff.
+- Conflitos mantidos como PENDING_OWNER_APPROVAL.
+- RT-AI-003 movida para REVIEW.
+
 Proximos passos:
-- Executar RT-AI-003 somente apos autorizacao explicita.
-- Criar apenas `docs/product/ai-concierge-answer-matrix.md` e atualizar os quatro docs operacionais.
 - Revisar a matriz antes de qualquer prototipo de RAG, chat ou agente.
 
-Restricoes desta abertura:
-- Nenhum documento de produto criado.
+Restricoes desta execucao:
 - Nenhuma implementacao tecnica, dependencia, base vetorial, embedding, chat ou rota API.
 - Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login, producao, `package.json` ou lockfiles.
-- Nenhum commit ou push.
+- Nenhum commit ou push executado.

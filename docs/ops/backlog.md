@@ -1425,7 +1425,7 @@ Estado de execucao: inventario documental criado localmente; aguardando revisao.
 
 ## RT-AI-003 Define Approved FAQ and Answer Examples
 
-Estado: READY.
+Estado: REVIEW.
 
 Objetivo: definir uma matriz documental aprovada de perguntas, respostas esperadas, respostas bloqueadas e criterios de handoff humano para o futuro Rick Travel AI Concierge, antes de qualquer implementacao tecnica de RAG, chat ou agente.
 

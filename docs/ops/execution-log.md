@@ -5,6 +5,42 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-04 - RT-AI-003 Approved FAQ and Answer Matrix Documentation
+
+**Executado por:** Codex
+**Ambiente:** local; documentacao apenas
+**Status:** Local REVIEW; sem commit e sem push
+
+**Objetivo:**
+Executar RT-AI-003 como task exclusivamente documental, criando a matriz de perguntas, respostas esperadas, respostas bloqueadas e handoff humano para o futuro Rick Travel AI Concierge.
+
+**Arquivo criado:**
+- `docs/product/ai-concierge-answer-matrix.md`
+
+**Documentacao operacional atualizada:**
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+**Resultado:**
+- Matriz documental com 20 cenarios criada baseada nas regras de RT-AI-001 e RT-AI-002.
+- Respostas esperadas, bloqueadas e criterios de handoff registrados.
+- Criterios de handoff por disponibilidade, preço, pagamentos e regras de cancelamento estabelecidos.
+- Conflitos comerciais mantidos como PENDING_OWNER_APPROVAL.
+- Seguranca e acessibilidade exigem handoff.
+- RT-AI-003 movida para REVIEW.
+- `docs/product/ai-concierge-approved-faq.md` não foi criado.
+
+**Restricoes mantidas:**
+- Nenhuma dependencia, base vetorial, embedding, chat ou rota API criada.
+- Nenhum codigo, frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao alterado.
+- Nenhum `package.json` ou lockfile alterado.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.
+
+---
+
 ## 2026-06-04 - RT-AI-003 READY Documentation Gate
 
 **Executado por:** Codex
