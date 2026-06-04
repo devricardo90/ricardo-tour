@@ -1422,3 +1422,104 @@ Risco: medio, principalmente por divergencia entre fontes, conteudo legado, clai
 Evidencia criada: `docs/product/ai-concierge-knowledge-base-inventory.md` e documentacao operacional atualizada.
 
 Estado de execucao: inventario documental criado localmente; aguardando revisao. Nenhuma base vetorial, dependencia, embedding, chat, rota API, codigo, frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao foi alterado.
+
+## RT-AI-003 Define Approved FAQ and Answer Examples
+
+Estado: READY.
+
+Objetivo: definir uma matriz documental aprovada de perguntas, respostas esperadas, respostas bloqueadas e criterios de handoff humano para o futuro Rick Travel AI Concierge, antes de qualquer implementacao tecnica de RAG, chat ou agente.
+
+Tipo: DISCOVERY/PRODUCT DOCUMENTATION. Esta task deve produzir um unico artefato de validacao e nao deve implementar runtime.
+
+Arquivo de produto permitido na futura execucao:
+- `docs/product/ai-concierge-answer-matrix.md`
+
+Docs operacionais permitidos:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Nao criar:
+- `docs/product/ai-concierge-approved-faq.md`, para evitar duplicacao e divergencia de respostas.
+
+Campos obrigatorios por cenario:
+- Identificador.
+- Intencao.
+- Idioma.
+- Pergunta do usuario.
+- Fonte autorizada necessaria.
+- Resposta esperada ou comportamento esperado.
+- Exemplos de respostas bloqueadas.
+- Perguntas de esclarecimento permitidas.
+- Necessidade e motivo de handoff.
+- Estado de aprovacao pelo responsavel.
+- Criterios de validacao.
+
+Cenarios minimos obrigatorios:
+1. Primeira viagem ao Rio.
+2. Comparacao entre Cristo Redentor e Pao de Acucar.
+3. Passeio para familia.
+4. Passeio para casal.
+5. Meio dia disponivel.
+6. Roteiro de 1 dia no Rio.
+7. Tour privado.
+8. Duvida sobre preco.
+9. Duvida sobre disponibilidade.
+10. Duvida sobre pagamento.
+11. Duvida sobre cancelamento.
+12. Duvida sobre seguranca.
+13. Duvida sobre favela/comunidade.
+14. Duvida sobre acessibilidade.
+15. Cliente pedindo algo que o agente nao pode confirmar.
+16. Cliente pedindo contato humano.
+17. Cliente em ingles.
+18. Cliente em espanhol.
+19. Pergunta fora do escopo do Rio/Rick Travel.
+20. Pergunta com risco de alucinacao.
+
+Respostas bloqueadas obrigatorias:
+- Confirmar reserva ou disponibilidade.
+- Informar preco final de grupo, desconto ou condicao especial.
+- Afirmar politicas nao aprovadas de pagamento, cancelamento ou reembolso.
+- Garantir seguranca ou acessibilidade.
+- Recomendar tours inexistentes ou nao publicados.
+- Usar dados privados, administrativos, bookings ou pagamentos.
+- Repetir claims sem evidencia aprovada.
+- Inventar horarios, condicoes, duracao ou fatos ausentes.
+- Fornecer orientacao medica, legal, policial ou emergencial alem de encaminhamento oficial.
+
+Handoff humano obrigatorio:
+- Disponibilidade, reserva, preco final e condicoes especiais.
+- Pagamento, cancelamento, reembolso ou reagendamento.
+- Tours privados, grupos e roteiros personalizados.
+- Acessibilidade, criancas, idosos ou necessidades especificas.
+- Seguranca, favela/comunidade, periodo noturno e clima severo.
+- Conflito entre fontes, baixa confianca ou ausencia de fonte aprovada.
+- Solicitacao explicita de contato humano.
+
+Regra critica:
+- Conflitos comerciais ainda nao resolvidos devem aparecer como `PENDING_OWNER_APPROVAL` e exigir handoff.
+- Conflitos comerciais nao podem ser tratados como FAQ factual aprovada.
+
+Fora de escopo:
+- Nao criar ainda `docs/product/ai-concierge-answer-matrix.md` nesta abertura de READY.
+- Nao criar `docs/product/ai-concierge-approved-faq.md`.
+- Nao criar chat, rota API, base vetorial ou embeddings.
+- Nao instalar LangChain ou LangGraph.
+- Nao alterar frontend, backend, schema Prisma, seed, admin, reservas, pagamentos, login ou producao.
+- Nao alterar `package.json` ou lockfiles.
+- Nao criar `STATUS.md` ou `backlog.md` na raiz.
+- Nao fazer commit ou push nesta abertura de READY.
+
+Criterios de aceite da futura task:
+- Um unico documento de matriz criado e rastreavel a RT-AI-001 e RT-AI-002.
+- Todos os 20 cenarios minimos representados.
+- Cada cenario registra resposta esperada, bloqueios, handoff, fonte, aprovacao, idioma e validacao.
+- Exemplos em portugues, ingles e espanhol preservam os mesmos guardrails.
+- Nenhum conflito comercial pendente e promovido a fato aprovado.
+- Nenhum tour nao publicado, dado privado ou claim sem evidencia e usado.
+- Agenda ou `TripSchedule` nao e tratada como disponibilidade confirmada.
+- Nenhuma implementacao tecnica, dependencia ou alteracao de produto realizada.
+
+Risco: medio, principalmente por aprovar acidentalmente informacao comercial conflitante, enfraquecer guardrails em traducoes, criar respostas desatualizadas ou induzir excesso de confianca.

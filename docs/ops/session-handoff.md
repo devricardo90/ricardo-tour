@@ -262,3 +262,39 @@ Restricoes da execucao:
 - Nenhuma implementacao tecnica, dependencia, base vetorial, embedding, chat ou rota API.
 - Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao.
 - Nenhum commit ou push.
+
+## RT-AI-003 READY - Approved FAQ and Answer Examples
+
+Estado: READY em 2026-06-04.
+
+Objetivo da futura execucao: criar uma matriz documental aprovada de perguntas, respostas esperadas, respostas bloqueadas e criterios de handoff humano para validar futuramente o Rick Travel AI Concierge.
+
+Arquivo de produto permitido:
+- `docs/product/ai-concierge-answer-matrix.md`
+
+Docs operacionais permitidos:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Nao criar:
+- `docs/product/ai-concierge-approved-faq.md`.
+
+Escopo da futura matriz:
+- Registrar por cenario identificador, intencao, idioma, pergunta, fonte autorizada, comportamento esperado, respostas bloqueadas, esclarecimentos permitidos, handoff, aprovacao e validacao.
+- Cobrir os 20 cenarios minimos registrados em `docs/ops/backlog.md`.
+- Incluir exemplos em portugues, ingles e espanhol com os mesmos guardrails.
+- Exigir handoff para decisoes comerciais, seguranca, acessibilidade, baixa confianca, conflito entre fontes e pedido explicito de humano.
+- Manter conflitos comerciais sem resolucao como `PENDING_OWNER_APPROVAL`, nunca como FAQ factual aprovada.
+
+Proximos passos:
+- Executar RT-AI-003 somente apos autorizacao explicita.
+- Criar apenas `docs/product/ai-concierge-answer-matrix.md` e atualizar os quatro docs operacionais.
+- Revisar a matriz antes de qualquer prototipo de RAG, chat ou agente.
+
+Restricoes desta abertura:
+- Nenhum documento de produto criado.
+- Nenhuma implementacao tecnica, dependencia, base vetorial, embedding, chat ou rota API.
+- Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login, producao, `package.json` ou lockfiles.
+- Nenhum commit ou push.

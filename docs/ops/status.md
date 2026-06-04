@@ -392,3 +392,30 @@ Restricoes desta execucao:
 - Nenhuma base vetorial, dependencia, embedding, chat, rota API ou implementacao tecnica foi criada.
 - Nenhum frontend, backend, schema, seed, admin, reserva, pagamento, login ou producao foi alterado.
 - Nenhum commit ou push executado.
+
+## Atualizacao 2026-06-04 - RT-AI-003 Approved FAQ and Answer Examples READY
+
+Estado: READY.
+
+RT-AI-003 foi aberta como task exclusivamente documental para definir uma matriz aprovada de perguntas, respostas esperadas, respostas bloqueadas e criterios de handoff humano antes de qualquer implementacao tecnica do Rick Travel AI Concierge.
+
+Arquivo permitido na futura execucao:
+- `docs/product/ai-concierge-answer-matrix.md`
+
+Decisoes da READY:
+- A futura task deve criar somente um documento de matriz.
+- `docs/product/ai-concierge-approved-faq.md` nao deve ser criado para evitar duplicacao e divergencia.
+- A matriz deve cobrir os 20 cenarios minimos de planejamento, catalogo, comercial, seguranca, acessibilidade, idiomas, limites e risco de alucinacao.
+- Cada cenario deve registrar fonte autorizada, resposta esperada, respostas bloqueadas, esclarecimentos permitidos, handoff, aprovacao e validacao.
+- Conflitos comerciais nao resolvidos devem permanecer como `PENDING_OWNER_APPROVAL` e exigir handoff.
+- Confirmacoes de reserva, disponibilidade, preco final, politicas nao aprovadas, garantias de seguranca/acessibilidade, dados privados e claims sem evidencia sao bloqueados.
+
+Resultado local:
+- RT-AI-003 registrada como READY nos documentos operacionais.
+- Nenhum documento de produto criado nesta abertura.
+
+Restricoes desta abertura:
+- Nenhum chat, rota API, RAG tecnico, base vetorial, embedding ou dependencia foi criado.
+- Nenhum frontend, backend, schema, seed, admin, reserva, pagamento, login, producao, `package.json` ou lockfile foi alterado.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.
