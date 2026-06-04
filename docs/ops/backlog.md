@@ -1362,3 +1362,59 @@ Risco: medio, principalmente por alucinacao, promessa comercial indevida, orient
 Evidencia criada: `docs/product/ai-concierge-scope.md`, `docs/architecture/ai-concierge-rag-strategy.md` e documentacao operacional atualizada.
 
 Estado de execucao: documentacao criada localmente; aguardando revisao. Nenhum codigo, dependencia, schema, seed, frontend, admin, reservas, pagamentos, login ou producao foi alterado.
+
+## RT-AI-002 Define AI Concierge Knowledge Base Inventory
+
+Estado: READY.
+
+Objetivo: criar um inventario documental das fontes existentes que poderao ou nao alimentar futuramente o Rick Travel AI Concierge, sem criar base de conhecimento executavel, retrieval, embeddings, chat ou runtime.
+
+Tipo: DISCOVERY/PRODUCT DOCUMENTATION. Esta task deve classificar fontes como `permitidas`, `condicionais` ou `bloqueadas`.
+
+Arquivo de produto permitido na futura execucao:
+- `docs/product/ai-concierge-knowledge-base-inventory.md`
+
+Docs operacionais permitidos:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Escopo permitido:
+- Registrar caminho ou origem de cada fonte.
+- Definir tipo de conteudo, prioridade e autoridade.
+- Classificar conteudo publico versus interno.
+- Registrar idiomas disponiveis e responsavel pela aprovacao.
+- Registrar risco de desatualizacao e gatilho de revisao.
+- Definir relacao da fonte com futuras etapas RAG.
+- Definir precedencia entre fontes e resolucao de conflitos.
+- Registrar lacunas de conteudo e aprovacoes pendentes.
+
+Regras obrigatorias:
+- O catalogo publico publicado tem prioridade sobre seed e arquivos legados.
+- Somente tours com `isPublished=true` podem ser considerados para respostas publicas.
+- Agenda ou `TripSchedule` nao representa disponibilidade confirmada.
+- Seed e referencia secundaria e nao supera o catalogo publico publicado.
+- `data/real-trips.json` deve ser classificado como bloqueado ou legado divergente, salvo revisao futura aprovada.
+- `docs/ops/*` nao deve ser ingerido integralmente.
+- Dados privados, bookings, pagamentos, contatos, admin, analytics, e-mails, logs, `.env`, segredos e backups sao bloqueados.
+- Claims como `500+ tours`, avaliacao `4,9`, resposta em minutos, Cadastur, seguros e cobertura completa exigem evidencia aprovada antes de uso.
+- Politicas de pagamento, cancelamento, reembolso e disponibilidade exigem aprovacao explicita antes de entrar na base.
+
+Fora de escopo:
+- Nao criar ainda `docs/product/ai-concierge-knowledge-base-inventory.md` nesta abertura de READY.
+- Nao criar base vetorial, embeddings, chat ou rota API.
+- Nao instalar LangChain ou LangGraph.
+- Nao alterar frontend, backend, schema Prisma, seed, admin, reservas, pagamentos, login ou producao.
+- Nao instalar dependencias.
+- Nao fazer commit ou push nesta abertura de READY.
+
+Criterios de aceite da futura task:
+- Inventario criado somente com fontes existentes e verificaveis.
+- Cada fonte classificada como permitida, condicional ou bloqueada.
+- Precedencia, conflitos, lacunas, aprovacoes pendentes e riscos documentados.
+- Separacao entre conteudo publico e interno preservada.
+- Nenhum dado privado ou fonte bloqueada promovido para uso publico.
+- Nenhuma implementacao tecnica, dependencia ou alteracao de produto realizada.
+
+Risco: medio, principalmente por divergencia entre fontes, conteudo legado, claims sem evidencia, regras comerciais contraditorias, desatualizacao e exposicao acidental de dados internos ou privados.

@@ -5,6 +5,31 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-04 - RT-AI-002 READY Documentation Gate
+
+**Executado por:** Codex
+**Ambiente:** local; documentacao operacional apenas
+**Status:** READY aberto; sem efeito em producao
+
+**Objetivo:**
+Registrar RT-AI-002 como task exclusivamente documental para inventariar e classificar fontes existentes do futuro Rick Travel AI Concierge.
+
+**Resultado:**
+- RT-AI-002 marcada como READY nos documentos operacionais.
+- Futura classificacao definida: fontes permitidas, condicionais ou bloqueadas.
+- Precedencia do catalogo publico publicado e requisito `isPublished=true` registrados.
+- Seed definido como referencia secundaria; `TripSchedule` nao confirma disponibilidade.
+- Fontes privadas, internas sensiveis, legadas divergentes e claims sem evidencia foram explicitamente restringidos.
+- Arquivo futuro permitido: `docs/product/ai-concierge-knowledge-base-inventory.md`.
+
+**Restricoes mantidas:**
+- O documento de inventario nao foi criado nesta abertura de READY.
+- Nenhuma dependencia, base vetorial, embedding, chat ou rota API criada.
+- Nenhum codigo, frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao alterado.
+- Nenhum commit ou push executado.
+
+---
+
 ## 2026-06-03 - RT-AI-001 Scope and RAG Strategy Documentation
 
 **Executado por:** Codex

@@ -226,3 +226,36 @@ Restricoes mantidas na execucao documental:
 - Nenhuma dependencia instalada.
 - Nenhum chat, rota API, banco vetorial, schema, seed, frontend, admin, pagamento, reserva, login ou producao alterado.
 - Nenhum commit ou push executado.
+
+## RT-AI-002 READY - AI Concierge Knowledge Base Inventory
+
+Estado: READY em 2026-06-04.
+
+Objetivo da futura task: criar `docs/product/ai-concierge-knowledge-base-inventory.md` para inventariar fontes existentes e classifica-las como permitidas, condicionais ou bloqueadas antes de qualquer etapa tecnica de RAG.
+
+Arquivos permitidos na futura execucao:
+- `docs/product/ai-concierge-knowledge-base-inventory.md`
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Conteudo obrigatorio do inventario:
+- caminho ou origem, tipo, prioridade, autoridade e idiomas;
+- classificacao publico versus interno e responsavel pela aprovacao;
+- risco de desatualizacao, gatilho de revisao e relacao com futuras etapas RAG;
+- precedencia entre fontes, resolucao de conflitos, lacunas e aprovacoes pendentes.
+
+Regras registradas:
+- Catalogo publico publicado prevalece; somente `isPublished=true` e elegivel para resposta publica.
+- `TripSchedule` nao confirma disponibilidade e seed e apenas referencia secundaria.
+- `data/real-trips.json` e bloqueado ou legado divergente ate revisao futura.
+- `docs/ops/*` nao deve ser ingerido integralmente.
+- Dados privados, bookings, pagamentos, contatos, admin, analytics, e-mails, logs, `.env`, segredos e backups sao bloqueados.
+- Claims sem evidencia e politicas de pagamento, cancelamento, reembolso ou disponibilidade sem aprovacao explicita nao entram na base.
+
+Restricoes da READY:
+- `docs/product/ai-concierge-knowledge-base-inventory.md` ainda nao foi criado.
+- Nenhuma implementacao tecnica, dependencia, base vetorial, embedding, chat ou rota API.
+- Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao.
+- Nenhum commit ou push.
