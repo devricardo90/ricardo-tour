@@ -485,3 +485,34 @@ Restricoes desta abertura:
 - Nenhum frontend, backend, schema, seed, admin, reserva, pagamento, login, producao, `package.json` ou lockfile foi alterado.
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
 - Nenhum commit ou push executado.
+
+---
+
+## Atualizacao 2026-06-05 - RT-AI-004 Prompt and Guardrail Contract Documentation
+
+Estado: REVIEW.
+
+RT-AI-004 foi executada localmente como task exclusivamente documental para criar o contrato operacional de prompt, comportamento, guardrails, recusas, handoff humano e formato de resposta do futuro Rick Travel AI Concierge.
+
+Arquivo criado:
+- `docs/product/ai-concierge-prompt-contract.md`
+
+Conteudo registrado:
+- Objetivo do contrato e relacao com RT-AI-001, RT-AI-002 e RT-AI-003.
+- Persona publica Rick Travel AI Concierge, papel do agente, tom de voz e idioma de resposta.
+- Regras de fontes aprovadas, nao invencao, baixa confianca e conflito entre fontes.
+- Regras comerciais, seguranca turistica, favela/comunidade, acessibilidade, criancas, idosos e necessidades especiais.
+- Pagamento, cancelamento e reembolso mantidos como `PENDING_OWNER_APPROVAL`.
+- Handoff humano, recusas, formato esperado e formato bloqueado de resposta.
+- Limite explicito para nao mencionar RIC Studio no fluxo publico.
+- Contrato minimo para futura implementacao tecnica de system/developer prompt, sem criar codigo.
+
+Resultado local:
+- Contrato operacional criado.
+- RT-AI-004 movida para REVIEW.
+
+Restricoes desta execucao:
+- Nenhum prompt em codigo, chat, rota API, RAG tecnico, base vetorial, embedding ou dependencia foi criado.
+- Nenhum frontend, backend, schema, seed, admin, reserva, pagamento, login, producao, `package.json` ou lockfile foi alterado.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.

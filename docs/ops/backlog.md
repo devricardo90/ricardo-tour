@@ -1526,7 +1526,7 @@ Risco: medio, principalmente por aprovar acidentalmente informacao comercial con
 
 ## RT-AI-004 Define AI Concierge Prompt and Guardrail Contract
 
-Estado: READY.
+Estado: REVIEW.
 
 Objetivo: definir o contrato operacional do futuro Rick Travel AI Concierge, incluindo prompt behavior, guardrails, recusas, handoff humano e formato de resposta antes de qualquer implementacao tecnica.
 
@@ -1599,3 +1599,7 @@ Criterios de aceite da futura task:
 - Nenhum codigo, dependencia, runtime, chat, API, RAG tecnico, frontend, backend, schema, seed, admin, reserva, pagamento, login ou producao alterado.
 
 Risco: medio, principalmente por transformar exemplos da matriz em comportamento excessivamente aberto, enfraquecer bloqueios comerciais, permitir confianca indevida ou antecipar implementacao tecnica antes do contrato documental.
+
+Evidencia criada: `docs/product/ai-concierge-prompt-contract.md` e documentacao operacional atualizada.
+
+Estado de execucao: contrato operacional criado localmente; aguardando revisao. Nenhum prompt em codigo, chat, rota API, RAG tecnico, dependencia, frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao foi alterado.

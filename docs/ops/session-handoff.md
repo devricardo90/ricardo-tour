@@ -303,9 +303,9 @@ Restricoes desta execucao:
 - Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login, producao, `package.json` ou lockfiles.
 - Nenhum commit ou push executado.
 
-## RT-AI-004 READY - Prompt and Guardrail Contract
+## RT-AI-004 REVIEW - Prompt and Guardrail Contract
 
-Estado: READY em 2026-06-05.
+Estado: REVIEW em 2026-06-05.
 
 Objetivo: definir o contrato operacional do futuro Rick Travel AI Concierge antes de qualquer implementacao tecnica de chat, rota API, RAG, LangChain ou LangGraph.
 
@@ -337,6 +337,22 @@ Regras criticas:
 
 Restricoes da abertura READY:
 - `docs/product/ai-concierge-prompt-contract.md` ainda nao foi criado.
+- Nenhum prompt em codigo, chat, rota API, base vetorial, embedding, LangChain ou LangGraph.
+- Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login, producao, `package.json` ou lockfiles.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.
+
+Resultado local:
+- `docs/product/ai-concierge-prompt-contract.md` criado.
+- Contrato cobre objetivo, relacao com RT-AI-001/002/003, persona, papel, tom, idioma, fontes, nao invencao, baixa confianca, conflito entre fontes, regras comerciais, seguranca turistica, favela/comunidade, acessibilidade, criancas, idosos, necessidades especiais, pagamento/cancelamento/reembolso, handoff, recusas, formato de resposta e limite sobre RIC Studio.
+- RT-AI-004 movida para REVIEW.
+
+Proximos passos:
+- Revisar o contrato antes de qualquer prototipo tecnico.
+- Nao abrir chat, rota API, RAG tecnico, LangChain, LangGraph, embeddings ou base vetorial ate o contrato ser aprovado.
+- Manter pagamento, cancelamento e reembolso como `PENDING_OWNER_APPROVAL` ate politica final.
+
+Restricoes desta execucao:
 - Nenhum prompt em codigo, chat, rota API, base vetorial, embedding, LangChain ou LangGraph.
 - Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login, producao, `package.json` ou lockfiles.
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
