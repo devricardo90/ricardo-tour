@@ -5,6 +5,39 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-05 - RT-AI-005 Curated Knowledge Base Format Documentation
+
+**Executado por:** Codex
+**Ambiente:** local; documentacao apenas
+**Status:** Local REVIEW; sem commit e sem push
+
+**Objetivo:**
+Executar RT-AI-005 como task exclusivamente documental, criando o formato canonico e versionavel da futura base de conhecimento curada do Rick Travel AI Concierge.
+
+**Arquivo criado:**
+- `docs/product/ai-concierge-knowledge-base-format.md`
+
+**Documentacao operacional atualizada:**
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+**Resultado:**
+- Formato canonico criado com objetivo, relacao com RT-AI-001/002/003/004, tipos permitidos, campos obrigatorios, campos opcionais, estados de aprovacao e regras criticas.
+- Estrategia de idioma registrada para portugues, ingles, espanhol e sueco somente com conteudo aprovado.
+- Formatos definidos para tours, destinos, atracoes, regras comerciais, regras de seguranca, handoff rules, FAQ/respostas aprovadas e blocked claims.
+- Regras de precedencia, validade, expiracao e relacao futura com RAG, chunking, embeddings e LangChain documentadas sem implementacao tecnica.
+- RT-AI-005 movida para REVIEW.
+
+**Restricoes mantidas:**
+- Nenhum arquivo JSON/YAML de base real, seed, alteracao em `data/`, base vetorial, embedding, chat, rota API, LangChain ou LangGraph criado ou instalado.
+- Nenhum codigo, frontend, backend, schema, admin, reservas, pagamentos, login ou producao alterado.
+- Nenhum `package.json`, lockfile, `STATUS.md` ou `backlog.md` na raiz alterado ou criado.
+- Nenhum commit ou push executado.
+
+---
+
 ## 2026-06-05 - RT-AI-005 READY Documentation Gate
 
 **Executado por:** Codex

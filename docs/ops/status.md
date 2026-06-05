@@ -550,3 +550,34 @@ Restricoes desta abertura:
 - Nenhum frontend, backend, schema, admin, reserva, pagamento, login, producao, `package.json` ou lockfile foi alterado.
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
 - Nenhum commit ou push executado.
+
+---
+
+## Atualizacao 2026-06-05 - RT-AI-005 Curated Knowledge Base Format Documentation
+
+Estado: REVIEW.
+
+RT-AI-005 foi executada localmente como task exclusivamente documental para criar o formato canonico e versionavel da futura base de conhecimento curada do Rick Travel AI Concierge.
+
+Arquivo criado:
+- `docs/product/ai-concierge-knowledge-base-format.md`
+
+Conteudo registrado:
+- Objetivo da base curada e relacao com RT-AI-001, RT-AI-002, RT-AI-003 e RT-AI-004.
+- Tipos de registros permitidos: `tour`, `destination`, `attraction`, `commercial_rule`, `safety_rule`, `handoff_rule`, `faq_answer` e `blocked_claim`.
+- Campos obrigatorios e opcionais da base futura.
+- Estados de aprovacao: `APPROVED`, `CONDITIONAL`, `PENDING_OWNER_APPROVAL` e `BLOCKED`.
+- Regras criticas para uso factual, conteudo condicional, handoff, bloqueios, tours publicados, agenda, preco, pagamento, cancelamento, reembolso, claims e dados privados.
+- Estrategia de idioma para portugues, ingles, espanhol e sueco somente com conteudo aprovado.
+- Formatos para tours, destinos, atracoes, regras comerciais, seguranca turistica, handoff rules, FAQ/respostas aprovadas e blocked claims.
+- Regras de precedencia, validade, expiracao e relacao futura com RAG, chunking, embeddings e LangChain, sem implementacao tecnica.
+
+Resultado local:
+- Documento de formato canonico criado.
+- RT-AI-005 movida para REVIEW.
+
+Restricoes desta execucao:
+- Nenhum arquivo JSON/YAML de base real, seed, alteracao em `data/`, base vetorial, embedding, chat, rota API, LangChain ou LangGraph foi criado.
+- Nenhum frontend, backend, schema, admin, reserva, pagamento, login, producao, `package.json` ou lockfile foi alterado.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.

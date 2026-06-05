@@ -1606,7 +1606,7 @@ Estado de execucao: contrato operacional criado localmente; aguardando revisao. 
 
 ## RT-AI-005 Define Curated Knowledge Base Format
 
-Estado: READY.
+Estado: REVIEW.
 
 Objetivo: definir o formato canonico e versionavel da futura base de conhecimento curada do Rick Travel AI Concierge.
 
@@ -1717,7 +1717,6 @@ Fora de escopo:
 - Nao alterar producao.
 - Nao alterar `package.json` ou lockfiles.
 - Nao criar `STATUS.md` ou `backlog.md` na raiz.
-- Nao criar ainda `docs/product/ai-concierge-knowledge-base-format.md` nesta abertura de READY.
 - Nao fazer commit ou push nesta abertura de READY.
 
 Criterios de aceite da futura task:
@@ -1729,3 +1728,7 @@ Criterios de aceite da futura task:
 - Nenhum arquivo JSON/YAML de base real, seed, `data/`, base vetorial, embedding, chat, API, dependencia, frontend, backend, schema, admin, reserva, pagamento, login ou producao alterado.
 
 Risco: medio, principalmente por promover conteudo condicional ou pendente a fato aprovado, misturar idiomas sem revisao, permitir claims sem evidencia ou antecipar formato executavel antes da curadoria documental.
+
+Evidencia criada: `docs/product/ai-concierge-knowledge-base-format.md` e documentacao operacional atualizada.
+
+Estado de execucao: formato canonico criado localmente; aguardando revisao. Nenhum arquivo JSON/YAML de base real, seed, `data/`, base vetorial, embedding, chat, rota API, dependencia, frontend, backend, schema, admin, reservas, pagamentos, login ou producao foi alterado.

@@ -358,13 +358,13 @@ Restricoes desta execucao:
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
 - Nenhum commit ou push executado.
 
-## RT-AI-005 READY - Curated Knowledge Base Format
+## RT-AI-005 REVIEW - Curated Knowledge Base Format
 
-Estado: READY em 2026-06-05.
+Estado: REVIEW em 2026-06-05.
 
 Objetivo: definir o formato canonico e versionavel da futura base de conhecimento curada do Rick Travel AI Concierge.
 
-Arquivo de produto permitido na futura execucao:
+Arquivo de produto criado:
 - `docs/product/ai-concierge-knowledge-base-format.md`
 
 Docs operacionais permitidos:
@@ -373,7 +373,7 @@ Docs operacionais permitidos:
 - `docs/ops/session-handoff.md`
 - `docs/ops/execution-log.md`
 
-Escopo da futura task:
+Escopo executado:
 - Definir objetivo da base curada e relacao com RT-AI-001, RT-AI-002, RT-AI-003 e RT-AI-004.
 - Definir tipos de registros permitidos, campos obrigatorios, campos opcionais, metadados, idiomas, status de aprovacao, fonte, atualizacao e validade.
 - Definir regras para conteudo publico versus interno e conteudo bloqueado.
@@ -409,13 +409,18 @@ Regras criticas:
 - Portugues, ingles e espanhol sao prioridade inicial; sueco somente se houver conteudo aprovado.
 - Nao misturar idiomas divergentes sem revisao.
 
-Restricoes da abertura READY:
-- `docs/product/ai-concierge-knowledge-base-format.md` ainda nao foi criado.
+Resultado local:
+- `docs/product/ai-concierge-knowledge-base-format.md` criado.
+- Documento define formato canonico, campos, estados, tipos, precedencia, validade, idioma e relacao futura com RAG sem criar implementacao.
+- RT-AI-005 movida para REVIEW.
+
+Restricoes desta execucao:
 - Nenhum JSON/YAML de base real, seed, `data/`, base vetorial, embedding, chat, rota API, LangChain ou LangGraph.
 - Nenhuma alteracao em frontend, backend, schema, admin, reservas, pagamentos, login, producao, `package.json` ou lockfiles.
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
 - Nenhum commit ou push executado.
 
 Proximos passos:
-- Executar RT-AI-005 como documentacao de formato somente depois da revisao desta READY.
-- Nao criar base real, seed, embeddings, retrieval, chat ou rota API durante a abertura.
+- Revisar o formato canonico antes de qualquer prototipo tecnico.
+- Nao criar base real, seed, embeddings, retrieval, chat, rota API, LangChain ou LangGraph sem nova task explicita.
+- Manter politicas comerciais pendentes como `PENDING_OWNER_APPROVAL` e claims sem evidencia como `blocked_claim`.
