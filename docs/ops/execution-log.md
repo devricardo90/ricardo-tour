@@ -5,6 +5,35 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-05 - RT-AI-005 READY Documentation Gate
+
+**Executado por:** Codex
+**Ambiente:** local; documentacao operacional apenas
+**Status:** READY aberto; sem efeito em producao
+
+**Objetivo:**
+Registrar RT-AI-005 como task exclusivamente documental para definir o formato canonico e versionavel da futura base de conhecimento curada do Rick Travel AI Concierge.
+
+**Resultado:**
+- RT-AI-005 marcada como READY nos documentos operacionais.
+- Arquivo futuro permitido: `docs/product/ai-concierge-knowledge-base-format.md`.
+- A futura task deve definir objetivo, relacao com RT-AI-001/002/003/004, tipos de registros, campos obrigatorios e opcionais, metadados, idiomas, status de aprovacao, fonte, atualizacao, validade, publico versus interno, conteudo bloqueado e criterios de validacao.
+- Tipos minimos registrados: `tour`, `destination`, `attraction`, `commercial_rule`, `safety_rule`, `handoff_rule`, `faq_answer` e `blocked_claim`.
+- Campos obrigatorios minimos registrados: `id`, `type`, `locale`, `title`, `content`, `source`, `sourceAuthority`, `approvalStatus`, `owner`, `updatedAt`, `publicAllowed` e `ragAllowed`.
+- Estados de aprovacao registrados: `APPROVED`, `CONDITIONAL`, `PENDING_OWNER_APPROVAL` e `BLOCKED`.
+- Regras criticas registradas: somente `APPROVED` pode sustentar resposta factual; `CONDITIONAL` exige regra explicita; `PENDING_OWNER_APPROVAL` gera handoff; `BLOCKED` nao pode ser usado publicamente; tours exigem `isPublished=true`; agenda nao confirma disponibilidade; preco final, pagamento, cancelamento e reembolso nao devem ser inferidos.
+- Idiomas prioritarios registrados: portugues, ingles e espanhol; sueco somente com conteudo aprovado.
+- Relacao futura com RAG, embeddings e LangChain registrada como documental, sem implementacao.
+
+**Restricoes mantidas:**
+- `docs/product/ai-concierge-knowledge-base-format.md` nao foi criado nesta abertura de READY.
+- Nenhum arquivo JSON/YAML de base real, seed, alteracao em `data/`, base vetorial, embedding, chat, rota API, LangChain ou LangGraph criado ou instalado.
+- Nenhum codigo, frontend, backend, schema, admin, reservas, pagamentos, login ou producao alterado.
+- Nenhum `package.json`, lockfile, `STATUS.md` ou `backlog.md` na raiz alterado ou criado.
+- Nenhum commit ou push executado.
+
+---
+
 ## 2026-06-05 - RT-AI-004 Prompt and Guardrail Contract Documentation
 
 **Executado por:** Codex

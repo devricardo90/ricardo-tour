@@ -516,3 +516,37 @@ Restricoes desta execucao:
 - Nenhum frontend, backend, schema, seed, admin, reserva, pagamento, login, producao, `package.json` ou lockfile foi alterado.
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
 - Nenhum commit ou push executado.
+
+---
+
+## Atualizacao 2026-06-05 - RT-AI-005 Curated Knowledge Base Format READY
+
+Estado: READY.
+
+RT-AI-005 foi aberta como task exclusivamente documental para definir o formato canonico e versionavel da futura base de conhecimento curada do Rick Travel AI Concierge.
+
+Arquivo permitido na futura execucao:
+- `docs/product/ai-concierge-knowledge-base-format.md`
+
+Decisoes da READY:
+- A futura task deve definir objetivo da base curada e relacao com RT-AI-001, RT-AI-002, RT-AI-003 e RT-AI-004.
+- O formato deve cobrir tipos de registros, campos obrigatorios, campos opcionais, metadados, idiomas, status de aprovacao, fonte de origem, data de atualizacao, validade, conteudo publico versus interno e conteudo bloqueado.
+- Tipos minimos: `tour`, `destination`, `attraction`, `commercial_rule`, `safety_rule`, `handoff_rule`, `faq_answer` e `blocked_claim`.
+- Campos obrigatorios minimos: `id`, `type`, `locale`, `title`, `content`, `source`, `sourceAuthority`, `approvalStatus`, `owner`, `updatedAt`, `publicAllowed` e `ragAllowed`.
+- Campos opcionais minimos: `tourId`, `relatedTourIds`, `city`, `neighborhood`, `tags`, `riskLevel`, `handoffRequired`, `expiresAt` e `notes`.
+- Estados de aprovacao: `APPROVED`, `CONDITIONAL`, `PENDING_OWNER_APPROVAL` e `BLOCKED`.
+- Somente conteudo `APPROVED` pode ser usado em resposta factual; `CONDITIONAL` exige regra explicita; `PENDING_OWNER_APPROVAL` gera handoff; `BLOCKED` nunca deve ser usado para resposta publica.
+- Tours exigem `isPublished=true`; agenda nao confirma disponibilidade; preco final, pagamento, cancelamento e reembolso nao devem ser inferidos.
+- Claims como Cadastur, avaliacao, seguros e "500+ tours" exigem evidencia aprovada.
+- Portugues, ingles e espanhol sao prioridade inicial; sueco somente com conteudo aprovado; idiomas divergentes nao devem ser misturados sem revisao.
+- A futura task deve documentar a relacao com RAG, embeddings e LangChain, sem implementar nada.
+
+Resultado local:
+- RT-AI-005 registrada como READY nos documentos operacionais.
+- `docs/product/ai-concierge-knowledge-base-format.md` nao foi criado nesta abertura.
+
+Restricoes desta abertura:
+- Nenhum arquivo JSON/YAML de base real, seed, alteracao em `data/`, base vetorial, embedding, chat, rota API, LangChain ou LangGraph foi criado.
+- Nenhum frontend, backend, schema, admin, reserva, pagamento, login, producao, `package.json` ou lockfile foi alterado.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.

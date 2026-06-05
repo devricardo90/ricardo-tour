@@ -1603,3 +1603,129 @@ Risco: medio, principalmente por transformar exemplos da matriz em comportamento
 Evidencia criada: `docs/product/ai-concierge-prompt-contract.md` e documentacao operacional atualizada.
 
 Estado de execucao: contrato operacional criado localmente; aguardando revisao. Nenhum prompt em codigo, chat, rota API, RAG tecnico, dependencia, frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao foi alterado.
+
+## RT-AI-005 Define Curated Knowledge Base Format
+
+Estado: READY.
+
+Objetivo: definir o formato canonico e versionavel da futura base de conhecimento curada do Rick Travel AI Concierge.
+
+Tipo: DISCOVERY/PRODUCT DOCUMENTATION. Esta task deve produzir um unico documento de formato e nao deve criar base real, seed, runtime, retrieval, embeddings ou agente.
+
+Arquivo de produto permitido na futura execucao:
+- `docs/product/ai-concierge-knowledge-base-format.md`
+
+Docs operacionais permitidos:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Conteudo obrigatorio do formato:
+- objetivo da base curada;
+- relacao com RT-AI-001, RT-AI-002, RT-AI-003 e RT-AI-004;
+- tipos de registros permitidos;
+- campos obrigatorios;
+- campos opcionais;
+- metadados;
+- idiomas;
+- status de aprovacao;
+- fonte de origem;
+- data de atualizacao;
+- regras de validade;
+- regras para conteudo publico versus interno;
+- regras para conteudo bloqueado;
+- formato para tours;
+- formato para destinos/atracoes;
+- formato para regras comerciais;
+- formato para regras de seguranca;
+- formato para FAQ/matriz de respostas;
+- relacao futura com RAG, embeddings e LangChain;
+- criterios de validacao.
+
+Tipos minimos de conteudo:
+- `tour`
+- `destination`
+- `attraction`
+- `commercial_rule`
+- `safety_rule`
+- `handoff_rule`
+- `faq_answer`
+- `blocked_claim`
+
+Campos obrigatorios minimos:
+- `id`
+- `type`
+- `locale`
+- `title`
+- `content`
+- `source`
+- `sourceAuthority`
+- `approvalStatus`
+- `owner`
+- `updatedAt`
+- `publicAllowed`
+- `ragAllowed`
+
+Campos opcionais minimos:
+- `tourId`
+- `relatedTourIds`
+- `city`
+- `neighborhood`
+- `tags`
+- `riskLevel`
+- `handoffRequired`
+- `expiresAt`
+- `notes`
+
+Estados de aprovacao:
+- `APPROVED`
+- `CONDITIONAL`
+- `PENDING_OWNER_APPROVAL`
+- `BLOCKED`
+
+Regras criticas:
+- Somente conteudo `APPROVED` pode ser usado em resposta factual.
+- Conteudo `CONDITIONAL` exige regra explicita.
+- Conteudo `PENDING_OWNER_APPROVAL` deve gerar handoff.
+- Conteudo `BLOCKED` nunca deve ser usado para resposta publica.
+- Tours exigem `isPublished=true`.
+- Agenda nao significa disponibilidade confirmada.
+- Preco final, pagamento, cancelamento e reembolso nao devem ser inferidos.
+- Claims como Cadastur, avaliacao, seguros e "500+ tours" exigem evidencia aprovada.
+- Portugues, ingles e espanhol sao prioridade inicial.
+- Sueco somente se houver conteudo aprovado.
+- Nao misturar idiomas divergentes sem revisao.
+
+Fora de escopo:
+- Nao criar arquivos JSON/YAML de base real.
+- Nao criar seed.
+- Nao alterar `data/`.
+- Nao criar base vetorial.
+- Nao criar embeddings.
+- Nao instalar LangChain.
+- Nao instalar LangGraph.
+- Nao criar chat.
+- Nao criar rota API.
+- Nao alterar frontend.
+- Nao alterar backend.
+- Nao alterar schema Prisma.
+- Nao alterar admin.
+- Nao alterar reservas.
+- Nao alterar pagamentos.
+- Nao alterar login.
+- Nao alterar producao.
+- Nao alterar `package.json` ou lockfiles.
+- Nao criar `STATUS.md` ou `backlog.md` na raiz.
+- Nao criar ainda `docs/product/ai-concierge-knowledge-base-format.md` nesta abertura de READY.
+- Nao fazer commit ou push nesta abertura de READY.
+
+Criterios de aceite da futura task:
+- `docs/product/ai-concierge-knowledge-base-format.md` criado como documento de formato canonico unico.
+- Formato rastreavel a RT-AI-001, RT-AI-002, RT-AI-003 e RT-AI-004.
+- Tipos, campos obrigatorios, campos opcionais, metadados, idiomas, aprovacao, origem, atualizacao, validade e publico versus interno definidos.
+- Regras para tours, destinos/atracoes, regras comerciais, seguranca, handoff, FAQ/matriz de respostas e claims bloqueados definidas.
+- Relacao futura com RAG, embeddings e LangChain documentada sem implementacao tecnica.
+- Nenhum arquivo JSON/YAML de base real, seed, `data/`, base vetorial, embedding, chat, API, dependencia, frontend, backend, schema, admin, reserva, pagamento, login ou producao alterado.
+
+Risco: medio, principalmente por promover conteudo condicional ou pendente a fato aprovado, misturar idiomas sem revisao, permitir claims sem evidencia ou antecipar formato executavel antes da curadoria documental.

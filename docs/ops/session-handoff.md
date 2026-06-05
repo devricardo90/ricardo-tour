@@ -357,3 +357,65 @@ Restricoes desta execucao:
 - Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login, producao, `package.json` ou lockfiles.
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
 - Nenhum commit ou push executado.
+
+## RT-AI-005 READY - Curated Knowledge Base Format
+
+Estado: READY em 2026-06-05.
+
+Objetivo: definir o formato canonico e versionavel da futura base de conhecimento curada do Rick Travel AI Concierge.
+
+Arquivo de produto permitido na futura execucao:
+- `docs/product/ai-concierge-knowledge-base-format.md`
+
+Docs operacionais permitidos:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Escopo da futura task:
+- Definir objetivo da base curada e relacao com RT-AI-001, RT-AI-002, RT-AI-003 e RT-AI-004.
+- Definir tipos de registros permitidos, campos obrigatorios, campos opcionais, metadados, idiomas, status de aprovacao, fonte, atualizacao e validade.
+- Definir regras para conteudo publico versus interno e conteudo bloqueado.
+- Definir formatos para tours, destinos/atracoes, regras comerciais, regras de seguranca, handoff, FAQ/matriz de respostas e claims bloqueados.
+- Registrar relacao futura com RAG, embeddings e LangChain sem criar implementacao tecnica.
+- Definir criterios de validacao.
+
+Tipos minimos:
+- `tour`
+- `destination`
+- `attraction`
+- `commercial_rule`
+- `safety_rule`
+- `handoff_rule`
+- `faq_answer`
+- `blocked_claim`
+
+Campos obrigatorios minimos:
+- `id`, `type`, `locale`, `title`, `content`, `source`, `sourceAuthority`, `approvalStatus`, `owner`, `updatedAt`, `publicAllowed`, `ragAllowed`.
+
+Campos opcionais minimos:
+- `tourId`, `relatedTourIds`, `city`, `neighborhood`, `tags`, `riskLevel`, `handoffRequired`, `expiresAt`, `notes`.
+
+Regras criticas:
+- Somente `APPROVED` pode ser usado em resposta factual.
+- `CONDITIONAL` exige regra explicita.
+- `PENDING_OWNER_APPROVAL` deve gerar handoff.
+- `BLOCKED` nunca deve ser usado para resposta publica.
+- Tours exigem `isPublished=true`.
+- Agenda nao significa disponibilidade confirmada.
+- Preco final, pagamento, cancelamento e reembolso nao devem ser inferidos.
+- Claims como Cadastur, avaliacao, seguros e "500+ tours" exigem evidencia aprovada.
+- Portugues, ingles e espanhol sao prioridade inicial; sueco somente se houver conteudo aprovado.
+- Nao misturar idiomas divergentes sem revisao.
+
+Restricoes da abertura READY:
+- `docs/product/ai-concierge-knowledge-base-format.md` ainda nao foi criado.
+- Nenhum JSON/YAML de base real, seed, `data/`, base vetorial, embedding, chat, rota API, LangChain ou LangGraph.
+- Nenhuma alteracao em frontend, backend, schema, admin, reservas, pagamentos, login, producao, `package.json` ou lockfiles.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.
+
+Proximos passos:
+- Executar RT-AI-005 como documentacao de formato somente depois da revisao desta READY.
+- Nao criar base real, seed, embeddings, retrieval, chat ou rota API durante a abertura.
