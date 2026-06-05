@@ -1523,3 +1523,79 @@ Criterios de aceite da futura task:
 - Nenhuma implementacao tecnica, dependencia ou alteracao de produto realizada.
 
 Risco: medio, principalmente por aprovar acidentalmente informacao comercial conflitante, enfraquecer guardrails em traducoes, criar respostas desatualizadas ou induzir excesso de confianca.
+
+## RT-AI-004 Define AI Concierge Prompt and Guardrail Contract
+
+Estado: READY.
+
+Objetivo: definir o contrato operacional do futuro Rick Travel AI Concierge, incluindo prompt behavior, guardrails, recusas, handoff humano e formato de resposta antes de qualquer implementacao tecnica.
+
+Tipo: DISCOVERY/PRODUCT DOCUMENTATION. Esta task deve criar um unico documento contratual e nao deve implementar runtime.
+
+Arquivo de produto permitido na futura execucao:
+- `docs/product/ai-concierge-prompt-contract.md`
+
+Docs operacionais permitidos:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Conteudo obrigatorio do contrato:
+- persona publica: Rick Travel AI Concierge;
+- papel do agente;
+- tom de voz;
+- idioma de resposta;
+- uso obrigatorio de fontes aprovadas ou contexto recuperado;
+- regra de nao invencao;
+- regras de baixa confianca;
+- regras de conflito entre fontes;
+- regras comerciais;
+- regras de seguranca turistica;
+- regras de handoff humano;
+- recusas e bloqueios;
+- formato esperado de resposta;
+- formato bloqueado de resposta;
+- limite explicito para nao mencionar RIC Studio no fluxo publico;
+- contrato minimo para futura implementacao tecnica de system/developer prompt, sem criar codigo.
+
+Regras criticas:
+- Pagamento, cancelamento e reembolso continuam `PENDING_OWNER_APPROVAL`.
+- Baixa confianca deve gerar resposta do tipo "nao tenho informacao aprovada" e encaminhamento humano.
+- O agente deve responder no idioma do usuario quando possivel.
+- O agente deve ser curto, claro e comercialmente seguro.
+- O agente nao deve prometer acao operacional.
+- O agente nao deve mencionar RIC Studio no fluxo publico.
+
+Riscos que a futura task deve bloquear:
+- Confirmar reserva, disponibilidade, pagamento ou preco final.
+- Inventar tours, horarios, politicas, duracao, claims ou descontos.
+- Usar fontes bloqueadas ou condicionais sem curadoria.
+- Responder com confianca quando houver baixa evidencia.
+- Prometer seguranca absoluta.
+- Dar veredito sobre favela/comunidade, acessibilidade, criancas, idosos ou necessidades especiais sem humano.
+- Citar RIC Studio como parte da experiencia publica.
+- Transformar o concierge em chatbot open-domain.
+- Criar dependencia prematura de LangChain, LangGraph, embeddings ou banco vetorial.
+
+Fora de escopo:
+- Nao criar prompt em codigo.
+- Nao criar chat.
+- Nao criar rota API.
+- Nao criar base vetorial.
+- Nao criar embeddings.
+- Nao instalar LangChain.
+- Nao instalar LangGraph.
+- Nao alterar frontend, backend, schema Prisma, seed, admin, reservas, pagamentos, login ou producao.
+- Nao alterar `package.json` ou lockfiles.
+- Nao criar `STATUS.md` ou `backlog.md` na raiz.
+- Nao fazer commit ou push nesta abertura de READY.
+
+Criterios de aceite da futura task:
+- `docs/product/ai-concierge-prompt-contract.md` criado como documento contratual unico.
+- Contrato rastreavel a RT-AI-001, RT-AI-002 e RT-AI-003.
+- Persona, papel, tom, idioma, fontes, nao invencao, baixa confianca, conflito entre fontes, handoff, recusas e formato de resposta definidos.
+- Bloqueios comerciais, seguranca turistica e limites sobre RIC Studio preservados.
+- Nenhum codigo, dependencia, runtime, chat, API, RAG tecnico, frontend, backend, schema, seed, admin, reserva, pagamento, login ou producao alterado.
+
+Risco: medio, principalmente por transformar exemplos da matriz em comportamento excessivamente aberto, enfraquecer bloqueios comerciais, permitir confianca indevida ou antecipar implementacao tecnica antes do contrato documental.

@@ -302,3 +302,42 @@ Restricoes desta execucao:
 - Nenhuma implementacao tecnica, dependencia, base vetorial, embedding, chat ou rota API.
 - Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login, producao, `package.json` ou lockfiles.
 - Nenhum commit ou push executado.
+
+## RT-AI-004 READY - Prompt and Guardrail Contract
+
+Estado: READY em 2026-06-05.
+
+Objetivo: definir o contrato operacional do futuro Rick Travel AI Concierge antes de qualquer implementacao tecnica de chat, rota API, RAG, LangChain ou LangGraph.
+
+Arquivo de produto permitido na futura execucao:
+- `docs/product/ai-concierge-prompt-contract.md`
+
+Docs operacionais permitidos:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Escopo da futura task:
+- Definir persona publica: Rick Travel AI Concierge.
+- Definir papel do agente, tom de voz e idioma de resposta.
+- Exigir uso de fontes aprovadas ou contexto recuperado.
+- Definir regra de nao invencao, baixa confianca e conflito entre fontes.
+- Definir regras comerciais, seguranca turistica, handoff humano, recusas e bloqueios.
+- Definir formato esperado e formato bloqueado de resposta.
+- Registrar que RIC Studio nao deve ser mencionado no fluxo publico.
+- Criar contrato minimo para futura implementacao tecnica de system/developer prompt, sem criar codigo.
+
+Regras criticas:
+- Pagamento, cancelamento e reembolso continuam `PENDING_OWNER_APPROVAL`.
+- Baixa confianca deve gerar "nao tenho informacao aprovada" e encaminhamento humano.
+- O agente deve responder no idioma do usuario quando possivel.
+- O agente deve ser curto, claro e comercialmente seguro.
+- O agente nao deve prometer acao operacional.
+
+Restricoes da abertura READY:
+- `docs/product/ai-concierge-prompt-contract.md` ainda nao foi criado.
+- Nenhum prompt em codigo, chat, rota API, base vetorial, embedding, LangChain ou LangGraph.
+- Nenhuma alteracao em frontend, backend, schema, seed, admin, reservas, pagamentos, login, producao, `package.json` ou lockfiles.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.

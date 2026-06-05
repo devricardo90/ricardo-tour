@@ -446,3 +446,42 @@ Restricoes desta abertura:
 - Nenhum frontend, backend, schema, seed, admin, reserva, pagamento, login, producao, `package.json` ou lockfile foi alterado.
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
 - Nenhum commit ou push executado.
+
+---
+
+## Atualizacao 2026-06-05 - RT-AI-004 Prompt and Guardrail Contract READY
+
+Estado: READY.
+
+RT-AI-004 foi aberta como task exclusivamente documental para definir o contrato operacional do futuro Rick Travel AI Concierge antes de qualquer chat, rota API, RAG tecnico, LangChain ou LangGraph.
+
+Arquivo permitido na futura execucao:
+- `docs/product/ai-concierge-prompt-contract.md`
+
+Decisoes da READY:
+- A futura task deve definir persona publica, papel do agente, tom de voz, idioma de resposta, uso de fontes aprovadas/contexto recuperado, nao invencao, baixa confianca, conflito entre fontes, regras comerciais, seguranca turistica, handoff humano, recusas, bloqueios e formato de resposta.
+- O contrato deve servir como base para futura implementacao tecnica de system/developer prompt, mas sem criar codigo agora.
+- Pagamento, cancelamento e reembolso continuam `PENDING_OWNER_APPROVAL`.
+- Baixa confianca deve gerar "nao tenho informacao aprovada" e encaminhamento humano.
+- O agente deve responder no idioma do usuario quando possivel, de forma curta, clara e comercialmente segura.
+- RIC Studio nao deve ser mencionado no fluxo publico.
+
+Riscos bloqueados na READY:
+- Confirmar reserva, disponibilidade, pagamento ou preco final.
+- Inventar tours, horarios, politicas, duracao, claims ou descontos.
+- Usar fontes bloqueadas ou condicionais sem curadoria.
+- Responder com confianca quando houver baixa evidencia.
+- Prometer seguranca absoluta.
+- Dar veredito sobre favela/comunidade, acessibilidade, criancas, idosos ou necessidades especiais sem humano.
+- Transformar o concierge em chatbot open-domain.
+- Criar dependencia prematura de LangChain, LangGraph, embeddings ou banco vetorial.
+
+Resultado local:
+- RT-AI-004 registrada como READY nos documentos operacionais.
+- `docs/product/ai-concierge-prompt-contract.md` nao foi criado nesta abertura.
+
+Restricoes desta abertura:
+- Nenhum prompt em codigo, chat, rota API, RAG tecnico, base vetorial, embedding ou dependencia foi criado.
+- Nenhum frontend, backend, schema, seed, admin, reserva, pagamento, login, producao, `package.json` ou lockfile foi alterado.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.

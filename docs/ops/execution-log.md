@@ -5,6 +5,32 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-05 - RT-AI-004 READY Documentation Gate
+
+**Executado por:** Codex
+**Ambiente:** local; documentacao operacional apenas
+**Status:** READY aberto; sem efeito em producao
+
+**Objetivo:**
+Registrar RT-AI-004 como task exclusivamente documental para definir o contrato operacional de prompt, comportamento, guardrails, recusas, handoff humano e formato de resposta do futuro Rick Travel AI Concierge.
+
+**Resultado:**
+- RT-AI-004 marcada como READY nos documentos operacionais.
+- Arquivo futuro permitido: `docs/product/ai-concierge-prompt-contract.md`.
+- Persona publica, papel do agente, tom, idioma, uso de fontes aprovadas, nao invencao, baixa confianca, conflito entre fontes, regras comerciais, seguranca turistica, handoff, recusas e formato de resposta registrados como escopo obrigatorio.
+- Pagamento, cancelamento e reembolso mantidos como `PENDING_OWNER_APPROVAL`.
+- Baixa confianca definida como "nao tenho informacao aprovada" e encaminhamento humano.
+- RIC Studio explicitamente bloqueado no fluxo publico.
+
+**Restricoes mantidas:**
+- `docs/product/ai-concierge-prompt-contract.md` nao foi criado nesta abertura de READY.
+- Nenhum prompt em codigo, chat, rota API, RAG tecnico, base vetorial, embedding, LangChain ou LangGraph criado ou instalado.
+- Nenhum codigo, frontend, backend, schema, seed, admin, reservas, pagamentos, login ou producao alterado.
+- Nenhum `package.json`, lockfile, `STATUS.md` ou `backlog.md` na raiz alterado ou criado.
+- Nenhum commit ou push executado.
+
+---
+
 ## 2026-06-04 - RT-AI-003 Approved FAQ and Answer Matrix Documentation
 
 **Executado por:** Codex
