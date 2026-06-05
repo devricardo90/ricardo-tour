@@ -1732,3 +1732,96 @@ Risco: medio, principalmente por promover conteudo condicional ou pendente a fat
 Evidencia criada: `docs/product/ai-concierge-knowledge-base-format.md` e documentacao operacional atualizada.
 
 Estado de execucao: formato canonico criado localmente; aguardando revisao. Nenhum arquivo JSON/YAML de base real, seed, `data/`, base vetorial, embedding, chat, rota API, dependencia, frontend, backend, schema, admin, reservas, pagamentos, login ou producao foi alterado.
+
+## RT-AI-006 Define First Curated Knowledge Base Seed Scope
+
+Estado: READY.
+
+Objetivo: definir o primeiro escopo editorial da Curated Knowledge Base Seed do Rick Travel AI Concierge antes de qualquer criacao de base real.
+
+Tipo: DISCOVERY/PRODUCT DOCUMENTATION. Esta task deve produzir um unico documento de escopo editorial e nao deve criar JSON/YAML, seed, runtime, retrieval, embeddings, chat, API ou agente.
+
+Arquivo de produto permitido na futura execucao:
+- `docs/product/ai-concierge-first-kb-seed-scope.md`
+
+Docs operacionais permitidos:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Fontes documentais permitidas para referencia:
+- `docs/product/ai-concierge-scope.md`
+- `docs/architecture/ai-concierge-rag-strategy.md`
+- `docs/product/ai-concierge-knowledge-base-inventory.md`
+- `docs/product/ai-concierge-answer-matrix.md`
+- `docs/product/ai-concierge-prompt-contract.md`
+- `docs/product/ai-concierge-knowledge-base-format.md`
+
+Conteudo obrigatorio da futura task:
+- definir quais tipos de conteudo entram no primeiro pacote curado;
+- definir quais fontes ficam condicionais;
+- definir quais fontes ficam bloqueadas;
+- definir criterios editoriais antes de qualquer criacao de base real;
+- registrar precedencia entre fontes aprovadas, condicionais e bloqueadas;
+- registrar criterios por idioma e por aprovacao de owner;
+- registrar lacunas que devem permanecer como handoff ou `PENDING_OWNER_APPROVAL`;
+- registrar criterios de validacao do primeiro escopo editorial.
+
+Escopo conceitual minimo:
+- catalogo publico publicado pode ser fonte primaria somente para tours com `isPublished=true`;
+- campos publicos de tours podem ser considerados apenas quando vierem do catalogo publicado ou de fonte aprovada;
+- paginas publicas podem ser usadas somente por secao aprovada;
+- documentos de governanca AI ja aprovados podem sustentar guardrails, handoff, bloqueios e precedencia;
+- `prisma/seed.ts` permanece fonte secundaria/condicional, nunca superior ao catalogo publicado;
+- `messages/*.json` permanecem condicionais por chave revisada, sem ingestao integral;
+- `docs/ops/*` permanece evidencia operacional pontual, nunca corpus integral;
+- `data/real-trips.json` permanece bloqueado enquanto legado/divergente;
+- `TripSchedule` nao confirma disponibilidade;
+- claims como Cadastur, guias credenciados, seguro, avaliacoes, suporte rapido e seguranca dependem de evidencia e aprovacao explicita;
+- pagamento, cancelamento, reembolso, preco final, disponibilidade e confirmacao de reserva permanecem fora de resposta factual sem politica aprovada.
+
+Fora de escopo:
+- Nao criar `docs/product/ai-concierge-first-kb-seed-scope.md` nesta abertura de READY.
+- Nao criar arquivos JSON.
+- Nao criar arquivos YAML.
+- Nao criar ou alterar `data/`.
+- Nao criar seed real.
+- Nao alterar `prisma/seed.ts`.
+- Nao alterar `messages/*.json`.
+- Nao alterar frontend.
+- Nao alterar backend.
+- Nao alterar API.
+- Nao criar chat.
+- Nao criar embeddings.
+- Nao instalar LangChain.
+- Nao instalar LangGraph.
+- Nao alterar schema Prisma.
+- Nao alterar banco.
+- Nao alterar admin.
+- Nao alterar bookings.
+- Nao alterar pagamentos.
+- Nao alterar usuarios.
+- Nao alterar contatos privados.
+- Nao alterar analytics.
+- Nao alterar logs.
+- Nao alterar `.env`, backups ou deploy.
+- Nao alterar `package.json` ou lockfiles.
+- Nao criar `STATUS.md` ou `backlog.md` na raiz.
+- Nao fazer commit ou push nesta abertura de READY.
+- Nao abrir RT-AI-007.
+
+Criterios de aceite da futura task:
+- `docs/product/ai-concierge-first-kb-seed-scope.md` criado como documento unico de escopo editorial.
+- Documento rastreavel a RT-AI-001, RT-AI-002, RT-AI-003, RT-AI-004 e RT-AI-005.
+- Primeiro pacote curado definido por tipo de conteudo, fonte, status de aprovacao, idioma, owner, risco e criterio de entrada.
+- Fontes condicionais e bloqueadas registradas explicitamente.
+- Tours restritos a `isPublished=true`; `TripSchedule` tratado como nao confirmatorio de disponibilidade.
+- Claims sem evidencia/aprovacao explicita mantidos fora do pacote aprovado.
+- Nenhum JSON/YAML de base real, seed, `data/`, embeddings, chat, API, dependencia, frontend, backend, schema, banco, admin, bookings, pagamentos, usuarios, contatos privados, analytics, logs, `.env`, backups ou deploy alterado.
+
+Risco: medio, principalmente por promover conteudo condicional a aprovado, usar mensagens i18n conflitantes como fonte integral, tratar agenda como disponibilidade, aceitar claims sem evidencia ou antecipar criacao de base real antes da curadoria editorial.
+
+Evidencia esperada na futura execucao: `docs/product/ai-concierge-first-kb-seed-scope.md` e documentacao operacional atualizada.
+
+Estado de execucao: READY aberto nos documentos operacionais. O documento de produto ainda nao foi criado. Nenhum JSON/YAML, seed, `data/`, `prisma/seed.ts`, `messages/*.json`, codigo, API, embeddings, LangChain, LangGraph, schema, banco, admin, bookings, pagamentos, usuarios, contatos privados, analytics, logs, `.env`, backups ou deploy foi alterado.

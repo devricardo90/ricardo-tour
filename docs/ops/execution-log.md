@@ -5,6 +5,39 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-06 - RT-AI-006 READY Documentation Gate
+
+**Executado por:** Codex
+**Ambiente:** local; documentacao operacional apenas
+**Status:** READY aberto; sem efeito em producao
+
+**Objetivo:**
+Registrar RT-AI-006 como task exclusivamente documental para definir o primeiro escopo editorial da Curated Knowledge Base Seed do Rick Travel AI Concierge.
+
+**Resultado:**
+- RT-AI-006 marcada como READY nos documentos operacionais.
+- Arquivo futuro permitido: `docs/product/ai-concierge-first-kb-seed-scope.md`.
+- A futura task deve definir quais tipos de conteudo entram no primeiro pacote curado.
+- A futura task deve definir quais fontes ficam condicionais e quais fontes ficam bloqueadas.
+- Criterios editoriais devem ser definidos antes de qualquer criacao de base real.
+- Somente tours publicados com `isPublished=true` podem ser considerados fonte publica primaria.
+- `TripSchedule` registrado como nao confirmatorio de disponibilidade.
+- `prisma/seed.ts` permanece fonte secundaria/condicional, nunca superior ao catalogo publicado.
+- `messages/*.json` permanecem condicionais por chave revisada, sem ingestao integral.
+- `docs/ops/*` permanece evidencia operacional pontual, nunca corpus integral.
+- `data/real-trips.json` permanece bloqueado enquanto legado/divergente.
+- Claims como Cadastur, guias credenciados, seguro, avaliacoes, suporte rapido e seguranca dependem de evidencia e aprovacao explicita.
+
+**Restricoes mantidas:**
+- `docs/product/ai-concierge-first-kb-seed-scope.md` nao foi criado nesta abertura de READY.
+- Nenhum arquivo JSON/YAML de base real, seed, alteracao em `data/`, `prisma/seed.ts`, `messages/*.json`, base vetorial, embedding, chat, API, LangChain ou LangGraph criado ou instalado.
+- Nenhum codigo, frontend, backend, schema, banco, admin, bookings, pagamentos, usuarios, contatos privados, analytics, logs, `.env`, backups, deploy, `package.json` ou lockfile alterado.
+- Nenhum `STATUS.md` ou `backlog.md` na raiz alterado ou criado.
+- Nenhum commit ou push executado.
+- RT-AI-007 nao foi aberta.
+
+---
+
 ## 2026-06-05 - RT-AI-005 Curated Knowledge Base Format Documentation
 
 **Executado por:** Codex

@@ -424,3 +424,48 @@ Proximos passos:
 - Revisar o formato canonico antes de qualquer prototipo tecnico.
 - Nao criar base real, seed, embeddings, retrieval, chat, rota API, LangChain ou LangGraph sem nova task explicita.
 - Manter politicas comerciais pendentes como `PENDING_OWNER_APPROVAL` e claims sem evidencia como `blocked_claim`.
+
+## RT-AI-006 READY - First Curated Knowledge Base Seed Scope
+
+Estado: READY em 2026-06-06.
+
+Objetivo: definir o primeiro escopo editorial da Curated Knowledge Base Seed do Rick Travel AI Concierge antes de qualquer criacao de base real.
+
+Arquivo de produto permitido na futura execucao:
+- `docs/product/ai-concierge-first-kb-seed-scope.md`
+
+Docs operacionais permitidos:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Fontes documentais permitidas para referencia:
+- `docs/product/ai-concierge-scope.md`
+- `docs/architecture/ai-concierge-rag-strategy.md`
+- `docs/product/ai-concierge-knowledge-base-inventory.md`
+- `docs/product/ai-concierge-answer-matrix.md`
+- `docs/product/ai-concierge-prompt-contract.md`
+- `docs/product/ai-concierge-knowledge-base-format.md`
+
+Escopo READY:
+- Definir quais tipos de conteudo entram no primeiro pacote curado.
+- Definir quais fontes ficam condicionais.
+- Definir quais fontes ficam bloqueadas.
+- Definir criterios editoriais antes de qualquer criacao de base real.
+- Manter catalogo publico publicado como fonte primaria somente para tours com `isPublished=true`.
+- Registrar que `TripSchedule` nao confirma disponibilidade.
+- Registrar que claims como Cadastur, guias credenciados, seguro, avaliacoes, suporte rapido e seguranca dependem de evidencia/aprovacao explicita.
+- Manter pagamento, cancelamento, reembolso, preco final, disponibilidade e confirmacao de reserva fora de resposta factual sem politica aprovada.
+
+Restricoes desta abertura:
+- `docs/product/ai-concierge-first-kb-seed-scope.md` nao foi criado.
+- Nenhum JSON/YAML de base real, seed, `data/`, `prisma/seed.ts`, `messages/*.json`, base vetorial, embedding, chat, API, LangChain ou LangGraph.
+- Nenhuma alteracao em frontend, backend, schema, banco, admin, bookings, pagamentos, usuarios, contatos privados, analytics, logs, `.env`, backups, deploy, `package.json` ou lockfiles.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.
+- RT-AI-007 nao foi aberta.
+
+Proximos passos:
+- Executar RT-AI-006 somente quando autorizado, criando `docs/product/ai-concierge-first-kb-seed-scope.md`.
+- Nao criar base real, JSON/YAML, seed, embeddings, retrieval, chat, rota API, LangChain ou LangGraph sem nova task explicita.

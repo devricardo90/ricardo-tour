@@ -581,3 +581,46 @@ Restricoes desta execucao:
 - Nenhum frontend, backend, schema, admin, reserva, pagamento, login, producao, `package.json` ou lockfile foi alterado.
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
 - Nenhum commit ou push executado.
+
+---
+
+## Atualizacao 2026-06-06 - RT-AI-006 First Curated Knowledge Base Seed Scope READY
+
+Estado: READY.
+
+RT-AI-006 foi aberta como task exclusivamente documental para definir o primeiro escopo editorial da Curated Knowledge Base Seed do Rick Travel AI Concierge antes de qualquer criacao de base real.
+
+Arquivo permitido na futura execucao:
+- `docs/product/ai-concierge-first-kb-seed-scope.md`
+
+Fontes documentais permitidas para referencia:
+- `docs/product/ai-concierge-scope.md`
+- `docs/architecture/ai-concierge-rag-strategy.md`
+- `docs/product/ai-concierge-knowledge-base-inventory.md`
+- `docs/product/ai-concierge-answer-matrix.md`
+- `docs/product/ai-concierge-prompt-contract.md`
+- `docs/product/ai-concierge-knowledge-base-format.md`
+
+Decisoes da READY:
+- A futura task deve definir quais tipos de conteudo entram no primeiro pacote curado.
+- A futura task deve definir quais fontes ficam condicionais e quais ficam bloqueadas.
+- A futura task deve definir criterios editoriais antes de qualquer criacao de base real.
+- Somente tours publicados com `isPublished=true` podem ser considerados fonte publica primaria.
+- `TripSchedule` nao confirma disponibilidade.
+- `prisma/seed.ts` permanece fonte secundaria/condicional, nunca superior ao catalogo publicado.
+- `messages/*.json` permanecem condicionais por chave revisada, sem ingestao integral.
+- `docs/ops/*` permanece evidencia operacional pontual, nunca corpus integral.
+- `data/real-trips.json` permanece bloqueado enquanto legado/divergente.
+- Claims como Cadastur, guias credenciados, seguro, avaliacoes, suporte rapido e seguranca dependem de evidencia e aprovacao explicita.
+- Pagamento, cancelamento, reembolso, preco final, disponibilidade e confirmacao de reserva permanecem fora de resposta factual sem politica aprovada.
+
+Resultado local:
+- RT-AI-006 registrada como READY nos documentos operacionais.
+- `docs/product/ai-concierge-first-kb-seed-scope.md` nao foi criado nesta abertura.
+
+Restricoes desta abertura:
+- Nenhum arquivo JSON/YAML de base real, seed, alteracao em `data/`, `prisma/seed.ts`, `messages/*.json`, base vetorial, embedding, chat, API, LangChain ou LangGraph foi criado.
+- Nenhum frontend, backend, schema, banco, admin, bookings, pagamentos, usuarios, contatos privados, analytics, logs, `.env`, backups, deploy, `package.json` ou lockfile foi alterado.
+- Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
+- Nenhum commit ou push executado.
+- RT-AI-007 nao foi aberta.
