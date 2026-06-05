@@ -5,6 +5,29 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-06 - RT-AI-007 READY Documentation Gate
+
+**Executed by:** Codex
+**Environment:** local; documentation operations only
+**Status:** READY opened; no production effect
+
+**Objective:**
+Open RT-AI-007 as a documentation-only task to define the first curated editorial KB records for the Rick Travel AI Concierge, based on RT-AI-006.
+
+**Result:**
+- RT-AI-007 marked as READY in operational documentation.
+- Future product file allowed: `docs/product/ai-concierge-first-curated-kb-records.md`.
+- Required future record groups registered: company identity, contact channels, trust and credibility boundaries, Cadastur/CNPJ pending or blocked, tour catalog basics from public published tours only, booking as assisted/manual-confirmed flow, payment as blocked/handoff, cancellation/refund as blocked/handoff, human support escalation, and language support for PT, EN, and ES.
+- Required future record fields registered: `id`, `type`, `locale`, `title`, `content`, `source`, `sourceAuthority`, `approvalStatus`, `owner`, `updatedAt`, `reviewedAt`, `publicAllowed`, `ragAllowed`, `handoffRequired`, `riskLevel`, `notes`.
+- Acceptance criteria registered for editorial records only, with no machine-readable KB data or technical implementation artifacts.
+
+**Restrictions preserved:**
+- `docs/product/ai-concierge-first-curated-kb-records.md` was not created in this READY opening.
+- No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML seed files, embeddings, RAG, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push was created or changed.
+- No real payment information or invented Cadastur/CNPJ, phone, email, opening hours, response time, ratings, reviews, safety, insurance, or certification claims were added.
+
+---
+
 ## 2026-06-06 - RT-AI-006 First Knowledge Base Seed Scope Documentation
 
 **Executed by:** Codex

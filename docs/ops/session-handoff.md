@@ -503,3 +503,36 @@ Restrictions preserved:
 Next step:
 - Review `docs/product/ai-concierge-first-kb-seed-scope.md`.
 - Do not create real KB records, JSON/YAML, seed files, embeddings, RAG, API routes, chat UI, LangChain, or LangGraph without a new explicit task.
+
+## RT-AI-007 READY - First Curated KB Records Content
+
+State: READY on 2026-06-06.
+
+Objective: define the first curated editorial KB records for the Rick Travel AI Concierge, based on RT-AI-006.
+
+Product file allowed in the future execution:
+- `docs/product/ai-concierge-first-curated-kb-records.md`
+
+Allowed future record groups:
+- Company identity.
+- Contact channels.
+- Trust and credibility boundaries.
+- Cadastur/CNPJ pending or blocked unless exact evidence is approved.
+- Tour catalog basics from public published tours only.
+- Booking as assisted/manual-confirmed flow.
+- Payment as blocked/handoff unless approved policy exists.
+- Cancellation/refund as blocked/handoff unless approved policy exists.
+- Human support escalation.
+- Language support for PT, EN, and ES.
+
+Required fields for every future record:
+- `id`, `type`, `locale`, `title`, `content`, `source`, `sourceAuthority`, `approvalStatus`, `owner`, `updatedAt`, `reviewedAt`, `publicAllowed`, `ragAllowed`, `handoffRequired`, `riskLevel`, `notes`.
+
+Restrictions for this READY opening:
+- `docs/product/ai-concierge-first-curated-kb-records.md` was not created.
+- No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML seed files, embeddings, RAG implementation, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push.
+- No real payment information or invented Cadastur/CNPJ, phone, email, opening hours, response time, ratings, reviews, safety, insurance, or certification claims.
+
+Next step:
+- Execute RT-AI-007 only when explicitly authorized, creating `docs/product/ai-concierge-first-curated-kb-records.md`.
+- Keep the future task documentation-only and do not create machine-readable KB data or implementation artifacts.

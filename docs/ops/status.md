@@ -651,3 +651,44 @@ Restrictions preserved:
 - No KB records, JSON/YAML data files, seed implementation, `data/`, `prisma/seed.ts`, `messages/*.json`, frontend, backend, API, Prisma schema, database, admin, bookings, payments, users, contacts, analytics, logs, environment, package, lockfile, deployment, embeddings, LangChain, LangGraph, RAG implementation, or chat UI were changed.
 - No commit or push was executed.
 - RT-AI-007 was not opened.
+
+---
+
+## Update 2026-06-06 - RT-AI-007 First Curated KB Records Content READY
+
+State: READY.
+
+RT-AI-007 was opened as the next documentation-only task after RT-AI-006 Remote DONE. The future task must define the first curated editorial KB records for the Rick Travel AI Concierge.
+
+File allowed in the future execution:
+- `docs/product/ai-concierge-first-curated-kb-records.md`
+
+Required future record groups:
+- Company identity.
+- Contact channels.
+- Trust and credibility boundaries.
+- Cadastur/CNPJ pending or blocked unless exact evidence is approved.
+- Tour catalog basics from public published tours only.
+- Booking as assisted/manual-confirmed flow.
+- Payment as blocked/handoff unless approved policy exists.
+- Cancellation/refund as blocked/handoff unless approved policy exists.
+- Human support escalation.
+- Language support for PT, EN, and ES.
+
+Required future record fields:
+- `id`, `type`, `locale`, `title`, `content`, `source`, `sourceAuthority`, `approvalStatus`, `owner`, `updatedAt`, `reviewedAt`, `publicAllowed`, `ragAllowed`, `handoffRequired`, `riskLevel`, `notes`.
+
+Future acceptance criteria:
+- The future task creates only `docs/product/ai-concierge-first-curated-kb-records.md` plus allowed ops docs.
+- It defines editorial records, not machine-readable KB data.
+- Every record has all required fields.
+- Records use only `APPROVED`, `CONDITIONAL`, `PENDING_OWNER_APPROVAL`, or `BLOCKED`.
+- Tour records are restricted to public tours with `isPublished=true`.
+- Payment, cancellation, refund, Cadastur, CNPJ, trust, rating, safety, insurance, and certification claims remain blocked or pending unless evidence is explicitly approved.
+- Handoff rules are present before any future implementation.
+- No technical implementation artifacts are created.
+
+Restrictions preserved:
+- `docs/product/ai-concierge-first-curated-kb-records.md` was not created in this READY opening.
+- No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML seed files, embeddings, RAG, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push was created or changed.
+- No real payment information or invented Cadastur/CNPJ, phone, email, opening hours, response time, ratings, reviews, safety, insurance, or certification claims were added.

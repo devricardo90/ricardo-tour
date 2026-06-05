@@ -1825,3 +1825,89 @@ Risco: medio, principalmente por promover conteudo condicional a aprovado, usar 
 Evidencia criada: `docs/product/ai-concierge-first-kb-seed-scope.md` e documentacao operacional atualizada.
 
 Estado de execucao: product scope document created locally; RT-AI-006 moved to REVIEW. No KB records, JSON/YAML, seed, `data/`, `prisma/seed.ts`, `messages/*.json`, code, API, embeddings, LangChain, LangGraph, schema, database, admin, bookings, payments, users, private contacts, analytics, logs, `.env`, backups, packages, lockfiles, or deployment were changed.
+
+## RT-AI-007 Define First Curated KB Records Content
+
+State: READY.
+
+Objective: define the first curated editorial knowledge base records for the Rick Travel AI Concierge, based on RT-AI-006.
+
+Type: PRODUCT DOCUMENTATION. This task must define editorial records only. It must not create machine-readable KB data, JSON/YAML seed files, embeddings, RAG runtime, LangChain, LangGraph, API routes, chat UI, code, or deployment changes.
+
+Product file allowed in the future execution:
+- `docs/product/ai-concierge-first-curated-kb-records.md`
+
+Operational docs allowed:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Required future record groups:
+- Company identity.
+- Contact channels.
+- Trust and credibility boundaries.
+- Cadastur/CNPJ pending or blocked unless exact evidence is approved.
+- Tour catalog basics from public published tours only.
+- Booking as assisted/manual-confirmed flow.
+- Payment as blocked/handoff unless approved policy exists.
+- Cancellation/refund as blocked/handoff unless approved policy exists.
+- Human support escalation.
+- Language support for PT, EN, and ES.
+
+Required future record fields:
+- `id`
+- `type`
+- `locale`
+- `title`
+- `content`
+- `source`
+- `sourceAuthority`
+- `approvalStatus`
+- `owner`
+- `updatedAt`
+- `reviewedAt`
+- `publicAllowed`
+- `ragAllowed`
+- `handoffRequired`
+- `riskLevel`
+- `notes`
+
+Allowed approval statuses:
+- `APPROVED`
+- `CONDITIONAL`
+- `PENDING_OWNER_APPROVAL`
+- `BLOCKED`
+
+Out of scope:
+- Do not create `docs/product/ai-concierge-first-curated-kb-records.md` in this READY opening.
+- Do not edit code.
+- Do not edit frontend.
+- Do not edit backend/API.
+- Do not edit Prisma/schema.
+- Do not edit `data/`.
+- Do not create JSON/YAML seed files.
+- Do not create embeddings.
+- Do not implement RAG.
+- Do not install or configure LangChain.
+- Do not install or configure LangGraph.
+- Do not create chat UI.
+- Do not edit package or lockfiles.
+- Do not edit environment or deployment files.
+- Do not add real payment information.
+- Do not invent Cadastur/CNPJ numbers, phone, email, opening hours, response time, ratings, reviews, safety, insurance, or certification claims.
+- Do not commit or push in this READY opening.
+
+Acceptance criteria for the future task:
+- Creates only `docs/product/ai-concierge-first-curated-kb-records.md` plus allowed ops docs.
+- Defines editorial records, not machine-readable KB data.
+- Every proposed record has all required fields.
+- Records use only `APPROVED`, `CONDITIONAL`, `PENDING_OWNER_APPROVAL`, or `BLOCKED`.
+- Tour records are restricted to public tours with `isPublished=true`.
+- Payment, cancellation, refund, Cadastur, CNPJ, trust, rating, safety, insurance, and certification claims remain blocked or pending unless evidence is explicitly approved.
+- Handoff rules are present before any future implementation.
+- No technical implementation artifacts are created.
+
+Risk: medium. The main risk is accidentally turning conditional or blocked claims into approved facts, especially payment, cancellation/refund, Cadastur, CNPJ, trust, ratings, safety, insurance, certification, or availability claims.
+
+Execution state: READY opened in operational docs only. The product records document has not been created. No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML, embeddings, RAG, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push was created or changed.
