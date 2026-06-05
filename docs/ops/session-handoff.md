@@ -469,3 +469,37 @@ Restricoes desta abertura:
 Proximos passos:
 - Executar RT-AI-006 somente quando autorizado, criando `docs/product/ai-concierge-first-kb-seed-scope.md`.
 - Nao criar base real, JSON/YAML, seed, embeddings, retrieval, chat, rota API, LangChain ou LangGraph sem nova task explicita.
+
+## RT-AI-006 REVIEW - First Knowledge Base Seed Scope
+
+State: REVIEW on 2026-06-06.
+
+Objective: define the first approved knowledge base seed scope for the Rick Travel AI Concierge before any real KB records or technical implementation exist.
+
+Product file created:
+- `docs/product/ai-concierge-first-kb-seed-scope.md`
+
+Operational docs updated:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Scope executed:
+- Defined the purpose of the first KB seed.
+- Defined included and excluded categories.
+- Defined approved source hierarchy.
+- Defined required fields for future KB records.
+- Defined initial content groups: company identity, contact channels, trust and credibility, Cadastur/CNPJ references, tour catalog basics, booking rules, payment rules, cancellation/refund boundaries, customer support escalation, and language support.
+- Defined what the AI Concierge may answer and must not answer.
+- Defined WhatsApp/human support redirect rules.
+- Defined validation criteria before any implementation task.
+
+Restrictions preserved:
+- No KB records, JSON/YAML, seed implementation, `data/`, `prisma/seed.ts`, `messages/*.json`, frontend, backend, API, Prisma schema, database, admin, bookings, payments, users, private contacts, analytics, logs, environment, package, lockfile, deployment, embeddings, LangChain, LangGraph, RAG implementation, or chat UI were changed.
+- No commit or push was executed.
+- RT-AI-007 was not opened.
+
+Next step:
+- Review `docs/product/ai-concierge-first-kb-seed-scope.md`.
+- Do not create real KB records, JSON/YAML, seed files, embeddings, RAG, API routes, chat UI, LangChain, or LangGraph without a new explicit task.

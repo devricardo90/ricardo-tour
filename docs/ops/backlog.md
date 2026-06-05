@@ -1735,7 +1735,7 @@ Estado de execucao: formato canonico criado localmente; aguardando revisao. Nenh
 
 ## RT-AI-006 Define First Curated Knowledge Base Seed Scope
 
-Estado: READY.
+Estado: REVIEW.
 
 Objetivo: definir o primeiro escopo editorial da Curated Knowledge Base Seed do Rick Travel AI Concierge antes de qualquer criacao de base real.
 
@@ -1822,6 +1822,6 @@ Criterios de aceite da futura task:
 
 Risco: medio, principalmente por promover conteudo condicional a aprovado, usar mensagens i18n conflitantes como fonte integral, tratar agenda como disponibilidade, aceitar claims sem evidencia ou antecipar criacao de base real antes da curadoria editorial.
 
-Evidencia esperada na futura execucao: `docs/product/ai-concierge-first-kb-seed-scope.md` e documentacao operacional atualizada.
+Evidencia criada: `docs/product/ai-concierge-first-kb-seed-scope.md` e documentacao operacional atualizada.
 
-Estado de execucao: READY aberto nos documentos operacionais. O documento de produto ainda nao foi criado. Nenhum JSON/YAML, seed, `data/`, `prisma/seed.ts`, `messages/*.json`, codigo, API, embeddings, LangChain, LangGraph, schema, banco, admin, bookings, pagamentos, usuarios, contatos privados, analytics, logs, `.env`, backups ou deploy foi alterado.
+Estado de execucao: product scope document created locally; RT-AI-006 moved to REVIEW. No KB records, JSON/YAML, seed, `data/`, `prisma/seed.ts`, `messages/*.json`, code, API, embeddings, LangChain, LangGraph, schema, database, admin, bookings, payments, users, private contacts, analytics, logs, `.env`, backups, packages, lockfiles, or deployment were changed.

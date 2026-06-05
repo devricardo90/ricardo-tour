@@ -5,6 +5,41 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-06 - RT-AI-006 First Knowledge Base Seed Scope Documentation
+
+**Executed by:** Codex
+**Environment:** local; documentation only
+**Status:** Local REVIEW; no commit and no push
+
+**Objective:**
+Execute RT-AI-006 as a documentation-only product task by creating the first approved knowledge base seed scope for the Rick Travel AI Concierge.
+
+**File created:**
+- `docs/product/ai-concierge-first-kb-seed-scope.md`
+
+**Operational documentation updated:**
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+**Result:**
+- First KB seed purpose defined.
+- Included and excluded knowledge categories defined.
+- Approved source hierarchy defined.
+- Required fields for future KB records defined.
+- Initial content groups defined for company identity, contact channels, trust and credibility, Cadastur/CNPJ references, tour catalog basics, booking rules, payment rules, cancellation/refund boundaries, customer support escalation, and language support.
+- Allowed AI Concierge answers, blocked answers, and WhatsApp/human support redirect rules defined.
+- Validation criteria defined before any implementation task.
+- RT-AI-006 moved to REVIEW.
+
+**Restrictions preserved:**
+- No KB records, JSON/YAML data files, seed implementation, `data/`, `prisma/seed.ts`, `messages/*.json`, code, frontend, backend, API, Prisma schema, database, admin, bookings, payments, users, contacts, analytics, logs, environment, package, lockfile, deployment, embeddings, LangChain, LangGraph, RAG implementation, or chat UI were changed.
+- No commit or push was executed.
+- RT-AI-007 was not opened.
+
+---
+
 ## 2026-06-06 - RT-AI-006 READY Documentation Gate
 
 **Executado por:** Codex

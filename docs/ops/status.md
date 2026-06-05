@@ -624,3 +624,30 @@ Restricoes desta abertura:
 - Nenhum `STATUS.md` ou `backlog.md` criado na raiz.
 - Nenhum commit ou push executado.
 - RT-AI-007 nao foi aberta.
+
+---
+
+## Update 2026-06-06 - RT-AI-006 First Knowledge Base Seed Scope Documentation
+
+State: REVIEW.
+
+RT-AI-006 was executed locally as a documentation-only product task to define the first approved knowledge base seed scope for the Rick Travel AI Concierge.
+
+File created:
+- `docs/product/ai-concierge-first-kb-seed-scope.md`
+
+Content registered:
+- Purpose of the first KB seed.
+- Included and excluded knowledge categories.
+- Approved source hierarchy.
+- Required fields for future KB records.
+- Initial content groups for company identity, contact channels, trust and credibility, Cadastur/CNPJ references, tour catalog basics, booking rules, payment rules, cancellation/refund boundaries, customer support escalation, and language support.
+- What the AI Concierge may answer.
+- What the AI Concierge must not answer.
+- WhatsApp and human support redirect rules.
+- Validation criteria before any implementation task.
+
+Restrictions preserved:
+- No KB records, JSON/YAML data files, seed implementation, `data/`, `prisma/seed.ts`, `messages/*.json`, frontend, backend, API, Prisma schema, database, admin, bookings, payments, users, contacts, analytics, logs, environment, package, lockfile, deployment, embeddings, LangChain, LangGraph, RAG implementation, or chat UI were changed.
+- No commit or push was executed.
+- RT-AI-007 was not opened.
