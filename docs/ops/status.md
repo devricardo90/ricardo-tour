@@ -692,3 +692,29 @@ Restrictions preserved:
 - `docs/product/ai-concierge-first-curated-kb-records.md` was not created in this READY opening.
 - No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML seed files, embeddings, RAG, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push was created or changed.
 - No real payment information or invented Cadastur/CNPJ, phone, email, opening hours, response time, ratings, reviews, safety, insurance, or certification claims were added.
+
+---
+
+## Update 2026-06-08 - RT-AI-007 First Curated KB Records Content Documentation
+
+State: REVIEW.
+
+RT-AI-007 was executed locally as a documentation-only product task to define the first curated editorial KB records for the Rick Travel AI Concierge.
+
+File created:
+- `docs/product/ai-concierge-first-curated-kb-records.md`
+
+Content registered:
+- Editorial record format with all required fields.
+- Company identity record with conservative limitation text.
+- Contact channel record without invented phone, email, WhatsApp number, opening hours, or response time.
+- Trust, Cadastur, CNPJ, payment, cancellation, refund, safety, insurance, certification, ratings, and reviews kept blocked or pending unless exact evidence is approved.
+- Tour catalog rule restricted to public published tours with `isPublished=true`; `TripSchedule` explicitly not treated as confirmed availability.
+- Booking documented as assisted/manual-confirmed flow.
+- Human support escalation triggers.
+- Language support records for PT, EN, and ES.
+- Validation criteria before any technical implementation.
+
+Restrictions preserved:
+- No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML seed files, embeddings, RAG, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push.
+- No real payment information or invented Cadastur/CNPJ, phone, email, opening hours, response time, ratings, reviews, safety, insurance, or certification claims were added.

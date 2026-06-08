@@ -5,6 +5,38 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-007 First Curated KB Records Content Documentation
+
+**Executed by:** Codex
+**Environment:** local; documentation only
+**Status:** Local REVIEW; no commit and no push
+
+**Objective:**
+Execute RT-AI-007 as a documentation-only product task by defining the first curated editorial KB records for the Rick Travel AI Concierge.
+
+**File created:**
+- `docs/product/ai-concierge-first-curated-kb-records.md`
+
+**Operational documentation updated:**
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+**Result:**
+- Editorial record format defined with all required fields.
+- First editorial records created for company identity, contact channels, trust and credibility boundaries, Cadastur/CNPJ boundaries, tour catalog basics, assisted/manual booking, payment boundary, cancellation/refund boundary, human support escalation, safety/accessibility, and language support for PT, EN, and ES.
+- Tour catalog rule restricted to public published tours with `isPublished=true`.
+- `TripSchedule` documented as not confirming availability.
+- Payment, cancellation, refund, Cadastur, CNPJ, trust, ratings, safety, insurance, and certification claims kept blocked or pending unless exact evidence is approved.
+- RT-AI-007 moved to REVIEW.
+
+**Restrictions preserved:**
+- No machine-readable KB data, JSON/YAML seed files, code, frontend, backend/API, Prisma/schema, `data/`, embeddings, RAG, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push was created or changed.
+- No real payment information or invented Cadastur/CNPJ, phone, email, opening hours, response time, ratings, reviews, safety, insurance, or certification claims were added.
+
+---
+
 ## 2026-06-06 - RT-AI-007 READY Documentation Gate
 
 **Executed by:** Codex

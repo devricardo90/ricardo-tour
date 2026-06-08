@@ -536,3 +536,33 @@ Restrictions for this READY opening:
 Next step:
 - Execute RT-AI-007 only when explicitly authorized, creating `docs/product/ai-concierge-first-curated-kb-records.md`.
 - Keep the future task documentation-only and do not create machine-readable KB data or implementation artifacts.
+
+## RT-AI-007 REVIEW - First Curated KB Records Content
+
+State: REVIEW on 2026-06-08.
+
+Objective: define the first curated editorial KB records for the Rick Travel AI Concierge, based on RT-AI-006.
+
+Product file created:
+- `docs/product/ai-concierge-first-curated-kb-records.md`
+
+Operational docs updated:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Scope executed:
+- Defined the editorial record format and required metadata fields.
+- Created first editorial records for company identity, contact channels, trust boundaries, Cadastur/CNPJ boundaries, tour catalog basics, manual booking, payment boundary, cancellation/refund boundary, human support escalation, safety/accessibility boundaries, and language support for PT, EN, and ES.
+- Kept tour facts restricted to public published tours with `isPublished=true`.
+- Kept `TripSchedule` from being treated as confirmed availability.
+- Kept payment, cancellation, refund, Cadastur, CNPJ, trust, ratings, safety, insurance, and certification claims blocked or pending unless exact evidence is approved.
+
+Restrictions preserved:
+- No machine-readable KB data, JSON/YAML seed files, code, frontend, backend/API, Prisma/schema, `data/`, embeddings, RAG implementation, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push.
+- No real payment information or invented Cadastur/CNPJ, phone, email, opening hours, response time, ratings, reviews, safety, insurance, or certification claims.
+
+Next step:
+- Review `docs/product/ai-concierge-first-curated-kb-records.md`.
+- Do not create technical KB data, JSON/YAML, seeds, embeddings, RAG, API routes, chat UI, LangChain, or LangGraph without a new explicit implementation task.

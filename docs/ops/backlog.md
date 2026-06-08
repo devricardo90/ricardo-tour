@@ -1828,7 +1828,7 @@ Estado de execucao: product scope document created locally; RT-AI-006 moved to R
 
 ## RT-AI-007 Define First Curated KB Records Content
 
-State: READY.
+State: REVIEW.
 
 Objective: define the first curated editorial knowledge base records for the Rick Travel AI Concierge, based on RT-AI-006.
 
@@ -1910,4 +1910,6 @@ Acceptance criteria for the future task:
 
 Risk: medium. The main risk is accidentally turning conditional or blocked claims into approved facts, especially payment, cancellation/refund, Cadastur, CNPJ, trust, ratings, safety, insurance, certification, or availability claims.
 
-Execution state: READY opened in operational docs only. The product records document has not been created. No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML, embeddings, RAG, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push was created or changed.
+Evidence created: `docs/product/ai-concierge-first-curated-kb-records.md` and operational documentation updated.
+
+Execution state: product records document created locally; RT-AI-007 moved to REVIEW. The records are editorial examples and approval-controlled content only, not machine-readable KB data. No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML seed files, embeddings, RAG, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, real payment information, invented Cadastur/CNPJ numbers, invented contact details, opening hours, response times, ratings, reviews, safety, insurance, certification claims, commit, or push was created or changed.
