@@ -47,29 +47,227 @@ Every value record must include:
 
 ## 5. Approved For Public Website Use
 
-No real Rick Travel business evidence value is approved for public website use in this document yet.
+The following Rick Travel business evidence values are approved for public use on the website:
 
-Future entries in this section must have:
+### Approved Record 1 - Public Brand Name
 
-- `approvalStatus`: `APPROVED`;
-- `publicAllowed`: `true`;
-- `websiteAllowed`: `true`;
-- exact source and owner approval;
-- limitation text that prevents broader claims than the evidence supports.
+- `id`: `approved-values-brand-name-v1`
+- `label`: `Public brand name`
+- `value`: `Rick Travel`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `true`
+- `websiteAllowed`: `true`
+- `aiAllowed`: `true`
+- `handoffRequired`: `false`
+- `riskLevel`: `low`
+- `language`: `all`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `Rick Travel is the official brand and customer-facing name.`
+
+### Approved Record 2 - Approved Short Description
+
+- `id`: `approved-values-short-description-v1`
+- `label`: `Approved short description`
+- `value`: `Rick Travel is a travel agency focused on local tourism experiences in Rio de Janeiro, Brazil, offering guided tours, personalized travel orientation, and support for travelers in Portuguese, Spanish, and English.`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `true`
+- `websiteAllowed`: `true`
+- `aiAllowed`: `true`
+- `handoffRequired`: `false`
+- `riskLevel`: `low`
+- `language`: `en`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `Official English short description for website and AI.`
+
+### Approved Record 3 - Main Service Base
+
+- `id`: `approved-values-service-base-v1`
+- `label`: `Main service base`
+- `value`: `Rio de Janeiro, Brazil`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `true`
+- `websiteAllowed`: `true`
+- `aiAllowed`: `true`
+- `handoffRequired`: `false`
+- `riskLevel`: `low`
+- `language`: `all`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `City: Rio de Janeiro; State/Country: Rio de Janeiro, Brazil.`
+
+### Approved Record 4 - Approved Service Regions
+
+- `id`: `approved-values-service-regions-v1`
+- `label`: `Approved service regions`
+- `value`: `Rio de Janeiro, Brazil`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `true`
+- `websiteAllowed`: `true`
+- `aiAllowed`: `true`
+- `handoffRequired`: `false`
+- `riskLevel`: `low`
+- `language`: `all`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `The company operates primarily in Rio de Janeiro and Brazil.`
+
+### Approved Record 5 - Approved Service Languages
+
+- `id`: `approved-values-service-languages-v1`
+- `label`: `Approved service languages`
+- `value`: `Portuguese, Spanish, English`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `true`
+- `websiteAllowed`: `true`
+- `aiAllowed`: `true`
+- `handoffRequired`: `false`
+- `riskLevel`: `low`
+- `language`: `all`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `Support available in Portuguese, Spanish, and English.`
+
+### Approved Record 6 - Approved General Services
+
+- `id`: `approved-values-general-services-v1`
+- `label`: `Approved general services`
+- `value`: `Guided tours; Tourist experiences in Rio de Janeiro; Visits to main tourist attractions; Personalized travel orientation; Initial support for travelers interested in tours and experiences.`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `true`
+- `websiteAllowed`: `true`
+- `aiAllowed`: `true`
+- `handoffRequired`: `false`
+- `riskLevel`: `low`
+- `language`: `en`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `General services approved for public disclosure.`
+
+### Approved Record 7 - Approved Public WhatsApp
+
+- `id`: `approved-values-public-whatsapp-v1`
+- `label`: `Approved public WhatsApp`
+- `value`: `+55 21 96681-9928`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `true`
+- `websiteAllowed`: `true`
+- `aiAllowed`: `true`
+- `handoffRequired`: `true`
+- `riskLevel`: `low`
+- `language`: `all`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `Official public contact channel. AI must not confirm reservations, prices, payments, discounts, schedules, suppliers, or availability.`
+
+### Approved Record 8 - Approved Public Email
+
+- `id`: `approved-values-public-email-v1`
+- `label`: `Approved public email`
+- `value`: `contact@travelrick.com`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `true`
+- `websiteAllowed`: `true`
+- `aiAllowed`: `true`
+- `handoffRequired`: `true`
+- `riskLevel`: `low`
+- `language`: `all`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `Official public email address. AI may recommend contacting this team for quotes, bookings, and confirmations.`
+
+### Approved Record 9 - Approved Official Social Media
+
+- `id`: `approved-values-social-media-v1`
+- `label`: `Approved official social media`
+- `value`: `Instagram: @ricktravelbrasil`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `true`
+- `websiteAllowed`: `true`
+- `aiAllowed`: `true`
+- `handoffRequired`: `false`
+- `riskLevel`: `low`
+- `language`: `all`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `Official Instagram profile.`
+
+### Approved Record 10 - Institutional Website Text
+
+- `id`: `approved-values-institutional-text-v1`
+- `label`: `Institutional website text`
+- `value`: `Rick Travel helps travelers plan local tourism experiences in Rio de Janeiro with close service, personalized orientation, and support in Portuguese, Spanish, and English. The company works with guided tours, local experiences, travel orientation, and traveler support, connecting practical destination knowledge with human service. Our focus is to make the customer journey easier through clear information, organization, and safe handoff for quotes, reservations, and final confirmation.`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `true`
+- `websiteAllowed`: `true`
+- `aiAllowed`: `true`
+- `handoffRequired`: `false`
+- `riskLevel`: `low`
+- `language`: `en`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `Official institutional copy for website and AI.`
 
 ## 6. Approved For Future AI Concierge Use
 
-No real Rick Travel business evidence value is approved for future AI Concierge factual use in this document yet.
+The following rules and values are explicitly approved for the future Rick Travel AI Concierge:
 
-Future entries in this section must have:
+### AI Rule 1 - Allowed Automatic Answers
 
-- `approvalStatus`: `APPROVED`;
-- `publicAllowed`: `true`;
-- `aiAllowed`: `true`;
-- exact source and owner approval;
-- language-specific approval;
-- limitation text suitable for AI responses;
-- separate future technical implementation before runtime use.
+- `id`: `approved-values-ai-allowed-answers-v1`
+- `label`: `AI allowed automatic answers`
+- `value`: `1. Explain general types of services (guided tours, experiences, orientation, support). 2. Inform available service languages and how to start a request. 3. Collect initial information (destination, dates, number of people, trip type, preference).`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `false`
+- `websiteAllowed`: `false`
+- `aiAllowed`: `true`
+- `handoffRequired`: `false`
+- `riskLevel`: `medium`
+- `language`: `en`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `Scope of automatic responses for the AI Concierge.`
+
+### AI Rule 2 - Mandatory Human Handoff
+
+- `id`: `approved-values-ai-handoff-rules-v1`
+- `label`: `AI mandatory human handoff`
+- `value`: `1. Final prices, quotes, discounts. 2. Payment methods or confirmation. 3. Reservation confirmation. 4. Real availability (tours, dates, hotels, flights, etc.). 5. Personalized cases, groups, international trips. 6. Documentation questions, special needs, complaints. 7. Commercial decisions.`
+- `source`: `owner_provided`
+- `sourceAuthority`: `owner_approved`
+- `ownerApproval`: `approved`
+- `approvalStatus`: `APPROVED`
+- `publicAllowed`: `false`
+- `websiteAllowed`: `false`
+- `aiAllowed`: `true`
+- `handoffRequired`: `true`
+- `riskLevel`: `medium`
+- `language`: `en`
+- `lastReviewedAt`: `2026-06-08`
+- `notes`: `Critical handoff rules to ensure commercial safety and accuracy.`
 
 ## 7. Approved Only For Internal Or Handoff Use
 
@@ -135,61 +333,7 @@ The records below are placeholders for categories that may later receive exact o
 - `lastReviewedAt`: `2026-06-08`
 - `notes`: `Do not state guide credential numbers, accredited guide claims, named guide assignment, language availability, or certification claims without exact evidence and approval.`
 
-### Pending Record 4 - Public WhatsApp
-
-- `id`: `approved-values-pending-public-whatsapp-v1`
-- `label`: `Public WhatsApp`
-- `value`: `NO_APPROVED_VALUE_RECORDED`
-- `source`: `NONE_APPROVED`
-- `sourceAuthority`: `blocked`
-- `ownerApproval`: `not_approved`
-- `approvalStatus`: `PENDING_OWNER_APPROVAL`
-- `publicAllowed`: `false`
-- `websiteAllowed`: `false`
-- `aiAllowed`: `false`
-- `handoffRequired`: `true`
-- `riskLevel`: `high`
-- `language`: `all`
-- `lastReviewedAt`: `2026-06-08`
-- `notes`: `Do not publish or repeat any WhatsApp number until the owner approves the exact public number, display format, and usage scope.`
-
-### Pending Record 5 - Public Email
-
-- `id`: `approved-values-pending-public-email-v1`
-- `label`: `Public email`
-- `value`: `NO_APPROVED_VALUE_RECORDED`
-- `source`: `NONE_APPROVED`
-- `sourceAuthority`: `blocked`
-- `ownerApproval`: `not_approved`
-- `approvalStatus`: `PENDING_OWNER_APPROVAL`
-- `publicAllowed`: `false`
-- `websiteAllowed`: `false`
-- `aiAllowed`: `false`
-- `handoffRequired`: `true`
-- `riskLevel`: `high`
-- `language`: `all`
-- `lastReviewedAt`: `2026-06-08`
-- `notes`: `Do not publish or repeat any email address until the owner approves the exact public address, inbox purpose, and usage scope.`
-
-### Pending Record 6 - Official Social Media Links
-
-- `id`: `approved-values-pending-social-media-v1`
-- `label`: `Official social media links`
-- `value`: `NO_APPROVED_VALUE_RECORDED`
-- `source`: `NONE_APPROVED`
-- `sourceAuthority`: `blocked`
-- `ownerApproval`: `not_approved`
-- `approvalStatus`: `PENDING_OWNER_APPROVAL`
-- `publicAllowed`: `false`
-- `websiteAllowed`: `false`
-- `aiAllowed`: `false`
-- `handoffRequired`: `true`
-- `riskLevel`: `medium`
-- `language`: `all`
-- `lastReviewedAt`: `2026-06-08`
-- `notes`: `Do not link, display, or name social profiles until exact official URLs/handles and owner approval are recorded.`
-
-### Pending Record 7 - Service Hours
+### Pending Record 4 - Service Hours
 
 - `id`: `approved-values-pending-service-hours-v1`
 - `label`: `Service hours`
@@ -207,7 +351,7 @@ The records below are placeholders for categories that may later receive exact o
 - `lastReviewedAt`: `2026-06-08`
 - `notes`: `Do not state opening hours, support hours, response times, or response guarantees without approved policy evidence.`
 
-### Pending Record 8 - Booking Policy
+### Pending Record 5 - Booking Policy
 
 - `id`: `approved-values-pending-booking-policy-v1`
 - `label`: `Booking policy`
@@ -225,7 +369,7 @@ The records below are placeholders for categories that may later receive exact o
 - `lastReviewedAt`: `2026-06-08`
 - `notes`: `Manual assisted booking remains the safe boundary. Do not confirm availability, pickup, seats, guide, schedule, or booking status.`
 
-### Pending Record 9 - Payment Policy
+### Pending Record 6 - Payment Policy
 
 - `id`: `approved-values-pending-payment-policy-v1`
 - `label`: `Payment policy`
@@ -243,7 +387,7 @@ The records below are placeholders for categories that may later receive exact o
 - `lastReviewedAt`: `2026-06-08`
 - `notes`: `Do not state payment methods, payment links, Pix, bank details, deposits, installments, payment status, discounts, or provider details.`
 
-### Pending Record 10 - Cancellation / Refund Policy
+### Pending Record 7 - Cancellation / Refund Policy
 
 - `id`: `approved-values-pending-cancellation-refund-policy-v1`
 - `label`: `Cancellation / refund policy`
@@ -261,7 +405,7 @@ The records below are placeholders for categories that may later receive exact o
 - `lastReviewedAt`: `2026-06-08`
 - `notes`: `Do not state cancellation windows, refund eligibility, free rescheduling, weather rules, no-show rules, or case decisions without approved policy evidence.`
 
-### Pending Record 11 - Published Tours
+### Pending Record 8 - Published Tours
 
 - `id`: `approved-values-pending-published-tours-v1`
 - `label`: `Published tours`
@@ -279,7 +423,7 @@ The records below are placeholders for categories that may later receive exact o
 - `lastReviewedAt`: `2026-06-08`
 - `notes`: `This document does not snapshot tour names, prices, descriptions, or availability. Future use must revalidate the current public catalog with isPublished=true. TripSchedule is not availability.`
 
-### Pending Record 12 - Official Photos
+### Pending Record 9 - Official Photos
 
 - `id`: `approved-values-pending-official-photos-v1`
 - `label`: `Official photos`
@@ -297,7 +441,7 @@ The records below are placeholders for categories that may later receive exact o
 - `lastReviewedAt`: `2026-06-08`
 - `notes`: `Do not treat photos as official or reusable until ownership, license, usage rights, subject suitability, and tour alignment are approved.`
 
-### Pending Record 13 - Reviews / Testimonials
+### Pending Record 10 - Reviews / Testimonials
 
 - `id`: `approved-values-pending-reviews-testimonials-v1`
 - `label`: `Reviews / testimonials`
@@ -315,7 +459,7 @@ The records below are placeholders for categories that may later receive exact o
 - `lastReviewedAt`: `2026-06-08`
 - `notes`: `Do not state ratings, review counts, testimonials, customer quotes, star averages, rankings, or satisfaction claims without verifiable source, consent, attribution, date, and approval.`
 
-### Pending Record 14 - Insurance, Certificates, Licenses, Or Safety-Related Claims
+### Pending Record 11 - Insurance, Certificates, Licenses, Or Safety-Related Claims
 
 - `id`: `approved-values-pending-insurance-certificates-safety-v1`
 - `label`: `Insurance, certificates, licenses, or safety-related claims`
@@ -407,8 +551,7 @@ Before any future technical use:
 
 This document does not:
 
-- add real approved business values;
-- publish CNPJ, Cadastur, guide credentials, WhatsApp, email, social links, hours, policies, photos, reviews, insurance, certificates, licenses, or safety claims;
+- publish CNPJ, Cadastur, guide credentials, schedules, tour availability, real-time prices, booking status, or private operational data;
 - create JSON;
 - create YAML;
 - create seed;

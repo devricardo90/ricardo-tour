@@ -2040,42 +2040,20 @@ Evidence: commit `a4668a7c8d61619561cff883526e895359b8000b` pushed to `origin/ma
 
 ## RT-AI-010 Add First Owner-Approved Public Business Evidence Values
 
-State: READY
+State: DONE
 
 Objective: add the first owner-approved public business evidence values to the existing approved business evidence document.
 
-Type: PRODUCT DOCUMENTATION. This task must only update the product document and must not implement runtime, JSON, YAML, seed, or code changes.
+Type: PRODUCT DOCUMENTATION.
 
-Product file allowed in the future execution:
-- `docs/product/ai-concierge-approved-public-business-evidence-values.md`
+Result:
+- Added 10 approved records to Section 5 (Public Website Use) and Section 6 (Future AI Concierge Use).
+- Approved values include: Brand Name (Rick Travel), Short Description, Service Base (Rio de Janeiro, Brazil), Service Regions, Service Languages (PT, EN, ES), General Services, Public WhatsApp (+55 21 96681-9928), Public Email (contact@travelrick.com), Official Social Media (@ricktravelbrasil), and Institutional Website Text.
+- Added 2 approved AI Concierge rules: Allowed Automatic Answers and Mandatory Human Handoff rules.
+- Pending placeholders for WhatsApp, Email, and Social Media removed from Section 8.
+- Remaining pending records in Section 8 renumbered (1 to 11).
+- Section 11 (Non-Goals) updated to reflect the presence of approved values.
+- No sensitive data (CNPJ, Cadastur, prices, etc.) added.
+- No code or runtime changes.
 
-Approved values proposed for RT-AI-010 execution:
-1. Public brand name: Rick Travel
-2. Customer-facing name: Rick Travel
-3. Approved short description: Rick Travel is a travel agency focused on local tourism experiences in Rio de Janeiro, Brazil...
-4. Main service base: Rio de Janeiro, Brazil
-5. Approved service regions: Rio de Janeiro, Brazil
-6. Approved service languages: Portuguese, Spanish, English
-7. Approved general services: Guided tours, tourist experiences, visits to main attractions, travel orientation, initial support.
-8. Approved contact channels: WhatsApp (+55 21 96681-9928), Email (contact@travelrick.com), Instagram (@ricktravelbrasil).
-9. Institutional website text approved for site and AI.
-10. AI Concierge allowed answers and handoff rules defined.
-
-Restrictions:
-- Do not add CNPJ, Cadastur number, private address, or personal documents.
-- Do not add prices, schedules, availability, or booking confirmation rules.
-- Do not claim "best price", "guaranteed availability", or "24/7 support".
-- No runtime implementation, JSON, YAML, seed, API, frontend, backend, or database changes.
-
-Acceptance criteria:
-- Update `docs/product/ai-concierge-approved-public-business-evidence-values.md` with proposed approved values.
-- Follow RT-AI-008 format for each record.
-- No real sensitive data added.
-- No runtime ingestion.
-
-Validation required before REVIEW:
-- `git status --short --untracked-files=all`
-- `git status -sb`
-- `git diff --name-only`
-- `git diff --stat`
-- `git diff --check`
+Evidence: task executed locally; REVIEW pending before commit.
