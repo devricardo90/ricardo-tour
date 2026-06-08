@@ -718,3 +718,28 @@ Content registered:
 Restrictions preserved:
 - No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML seed files, embeddings, RAG, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push.
 - No real payment information or invented Cadastur/CNPJ, phone, email, opening hours, response time, ratings, reviews, safety, insurance, or certification claims were added.
+
+---
+
+## Update 2026-06-08 - RT-AI-008 Verified Business Evidence Records READY
+
+State: READY.
+
+RT-AI-008 was opened as the next documentation-only task after RT-AI-007 Remote DONE at commit `17f227f`.
+
+Future product file allowed:
+- `docs/product/ai-concierge-verified-business-evidence-records.md`
+
+Future objective:
+- Define a verified business evidence governance layer for real Rick Travel business data before any data is treated as public, website-safe, or AI Concierge-safe.
+
+Required future scope:
+- Evidence format, source/evidence requirement, owner approval, `reviewedAt`, `approvalStatus`, `publicAllowed`, `aiAllowed`, `websiteAllowed`, `riskLevel`, no-data-public-by-default rule, and sensitive-data approval rule.
+
+Evidence categories planned:
+- CNPJ / razao social / nome fantasia, Cadastur, guide credential, approved public WhatsApp, approved public email, official social networks, service hours, booking policy, payment policy, cancellation/refund policy, real published tours, official photos, reviews when verifiable, and certificates/insurance/credentials when real evidence exists.
+
+Restrictions preserved:
+- `docs/product/ai-concierge-verified-business-evidence-records.md` was not created in this READY opening.
+- No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, real business data ingestion, commit, or push was created or changed.
+- No sensitive data was published or treated as public by default.

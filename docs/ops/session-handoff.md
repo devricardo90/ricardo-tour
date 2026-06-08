@@ -566,3 +566,31 @@ Restrictions preserved:
 Next step:
 - Review `docs/product/ai-concierge-first-curated-kb-records.md`.
 - Do not create technical KB data, JSON/YAML, seeds, embeddings, RAG, API routes, chat UI, LangChain, or LangGraph without a new explicit implementation task.
+
+## RT-AI-008 READY - Verified Business Evidence Records
+
+State: READY on 2026-06-08.
+
+Objective: define a documentation-only evidence governance layer for real Rick Travel business data before any data is treated as public, website-safe, or AI Concierge-safe.
+
+Product file allowed in the future execution:
+- `docs/product/ai-concierge-verified-business-evidence-records.md`
+
+Operational docs allowed:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Future scope:
+- Define evidence format, source/evidence requirement, owner approval, `reviewedAt`, `approvalStatus`, `publicAllowed`, `aiAllowed`, `websiteAllowed`, `riskLevel`, no-data-public-by-default rule, and sensitive-data approval rule.
+- Cover CNPJ / razao social / nome fantasia, Cadastur, guide credential, approved public WhatsApp, approved public email, official social networks, service hours, booking policy, payment policy, cancellation/refund policy, real published tours, official photos, reviews if verifiable, and certificates/insurance/credentials if real evidence exists.
+
+Restrictions for this READY opening:
+- `docs/product/ai-concierge-verified-business-evidence-records.md` was not created.
+- No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, real business data ingestion, commit, or push.
+- No sensitive data was published or treated as public by default.
+
+Next step:
+- Execute RT-AI-008 only when explicitly authorized, creating `docs/product/ai-concierge-verified-business-evidence-records.md`.
+- Keep the future task documentation-only and do not create machine-readable KB data or implementation artifacts.

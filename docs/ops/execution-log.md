@@ -5,6 +5,29 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-008 READY Documentation Gate
+
+**Executed by:** Codex
+**Environment:** local; documentation operations only
+**Status:** READY opened; no production effect
+
+**Objective:**
+Open RT-AI-008 as a documentation-only task to define a verified business evidence governance layer for real Rick Travel business data before any data is treated as public, website-safe, or AI Concierge-safe.
+
+**Result:**
+- RT-AI-008 marked as READY in operational documentation.
+- Future product file allowed: `docs/product/ai-concierge-verified-business-evidence-records.md`.
+- Future evidence scope registered: evidence format, source/evidence requirement, owner approval, `reviewedAt`, `approvalStatus`, `publicAllowed`, `aiAllowed`, `websiteAllowed`, `riskLevel`, no-data-public-by-default rule, and sensitive-data approval rule.
+- Future evidence categories registered: CNPJ / razao social / nome fantasia, Cadastur, guide credential, approved public WhatsApp, approved public email, official social networks, service hours, booking policy, payment policy, cancellation/refund policy, real published tours, official photos, verifiable reviews, and certificates/insurance/credentials when evidence exists.
+- Validation commands registered for the future REVIEW gate.
+
+**Restrictions preserved:**
+- `docs/product/ai-concierge-verified-business-evidence-records.md` was not created in this READY opening.
+- No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, real business data ingestion, commit, or push was created or changed.
+- No sensitive data was published or treated as public by default.
+
+---
+
 ## 2026-06-08 - RT-AI-007 First Curated KB Records Content Documentation
 
 **Executed by:** Codex

@@ -1913,3 +1913,104 @@ Risk: medium. The main risk is accidentally turning conditional or blocked claim
 Evidence created: `docs/product/ai-concierge-first-curated-kb-records.md` and operational documentation updated.
 
 Execution state: product records document created locally; RT-AI-007 moved to REVIEW. The records are editorial examples and approval-controlled content only, not machine-readable KB data. No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML seed files, embeddings, RAG, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, real payment information, invented Cadastur/CNPJ numbers, invented contact details, opening hours, response times, ratings, reviews, safety, insurance, certification claims, commit, or push was created or changed.
+
+## RT-AI-008 Define Verified Rick Travel Business Evidence Records
+
+State: READY.
+
+Objective: define a documentation-only evidence governance layer for real Rick Travel business data before any real business evidence is treated as public, website-safe, or AI Concierge-safe.
+
+Type: PRODUCT DOCUMENTATION. This task must prepare a future evidence record document only. It must not ingest real business data into runtime, create machine-readable KB data, JSON/YAML seed files, embeddings, RAG runtime, LangChain, LangGraph, API routes, chat UI, code, deploy, or publication changes.
+
+Product file allowed in the future execution:
+- `docs/product/ai-concierge-verified-business-evidence-records.md`
+
+Operational docs allowed:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Required future scope:
+- define evidence format;
+- define source/evidence requirement;
+- define owner approval requirement;
+- define `reviewedAt`;
+- define `approvalStatus`;
+- define `publicAllowed`;
+- define `aiAllowed`;
+- define `websiteAllowed`;
+- define `riskLevel`;
+- define that no data is public by default;
+- define that sensitive data must not be published without explicit owner approval.
+
+Evidence categories for the future task:
+- CNPJ / razao social / nome fantasia;
+- Cadastur da empresa;
+- credencial de guia;
+- WhatsApp publico aprovado;
+- e-mail publico aprovado;
+- redes sociais oficiais;
+- horario de atendimento;
+- politica de reserva;
+- politica de pagamento;
+- politica de cancelamento/reembolso;
+- tours reais publicados;
+- fotos oficiais;
+- avaliacoes/reviews, se houver fonte verificavel;
+- certificados, seguros ou credenciais, se houver evidencia real.
+
+Required future evidence fields:
+- dado informado;
+- fonte/evidencia;
+- owner responsavel;
+- data de revisao / `reviewedAt`;
+- status: `APPROVED`, `CONDITIONAL`, `PENDING_OWNER_APPROVAL`, or `BLOCKED`;
+- `publicAllowed`;
+- `aiAllowed`;
+- `websiteAllowed`;
+- `riskLevel`: `low`, `medium`, `high`, or `critical`;
+- observacoes de limite.
+
+Out of scope:
+- Do not create `docs/product/ai-concierge-verified-business-evidence-records.md` in this READY opening.
+- Do not create JSON.
+- Do not create YAML.
+- Do not create seed.
+- Do not alter `data/`.
+- Do not alter `prisma/`.
+- Do not alter API.
+- Do not alter frontend.
+- Do not alter backend.
+- Do not alter schema.
+- Do not alter package or lockfiles.
+- Do not create embeddings.
+- Do not implement RAG.
+- Do not install or configure LangChain.
+- Do not install or configure LangGraph.
+- Do not add chatbot.
+- Do not deploy.
+- Do not ingest real business data.
+- Do not publish sensitive data without explicit approval.
+- Do not commit or push in this READY opening.
+
+Acceptance criteria for the future task:
+- Creates only `docs/product/ai-concierge-verified-business-evidence-records.md` plus allowed ops docs.
+- Defines evidence governance records, not machine-readable KB data.
+- No real data is public by default.
+- Every real data item requires source/evidence, owner, `reviewedAt`, approval status, explicit usage permissions, risk level, and limitation notes.
+- `publicAllowed`, `aiAllowed`, and `websiteAllowed` are explicit and never inferred.
+- Sensitive data remains `BLOCKED` or `PENDING_OWNER_APPROVAL` unless explicit source and owner approval exist.
+- The document prepares a future technical KB path without implementing it.
+
+Validation required before REVIEW:
+- `git status --short --untracked-files=all`
+- `git status -sb`
+- `git diff --name-only`
+- `git diff --stat`
+- `git diff --check`
+- `git diff --cached --name-only`
+
+Risk: high. The main risk is accidentally publishing or approving real business identifiers, contact channels, payment/cancellation policies, trust claims, safety claims, reviews, certifications, insurance, or credentials without explicit evidence and owner approval.
+
+Execution state: READY opened in operational docs only. The product evidence document has not been created. No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, real business data ingestion, commit, or push was created or changed.
