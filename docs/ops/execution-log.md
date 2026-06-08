@@ -5,6 +5,37 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-012 Website Approved Values Audit Documentation
+
+**Executed by:** Codex
+**Environment:** local; documentation only
+**Status:** Local REVIEW; no commit and no push
+
+**Objective:**
+Execute RT-AI-012 by creating a documentation-only audit of current website copy and content against approved public business values, public credibility evidence rules, blocked/pending credibility claims, and AI/human handoff rules.
+
+**File created:**
+- `docs/product/ai-concierge-website-approved-values-audit.md`
+
+**Operational documentation updated:**
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+**Result:**
+- Audit result recorded as `PASS_WITH_REVIEW_ITEMS`.
+- Approved values safe for website use recorded: Rick Travel, Rio de Janeiro, Brazil, Portuguese, Spanish, English, public WhatsApp, public email, Instagram, approved institutional positioning, guided tours, local tourism experiences, and traveler support.
+- Aligned content recorded for brand usage, Rio de Janeiro positioning, public contact channel references, general guided-tour positioning, and assisted support/manual confirmation language.
+- Review/rewrite items recorded for Cadastur, guide credential, certification, safety, testimonial, rating, review, price, availability, payment, guarantee, trust-badge, CNPJ-like, and unapproved contact-value content.
+- RT-AI-012 moved to REVIEW.
+
+**Restrictions preserved:**
+- No website code, component, app file, message file, style file, architecture document, runtime file, implementation file, JSON, YAML, seed, API, frontend, backend, database, package file, lockfile, production release action, commit, or push was created or changed.
+- No actual CNPJ value, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial value, rating approval, price approval, availability approval, guarantee, or real credential value was added.
+
+---
+
 ## 2026-06-08 - RT-AI-012 READY Documentation Gate
 
 **Executed by:** Codex

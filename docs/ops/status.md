@@ -1,5 +1,30 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-08 - RT-AI-012 Website Approved Values Audit Documentation
+
+State: REVIEW.
+
+RT-AI-012 was executed locally as a documentation-only website/content audit.
+
+File created:
+- `docs/product/ai-concierge-website-approved-values-audit.md`
+
+Audit result:
+- `PASS_WITH_REVIEW_ITEMS`.
+
+Content registered:
+- Source documents reviewed for approved public business values and credibility evidence rules.
+- Website file groups inspected under `app/**`, `components/**`, and `messages/**`.
+- Approved website-safe values recorded: Rick Travel, Rio de Janeiro, Brazil, Portuguese, Spanish, English, public WhatsApp, public email, Instagram, institutional positioning, guided tours, local tourism experiences, and traveler support.
+- Current aligned content recorded for brand, Rio de Janeiro positioning, approved email, approved Instagram, general guided-tour positioning, and assisted booking/support language.
+- Review items recorded for Cadastur, guide credential, certification, safety, testimonial, rating, review, price, availability, payment, guarantee, trust-badge, and CNPJ-like website content.
+
+Restrictions preserved:
+- No website code, component, app file, message file, style file, architecture document, runtime file, implementation file, JSON, YAML, seed, API, frontend, backend, database, package file, lockfile, production release action, commit, or push was created or changed.
+- No actual CNPJ value, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial value, rating approval, price approval, availability approval, guarantee, or real credential value was added.
+
+---
+
 ## Update 2026-06-08 - RT-AI-012 Website Approved Values Audit READY
 
 State: READY.

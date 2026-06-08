@@ -751,3 +751,36 @@ Restrictions for this READY opening:
 - No website code, components, app files, message files, product documents, architecture documents, runtime files, implementation files, JSON, YAML, seed, API, frontend, backend, database, AI technical assets, deploy files, package files, or lockfiles were changed.
 - No actual CNPJ values, Cadastur numeric values, guide credential identifiers, personal documents, private addresses, customer information, payment information, testimonials, ratings, review counts, rankings, prices, availability statements, guarantees, or credential values were added.
 - No commit or push performed.
+
+## RT-AI-012 REVIEW - Audit Website Against Approved Public Values
+
+State: REVIEW on 2026-06-08.
+
+Objective: create a documentation-only website audit comparing current Rick Travel website content against approved public business values and credibility rules.
+
+Product file created:
+- `docs/product/ai-concierge-website-approved-values-audit.md`
+
+Operational docs updated:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Audit result:
+- `PASS_WITH_REVIEW_ITEMS`.
+
+Scope executed:
+- Reviewed approved public business evidence values and public credibility evidence approval scope.
+- Inspected current website/content groups under `app/**`, `components/**`, and `messages/**`.
+- Recorded approved website-safe values for Rick Travel, Rio de Janeiro, Brazil, Portuguese, Spanish, English, public WhatsApp, public email, Instagram, approved institutional positioning, general guided tours, local tourism experiences, and traveler support.
+- Recorded aligned website content for brand, Rio de Janeiro positioning, approved public contact channels, institutional positioning, and assisted/manual support language.
+- Recorded review items for Cadastur, guide credential, certification, safety, testimonials, reviews, ratings, prices, availability, payment, guarantees, trust badges, CNPJ-like content, and unapproved contact-value content.
+
+Restrictions preserved:
+- No website code, components, app files, message files, styles, architecture documents, runtime files, implementation files, JSON, YAML, seed, API, frontend, backend, database, package files, lockfiles, production release action, commit, or push were created or changed.
+- No actual CNPJ value, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial value, rating approval, price approval, availability approval, guarantee, or real credential value was added.
+
+Next step:
+- Review `docs/product/ai-concierge-website-approved-values-audit.md`.
+- Do not fix website copy, synchronize messages, approve credentials, publish testimonials, or change public content without a separate explicit task.
