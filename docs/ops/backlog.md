@@ -2186,7 +2186,7 @@ Execution result: website approved-values audit created locally; RT-AI-012 moved
 
 ## RT-AI-013 Remove Unsupported Website Credibility Claims
 
-State: READY
+State: REVIEW
 
 Objective: remove or neutralize unsupported public credibility claims from the current website and align public copy with owner-approved values from RT-AI-010 and credibility rules from RT-AI-011.
 
@@ -2251,3 +2251,7 @@ Acceptance criteria:
 Risk: medium. The main risk is accidentally replacing blocked claims with new unsupported claims instead of neutral approved wording.
 
 Execution state: RT-AI-013 opened as READY in operational documentation only. No website file, product document, runtime file, implementation file, JSON, YAML, seed, API, backend, database, package file, lockfile, commit, or push was created or changed.
+
+Evidence created: unsupported website credibility claims were removed or neutralized in the allowed website/content files, and operational documentation was updated.
+
+Execution result: RT-AI-013 moved to REVIEW. Metadata, homepage copy, traveler-support section, security/support section, and locale messages were updated to remove or neutralize unsupported Cadastur, CNPJ-like, guide credential, certification, testimonial, rating, review, safety, insurance, guarantee, and related trust-claim wording. The public copy now uses neutral approved positioning around guided tours, local tourism experiences, personalized travel orientation, traveler support, approved public contact channels, and support in Portuguese, Spanish, and English. No product document, architecture document, package file, lockfile, JSON/YAML seed file, API, backend, database, technical AI file, actual CNPJ value, Cadastur numeric value, guide credential identifier, testimonial, rating, review, price, availability confirmation, payment detail, guarantee, customer data, private address, personal document, commit, or push was created or changed.

@@ -1,8 +1,8 @@
 {
     "HomePage": {
         "Hero": {
-            "title": "City Tour en Río de Janeiro con Guía Acreditado",
-            "description": "Descubre las maravillas de Río de Janeiro en tours exclusivos, guiados por expertos acreditados. Seguridad y experiencias personalizadas para brasileños y extranjeros.",
+            "title": "Tours guiados en Rio de Janeiro",
+            "description": "Rick Travel ofrece tours guiados, experiencias de turismo local, orientacion personalizada y soporte para viajeros en Rio de Janeiro, Brasil.",
             "primaryButton": "Reserva Ahora Tu Tour Exclusivo",
             "secondaryButton": "Solicitar Presupuesto"
         },
@@ -20,48 +20,6 @@
             "myBookings": "Mis Reservas",
             "availableTrips": "Tours Disponibles"
         },
-        "Testimonials": {
-            "title": "Valoraciones y Testimonios",
-            "subtitle": "Experiencias reales de clientes que descubrieron Río de Janeiro con Rick Travel.",
-            "readMore": "Leer más",
-            "readLess": "Leer menos",
-            "testimonial1": {
-                "author": "Camila Ferraz",
-                "role": "Turista • São Paulo",
-                "text": "¡Experiencia increíble! Atención impecable e itinerario muy bien planificado.",
-                "fullText": "¡Experiencia increíble! Atención impecable e itinerario muy bien planificado. El guía fue extremadamente profesional y atento, haciendo el paseo ligero, seguro y enriquecedor. Lo recomiendo para quien quiera conocer Río con calidad."
-            },
-            "testimonial2": {
-                "author": "Lucas Hernanes",
-                "role": "Turista Internacional",
-                "text": "Tour privado excelente, todo organizado al detalle.",
-                "fullText": "Tour privado excelente, todo organizado al detalle. El guía hablaba inglés con fluidez, el transporte fue cómodo y el itinerario flexible. Una experiencia memorable para toda la familia."
-            },
-            "testimonial3": {
-                "author": "Rafael Monteiro",
-                "role": "Turista • Minas Gerais",
-                "text": "Paseo súper organizado y cómodo, vale cada minuto.",
-                "fullText": "Paseo súper organizado y cómodo, vale cada minuto. El itinerario fue flexible, el guía extremadamente educado y el transporte impecable. Pudimos disfrutar de Río con tranquilidad y seguridad. ¡Lo recomiendo muchísimo!"
-            },
-            "testimonial4": {
-                "author": "Mariana Lopes",
-                "role": "Empresaria",
-                "text": "Atención premium de principio a fin, experiencia sensacional.",
-                "fullText": "Atención premium de principio a fin, experiencia sensacional. Rick Travel cuidó todos los detalles con mucho profesionalismo. El tour fue exclusivo, cómodo y súper bien planificado. Sin duda la mejor forma de conocer Río."
-            },
-            "testimonial5": {
-                "author": "Danyela Viana",
-                "role": "Influencer Digital",
-                "text": "¡El paseo en helicóptero fue simplemente surreal!",
-                "fullText": "¡El paseo en helicóptero fue simplemente surreal! La vista aérea del Cristo Redentor y de la Bahía de Guanabara es algo que nunca olvidaré. Organización, seguridad y profesionalismo impecables."
-            },
-            "testimonial6": {
-                "author": "Julia Cortez",
-                "role": "Periodista",
-                "text": "Itinerario cultural riquísimo y muy bien explicado.",
-                "fullText": "Itinerario cultural riquísimo y muy bien explicado. El guía demostró dominio total de la historia de Río, haciendo el paseo envolvente y educativo. Experiencia de altísimo nivel."
-            }
-        },
         "FAQs": {
             "title": "Preguntas Frecuentes",
             "subtitle": "Respuestas rápidas y claras a las principales preguntas sobre nuestros tours, reservas y experiencias en Río de Janeiro.",
@@ -70,11 +28,11 @@
             "questions": {
                 "q1": {
                     "question": "¿Cuánto tiempo tarda la confirmación de la reserva?",
-                    "answer": "La confirmación de la reserva ocurre en hasta 24 horas después del pago. Para reservas urgentes, ofrecemos confirmación expresa en hasta 2 horas. Solo contacta con nuestro equipo."
+                    "answer": "El equipo Rick Travel confirma los detalles de la reserva por los canales publicos aprobados."
                 },
                 "q2": {
                     "question": "¿Qué métodos de pago aceptan?",
-                    "answer": "Aceptamos tarjetas de crédito (Visa, Mastercard y American Express), Pix, PayPal y transferencia bancaria. Para empresas, también disponibilizamos facturación."
+                    "answer": "Las preguntas sobre pago son tratadas directamente por el equipo Rick Travel en los canales publicos aprobados."
                 },
                 "q3": {
                     "question": "¿Puedo cambiar o cancelar mi reserva?",
@@ -82,11 +40,31 @@
                 },
                 "q4": {
                     "question": "¿Atienden a turistas internacionales?",
-                    "answer": "Atendemos a turistas de todo el mundo. Nuestros guías están acreditados por Cadastur y hablan portugués, inglés y español, garantizando una experiencia segura y personalizada."
+                    "answer": "Atendemos a viajeros interesados en Rio de Janeiro. El soporte esta disponible en portugues, espanol e ingles."
                 },
                 "q5": {
                     "question": "¿Cuál es la política de reembolso?",
-                    "answer": "Los reembolsos están garantizados para cancelaciones hechas hasta 48 horas antes del tour. En casos de clima adverso, ofrecemos reprogramación sin costo adicional."
+                    "answer": "Las preguntas sobre cancelacion y reembolso requieren confirmacion del equipo Rick Travel por los canales publicos aprobados."
+                }
+            }
+        },
+        "TravelerSupport": {
+            "eyebrow": "Soporte al viajero",
+            "title": "Orientacion clara para planificar tu experiencia en Rio",
+            "subtitle": "Rick Travel ayuda a viajeros a organizar experiencias de turismo local con atencion humana y canales publicos aprobados.",
+            "cardFooter": "Atencion humana",
+            "items": {
+                "orientation": {
+                    "title": "Orientacion local",
+                    "text": "Rick Travel ofrece tours guiados, experiencias de turismo local, orientacion personalizada y soporte para viajeros en Rio de Janeiro, Brasil."
+                },
+                "languages": {
+                    "title": "Soporte en idiomas",
+                    "text": "Support is available in Portuguese, Spanish, and English."
+                },
+                "handoff": {
+                    "title": "Confirmacion del equipo",
+                    "text": "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
                 }
             }
         }
@@ -118,7 +96,7 @@
         "intro": "Rick Travel nació de la pasión por Río de Janeiro y del deseo de proporcionar experiencias inolvidables a nuestros visitantes.",
         "mission": {
             "title": "Misión",
-            "description": "Ofrecer experiencias turísticas seguras, auténticas y memorables, conectando personas a la cultura y belleza de Río de Janeiro."
+            "description": "Apoyar a viajeros con experiencias de turismo local, informacion clara y atencion humana en Rio de Janeiro."
         },
         "vision": {
             "title": "Visión",
@@ -126,15 +104,15 @@
         },
         "values": {
             "title": "Valores",
-            "item1": "Seguridad en primer lugar",
+            "item1": "Informacion clara",
             "item2": "Puntualidad y compromiso",
             "item3": "Respeto a la cultura local",
             "item4": "Excelencia en el servicio"
         },
         "certification": {
-            "title": "Seguridad y Certificación",
-            "description1": "Tu seguridad es nuestra prioridad. Todos nuestros guías están acreditados por el Ministerio de Turismo (Cadastur) y nuestros vehículos pasan por rigurosas inspecciones.",
-            "description2": "Viaja tranquilo sabiendo que estás en buenas manos."
+            "title": "Informacion clara y atencion humana",
+            "description1": "Rick Travel ayuda a viajeros a planificar experiencias de turismo local en Rio de Janeiro con canales publicos aprobados.",
+            "description2": "Para presupuestos, reservas, horarios, pago y confirmacion final, contacta al equipo Rick Travel."
         }
     },
     "ToursPage": {
@@ -181,7 +159,7 @@
     "BookingsPage": {
         "title": "Mis Reservas",
         "eyebrow": "Seguimiento de reservas",
-        "subtitle": "Consulta tus pre-reservas, revisa el estado de cada solicitud y sigue la confirmacion manual del equipo Rick Travel.",
+        "subtitle": "Consulta tus pre-reservas, verifica el estado de cada solicitud y sigue la confirmacion manual del equipo Rick Travel.",
         "manualBadge": "Confirmacion manual del equipo",
         "statusBadge": "Estado claro de la reserva",
         "loading": "Cargando reservas...",
@@ -206,8 +184,8 @@
         "guestCount": "{count, plural, one {# huesped} other {# huespedes}}",
         "confirmationEyebrow": "Reserva recibida",
         "confirmationTitle": "Recibimos tu pre-reserva",
-        "confirmationIntro": "Tu solicitud fue registrada con estado pendiente. La confirmacion y los detalles de pago seran tratados manualmente por el equipo Rick Travel.",
-        "manualConfirmationNotice": "No se inicio ningun pago online. Nuestro equipo revisara la disponibilidad y te contactara para confirmar la reserva.",
+        "confirmationIntro": "Tu solicitud fue recibida con estado pendiente. La confirmacion y los detalles de pago seran tratados manualmente por el equipo Rick Travel.",
+        "manualConfirmationNotice": "No se inicio ningun pago online. Nuestro equipo verificara la solicitud y te contactara para confirmar la reserva.",
         "tour": "Tour",
         "tourFallback": "Tour",
         "date": "Fecha",
@@ -223,14 +201,14 @@
             "pending": "Pendiente",
             "confirmed": "Confirmada",
             "canceled": "Cancelada",
-            "inReview": "En revision"
+            "inReview": "Verificacion manual"
         },
         "paymentStatus": {
             "manualPending": "A coordinar con el equipo",
             "paid": "Pagado",
             "refunded": "Reembolsado",
             "partial": "Parcial",
-            "inReview": "En revision"
+            "inReview": "Verificacion manual"
         }
     },
     "LoginPage": {
@@ -279,4 +257,3 @@
         "imageAlt": "{title} en {city}"
     }
 }
-

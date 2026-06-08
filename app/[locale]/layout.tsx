@@ -12,15 +12,15 @@ import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
 export const metadata: Metadata = {
   metadataBase: new URL(PUBLIC_SITE_URL),
   title: "Rick Travel — City Tour no Rio",
-  description: "Guia credenciado Cadastur. PT/EN/ES.",
+  description: "Guided tours, local tourism experiences, and traveler support in Rio de Janeiro, Brazil. Support in Portuguese, Spanish, and English.",
   authors: [{ name: "Rick Travel" }],
-  keywords: ["turismo", "rio de janeiro", "city tour", "cadastur", "guia turístico"],
+  keywords: ["turismo", "rio de janeiro", "city tour", "guided tours", "local tourism", "traveler support"],
   openGraph: {
     type: "website",
     locale: "pt_BR",
     url: PUBLIC_SITE_URL,
     title: "Rick Travel | City Tour no Rio de Janeiro",
-    description: "Descubra o Rio de Janeiro com passeios exclusivos e guias credenciados.",
+    description: "Guided tours, local tourism experiences, and traveler support in Rio de Janeiro, Brazil.",
     siteName: "Rick Travel",
     images: [
       {
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Rick Travel | City Tour no Rio',
     description:
-      'Passeios exclusivos no Rio de Janeiro com guias credenciados.',
+      'Guided tours and local tourism experiences in Rio de Janeiro, Brazil.',
     images: ['/og-image.jpg'],
   },
   robots: {

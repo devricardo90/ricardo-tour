@@ -842,3 +842,38 @@ Future validation:
 Next step:
 - Execute RT-AI-013 only when explicitly authorized by a separate execution gate.
 - Do not add credential evidence, testimonials, ratings, prices, availability, payment details, guarantees, private data, or technical AI work in this correction task.
+
+## RT-AI-013 REVIEW - Remove Unsupported Website Credibility Claims
+
+State: REVIEW on 2026-06-08.
+
+Objective: remove or neutralize unsupported public credibility claims from the current website and align public copy with owner-approved values from RT-AI-010 and credibility rules from RT-AI-011.
+
+Files changed:
+- `app/[locale]/layout.tsx`
+- `app/[locale]/(public)/page.tsx`
+- `components/testimonials.tsx`
+- `components/about/security-section.tsx`
+- `messages/en.json`
+- `messages/pt.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `docs/ops/backlog.md`
+- `docs/ops/execution-log.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/status.md`
+
+Execution result:
+- Metadata and homepage descriptions were rewritten to approved neutral positioning.
+- Hard-coded testimonials, customer names, customer quotes, attribution content, and star UI were removed.
+- The former testimonial section now renders neutral traveler-support content only.
+- Cadastur seal content and CNPJ-like public display were removed from the support/identity section.
+- Changed locale messages now use neutral wording around guided tours, local tourism experiences, personalized travel orientation, traveler support, approved public contact channels, and language support.
+
+Restrictions preserved:
+- No product document, architecture document, package file, lockfile, JSON/YAML seed file, API, backend, database, technical AI file, commit, or push was created or changed.
+- No actual CNPJ value, Cadastur numeric value, guide credential identifier, testimonial, rating, review, price, availability confirmation, payment detail, guarantee, customer data, private address, personal document, or unapproved credential value was added.
+
+Next step:
+- Review the RT-AI-013 diff and validation output.
+- Do not commit or push until explicitly authorized.

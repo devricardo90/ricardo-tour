@@ -4,7 +4,7 @@ import { ReservationsSection } from "@/components/reservations-section";
 import { FadeInSection } from "@/components/ui/fade-in-section";
 import dynamic from "next/dynamic";
 
-const Testimonials = dynamic(() => import("@/components/testimonials"), {
+const TravelerSupport = dynamic(() => import("@/components/testimonials"), {
     loading: () => <div className="section-spacing h-96 animate-pulse" />,
 });
 
@@ -15,22 +15,22 @@ function getHomeMetadataCopy(locale: string) {
         case "en":
             return {
                 title: "Rick Travel | Private Tours in Rio de Janeiro",
-                description: "Book guided tours in Rio de Janeiro with a licensed team, fast WhatsApp support and a safer booking flow.",
+                description: "Rick Travel offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil.",
             };
         case "es":
             return {
                 title: "Rick Travel | Tours privados en Rio de Janeiro",
-                description: "Reserva tours guiados en Rio de Janeiro con equipo acreditado, soporte rapido por WhatsApp y flujo de reserva mas seguro.",
+                description: "Rick Travel ofrece tours guiados, experiencias de turismo local, orientacion personalizada y soporte para viajeros en Rio de Janeiro, Brasil.",
             };
         case "sv":
             return {
                 title: "Rick Travel | Privata turer i Rio de Janeiro",
-                description: "Boka guidade turer i Rio de Janeiro med certifierat team, snabb WhatsApp-support och tryggare bokningsflode.",
+                description: "Rick Travel erbjuder guidade turer, lokala turismupplevelser, personlig reseorientering och resenarstod i Rio de Janeiro, Brasilien.",
             };
         default:
             return {
                 title: "Rick Travel | Passeios exclusivos no Rio de Janeiro",
-                description: "Reserve passeios guiados no Rio com equipe credenciada, suporte rapido no WhatsApp e fluxo de reserva mais seguro.",
+                description: "A Rick Travel oferece passeios guiados, experiencias de turismo local, orientacao personalizada e suporte ao viajante no Rio de Janeiro, Brasil.",
             };
     }
 }
@@ -80,7 +80,7 @@ export default function Home() {
                 <ReservationsSection />
 
                 <FadeInSection delay={0.2}>
-                    <Testimonials />
+                    <TravelerSupport />
                 </FadeInSection>
 
                 <FooterSection />

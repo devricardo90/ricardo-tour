@@ -5,6 +5,42 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-013 Unsupported Website Credibility Claims Removal
+
+**Executed by:** Codex
+**Environment:** local; website content correction only
+**Status:** Local REVIEW; no commit and no push
+
+**Objective:**
+Remove or neutralize unsupported public credibility claims from current Rick Travel website surfaces identified by RT-AI-012.
+
+**Files changed:**
+- `app/[locale]/layout.tsx`
+- `app/[locale]/(public)/page.tsx`
+- `components/testimonials.tsx`
+- `components/about/security-section.tsx`
+- `messages/en.json`
+- `messages/pt.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+**Result:**
+- Metadata and homepage copy changed to approved neutral positioning.
+- The hard-coded testimonial section was replaced by neutral traveler-support content with no customer names, quotes, star UI, review counts, rankings, or satisfaction claims.
+- Cadastur seal content and CNPJ-like public display were removed from the security/support section.
+- Unsupported credential, certification, safety, insurance, guarantee, testimonial, rating, review, and related trust wording was removed or neutralized in changed locale messages.
+- RT-AI-013 moved to REVIEW.
+
+**Restrictions preserved:**
+- No product document, architecture document, package file, lockfile, JSON/YAML seed file, API, backend, database, technical AI file, commit, or push was created or changed.
+- No actual CNPJ value, Cadastur numeric value, guide credential identifier, testimonial, rating, review, price, availability confirmation, payment detail, guarantee, customer data, private address, personal document, or unapproved credential value was added.
+
+---
+
 ## 2026-06-08 - RT-AI-013 READY Documentation Gate
 
 **Executed by:** Codex

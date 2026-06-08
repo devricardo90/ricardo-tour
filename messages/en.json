@@ -1,8 +1,8 @@
 {
     "HomePage": {
         "Hero": {
-            "title": "City Tour in Rio de Janeiro with Licensed Guide",
-            "description": "Discover the wonders of Rio de Janeiro on exclusive tours, guided by licensed experts. Safety and personalized experiences for Brazilians and foreigners.",
+            "title": "Guided Tours in Rio de Janeiro",
+            "description": "Rick Travel offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil.",
             "primaryButton": "Book Your Exclusive Tour Now",
             "secondaryButton": "Request a Quote"
         },
@@ -20,48 +20,6 @@
             "myBookings": "My Bookings",
             "availableTrips": "Available Tours"
         },
-        "Testimonials": {
-            "title": "Reviews and Testimonials",
-            "subtitle": "Real experiences from clients who discovered Rio de Janeiro with Rick Travel.",
-            "readMore": "Read more",
-            "readLess": "Read less",
-            "testimonial1": {
-                "author": "Camila Ferraz",
-                "role": "Tourist • São Paulo",
-                "text": "Amazing experience! Impeccable service and very well-planned itinerary.",
-                "fullText": "Amazing experience! Impeccable service and very well-planned itinerary. The guide was extremely professional and attentive, making the tour easy, safe, and enriching. I recommend it to anyone who wants to explore Rio with quality."
-            },
-            "testimonial2": {
-                "author": "Lucas Hernanes",
-                "role": "International Tourist",
-                "text": "Excellent private tour, everything organized down to the smallest details.",
-                "fullText": "Excellent private tour, everything organized down to the smallest details. The guide spoke fluent English, the transportation was comfortable, and the itinerary flexible. A memorable experience for the whole family."
-            },
-            "testimonial3": {
-                "author": "Rafael Monteiro",
-                "role": "Tourist • Minas Gerais",
-                "text": "Super organized and comfortable tour, worth every minute.",
-                "fullText": "Super organized and comfortable tour, worth every minute. The itinerary was flexible, the guide extremely polite, and the transportation impeccable. We enjoyed Rio with peace of mind and safety. Highly recommend!"
-            },
-            "testimonial4": {
-                "author": "Mariana Lopes",
-                "role": "Businesswoman",
-                "text": "Premium service from start to finish, sensational experience.",
-                "fullText": "Premium service from start to finish, sensational experience. Rick Travel took care of every detail with great professionalism. The tour was exclusive, comfortable, and super well-planned. Undoubtedly the best way to explore Rio."
-            },
-            "testimonial5": {
-                "author": "Danyela Viana",
-                "role": "Digital Influencer",
-                "text": "The helicopter tour was simply surreal!",
-                "fullText": "The helicopter tour was simply surreal! The aerial view of Christ the Redeemer and Guanabara Bay is something I will never forget. Impeccable organization, safety, and professionalism."
-            },
-            "testimonial6": {
-                "author": "Julia Cortez",
-                "role": "Journalist",
-                "text": "Extremely rich cultural itinerary and very well explained.",
-                "fullText": "Extremely rich cultural itinerary and very well explained. The guide demonstrated complete mastery of Rio's history, making the tour engaging and educational. Top-tier experience."
-            }
-        },
         "FAQs": {
             "title": "Frequently Asked Questions",
             "subtitle": "Quick and clear answers to the main questions about our tours, bookings, and experiences in Rio de Janeiro.",
@@ -70,11 +28,11 @@
             "questions": {
                 "q1": {
                     "question": "How long does it take to confirm the booking?",
-                    "answer": "Booking confirmation happens within 24 hours after payment. For urgent bookings, we offer express confirmation within 2 hours. Just contact our team."
+                    "answer": "The Rick Travel team confirms reservation details through the approved public channels."
                 },
                 "q2": {
                     "question": "What payment methods do you accept?",
-                    "answer": "We accept credit cards (Visa, Mastercard, and American Express), Pix, PayPal, and bank transfers. For companies, we also provide invoicing."
+                    "answer": "Payment questions are handled directly by the Rick Travel team through the approved public channels."
                 },
                 "q3": {
                     "question": "Can I change or cancel my booking?",
@@ -82,11 +40,31 @@
                 },
                 "q4": {
                     "question": "Do you serve international tourists?",
-                    "answer": "We serve tourists from all over the world. Our guides are Cadastur-licensed and speak Portuguese, English, and Spanish, ensuring a safe and personalized experience."
+                    "answer": "We serve travelers interested in Rio de Janeiro. Support is available in Portuguese, Spanish, and English."
                 },
                 "q5": {
                     "question": "What is the refund policy?",
-                    "answer": "Refunds are guaranteed for cancellations made up to 48 hours before the tour. In cases of adverse weather, we offer free rescheduling."
+                    "answer": "Cancellation and refund questions require confirmation from the Rick Travel team through the approved public channels."
+                }
+            }
+        },
+        "TravelerSupport": {
+            "eyebrow": "Traveler support",
+            "title": "Clear guidance for planning your Rio experience",
+            "subtitle": "Rick Travel helps travelers organize local tourism experiences with human support and approved public channels.",
+            "cardFooter": "Human support",
+            "items": {
+                "orientation": {
+                    "title": "Local orientation",
+                    "text": "Rick Travel offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil."
+                },
+                "languages": {
+                    "title": "Language support",
+                    "text": "Support is available in Portuguese, Spanish, and English."
+                },
+                "handoff": {
+                    "title": "Team confirmation",
+                    "text": "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
                 }
             }
         }
@@ -124,8 +102,8 @@
         "story": {
             "title": "Our Story",
             "imageAlt": "Ricardo, founder of Rick Travel",
-            "paragraph1": "Rick Travel was born from a passion for Rio de Janeiro and the desire to provide authentic experiences to visitors. Founded by Ricardo, a certified guide with hands-on experience in tourism, service, and trip planning across Rio de Janeiro, the company has a simple goal: to show Rio safely, organized, and with attention to detail.",
-            "paragraph2": "We operate with inspected and insured vehicles, prioritizing the safety and well-being of each client on every tour."
+            "paragraph1": "Rick Travel was born from a passion for Rio de Janeiro and the desire to provide authentic experiences to visitors. The company focuses on guided tours, local tourism experiences, personalized travel orientation, and traveler support.",
+            "paragraph2": "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
         },
         "whyChoose": {
             "title": "Why Choose Rick Travel",
@@ -135,12 +113,12 @@
                 "description": "Itineraries adapted to your interests, pace, and preferences. Each client is unique to us."
             },
             "certified": {
-                "title": "Cadastur Certified Guide",
-                "description": "Certified by the Ministry of Tourism, ensuring professionalism and knowledge on every tour."
+                "title": "Personalized Orientation",
+                "description": "Traveler support for planning local tourism experiences in Rio de Janeiro."
             },
             "security": {
-                "title": "Certified Safety",
-                "description": "Inspected vehicles, updated insurance, and rigorous safety protocols on all tours."
+                "title": "Human Support",
+                "description": "Quotes, reservations, schedules, payment, and final confirmation are handled by the Rick Travel team."
             },
             "local": {
                 "title": "Authentic Local Experience",
@@ -157,7 +135,7 @@
         },
         "mission": {
             "title": "Mission",
-            "description": "To offer safe, authentic, and memorable tourist experiences, connecting people to the culture and beauty of Rio de Janeiro."
+            "description": "To support travelers with local tourism experiences, clear information, and human service in Rio de Janeiro."
         },
         "vision": {
             "title": "Vision",
@@ -165,54 +143,50 @@
         },
         "values": {
             "title": "Values",
-            "item1": "Safety first",
+            "item1": "Clear information",
             "item2": "Punctuality and commitment",
             "item3": "Respect for local culture",
             "item4": "Excellence in service"
         },
         "security": {
-            "title": "Safety and Certification",
-            "subtitle": "Travel with peace of mind and legal support",
-            "certification": {
-                "registered": "Registered with the Ministry of Tourism",
-                "cadasturNumber": "",
-                "activeStatus": "Active registration",
-                "federalCompliance": "Federally compliant"
+            "eyebrow": "Traveler support",
+            "title": "Clear information and human support",
+            "subtitle": "Rick Travel helps travelers plan local tourism experiences in Rio de Janeiro with approved public contact channels.",
+            "supportInfo": {
+                "title": "Personalized orientation",
+                "description": "Rick Travel offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil."
             },
-            "guide": {
-                "name": "Ricardo Francisco",
-                "title": "Certified Guide",
-                "subtitle": "Ministry of Tourism",
-                "cadasturNumber": "",
-                "credential": "",
-                "imageAlt": "Ricardo, Rick Travel certified guide"
+            "handoffInfo": {
+                "title": "Human confirmation",
+                "description": "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
             },
             "operational": {
-                "title": "Operational Safety Standards",
-                "vehicles": {
-                    "title": "Inspected Vehicles",
-                    "description": "Regulated and inspected fleet"
+                "title": "Planning support",
+                "orientation": {
+                    "title": "Local tourism",
+                    "description": "Guided tours and local experiences in Rio de Janeiro"
                 },
-                "insurance": {
-                    "title": "Passenger Insurance",
-                    "description": "Full coverage on all tours"
+                "handoff": {
+                    "title": "Team follow-up",
+                    "description": "Quotes and final details handled by the Rick Travel team"
                 },
                 "support": {
-                    "title": "Punctuality & Support",
-                    "description": "Professional service"
+                    "title": "Language support",
+                    "description": "Portuguese, Spanish, and English"
                 }
             },
             "identity": {
                 "businessName": "Rick Travel",
-                "serviceFocus": "City Tour Rio de Janeiro",
-                "companyDocumentLabel": "CNPJ",
+                "serviceFocus": "Guided tours and local tourism experiences in Rio de Janeiro, Brazil",
+                "serviceLabel": "Service",
+                "serviceValue": "Traveler support",
                 "instagramLabel": "Instagram",
                 "whatsappLabel": "WhatsApp",
                 "emailLabel": "Email",
                 "languagesLabel": "Languages",
                 "languagesValue": "Portuguese, English and Spanish",
-                "serviceHoursLabel": "Service hours",
-                "serviceHoursValue": "Daily, 08:00–18:00"
+                "nextStepLabel": "Next step",
+                "nextStepValue": "Contact the Rick Travel team"
             }
         },
         "ctaFinal": {
@@ -265,7 +239,7 @@
     "BookingsPage": {
         "title": "My Bookings",
         "eyebrow": "Booking tracking",
-        "subtitle": "Review your pre-bookings, check each request status, and follow the Rick Travel team's manual confirmation.",
+        "subtitle": "Check your pre-bookings, see each request status, and follow the Rick Travel team manual confirmation.",
         "manualBadge": "Manual team confirmation",
         "statusBadge": "Clear booking status",
         "loading": "Loading bookings...",
@@ -290,8 +264,8 @@
         "guestCount": "{count, plural, one {# guest} other {# guests}}",
         "confirmationEyebrow": "Booking received",
         "confirmationTitle": "We received your pre-booking",
-        "confirmationIntro": "Your request was registered with pending status. Confirmation and payment details will be handled manually by the Rick Travel team.",
-        "manualConfirmationNotice": "No online payment was started. Our team will review availability and contact you to confirm the booking.",
+        "confirmationIntro": "Your request was received with pending status. Confirmation and payment details will be handled manually by the Rick Travel team.",
+        "manualConfirmationNotice": "No online payment was started. Our team will check the request and contact you to confirm the booking.",
         "tour": "Tour",
         "tourFallback": "Tour",
         "date": "Date",
@@ -307,14 +281,14 @@
             "pending": "Pending",
             "confirmed": "Confirmed",
             "canceled": "Canceled",
-            "inReview": "In review"
+            "inReview": "Manual check"
         },
         "paymentStatus": {
             "manualPending": "To be arranged with the team",
             "paid": "Paid",
             "refunded": "Refunded",
             "partial": "Partial",
-            "inReview": "In review"
+            "inReview": "Manual check"
         }
     },
     "LoginPage": {

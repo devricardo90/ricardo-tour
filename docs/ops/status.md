@@ -1,5 +1,38 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-08 - RT-AI-013 Remove Unsupported Website Credibility Claims
+
+State: REVIEW.
+
+RT-AI-013 was executed locally as the first controlled website correction after the approved-values audit.
+
+Files changed:
+- `app/[locale]/layout.tsx`
+- `app/[locale]/(public)/page.tsx`
+- `components/testimonials.tsx`
+- `components/about/security-section.tsx`
+- `messages/en.json`
+- `messages/pt.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `docs/ops/backlog.md`
+- `docs/ops/execution-log.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/status.md`
+
+Content result:
+- Metadata and homepage descriptions now use neutral approved positioning.
+- Hard-coded testimonials, customer names, customer quotes, and star UI were removed from the former testimonial section.
+- The replacement section is neutral traveler-support content only.
+- Cadastur seal content and CNPJ-like public display were removed from the security/support section.
+- Locale messages were updated to remove or neutralize unsupported credibility and social-proof wording used by the changed surfaces.
+
+Restrictions preserved:
+- No product document, architecture document, package file, lockfile, JSON/YAML seed file, API, backend, database, technical AI file, commit, or push was created or changed.
+- No actual CNPJ value, Cadastur numeric value, guide credential identifier, testimonial, rating, review, price, availability confirmation, payment detail, guarantee, customer data, private address, personal document, or unapproved credential value was added.
+
+---
+
 ## Update 2026-06-08 - RT-AI-013 Remove Unsupported Website Credibility Claims READY
 
 State: READY.
