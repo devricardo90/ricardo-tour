@@ -5,6 +5,28 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-013 READY Documentation Gate
+
+**Executed by:** Codex
+**Environment:** local; documentation operations only
+**Status:** READY opened; no production effect
+
+**Objective:**
+Open RT-AI-013 as a small correction-only website content safety task to remove or neutralize unsupported public credibility claims identified by RT-AI-012.
+
+**Result:**
+- RT-AI-013 marked as READY in operational documentation.
+- Future allowed file list registered for `app/[locale]/layout.tsx`, `app/[locale]/(public)/page.tsx`, `components/testimonials.tsx`, `components/about/security-section.tsx`, `messages/en.json`, `messages/pt.json`, `messages/es.json`, `messages/sv.json`, and allowed ops docs.
+- Future correction scope registered for Cadastur claims, credential-style guide/team claims, CNPJ-like public display, hard-coded testimonials, customer names, customer quotes, star ratings, review/rating labels, safety, insured, official, registered, guaranteed, and "safer" claims.
+- Approved neutral wording registered for guided tours, local tourism experiences, personalized travel orientation, traveler support in Rio de Janeiro, Brazil, and support in Portuguese, Spanish, and English.
+- Required future validation registered for Git scope checks, `npm.cmd run lint`, `npm.cmd run typecheck`, and targeted forbidden-content search across changed public files.
+
+**Restrictions preserved:**
+- No website file, app file, component file, messages file, product document, runtime file, implementation file, JSON, YAML, seed, API, backend, database, package file, lockfile, release/deployment file, commit, or push was created or changed.
+- No actual CNPJ value, Cadastur numeric value, guide credential identifier, testimonial, rating, price, availability statement, payment detail, guarantee, customer data, private address, personal document, or unapproved credential value was added.
+
+---
+
 ## 2026-06-08 - RT-AI-012 Website Approved Values Audit Documentation
 
 **Executed by:** Codex
@@ -32,7 +54,7 @@ Execute RT-AI-012 by creating a documentation-only audit of current website copy
 
 **Restrictions preserved:**
 - No website code, component, app file, message file, style file, architecture document, runtime file, implementation file, JSON, YAML, seed, API, frontend, backend, database, package file, lockfile, production release action, commit, or push was created or changed.
-- No actual CNPJ value, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial value, rating approval, price approval, availability approval, guarantee, or real credential value was added.
+- No actual CNPJ value, Cadastur number, guide credential identifier, personal document, private address, customer data, payment data, testimonial value, rating approval, price approval, availability approval, guarantee, or credential value was added.
 
 ---
 

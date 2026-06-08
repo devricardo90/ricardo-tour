@@ -779,8 +779,66 @@ Scope executed:
 
 Restrictions preserved:
 - No website code, components, app files, message files, styles, architecture documents, runtime files, implementation files, JSON, YAML, seed, API, frontend, backend, database, package files, lockfiles, production release action, commit, or push were created or changed.
-- No actual CNPJ value, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial value, rating approval, price approval, availability approval, guarantee, or real credential value was added.
+- No actual CNPJ value, Cadastur number, guide credential identifier, personal document, private address, customer data, payment data, testimonial value, rating approval, price approval, availability approval, guarantee, or credential value was added.
 
 Next step:
 - Review `docs/product/ai-concierge-website-approved-values-audit.md`.
 - Do not fix website copy, synchronize messages, approve credentials, publish testimonials, or change public content without a separate explicit task.
+
+## RT-AI-013 READY - Remove Unsupported Website Credibility Claims
+
+State: READY on 2026-06-08.
+
+Objective: remove or neutralize unsupported public credibility claims from the current website and align public copy with owner-approved values from RT-AI-010 and credibility rules from RT-AI-011.
+
+Context:
+- RT-AI-012 is Remote DONE at commit `490bc01d1587c4249f18209509f5711cb58a55b0`.
+- RT-AI-012 audit result is `PASS_WITH_REVIEW_ITEMS`.
+- Review items include metadata Cadastur/credential claims, homepage licensed/accredited/certified team wording, rendered testimonials/ratings/attribution content, and security-section Cadastur/CNPJ-like public content.
+
+Future implementation files allowed:
+- `app/[locale]/layout.tsx`
+- `app/[locale]/(public)/page.tsx`
+- `components/testimonials.tsx`
+- `components/about/security-section.tsx`
+- `messages/en.json`
+- `messages/pt.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `docs/ops/backlog.md`
+- `docs/ops/execution-log.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/status.md`
+
+Future correction scope:
+- Remove or neutralize Cadastur claims.
+- Remove or neutralize accredited, credentialed, licensed, or certified guide/team claims.
+- Remove CNPJ-like public display.
+- Remove hard-coded testimonials, customer names, customer quotes, star ratings, and review/rating labels.
+- Remove or neutralize safety, insured, official, registered, guaranteed, or "safer" claims unless already approved.
+- Remove fast-response claims if phrased as a guarantee.
+
+Approved neutral wording:
+- "Rick Travel offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil."
+- "Support is available in Portuguese, Spanish, and English."
+- "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
+
+Restrictions for this READY opening:
+- Website files were not modified.
+- Product documents were not modified.
+- No app file, component file, messages file, runtime file, implementation file, JSON, YAML, seed, API, backend, database, package file, lockfile, release/deployment file, commit, or push was created or changed.
+- No actual CNPJ value, Cadastur numeric value, guide credential identifier, testimonial, rating, price, availability statement, payment detail, guarantee, customer data, private address, personal document, or unapproved credential value was added.
+
+Future validation:
+- `git status --short --untracked-files=all`
+- `git status -sb`
+- `git diff --name-only`
+- `git diff --stat`
+- `git diff --check`
+- `npm.cmd run lint`
+- `npm.cmd run typecheck`
+- Targeted forbidden-content search across changed public files for `CNPJ|Cadastur|credential|certified|licensed|registered|insured|official|safe|guarantee|testimonial|review|rating`.
+
+Next step:
+- Execute RT-AI-013 only when explicitly authorized by a separate execution gate.
+- Do not add credential evidence, testimonials, ratings, prices, availability, payment details, guarantees, private data, or technical AI work in this correction task.

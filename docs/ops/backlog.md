@@ -2182,4 +2182,72 @@ Execution state: RT-AI-012 opened as READY in operational documentation only. No
 
 Evidence created: `docs/product/ai-concierge-website-approved-values-audit.md` and operational documentation updated.
 
-Execution result: website approved-values audit created locally; RT-AI-012 moved to REVIEW. The audit result is `PASS_WITH_REVIEW_ITEMS`: the website contains approved low-risk public values, but also contains blocked or pending Cadastur, credential, safety, testimonial, rating, price, availability, payment, guarantee, and trust-claim content that requires review or rewrite before any future website sync. No website code, component, app file, message file, style file, JSON, YAML, seed, API, frontend, backend, database, package file, lockfile, runtime file, implementation file, real CNPJ value, Cadastur number, guide credential identifier, testimonial text, rating approval, price approval, availability approval, guarantee, customer data, payment data, private address, personal document, commit, or push was created or changed.
+Execution result: website approved-values audit created locally; RT-AI-012 moved to REVIEW. The audit result is `PASS_WITH_REVIEW_ITEMS`: the website contains approved low-risk public values, but also contains blocked or pending Cadastur, credential, safety, testimonial, rating, price, availability, payment, guarantee, and trust-claim content that requires review or rewrite before any future website sync. No website code, component, app file, message file, style file, JSON, YAML, seed, API, frontend, backend, database, package file, lockfile, runtime file, implementation file, actual CNPJ value, Cadastur number, guide credential identifier, testimonial text, rating approval, price approval, availability approval, guarantee, customer data, payment data, private address, personal document, commit, or push was created or changed.
+
+## RT-AI-013 Remove Unsupported Website Credibility Claims
+
+State: READY
+
+Objective: remove or neutralize unsupported public credibility claims from the current website and align public copy with owner-approved values from RT-AI-010 and credibility rules from RT-AI-011.
+
+Type: UI/UX + CONTENT SAFETY. This future task is a small correction-only website task. It must not add new public credibility evidence, new testimonials, new ratings, new prices, new availability statements, new payment details, new guarantees, customer data, private addresses, personal documents, technical AI work, or data/model/backend scope.
+
+Future implementation files allowed:
+- `app/[locale]/layout.tsx`
+- `app/[locale]/(public)/page.tsx`
+- `components/testimonials.tsx`
+- `components/about/security-section.tsx`
+- `messages/en.json`
+- `messages/pt.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `docs/ops/backlog.md`
+- `docs/ops/execution-log.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/status.md`
+
+Future correction scope:
+- Remove or neutralize Cadastur claims.
+- Remove or neutralize accredited, credentialed, licensed, or certified guide/team claims.
+- Remove CNPJ-like public display.
+- Remove hard-coded testimonials, customer names, customer quotes, star ratings, and review/rating labels.
+- Remove or neutralize safety, insured, official, registered, guaranteed, or "safer" claims unless already approved.
+- Remove fast-response claims if phrased as a guarantee.
+
+Approved neutral wording allowed:
+- "Rick Travel offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil."
+- "Support is available in Portuguese, Spanish, and English."
+- "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
+
+Rules:
+- Testimonials must be removed entirely for this task, not replaced with testimonial-like placeholders.
+- A neutral traveler-support section is allowed only if it contains no customer quote, rating, review count, ranking, or satisfaction claim.
+- Cadastur and CNPJ-like content must be removed or hidden until credential validation and explicit owner approval exist.
+- Public copy must stay aligned with approved brand, service base, languages, contact channels, general guided tours, local tourism experiences, and traveler support.
+
+Out of scope:
+- Do not add actual CNPJ values, Cadastur numeric values, guide credential identifiers, testimonials, ratings, prices, availability statements, payment details, guarantees, customer data, private addresses, personal documents, AI data-model work, chatbot work, RAG work, embeddings work, LangChain work, LangGraph work, API work, backend work, database work, seed files, JSON/YAML files, package files, lockfiles, or release/deployment scope.
+- Do not modify website files during this READY opening.
+- Do not modify product documents during this READY opening.
+- Do not commit or push in this READY opening.
+
+Validation required before REVIEW:
+- `git status --short --untracked-files=all`
+- `git status -sb`
+- `git diff --name-only`
+- `git diff --stat`
+- `git diff --check`
+- `npm.cmd run lint`
+- `npm.cmd run typecheck`
+- Targeted forbidden-content search across changed public files for `CNPJ|Cadastur|credential|certified|licensed|registered|insured|official|safe|guarantee|testimonial|review|rating`.
+
+Acceptance criteria:
+- Unsupported Cadastur, CNPJ-like, credential, certification, testimonial, rating, safety, guarantee, and similar public credibility claims are removed or neutralized only within the allowed future files.
+- Public copy uses approved neutral wording or existing owner-approved values only.
+- No testimonials, customer names, customer quotes, star ratings, review counts, rankings, prices, availability confirmations, payment details, guarantees, customer data, private addresses, personal documents, or unapproved credential values are added.
+- No app implementation beyond copy/content correction is introduced.
+- No product document, package, lockfile, JSON/YAML, seed, API, backend, database, runtime, or technical AI file is changed.
+
+Risk: medium. The main risk is accidentally replacing blocked claims with new unsupported claims instead of neutral approved wording.
+
+Execution state: RT-AI-013 opened as READY in operational documentation only. No website file, product document, runtime file, implementation file, JSON, YAML, seed, API, backend, database, package file, lockfile, commit, or push was created or changed.

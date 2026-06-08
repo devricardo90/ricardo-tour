@@ -1,5 +1,38 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-08 - RT-AI-013 Remove Unsupported Website Credibility Claims READY
+
+State: READY.
+
+RT-AI-013 was opened as a small correction-only website content safety task after RT-AI-012 Remote DONE at commit `490bc01`.
+
+Future objective:
+- Remove or neutralize unsupported public credibility claims from current website copy and align public copy with owner-approved values from RT-AI-010 and credibility rules from RT-AI-011.
+
+Future allowed implementation files:
+- `app/[locale]/layout.tsx`
+- `app/[locale]/(public)/page.tsx`
+- `components/testimonials.tsx`
+- `components/about/security-section.tsx`
+- `messages/en.json`
+- `messages/pt.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `docs/ops/backlog.md`
+- `docs/ops/execution-log.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/status.md`
+
+Future correction scope:
+- Remove or neutralize Cadastur claims, accredited/credentialed/licensed/certified guide or team claims, CNPJ-like public display, hard-coded testimonials, customer names, customer quotes, star ratings, review/rating labels, safety, insured, official, registered, guaranteed, or "safer" claims unless already approved.
+- Use only approved neutral wording for guided tours, local tourism experiences, personalized travel orientation, traveler support in Rio de Janeiro, Brazil, and support in Portuguese, Spanish, and English.
+
+Restrictions preserved in this READY opening:
+- No website, app, component, messages, product document, runtime, implementation, JSON, YAML, seed, API, backend, database, package, lockfile, release/deployment, commit, or push changes were made.
+- No actual CNPJ value, Cadastur numeric value, guide credential identifier, testimonial, rating, price, availability statement, payment detail, guarantee, customer data, private address, personal document, or unapproved credential value was added.
+
+---
+
 ## Update 2026-06-08 - RT-AI-012 Website Approved Values Audit Documentation
 
 State: REVIEW.
@@ -21,7 +54,7 @@ Content registered:
 
 Restrictions preserved:
 - No website code, component, app file, message file, style file, architecture document, runtime file, implementation file, JSON, YAML, seed, API, frontend, backend, database, package file, lockfile, production release action, commit, or push was created or changed.
-- No actual CNPJ value, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial value, rating approval, price approval, availability approval, guarantee, or real credential value was added.
+- No actual CNPJ value, Cadastur number, guide credential identifier, personal document, private address, customer data, payment data, testimonial value, rating approval, price approval, availability approval, guarantee, or credential value was added.
 
 ---
 
