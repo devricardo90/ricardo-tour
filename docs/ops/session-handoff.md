@@ -496,7 +496,7 @@ Scope executed:
 - Defined validation criteria before any implementation task.
 
 Restrictions preserved:
-- No KB records, JSON/YAML, seed implementation, `data/`, `prisma/seed.ts`, `messages/*.json`, frontend, backend, API, Prisma schema, database, admin, bookings, payments, users, private contacts, analytics, logs, environment, package, lockfile, deployment, embeddings, LangChain, LangGraph, RAG implementation, or chat UI were changed.
+- No KB records, JSON/YAML, seed implementation, `data/`, `prisma/seed.ts`, `messages/*.json`, frontend, backend, API, Prisma schema, database, admin, bookings, payments, users, private contacts, analytics, logs, environment, package, lockfile, deployment, embeddings, LangChain, LangGraph, RAG work, or chat UI were changed.
 - No commit or push was executed.
 - RT-AI-007 was not opened.
 
@@ -530,7 +530,7 @@ Required fields for every future record:
 
 Restrictions for this READY opening:
 - `docs/product/ai-concierge-first-curated-kb-records.md` was not created.
-- No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML seed files, embeddings, RAG implementation, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push.
+- No code, frontend, backend/API, Prisma/schema, `data/`, JSON/YAML seed files, embeddings, RAG work, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push.
 - No real payment information or invented Cadastur/CNPJ, phone, email, opening hours, response time, ratings, reviews, safety, insurance, or certification claims.
 
 Next step:
@@ -560,7 +560,7 @@ Scope executed:
 - Kept payment, cancellation, refund, Cadastur, CNPJ, trust, ratings, safety, insurance, and certification claims blocked or pending unless exact evidence is approved.
 
 Restrictions preserved:
-- No machine-readable KB data, JSON/YAML seed files, code, frontend, backend/API, Prisma/schema, `data/`, embeddings, RAG implementation, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push.
+- No machine-readable KB data, JSON/YAML seed files, code, frontend, backend/API, Prisma/schema, `data/`, embeddings, RAG work, LangChain, LangGraph, chat UI, package, lockfile, environment, deployment, commit, or push.
 - No real payment information or invented Cadastur/CNPJ, phone, email, opening hours, response time, ratings, reviews, safety, insurance, or certification claims.
 
 Next step:
@@ -713,7 +713,7 @@ Required future rules:
 
 Restrictions for this READY opening:
 - No product document was modified.
-- No real CNPJ, Cadastur number, guide document, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or credential value was added.
+- No actual CNPJ value, Cadastur number, guide document, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or credential value was added.
 - No runtime or implementation files were changed.
 - No commit or push performed.
 
@@ -726,5 +726,28 @@ Execution result:
 - Mandatory human handoff rules are defined for legal/tax/credential disputes, document requests, stale evidence, conflicting evidence, named guide certification questions, safety/legal/insurance claims, and anything pending or blocked.
 
 Restrictions preserved in execution:
-- No real CNPJ, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or real credential value was added.
+- No actual CNPJ value, Cadastur number, guide credential identifier, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or actual credential value was added.
 - No runtime, implementation, JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, commit, or push was created or changed.
+
+## RT-AI-012 READY - Audit Website Against Approved Public Values
+
+State: READY on 2026-06-08.
+
+Objective: define a documentation-only audit of current website copy and content against approved public business values, public credibility evidence scope, blocked/pending credibility claims, and AI/human handoff rules.
+
+Context:
+- RT-AI-011 is Remote DONE at commit `7b231bcea89c4845c5e9c8909727832a888ba52f`.
+- Approved public values now exist for brand, service base, service languages, public contact channels, institutional text, and AI handoff rules.
+- CNPJ, Cadastur, guide credentials, testimonials, ratings, review counts, rankings, prices, availability, guarantees, and unsupported trust claims remain blocked or pending unless already explicitly approved in current governance documents.
+
+Future audit scope:
+- Identify website content that is safe and approved.
+- Identify website content that should be removed.
+- Identify website content that should be rewritten.
+- Identify website content that must remain blocked or pending.
+- Identify website areas that may need later implementation only after separate review and approval.
+
+Restrictions for this READY opening:
+- No website code, components, app files, message files, product documents, architecture documents, runtime files, implementation files, JSON, YAML, seed, API, frontend, backend, database, AI technical assets, deploy files, package files, or lockfiles were changed.
+- No actual CNPJ values, Cadastur numeric values, guide credential identifiers, personal documents, private addresses, customer information, payment information, testimonials, ratings, review counts, rankings, prices, availability statements, guarantees, or credential values were added.
+- No commit or push performed.

@@ -1,5 +1,27 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-08 - RT-AI-012 Website Approved Values Audit READY
+
+State: READY.
+
+RT-AI-012 was opened as a documentation-only audit task after RT-AI-011 Remote DONE at commit `7b231bc`.
+
+Future objective:
+- Audit current website copy and content against approved public business values, public credibility evidence scope, blocked/pending credibility claims, and AI/human handoff rules.
+
+Future scope:
+- Identify website content that is safe and approved.
+- Identify website content that should be removed.
+- Identify website content that should be rewritten.
+- Identify website content that must remain blocked or pending.
+- Identify website areas that need later implementation only after separate review.
+
+Restrictions preserved:
+- No website code, components, app files, message files, product documents, architecture documents, runtime files, implementation files, JSON, YAML, seed, API, frontend, backend, database, AI technical assets, deploy files, package files, lockfiles, commit, or push were created or changed in this READY opening.
+- No actual CNPJ values, Cadastur numeric values, guide credential identifiers, personal documents, private addresses, customer information, payment information, testimonials, ratings, review counts, rankings, prices, availability statements, guarantees, or credential values were added.
+
+---
+
 ## Update 2026-06-08 - RT-AI-011 Public Credibility Evidence Approval Scope READY
 
 State: READY.
@@ -29,7 +51,7 @@ Required future rules:
 
 Restrictions preserved:
 - No product document was modified in this READY opening.
-- No real CNPJ, Cadastur number, guide document, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or credential value was added.
+- No actual CNPJ value, Cadastur number, guide document, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or credential value was added.
 - No JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, runtime file, implementation file, commit, or push was created or changed.
 
 ---
@@ -55,7 +77,7 @@ Content registered:
 - Trust badge, claim, testimonial, social proof, and required record-field rules.
 
 Restrictions preserved:
-- No real CNPJ, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or real credential value was added.
+- No actual CNPJ value, Cadastur number, guide credential identifier, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or actual credential value was added.
 - No runtime, implementation, JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, commit, or push was created or changed.
 
 ---
@@ -708,7 +730,7 @@ Content registered:
 - Validation criteria before any implementation task.
 
 Restrictions preserved:
-- No KB records, JSON/YAML data files, seed implementation, `data/`, `prisma/seed.ts`, `messages/*.json`, frontend, backend, API, Prisma schema, database, admin, bookings, payments, users, contacts, analytics, logs, environment, package, lockfile, deployment, embeddings, LangChain, LangGraph, RAG implementation, or chat UI were changed.
+- No KB records, JSON/YAML data files, seed implementation, `data/`, `prisma/seed.ts`, `messages/*.json`, frontend, backend, API, Prisma schema, database, admin, bookings, payments, users, contacts, analytics, logs, environment, package, lockfile, deployment, embeddings, LangChain, LangGraph, RAG work, or chat UI were changed.
 - No commit or push was executed.
 - RT-AI-007 was not opened.
 

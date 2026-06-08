@@ -5,6 +5,27 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-012 READY Documentation Gate
+
+**Executed by:** Codex
+**Environment:** local; documentation operations only
+**Status:** READY opened; no production effect
+
+**Objective:**
+Open RT-AI-012 as a documentation-only audit task to compare current website copy and content against approved public business values, public credibility evidence rules, blocked/pending credibility claims, and AI/human handoff rules.
+
+**Result:**
+- RT-AI-012 marked as READY in operational documentation.
+- Future audit scope registered for safe/approved website content, removal candidates, rewrite candidates, blocked/pending content, and website areas needing later review before implementation.
+- Required rule registered that the future audit must not change website code, components, app files, message files, product documents, architecture documents, runtime files, implementation files, data files, package files, lockfiles, or deploy files.
+- Required rule registered that blocked/pending credibility claims must remain blocked or pending unless already explicitly approved in current governance documents.
+
+**Restrictions preserved:**
+- No website file, product document, architecture document, runtime file, implementation file, JSON, YAML, seed, API, frontend, backend, database, AI technical asset, deploy file, package file, lockfile, commit, or push was created or changed.
+- No actual CNPJ values, Cadastur numeric values, guide credential identifiers, personal documents, private addresses, customer information, payment information, testimonials, ratings, review counts, rankings, prices, availability statements, guarantees, or credential values were added.
+
+---
+
 ## 2026-06-08 - RT-AI-011 Public Credibility Evidence Approval Scope Documentation
 
 **Executed by:** Codex
@@ -33,7 +54,7 @@ Execute RT-AI-011 as a documentation-only product task by creating the public cr
 - RT-AI-011 moved to REVIEW.
 
 **Restrictions preserved:**
-- No real CNPJ, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or real credential value was added.
+- No actual CNPJ value, Cadastur number, guide credential identifier, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or actual credential value was added.
 - No runtime, implementation, JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, commit, or push was created or changed.
 
 ---
@@ -57,7 +78,7 @@ Open RT-AI-011 as a documentation-only task to define public credibility evidenc
 
 **Restrictions preserved:**
 - No product document was modified in this READY opening.
-- No real CNPJ, Cadastur number, guide document, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or credential value was added.
+- No actual CNPJ value, Cadastur number, guide document, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or credential value was added.
 - No code, API, frontend, backend, database, JSON, YAML, seed, package file, lockfile, RAG, embeddings, LangChain, LangGraph, chatbot, runtime, deploy, commit, or push was created or changed.
 
 ---
@@ -277,7 +298,7 @@ Execute RT-AI-006 as a documentation-only product task by creating the first app
 - RT-AI-006 moved to REVIEW.
 
 **Restrictions preserved:**
-- No KB records, JSON/YAML data files, seed implementation, `data/`, `prisma/seed.ts`, `messages/*.json`, code, frontend, backend, API, Prisma schema, database, admin, bookings, payments, users, contacts, analytics, logs, environment, package, lockfile, deployment, embeddings, LangChain, LangGraph, RAG implementation, or chat UI were changed.
+- No KB records, JSON/YAML data files, seed implementation, `data/`, `prisma/seed.ts`, `messages/*.json`, code, frontend, backend, API, Prisma schema, database, admin, bookings, payments, users, contacts, analytics, logs, environment, package, lockfile, deployment, embeddings, LangChain, LangGraph, RAG work, or chat UI were changed.
 - No commit or push was executed.
 - RT-AI-007 was not opened.
 

@@ -2091,8 +2091,8 @@ Required future rules:
 - Missing, stale, private, conflicting, or unsupported credibility evidence must remain blocked or require human handoff.
 
 Out of scope:
-- Do not add real CNPJ.
-- Do not add real Cadastur number.
+- Do not add an actual CNPJ value.
+- Do not add a Cadastur numeric value.
 - Do not add guide documents, credential numbers, personal documents, private addresses, customer data, payment data, testimonial text, prices, availability, guarantees, or credential values.
 - Do not modify `docs/product/ai-concierge-approved-public-business-evidence-values.md` in this READY opening.
 - Do not modify `docs/product/ai-concierge-verified-business-evidence-records.md` in this READY opening.
@@ -2121,4 +2121,61 @@ Risk: high. The main risk is accidentally turning legal identity, Cadastur, guid
 
 Evidence created: `docs/product/ai-concierge-public-credibility-evidence-approval-scope.md` and operational documentation updated.
 
-Execution state: product credibility evidence approval scope document created locally; RT-AI-011 moved to REVIEW. The document defines approval scope and blocking/handoff rules only. No real CNPJ, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, real credential value, runtime file, implementation file, JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, commit, or push was created or changed.
+Execution state: product credibility evidence approval scope document created locally; RT-AI-011 moved to REVIEW. The document defines approval scope and blocking/handoff rules only. No actual CNPJ value, Cadastur number, guide credential identifier, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, actual credential value, runtime file, implementation file, JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, commit, or push was created or changed.
+
+## RT-AI-012 Audit Website Against Approved Public Values
+
+State: READY
+
+Objective: define a documentation-only audit of current website copy and content against approved public business values, public credibility evidence scope, blocked/pending credibility claims, and AI/human handoff rules.
+
+Type: PRODUCT/CONTENT AUDIT DOCUMENTATION. This future task must inspect website content and produce an audit note only. It must not modify website code, components, app files, message files, product documents, architecture documents, runtime files, implementation files, data files, dependencies, deploy configuration, or package metadata.
+
+Audit scope allowed in the future execution:
+- Identify website content that is safe and already approved.
+- Identify website content that should be removed.
+- Identify website content that should be rewritten.
+- Identify website content that must remain blocked or pending.
+- Identify website areas that may need later implementation only after separate review and approval.
+- Compare website copy against `docs/product/ai-concierge-approved-public-business-evidence-values.md`.
+- Compare website credibility claims against `docs/product/ai-concierge-public-credibility-evidence-approval-scope.md`.
+- Preserve AI/human handoff rules already approved in the evidence documents.
+
+Operational docs allowed in the future execution:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Required future rules:
+- The audit must be documentation-only.
+- The audit must not change code, UI, messages, data, product documents, or architecture documents.
+- Existing approved public values may be marked safe for website use only when the approval record explicitly allows website use.
+- CNPJ, Cadastur, guide credentials, trust badges, testimonials, ratings, review counts, rankings, prices, availability, guarantees, safety claims, insurance claims, and certification-style claims must remain blocked or pending unless already explicitly approved in current governance documents.
+- Website approval and future AI Concierge approval remain separate explicit decisions.
+- Any website content touching missing, stale, disputed, pending, blocked, private, legal, tax, credential, safety, insurance, payment, price, or availability evidence must be marked for human review or removal/rewrite.
+
+Out of scope:
+- Do not modify website code, components, app files, message files, product documents, architecture documents, runtime files, implementation files, JSON, YAML, seed, API, frontend, backend, database, package files, lockfiles, deploy configuration, or AI technical assets.
+- Do not add actual CNPJ values, Cadastur numeric values, guide credential identifiers, personal documents, private addresses, customer information, payment information, testimonials, ratings, review counts, rankings, prices, availability statements, guarantees, or credential values.
+- Do not add new approvals for verified, certified, licensed, registered, insured, safe, or official claims unless those claims already have explicit approval in current governance documents.
+- Do not commit or push in this READY opening.
+
+Acceptance criteria for the future task:
+- Produces a documentation-only audit note plus allowed ops updates when explicitly authorized.
+- Lists approved website-safe content and the source approval record.
+- Lists blocked, pending, risky, stale, unsupported, or rewrite-needed website content.
+- Confirms no website implementation or content changes were made during the audit.
+- Confirms no product document, architecture document, runtime file, implementation file, data file, package file, lockfile, or deploy file was changed.
+
+Validation required before REVIEW:
+- `git status --short --untracked-files=all`
+- `git status -sb`
+- `git diff --name-only`
+- `git diff --stat`
+- `git diff --check`
+- Forbidden scope search across allowed ops docs.
+
+Risk: medium. The main risk is accidentally turning an audit finding into a website change or treating blocked credibility claims as approved public content.
+
+Execution state: RT-AI-012 opened as READY in operational documentation only. No website file, product document, architecture document, runtime file, implementation file, JSON, YAML, seed, API, frontend, backend, database, AI technical asset, deploy file, package file, lockfile, commit, or push was created or changed.
