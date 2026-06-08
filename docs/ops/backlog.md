@@ -2019,84 +2019,59 @@ Execution state: product evidence governance document created locally; RT-AI-008
 
 ## RT-AI-009 Define Approved Public Business Evidence Values
 
-State: REVIEW.
+State: DONE
 
 Objective: create a separate approved-values register for real Rick Travel business evidence values that the owner explicitly approves for public, website, and/or future AI Concierge use.
 
-Type: PRODUCT DOCUMENTATION. This future task must record approved values only as documentation. It must not implement runtime ingestion, create machine-readable KB data, JSON/YAML seed files, embeddings, RAG runtime, LangChain, LangGraph, API routes, chat UI, code, database changes, deploy, or publication changes.
+Type: PRODUCT DOCUMENTATION. This task produced a separate approved-values register.
 
-Context:
-- RT-AI-008 is Remote DONE at commit `366660c`.
-- RT-AI-008 created `docs/product/ai-concierge-verified-business-evidence-records.md` as the evidence schema/governance layer.
-- RT-AI-009 must use a separate product document to avoid mixing format rules with real business data.
+Product file created:
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md`
+
+Result:
+- Separate approved-values register created from the RT-AI-008 evidence governance document.
+- Sections created for public website use, future AI Concierge use, internal/handoff use, pending owner confirmation, and blocked/sensitive values.
+- No real approved business values were added.
+- Pending owner confirmation records created for CNPJ/legal identity, Cadastur, guide credential, public WhatsApp, public email, social links, service hours, booking policy, payment policy, cancellation/refund policy, published tours, official photos, reviews/testimonials, and insurance/certificates/licenses/safety claims.
+- Blocked records created for private personal data, operational/customer/payment/admin data, and unsupported public claims.
+- Runtime and technical implementation remain blocked without a separate task.
+
+Evidence: commit `a4668a7c8d61619561cff883526e895359b8000b` pushed to `origin/main`.
+
+## RT-AI-010 Add First Owner-Approved Public Business Evidence Values
+
+State: READY
+
+Objective: add the first owner-approved public business evidence values to the existing approved business evidence document.
+
+Type: PRODUCT DOCUMENTATION. This task must only update the product document and must not implement runtime, JSON, YAML, seed, or code changes.
 
 Product file allowed in the future execution:
 - `docs/product/ai-concierge-approved-public-business-evidence-values.md`
 
-Operational docs allowed:
-- `docs/ops/backlog.md`
-- `docs/ops/status.md`
-- `docs/ops/session-handoff.md`
-- `docs/ops/execution-log.md`
+Approved values proposed for RT-AI-010 execution:
+1. Public brand name: Rick Travel
+2. Customer-facing name: Rick Travel
+3. Approved short description: Rick Travel is a travel agency focused on local tourism experiences in Rio de Janeiro, Brazil...
+4. Main service base: Rio de Janeiro, Brazil
+5. Approved service regions: Rio de Janeiro, Brazil
+6. Approved service languages: Portuguese, Spanish, English
+7. Approved general services: Guided tours, tourist experiences, visits to main attractions, travel orientation, initial support.
+8. Approved contact channels: WhatsApp (+55 21 96681-9928), Email (contact@travelrick.com), Instagram (@ricktravelbrasil).
+9. Institutional website text approved for site and AI.
+10. AI Concierge allowed answers and handoff rules defined.
 
-Required future scope:
-- record only explicitly owner-approved values;
-- require each value to follow the RT-AI-008 evidence format;
-- require exact value, evidence source, source type, source authority, owner approval, `reviewedAt`, `updatedAt`, `approvalStatus`, `publicAllowed`, `websiteAllowed`, `aiAllowed`, `handoffRequired`, `riskLevel`, and limitation notes;
-- default `publicAllowed`, `websiteAllowed`, and `aiAllowed` to `false`;
-- document that screenshots alone are not sufficient for high-risk categories;
-- keep runtime usage blocked until a future technical implementation task.
+Restrictions:
+- Do not add CNPJ, Cadastur number, private address, or personal documents.
+- Do not add prices, schedules, availability, or booking confirmation rules.
+- Do not claim "best price", "guaranteed availability", or "24/7 support".
+- No runtime implementation, JSON, YAML, seed, API, frontend, backend, or database changes.
 
-Evidence categories for the future task:
-- CNPJ / legal entity / trade name;
-- Cadastur company record;
-- guide credential;
-- public WhatsApp;
-- public email;
-- official social media links;
-- service hours;
-- booking policy;
-- payment policy;
-- cancellation/refund policy;
-- published tours;
-- official photos;
-- reviews/testimonials;
-- insurance, certificates, licenses, or safety-related claims.
-
-Blocked in this READY opening:
-- Do not create `docs/product/ai-concierge-approved-public-business-evidence-values.md`.
-- Do not add real business values.
-- Do not add CPF, private address, private phone, private email, signatures, QR codes, document scans, payment keys, passwords, tokens, `.env`, admin data, booking data, payment data, contact submissions, analytics, logs, or credentials.
-- Do not create JSON.
-- Do not create YAML.
-- Do not create seed.
-- Do not alter `data/`.
-- Do not alter `prisma/`.
-- Do not alter API.
-- Do not alter frontend.
-- Do not alter backend.
-- Do not alter schema.
-- Do not alter package or lockfiles.
-- Do not create embeddings.
-- Do not implement RAG.
-- Do not install or configure LangChain.
-- Do not install or configure LangGraph.
-- Do not add chatbot.
-- Do not deploy.
-- Do not change database.
-- Do not ingest anything into runtime.
-- Do not commit or push in this READY opening.
-
-High-risk evidence rule:
-- Screenshots alone are not sufficient to approve CNPJ, Cadastur, guide credentials, payment policies, cancellation/refund policies, reviews/testimonials, insurance, certificates, licenses, safety claims, official photos, or any sensitive/public contact value.
-- CPF, passwords, tokens, `.env`, admin data, booking data, payment data, contact submissions, analytics, logs, credentials, private addresses, private phones, private emails, signatures, QR codes, document scans, and payment keys remain blocked even if present in owner-provided material.
-
-Acceptance criteria for the future task:
-- Creates only `docs/product/ai-concierge-approved-public-business-evidence-values.md` plus allowed ops docs.
-- Records only exact owner-approved values with source, owner, review date, usage permissions, risk level, and limitation notes.
-- No value is public, website-safe, or AI-safe by default.
-- Sensitive categories remain `PENDING_OWNER_APPROVAL` or `BLOCKED` unless evidence and explicit owner approval are clear.
-- Runtime usage remains blocked without a future technical implementation task.
+Acceptance criteria:
+- Update `docs/product/ai-concierge-approved-public-business-evidence-values.md` with proposed approved values.
+- Follow RT-AI-008 format for each record.
+- No real sensitive data added.
+- No runtime ingestion.
 
 Validation required before REVIEW:
 - `git status --short --untracked-files=all`
@@ -2104,10 +2079,3 @@ Validation required before REVIEW:
 - `git diff --name-only`
 - `git diff --stat`
 - `git diff --check`
-- `git diff --cached --name-only`
-
-Risk: critical. The main risk is accidentally recording sensitive/private data or treating a real business value as public, website-safe, or AI-safe before exact evidence, owner approval, and explicit usage permissions exist.
-
-Evidence created: `docs/product/ai-concierge-approved-public-business-evidence-values.md` and operational documentation updated.
-
-Execution state: product approved-values register created locally; RT-AI-009 moved to REVIEW. No real approved business values were added. The document records empty approved sections, pending owner confirmation records, blocked sensitive values, and runtime implementation blockers. No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, database change, runtime ingestion, commit, or push was created or changed.

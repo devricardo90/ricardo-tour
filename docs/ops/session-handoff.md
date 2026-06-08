@@ -655,32 +655,29 @@ Next step:
 - Execute RT-AI-009 only when explicitly authorized, creating `docs/product/ai-concierge-approved-public-business-evidence-values.md`.
 - Keep the future task documentation-only and do not create runtime ingestion or technical implementation artifacts.
 
-## RT-AI-009 REVIEW - Approved Public Business Evidence Values
+## RT-AI-009 DONE - Approved Public Business Evidence Values
 
-State: REVIEW on 2026-06-08.
+State: Remote DONE on 2026-06-08 (commit `a4668a7`).
 
-Objective: create the first documentation-only approved-values register for Rick Travel public business evidence values.
+Result:
+- Product file `docs/product/ai-concierge-approved-public-business-evidence-values.md` created.
+- Approved-values register structure established with all required governance sections and fields.
+- No real business values added yet.
+- Runtime and technical implementation remain blocked.
 
-Product file created:
-- `docs/product/ai-concierge-approved-public-business-evidence-values.md`
+## RT-AI-010 READY - Add First Owner-Approved Public Business Evidence Values
 
-Operational docs updated:
-- `docs/ops/backlog.md`
-- `docs/ops/status.md`
-- `docs/ops/session-handoff.md`
-- `docs/ops/execution-log.md`
+State: READY on 2026-06-08.
 
-Scope executed:
-- Created a separate approved-values register from the RT-AI-008 evidence governance document.
-- Defined sections for public website use, future AI Concierge use, internal/handoff use, pending owner confirmation, and blocked/sensitive values.
-- Added no real approved business values because none were explicitly approved in this execution.
-- Added pending owner confirmation records for the requested business evidence categories.
-- Added blocked records for private personal data, operational/customer/payment/admin data, and unsupported public claims.
-- Kept runtime and technical implementation blocked without a separate task.
+Objective: add the first owner-approved public business evidence values for Rick Travel to the existing approved business evidence document.
+
+Proposed values:
+- Brand name, description, regions, languages, and general services.
+- Approved contact channels (WhatsApp, Email, Instagram) with IA rules.
+- AI Concierge allowed answers and handoff rules.
 
 Restrictions preserved:
-- No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, database, schema, package files, lockfiles, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, runtime ingestion, commit, or push.
-
-Next step:
-- Review `docs/product/ai-concierge-approved-public-business-evidence-values.md`.
-- Do not add real approved values or technical ingestion without explicit owner approval and a new task.
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md` was not modified yet.
+- No real business values (CNPJ, Cadastur, prices) were added to the product document.
+- No code, API, frontend, backend, database, JSON, YAML, or seed changes.
+- No commit or push performed for RT-AI-010.

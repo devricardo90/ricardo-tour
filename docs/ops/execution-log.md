@@ -5,6 +5,29 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-010 READY Documentation Gate
+
+**Executed by:** Codex
+**Environment:** local; documentation operations only
+**Status:** READY opened; no production effect
+
+**Objective:**
+Open RT-AI-010 as a documentation-only task to add the first owner-approved public business evidence values for Rick Travel, including brand names, description, regions, languages, services, contact channels, and institutional texts.
+
+**Result:**
+- RT-AI-010 marked as READY in operational documentation.
+- Approved values proposed for future execution: brand names, short description, service base, regions, languages, general services, approved contact channels (WhatsApp, Email, Instagram), and institutional website text.
+- AI Concierge allowed answers and handoff rules defined for the future task.
+- Prohibited values explicitly registered for the future task (CNPJ, Cadastur, private data, prices, availability).
+
+**Restrictions preserved:**
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md` was not modified in this READY opening.
+- No real business values (CNPJ, Cadastur, prices) were added to the product document.
+- No code, API, frontend, backend, database, JSON, YAML, or seed was created or changed.
+- No commit or push has been performed for this task.
+
+---
+
 ## 2026-06-08 - RT-AI-009 Approved Public Business Evidence Values Documentation
 
 **Executed by:** Codex

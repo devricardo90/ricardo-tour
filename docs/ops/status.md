@@ -796,20 +796,25 @@ Restrictions preserved:
 
 ## Update 2026-06-08 - RT-AI-009 Approved Public Business Evidence Values Documentation
 
-State: REVIEW.
+State: DONE remoto.
 
-RT-AI-009 was executed locally as a documentation-only product task to create the first approved-values register for Rick Travel public business evidence values.
+RT-AI-009 foi concluída com o commit `a4668a7` publicado em `origin/main`. O registro de valores aprovados foi criado com todas as seções e campos necessários, mas sem valores reais aprovados ainda.
 
-File created:
-- `docs/product/ai-concierge-approved-public-business-evidence-values.md`
+---
 
-Content registered:
-- Separate sections for public website use, future AI Concierge use, internal/handoff use, pending owner confirmation, and blocked/sensitive values.
-- Required record fields: `id`, `label`, `value`, `source`, `sourceAuthority`, `ownerApproval`, `approvalStatus`, `publicAllowed`, `websiteAllowed`, `aiAllowed`, `handoffRequired`, `riskLevel`, `language`, `lastReviewedAt`, and `notes`.
-- Empty approved sections because no real business value was explicitly approved in this execution.
-- Pending records for CNPJ/legal identity, Cadastur, guide credential, public WhatsApp, public email, social links, service hours, booking policy, payment policy, cancellation/refund policy, published tours, official photos, reviews/testimonials, and insurance/certificates/licenses/safety claims.
-- Blocked records for private personal data, operational/customer/payment/admin data, and unsupported public claims.
-- Runtime and technical implementation remain blocked without a separate task.
+## Update 2026-06-08 - RT-AI-010 Add First Owner-Approved Public Business Evidence Values READY
 
-Restrictions preserved:
-- No real business values, JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, database, schema, package files, lockfiles, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, runtime ingestion, commit, or push.
+State: READY.
+
+RT-AI-010 foi aberta para adicionar os primeiros valores de evidência de negócio aprovados pelo proprietário ao documento `docs/product/ai-concierge-approved-public-business-evidence-values.md`.
+
+Valores propostos para a execução:
+- Nome da marca e descrição institucional.
+- Regiões, base de serviço e idiomas.
+- Lista de serviços aprovados para uso público.
+- Canais de contato oficiais (WhatsApp, E-mail, Instagram) com regras de uso para IA.
+- Regras de handoff humano para o AI Concierge.
+
+Restrições preservadas:
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md` não foi alterado nesta abertura de READY.
+- Nenhum valor real de negócio, JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, database, schema, arquivos de pacote, lockfiles, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, ingestão em runtime, commit ou push.
