@@ -5,6 +5,38 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-009 Approved Public Business Evidence Values Documentation
+
+**Executed by:** Codex
+**Environment:** local; documentation only
+**Status:** Local REVIEW; no commit and no push
+
+**Objective:**
+Execute RT-AI-009 as a documentation-only product task by creating the first approved-values register for Rick Travel public business evidence values.
+
+**File created:**
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md`
+
+**Operational documentation updated:**
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+**Result:**
+- Separate approved-values register created from the RT-AI-008 evidence governance document.
+- Sections created for public website use, future AI Concierge use, internal/handoff use, pending owner confirmation, and blocked/sensitive values.
+- No real approved business values were added.
+- Pending owner confirmation records created for CNPJ/legal identity, Cadastur, guide credential, public WhatsApp, public email, social links, service hours, booking policy, payment policy, cancellation/refund policy, published tours, official photos, reviews/testimonials, and insurance/certificates/licenses/safety claims.
+- Blocked records created for private personal data, operational/customer/payment/admin data, and unsupported public claims.
+- Runtime and technical implementation remain blocked without a separate task.
+- RT-AI-009 moved to REVIEW.
+
+**Restrictions preserved:**
+- No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, database, schema, package files, lockfiles, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, runtime ingestion, commit, or push was created or changed.
+
+---
+
 ## 2026-06-08 - RT-AI-009 READY Documentation Gate
 
 **Executed by:** Codex

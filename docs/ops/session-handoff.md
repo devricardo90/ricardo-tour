@@ -654,3 +654,33 @@ Restrictions for this READY opening:
 Next step:
 - Execute RT-AI-009 only when explicitly authorized, creating `docs/product/ai-concierge-approved-public-business-evidence-values.md`.
 - Keep the future task documentation-only and do not create runtime ingestion or technical implementation artifacts.
+
+## RT-AI-009 REVIEW - Approved Public Business Evidence Values
+
+State: REVIEW on 2026-06-08.
+
+Objective: create the first documentation-only approved-values register for Rick Travel public business evidence values.
+
+Product file created:
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md`
+
+Operational docs updated:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Scope executed:
+- Created a separate approved-values register from the RT-AI-008 evidence governance document.
+- Defined sections for public website use, future AI Concierge use, internal/handoff use, pending owner confirmation, and blocked/sensitive values.
+- Added no real approved business values because none were explicitly approved in this execution.
+- Added pending owner confirmation records for the requested business evidence categories.
+- Added blocked records for private personal data, operational/customer/payment/admin data, and unsupported public claims.
+- Kept runtime and technical implementation blocked without a separate task.
+
+Restrictions preserved:
+- No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, database, schema, package files, lockfiles, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, runtime ingestion, commit, or push.
+
+Next step:
+- Review `docs/product/ai-concierge-approved-public-business-evidence-values.md`.
+- Do not add real approved values or technical ingestion without explicit owner approval and a new task.

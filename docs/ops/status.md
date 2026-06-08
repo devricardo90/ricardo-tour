@@ -791,3 +791,25 @@ Required future scope:
 Restrictions preserved:
 - `docs/product/ai-concierge-approved-public-business-evidence-values.md` was not created in this READY opening.
 - No real business values, CPF, private address, private phone, private email, signatures, QR codes, document scans, payment keys, passwords, tokens, `.env`, admin data, booking data, payment data, contact submissions, analytics, logs, credentials, JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, database change, runtime ingestion, commit, or push was created or changed.
+
+---
+
+## Update 2026-06-08 - RT-AI-009 Approved Public Business Evidence Values Documentation
+
+State: REVIEW.
+
+RT-AI-009 was executed locally as a documentation-only product task to create the first approved-values register for Rick Travel public business evidence values.
+
+File created:
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md`
+
+Content registered:
+- Separate sections for public website use, future AI Concierge use, internal/handoff use, pending owner confirmation, and blocked/sensitive values.
+- Required record fields: `id`, `label`, `value`, `source`, `sourceAuthority`, `ownerApproval`, `approvalStatus`, `publicAllowed`, `websiteAllowed`, `aiAllowed`, `handoffRequired`, `riskLevel`, `language`, `lastReviewedAt`, and `notes`.
+- Empty approved sections because no real business value was explicitly approved in this execution.
+- Pending records for CNPJ/legal identity, Cadastur, guide credential, public WhatsApp, public email, social links, service hours, booking policy, payment policy, cancellation/refund policy, published tours, official photos, reviews/testimonials, and insurance/certificates/licenses/safety claims.
+- Blocked records for private personal data, operational/customer/payment/admin data, and unsupported public claims.
+- Runtime and technical implementation remain blocked without a separate task.
+
+Restrictions preserved:
+- No real business values, JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, database, schema, package files, lockfiles, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, runtime ingestion, commit, or push.
