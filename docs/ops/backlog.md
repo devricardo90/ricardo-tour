@@ -2057,3 +2057,66 @@ Result:
 - No code or runtime changes.
 
 Evidence: task executed locally; REVIEW pending before commit.
+
+## RT-AI-011 Define Public Credibility Evidence Approval Scope
+
+State: READY
+
+Objective: define a documentation-only approval scope for public credibility evidence before any website expansion, AI Concierge use, ingestion, runtime, or implementation work.
+
+Type: PRODUCT DOCUMENTATION. This future task must define approval rules and safe usage boundaries only. It must not add real credential values, real legal identifiers, customer data, payment data, testimonials, prices, availability, guarantees, runtime files, or implementation artifacts.
+
+Product documentation scope allowed in the future execution:
+- Define rules for CNPJ / legal entity references.
+- Define rules for Cadastur company registration references.
+- Define rules for guide credentials, handled separately from company credentials.
+- Define rules for official public business identity and trust badges.
+- Define rules for testimonials, social proof, ratings, rankings, and customer quotes.
+- Define rules for verified, certified, licensed, registered, insured, or similar claims.
+- Define what the future AI Concierge may or may not say about credentials.
+
+Operational docs allowed in the future execution:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Required future rules:
+- CNPJ and Cadastur remain `PENDING_OWNER_APPROVAL` or `BLOCKED` by default until exact official evidence and explicit owner approval are recorded.
+- CNPJ and Cadastur should be treated as verification-first values by default; public display requires a separate owner-approved decision on exact value, source, wording, review date, and usage flags.
+- Guide credentials must be handled separately from company credentials because they may involve named people, validity, assignment, language coverage, privacy, and operational availability.
+- Website approval must not automatically imply future AI Concierge approval.
+- Public permission, website permission, and AI permission must remain separate explicit decisions.
+- The AI Concierge must hand off legal, tax, credential, document, stale evidence, missing evidence, conflicting evidence, and named guide certification questions.
+- Missing, stale, private, conflicting, or unsupported credibility evidence must remain blocked or require human handoff.
+
+Out of scope:
+- Do not add real CNPJ.
+- Do not add real Cadastur number.
+- Do not add guide documents, credential numbers, personal documents, private addresses, customer data, payment data, testimonial text, prices, availability, guarantees, or credential values.
+- Do not modify `docs/product/ai-concierge-approved-public-business-evidence-values.md` in this READY opening.
+- Do not modify `docs/product/ai-concierge-verified-business-evidence-records.md` in this READY opening.
+- Do not create or modify JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, database, schema, package files, lockfiles, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, runtime files, or implementation files.
+- Do not create root `STATUS.md` or root `backlog.md`.
+- Do not commit or push in this READY opening.
+
+Acceptance criteria for the future task:
+- Creates or updates only an approved product documentation file plus allowed ops docs when explicitly authorized.
+- Defines public credibility evidence approval scope without publishing actual credential values.
+- Keeps CNPJ, Cadastur, guide credentials, trust badges, testimonials, reviews, safety, insurance, certification, verified, licensed, registered, and similar claims blocked or pending unless exact evidence and owner approval exist.
+- Separates company credentials from guide credentials.
+- Separates public, website, and AI approval flags.
+- Defines mandatory human handoff for legal/tax/credential disputes, document requests, stale evidence, missing evidence, conflicting evidence, and named guide certification questions.
+- Does not define or implement schema, chatbot, ingestion, RAG, runtime, API, frontend, backend, database, seed, package, lockfile, or deployment work.
+
+Validation required before REVIEW:
+- `git status --short --untracked-files=all`
+- `git status -sb`
+- `git diff --name-only`
+- `git diff --stat`
+- `git diff --check`
+- Forbidden reference search across allowed ops docs.
+
+Risk: high. The main risk is accidentally turning legal identity, Cadastur, guide credentials, testimonials, trust badges, certification, insurance, safety, or verified claims into public facts without exact evidence and owner approval.
+
+Execution state: RT-AI-011 opened as READY in operational documentation only. No product document, credential value, runtime file, implementation file, JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, commit, or push was created or changed.

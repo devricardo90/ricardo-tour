@@ -681,3 +681,38 @@ Restrictions preserved:
 - No real business values (CNPJ, Cadastur, prices) were added to the product document.
 - No code, API, frontend, backend, database, JSON, YAML, or seed changes.
 - No commit or push performed for RT-AI-010.
+
+## RT-AI-011 READY - Public Credibility Evidence Approval Scope
+
+State: READY on 2026-06-08.
+
+Objective: define a documentation-only approval scope for public credibility evidence before any website expansion, AI Concierge use, ingestion, runtime, or implementation work.
+
+Context:
+- RT-AI-010 is Remote DONE at commit `8c1f38894930d065addd3b10896933ef480b93d5`.
+- First owner-approved low-risk public business values now exist for brand, service base, service languages, public contact channels, institutional text, and AI handoff rules.
+- CNPJ, Cadastur, guide credentials, legal identity, registration claims, testimonials, prices, availability, and guarantees remain blocked or pending.
+
+Future scope:
+- CNPJ / legal entity references.
+- Cadastur company registration.
+- Guide credentials, separately from company credentials.
+- Official public business identity.
+- Trust badges.
+- Testimonials, social proof, ratings, rankings, and customer quotes.
+- Verified, certified, licensed, registered, insured, and similar credibility claims.
+- Future AI Concierge credential wording and handoff limits.
+
+Required future rules:
+- CNPJ and Cadastur remain `PENDING_OWNER_APPROVAL` or `BLOCKED` by default.
+- CNPJ and Cadastur are verification-first values unless the owner separately approves public display.
+- Guide credentials must be handled separately from company credentials.
+- Website approval does not automatically imply AI Concierge approval.
+- AI must hand off legal/tax/credential disputes, document requests, stale evidence, missing evidence, conflicting evidence, and named guide certification questions.
+- No schema, chatbot, ingestion, RAG, runtime, API, frontend, backend, database, seed, package, lockfile, or deployment work is authorized.
+
+Restrictions for this READY opening:
+- No product document was modified.
+- No real CNPJ, Cadastur number, guide document, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or credential value was added.
+- No runtime or implementation files were changed.
+- No commit or push performed.

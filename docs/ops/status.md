@@ -1,5 +1,39 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-08 - RT-AI-011 Public Credibility Evidence Approval Scope READY
+
+State: READY.
+
+RT-AI-011 was opened as the next documentation-only task after RT-AI-010 Remote DONE at commit `8c1f388`.
+
+Future objective:
+- Define safe public credibility evidence approval scope for Rick Travel before any website expansion, AI Concierge use, ingestion, runtime, or implementation work.
+
+Future scope:
+- CNPJ / legal entity reference.
+- Cadastur company registration.
+- Guide credentials, handled separately from company credentials.
+- Official public business identity.
+- Public trust badges.
+- Testimonials, social proof, ratings, rankings, and customer quotes.
+- Verified, certified, licensed, registered, insured, or similar claims.
+- What the future AI Concierge may or may not say about credentials.
+
+Required future rules:
+- CNPJ and Cadastur remain `PENDING_OWNER_APPROVAL` or `BLOCKED` by default until exact official evidence and explicit owner approval are recorded.
+- CNPJ and Cadastur are verification-first values by default; public display requires separate approval of exact value, source, wording, review date, and usage flags.
+- Guide credentials must be handled separately from company credentials.
+- Website approval does not automatically imply AI Concierge approval.
+- Public, website, and AI permissions must remain separate explicit decisions.
+- The AI Concierge must hand off legal/tax/credential disputes, document requests, stale evidence, missing evidence, conflicting evidence, and named guide certification questions.
+
+Restrictions preserved:
+- No product document was modified in this READY opening.
+- No real CNPJ, Cadastur number, guide document, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or credential value was added.
+- No JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, runtime file, implementation file, commit, or push was created or changed.
+
+---
+
 Data: 2026-05-06
 
 ## Protocolo Rick

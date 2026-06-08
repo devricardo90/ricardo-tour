@@ -5,6 +5,30 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-011 READY Documentation Gate
+
+**Executed by:** Codex
+**Environment:** local; documentation operations only
+**Status:** READY opened; no production effect
+
+**Objective:**
+Open RT-AI-011 as a documentation-only task to define public credibility evidence approval scope before any website expansion, AI Concierge use, ingestion, runtime, or implementation work.
+
+**Result:**
+- RT-AI-011 marked as READY in operational documentation.
+- Future scope registered for CNPJ / legal entity references, Cadastur company registration, guide credentials, official public business identity, trust badges, testimonials/social proof, and verified/certified/licensed/registered/insured claims.
+- Required rule registered that CNPJ and Cadastur remain blocked or pending by default until exact official evidence and explicit owner approval exist.
+- Required rule registered that guide credentials must be handled separately from company credentials.
+- Required rule registered that website approval does not automatically imply AI Concierge approval.
+- Required handoff registered for legal/tax/credential disputes, document requests, stale evidence, missing evidence, conflicting evidence, and named guide certification questions.
+
+**Restrictions preserved:**
+- No product document was modified in this READY opening.
+- No real CNPJ, Cadastur number, guide document, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or credential value was added.
+- No code, API, frontend, backend, database, JSON, YAML, seed, package file, lockfile, RAG, embeddings, LangChain, LangGraph, chatbot, runtime, deploy, commit, or push was created or changed.
+
+---
+
 ## 2026-06-08 - RT-AI-010 READY Documentation Gate
 
 **Executed by:** Codex
