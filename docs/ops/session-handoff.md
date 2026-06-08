@@ -682,9 +682,9 @@ Restrictions preserved:
 - No code, API, frontend, backend, database, JSON, YAML, or seed changes.
 - No commit or push performed for RT-AI-010.
 
-## RT-AI-011 READY - Public Credibility Evidence Approval Scope
+## RT-AI-011 REVIEW - Public Credibility Evidence Approval Scope
 
-State: READY on 2026-06-08.
+State: REVIEW on 2026-06-08.
 
 Objective: define a documentation-only approval scope for public credibility evidence before any website expansion, AI Concierge use, ingestion, runtime, or implementation work.
 
@@ -716,3 +716,15 @@ Restrictions for this READY opening:
 - No real CNPJ, Cadastur number, guide document, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or credential value was added.
 - No runtime or implementation files were changed.
 - No commit or push performed.
+
+Execution result:
+- Product document created: `docs/product/ai-concierge-public-credibility-evidence-approval-scope.md`.
+- CNPJ and Cadastur remain blocked or pending by default.
+- CNPJ is verification-first by default and public display is not approved in this task.
+- Guide credentials are separated from company credentials.
+- Website approval and future AI Concierge approval remain separate explicit decisions.
+- Mandatory human handoff rules are defined for legal/tax/credential disputes, document requests, stale evidence, conflicting evidence, named guide certification questions, safety/legal/insurance claims, and anything pending or blocked.
+
+Restrictions preserved in execution:
+- No real CNPJ, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or real credential value was added.
+- No runtime, implementation, JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, commit, or push was created or changed.

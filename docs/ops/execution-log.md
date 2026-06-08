@@ -5,6 +5,39 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-011 Public Credibility Evidence Approval Scope Documentation
+
+**Executed by:** Codex
+**Environment:** local; documentation only
+**Status:** Local REVIEW; no commit and no push
+
+**Objective:**
+Execute RT-AI-011 as a documentation-only product task by creating the public credibility evidence approval scope for Rick Travel.
+
+**File created:**
+- `docs/product/ai-concierge-public-credibility-evidence-approval-scope.md`
+
+**Operational documentation updated:**
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+**Result:**
+- Defined public credibility evidence categories for CNPJ/legal identity, Cadastur, guide credentials, official public identity, trust badges, testimonials/social proof, and verified/certified/licensed/registered/insured claims.
+- Kept CNPJ and Cadastur blocked or pending by default.
+- Defined CNPJ as verification-first by default.
+- Separated guide credentials from company credentials.
+- Defined website approval and future AI Concierge approval as separate explicit decisions.
+- Added mandatory human handoff rules for legal/tax/credential disputes, document requests, stale evidence, conflicting evidence, named guide certification questions, safety/legal/insurance claims, and anything pending or blocked.
+- RT-AI-011 moved to REVIEW.
+
+**Restrictions preserved:**
+- No real CNPJ, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or real credential value was added.
+- No runtime, implementation, JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, commit, or push was created or changed.
+
+---
+
 ## 2026-06-08 - RT-AI-011 READY Documentation Gate
 
 **Executed by:** Codex

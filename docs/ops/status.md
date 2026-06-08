@@ -34,6 +34,32 @@ Restrictions preserved:
 
 ---
 
+## Update 2026-06-08 - RT-AI-011 Public Credibility Evidence Approval Scope Documentation
+
+State: REVIEW.
+
+RT-AI-011 was executed locally as a documentation-only product task to define public credibility evidence approval scope for Rick Travel.
+
+File created:
+- `docs/product/ai-concierge-public-credibility-evidence-approval-scope.md`
+
+Content registered:
+- Purpose and relationship to approved public business evidence values, verified business evidence records, prompt contract, and answer matrix.
+- Credibility categories for CNPJ/legal identity, Cadastur, guide credentials, official public identity, trust badges, testimonials/social proof, and verified/certified/licensed/registered/insured claims.
+- Default status of credibility evidence as `PENDING_OWNER_APPROVAL` or `BLOCKED`.
+- Website approval requirements, including owner approval, exact value confirmation, source authority, review date, approved wording, risk level, and explicit `websiteAllowed=true`.
+- Future AI Concierge approval rules requiring explicit `aiAllowed=true` and handoff for missing, stale, disputed, pending, blocked, conflicting, private, or ambiguous evidence.
+- CNPJ as verification-first by default, with no public display approved in this task.
+- Cadastur as pending until official evidence, owner approval, exact wording, and review date exist.
+- Guide credentials separated from company credentials, with named guide certification questions requiring human handoff.
+- Trust badge, claim, testimonial, social proof, and required record-field rules.
+
+Restrictions preserved:
+- No real CNPJ, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, or real credential value was added.
+- No runtime, implementation, JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, commit, or push was created or changed.
+
+---
+
 Data: 2026-05-06
 
 ## Protocolo Rick

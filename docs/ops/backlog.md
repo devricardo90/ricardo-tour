@@ -2060,7 +2060,7 @@ Evidence: task executed locally; REVIEW pending before commit.
 
 ## RT-AI-011 Define Public Credibility Evidence Approval Scope
 
-State: READY
+State: REVIEW
 
 Objective: define a documentation-only approval scope for public credibility evidence before any website expansion, AI Concierge use, ingestion, runtime, or implementation work.
 
@@ -2119,4 +2119,6 @@ Validation required before REVIEW:
 
 Risk: high. The main risk is accidentally turning legal identity, Cadastur, guide credentials, testimonials, trust badges, certification, insurance, safety, or verified claims into public facts without exact evidence and owner approval.
 
-Execution state: RT-AI-011 opened as READY in operational documentation only. No product document, credential value, runtime file, implementation file, JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, commit, or push was created or changed.
+Evidence created: `docs/product/ai-concierge-public-credibility-evidence-approval-scope.md` and operational documentation updated.
+
+Execution state: product credibility evidence approval scope document created locally; RT-AI-011 moved to REVIEW. The document defines approval scope and blocking/handoff rules only. No real CNPJ, Cadastur number, guide credential number, personal document, private address, customer data, payment data, testimonial, price, availability, guarantee, real credential value, runtime file, implementation file, JSON, YAML, seed, API, frontend, backend, database, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, package file, lockfile, commit, or push was created or changed.
