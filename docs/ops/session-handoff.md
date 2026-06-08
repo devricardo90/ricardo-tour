@@ -594,3 +594,33 @@ Restrictions for this READY opening:
 Next step:
 - Execute RT-AI-008 only when explicitly authorized, creating `docs/product/ai-concierge-verified-business-evidence-records.md`.
 - Keep the future task documentation-only and do not create machine-readable KB data or implementation artifacts.
+
+## RT-AI-008 REVIEW - Verified Business Evidence Records
+
+State: REVIEW on 2026-06-08.
+
+Objective: define how real Rick Travel business evidence must be recorded, reviewed, approved, blocked, and later used safely by the website or AI Concierge.
+
+Product file created:
+- `docs/product/ai-concierge-verified-business-evidence-records.md`
+
+Operational docs updated:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Scope executed:
+- Defined evidence record format and approval states.
+- Defined default rule that no real data is public, website-safe, or AI-safe by default.
+- Created placeholder/blocking records for CNPJ/legal identity, Cadastur, guide credential, public WhatsApp, public email, official social media, service hours, booking policy, payment policy, cancellation/refund policy, published tours, official photos, reviews/testimonials, and insurance/certificates/licenses/safety claims.
+- Kept sensitive business evidence `PENDING_OWNER_APPROVAL` or `BLOCKED` unless exact evidence and owner approval exist.
+- Blocked future technical conversion without a separate task.
+
+Restrictions preserved:
+- No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, real business data runtime ingestion, commit, or push.
+- No real sensitive data was made public by default.
+
+Next step:
+- Review `docs/product/ai-concierge-verified-business-evidence-records.md`.
+- Do not convert evidence records into JSON/YAML, seed, database, embeddings, RAG, API, chat UI, LangChain, or LangGraph without a new explicit implementation task.

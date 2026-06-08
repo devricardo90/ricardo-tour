@@ -5,6 +5,37 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-008 Verified Business Evidence Records Documentation
+
+**Executed by:** Codex
+**Environment:** local; documentation only
+**Status:** Local REVIEW; no commit and no push
+
+**Objective:**
+Execute RT-AI-008 as a documentation-only product task by defining how real Rick Travel business evidence must be recorded, reviewed, approved, blocked, and later used safely by the website or AI Concierge.
+
+**File created:**
+- `docs/product/ai-concierge-verified-business-evidence-records.md`
+
+**Operational documentation updated:**
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+**Result:**
+- Evidence record format defined with required fields and explicit usage permissions.
+- Placeholder/blocking records created for CNPJ/legal identity, Cadastur, guide credential, public WhatsApp, public email, official social media, service hours, booking policy, payment policy, cancellation/refund policy, published tours, official photos, reviews/testimonials, and insurance/certificates/licenses/safety claims.
+- Default rule recorded: no data is public, website-safe, or AI-safe without exact evidence and explicit owner approval.
+- Future technical conversion to JSON/YAML/seed/RAG/API/chat remains blocked without a separate task.
+- RT-AI-008 moved to REVIEW.
+
+**Restrictions preserved:**
+- No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, real business data runtime ingestion, commit, or push was created or changed.
+- No real sensitive data was made public by default.
+
+---
+
 ## 2026-06-08 - RT-AI-008 READY Documentation Gate
 
 **Executed by:** Codex
