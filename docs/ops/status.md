@@ -764,3 +764,30 @@ Content registered:
 Restrictions preserved:
 - No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, real business data runtime ingestion, commit, or push.
 - No real sensitive data was made public by default.
+
+---
+
+## Update 2026-06-08 - RT-AI-009 Approved Public Business Evidence Values READY
+
+State: READY.
+
+RT-AI-009 was opened as the next documentation-only task after RT-AI-008 Remote DONE at commit `366660c`.
+
+Future product file allowed:
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md`
+
+Decision:
+- RT-AI-009 must use a separate approved-values register. RT-AI-008 remains the evidence schema/governance layer.
+
+Future objective:
+- Record real Rick Travel business evidence values only when the owner explicitly approves public, website, and/or future AI Concierge use.
+
+Required future scope:
+- Every value must follow the RT-AI-008 format and include exact value, evidence source, source type, source authority, owner approval, `reviewedAt`, `updatedAt`, `approvalStatus`, `publicAllowed`, `websiteAllowed`, `aiAllowed`, `handoffRequired`, `riskLevel`, and limitation notes.
+- `publicAllowed`, `websiteAllowed`, and `aiAllowed` default to `false`.
+- Screenshots alone are not sufficient for high-risk categories.
+- Runtime usage remains blocked until a future technical implementation task.
+
+Restrictions preserved:
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md` was not created in this READY opening.
+- No real business values, CPF, private address, private phone, private email, signatures, QR codes, document scans, payment keys, passwords, tokens, `.env`, admin data, booking data, payment data, contact submissions, analytics, logs, credentials, JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, database change, runtime ingestion, commit, or push was created or changed.

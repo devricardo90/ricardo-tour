@@ -624,3 +624,33 @@ Restrictions preserved:
 Next step:
 - Review `docs/product/ai-concierge-verified-business-evidence-records.md`.
 - Do not convert evidence records into JSON/YAML, seed, database, embeddings, RAG, API, chat UI, LangChain, or LangGraph without a new explicit implementation task.
+
+## RT-AI-009 READY - Approved Public Business Evidence Values
+
+State: READY on 2026-06-08.
+
+Objective: create a separate approved-values register for real Rick Travel business evidence values that the owner explicitly approves for public, website, and/or future AI Concierge use.
+
+Product file allowed in the future execution:
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md`
+
+Operational docs allowed:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Future scope:
+- Record only explicitly owner-approved values using the RT-AI-008 evidence format.
+- Require exact value, evidence source, source type, source authority, owner approval, `reviewedAt`, `updatedAt`, `approvalStatus`, `publicAllowed`, `websiteAllowed`, `aiAllowed`, `handoffRequired`, `riskLevel`, and limitation notes.
+- Default `publicAllowed`, `websiteAllowed`, and `aiAllowed` to `false`.
+- Treat screenshots alone as insufficient for high-risk categories.
+- Keep runtime usage blocked until a future technical implementation task.
+
+Restrictions for this READY opening:
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md` was not created.
+- No real business values, CPF, private address, private phone, private email, signatures, QR codes, document scans, payment keys, passwords, tokens, `.env`, admin data, booking data, payment data, contact submissions, analytics, logs, credentials, JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, database change, runtime ingestion, commit, or push.
+
+Next step:
+- Execute RT-AI-009 only when explicitly authorized, creating `docs/product/ai-concierge-approved-public-business-evidence-values.md`.
+- Keep the future task documentation-only and do not create runtime ingestion or technical implementation artifacts.

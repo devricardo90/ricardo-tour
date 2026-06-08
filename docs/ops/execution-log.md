@@ -5,6 +5,28 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-08 - RT-AI-009 READY Documentation Gate
+
+**Executed by:** Codex
+**Environment:** local; documentation operations only
+**Status:** READY opened; no production effect
+
+**Objective:**
+Open RT-AI-009 as a documentation-only task to define a separate approved-values register for real Rick Travel business evidence values explicitly approved by the owner for public, website, and/or future AI Concierge use.
+
+**Result:**
+- RT-AI-009 marked as READY in operational documentation.
+- Future product file allowed: `docs/product/ai-concierge-approved-public-business-evidence-values.md`.
+- Decision registered: RT-AI-008 remains the evidence schema/governance layer; RT-AI-009 must be a separate approved-values register.
+- Future evidence categories registered: CNPJ / legal entity / trade name, Cadastur, guide credential, public WhatsApp, public email, official social media links, service hours, booking policy, payment policy, cancellation/refund policy, published tours, official photos, reviews/testimonials, and insurance/certificates/licenses/safety claims.
+- Required value fields and validation commands registered.
+
+**Restrictions preserved:**
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md` was not created in this READY opening.
+- No real business values, CPF, private address, private phone, private email, signatures, QR codes, document scans, payment keys, passwords, tokens, `.env`, admin data, booking data, payment data, contact submissions, analytics, logs, credentials, JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, database change, runtime ingestion, commit, or push was created or changed.
+
+---
+
 ## 2026-06-08 - RT-AI-008 Verified Business Evidence Records Documentation
 
 **Executed by:** Codex

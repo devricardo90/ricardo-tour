@@ -2016,3 +2016,96 @@ Risk: high. The main risk is accidentally publishing or approving real business 
 Evidence created: `docs/product/ai-concierge-verified-business-evidence-records.md` and operational documentation updated.
 
 Execution state: product evidence governance document created locally; RT-AI-008 moved to REVIEW. The document defines placeholder and blocking evidence records only, not approved real business facts. No JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, real business data runtime ingestion, commit, or push was created or changed. No sensitive data was made public by default.
+
+## RT-AI-009 Define Approved Public Business Evidence Values
+
+State: READY.
+
+Objective: create a separate approved-values register for real Rick Travel business evidence values that the owner explicitly approves for public, website, and/or future AI Concierge use.
+
+Type: PRODUCT DOCUMENTATION. This future task must record approved values only as documentation. It must not implement runtime ingestion, create machine-readable KB data, JSON/YAML seed files, embeddings, RAG runtime, LangChain, LangGraph, API routes, chat UI, code, database changes, deploy, or publication changes.
+
+Context:
+- RT-AI-008 is Remote DONE at commit `366660c`.
+- RT-AI-008 created `docs/product/ai-concierge-verified-business-evidence-records.md` as the evidence schema/governance layer.
+- RT-AI-009 must use a separate product document to avoid mixing format rules with real business data.
+
+Product file allowed in the future execution:
+- `docs/product/ai-concierge-approved-public-business-evidence-values.md`
+
+Operational docs allowed:
+- `docs/ops/backlog.md`
+- `docs/ops/status.md`
+- `docs/ops/session-handoff.md`
+- `docs/ops/execution-log.md`
+
+Required future scope:
+- record only explicitly owner-approved values;
+- require each value to follow the RT-AI-008 evidence format;
+- require exact value, evidence source, source type, source authority, owner approval, `reviewedAt`, `updatedAt`, `approvalStatus`, `publicAllowed`, `websiteAllowed`, `aiAllowed`, `handoffRequired`, `riskLevel`, and limitation notes;
+- default `publicAllowed`, `websiteAllowed`, and `aiAllowed` to `false`;
+- document that screenshots alone are not sufficient for high-risk categories;
+- keep runtime usage blocked until a future technical implementation task.
+
+Evidence categories for the future task:
+- CNPJ / legal entity / trade name;
+- Cadastur company record;
+- guide credential;
+- public WhatsApp;
+- public email;
+- official social media links;
+- service hours;
+- booking policy;
+- payment policy;
+- cancellation/refund policy;
+- published tours;
+- official photos;
+- reviews/testimonials;
+- insurance, certificates, licenses, or safety-related claims.
+
+Blocked in this READY opening:
+- Do not create `docs/product/ai-concierge-approved-public-business-evidence-values.md`.
+- Do not add real business values.
+- Do not add CPF, private address, private phone, private email, signatures, QR codes, document scans, payment keys, passwords, tokens, `.env`, admin data, booking data, payment data, contact submissions, analytics, logs, or credentials.
+- Do not create JSON.
+- Do not create YAML.
+- Do not create seed.
+- Do not alter `data/`.
+- Do not alter `prisma/`.
+- Do not alter API.
+- Do not alter frontend.
+- Do not alter backend.
+- Do not alter schema.
+- Do not alter package or lockfiles.
+- Do not create embeddings.
+- Do not implement RAG.
+- Do not install or configure LangChain.
+- Do not install or configure LangGraph.
+- Do not add chatbot.
+- Do not deploy.
+- Do not change database.
+- Do not ingest anything into runtime.
+- Do not commit or push in this READY opening.
+
+High-risk evidence rule:
+- Screenshots alone are not sufficient to approve CNPJ, Cadastur, guide credentials, payment policies, cancellation/refund policies, reviews/testimonials, insurance, certificates, licenses, safety claims, official photos, or any sensitive/public contact value.
+- CPF, passwords, tokens, `.env`, admin data, booking data, payment data, contact submissions, analytics, logs, credentials, private addresses, private phones, private emails, signatures, QR codes, document scans, and payment keys remain blocked even if present in owner-provided material.
+
+Acceptance criteria for the future task:
+- Creates only `docs/product/ai-concierge-approved-public-business-evidence-values.md` plus allowed ops docs.
+- Records only exact owner-approved values with source, owner, review date, usage permissions, risk level, and limitation notes.
+- No value is public, website-safe, or AI-safe by default.
+- Sensitive categories remain `PENDING_OWNER_APPROVAL` or `BLOCKED` unless evidence and explicit owner approval are clear.
+- Runtime usage remains blocked without a future technical implementation task.
+
+Validation required before REVIEW:
+- `git status --short --untracked-files=all`
+- `git status -sb`
+- `git diff --name-only`
+- `git diff --stat`
+- `git diff --check`
+- `git diff --cached --name-only`
+
+Risk: critical. The main risk is accidentally recording sensitive/private data or treating a real business value as public, website-safe, or AI-safe before exact evidence, owner approval, and explicit usage permissions exist.
+
+Execution state: READY opened in operational docs only. The future approved-values product document has not been created. No real business values, sensitive data, JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, schema, package, lockfile, embeddings, RAG, LangChain, LangGraph, chatbot, deploy, database change, runtime ingestion, commit, or push was created or changed.
