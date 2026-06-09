@@ -2255,3 +2255,67 @@ Execution state: RT-AI-013 opened as READY in operational documentation only. No
 Evidence created: unsupported website credibility claims were removed or neutralized in the allowed website/content files, and operational documentation was updated.
 
 Execution result: RT-AI-013 moved to REVIEW. Metadata, homepage copy, traveler-support section, security/support section, and locale messages were updated to remove or neutralize unsupported Cadastur, CNPJ-like, guide credential, certification, testimonial, rating, review, safety, insurance, guarantee, and related trust-claim wording. The public copy now uses neutral approved positioning around guided tours, local tourism experiences, personalized travel orientation, traveler support, approved public contact channels, and support in Portuguese, Spanish, and English. No product document, architecture document, package file, lockfile, JSON/YAML seed file, API, backend, database, technical AI file, actual CNPJ value, Cadastur numeric value, guide credential identifier, testimonial, rating, review, price, availability confirmation, payment detail, guarantee, customer data, private address, personal document, commit, or push was created or changed.
+
+## RT-AI-015 Audit Remaining Public Risky Claims
+
+State: READY
+
+Objective: audit and clean remaining public-visible risky claims on the Rick Travel website after RT-AI-014 polished the public trust localization copy.
+
+Type: MIXED, mostly code/copy. This READY opening is documentation-only.
+
+Context:
+- RT-AI-014 is Remote DONE at commit `b06b680c96ba23aacae4bbb2174705f0abade043`.
+- RT-AI-014 changed only `messages/en.json`, `messages/es.json`, `messages/pt.json`, and `messages/sv.json`.
+- The RT-AI-014 validation scan found remaining public-visible risky claims outside that task scope.
+
+Future implementation files allowed:
+- `components/hero-section.tsx`
+- `components/footer.tsx`
+- `components/trips/tour-detail-client.tsx`
+- `components/trips/tour-media-badges.tsx`
+- `components/trips/trip-card.tsx`
+- `app/[locale]/(public)/page.tsx`
+- `app/[locale]/(public)/contato/page.tsx`
+- `messages/en.json`
+- `messages/pt.json`
+- `messages/es.json`
+- `messages/sv.json`
+- Optional: `components/about/why-choose-us.tsx` only for source hygiene if no public behavior changes are needed.
+
+Known risky surfaces to audit:
+- Hero badges and support copy that mention ratings, licensed guides, guide credentials, fast response, private tours, secure operation, or volume claims.
+- Footer images, alt text, and card copy that mention Cadastur, official channels, secure forms, or safety-style wording.
+- Contact page metadata and visible body copy that mention Cadastur, credentialed guides, local team, or safety-style wording.
+- Home metadata that mentions private tours.
+- Tour detail confidence copy that mentions licensed, certified, accredited, credentialed, or similar guide operations.
+- Tour list card badges that render ratings, reviews, or booking-count social proof.
+
+Future forbidden scope:
+- No AI concierge, RAG, embeddings, LangChain, or LangGraph.
+- No backend/API changes.
+- No database changes.
+- No schema/migration/seed changes.
+- No package or lockfile changes.
+- No deploy.
+- No CNPJ, Cadastur number, credential number, testimonials, reviews, ratings, fake names, prices, availability guarantees, payment guarantees, "certified", "licensed", "official", "credentialed/credenciado", or equivalent credibility claims unless explicitly verified and approved in project docs.
+
+Future validation criteria:
+- `npm.cmd run lint`
+- `npm.cmd run typecheck`
+- Repeat risky-term scan over `app components messages`.
+- Confirm remaining hits are only internal/key-only or acceptable factual/service copy.
+- Verify public home, contact, tour list cards, and tour detail no longer show unsupported credibility or social-proof claims.
+- `git diff --check`
+- Final evidence with changed files and confirmation no forbidden scope was touched.
+
+Acceptance criteria:
+- Remaining public-visible Cadastur, credential, certified, licensed, official, testimonial, review, rating, social-proof, guarantee, safety-style, fast-response, private-tour, and similar unsupported claims are removed or neutralized in the allowed future files only.
+- Public copy remains commercially useful using approved neutral service wording only.
+- No new unsupported credibility, social-proof, price, availability, payment, guarantee, customer, legal, or credential claim is introduced.
+- Any remaining risky-term scan hits are explicitly classified as internal/key-only or acceptable factual/service copy.
+- No implementation outside the allowed future files is introduced.
+
+Risk: medium. The main risk is replacing unsupported public claims with different unsupported credibility or social-proof wording instead of neutral approved service copy.
+
+Execution state: RT-AI-015 opened as READY in operational documentation only. No app file, component file, message file, product document, runtime file, implementation file, JSON, YAML, seed, API, backend, database, package file, lockfile, deploy, commit, or push was created or changed in this READY opening.

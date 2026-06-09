@@ -877,3 +877,48 @@ Restrictions preserved:
 Next step:
 - Review the RT-AI-013 diff and validation output.
 - Do not commit or push until explicitly authorized.
+
+## RT-AI-015 READY - Audit Remaining Public Risky Claims
+
+State: READY on 2026-06-09.
+
+Objective: audit and clean remaining public-visible risky claims from the Rick Travel website after RT-AI-014 polished public trust localization copy.
+
+Context:
+- RT-AI-014 is Remote DONE at commit `b06b680c96ba23aacae4bbb2174705f0abade043`.
+- RT-AI-014 changed only the four locale message files.
+- A Discussion Gate found remaining public-visible risky claims outside RT-AI-014 scope.
+
+Future implementation files allowed:
+- `components/hero-section.tsx`
+- `components/footer.tsx`
+- `components/trips/tour-detail-client.tsx`
+- `components/trips/tour-media-badges.tsx`
+- `components/trips/trip-card.tsx`
+- `app/[locale]/(public)/page.tsx`
+- `app/[locale]/(public)/contato/page.tsx`
+- `messages/en.json`
+- `messages/pt.json`
+- `messages/es.json`
+- `messages/sv.json`
+- Optional: `components/about/why-choose-us.tsx` only for source hygiene if no public behavior changes are needed.
+
+Future forbidden scope:
+- No AI concierge, RAG, embeddings, LangChain, LangGraph, backend/API, database, schema/migration/seed, package or lockfile changes, deploy, or implementation outside the allowed future files.
+- No CNPJ, Cadastur number, credential number, testimonials, reviews, ratings, fake names, prices, availability guarantees, payment guarantees, "certified", "licensed", "official", "credentialed/credenciado", or equivalent credibility claims unless explicitly verified and approved in project docs.
+
+Future validation:
+- `npm.cmd run lint`
+- `npm.cmd run typecheck`
+- Repeat risky-term scan over `app components messages`.
+- Confirm remaining hits are only internal/key-only or acceptable factual/service copy.
+- Verify public home, contact, tour list cards, and tour detail no longer show unsupported credibility or social-proof claims.
+- `git diff --check`
+- Final evidence with changed files and confirmation no forbidden scope was touched.
+
+Restrictions for this READY opening:
+- Operational docs only.
+- No app files, components, messages, product docs, runtime files, implementation files, JSON, YAML, seed, API, backend, database, schema, package, lockfile, deploy, commit, or push were changed.
+
+Next step:
+- Execute RT-AI-015 only when explicitly authorized by a separate implementation gate.

@@ -1,5 +1,45 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-09 - RT-AI-015 Remaining Public Risky Claims READY
+
+State: READY.
+
+RT-AI-015 was opened as a small mixed code/copy task after RT-AI-014 Remote DONE at commit `b06b680c96ba23aacae4bbb2174705f0abade043`.
+
+Future objective:
+- Audit and clean remaining public-visible risky claims from the website surfaces that were outside RT-AI-014 scope.
+
+Future allowed implementation files:
+- `components/hero-section.tsx`
+- `components/footer.tsx`
+- `components/trips/tour-detail-client.tsx`
+- `components/trips/tour-media-badges.tsx`
+- `components/trips/trip-card.tsx`
+- `app/[locale]/(public)/page.tsx`
+- `app/[locale]/(public)/contato/page.tsx`
+- `messages/en.json`
+- `messages/pt.json`
+- `messages/es.json`
+- `messages/sv.json`
+- Optional: `components/about/why-choose-us.tsx` only for source hygiene if no public behavior changes are needed.
+
+Future correction scope:
+- Remove or neutralize unsupported public-visible claims involving Cadastur, guide credentials, licensed/certified/official wording, ratings, reviews, booking-count social proof, guarantees, safety-style wording, fast-response claims, private-tour positioning, local-team claims, and equivalent credibility claims unless explicitly verified and approved in project docs.
+
+Future validation:
+- `npm.cmd run lint`
+- `npm.cmd run typecheck`
+- Repeat risky-term scan over `app components messages`.
+- Confirm remaining hits are only internal/key-only or acceptable factual/service copy.
+- Verify public home, contact, tour list cards, and tour detail no longer show unsupported credibility or social-proof claims.
+- `git diff --check`
+
+Restrictions preserved in this READY opening:
+- No app, component, message, product document, runtime, implementation, JSON, YAML, seed, API, backend, database, schema, package, lockfile, deploy, commit, or push changes were made beyond allowed operational documentation.
+- No actual CNPJ value, Cadastur number, credential number, testimonial, review, rating, fake name, price, availability guarantee, payment guarantee, or unapproved credibility claim was added.
+
+---
+
 ## Update 2026-06-08 - RT-AI-013 Remove Unsupported Website Credibility Claims
 
 State: REVIEW.

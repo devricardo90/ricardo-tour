@@ -5,6 +5,31 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-09 - RT-AI-015 READY Documentation Gate
+
+**Executed by:** Codex
+**Environment:** local; documentation operations only
+**Status:** READY opened; no production effect
+
+**Objective:**
+Open RT-AI-015 as a small mixed code/copy task to audit and clean remaining public-visible risky claims found outside RT-AI-014 scope.
+
+**Context:**
+- RT-AI-014 is Remote DONE at commit `b06b680c96ba23aacae4bbb2174705f0abade043`.
+- Remaining risky surfaces were identified in `components/hero-section.tsx`, `components/footer.tsx`, `components/trips/tour-detail-client.tsx`, `components/trips/tour-media-badges.tsx`, `components/trips/trip-card.tsx`, `app/[locale]/(public)/page.tsx`, and `app/[locale]/(public)/contato/page.tsx`.
+
+**Result:**
+- RT-AI-015 marked as READY in operational documentation.
+- Future allowed file list registered for the remaining public surfaces, locale message files, and optional `components/about/why-choose-us.tsx` source hygiene only.
+- Future forbidden scope registered for AI concierge, RAG, embeddings, LangChain, LangGraph, backend/API, database, schema/migration/seed, package/lockfile, deploy, and unapproved credibility/social-proof claims.
+- Future validation registered for lint, typecheck, risky-term scan, public surface verification, `git diff --check`, changed-file evidence, and forbidden-scope confirmation.
+
+**Restrictions preserved:**
+- No app file, component file, message file, product document, runtime file, implementation file, JSON, YAML, seed, API, backend, database, schema, package file, lockfile, deploy, commit, or push was created or changed in this READY opening.
+- No actual CNPJ value, Cadastur number, credential number, testimonial, review, rating, fake name, price, availability guarantee, payment guarantee, or unapproved credibility claim was added.
+
+---
+
 ## 2026-06-08 - RT-AI-013 Unsupported Website Credibility Claims Removal
 
 **Executed by:** Codex
