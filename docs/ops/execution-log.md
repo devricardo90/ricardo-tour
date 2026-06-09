@@ -5,6 +5,31 @@ Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com e
 
 ---
 
+## 2026-06-09 - RT-AI-016 READY Documentation Gate
+
+**Executed by:** Codex
+**Environment:** local; documentation operations only
+**Status:** READY opened; no production effect
+
+**Objective:**
+Open RT-AI-016 as a narrow recovery task to restore the owner-approved Cadastur trust mark in the footer without reverting the full RT-AI-015 cleanup.
+
+**Context:**
+- RT-AI-015 is Remote DONE at commit `782285aee0a0bc1db384ded060cf4b04954c135c`.
+- Owner feedback clarified that the Cadastur logo should not have been removed.
+- Existing assets are available at `public/cadastro/cadastur.png` and `public/images/seals/cadastur-official.png`.
+
+**Result:**
+- RT-AI-016 marked as READY in operational documentation.
+- Future implementation scope restricted to `components/footer.tsx` only.
+- Future wording restricted to neutral Cadastur trust mark copy such as "Cadastur", "Cadastro turistico", or "Registro turistico informado pela Rick Travel".
+- Future forbidden scope registered to prevent restoring reviews, ratings, fake counters, "500+", testimonials, guarantees, unsupported social proof, fake Cadastur number, Ministerio do Turismo wording unless explicitly owner-approved, or expanded official/licensed/certified/guaranteed claims.
+
+**Restrictions preserved:**
+- No app file, component file, message file, image asset, product document, runtime file, implementation file, JSON, YAML, seed, API, backend, database, schema, package file, lockfile, deploy, commit, or push was created or changed in this READY opening.
+
+---
+
 ## 2026-06-09 - RT-AI-015 READY Documentation Gate
 
 **Executed by:** Codex

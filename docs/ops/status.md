@@ -1,5 +1,36 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-09 - RT-AI-016 Restore Approved Cadastur Trust Mark READY
+
+State: READY.
+
+RT-AI-016 was opened as a narrow recovery task after RT-AI-015 Remote DONE at commit `782285aee0a0bc1db384ded060cf4b04954c135c`.
+
+Future objective:
+- Restore the owner-approved Cadastur trust mark in the footer without reverting RT-AI-015 and without changing broader public UI.
+
+Future allowed implementation scope:
+- `components/footer.tsx` only.
+- Existing Cadastur asset `public/cadastro/cadastur.png` or `public/images/seals/cadastur-official.png`.
+
+Future copy/alt direction:
+- Use neutral wording such as "Cadastur", "Cadastro turistico", or "Registro turistico informado pela Rick Travel".
+
+Future forbidden scope:
+- No hero redesign, home layout change, contact page change, tour card change, tour detail change, booking flow change, admin change, messages change unless separately authorized, backend/API, database, schema/migration/seed, AI Concierge, RAG, embeddings, LangChain, LangGraph, package/lockfile, deploy, fake Cadastur number, reviews, ratings, fake counters, testimonials, guarantees, "500+", unsupported social proof, Ministerio do Turismo wording unless explicitly owner-approved, or "oficial", "licenciado", "certificado", "garantido", or equivalent expanded legal/credential claim unless explicitly owner-approved.
+
+Future validation:
+- `npm.cmd run lint`
+- `npm.cmd run typecheck`
+- `git diff --check`
+- Confirm changed files are limited to `components/footer.tsx`.
+- Confirm no RT-AI-015 removed risky claims were restored.
+
+Restrictions preserved in this READY opening:
+- No app, component, message, image, product document, runtime, implementation, JSON, YAML, seed, API, backend, database, schema, package, lockfile, deploy, commit, or push changes were made beyond allowed operational documentation.
+
+---
+
 ## Update 2026-06-09 - RT-AI-015 Remaining Public Risky Claims READY
 
 State: READY.

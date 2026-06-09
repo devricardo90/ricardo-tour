@@ -2319,3 +2319,66 @@ Acceptance criteria:
 Risk: medium. The main risk is replacing unsupported public claims with different unsupported credibility or social-proof wording instead of neutral approved service copy.
 
 Execution state: RT-AI-015 opened as READY in operational documentation only. No app file, component file, message file, product document, runtime file, implementation file, JSON, YAML, seed, API, backend, database, package file, lockfile, deploy, commit, or push was created or changed in this READY opening.
+
+## RT-AI-016 Restore Approved Cadastur Trust Mark
+
+State: READY
+
+Objective: restore the owner-approved Cadastur trust mark in the footer without reverting RT-AI-015 and without changing broader public UI.
+
+Type: RECOVERY UI/COPY. This READY opening is documentation-only.
+
+Context:
+- RT-AI-015 is Remote DONE at commit `782285aee0a0bc1db384ded060cf4b04954c135c`.
+- RT-AI-015 removed remaining public risky claims, including the footer Cadastur mark.
+- Owner feedback clarified that the Cadastur logo should not have been removed and is considered an important credibility asset for Rick Travel.
+- Existing Cadastur assets are present at `public/cadastro/cadastur.png` and `public/images/seals/cadastur-official.png`.
+
+Future implementation files allowed:
+- `components/footer.tsx` only.
+
+Future asset usage allowed:
+- Use existing asset `public/cadastro/cadastur.png`; or
+- Use existing asset `public/images/seals/cadastur-official.png`.
+
+Future implementation scope:
+- Restore Cadastur as a neutral trust mark in the footer trust area.
+- Use neutral alt/copy such as "Cadastur", "Cadastro turistico", or "Registro turistico informado pela Rick Travel".
+- Keep the RT-AI-015 cleanup intact for reviews, ratings, fake counters, "500+", testimonials, guarantees, and unsupported social proof.
+
+Future forbidden scope:
+- No hero redesign.
+- No home layout changes.
+- No contact page changes.
+- No tour card changes.
+- No tour detail changes.
+- No booking flow changes.
+- No admin changes.
+- No messages changes unless separately authorized.
+- No backend/API changes.
+- No database changes.
+- No schema/migration/seed changes.
+- No AI Concierge, RAG, embeddings, LangChain, or LangGraph.
+- No package or lockfile changes.
+- No deploy.
+- No fake Cadastur number.
+- No reviews, ratings, fake counters, testimonials, guarantees, "500+", or unsupported social proof.
+- No Ministerio do Turismo wording unless explicitly owner-approved.
+- No "oficial", "licenciado", "certificado", "garantido", or equivalent expanded legal/credential claim unless explicitly owner-approved.
+
+Future validation criteria:
+- `npm.cmd run lint`
+- `npm.cmd run typecheck`
+- `git diff --check`
+- Confirm changed files are limited to `components/footer.tsx`.
+- Confirm the restored footer mark uses an existing Cadastur asset and neutral approved wording only.
+- Confirm no RT-AI-015 removed risky claims were restored.
+
+Acceptance criteria:
+- Footer displays the approved Cadastur trust mark again.
+- No broader UI, route, booking, admin, data, package, database, AI, or deploy scope is changed.
+- No Cadastur number, fake credential, legal expansion, official/ministry wording, certification/licensing claim, guarantee, testimonial, review, rating, fake counter, or social-proof claim is added.
+
+Risk: low to medium. The main risk is restoring the mark with expanded unsupported legal or official wording instead of a neutral owner-approved trust mark.
+
+Execution state: RT-AI-016 opened as READY in operational documentation only. No app file, component file, message file, image asset, product document, runtime file, implementation file, JSON, YAML, seed, API, backend, database, schema, package file, lockfile, deploy, commit, or push was created or changed in this READY opening.

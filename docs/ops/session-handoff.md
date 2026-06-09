@@ -922,3 +922,41 @@ Restrictions for this READY opening:
 
 Next step:
 - Execute RT-AI-015 only when explicitly authorized by a separate implementation gate.
+
+## RT-AI-016 READY - Restore Approved Cadastur Trust Mark
+
+State: READY on 2026-06-09.
+
+Objective: restore the owner-approved Cadastur trust mark in the footer without reverting RT-AI-015 or changing broader UI.
+
+Context:
+- RT-AI-015 is Remote DONE at commit `782285aee0a0bc1db384ded060cf4b04954c135c`.
+- Owner feedback: removing the Cadastur logo was not intended.
+- Existing assets remain available:
+  - `public/cadastro/cadastur.png`
+  - `public/images/seals/cadastur-official.png`
+
+Future implementation files allowed:
+- `components/footer.tsx` only.
+
+Future implementation scope:
+- Restore Cadastur as a neutral trust mark in the footer trust area.
+- Use an existing Cadastur asset.
+- Use neutral alt/copy such as "Cadastur", "Cadastro turistico", or "Registro turistico informado pela Rick Travel".
+
+Future forbidden scope:
+- No hero redesign, home layout changes, contact page changes, tour card changes, tour detail changes, booking flow changes, admin changes, messages changes unless separately authorized, backend/API, database, schema/migration/seed, AI Concierge, RAG, embeddings, LangChain, LangGraph, package/lockfile, deploy, fake Cadastur number, reviews, ratings, fake counters, testimonials, guarantees, "500+", unsupported social proof, Ministerio do Turismo wording unless explicitly owner-approved, or "oficial", "licenciado", "certificado", "garantido", or equivalent expanded legal/credential claim unless explicitly owner-approved.
+
+Future validation:
+- `npm.cmd run lint`
+- `npm.cmd run typecheck`
+- `git diff --check`
+- Confirm changed files are limited to `components/footer.tsx`.
+- Confirm no RT-AI-015 removed risky claims were restored.
+
+Restrictions for this READY opening:
+- Operational docs only.
+- No app files, components, messages, images, product docs, runtime files, implementation files, JSON, YAML, seed, API, backend, database, schema, package, lockfile, deploy, commit, or push were changed.
+
+Next step:
+- Execute RT-AI-016 only when explicitly authorized by a separate implementation gate.
