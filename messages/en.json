@@ -51,20 +51,20 @@
         "TravelerSupport": {
             "eyebrow": "Traveler support",
             "title": "Clear guidance for planning your Rio experience",
-            "subtitle": "Rick Travel helps travelers organize local tourism experiences with human support and approved public channels.",
-            "cardFooter": "Human support",
+            "subtitle": "Rick Travel helps travelers plan tours and experiences in Rio with human support, clear guidance, and direct confirmation from the team.",
+            "cardFooter": "HUMAN SUPPORT",
             "items": {
                 "orientation": {
-                    "title": "Local orientation",
-                    "text": "Rick Travel offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil."
+                    "title": "Local guidance",
+                    "text": "We help you understand the best options for tours, experiences, and getting around Rio de Janeiro, based on your travel profile."
                 },
                 "languages": {
-                    "title": "Language support",
-                    "text": "Support is available in Portuguese, Spanish, and English."
+                    "title": "Support in languages",
+                    "text": "You can speak with the team in Portuguese, Spanish, or English to ask questions and organize your experience with more clarity."
                 },
                 "handoff": {
                     "title": "Team confirmation",
-                    "text": "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
+                    "text": "Prices, schedules, reservations, availability, and payments are always confirmed directly by the Rick Travel team before finalization."
                 }
             }
         }

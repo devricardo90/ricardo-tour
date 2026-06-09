@@ -50,21 +50,21 @@
         },
         "TravelerSupport": {
             "eyebrow": "Soporte al viajero",
-            "title": "Orientacion clara para planificar tu experiencia en Rio",
-            "subtitle": "Rick Travel ayuda a viajeros a organizar experiencias de turismo local con atencion humana y canales publicos aprobados.",
-            "cardFooter": "Atencion humana",
+            "title": "Orientación clara para planificar tu experiencia en Río",
+            "subtitle": "Rick Travel ayuda a viajeros a planificar paseos y experiencias en Río con atención humana, orientación clara y confirmación directa del equipo.",
+            "cardFooter": "ATENCIÓN HUMANA",
             "items": {
                 "orientation": {
-                    "title": "Orientacion local",
-                    "text": "Rick Travel ofrece tours guiados, experiencias de turismo local, orientacion personalizada y soporte para viajeros en Rio de Janeiro, Brasil."
+                    "title": "Orientación local",
+                    "text": "Te ayudamos a entender las mejores opciones de paseos, experiencias y traslados en Río de Janeiro, según tu perfil de viaje."
                 },
                 "languages": {
-                    "title": "Soporte en idiomas",
-                    "text": "Support is available in Portuguese, Spanish, and English."
+                    "title": "Atención en idiomas",
+                    "text": "Puedes hablar con el equipo en portugués, español o inglés para resolver dudas y organizar tu experiencia con más claridad."
                 },
                 "handoff": {
-                    "title": "Confirmacion del equipo",
-                    "text": "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
+                    "title": "Confirmación del equipo",
+                    "text": "Valores, horarios, reservas, disponibilidad y pagos siempre son confirmados directamente por el equipo Rick Travel antes de la finalización."
                 }
             }
         }

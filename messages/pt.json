@@ -50,21 +50,21 @@
         },
         "TravelerSupport": {
             "eyebrow": "Suporte ao viajante",
-            "title": "Orientacao clara para planejar sua experiencia no Rio",
-            "subtitle": "A Rick Travel ajuda viajantes a organizar experiencias de turismo local com atendimento humano e canais publicos aprovados.",
-            "cardFooter": "Atendimento humano",
+            "title": "Orientação clara para planejar sua experiência no Rio",
+            "subtitle": "A Rick Travel ajuda viajantes a planejar passeios e experiências no Rio com atendimento humano, orientação clara e confirmação direta pela equipe.",
+            "cardFooter": "ATENDIMENTO HUMANO",
             "items": {
                 "orientation": {
-                    "title": "Orientacao local",
-                    "text": "A Rick Travel oferece passeios guiados, experiencias de turismo local, orientacao personalizada e suporte ao viajante no Rio de Janeiro, Brasil."
+                    "title": "Orientação local",
+                    "text": "Ajudamos você a entender as melhores opções de passeios, experiências e deslocamentos no Rio de Janeiro, de acordo com seu perfil de viagem."
                 },
                 "languages": {
-                    "title": "Suporte em idiomas",
-                    "text": "Support is available in Portuguese, Spanish, and English."
+                    "title": "Atendimento em idiomas",
+                    "text": "Você pode falar com a equipe em português, espanhol ou inglês para tirar dúvidas e organizar sua experiência com mais segurança."
                 },
                 "handoff": {
-                    "title": "Confirmacao pela equipe",
-                    "text": "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
+                    "title": "Confirmação pela equipe",
+                    "text": "Valores, horários, reservas, disponibilidade e pagamentos são sempre confirmados diretamente pela equipe Rick Travel antes da finalização."
                 }
             }
         }

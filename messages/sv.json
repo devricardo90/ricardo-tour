@@ -49,22 +49,22 @@
             }
         },
         "TravelerSupport": {
-            "eyebrow": "Resenarstod",
-            "title": "Tydlig vagledning for din Rio-planering",
-            "subtitle": "Rick Travel hjalper resenarer att organisera lokala turismupplevelser med mansklig kontakt och godkanda offentliga kanaler.",
-            "cardFooter": "Mansklig kontakt",
+            "eyebrow": "Resenärsstöd",
+            "title": "Tydlig vägledning för att planera din upplevelse i Rio",
+            "subtitle": "Rick Travel hjälper resenärer att planera turer och upplevelser i Rio med mänsklig kontakt, tydlig vägledning och direkt bekräftelse från teamet.",
+            "cardFooter": "MÄNSKLIG KONTAKT",
             "items": {
                 "orientation": {
-                    "title": "Lokal orientering",
-                    "text": "Rick Travel erbjuder guidade turer, lokala turismupplevelser, personlig reseorientering och resenarstod i Rio de Janeiro, Brasilien."
+                    "title": "Lokal vägledning",
+                    "text": "Vi hjälper dig att förstå de bästa alternativen för turer, upplevelser och transporter i Rio de Janeiro utifrån din reseprofil."
                 },
                 "languages": {
-                    "title": "Sprakstod",
-                    "text": "Support is available in Portuguese, Spanish, and English."
+                    "title": "Stöd på flera språk",
+                    "text": "Du kan prata med teamet på portugisiska, spanska eller engelska för att ställa frågor och planera din upplevelse med större tydlighet."
                 },
                 "handoff": {
-                    "title": "Teamets bekraftelse",
-                    "text": "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
+                    "title": "Bekräftelse från teamet",
+                    "text": "Priser, tider, bokningar, tillgänglighet och betalningar bekräftas alltid direkt av Rick Travel-teamet innan allt slutförs."
                 }
             }
         }
