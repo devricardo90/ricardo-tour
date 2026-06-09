@@ -99,21 +99,17 @@ export default function FooterSection() {
                 <div className="my-10 border-t border-white/8" />
 
                 <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
-                    <div className="flex items-center gap-5">
+                    <div className="flex items-center gap-4">
                         <Image
-                            src="/plane.svg"
-                            alt=""
+                            src="/cadastro/cadastur.png"
+                            alt="Cadastur"
                             width={72}
                             height={40}
                             className="object-contain opacity-70"
                         />
-                        <Image
-                            src="/plane.svg"
-                            alt=""
-                            width={72}
-                            height={40}
-                            className="object-contain opacity-70"
-                        />
+                        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-white/48">
+                            {"Cadastro tur\u00edstico"}
+                        </span>
                     </div>
                     <span className="text-center text-sm text-white/50">
                         &copy; {new Date().getFullYear()} <strong className="text-white">Rick Travel</strong>. {t("copyright")}
