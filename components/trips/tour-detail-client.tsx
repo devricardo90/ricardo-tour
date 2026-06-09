@@ -42,31 +42,31 @@ function getReserveConfidenceCopy(locale: string) {
     switch (locale) {
         case "en":
             return {
-                title: "Why book with Rick Travel",
-                item1: "Licensed guide operation with support before your tour",
+                title: "Trip information",
+                item1: "Team guidance before your tour",
                 item2: "Pre-booking flow with manual confirmation before payment",
-                item3: "If you prefer, our team can shape the itinerary with you on WhatsApp",
+                item3: "If you prefer, the team can help shape the itinerary with you on WhatsApp",
             };
         case "es":
             return {
-                title: "Por que reservar con Rick Travel",
-                item1: "Operacion con guia acreditado y soporte antes del tour",
+                title: "Informacion del paseo",
+                item1: "Orientacion del equipo antes del tour",
                 item2: "Pre-reserva con confirmacion manual antes del pago",
-                item3: "Si prefieres, nuestro equipo puede montar el itinerario contigo por WhatsApp",
+                item3: "Si prefieres, el equipo puede ayudarte a organizar el itinerario por WhatsApp",
             };
         case "sv":
             return {
-                title: "Varfor boka med Rick Travel",
-                item1: "Certifierad guideverksamhet med support innan din tur",
+                title: "Information om turen",
+                item1: "Vagledning fran teamet fore turen",
                 item2: "Forbokning med manuell bekraftelse innan betalning",
-                item3: "Om du foredrar det kan vart team forma resplanen med dig via WhatsApp",
+                item3: "Om du foredrar det kan teamet hjalpa dig att planera resan via WhatsApp",
             };
         default:
             return {
-                title: "Por que reservar com a Rick Travel",
-                item1: "Operacao com guia credenciado e suporte antes do passeio",
+                title: "Informacoes do passeio",
+                item1: "Orientacao da equipe antes do passeio",
                 item2: "Pre-reserva com confirmacao manual antes do pagamento",
-                item3: "Se preferir, nossa equipe monta um roteiro e tira duvidas pelo WhatsApp",
+                item3: "Se preferir, a equipe ajuda a organizar o roteiro pelo WhatsApp",
             };
     }
 }
@@ -137,8 +137,8 @@ export function TourDetailClient({ trip, startDate, schedules }: TourDetailClien
 
                         <div className="mt-6 grid gap-3 sm:grid-cols-3">
                             <div className="rounded-[22px] border border-white/8 bg-[#091d2c] px-4 py-4">
-                                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-[#d8c18f]">Operação</div>
-                                <div className="mt-2 text-sm leading-6 text-white/72">Guia credenciado e suporte humano antes do passeio.</div>
+                                <div className="text-xs font-semibold uppercase tracking-[0.14em] text-[#d8c18f]">Informacoes</div>
+                                <div className="mt-2 text-sm leading-6 text-white/72">Detalhes do passeio apresentados de forma clara antes da reserva.</div>
                             </div>
                             <div className="rounded-[22px] border border-white/8 bg-[#091d2c] px-4 py-4">
                                 <div className="text-xs font-semibold uppercase tracking-[0.14em] text-[#d8c18f]">Reserva</div>

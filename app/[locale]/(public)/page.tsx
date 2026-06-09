@@ -14,17 +14,17 @@ function getHomeMetadataCopy(locale: string) {
     switch (locale) {
         case "en":
             return {
-                title: "Rick Travel | Private Tours in Rio de Janeiro",
+                title: "Rick Travel | Rio de Janeiro Experiences",
                 description: "Rick Travel offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil.",
             };
         case "es":
             return {
-                title: "Rick Travel | Tours privados en Rio de Janeiro",
+                title: "Rick Travel | Experiencias en Rio de Janeiro",
                 description: "Rick Travel ofrece tours guiados, experiencias de turismo local, orientacion personalizada y soporte para viajeros en Rio de Janeiro, Brasil.",
             };
         case "sv":
             return {
-                title: "Rick Travel | Privata turer i Rio de Janeiro",
+                title: "Rick Travel | Upplevelser i Rio de Janeiro",
                 description: "Rick Travel erbjuder guidade turer, lokala turismupplevelser, personlig reseorientering och resenarstod i Rio de Janeiro, Brasilien.",
             };
         default:

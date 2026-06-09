@@ -6,7 +6,6 @@ import { HeroSearch } from "@/components/hero-search";
 import {
   ChevronRight,
   ShieldCheck,
-  Star,
   MapPin,
   MessageCircleMore,
   Clock3,
@@ -18,51 +17,51 @@ function getHeroSupportCopy(locale: string) {
   switch (locale) {
     case "en":
       return {
-        responseTime: "WhatsApp support replies within minutes",
+        responseTime: "Contact guidance by WhatsApp",
         quoteNote: "Build your itinerary with our team",
-        trustBadges: [
-          "500+ curated experiences delivered",
-          "4.9 average guest rating",
-          "Licensed guides and secure operation",
+        supportBadges: [
+          "Rio experience planning",
+          "Human support",
+          "Details confirmed by the team",
         ],
       };
     case "es":
       return {
-        responseTime: "Atencion por WhatsApp en pocos minutos",
+        responseTime: "Orientacion por WhatsApp",
         quoteNote: "Arma tu itinerario con ayuda de nuestro equipo",
-        trustBadges: [
-          "500+ tours realizados",
-          "4,9 de valoracion media",
-          "Guias acreditados y operacion segura",
+        supportBadges: [
+          "Planificacion de experiencias en Rio",
+          "Atencion humana",
+          "Detalles confirmados por el equipo",
         ],
       };
     case "sv":
       return {
-        responseTime: "WhatsApp-svar inom nagra minuter",
+        responseTime: "Vagledning via WhatsApp",
         quoteNote: "Bygg din resplan tillsammans med vart team",
-        trustBadges: [
-          "500+ genomforda turer",
-          "4,9 i genomsnittligt betyg",
-          "Certifierade guider och trygg drift",
+        supportBadges: [
+          "Planering av Rio-upplevelser",
+          "Mansklig kontakt",
+          "Detaljer bekraftas av teamet",
         ],
       };
     default:
       return {
-        responseTime: "Atendimento no WhatsApp em poucos minutos",
+        responseTime: "Orientacao pelo WhatsApp",
         quoteNote: "Monte seu roteiro com ajuda da nossa equipe",
-        trustBadges: [
-          "500+ tours realizados",
-          "4,9 de avaliacao media",
-          "Guias credenciados e operacao segura",
+        supportBadges: [
+          "Planejamento de experiencias no Rio",
+          "Atendimento humano",
+          "Detalhes confirmados pela equipe",
         ],
       };
   }
 }
 
-function TrustBar({ badges }: { badges: string[] }) {
+function SupportBar({ badges }: { badges: string[] }) {
   const items = [
     { icon: <MapPin className="h-3.5 w-3.5" />, text: badges[0] },
-    { icon: <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />, text: badges[1] },
+    { icon: <MessageCircleMore className="h-3.5 w-3.5" />, text: badges[1] },
     { icon: <ShieldCheck className="h-3.5 w-3.5" />, text: badges[2] },
   ];
 
@@ -93,7 +92,7 @@ function HeroContent() {
       <div className="mx-auto max-w-5xl text-center">
         <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#d8c18f] backdrop-blur-md">
           <ShieldCheck className="h-3.5 w-3.5" />
-          Guia credenciado e operação local
+          Atendimento humano e orientacao clara
         </div>
 
         <h1 className="mx-auto mt-7 max-w-[15ch] text-balance text-4xl font-semibold leading-[0.98] tracking-[-0.045em] text-white md:text-6xl lg:text-[5rem]">
@@ -149,7 +148,7 @@ function HeroContent() {
           </span>
         </div>
 
-        <TrustBar badges={supportCopy.trustBadges} />
+        <SupportBar badges={supportCopy.supportBadges} />
 
       </div>
     </div>
@@ -175,7 +174,7 @@ function HeroMedia() {
       <div className="absolute inset-x-8 bottom-8 hidden rounded-[26px] border border-white/10 bg-[#0a1d2b]/56 px-6 py-5 text-white/78 backdrop-blur-xl lg:block">
         <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#C8A86B]">Rio de Janeiro curated travel</div>
         <div className="mt-2 max-w-xl text-sm leading-6">
-          Private tours, local guidance and flexible planning for travelers who want a cleaner booking flow.
+          Rio experiences, clear planning and team confirmation before final details.
         </div>
       </div>
     </div>

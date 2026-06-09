@@ -87,9 +87,6 @@ export function TripCard({ trip }: TripCardProps) {
                 ) : null}
 
                 <TourMediaBadges
-                    rating={trip.ratingAvg}
-                    reviews={trip.reviewsCount}
-                    bookings={trip.bookingsCount}
                     showFavorite
                 />
             </div>

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { ShieldCheck, Clock3, MessageCircleMore, MapPin } from "lucide-react";
+import { Clock3, MessageCircleMore, MapPin } from "lucide-react";
 import { ContactForm } from "@/components/contact-form";
 import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
 import { buildWhatsAppQuoteUrl } from "@/lib/whatsapp";
@@ -15,14 +15,14 @@ export async function generateMetadata({
   return {
     title: "Contato e Orcamento | Rick Travel",
     description:
-      "Solicite orcamento para passeios no Rio de Janeiro com guias credenciados Cadastur. Entre em contato conosco.",
+      "Solicite orcamento, tire duvidas e receba apoio para planejar experiencias no Rio de Janeiro com confirmacao direta da equipe.",
     alternates: {
       canonical: path,
     },
     openGraph: {
       title: "Contato e Orcamento | Rick Travel",
       description:
-        "Solicite orcamento para passeios no Rio de Janeiro com guias credenciados Cadastur.",
+        "Solicite orcamento, tire duvidas e receba apoio para planejar experiencias no Rio de Janeiro.",
       url: `${PUBLIC_SITE_URL}${path}`,
       siteName: "Rick Travel",
       locale: "pt_BR",
@@ -60,8 +60,8 @@ export default function ContatoPage() {
 
               <p className="mt-5 max-w-3xl text-[15px] leading-8 text-white/68 md:text-lg">
                 Solicite orcamento, tire duvidas sobre roteiros e receba apoio para
-                montar uma experiencia mais segura, organizada e personalizada com
-                equipe local credenciada.
+                organizar uma experiencia no Rio com orientacao clara e confirmacao
+                direta da equipe.
               </p>
 
               <div className="mt-6 flex flex-wrap items-center gap-3">
@@ -72,11 +72,11 @@ export default function ContatoPage() {
                   className="chip-dark transition-colors hover:text-white"
                 >
                   <MessageCircleMore className="h-3.5 w-3.5" />
-                  WhatsApp oficial
+                  WhatsApp da equipe
                 </a>
                 <span className="chip-dark">
-                  <ShieldCheck className="h-3.5 w-3.5" />
-                  Guias credenciados
+                  <MessageCircleMore className="h-3.5 w-3.5" />
+                  Duvidas e planejamento
                 </span>
                 <span className="chip-dark">
                   <Clock3 className="h-3.5 w-3.5" />
@@ -84,7 +84,7 @@ export default function ContatoPage() {
                 </span>
                 <span className="chip-dark">
                   <MapPin className="h-3.5 w-3.5" />
-                  Rio de Janeiro com operacao local
+                  Experiencias no Rio de Janeiro
                 </span>
               </div>
             </div>

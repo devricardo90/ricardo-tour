@@ -41,7 +41,7 @@ export default function FooterSection() {
                             <RickTravelLogo variant="full" size="md" />
                         </Link>
                         <p className="mt-4 max-w-[260px] text-sm leading-7 text-white/62">
-                            Experiencias no Rio de Janeiro com operacao mais clara, segura e personalizada.
+                            Experiencias no Rio de Janeiro com planejamento claro e atendimento humano.
                         </p>
                     </div>
 
@@ -73,7 +73,7 @@ export default function FooterSection() {
                     >
                         <MessageCircleMore className="mt-0.5 h-5 w-5 shrink-0 text-[#d8c18f]" />
                         <span>
-                            <strong className="block text-white">WhatsApp oficial</strong>
+                            <strong className="block text-white">WhatsApp da equipe</strong>
                             Atendimento direto para orcamentos, agenda e duvidas antes da pre-reserva.
                         </span>
                     </a>
@@ -83,15 +83,15 @@ export default function FooterSection() {
                     >
                         <Mail className="mt-0.5 h-5 w-5 shrink-0 text-[#d8c18f]" />
                         <span>
-                            <strong className="block text-white">Formulario seguro</strong>
-                            Envie seu e-mail e telefone para a equipe retornar com roteiro e disponibilidade.
+                            <strong className="block text-white">Formulario de contato</strong>
+                            Envie seu e-mail e telefone para a equipe retornar com orientacao e proximos passos.
                         </span>
                     </Link>
                     <div className="flex items-start gap-3 rounded-[18px] border border-white/8 bg-[#091d2c] p-4 text-sm text-white/72">
                         <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#d8c18f]" />
                         <span>
-                            <strong className="block text-white">Pre-reserva manual</strong>
-                            Nenhum pagamento online e iniciado nesta versao; a equipe confirma os proximos passos.
+                            <strong className="block text-white">Atendimento Rick Travel</strong>
+                            Informacoes de agenda, reserva e pagamento sao confirmadas pela equipe.
                         </span>
                     </div>
                 </div>
@@ -101,15 +101,15 @@ export default function FooterSection() {
                 <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
                     <div className="flex items-center gap-5">
                         <Image
-                            src="/cadastro/cadastur.png"
-                            alt="Cadastur - Ministério do Turismo"
+                            src="/plane.svg"
+                            alt=""
                             width={72}
                             height={40}
                             className="object-contain opacity-70"
                         />
                         <Image
-                            src="/logos/logo-turismo.webp"
-                            alt="Ministério do Turismo"
+                            src="/plane.svg"
+                            alt=""
                             width={72}
                             height={40}
                             className="object-contain opacity-70"
