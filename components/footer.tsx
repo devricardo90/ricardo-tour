@@ -1,16 +1,13 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Mail, MessageCircleMore, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 
 import { RickTravelLogo } from "@/components/rick-travel-logo";
 import { Link } from "@/i18n/routing";
-import { buildWhatsAppQuoteUrl } from "@/lib/whatsapp";
 
 export default function FooterSection() {
     const t = useTranslations("Footer");
-    const whatsappUrl = buildWhatsAppQuoteUrl({ locale: "pt", source: "home" });
 
     const columns = [
         {
@@ -64,39 +61,7 @@ export default function FooterSection() {
                     ))}
                 </div>
 
-                <div className="mt-10 grid gap-3 rounded-[24px] border border-white/8 bg-white/[0.03] p-5 md:grid-cols-3">
-                    <a
-                        href={whatsappUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-start gap-3 rounded-[18px] border border-white/8 bg-[#091d2c] p-4 text-sm text-white/72 transition-colors hover:text-white"
-                    >
-                        <MessageCircleMore className="mt-0.5 h-5 w-5 shrink-0 text-[#d8c18f]" />
-                        <span>
-                            <strong className="block text-white">WhatsApp da equipe</strong>
-                            Atendimento direto para orcamentos, agenda e duvidas antes da pre-reserva.
-                        </span>
-                    </a>
-                    <Link
-                        href="/contato"
-                        className="flex items-start gap-3 rounded-[18px] border border-white/8 bg-[#091d2c] p-4 text-sm text-white/72 transition-colors hover:text-white"
-                    >
-                        <Mail className="mt-0.5 h-5 w-5 shrink-0 text-[#d8c18f]" />
-                        <span>
-                            <strong className="block text-white">Formulario de contato</strong>
-                            Envie seu e-mail e telefone para a equipe retornar com orientacao e proximos passos.
-                        </span>
-                    </Link>
-                    <div className="flex items-start gap-3 rounded-[18px] border border-white/8 bg-[#091d2c] p-4 text-sm text-white/72">
-                        <ShieldCheck className="mt-0.5 h-5 w-5 shrink-0 text-[#d8c18f]" />
-                        <span>
-                            <strong className="block text-white">Atendimento Rick Travel</strong>
-                            Informacoes de agenda, reserva e pagamento sao confirmadas pela equipe.
-                        </span>
-                    </div>
-                </div>
-
-                <div className="my-10 border-t border-white/8" />
+                <div className="my-12 border-t border-white/8" />
 
                 <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
                     <div className="flex items-center gap-4">
