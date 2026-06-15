@@ -19,6 +19,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { ThemeToggleButton } from "./ThemeToggleButton";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { authClient } from "@/lib/auth-client";
+import { cn } from "@/lib/utils";
 
 /* ─── Types ─── */
 type SessionUser = {
@@ -319,11 +320,13 @@ export default function MobileMenu({ open, onClose }: Props) {
             <div
                 ref={overlayRef}
                 onClick={onClose}
-                className="fixed inset-0 z-40 bg-background/60 opacity-0"
+                className={cn(
+                    "fixed inset-0 z-40 bg-background/60 opacity-0 transition-all",
+                    !open && "pointer-events-none"
+                )}
                 style={{
                     backdropFilter: "blur(8px)",
                     WebkitBackdropFilter: "blur(8px)",
-                    pointerEvents: "none",
                 }}
                 aria-hidden={!open}
             />
@@ -331,7 +334,10 @@ export default function MobileMenu({ open, onClose }: Props) {
             {/* Bottom Sheet — tema escuro premium */}
             <div
                 ref={sheetRef}
-                className="fixed left-3 right-3 bottom-3 z-50 rounded-[26px] border border-white/10 p-4 opacity-0 shadow-2xl pointer-events-none"
+                className={cn(
+                    "fixed left-3 right-3 bottom-3 z-50 rounded-[26px] border border-white/10 p-4 opacity-0 shadow-2xl transition-all",
+                    !open && "pointer-events-none"
+                )}
                 style={{
                     background: "rgba(7, 26, 43, 0.96)",
                     backdropFilter: "blur(24px)",
@@ -340,6 +346,7 @@ export default function MobileMenu({ open, onClose }: Props) {
                 role="dialog"
                 aria-modal="true"
                 aria-label="Menu de navegação"
+                aria-hidden={!open}
             >
                 {/* Handle */}
                 <div className="flex justify-center mb-3">

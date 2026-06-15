@@ -2,8 +2,8 @@
     "HomePage": {
         "Hero": {
             "title": "Passeios guiados no Rio de Janeiro",
-            "description": "A Rick Travel oferece passeios guiados, experiencias de turismo local, orientacao personalizada e suporte ao viajante no Rio de Janeiro, Brasil.",
-            "primaryButton": "Reserve agora seu passeio exclusivo",
+            "description": "A Rick Travel oferece passeios guiados, experiências de turismo local, orientação personalizada e suporte ao viajante no Rio de Janeiro, Brasil.",
+            "primaryButton": "Conhecer passeios exclusivos",
             "secondaryButton": "Solicitar orçamento"
         },
         "Logos": {
@@ -15,8 +15,8 @@
             "noResults": "Nenhum passeio encontrado. Tente outra busca."
         },
         "Reservations": {
-            "title": "Reserve seu passeio",
-            "subtitle": "Escolha uma experiência e garanta sua vaga com poucos cliques.",
+            "title": "Planeje seu passeio",
+            "subtitle": "Escolha uma experiência e solicite sua reserva com poucos cliques.",
             "myBookings": "Minhas reservas",
             "availableTrips": "Passeios disponíveis"
         },
@@ -28,11 +28,11 @@
             "questions": {
                 "q1": {
                     "question": "Quanto tempo leva para confirmar a reserva?",
-                    "answer": "A equipe Rick Travel confirma os detalhes da reserva pelos canais publicos aprovados."
+                    "answer": "A equipe Rick Travel confirma os detalhes da reserva pelos canais públicos aprovados."
                 },
                 "q2": {
                     "question": "Quais métodos de pagamento vocês aceitam?",
-                    "answer": "Duvidas sobre pagamento sao tratadas diretamente pela equipe Rick Travel nos canais publicos aprovados."
+                    "answer": "Dúvidas sobre pagamento são tratadas diretamente pela equipe Rick Travel nos canais públicos aprovados."
                 },
                 "q3": {
                     "question": "Posso alterar ou cancelar minha reserva?",
@@ -40,11 +40,11 @@
                 },
                 "q4": {
                     "question": "Vocês atendem turistas internacionais?",
-                    "answer": "Atendemos viajantes interessados no Rio de Janeiro. O suporte esta disponivel em portugues, espanhol e ingles."
+                    "answer": "Atendemos viajantes interessados no Rio de Janeiro. O suporte está disponível em português, espanhol e inglês."
                 },
                 "q5": {
                     "question": "Qual é a política de reembolso?",
-                    "answer": "Duvidas sobre cancelamento e reembolso exigem confirmacao da equipe Rick Travel pelos canais publicos aprovados."
+                    "answer": "Dúvidas sobre cancelamento e reembolso exigem confirmação da equipe Rick Travel pelos canais públicos aprovados."
                 }
             }
         },
@@ -102,8 +102,8 @@
         "story": {
             "title": "Nossa História",
             "imageAlt": "Ricardo, fundador da Rick Travel",
-            "paragraph1": "A Rick Travel nasceu da paixao pelo Rio de Janeiro e do desejo de oferecer experiencias autenticas aos visitantes. A empresa atua com passeios guiados, experiencias de turismo local, orientacao personalizada e suporte ao viajante.",
-            "paragraph2": "Para orcamentos, reservas, agendas, pagamento e confirmacao final, fale com a equipe Rick Travel pelos canais publicos aprovados."
+            "paragraph1": "A Rick Travel nasceu da paixão pelo Rio de Janeiro e do desejo de oferecer experiências autênticas aos visitantes. A empresa atua com passeios guiados, experiências de turismo local, orientação personalizada e suporte ao viajante.",
+            "paragraph2": "Para orçamentos, reservas, agendas, pagamento e confirmação final, fale com a equipe Rick Travel pelos canais públicos aprovados."
         },
         "whyChoose": {
             "title": "Por Que Escolher a Rick Travel",
@@ -113,12 +113,12 @@
                 "description": "Roteiros adaptados aos seus interesses, ritmo e preferências. Cada cliente é único para nós."
             },
             "certified": {
-                "title": "Orientacao personalizada",
-                "description": "Suporte ao viajante para planejar experiencias de turismo local no Rio de Janeiro."
+                "title": "Orientação personalizada",
+                "description": "Suporte ao viajante para planejar experiências de turismo local no Rio de Janeiro."
             },
             "security": {
                 "title": "Atendimento humano",
-                "description": "Orcamentos, reservas, agendas, pagamento e confirmacao final sao tratados pela equipe Rick Travel."
+                "description": "Orçamentos, reservas, agendas, pagamento e confirmação final são tratados pela equipe Rick Travel."
             },
             "local": {
                 "title": "Experiência Local Autêntica",
@@ -135,7 +135,7 @@
         },
         "mission": {
             "title": "Missão",
-            "description": "Apoiar viajantes com experiencias de turismo local, informacoes claras e atendimento humano no Rio de Janeiro."
+            "description": "Apoiar viajantes com experiências de turismo local, informações claras e atendimento humano no Rio de Janeiro."
         },
         "vision": {
             "title": "Visão",
@@ -143,61 +143,61 @@
         },
         "values": {
             "title": "Valores",
-            "item1": "Informacoes claras",
+            "item1": "Informações claras",
             "item2": "Pontualidade e compromisso",
             "item3": "Respeito à cultura local",
             "item4": "Excelência no atendimento"
         },
         "security": {
             "eyebrow": "Suporte ao viajante",
-            "title": "Informacoes claras e atendimento humano",
-            "subtitle": "A Rick Travel ajuda viajantes a planejar experiencias de turismo local no Rio de Janeiro com canais publicos aprovados.",
+            "title": "Informações claras e atendimento humano",
+            "subtitle": "A Rick Travel ajuda viajantes a planejar experiências de turismo local no Rio de Janeiro com canais públicos aprovados.",
             "supportInfo": {
-                "title": "Orientacao personalizada",
-                "description": "A Rick Travel oferece passeios guiados, experiencias de turismo local, orientacao personalizada e suporte ao viajante no Rio de Janeiro, Brasil."
+                "title": "Orientação personalizada",
+                "description": "A Rick Travel oferece passeios guiados, experiências de turismo local, orientação personalizada e suporte ao viajante no Rio de Janeiro, Brasil."
             },
             "handoffInfo": {
-                "title": "Confirmacao humana",
-                "description": "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
+                "title": "Confirmação humana",
+                "description": "Para orçamentos, reservas, agendas, pagamento e confirmação final, entre em contato com a equipe Rick Travel pelos canais públicos aprovados."
             },
             "operational": {
                 "title": "Suporte de planejamento",
                 "orientation": {
                     "title": "Turismo local",
-                    "description": "Passeios guiados e experiencias locais no Rio de Janeiro"
+                    "description": "Passeios guiados e experiências locais no Rio de Janeiro"
                 },
                 "handoff": {
                     "title": "Acompanhamento da equipe",
-                    "description": "Orcamentos e detalhes finais tratados pela equipe Rick Travel"
+                    "description": "Orçamentos e detalhes finais tratados pela equipe Rick Travel"
                 },
                 "support": {
                     "title": "Suporte em idiomas",
-                    "description": "Portugues, espanhol e ingles"
+                    "description": "Português, espanhol e inglês"
                 }
             },
             "identity": {
                 "businessName": "Rick Travel",
-                "serviceFocus": "Passeios guiados e experiencias de turismo local no Rio de Janeiro, Brasil",
-                "serviceLabel": "Servico",
+                "serviceFocus": "Passeios guiados e experiências de turismo local no Rio de Janeiro, Brasil",
+                "serviceLabel": "Serviço",
                 "serviceValue": "Suporte ao viajante",
                 "instagramLabel": "Instagram",
                 "whatsappLabel": "WhatsApp",
                 "emailLabel": "Email",
                 "languagesLabel": "Idiomas",
-                "languagesValue": "Portugues, Ingles e Espanhol",
-                "nextStepLabel": "Proximo passo",
+                "languagesValue": "Português, Inglês e Espanhol",
+                "nextStepLabel": "Próximo passo",
                 "nextStepValue": "Fale com a equipe Rick Travel"
             }
         },
         "ctaFinal": {
             "title": "Pronto para viver o melhor do Rio?",
             "subtitle": "Fale com a equipe Rick Travel e planeje seu passeio no Rio de Janeiro com informações claras e atendimento profissional.",
-            "button": "Reserve seu tour agora"
+            "button": "Consultar passeio agora"
         }
     },
     "ToursPage": {
         "title": "Nossos tours",
-        "subtitle": "Confira todos os passeios disponíveis e reserve sua experiência."
+        "subtitle": "Confira todos os passeios disponíveis e solicite sua reserva."
     },
     "ContactPage": {
         "title": "Entre em contato",
@@ -239,40 +239,40 @@
     "BookingsPage": {
         "title": "Minhas reservas",
         "eyebrow": "Acompanhamento de reservas",
-        "subtitle": "Consulte suas pre-reservas, veja o status de cada pedido e acompanhe a confirmacao manual da equipe Rick Travel.",
-        "manualBadge": "Confirmacao manual pela equipe",
+        "subtitle": "Consulte suas pré-reservas, veja o status de cada pedido e acompanhe a confirmação manual da equipe Rick Travel.",
+        "manualBadge": "Confirmação manual pela equipe",
         "statusBadge": "Status claro da reserva",
         "loading": "Carregando reservas...",
         "loadError": "Erro ao carregar suas reservas",
-        "noBookings": "Voce ainda nao tem reservas.",
-        "noBookingsTitle": "Voce ainda nao tem reservas",
-        "noBookingsText": "Explore os passeios disponiveis no Rio de Janeiro e envie sua pre-reserva para a equipe.",
-        "browseToursButton": "Ver tours disponiveis",
-        "whatsappQuote": "Solicitar orcamento no WhatsApp",
+        "noBookings": "Você ainda não tem reservas.",
+        "noBookingsTitle": "Você ainda não tem reservas",
+        "noBookingsText": "Explore os passeios disponíveis no Rio de Janeiro e envie sua pré-reserva para a equipe.",
+        "browseToursButton": "Ver tours disponíveis",
+        "whatsappQuote": "Solicitar orçamento no WhatsApp",
         "activeTitle": "Reservas ativas",
         "canceledTitle": "Canceladas",
         "reservedAt": "Recebida em",
         "scheduledFor": "Data",
-        "pendingNote": "Sua reserva foi recebida e esta pendente de confirmacao manual pela equipe Rick Travel.",
-        "manualFlowNotice": "Este fluxo nao usa pagamento online. A equipe Rick Travel vai confirmar disponibilidade, pagamento e proximos passos manualmente.",
+        "pendingNote": "Sua reserva foi recebida e está pendente de confirmação manual pela equipe Rick Travel.",
+        "manualFlowNotice": "Este fluxo não usa pagamento online. A equipe Rick Travel vai confirmar disponibilidade, pagamento e próximos passos manualmente.",
         "paymentLabel": "Pagamento",
         "statusLabel": "Status",
         "viewDetails": "Ver detalhes",
         "cancel": "Cancelar",
         "cancelError": "Erro ao cancelar reserva",
         "cancelNetworkError": "Erro de rede ao cancelar",
-        "guestCount": "{count, plural, one {# hospede} other {# hospedes}}",
+        "guestCount": "{count, plural, one {# hóspede} other {# hóspedes}}",
         "confirmationEyebrow": "Reserva recebida",
-        "confirmationTitle": "Recebemos sua pre-reserva",
-        "confirmationIntro": "Seu pedido foi recebido com status pendente. A confirmacao e os detalhes de pagamento serao tratados manualmente pela equipe Rick Travel.",
+        "confirmationTitle": "Recebemos sua pré-reserva",
+        "confirmationIntro": "Seu pedido foi recebido com status pendente. A confirmação e os detalhes de pagamento serão tratados manualmente pela equipe Rick Travel.",
         "manualConfirmationNotice": "Nenhum pagamento online foi iniciado. Nossa equipe vai verificar o pedido e entrar em contato para confirmar a reserva.",
         "tour": "Passeio",
         "tourFallback": "Passeio",
         "date": "Data",
         "dateToConfirm": "Data a confirmar",
-        "guests": "Hospedes",
+        "guests": "Hóspedes",
         "total": "Total",
-        "bookingId": "Codigo da reserva",
+        "bookingId": "Código da reserva",
         "createdAt": "Criada em",
         "pendingStatusHelp": "Pendente significa que a equipe ainda precisa confirmar a reserva.",
         "backToBookings": "Voltar para minhas reservas",
@@ -281,14 +281,14 @@
             "pending": "Pendente",
             "confirmed": "Confirmada",
             "canceled": "Cancelada",
-            "inReview": "Analise manual"
+            "inReview": "Análise manual"
         },
         "paymentStatus": {
             "manualPending": "A combinar com a equipe",
             "paid": "Pago",
             "refunded": "Reembolsado",
             "partial": "Parcial",
-            "inReview": "Analise manual"
+            "inReview": "Análise manual"
         }
     },
     "LoginPage": {
@@ -303,7 +303,7 @@
     },
     "RegisterPage": {
         "title": "Criar conta",
-        "subtitle": "Cadastre-se para reservar passeios.",
+        "subtitle": "Cadastre-se para solicitar reservas de passeios.",
         "nameLabel": "Nome",
         "namePlaceholder": "Seu nome",
         "emailLabel": "Email",
@@ -320,10 +320,10 @@
         "pricePerPerson": "Preço por pessoa",
         "processing": "Processando...",
         "reserved": "Reservado",
-        "reserveNow": "Reservar Agora",
+        "reserveNow": "Solicitar Reserva",
         "alreadyReserved": "Você já tem uma reserva para este tour!",
-        "successMessage": "Reserva confirmada com sucesso!",
-        "pendingMessage": "Reserva criada com sucesso e agora esta pendente de confirmacao.",
+        "successMessage": "Pedido de reserva enviado com sucesso!",
+        "pendingMessage": "Reserva criada com sucesso e agora está pendente de confirmação.",
         "errorMessage": "Erro ao realizar reserva.",
         "connectionError": "Erro de conexão.",
         "freeCancellation": "Cancelamento grátis até 24h antes."
@@ -332,7 +332,7 @@
         "maxGuests": "Máximo {count} pessoas",
         "pricePerPerson": "Preço por pessoa",
         "reserved": "Reservado",
-        "reserveNow": "Reservar Agora",
+        "reserveNow": "Consultar Passeio",
         "viewDetails": "Ver detalhes do passeio",
         "imageAlt": "{title} em {city}"
     }
