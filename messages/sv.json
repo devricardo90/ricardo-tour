@@ -249,10 +249,10 @@
         "freeCancellation": "Gratis avbokning upp till 24h innan."
     },
     "TripCard": {
-        "maxGuests": "Maximalt {count} personer",
+        "maxGuests": "Max {count} personer",
         "pricePerPerson": "Pris per person",
         "reserved": "Reserverad",
-        "reserveNow": "Reservera nu",
+        "reserveNow": "Visa tur",
         "viewDetails": "Visa turdetaljer",
         "imageAlt": "{title} i {city}"
     }

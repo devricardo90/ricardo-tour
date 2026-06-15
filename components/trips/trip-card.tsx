@@ -32,19 +32,6 @@ function PhysicalLevelBadge({ level }: { level: string }) {
     );
 }
 
-function getCardCtaLabel(locale: string) {
-    switch (locale) {
-        case "en":
-            return "View dates";
-        case "es":
-            return "Ver fechas";
-        case "sv":
-            return "Se datum";
-        default:
-            return "Ver datas";
-    }
-}
-
 export function TripCard({ trip }: TripCardProps) {
     const locale = useLocale();
     const t = useTranslations("TripCard");
@@ -139,7 +126,7 @@ export function TripCard({ trip }: TripCardProps) {
                             asChild
                             className="shrink-0 rounded-xl bg-white text-slate-900 transition-all duration-200 hover:bg-white/92"
                         >
-                            <Link href={`/tours/${trip.id}`}>{getCardCtaLabel(locale)}</Link>
+                            <Link href={`/tours/${trip.id}`}>{t("reserveNow")}</Link>
                         </Button>
                     </motion.div>
                 </div>

@@ -332,7 +332,7 @@
         "maxGuests": "Máximo {count} pessoas",
         "pricePerPerson": "Preço por pessoa",
         "reserved": "Reservado",
-        "reserveNow": "Consultar Passeio",
+        "reserveNow": "Consultar passeio",
         "viewDetails": "Ver detalhes do passeio",
         "imageAlt": "{title} em {city}"
     }

@@ -329,10 +329,10 @@
         "freeCancellation": "Free cancellation up to 24h before."
     },
     "TripCard": {
-        "maxGuests": "Maximum {count} people",
+        "maxGuests": "Max {count} guests",
         "pricePerPerson": "Price per person",
         "reserved": "Reserved",
-        "reserveNow": "Reserve Now",
+        "reserveNow": "View tour",
         "viewDetails": "View tour details",
         "imageAlt": "{title} in {city}"
     }

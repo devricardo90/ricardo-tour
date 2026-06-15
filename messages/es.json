@@ -252,7 +252,7 @@
         "maxGuests": "Máximo {count} personas",
         "pricePerPerson": "Precio por persona",
         "reserved": "Reservado",
-        "reserveNow": "Reservar Ahora",
+        "reserveNow": "Ver tour",
         "viewDetails": "Ver detalles del tour",
         "imageAlt": "{title} en {city}"
     }
