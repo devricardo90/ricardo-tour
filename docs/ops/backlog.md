@@ -2382,3 +2382,38 @@ Acceptance criteria:
 Risk: low to medium. The main risk is restoring the mark with expanded unsupported legal or official wording instead of a neutral owner-approved trust mark.
 
 Execution state: RT-AI-016 opened as READY in operational documentation only. No app file, component file, message file, image asset, product document, runtime file, implementation file, JSON, YAML, seed, API, backend, database, schema, package file, lockfile, deploy, commit, or push was created or changed in this READY opening.
+
+## RT-UX-001D Auditar rotas/locales e SEO multilingue
+
+State: REVIEW
+
+Objective: audit public multilingual routes and SEO structure before typography, visual hierarchy, design polish, route fixes, or metadata fixes.
+
+Type: DOCUMENTATION-ONLY AUDIT.
+
+Evidence file:
+- `docs/validation/multilingual-routes-seo-audit-001d.md`
+
+Scope executed:
+- Audited `/pt`, `/en`, `/es`, `/sv`, `/sitemap.xml`, and `/robots.txt`.
+- Inspected `app/[locale]`, `proxy.ts`, `i18n/routing.ts`, `i18n/request.ts`, `messages/*.json`, `app/sitemap.ts`, `app/robots.ts`, and relevant metadata/link usage.
+- Ran local route checks through `http://127.0.0.1:3217`.
+- Ran production route checks against `https://rick-travel.vercel.app`.
+- Inspected rendered production HTML for `lang`, `title`, `description`, canonical, Open Graph URL, and alternate links.
+- Inspected rendered production internal hrefs for locale preservation.
+
+Execution result:
+- Local and production home routes for `pt`, `en`, `es`, and `sv` return `200`.
+- Production `/en` 404 was not reproducible in this audit; current `/en` returns `200` with no redirect.
+- Sitemap and robots return `200` in local and production.
+- Sitemap includes static and tour URLs for all four locales.
+- Canonicals are present per locale.
+- `hreflang`, `alternates.languages`, and `x-default` are missing.
+- Some public code still uses raw `next/link` with unprefixed hrefs.
+- Non-PT locales use Portuguese slugs for static pages.
+
+Recommended future task when explicitly authorized:
+- Fix multilingual SEO and locale-link consistency by adding shared canonical/alternate helpers, `hreflang`/`x-default`, page-level metadata gaps, contact metadata localization, and locale-aware links where needed. Do not open that task automatically.
+
+Restrictions preserved:
+- No design, typography, hero/card/footer visual, copy polish, route fix, metadata fix, package, lockfile, dependency, deployment, database, READY task, commit, or push was performed.

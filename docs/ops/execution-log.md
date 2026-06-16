@@ -1,5 +1,27 @@
 # Execution Log - Rick Travel
 
+## 2026-06-16 - RT-UX-001D - Multilingual Routes and SEO Audit
+
+**Executado por:** Codex
+**Status:** REVIEW
+**Tipo:** Documentation-only audit
+**Evidencia:** `docs/validation/multilingual-routes-seo-audit-001d.md`
+
+**Resumo:**
+- Registrado git status inicial com `.agents/` e `skills-lock.json` nao rastreados e nao tocados.
+- Auditadas rotas locais e de producao para `/pt`, `/en`, `/es`, `/sv`, `/sitemap.xml` e `/robots.txt`.
+- Producao atual retorna `200` para `/en`; o 404 reportado nao foi reproduzido.
+- Confirmado que `proxy.ts` executa roteamento `next-intl`; nao ha `middleware.ts`.
+- Confirmado sitemap com URLs para `en`, `pt`, `es` e `sv`.
+- Confirmados canonicals por locale no HTML renderizado.
+- Registrada ausencia de `hreflang`, `alternates.languages` e `x-default`.
+- Registrados riscos de slugs nao localizados e usos pontuais de `next/link` sem wrapper locale-aware.
+
+**Restricoes preservadas:**
+- Nenhuma mudanca de design, tipografia, hero, card, footer, copy polish, rota, metadata, package, lockfile, dependencia, deploy, banco, READY task, commit ou push.
+
+---
+
 Registro cronologico de execucoes operacionais significativas em producao.
 Nao registrar operacoes de codigo ou commits rotineiros - apenas execucoes com efeito em banco ou ambiente de producao.
 

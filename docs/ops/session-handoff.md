@@ -960,3 +960,29 @@ Restrictions for this READY opening:
 
 Next step:
 - Execute RT-AI-016 only when explicitly authorized by a separate implementation gate.
+
+## RT-UX-001D REVIEW - Multilingual Routes and SEO Audit
+
+State: REVIEW on 2026-06-16.
+
+Evidence file:
+- `docs/validation/multilingual-routes-seo-audit-001d.md`
+
+Summary:
+- Documentation-only audit completed.
+- Initial git status had unrelated untracked `.agents/` and `skills-lock.json`; they were not touched.
+- Local `/pt`, `/en`, `/es`, `/sv`, `/sitemap.xml`, and `/robots.txt` returned `200`.
+- Production `/pt`, `/en`, `/es`, `/sv`, `/sitemap.xml`, and `/robots.txt` returned `200`.
+- Reported production `/en` 404 was not reproduced; current production `/en` returns `200` with no redirect.
+- `proxy.ts` handles `next-intl` routing; no `middleware.ts` file exists.
+- Sitemap publishes all four locales.
+- Rendered canonicals exist per locale.
+- `hreflang`, `alternates.languages`, and `x-default` are missing.
+- Non-PT locales use Portuguese slugs such as `/en/quem-somos` and `/en/contato`.
+- Some public components/pages still use raw `next/link` with unprefixed hrefs, creating a future locale consistency risk.
+
+Restrictions preserved:
+- No design, typography, route, metadata, code, copy polish, package, lockfile, dependency, deploy, database, READY task, commit, or push was performed.
+
+Recommended next step:
+- Review the audit evidence. A future fix task should be opened only by explicit authorization; do not auto-open it from this handoff.

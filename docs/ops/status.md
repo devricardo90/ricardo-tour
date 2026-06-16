@@ -1,5 +1,29 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-16 - RT-UX-001D Multilingual Routes and SEO Audit
+
+State: REVIEW.
+
+RT-UX-001D was executed as a documentation-only audit before any typography, hierarchy, visual, route, or metadata change.
+
+Evidence file:
+- `docs/validation/multilingual-routes-seo-audit-001d.md`
+
+Result:
+- Local `/pt`, `/en`, `/es`, `/sv`, `/sitemap.xml`, and `/robots.txt` returned `200`.
+- Production `/pt`, `/en`, `/es`, `/sv`, `/sitemap.xml`, and `/robots.txt` returned `200`.
+- Production `/en` 404 was not reproduced on 2026-06-16; current `/en` returns `200` with no redirect.
+- `proxy.ts` exists and runs `next-intl` routing; no `middleware.ts` exists.
+- Sitemap publishes static and tour URLs for `en`, `pt`, `es`, and `sv`.
+- Canonicals render per locale, but no `hreflang`, `alternates.languages`, or `x-default` are emitted.
+- Some public code still uses raw `next/link` with unprefixed hrefs, creating locale consistency risk outside the rendered home-link sample.
+- Non-PT locales currently use Portuguese slugs such as `/en/quem-somos` and `/en/contato`.
+
+Restrictions preserved:
+- No design, typography, hero, card, footer, copy polish, route fix, metadata fix, package, lockfile, dependency, deploy, READY task, commit, database, or code change was made.
+
+---
+
 ## Update 2026-06-09 - RT-AI-016 Restore Approved Cadastur Trust Mark READY
 
 State: READY.
