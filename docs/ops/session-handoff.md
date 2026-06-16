@@ -986,3 +986,30 @@ Restrictions preserved:
 
 Recommended next step:
 - Review the audit evidence. A future fix task should be opened only by explicit authorization; do not auto-open it from this handoff.
+
+## RT-UX-001E REVIEW - Basic Multilingual SEO Fix
+
+State: REVIEW on 2026-06-16.
+
+Evidence file:
+- `docs/validation/multilingual-seo-fix-001e.md`
+
+Summary:
+- Starting HEAD and `origin/main` were `f42c707`.
+- Existing untracked `.agents/` and `skills-lock.json` were not touched.
+- Added shared locale helpers for canonical/alternate paths.
+- Added `alternates.languages` and `x-default` to public metadata.
+- Added absolute sitemap `xhtml:link` alternates for `en`, `pt`, `es`, `sv`, and `x-default`.
+- Added minimal `quem-somos` metadata for canonical, alternates, and route-specific `og:url`.
+- Converted minimal public raw `next/link` usages to the existing locale-aware `Link` wrapper.
+- Local `/pt`, `/en`, `/es`, `/sv`, `/sitemap.xml`, and `/robots.txt` returned `200`.
+- Lint and typecheck passed.
+
+Decision:
+- PT slugs in non-PT locales remain unchanged (`/en/quem-somos`, `/en/contato`, etc.) because localized pathnames require a route architecture and redirect strategy outside this task.
+
+Restrictions preserved:
+- No Home video, design, typography, broad copy, route architecture, package, lockfile, dependency, deploy, AI Concierge, booking, payment, user, admin, `.agents/`, `skills-lock.json`, new READY task, commit, or push.
+
+Next step:
+- Review the RT-UX-001E diff and validation evidence; commit only after explicit approval.

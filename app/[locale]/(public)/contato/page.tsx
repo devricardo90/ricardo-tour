@@ -3,6 +3,7 @@ import { Clock3, MessageCircleMore, MapPin } from "lucide-react";
 import { ContactForm } from "@/components/contact-form";
 import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
 import { buildWhatsAppQuoteUrl } from "@/lib/whatsapp";
+import { getLanguageAlternates } from "@/i18n/routing";
 
 export async function generateMetadata({
   params,
@@ -18,6 +19,7 @@ export async function generateMetadata({
       "Solicite orcamento, tire duvidas e receba apoio para planejar experiencias no Rio de Janeiro com confirmacao direta da equipe.",
     alternates: {
       canonical: path,
+      languages: getLanguageAlternates("/contato"),
     },
     openGraph: {
       title: "Contato e Orcamento | Rick Travel",

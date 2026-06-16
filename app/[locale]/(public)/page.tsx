@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import HeroSection from "@/components/hero-section";
 import { ReservationsSection } from "@/components/reservations-section";
 import { FadeInSection } from "@/components/ui/fade-in-section";
+import { getLanguageAlternates } from "@/i18n/routing";
 import dynamic from "next/dynamic";
 
 const TravelerSupport = dynamic(() => import("@/components/testimonials"), {
@@ -49,6 +50,7 @@ export async function generateMetadata({
         description: copy.description,
         alternates: {
             canonical: path,
+            languages: getLanguageAlternates(),
         },
         openGraph: {
             title: copy.title,

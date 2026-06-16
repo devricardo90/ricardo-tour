@@ -1,5 +1,37 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-16 - RT-UX-001E Basic Multilingual SEO Fix
+
+State: REVIEW.
+
+RT-UX-001E implemented the minimal multilingual SEO correction after RT-UX-001D Remote DONE at commit `f42c707`.
+
+Evidence file:
+- `docs/validation/multilingual-seo-fix-001e.md`
+
+Result:
+- Added shared locale helpers in `i18n/routing.ts`.
+- Added `alternates.languages` and `x-default` to public metadata for home, tours, tour detail, contato, and quem-somos.
+- Added absolute alternate language URLs to `sitemap.xml`.
+- Preserved per-locale canonical URLs.
+- Added minimal `quem-somos` metadata for canonical, alternates, and route-specific `og:url`.
+- Replaced a small set of raw public `next/link` usages with the existing locale-aware `Link` wrapper.
+- Kept PT slugs in non-PT locales by scope decision; no route architecture change was made.
+
+Validation:
+- Starting HEAD and `origin/main`: `f42c707`.
+- `npm.cmd run lint`: PASS.
+- `npm.cmd run typecheck`: PASS.
+- Local `/pt`, `/en`, `/es`, `/sv`, `/sitemap.xml`, and `/robots.txt`: PASS `200`.
+- Rendered metadata includes canonical, `en`, `pt`, `es`, `sv`, and `x-default` alternates.
+- Local sitemap includes `xhtml:link` alternates with absolute URLs.
+- `git diff --check`: PASS with known LF/CRLF warnings only.
+
+Restrictions preserved:
+- No Home video, typography, visual hierarchy, hero/card/footer design, broad copy rewrite, package, lockfile, dependency, deploy, AI Concierge, booking, payment, user, admin, `.agents/`, or `skills-lock.json` changes.
+
+---
+
 ## Update 2026-06-16 - RT-UX-001D Multilingual Routes and SEO Audit
 
 State: REVIEW.

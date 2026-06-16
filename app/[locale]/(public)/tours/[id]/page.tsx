@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { TourDetailClient } from "@/components/trips/tour-detail-client";
 import { getLocalizedField } from "@/lib/localized-field";
 import { asLocalizedList, asLocalizedText } from "@/lib/types";
+import { getLanguageAlternates } from "@/i18n/routing";
 
 interface PageProps {
     params: Promise<{ id: string; locale: string }>;
@@ -38,6 +39,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
         description: localizedDescription || `Reserve your spot on ${localizedTitle}`,
         alternates: {
             canonical: `/${params.locale}/tours/${params.id}`,
+            languages: getLanguageAlternates(`/tours/${params.id}`),
         },
         openGraph: {
             title: localizedTitle,

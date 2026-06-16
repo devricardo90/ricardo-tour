@@ -2417,3 +2417,35 @@ Recommended future task when explicitly authorized:
 
 Restrictions preserved:
 - No design, typography, hero/card/footer visual, copy polish, route fix, metadata fix, package, lockfile, dependency, deployment, database, READY task, commit, or push was performed.
+
+## RT-UX-001E Corrigir SEO multilingue basico
+
+State: REVIEW
+
+Objective: implement the minimal multilingual SEO correction for Rick Travel without changing visual design, Home video, route architecture, package files, deployment configuration, or product flows.
+
+Evidence file:
+- `docs/validation/multilingual-seo-fix-001e.md`
+
+Scope executed:
+- Added canonical/alternate helpers in `i18n/routing.ts`.
+- Added `alternates.languages` and `x-default` to public page metadata.
+- Added sitemap alternate language links with absolute URLs.
+- Added minimal `quem-somos` metadata for canonical, alternates, and `og:url`.
+- Replaced minimal raw public `next/link` usages with the existing locale-aware `Link` wrapper.
+- Documented that PT slugs in non-PT locales remain unchanged in this task.
+
+Validation:
+- Starting HEAD and `origin/main`: `f42c707`.
+- `npm.cmd run lint`: PASS.
+- `npm.cmd run typecheck`: PASS.
+- Local `/pt`, `/en`, `/es`, `/sv`, `/sitemap.xml`, and `/robots.txt`: PASS `200`.
+- Rendered metadata includes canonical, alternates for `en`, `pt`, `es`, `sv`, and `x-default`.
+- Sitemap XML includes `xhtml:link` alternate URLs for all locales and `x-default`.
+- `git diff --check`: PASS with known LF/CRLF warnings only.
+
+Decision:
+- Keep existing slugs such as `/en/quem-somos` and `/en/contato` because localized slugs require a route architecture and redirect strategy outside RT-UX-001E.
+
+Restrictions preserved:
+- No Home video removal, typography, visual hierarchy, hero/card/footer design, broad copy rewrite, package/lockfile, dependency install, deploy, AI Concierge, booking/payment/user/admin, `.agents/`, `skills-lock.json`, new READY task, commit, or push.

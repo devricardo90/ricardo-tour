@@ -1,6 +1,27 @@
+import type { Metadata } from 'next'
 import { ShieldCheck, MapPin, BadgeCheck } from 'lucide-react'
 import { OurStory } from '@/components/about/our-story'
 import { MissionVisionValues } from '@/components/about/mission-vision-values'
+import { getLanguageAlternates } from '@/i18n/routing'
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const path = `/${locale}/quem-somos`;
+
+  return {
+    alternates: {
+      canonical: path,
+      languages: getLanguageAlternates('/quem-somos'),
+    },
+    openGraph: {
+      url: path,
+    },
+  };
+}
 
 export default function QuemSomosPage() {
   return (

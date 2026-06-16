@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import TripList from "@/components/trip-list";
 import { ToursHeader } from "@/components/tours-header";
+import { getLanguageAlternates } from "@/i18n/routing";
 
 function getToursMetadataCopy(locale: string) {
   switch (locale) {
@@ -41,6 +42,7 @@ export async function generateMetadata({
     description: copy.description,
     alternates: {
       canonical: path,
+      languages: getLanguageAlternates("/tours"),
     },
     openGraph: {
       title: copy.title,
