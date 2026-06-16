@@ -1013,3 +1013,27 @@ Restrictions preserved:
 
 Next step:
 - Review the RT-UX-001E diff and validation evidence; commit only after explicit approval.
+
+## RT-UX-001F REVIEW - Home Video Removal
+
+State: REVIEW on 2026-06-16.
+
+Evidence file:
+- `docs/validation/home-video-removal-001f.md`
+
+Summary:
+- Starting HEAD and `origin/main` were `b4bc556`.
+- Existing untracked `.agents/` and `skills-lock.json` were not touched.
+- Removed the Home hero `<video>` usage.
+- Replaced it with `next/image` using existing asset `public/videos/imagem-rio-perfil.jpg`.
+- Preserved Home copy, CTAs, routes, SEO metadata, locale behavior, and current layout structure.
+- Video files were not deleted.
+- Local `/pt`, `/en`, `/es`, `/sv` returned `200`.
+- Desktop and mobile Playwright smoke passed with video count `0`, image loaded, no horizontal overflow, H1 visible, and primary CTA visible.
+- Lint, typecheck, and `git diff --check` passed.
+
+Restrictions preserved:
+- No multilingual SEO, route/locale, typography overhaul, full Home redesign, package/lockfile, dependency, deploy, `.agents/`, `skills-lock.json`, commit, or push.
+
+Next step:
+- Review the RT-UX-001F diff and validation evidence; commit only after explicit approval.

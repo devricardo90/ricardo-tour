@@ -1,5 +1,6 @@
 'use client'
 
+import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { HeroSearch } from "@/components/hero-search";
@@ -158,18 +159,17 @@ function HeroContent() {
 function HeroMedia() {
   return (
     <div className="absolute inset-1 -z-10 aspect-[2/3] overflow-hidden rounded-[2rem] border border-white/6 lg:aspect-video lg:rounded-[3rem]">
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        className="absolute inset-0 h-full w-full object-cover brightness-[0.62] saturate-[0.9]"
-        src="/videos/newhero.mp4"
-        poster="/videos/imagem-rio-perfil.jpg"
-        preload="auto"
+      <Image
+        src="/videos/imagem-rio-perfil.jpg"
+        alt=""
+        fill
+        priority
+        sizes="100vw"
+        className="absolute inset-0 object-cover brightness-[0.66] saturate-[0.96]"
       />
 
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,14,24,0.08),rgba(4,14,24,0.22)_32%,rgba(4,14,24,0.82)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(7,24,38,0.42),transparent_48%,rgba(200,168,107,0.12)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(900px_360px_at_50%_0%,rgba(255,255,255,0.08),transparent_68%)]" />
       <div className="absolute inset-x-8 bottom-8 hidden rounded-[26px] border border-white/10 bg-[#0a1d2b]/56 px-6 py-5 text-white/78 backdrop-blur-xl lg:block">
         <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#C8A86B]">Rio de Janeiro curated travel</div>

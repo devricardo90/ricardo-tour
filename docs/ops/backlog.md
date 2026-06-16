@@ -2449,3 +2449,30 @@ Decision:
 
 Restrictions preserved:
 - No Home video removal, typography, visual hierarchy, hero/card/footer design, broad copy rewrite, package/lockfile, dependency install, deploy, AI Concierge, booking/payment/user/admin, `.agents/`, `skills-lock.json`, new READY task, commit, or push.
+
+## RT-UX-001F Remover video da Home e substituir por visual leve
+
+State: REVIEW
+
+Objective: remove the Home hero video and replace it with a lightweight visual solution while preserving the current layout and premium tourism positioning.
+
+Evidence file:
+- `docs/validation/home-video-removal-001f.md`
+
+Scope executed:
+- Removed Home hero `<video>` usage from `components/hero-section.tsx`.
+- Replaced it with `next/image` using the existing static asset `public/videos/imagem-rio-perfil.jpg`.
+- Preserved Home copy, CTA behavior, routes, SEO metadata, locale behavior, and layout structure.
+- Kept video files in place; no asset deletion was performed.
+
+Validation:
+- Starting HEAD and `origin/main`: `b4bc556`.
+- Local `/pt`, `/en`, `/es`, `/sv`: PASS `200`.
+- Desktop Playwright smoke: video count `0`, hero image loaded, no horizontal overflow, H1 and primary CTA visible.
+- Mobile Playwright smoke: video count `0`, hero image loaded, no horizontal overflow, H1 and primary CTA visible.
+- `npm.cmd run lint`: PASS.
+- `npm.cmd run typecheck`: PASS.
+- `git diff --check`: PASS with known LF/CRLF warnings only.
+
+Restrictions preserved:
+- No multilingual SEO changes, route/locale changes, typography overhaul, full Home redesign, package/lockfile changes, dependency install, deploy, `.agents/`, `skills-lock.json`, commit, or push.

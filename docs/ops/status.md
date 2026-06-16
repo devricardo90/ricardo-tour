@@ -1,5 +1,36 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-16 - RT-UX-001F Home Video Removal
+
+State: REVIEW.
+
+RT-UX-001F removed the public Home hero video and replaced it with a lightweight static visual using the existing image `public/videos/imagem-rio-perfil.jpg`.
+
+Evidence file:
+- `docs/validation/home-video-removal-001f.md`
+
+Result:
+- Removed `<video>` usage from `components/hero-section.tsx`.
+- Removed direct hero references to `newhero.mp4`, `poster=`, `preload=`, and `autoPlay`.
+- Added `next/image` for the static hero visual.
+- Preserved Home copy, CTAs, route behavior, SEO metadata, locale behavior, and current layout structure.
+- Video files were not deleted.
+
+Validation:
+- Starting HEAD and `origin/main`: `b4bc556`.
+- Static image exists: `public/videos/imagem-rio-perfil.jpg`.
+- Local `/pt`, `/en`, `/es`, `/sv`: PASS `200`.
+- Playwright desktop 1440x900: video count `0`, hero image loaded, no horizontal overflow, H1 and primary CTA visible.
+- Playwright mobile 390x844: video count `0`, hero image loaded, no horizontal overflow, H1 and primary CTA visible.
+- `npm.cmd run lint`: PASS.
+- `npm.cmd run typecheck`: PASS.
+- `git diff --check`: PASS with known LF/CRLF warnings only.
+
+Restrictions preserved:
+- No multilingual SEO, route/locale, typography overhaul, full Home redesign, package/lockfile, dependency, deploy, `.agents/`, or `skills-lock.json` changes.
+
+---
+
 ## Update 2026-06-16 - RT-UX-001E Basic Multilingual SEO Fix
 
 State: REVIEW.

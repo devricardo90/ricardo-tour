@@ -1,5 +1,32 @@
 # Execution Log - Rick Travel
 
+## 2026-06-16 - RT-UX-001F - Home Video Removal
+
+**Executado por:** Codex
+**Status:** REVIEW
+**Tipo:** Focused UX/performance implementation
+**Evidencia:** `docs/validation/home-video-removal-001f.md`
+
+**Resumo:**
+- Confirmado inicio em `b4bc556` com `origin/main` sincronizado.
+- Removido `<video>` do hero publico da Home.
+- Substituido por `next/image` usando `public/videos/imagem-rio-perfil.jpg`.
+- Preservados copy, CTAs, rotas, SEO metadata, locale behavior e estrutura visual atual.
+- Arquivos de video nao foram deletados.
+
+**Validacao:**
+- `npm.cmd run lint`: PASS.
+- `npm.cmd run typecheck`: PASS.
+- `/pt`, `/en`, `/es`, `/sv` locais: PASS `200`.
+- Playwright desktop: video count `0`, imagem carregada, sem overflow horizontal, H1 e CTA primario visiveis.
+- Playwright mobile: video count `0`, imagem carregada, sem overflow horizontal, H1 e CTA primario visiveis.
+- `git diff --check`: PASS com avisos LF/CRLF conhecidos.
+
+**Restricoes preservadas:**
+- Nenhuma mudanca em SEO multilingue, routes/locales, tipografia ampla, redesign completo da Home, package/lockfile, dependencia, deploy, `.agents/`, `skills-lock.json`, commit ou push.
+
+---
+
 ## 2026-06-16 - RT-UX-001E - Basic Multilingual SEO Fix
 
 **Executado por:** Codex
