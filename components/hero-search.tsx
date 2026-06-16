@@ -28,22 +28,22 @@ function getSearchMetaCopy(locale: string) {
     switch (locale) {
         case 'en':
             return {
-                helper: 'Search by destination, neighborhood or experience',
+                helper: 'Search destination or experience',
                 viewAll: 'See all matching tours',
             }
         case 'es':
             return {
-                helper: 'Busca por destino, barrio o experiencia',
+                helper: 'Busca destino o experiencia',
                 viewAll: 'Ver todos los tours relacionados',
             }
         case 'sv':
             return {
-                helper: 'Sok efter destination, stadsdel eller upplevelse',
+                helper: 'Sök destination eller upplevelse',
                 viewAll: 'Visa alla matchande turer',
             }
         default:
             return {
-                helper: 'Busque por destino, bairro ou experiencia',
+                helper: 'Busque destino ou experiência',
                 viewAll: 'Ver todos os passeios relacionados',
             }
     }

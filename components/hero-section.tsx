@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import { HeroSearch } from "@/components/hero-search";
 import {
   ChevronRight,
-  ShieldCheck,
-  MapPin,
   MessageCircleMore,
   Clock3,
 } from "lucide-react";
@@ -20,62 +18,23 @@ function getHeroSupportCopy(locale: string) {
       return {
         responseTime: "Contact guidance by WhatsApp",
         quoteNote: "Build your itinerary with our team",
-        supportBadges: [
-          "Rio experience planning",
-          "Human support",
-          "Details confirmed by the team",
-        ],
       };
     case "es":
       return {
         responseTime: "Orientación por WhatsApp",
         quoteNote: "Arma tu itinerario con ayuda de nuestro equipo",
-        supportBadges: [
-          "Planificación de experiencias en Rio",
-          "Atención humana",
-          "Detalles confirmados por el equipo",
-        ],
       };
     case "sv":
       return {
         responseTime: "Vagledning via WhatsApp",
         quoteNote: "Bygg din resplan tillsammans med vårt team",
-        supportBadges: [
-          "Planering av Rio-upplevelser",
-          "Mänsklig kontakt",
-          "Detaljer bekräftas av teamet",
-        ],
       };
     default:
       return {
         responseTime: "Orientação pelo WhatsApp",
         quoteNote: "Monte seu roteiro com ajuda da nossa equipe",
-        supportBadges: [
-          "Planejamento de experiências no Rio",
-          "Atendimento humano",
-          "Detalhes confirmados pela equipe",
-        ],
       };
   }
-}
-
-function SupportBar({ badges }: { badges: string[] }) {
-  const items = [
-    { icon: <MapPin className="h-3.5 w-3.5" />, text: badges[0] },
-    { icon: <MessageCircleMore className="h-3.5 w-3.5" />, text: badges[1] },
-    { icon: <ShieldCheck className="h-3.5 w-3.5" />, text: badges[2] },
-  ];
-
-  return (
-    <div className="mt-6 flex flex-wrap items-center justify-center gap-2.5">
-      {items.map((badge) => (
-        <span key={badge.text} className="chip-dark min-h-9 px-3.5 text-[12px]">
-          {badge.icon}
-          {badge.text}
-        </span>
-      ))}
-    </div>
-  );
 }
 
 function HeroContent() {
@@ -91,12 +50,7 @@ function HeroContent() {
   return (
     <div className="relative mx-auto flex max-w-7xl flex-col px-5 lg:px-12">
       <div className="mx-auto max-w-5xl text-center">
-        <div className="mx-auto inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#d8c18f] backdrop-blur-md">
-          <ShieldCheck className="h-3.5 w-3.5" />
-          Atendimento humano e orientação clara
-        </div>
-
-        <h1 className="mx-auto mt-7 max-w-[15ch] text-balance text-4xl font-semibold leading-[0.98] tracking-[-0.045em] text-white md:text-6xl lg:text-[5rem]">
+        <h1 className="mx-auto max-w-[15ch] text-balance text-4xl font-semibold leading-[0.98] tracking-[-0.045em] text-white md:text-6xl lg:text-[5rem]">
           {t("title")}
         </h1>
 
@@ -148,9 +102,6 @@ function HeroContent() {
             {supportCopy.quoteNote}
           </span>
         </div>
-
-        <SupportBar badges={supportCopy.supportBadges} />
-
       </div>
     </div>
   );

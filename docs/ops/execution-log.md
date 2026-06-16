@@ -1,4 +1,4 @@
-# Execution Log - Rick Travel
+﻿# Execution Log - Rick Travel
 
 ## 2026-06-16 - RT-UX-001F - Home Video Removal
 
@@ -696,11 +696,11 @@ Executar RT-AI-003 como task exclusivamente documental, criando a matriz de perg
 **Resultado:**
 - Matriz documental com 20 cenarios criada baseada nas regras de RT-AI-001 e RT-AI-002.
 - Respostas esperadas, bloqueadas e criterios de handoff registrados.
-- Criterios de handoff por disponibilidade, preço, pagamentos e regras de cancelamento estabelecidos.
+- Criterios de handoff por disponibilidade, preÃ§o, pagamentos e regras de cancelamento estabelecidos.
 - Conflitos comerciais mantidos como PENDING_OWNER_APPROVAL.
 - Seguranca e acessibilidade exigem handoff.
 - RT-AI-003 movida para REVIEW.
-- `docs/product/ai-concierge-approved-faq.md` não foi criado.
+- `docs/product/ai-concierge-approved-faq.md` nÃ£o foi criado.
 
 **Restricoes mantidas:**
 - Nenhuma dependencia, base vetorial, embedding, chat ou rota API criada.
@@ -859,7 +859,7 @@ Registrar RT-AI-001 como task DISCOVERY/ARCHITECTURE para definir escopo, arquit
 
 **Executado por:** Trigger (manual, producao)
 **Ambiente:** `https://rick-travel.vercel.app` + Neon producao
-**Status:** Production DONE — seed executado; catalogo 6 tours publicado; smoke completo PASS
+**Status:** Production DONE â€” seed executado; catalogo 6 tours publicado; smoke completo PASS
 
 **Objetivo:**
 Executar seed em producao para publicar catalogo final de 6 tours e despublicar seed-001-cristo-dona-marta.
@@ -881,7 +881,7 @@ Executar seed em producao para publicar catalogo final de 6 tours e despublicar 
 - Booking submetido visivel no admin (validado manualmente pelo Trigger) PASS.
 
 **Pendencia P2 identificada:**
-- `TourDetailsPage` usa `findUnique` sem filtro `isPublished` — URL direta de tour despublicado (`/pt/tours/seed-001-cristo-dona-marta`) retorna HTTP 200 e exibe CTA. Tour nao aparece em nenhuma superficie navegavel publica (catalogo, busca, home). Registrado para RT-FINAL-HARDENING-01; nao corrigir dentro desta closure.
+- `TourDetailsPage` usa `findUnique` sem filtro `isPublished` â€” URL direta de tour despublicado (`/pt/tours/seed-001-cristo-dona-marta`) retorna HTTP 200 e exibe CTA. Tour nao aparece em nenhuma superficie navegavel publica (catalogo, busca, home). Registrado para RT-FINAL-HARDENING-01; nao corrigir dentro desta closure.
 
 **Restricoes mantidas:**
 - Nenhum codigo alterado nesta execucao.
@@ -896,7 +896,7 @@ Executar seed em producao para publicar catalogo final de 6 tours e despublicar 
 
 **Executado por:** Claude Code (Protocolo Rick - RT-FINAL-04C2B)
 **Ambiente:** local; somente prisma/seed.ts e documentacao operacional
-**Status:** Remote DONE — commit `0d9e0c5 fix: reconcile final catalog schedule updates` publicado em `origin/main`; smoke de producao completo PASS pelo Trigger (ver RT-FINAL-04C3 acima)
+**Status:** Remote DONE â€” commit `0d9e0c5 fix: reconcile final catalog schedule updates` publicado em `origin/main`; smoke de producao completo PASS pelo Trigger (ver RT-FINAL-04C3 acima)
 
 **Objetivo:**
 Corrigir os 6 blocos `update` de TripSchedule em `prisma/seed.ts` para incluir `capacity` e `pricePerPersonCents`, garantindo que re-execucoes do seed reconciliem todos os campos, nao apenas `startAt` e `status`.
@@ -931,8 +931,8 @@ Corrigir os 6 blocos `update` de TripSchedule em `prisma/seed.ts` para incluir `
 Adicionar os 2 assets obrigatorios e preparar seed definitivo do catalogo final de 6 tours sem alterar banco.
 
 **Operacoes locais:**
-- PNG RGBA `publicimagestripsimagem-helicoptero-cristo.jpg.png` convertido para JPEG via sharp (quality 92, progressive) → `public/images/trips/imagem-helicoptero-cristo.jpg` (1792x2390, 712KB).
-- PNG RGBA `publicimagestripsimagem-floresta-tijuca.jpg.png` convertido para JPEG via sharp (quality 92, progressive) → `public/images/trips/imagem-floresta-tijuca.jpg` (2352x1792, 1.7MB).
+- PNG RGBA `publicimagestripsimagem-helicoptero-cristo.jpg.png` convertido para JPEG via sharp (quality 92, progressive) â†’ `public/images/trips/imagem-helicoptero-cristo.jpg` (1792x2390, 712KB).
+- PNG RGBA `publicimagestripsimagem-floresta-tijuca.jpg.png` convertido para JPEG via sharp (quality 92, progressive) â†’ `public/images/trips/imagem-floresta-tijuca.jpg` (2352x1792, 1.7MB).
 - `prisma/seed.ts` reescrito com:
   - updateMany para despublicar `seed-001-cristo-dona-marta` (nao deleta, preserva bookings existentes).
   - upsert idempotente para os 6 tours do catalogo final com IDs determiniscos.
@@ -1629,3 +1629,14 @@ Fazer o tour Pao de Acucar aparecer no catalogo publico de forma controlada, seg
 - Nao executar seed novamente.
 - Nao executar migration.
 - Nao alterar Neon manualmente.
+
+## 2026-06-16 - RT-UX-001G Home Hero Simplification
+
+State: REVIEW.
+
+Objective: Simplify the Home hero visually by removing badges and improving copy clarity.
+
+- Removed redundant badges from components/hero-section.tsx.
+- Shortened search helper text in components/hero-search.tsx.
+- Improved H1 description and button copy in messages/*.json.
+- Validated via lint and typecheck.

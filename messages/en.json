@@ -1,10 +1,10 @@
 {
     "HomePage": {
         "Hero": {
-            "title": "Guided Tours in Rio de Janeiro",
-            "description": "Rick Travel offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil.",
-            "primaryButton": "Book Your Exclusive Tour Now",
-            "secondaryButton": "Request a Quote"
+            "title": "Guided tours in Rio de Janeiro",
+            "description": "Authentic experiences and personalized support for your trip to Rio.",
+            "primaryButton": "Explore tours",
+            "secondaryButton": "Request a quote"
         },
         "Logos": {
             "title": "Our Services"

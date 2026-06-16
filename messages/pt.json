@@ -2,8 +2,8 @@
     "HomePage": {
         "Hero": {
             "title": "Passeios guiados no Rio de Janeiro",
-            "description": "A Rick Travel oferece passeios guiados, experiências de turismo local, orientação personalizada e suporte ao viajante no Rio de Janeiro, Brasil.",
-            "primaryButton": "Conhecer passeios exclusivos",
+            "description": "Experiências autênticas e suporte personalizado para sua viagem ao Rio.",
+            "primaryButton": "Ver passeios",
             "secondaryButton": "Solicitar orçamento"
         },
         "Logos": {

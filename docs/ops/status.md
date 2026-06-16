@@ -1,5 +1,39 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-16 - RT-UX-001G Home Hero Simplification
+
+State: REVIEW.
+
+RT-UX-001G simplified the Home hero visually by removing redundant badges and improving copy clarity across all supported languages.
+
+Evidence file:
+- `docs/validation/home-hero-simplification-001g.md`
+
+Result:
+- Removed top "Atendimento humano" badge from `components/hero-section.tsx`.
+- Removed `SupportBar` and its three bottom badges from `components/hero-section.tsx`.
+- Shortened search helper text in `components/hero-search.tsx`.
+- Improved H1 description and button copy in `messages/*.json` for better clarity and less repetition.
+- Maintained commercial intent (guided tours, human support, WhatsApp).
+- Preserved route behavior, SEO metadata, locale behavior, and static hero image structure.
+
+Validation:
+- Starting HEAD and `origin/main`: `d7142b6`.
+- Local `/pt`, `/en`, `/es`, `/sv`: PASS `200`.
+- `npm.cmd run lint`: PASS.
+- `npm.cmd run typecheck`: PASS.
+- Playwright desktop 1440x900: PASS (badges removed, H1/CTA/Search visible, no overflow).
+- Playwright mobile 390x844: PASS (badges removed, H1/CTA/Search visible, no overflow).
+- `git diff --check`: PASS with known LF/CRLF warnings only.
+
+Restrictions preserved:
+- No changes to `.agents/` or `skills-lock.json`.
+- No route, SEO metadata, sitemap, locale config, or auth changes.
+- No package/lockfile changes or new dependencies.
+- No commit or push performed.
+
+---
+
 ## Update 2026-06-16 - RT-UX-001F Home Video Removal
 
 State: REVIEW.

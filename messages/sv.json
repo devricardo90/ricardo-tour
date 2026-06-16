@@ -2,9 +2,9 @@
     "HomePage": {
         "Hero": {
             "title": "Guidade turer i Rio de Janeiro",
-            "description": "Rick Travel erbjuder guidade turer, lokala turismupplevelser, personlig reseorientering och resenarstod i Rio de Janeiro, Brasilien.",
-            "primaryButton": "Boka Din Exklusiva Tur Nu",
-            "secondaryButton": "Begär Offert"
+            "description": "Autentiska upplevelser och personligt stöd för din resa till Rio.",
+            "primaryButton": "Utforska turer",
+            "secondaryButton": "Begär offert"
         },
         "Logos": {
             "title": "Våra Tjänster"
