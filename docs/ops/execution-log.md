@@ -1709,3 +1709,15 @@ Objective: Create the first documentation-only approved AI knowledge record exam
 - Included the required fields in each example and kept all examples conceptual and safe.
 - Avoided invented prices, live availability, booking guarantees, unsupported credentials, ratings, reviews, insurance claims, legal claims, runtime behavior, and production data.
 - No backend, API, database schema, migration, seed, JSON/YAML data file, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.
+
+## 2026-06-17 - RT-AI-020A AI Knowledge Record Validation Rules READY Opening
+
+State: READY.
+
+Objective: Open RT-AI-020A as a documentation-only validation rules task.
+
+- RT-AI-020A defined in docs/ops/backlog.md.
+- Operational status updated in docs/ops/status.md.
+- Future product validation rules document allowed but not created: `docs/product/ai-concierge-knowledge-record-validation-rules.md`.
+- Future scope covers required fields, allowed values, permission combinations, volatile fact rules, unknown/unsupported answer rules, PASS/FAIL examples, and future automated-validator migration path.
+- No backend, API, database, migration, seed, JSON/YAML data file, validation script, tests, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.

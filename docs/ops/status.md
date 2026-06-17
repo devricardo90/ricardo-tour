@@ -1,5 +1,30 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-17 - RT-AI-020A AI Knowledge Record Validation Rules READY
+
+State: READY.
+
+RT-AI-020A was opened as a documentation-only validation rules task for future AI knowledge records.
+
+Future objective:
+- Define governance rules that future AI knowledge records must pass before being considered safe for AI usage, retrieval, evaluation, or human handoff behavior.
+
+Future validation focus:
+- Required fields for every record.
+- Allowed values for approvalStatus and riskLevel.
+- Allowed and forbidden permission combinations.
+- Rules for websiteAllowed vs aiAllowed.
+- Rules for ragAllowed requiring aiAllowed.
+- Rules for handoffRequired, sourceRequired, ownerReviewRequired, and blocked records.
+- Rules for volatile facts including price, availability, schedule, payment, refund, booking confirmation, guarantees, discounts, credentials, insurance, and reviews/ratings.
+- Rules for unknown or unsupported answers.
+- PASS/FAIL examples and a future path toward automated validators.
+
+Restrictions preserved in this READY opening:
+- No product validation rules document, backend, API route, database schema, migration, seed, JSON/YAML data file, validation script, tests, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, runtime behavior, chatbot implementation, deploy, `.agents/`, `skills-lock.json`, broad git add, commit, or push changes were made beyond allowed operational documentation.
+
+---
+
 ## Update 2026-06-17 - RT-AI-019A First Approved AI Knowledge Record Examples
 
 State: REVIEW.

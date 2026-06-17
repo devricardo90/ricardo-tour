@@ -2666,3 +2666,58 @@ Execution state: RT-AI-019A executed as documentation-only product examples in `
 
 Restrictions preserved during execution:
 - No backend code, API route, database schema, migration, seed, JSON/YAML data file, dependency install, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend file, app file, component, message file, public asset, Prisma file, config file, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed.
+
+## RT-AI-020A — Define AI Knowledge Record Validation Rules
+
+State: READY
+
+Objective: Define documentation-only validation rules that future AI knowledge records must pass before being considered safe for AI usage, retrieval, evaluation, or human handoff behavior.
+
+Type: DOCUMENTATION-ONLY VALIDATION RULES.
+
+Context:
+- RT-AI-017 defined the robust AI Concierge architecture.
+- RT-AI-018A defined the approved AI knowledge records contract.
+- RT-AI-019A defined the first human-readable approved AI knowledge record examples.
+- The next governance layer is validation: clear PASS/FAIL rules for future records before any structured data, backend, RAG, embeddings, LangChain, LangGraph, or chatbot implementation exists.
+
+Future implementation files allowed:
+- docs/product/ai-concierge-knowledge-record-validation-rules.md
+- docs/ops/status.md
+- docs/ops/backlog.md
+- docs/ops/execution-log.md
+- docs/ops/session-handoff.md
+
+Future implementation scope:
+1. Define required fields for every future AI knowledge record.
+2. Define allowed values for approvalStatus and riskLevel.
+3. Define allowed and forbidden permission combinations.
+4. Define rules for websiteAllowed vs aiAllowed.
+5. Define rules for ragAllowed requiring aiAllowed.
+6. Define rules for handoffRequired, sourceRequired, ownerReviewRequired, and blocked records.
+7. Define rules for volatile facts: price, availability, schedule, payment, refund, booking confirmation, guarantees, discounts, credentials, insurance, and reviews/ratings.
+8. Define rules for unknown or unsupported answers.
+9. Provide PASS/FAIL examples.
+10. Define a future migration path toward automated validators without implementing validators now.
+
+Future forbidden scope:
+- No backend code.
+- No API route.
+- No database schema, migration, seed, JSON/YAML data file, validation script, tests, dependencies, package file, lockfile, embeddings, vector store, LangChain, LangGraph, runtime behavior, real chatbot implementation, or deploy.
+- No frontend, app, component, message, public asset, Prisma, config, `.agents/`, or `skills-lock.json` changes.
+- No broad git add, commit, or push without explicit authorization.
+
+Future validation criteria:
+- Validation rules document created.
+- Required fields and allowed values documented.
+- Allowed and forbidden permission combinations documented.
+- Volatile fact handling rules documented.
+- Unknown/unsupported answer rules documented.
+- PASS/FAIL examples included.
+- Future path toward automated validators documented without creating scripts, tests, schemas, JSON/YAML records, or runtime code.
+- No runtime, code, structured data, dependency, package, lockfile, deploy, `.agents/`, or `skills-lock.json` changes performed.
+- git diff --check PASS.
+
+Risk: low to medium (documentation only). The main risk is defining rules too loosely, allowing unsafe future AI records, or making the document look like an executable validation schema instead of governance guidance.
+
+Execution state: RT-AI-020A opened as READY in operational documentation only. The future product validation rules document was not created. No backend, API, database, migration, seed, JSON/YAML data file, validation script, tests, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed in this READY opening.
