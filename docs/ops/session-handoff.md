@@ -47,19 +47,17 @@ Resultado:
 Restricoes mantidas:
 - Nenhum backend, API, banco, migration, seed, JSON/YAML data file, dependencia, package, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, runtime behavior, chatbot implementation, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado.
 
-## RT-AI-020A READY - AI Knowledge Record Validation Rules
+## RT-AI-020A REVIEW - AI Knowledge Record Validation Rules
 
-Estado: READY em 2026-06-17.
+Estado: REVIEW em 2026-06-17.
 
-Objetivo futuro:
-- Definir regras documentation-only que futuros AI knowledge records devem passar antes de uso por AI, retrieval, evaluation ou human handoff behavior.
+Resultado:
+- Documento criado em `docs/product/ai-concierge-knowledge-record-validation-rules.md`.
+- Regras cobrem required fields, allowed values para approvalStatus/riskLevel, allowed/forbidden permission combinations, websiteAllowed vs aiAllowed, ragAllowed requiring aiAllowed, handoffRequired, sourceRequired, ownerReviewRequired e blocked records.
+- Regras para volatile facts cobrem price, availability, schedule, payment, refund, booking confirmation, guarantees, discounts, credentials, insurance e reviews/ratings.
+- Documento inclui unknown/unsupported answer rules, PASS/FAIL examples e future migration path toward automated validators.
 
-Escopo futuro:
-- Criar `docs/product/ai-concierge-knowledge-record-validation-rules.md`.
-- Cobrir required fields, allowed values para approvalStatus/riskLevel, allowed/forbidden permission combinations, websiteAllowed vs aiAllowed, ragAllowed requiring aiAllowed, handoffRequired, sourceRequired, ownerReviewRequired, blocked records, volatile facts, unknown/unsupported answers, PASS/FAIL examples e future migration path toward automated validators.
-
-Restricoes mantidas na abertura READY:
-- O documento de validation rules nao foi criado.
+Restricoes mantidas:
 - Nenhum backend, API, banco, migration, seed, JSON/YAML data file, validation script, tests, dependencia, package, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, runtime behavior, chatbot implementation, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado.
 
 ## RT-023A Portfolio README Showcase

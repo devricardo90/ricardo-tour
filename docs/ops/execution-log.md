@@ -1721,3 +1721,15 @@ Objective: Open RT-AI-020A as a documentation-only validation rules task.
 - Future product validation rules document allowed but not created: `docs/product/ai-concierge-knowledge-record-validation-rules.md`.
 - Future scope covers required fields, allowed values, permission combinations, volatile fact rules, unknown/unsupported answer rules, PASS/FAIL examples, and future automated-validator migration path.
 - No backend, API, database, migration, seed, JSON/YAML data file, validation script, tests, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.
+
+## 2026-06-17 - RT-AI-020A AI Knowledge Record Validation Rules
+
+State: REVIEW.
+
+Objective: Create documentation-only validation rules for future AI knowledge records.
+
+- Created `docs/product/ai-concierge-knowledge-record-validation-rules.md`.
+- Documented required fields, allowed approvalStatus values, allowed riskLevel values, allowed/forbidden permission combinations, websiteAllowed vs aiAllowed, ragAllowed requiring aiAllowed, handoffRequired, sourceRequired, ownerReviewRequired, and blocked-record rules.
+- Documented volatile fact rules for price, availability, schedule, payment, refund, booking confirmation, guarantees, discounts, credentials, insurance, and reviews/ratings.
+- Included unknown/unsupported answer rules, PASS/FAIL examples, and future migration path toward automated validators.
+- No backend, API, database schema, migration, seed, JSON/YAML data file, validation script, tests, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.

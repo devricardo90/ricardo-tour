@@ -2669,7 +2669,7 @@ Restrictions preserved during execution:
 
 ## RT-AI-020A — Define AI Knowledge Record Validation Rules
 
-State: READY
+State: REVIEW
 
 Objective: Define documentation-only validation rules that future AI knowledge records must pass before being considered safe for AI usage, retrieval, evaluation, or human handoff behavior.
 
@@ -2720,4 +2720,7 @@ Future validation criteria:
 
 Risk: low to medium (documentation only). The main risk is defining rules too loosely, allowing unsafe future AI records, or making the document look like an executable validation schema instead of governance guidance.
 
-Execution state: RT-AI-020A opened as READY in operational documentation only. The future product validation rules document was not created. No backend, API, database, migration, seed, JSON/YAML data file, validation script, tests, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed in this READY opening.
+Execution state: RT-AI-020A executed as documentation-only validation rules in `docs/product/ai-concierge-knowledge-record-validation-rules.md`. The document defines required fields, allowed approvalStatus/riskLevel values, allowed and forbidden permission combinations, websiteAllowed vs aiAllowed rules, ragAllowed requiring aiAllowed, handoffRequired/sourceRequired/ownerReviewRequired rules, blocked-record rules, volatile fact rules, unknown/unsupported answer rules, PASS/FAIL examples, and a future migration path toward automated validators.
+
+Restrictions preserved during execution:
+- No backend code, API route, database schema, migration, seed, JSON/YAML data file, validation script, tests, dependency install, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend file, app file, component, message file, public asset, Prisma file, config file, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed.

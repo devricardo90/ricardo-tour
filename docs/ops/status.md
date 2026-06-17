@@ -1,5 +1,26 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-17 - RT-AI-020A AI Knowledge Record Validation Rules
+
+State: REVIEW.
+
+RT-AI-020A created the documentation-only product validation rules for future Rick Travel AI knowledge records.
+
+Product validation rules document:
+- `docs/product/ai-concierge-knowledge-record-validation-rules.md`
+
+Result:
+- Defined purpose and scope for AI knowledge record validation.
+- Documented required fields, allowed approvalStatus values, allowed riskLevel values, allowed permission combinations, and forbidden permission combinations.
+- Documented websiteAllowed vs aiAllowed, ragAllowed requiring aiAllowed, handoffRequired, sourceRequired, ownerReviewRequired, and blocked-record rules.
+- Documented volatile fact rules for price, availability, schedule, payment, refund, booking confirmation, guarantees, discounts, credentials, insurance, and reviews/ratings.
+- Documented unknown/unsupported answer behavior, PASS/FAIL examples, and a future migration path toward automated validators.
+
+Restrictions preserved:
+- No backend, API route, database schema, migration, seed, JSON/YAML data file, validation script, tests, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, public asset, Prisma, config, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push change was made.
+
+---
+
 ## Update 2026-06-17 - RT-AI-020A AI Knowledge Record Validation Rules READY
 
 State: READY.
