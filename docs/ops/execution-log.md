@@ -1697,3 +1697,15 @@ Objective: Open RT-AI-019A as a documentation-only examples task.
 - Future product examples document allowed but not created: `docs/product/ai-concierge-first-approved-knowledge-record-examples.md`.
 - Future examples limited to stable company/about, tour overview, WhatsApp handoff, blocked volatile price/availability, and unknown/unsupported answer examples.
 - No backend, API, database, migration, seed, JSON/YAML data file, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.
+
+## 2026-06-17 - RT-AI-019A First Approved AI Knowledge Record Examples
+
+State: REVIEW.
+
+Objective: Create the first documentation-only approved AI knowledge record examples.
+
+- Created `docs/product/ai-concierge-first-approved-knowledge-record-examples.md`.
+- Documented exactly five Markdown examples: stable company/about, tour overview, WhatsApp human handoff, blocked volatile price/availability, and unknown/unsupported answer behavior.
+- Included the required fields in each example and kept all examples conceptual and safe.
+- Avoided invented prices, live availability, booking guarantees, unsupported credentials, ratings, reviews, insurance claims, legal claims, runtime behavior, and production data.
+- No backend, API, database schema, migration, seed, JSON/YAML data file, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.

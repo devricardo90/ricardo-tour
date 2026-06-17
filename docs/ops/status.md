@@ -1,5 +1,25 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-17 - RT-AI-019A First Approved AI Knowledge Record Examples
+
+State: REVIEW.
+
+RT-AI-019A created the first documentation-only product examples for approved AI knowledge records.
+
+Product examples document:
+- `docs/product/ai-concierge-first-approved-knowledge-record-examples.md`
+
+Result:
+- Created exactly five safe Markdown examples: stable company/about, tour overview, WhatsApp human handoff, blocked volatile price/availability, and unknown/unsupported answer behavior.
+- Each example includes recordId, title, locale, topic/category, sourceAuthority, approvalStatus, riskLevel, websiteAllowed, aiAllowed, ragAllowed, handoffRequired, sourceRequired, allowedAnswerBehavior, blockedAnswerBehavior, freshness/review expectation, and notes for future migration to structured data.
+- Examples avoid invented prices, live availability, booking guarantees, unsupported credentials, ratings, reviews, insurance claims, and legal claims.
+- Document states that the examples are Markdown only and not production data, runtime behavior, JSON/YAML records, database rows, embeddings, vector-store content, chatbot behavior, or API input.
+
+Restrictions preserved:
+- No backend, API route, database schema, migration, seed, JSON/YAML data file, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, public asset, Prisma, config, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push change was made.
+
+---
+
 ## Update 2026-06-17 - RT-AI-019A First Approved AI Knowledge Record Examples READY
 
 State: READY.

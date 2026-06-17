@@ -34,20 +34,17 @@ Resultado:
 Restricoes mantidas:
 - Nenhum backend, API, banco, migration, seed, JSON/YAML data file, dependencia, package, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado.
 
-## RT-AI-019A READY - First Approved AI Knowledge Record Examples
+## RT-AI-019A REVIEW - First Approved AI Knowledge Record Examples
 
-Estado: READY em 2026-06-17.
+Estado: REVIEW em 2026-06-17.
 
-Objetivo futuro:
-- Criar exemplos Markdown pequenos e seguros que demonstrem como o contrato RT-AI-018A deve funcionar antes de runtime, structured data, database, RAG, embeddings, LangChain, LangGraph ou chatbot.
+Resultado:
+- Documento criado em `docs/product/ai-concierge-first-approved-knowledge-record-examples.md`.
+- Foram criados exatamente 5 exemplos Markdown: stable company/about, tour overview, WhatsApp human handoff, blocked volatile price/availability e unknown/unsupported answer behavior.
+- Cada exemplo inclui recordId, title, locale, topic/category, sourceAuthority, approvalStatus, riskLevel, websiteAllowed, aiAllowed, ragAllowed, handoffRequired, sourceRequired, allowedAnswerBehavior, blockedAnswerBehavior, freshness/review expectation e notes for future migration to structured data.
+- Exemplos permanecem conceituais e seguros, sem inventar precos reais, live availability, booking guarantees, unsupported credentials, ratings, reviews, insurance claims ou legal claims.
 
-Escopo futuro:
-- Criar `docs/product/ai-concierge-first-approved-knowledge-record-examples.md`.
-- Incluir 1 stable company/about record, 1 tour overview record, 1 WhatsApp handoff record, 1 blocked volatile price/availability example e 1 unknown/unsupported answer example.
-- Cada exemplo deve mostrar recordId, title, locale, topic/category, sourceAuthority, approvalStatus, riskLevel, websiteAllowed, aiAllowed, ragAllowed, handoffRequired, sourceRequired, allowedAnswerBehavior, blockedAnswerBehavior, freshness/review expectation e notes for future migration to structured data.
-
-Restricoes mantidas na abertura READY:
-- O documento de exemplos nao foi criado.
+Restricoes mantidas:
 - Nenhum backend, API, banco, migration, seed, JSON/YAML data file, dependencia, package, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, runtime behavior, chatbot implementation, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado.
 
 ## RT-023A Portfolio README Showcase
