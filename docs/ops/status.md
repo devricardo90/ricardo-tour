@@ -1,5 +1,27 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-16 - RT-AI-017 Robust AI Concierge Architecture READY
+
+State: READY.
+
+RT-AI-017 was opened as a documentation-only architecture task to define a robust technical scaffold for the Rick Travel AI Concierge.
+
+Future objective:
+- Define the robust architecture with separate backend, separate database, API contract, and a clear learning path (RAG first, potential fine-tuning later).
+
+Future architecture focus:
+- Topology: separate AI backend and database.
+- Stack: Python/FastAPI vs Node/NestJS evaluation.
+- Learning: RAG + curation + logs + evaluation datasets.
+- Orchestration: LangChain and LangGraph positioning.
+- API: Conceptual contract for site-agent communication.
+- Safety: Technical guardrails against hallucinations and data exposure.
+
+Restrictions preserved in this READY opening:
+- No app, component, message, image, product document, runtime, implementation, JSON, YAML, seed, API, backend, database, schema, package, lockfile, deploy, commit, or push changes were made beyond allowed operational documentation.
+
+---
+
 ## Update 2026-06-16 - RT-UX-001G Home Hero Simplification
 
 State: REVIEW.

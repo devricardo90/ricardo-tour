@@ -1640,3 +1640,13 @@ Objective: Simplify the Home hero visually by removing badges and improving copy
 - Shortened search helper text in components/hero-search.tsx.
 - Improved H1 description and button copy in messages/*.json.
 - Validated via lint and typecheck.
+
+## 2026-06-16 - RT-AI-017 Robust AI Concierge Architecture READY Opening
+
+State: READY.
+
+Objective: Open RT-AI-017 as a documentation-only architecture task.
+
+- RT-AI-017 defined in docs/ops/backlog.md.
+- Operational status updated in docs/ops/status.md.
+- No app, component, or runtime files changed.

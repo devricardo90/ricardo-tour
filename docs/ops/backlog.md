@@ -2508,3 +2508,54 @@ Restrictions preserved:
 - No route, SEO metadata, sitemap, locale config, or auth changes.
 - No package/lockfile changes or new dependencies.
 - No commit or push performed.
+
+## RT-AI-017 — Define Robust AI Concierge Backend and Learning Architecture
+
+State: READY
+
+Objective: Define a robust technical architecture for the Rick Travel AI Concierge, establishing backend separation, data modeling for learning, and the evolution path from RAG to potential future fine-tuning.
+
+Type: DOCUMENTATION-ONLY ARCHITECTURE.
+
+Context:
+- Rick Travel's AI Concierge foundation is solid in terms of product governance (RT-AI-001 to RT-AI-016).
+- A robust, scalable, and isolated technical scaffold is required to support advanced agentic workflows and learning loops.
+
+Future implementation files allowed:
+- docs/architecture/ai-concierge-robust-backend-learning-architecture.md
+- docs/ops/status.md
+- docs/ops/backlog.md
+- docs/ops/execution-log.md
+- docs/ops/session-handoff.md
+
+Future implementation scope:
+1. Topology: Rick Travel Next.js site, separate AI Backend, separate AI Database, and API boundary.
+2. Stack Recommendation: Evaluate Python/FastAPI vs Node/NestJS, recommending one based on IA ecosystem and maintenance.
+3. Conceptual Database: Model entities for knowledge records, chunks, embeddings metadata, logs (conversation/handoff), evaluation examples, approved/rejected answers, and prompt versions.
+4. Learning Strategy: Define the flow of RAG + curation + logs + evaluation dataset. Document fine-tuning only as a future possibility if clear criteria (dataset size, approved examples, recurring errors) are met.
+5. Orchestration: Position LangChain for basic tools/retrieval and LangGraph for stateful workflows, auditing, and human-in-the-loop.
+6. API Contract: Define conceptual I/O (locale, userMessage, sessionId, pageContext, tourSlug -> answer, confidence, sourceRefs, handoffRequired, whatsappCta, blockedReason, suggestedNextQuestions).
+7. Safety & Security: Technical rules against inventing prices, availability, or credentials; protection of internal prompts; minimal sensitive data collection.
+
+Future forbidden scope:
+- No backend code.
+- No frontend code.
+- No real API or database implementation.
+- No Prisma migrations or seeds.
+- No real vector database or embeddings.
+- No installation of LangChain or LangGraph.
+- No package.json or lockfile changes.
+- No deployment or env vars.
+- No executable prompts.
+
+Future validation criteria:
+- Robust architecture document created.
+- Backend and Database separation justified.
+- RAG vs Evals vs Fine-tuning path clarified.
+- API contract documented.
+- No runtime changes performed.
+- git diff --check PASS.
+
+Risk: low (documentation only). The main risk is architectural misalignment with future scaling needs.
+
+Execution state: RT-AI-017 opened as READY in operational documentation only. No app file, component file, message file, runtime file, implementation file, JSON, YAML, seed, API, backend, database, schema, package file, lockfile, deploy, commit, or push was created or changed in this READY opening.
