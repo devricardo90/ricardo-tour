@@ -20,6 +20,23 @@ Resultado:
 Restricoes mantidas:
 - Nenhum backend, API, banco, migration, seed, dependencia, runtime, frontend, package, lockfile, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado nesta execucao.
 
+## RT-AI-018A READY - Approved AI Knowledge Records Contract
+
+Estado: READY em 2026-06-17.
+
+Objetivo futuro:
+- Definir o contrato documentation-only para approved AI knowledge records que o futuro AI Concierge podera usar em respostas, retrieval, source grounding, evaluation e regras de handoff humano.
+
+Escopo futuro:
+- Cobrir source authority, locale, topic/category, approval status, risk level, usage permissions, blocked content e source references.
+- Diferenciar websiteAllowed, aiAllowed, ragAllowed, handoffRequired, sourceRequired e ownerReviewRequired.
+- Definir regras para fatos volateis como preco, agenda, disponibilidade, garantias, promessas comerciais, confirmacao de reserva, seguranca, cancelamento, acessibilidade, private tours e WhatsApp handoff.
+- Definir caminho de migracao para futuros registros JSON/YAML/database sem implementar isso agora.
+
+Restricoes mantidas na abertura READY:
+- O documento `docs/product/ai-concierge-approved-knowledge-records-contract.md` nao foi criado.
+- Nenhum backend, API, banco, migration, seed, JSON/YAML data file, dependencia, package, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado.
+
 ## RT-023A Portfolio README Showcase
 
 Estado: DONE remoto - commit `67584b6 docs: create Rick Travel portfolio README showcase` publicado em `origin/main` em 2026-05-06.

@@ -2562,3 +2562,50 @@ Execution state: RT-AI-017 executed as documentation-only architecture in `docs/
 
 Restrictions preserved during execution:
 - No backend code, API route, database, migration, seed, embedding, dependency install, package file, lockfile, frontend file, app file, component, message file, public asset, Prisma file, config file, JSON/YAML data file, deploy, commit, push, `.agents/`, or `skills-lock.json` change was made.
+
+## RT-AI-018A — Define Approved AI Knowledge Records Contract
+
+State: READY
+
+Objective: Define the documentation-only contract for approved AI knowledge records that the future Rick Travel AI Concierge may use for answers, retrieval, source grounding, evaluation, and human handoff rules.
+
+Type: DOCUMENTATION-ONLY CONTRACT.
+
+Context:
+- RT-AI-017 defined the robust AI Concierge architecture with separate AI Backend, separate AI Database, future RAG, logs/evals, human review, WhatsApp handoff, and a phased LangChain/LangGraph path.
+- The next required governance layer is a clear contract for what may become approved AI knowledge before any structured records, retrieval, embeddings, or runtime implementation exists.
+
+Future implementation files allowed:
+- docs/product/ai-concierge-approved-knowledge-records-contract.md
+- docs/ops/status.md
+- docs/ops/backlog.md
+- docs/ops/execution-log.md
+- docs/ops/session-handoff.md
+
+Future implementation scope:
+1. Define what an approved AI knowledge record is.
+2. Define required record fields, including source authority, locale, topic/category, approval status, risk level, usage permissions, and source references.
+3. Define explicit permission flags: websiteAllowed, aiAllowed, ragAllowed, handoffRequired, sourceRequired, and ownerReviewRequired.
+4. Define blocked content for AI use.
+5. Define handling rules for volatile facts such as price, schedule, availability, guarantees, commercial promises, booking confirmation, safety, cancellation, accessibility, private tours, and WhatsApp handoff.
+6. Define the migration path from documentation contract to future JSON/YAML/database records without creating those records now.
+
+Future forbidden scope:
+- No backend code.
+- No API route.
+- No database schema, migration, seed, JSON/YAML data file, embeddings, vector store, LangChain, or LangGraph implementation.
+- No frontend, app, component, message, public asset, Prisma, config, package file, lockfile, dependency install, deploy, `.agents/`, or `skills-lock.json` changes.
+- No broad git add, commit, or push without explicit authorization.
+
+Future validation criteria:
+- Approved knowledge records contract document created.
+- WebsiteAllowed vs aiAllowed vs ragAllowed distinction documented.
+- Human handoff and source-required rules documented.
+- Volatile commercial fact handling documented.
+- Migration path to future structured records documented without implementation.
+- No runtime, code, data, dependency, package, lockfile, deploy, `.agents/`, or `skills-lock.json` changes performed.
+- git diff --check PASS.
+
+Risk: low to medium (documentation only). The main risk is ambiguity that could later allow AI use of content intended only for website display or require human confirmation.
+
+Execution state: RT-AI-018A opened as READY in operational documentation only. The future product document was not created. No backend, API, database, migration, seed, JSON/YAML data file, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, deploy, `.agents/`, `skills-lock.json`, commit, or push was created or changed in this READY opening.

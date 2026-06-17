@@ -1,5 +1,25 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-17 - RT-AI-018A Approved AI Knowledge Records Contract READY
+
+State: READY.
+
+RT-AI-018A was opened as a documentation-only contract task to define approved AI knowledge record rules before any structured records, retrieval, embeddings, or runtime implementation.
+
+Future objective:
+- Define the contract for approved AI knowledge records that the future Rick Travel AI Concierge may use for answers, retrieval, source grounding, evaluation, and human handoff rules.
+
+Future contract focus:
+- Source authority, locale, topic/category, approval status, risk level, usage permissions, blocked content, and source references.
+- Explicit permission distinctions: websiteAllowed, aiAllowed, ragAllowed, handoffRequired, sourceRequired, and ownerReviewRequired.
+- Handling of volatile facts such as price, schedule, availability, guarantees, commercial promises, booking confirmation, safety, cancellation, accessibility, private tours, and WhatsApp handoff.
+- Migration path to future JSON/YAML/database records without implementing those records now.
+
+Restrictions preserved in this READY opening:
+- No product contract document, backend, API route, database schema, migration, seed, JSON/YAML data file, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, deploy, `.agents/`, `skills-lock.json`, commit, or push changes were made beyond allowed operational documentation.
+
+---
+
 ## Update 2026-06-17 - RT-AI-017 Robust AI Concierge Architecture
 
 State: REVIEW.

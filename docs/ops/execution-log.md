@@ -1662,3 +1662,14 @@ Objective: Define the robust technical architecture for the Rick Travel AI Conci
 - Recommended Python + FastAPI for the future AI Backend after comparing it with Node.js + NestJS.
 - Defined conceptual AI data entities, API contract, RAG/evals/fine-tuning learning flow, LangChain/LangGraph roles, safety rules, roadmap, and DONE criteria.
 - No backend, API, database, migration, seed, dependency, runtime, frontend, package, lockfile, deploy, commit, push, `.agents/`, or `skills-lock.json` change was made.
+
+## 2026-06-17 - RT-AI-018A Approved AI Knowledge Records Contract READY Opening
+
+State: READY.
+
+Objective: Open RT-AI-018A as a documentation-only contract task.
+
+- RT-AI-018A defined in docs/ops/backlog.md.
+- Operational status updated in docs/ops/status.md.
+- Future product document allowed but not created: `docs/product/ai-concierge-approved-knowledge-records-contract.md`.
+- No backend, API, database, migration, seed, JSON/YAML data file, dependency, runtime, frontend, package, lockfile, deploy, `.agents/`, or `skills-lock.json` change was made.
