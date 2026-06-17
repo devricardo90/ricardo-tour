@@ -2565,7 +2565,7 @@ Restrictions preserved during execution:
 
 ## RT-AI-018A — Define Approved AI Knowledge Records Contract
 
-State: READY
+State: REVIEW
 
 Objective: Define the documentation-only contract for approved AI knowledge records that the future Rick Travel AI Concierge may use for answers, retrieval, source grounding, evaluation, and human handoff rules.
 
@@ -2608,4 +2608,7 @@ Future validation criteria:
 
 Risk: low to medium (documentation only). The main risk is ambiguity that could later allow AI use of content intended only for website display or require human confirmation.
 
-Execution state: RT-AI-018A opened as READY in operational documentation only. The future product document was not created. No backend, API, database, migration, seed, JSON/YAML data file, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, deploy, `.agents/`, `skills-lock.json`, commit, or push was created or changed in this READY opening.
+Execution state: RT-AI-018A executed as documentation-only product contract in `docs/product/ai-concierge-approved-knowledge-records-contract.md`. The document defines approved AI knowledge record purpose, websiteAllowed vs aiAllowed distinction, source authority, identity fields, locale handling, topic/category classification, approval status, risk level, usage permissions, blocked content, human handoff rules, source grounding, volatile fact handling, unsupported-answer behavior, migration path, and future readiness for retrieval/evaluation/backend architecture.
+
+Restrictions preserved during execution:
+- No backend code, API route, database schema, migration, seed, JSON/YAML data file, dependency install, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend file, app file, component, message file, public asset, Prisma file, config file, deploy, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed.

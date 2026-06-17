@@ -20,21 +20,18 @@ Resultado:
 Restricoes mantidas:
 - Nenhum backend, API, banco, migration, seed, dependencia, runtime, frontend, package, lockfile, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado nesta execucao.
 
-## RT-AI-018A READY - Approved AI Knowledge Records Contract
+## RT-AI-018A REVIEW - Approved AI Knowledge Records Contract
 
-Estado: READY em 2026-06-17.
+Estado: REVIEW em 2026-06-17.
 
-Objetivo futuro:
-- Definir o contrato documentation-only para approved AI knowledge records que o futuro AI Concierge podera usar em respostas, retrieval, source grounding, evaluation e regras de handoff humano.
+Resultado:
+- Documento criado em `docs/product/ai-concierge-approved-knowledge-records-contract.md`.
+- Contrato define purpose, websiteAllowed vs aiAllowed, source authority, record identity, locale/language handling, topic/category, approval status, risk level, usage permissions, blocked content, human handoff, source grounding e unsupported-answer behavior.
+- Regras para fatos volateis cobrem preco, disponibilidade, agenda, garantias, pagamentos e promessas comerciais.
+- Caminho de migracao para futuros registros estruturados foi documentado sem criar JSON/YAML/database records.
+- Contrato ficou alinhado com retrieval, evaluation e AI Backend architecture futura de RT-AI-017.
 
-Escopo futuro:
-- Cobrir source authority, locale, topic/category, approval status, risk level, usage permissions, blocked content e source references.
-- Diferenciar websiteAllowed, aiAllowed, ragAllowed, handoffRequired, sourceRequired e ownerReviewRequired.
-- Definir regras para fatos volateis como preco, agenda, disponibilidade, garantias, promessas comerciais, confirmacao de reserva, seguranca, cancelamento, acessibilidade, private tours e WhatsApp handoff.
-- Definir caminho de migracao para futuros registros JSON/YAML/database sem implementar isso agora.
-
-Restricoes mantidas na abertura READY:
-- O documento `docs/product/ai-concierge-approved-knowledge-records-contract.md` nao foi criado.
+Restricoes mantidas:
 - Nenhum backend, API, banco, migration, seed, JSON/YAML data file, dependencia, package, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado.
 
 ## RT-023A Portfolio README Showcase

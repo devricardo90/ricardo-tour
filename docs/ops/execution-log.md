@@ -1673,3 +1673,15 @@ Objective: Open RT-AI-018A as a documentation-only contract task.
 - Operational status updated in docs/ops/status.md.
 - Future product document allowed but not created: `docs/product/ai-concierge-approved-knowledge-records-contract.md`.
 - No backend, API, database, migration, seed, JSON/YAML data file, dependency, runtime, frontend, package, lockfile, deploy, `.agents/`, or `skills-lock.json` change was made.
+
+## 2026-06-17 - RT-AI-018A Approved AI Knowledge Records Contract
+
+State: REVIEW.
+
+Objective: Create the official product contract for approved AI knowledge records.
+
+- Created `docs/product/ai-concierge-approved-knowledge-records-contract.md`.
+- Defined approved record purpose, websiteAllowed vs aiAllowed, source authority, identity fields, locale handling, categories, approval status, risk level, usage permissions, blocked content, handoff rules, and source grounding.
+- Documented handling for prices, availability, schedules, guarantees, payments, commercial promises, unknown answers, and unsupported answers.
+- Documented migration path to future structured records and readiness for retrieval, evaluation, and the AI Backend architecture.
+- No backend, API, database schema, migration, seed, JSON/YAML data file, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.
