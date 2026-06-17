@@ -2612,3 +2612,54 @@ Execution state: RT-AI-018A executed as documentation-only product contract in `
 
 Restrictions preserved during execution:
 - No backend code, API route, database schema, migration, seed, JSON/YAML data file, dependency install, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend file, app file, component, message file, public asset, Prisma file, config file, deploy, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed.
+
+## RT-AI-019A — Define First Approved AI Knowledge Record Examples
+
+State: READY
+
+Objective: Define the first small set of human-readable approved AI knowledge record examples in Markdown, demonstrating how the RT-AI-018A contract should work before any runtime implementation, structured data, database, RAG, embeddings, LangChain, LangGraph, or chatbot behavior is introduced.
+
+Type: DOCUMENTATION-ONLY EXAMPLES.
+
+Context:
+- RT-AI-017 defined the robust AI Concierge architecture.
+- RT-AI-018A defined the approved AI knowledge records contract.
+- The next governance step is to provide a small, safe set of examples that show how the contract should be interpreted by humans before any machine-readable records exist.
+
+Future implementation files allowed:
+- docs/product/ai-concierge-first-approved-knowledge-record-examples.md
+- docs/ops/status.md
+- docs/ops/backlog.md
+- docs/ops/execution-log.md
+- docs/ops/session-handoff.md
+
+Future implementation scope:
+1. Define five small and safe Markdown examples:
+   - One stable company/about record.
+   - One tour overview record.
+   - One WhatsApp handoff record.
+   - One blocked volatile price/availability example.
+   - One unknown/unsupported answer example.
+2. Each example must show recordId, title, locale, topic/category, sourceAuthority, approvalStatus, riskLevel, websiteAllowed, aiAllowed, ragAllowed, handoffRequired, sourceRequired, allowedAnswerBehavior, blockedAnswerBehavior, freshness/review expectation, and notes for future migration to structured data.
+3. Demonstrate websiteAllowed vs aiAllowed vs ragAllowed behavior without creating structured runtime data.
+4. Demonstrate safe handling for volatile facts, unsupported answers, and human handoff.
+
+Future forbidden scope:
+- No backend code.
+- No API route.
+- No database schema, migration, seed, JSON/YAML data file, embeddings, vector store, LangChain, LangGraph, runtime behavior, real chatbot implementation, or dependency install.
+- No frontend, app, component, message, public asset, Prisma, config, package file, lockfile, deploy, `.agents/`, or `skills-lock.json` changes.
+- No broad git add, commit, or push without explicit authorization.
+
+Future validation criteria:
+- First approved AI knowledge record examples document created.
+- Exactly the expected small example set is documented.
+- Required fields appear in each example.
+- Volatile price/availability example is blocked from AI/RAG use.
+- Unknown/unsupported example routes to limitation or handoff behavior.
+- No runtime, code, structured data, dependency, package, lockfile, deploy, `.agents/`, or `skills-lock.json` changes performed.
+- git diff --check PASS.
+
+Risk: low to medium (documentation only). The main risk is accidentally making examples look like live runtime data or approved commercial facts instead of governance examples.
+
+Execution state: RT-AI-019A opened as READY in operational documentation only. The future product examples document was not created. No backend, API, database, migration, seed, JSON/YAML data file, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed in this READY opening.

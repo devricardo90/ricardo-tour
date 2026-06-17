@@ -1,5 +1,29 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-17 - RT-AI-019A First Approved AI Knowledge Record Examples READY
+
+State: READY.
+
+RT-AI-019A was opened as a documentation-only examples task to define the first small set of approved AI knowledge record examples in Markdown.
+
+Future objective:
+- Demonstrate how the RT-AI-018A approved AI knowledge records contract should work before any runtime implementation, structured data, database, RAG, embeddings, LangChain, LangGraph, or chatbot behavior exists.
+
+Future examples:
+- One stable company/about record.
+- One tour overview record.
+- One WhatsApp handoff record.
+- One blocked volatile price/availability example.
+- One unknown/unsupported answer example.
+
+Required example fields:
+- recordId, title, locale, topic/category, sourceAuthority, approvalStatus, riskLevel, websiteAllowed, aiAllowed, ragAllowed, handoffRequired, sourceRequired, allowedAnswerBehavior, blockedAnswerBehavior, freshness/review expectation, and notes for future migration to structured data.
+
+Restrictions preserved in this READY opening:
+- No product examples document, backend, API route, database schema, migration, seed, JSON/YAML data file, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, runtime behavior, chatbot implementation, deploy, `.agents/`, `skills-lock.json`, broad git add, commit, or push changes were made beyond allowed operational documentation.
+
+---
+
 ## Update 2026-06-17 - RT-AI-018A Approved AI Knowledge Records Contract
 
 State: REVIEW.
