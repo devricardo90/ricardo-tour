@@ -1,5 +1,26 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-17 - RT-AI-017 Robust AI Concierge Architecture
+
+State: REVIEW.
+
+RT-AI-017 created the documentation-only architecture for the Rick Travel AI Concierge robust backend and learning path.
+
+Architecture document:
+- `docs/architecture/ai-concierge-robust-backend-learning-architecture.md`
+
+Result:
+- Justified a separate AI Backend and separate AI Database.
+- Recommended Python + FastAPI over Node.js + NestJS for this project, while preserving the current Next.js site as the product frontend.
+- Defined conceptual topology with future vector store, WhatsApp handoff, and logs/evaluations layer.
+- Defined conceptual AI data entities without creating a real schema.
+- Documented RAG vs fine-tuning, human curation, evaluation datasets, LangChain/LangGraph positioning, API contract, safety rules, and phased roadmap.
+
+Restrictions preserved:
+- No backend, API route, database, migration, seed, embedding, dependency install, package file, lockfile, frontend file, app file, component, message, public asset, Prisma file, config file, JSON/YAML data file, deploy, commit, push, `.agents/`, or `skills-lock.json` change was made by this execution.
+
+---
+
 ## Update 2026-06-16 - RT-AI-017 Robust AI Concierge Architecture READY
 
 State: READY.

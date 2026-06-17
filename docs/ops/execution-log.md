@@ -1650,3 +1650,15 @@ Objective: Open RT-AI-017 as a documentation-only architecture task.
 - RT-AI-017 defined in docs/ops/backlog.md.
 - Operational status updated in docs/ops/status.md.
 - No app, component, or runtime files changed.
+
+## 2026-06-17 - RT-AI-017 Robust AI Concierge Architecture
+
+State: REVIEW.
+
+Objective: Define the robust technical architecture for the Rick Travel AI Concierge.
+
+- Created `docs/architecture/ai-concierge-robust-backend-learning-architecture.md`.
+- Documented separate AI Backend, separate AI Database, future vector store, WhatsApp handoff, and logs/evaluations layer.
+- Recommended Python + FastAPI for the future AI Backend after comparing it with Node.js + NestJS.
+- Defined conceptual AI data entities, API contract, RAG/evals/fine-tuning learning flow, LangChain/LangGraph roles, safety rules, roadmap, and DONE criteria.
+- No backend, API, database, migration, seed, dependency, runtime, frontend, package, lockfile, deploy, commit, push, `.agents/`, or `skills-lock.json` change was made.

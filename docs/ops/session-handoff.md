@@ -7,6 +7,19 @@ Data: 2026-05-14 (atualizado por RT-FINAL-04C2 - Add Final Catalog Assets and Se
 Sessao atualizada ate a Fase 3 - Operacao publica controlada do MVP seguindo o Protocolo Rick.
 RT-FINAL-DG aprovada. RT-FINAL-00 concluida como auditoria pura. RT-FINAL-00A Remote DONE confirmado. RT-FINAL-03A executada manualmente em producao pelo Trigger. RT-FINAL-04B Remote DONE (commit c7a1d47). RT-FINAL-04C1 CLOSED (Discussion Gate). RT-FINAL-04C2 Remote DONE (commit dfa7489). RT-FINAL-04C2B executada localmente; blocos `update` dos 6 schedules corrigidos para incluir `capacity` e `pricePerPersonCents`; aguardando aprovacao do Trigger para commit; seed nao executado em producao.
 
+## RT-AI-017 REVIEW - Robust AI Concierge Backend and Learning Architecture
+
+Estado: REVIEW em 2026-06-17.
+
+Resultado:
+- Documento criado em `docs/architecture/ai-concierge-robust-backend-learning-architecture.md`.
+- Arquitetura definiu AI Backend separado, AI Database separado, vector store futura, handoff humano via WhatsApp e camada de logs/evaluations.
+- Stack recomendada para futura implementacao: Python + FastAPI.
+- Documento cobre banco conceitual, estrategia de aprendizado, RAG vs fine-tuning, curadoria humana, LangChain/LangGraph, contrato conceitual de API, seguranca, roadmap e criterios de DONE.
+
+Restricoes mantidas:
+- Nenhum backend, API, banco, migration, seed, dependencia, runtime, frontend, package, lockfile, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado nesta execucao.
+
 ## RT-023A Portfolio README Showcase
 
 Estado: DONE remoto - commit `67584b6 docs: create Rick Travel portfolio README showcase` publicado em `origin/main` em 2026-05-06.
