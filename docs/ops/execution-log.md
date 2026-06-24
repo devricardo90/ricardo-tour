@@ -1733,3 +1733,17 @@ Objective: Create documentation-only validation rules for future AI knowledge re
 - Documented volatile fact rules for price, availability, schedule, payment, refund, booking confirmation, guarantees, discounts, credentials, insurance, and reviews/ratings.
 - Included unknown/unsupported answer rules, PASS/FAIL examples, and future migration path toward automated validators.
 - No backend, API, database schema, migration, seed, JSON/YAML data file, validation script, tests, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.
+
+## 2026-06-24 - RT-AI-021A Structured AI Knowledge Record Format READY Opening
+
+State: READY.
+
+Objective: Open RT-AI-021A as a documentation-only format specification task.
+
+- RT-AI-021A defined in docs/ops/backlog.md.
+- Operational status updated in docs/ops/status.md.
+- Session handoff updated in docs/ops/session-handoff.md.
+- Future product format document allowed but not created: `docs/product/ai-concierge-structured-knowledge-record-format.md`.
+- Future scope covers purpose, relationship to prior AI knowledge governance docs, conceptual field schema, required and optional fields, field types, enum values, source references, locale/translation fields, permissions, approval fields, risk fields, answer behavior, freshness, migration fields, documentation-only pseudo-records, and migration paths toward JSON/YAML records, database records, and validation scripts.
+- READY decision is valid only while the scope remains documentation-only.
+- No backend, API route, database schema, migration, seed, real JSON/YAML data file, actual structured record data file, validation script, tests, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.

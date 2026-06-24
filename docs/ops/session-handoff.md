@@ -60,6 +60,34 @@ Resultado:
 Restricoes mantidas:
 - Nenhum backend, API, banco, migration, seed, JSON/YAML data file, validation script, tests, dependencia, package, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, runtime behavior, chatbot implementation, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado.
 
+## RT-AI-021A READY - Structured AI Knowledge Record Format
+
+Estado: READY em 2026-06-24.
+
+Objetivo futuro:
+- Criar uma especificacao documental do formato estruturado futuro para AI knowledge records antes de qualquer arquivo real JSON/YAML, schema de banco, backend, RAG, embeddings, LangChain, LangGraph ou chatbot implementation.
+
+Arquivo permitido na futura execucao:
+- `docs/product/ai-concierge-structured-knowledge-record-format.md`
+
+Escopo futuro:
+- Purpose do formato estruturado.
+- Relacao com RT-AI-018A approved knowledge records contract, RT-AI-019A first approved examples e RT-AI-020A validation rules.
+- Conceptual field schema, required fields, optional fields, field types e allowed enum values.
+- Source reference structure.
+- Locale e translation fields.
+- Permission fields: websiteAllowed, aiAllowed, ragAllowed, evalAllowed, handoffRequired, sourceRequired, ownerReviewRequired e internalOnly.
+- Approval fields: approvalStatus, approvedByRole, reviewedAt e reviewCadence.
+- Risk fields: riskLevel, volatileFactType e riskNotes.
+- Answer behavior fields: allowedAnswerBehavior, blockedAnswerBehavior e handoffBehavior.
+- Freshness fields, migration fields e pseudo-records somente documentais.
+- Distincao explicita entre format documentation e real data files.
+- Future migration path para JSON/YAML records, database records e validation scripts.
+
+Restricoes desta abertura READY:
+- Nenhum product format document foi criado neste Discussion Gate.
+- Nenhum backend, API, banco, migration, seed, JSON/YAML data file, actual structured record data file, validation script, tests, dependencia, package, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, runtime behavior, chatbot implementation, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado.
+
 ## RT-023A Portfolio README Showcase
 
 Estado: DONE remoto - commit `67584b6 docs: create Rick Travel portfolio README showcase` publicado em `origin/main` em 2026-05-06.

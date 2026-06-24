@@ -1,5 +1,32 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-24 - RT-AI-021A Structured AI Knowledge Record Format READY
+
+State: READY.
+
+RT-AI-021A was opened as a documentation-only format specification task for future structured Rick Travel AI knowledge records.
+
+Future objective:
+- Define the conceptual structured record format that future AI knowledge records must follow when the project later migrates from Markdown examples to structured records.
+
+Future format focus:
+- Purpose of the structured format and relationship to the approved knowledge records contract, first approved examples, and validation rules.
+- Conceptual field schema with required fields, optional fields, field types, and allowed enum values.
+- Source reference structure, locale and translation fields, permission fields, approval fields, risk fields, answer behavior fields, freshness fields, and migration fields.
+- Documentation-only pseudo-record examples.
+- Explicit distinction between format documentation and real JSON/YAML data files or database records.
+- Future migration paths toward JSON/YAML records, database records, and validation scripts.
+
+READY decision:
+- RT-AI-021A is READY only because the scope remains documentation-only.
+- The future product document may be created by a separate execution gate at `docs/product/ai-concierge-structured-knowledge-record-format.md`.
+- This Discussion Gate did not create the future product document and did not create any JSON/YAML record file.
+
+Restrictions preserved in this READY opening:
+- No product format document, backend, API route, database schema, migration, seed, real JSON/YAML data file, actual structured record data file, validation script, tests, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, public asset, Prisma, config, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push changes were made beyond allowed operational documentation.
+
+---
+
 ## Update 2026-06-17 - RT-AI-020A AI Knowledge Record Validation Rules
 
 State: REVIEW.

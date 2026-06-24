@@ -2724,3 +2724,69 @@ Execution state: RT-AI-020A executed as documentation-only validation rules in `
 
 Restrictions preserved during execution:
 - No backend code, API route, database schema, migration, seed, JSON/YAML data file, validation script, tests, dependency install, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend file, app file, component, message file, public asset, Prisma file, config file, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed.
+
+## RT-AI-021A - Define Structured AI Knowledge Record Format
+
+State: READY
+
+Objective: Define the future structured format for Rick Travel AI knowledge records before any real JSON/YAML data files, database schema, backend, RAG, embeddings, LangChain, LangGraph, or chatbot implementation.
+
+Type: DOCUMENTATION-ONLY FORMAT SPECIFICATION.
+
+Context:
+- RT-AI-017 defined the robust AI Concierge architecture.
+- RT-AI-018A defined the approved AI knowledge records contract.
+- RT-AI-019A defined the first human-readable approved AI knowledge record examples.
+- RT-AI-020A defined validation rules for future AI knowledge records.
+- The next governance layer is a conceptual structured record format that can later guide JSON/YAML records, database records, and validation scripts without creating any of those implementation artifacts now.
+
+Future implementation files allowed:
+- docs/product/ai-concierge-structured-knowledge-record-format.md
+- docs/ops/status.md
+- docs/ops/backlog.md
+- docs/ops/execution-log.md
+- docs/ops/session-handoff.md
+
+Future implementation scope:
+1. Define the purpose of the structured AI knowledge record format.
+2. Explain its relationship to the approved knowledge records contract, first approved examples, and validation rules.
+3. Define a conceptual field schema with required fields, optional fields, field types, and allowed enum values.
+4. Define source reference structure.
+5. Define locale and translation fields.
+6. Define permission fields: websiteAllowed, aiAllowed, ragAllowed, evalAllowed, handoffRequired, sourceRequired, ownerReviewRequired, and internalOnly.
+7. Define approval fields: approvalStatus, approvedByRole, reviewedAt, and reviewCadence.
+8. Define risk fields: riskLevel, volatileFactType, and riskNotes.
+9. Define answer behavior fields: allowedAnswerBehavior, blockedAnswerBehavior, and handoffBehavior.
+10. Define freshness fields and migration fields.
+11. Include example pseudo-records in documentation only.
+12. Explicitly distinguish format documentation from real data files.
+13. Document future migration paths toward JSON/YAML records, database records, and validation scripts without implementing them.
+
+Future forbidden scope:
+- No backend code.
+- No API route.
+- No database schema, migration, seed, or database record.
+- No real JSON/YAML data file or actual structured record data file.
+- No validation script.
+- No tests.
+- No dependencies, package file, or lockfile changes.
+- No LangChain, LangGraph, embeddings, vector store, RAG, runtime behavior, real chatbot implementation, or deploy.
+- No frontend, app, component, message, public asset, Prisma, config, `.agents/`, or `skills-lock.json` changes.
+- No broad git add, commit, or push without explicit authorization.
+
+Future validation criteria:
+- Structured knowledge record format document created.
+- Relationship to RT-AI-018A, RT-AI-019A, and RT-AI-020A documented.
+- Conceptual field schema, required fields, optional fields, field types, and enum values documented.
+- Permission, approval, risk, answer behavior, freshness, source reference, locale/translation, and migration fields documented.
+- Pseudo-record examples are clearly documentation-only and not real data.
+- Future paths toward JSON/YAML records, database records, and validation scripts are documented without creating implementation artifacts.
+- No runtime, code, structured data, dependency, package, lockfile, deploy, `.agents/`, or `skills-lock.json` changes performed.
+- git diff --check PASS.
+
+Risk: low to medium (documentation only). The main risk is allowing the future format to look like live structured data or prematurely constrain implementation before the data model is approved.
+
+READY decision: Promote RT-AI-021A to READY only under the documentation-only scope above. The future product document may be created by a separate execution gate; this Discussion Gate does not create it.
+
+Restrictions preserved during READY opening:
+- No product format document, backend, API route, database schema, migration, seed, JSON/YAML data file, actual structured record data file, validation script, tests, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend file, app file, component, message file, public asset, Prisma file, config file, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed.
