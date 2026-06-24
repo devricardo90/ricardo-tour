@@ -1,5 +1,28 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-24 - RT-AI-021A Structured AI Knowledge Record Format
+
+State: REVIEW.
+
+RT-AI-021A created the documentation-only product format specification for future structured Rick Travel AI knowledge records.
+
+Product format document:
+- `docs/product/ai-concierge-structured-knowledge-record-format.md`
+
+Result:
+- Defined purpose and scope for the future structured AI knowledge record format.
+- Documented the relationship to the approved knowledge records contract, first approved examples, and validation rules.
+- Documented conceptual field schema, required fields, optional fields, field types, and allowed enum values.
+- Documented source reference structure, locale and translation fields, permission fields, approval fields, risk fields, answer behavior fields, freshness fields, and migration fields.
+- Included Markdown-only pseudo-record examples.
+- Explicitly distinguished format documentation from real JSON/YAML data files, database records, schemas, scripts, and runtime behavior.
+- Documented future migration paths toward JSON/YAML records, database records, and validation scripts.
+
+Restrictions preserved:
+- No backend, API route, database schema, migration, seed, real JSON/YAML data file, actual structured record data file, validation script, tests, dependency, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, public asset, Prisma, config, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push change was made.
+
+---
+
 ## Update 2026-06-24 - RT-AI-021A Structured AI Knowledge Record Format READY
 
 State: READY.

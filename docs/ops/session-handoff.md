@@ -88,6 +88,21 @@ Restricoes desta abertura READY:
 - Nenhum product format document foi criado neste Discussion Gate.
 - Nenhum backend, API, banco, migration, seed, JSON/YAML data file, actual structured record data file, validation script, tests, dependencia, package, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, runtime behavior, chatbot implementation, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado.
 
+## RT-AI-021A REVIEW - Structured AI Knowledge Record Format
+
+Estado: REVIEW em 2026-06-24.
+
+Resultado:
+- Documento criado em `docs/product/ai-concierge-structured-knowledge-record-format.md`.
+- O formato define purpose and scope, relacao com o approved knowledge records contract, first approved examples e validation rules.
+- O documento cobre conceptual field schema, required fields, optional fields, field types, allowed enum values, source reference structure, locale/translation fields, permission fields, approval fields, risk fields, answer behavior fields, freshness fields e migration fields.
+- Inclui pseudo-records somente em Markdown documental.
+- Registra distincao explicita entre format documentation e real JSON/YAML data files, database records, schemas, scripts e runtime behavior.
+- Registra future migration path para JSON/YAML records, database records e validation scripts.
+
+Restricoes mantidas:
+- Nenhum backend, API, banco, migration, seed, real JSON/YAML data file, actual structured record data file, validation script, tests, dependencia, package, lockfile, LangChain, LangGraph, embedding, vector store, frontend, app, component, message, runtime behavior, chatbot implementation, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado.
+
 ## RT-023A Portfolio README Showcase
 
 Estado: DONE remoto - commit `67584b6 docs: create Rick Travel portfolio README showcase` publicado em `origin/main` em 2026-05-06.

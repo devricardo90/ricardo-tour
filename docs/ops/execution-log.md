@@ -1747,3 +1747,16 @@ Objective: Open RT-AI-021A as a documentation-only format specification task.
 - Future scope covers purpose, relationship to prior AI knowledge governance docs, conceptual field schema, required and optional fields, field types, enum values, source references, locale/translation fields, permissions, approval fields, risk fields, answer behavior, freshness, migration fields, documentation-only pseudo-records, and migration paths toward JSON/YAML records, database records, and validation scripts.
 - READY decision is valid only while the scope remains documentation-only.
 - No backend, API route, database schema, migration, seed, real JSON/YAML data file, actual structured record data file, validation script, tests, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.
+
+## 2026-06-24 - RT-AI-021A Structured AI Knowledge Record Format
+
+State: REVIEW.
+
+Objective: Create the documentation-only product format specification for future structured Rick Travel AI knowledge records.
+
+- Created `docs/product/ai-concierge-structured-knowledge-record-format.md`.
+- Defined purpose, scope, and relationship to RT-AI-018A, RT-AI-019A, and RT-AI-020A.
+- Documented conceptual field schema, required fields, optional fields, field types, allowed enum values, source references, locale and translation fields, permissions, approval fields, risk fields, answer behavior fields, freshness fields, and migration fields.
+- Included Markdown-only pseudo-record examples and explicitly stated that they are not real JSON/YAML records, database rows, API payloads, seed data, embeddings, vector-store content, or chatbot behavior.
+- Documented future migration paths toward JSON/YAML records, database records, and validation scripts without implementing them.
+- No backend, API route, database schema, migration, seed, real JSON/YAML data file, actual structured record data file, validation script, tests, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.
