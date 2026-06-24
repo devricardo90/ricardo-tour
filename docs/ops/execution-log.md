@@ -1,5 +1,26 @@
 ﻿# Execution Log - Rick Travel
 
+## 2026-06-24 - RT-UX-002A Footer Audit and Hero Support Microcopy READY Opening
+
+**Executed by:** Codex
+**Environment:** local; documentation operations only
+**Status:** READY opened; no production effect
+
+**Objective:**
+Open RT-UX-002A as a small controlled frontend/UX polish task to audit the public footer and remove only the hero support microcopy row below the main CTAs.
+
+**Result:**
+- RT-UX-002A marked as READY in operational documentation.
+- Future implementation scope limited to `components/hero-section.tsx`, `components/footer.tsx`, locale message files if needed, `docs/validation/public-home-footer-ux-review.md`, and allowed ops docs.
+- Future validation requires Playwright visual inspection of `/pt`, desktop/mobile checks if possible, and before/after screenshots if implementation happens.
+- Future footer review must cover visual balance, spacing, hierarchy, link clarity, Cadastur trust mark placement, excessive empty space, mobile behavior, and copy clarity.
+- Recommendations must be documented before broad footer or homepage changes.
+
+**Restrictions preserved:**
+- No UI implementation, Playwright run, validation report, AI Concierge document, backend, API route, database, migration, seed, auth change, booking/payment logic, package file, lockfile, dependency install, `.agents/`, `skills-lock.json`, deploy, broad redesign, full homepage rewrite, new section, Cadastur removal, unsupported credibility claim, broad git add, commit, or push was created or changed.
+
+---
+
 ## 2026-06-16 - RT-UX-001F - Home Video Removal
 
 **Executado por:** Codex

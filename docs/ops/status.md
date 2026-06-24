@@ -1,5 +1,40 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-24 - RT-UX-002A Footer Audit and Hero Support Microcopy READY
+
+State: READY.
+
+RT-UX-002A was opened as a small controlled frontend/UX polish task.
+
+Future objective:
+- Audit the public footer visually and remove only the small hero support microcopy row below the main CTAs.
+
+Future implementation focus:
+- Use Playwright to inspect `/pt` visually.
+- Capture before/after screenshots if implementation happens.
+- Check desktop and mobile if possible.
+- Remove only:
+  - "Orientação pelo WhatsApp"
+  - "Monte seu roteiro com ajuda da nossa equipe"
+- Review footer visual balance, spacing, hierarchy, link clarity, Cadastur trust mark placement, excessive empty space, mobile behavior, and copy clarity.
+- Produce recommendations for possible footer and homepage polish before broad changes.
+- Use frontend design and copywriting guidance only as review discipline.
+
+Future allowed files:
+- `components/hero-section.tsx`
+- `components/footer.tsx`
+- `messages/pt.json`
+- `messages/en.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `docs/validation/public-home-footer-ux-review.md`
+- Allowed operational docs.
+
+Restrictions preserved in this READY opening:
+- No UI implementation, Playwright run, validation report, AI Concierge docs, backend, API route, database, migration, seed, auth, booking/payment logic, package file, lockfile, dependency install, `.agents/`, `skills-lock.json`, deploy, broad redesign, full homepage rewrite, new section, Cadastur removal, unsupported credibility claim, broad git add, commit, or push change was made.
+
+---
+
 ## Update 2026-06-24 - RT-AI-021A Structured AI Knowledge Record Format
 
 State: REVIEW.

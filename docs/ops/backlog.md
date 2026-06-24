@@ -2795,3 +2795,71 @@ Execution state: RT-AI-021A executed as documentation-only structured format spe
 
 Restrictions preserved during execution:
 - No backend code, API route, database schema, migration, seed, real JSON/YAML data file, actual structured record data file, validation script, tests, dependency install, package file, lockfile, LangChain, LangGraph, embedding, vector store, frontend file, app file, component, message file, public asset, Prisma file, config file, deploy, runtime behavior, chatbot implementation, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed.
+
+## RT-UX-002A - Audit Footer and Clean Hero Support Microcopy
+
+State: READY
+
+Objective: Audit the public footer visually and remove the small hero support microcopy row below the main CTAs without broad redesign.
+
+Type: SMALL FRONTEND/UX POLISH. This READY opening is documentation-only.
+
+Context:
+- Latest known remote commit before this gate: `c7b41aa docs: define structured ai knowledge record format`.
+- The public homepage currently shows a support microcopy row below the hero CTAs:
+  - "Orientação pelo WhatsApp"
+  - "Monte seu roteiro com ajuda da nossa equipe"
+- Owner direction is to open a controlled UX polish task that removes only that hero support row, inspects the public footer visually, and produces recommendations before broader footer or homepage changes.
+
+Future implementation files allowed:
+- components/hero-section.tsx
+- components/footer.tsx
+- messages/pt.json
+- messages/en.json
+- messages/es.json
+- messages/sv.json
+- docs/validation/public-home-footer-ux-review.md
+- docs/ops/status.md
+- docs/ops/backlog.md
+- docs/ops/execution-log.md
+- docs/ops/session-handoff.md
+
+Future implementation scope:
+1. Use Playwright to inspect `/pt` visually.
+2. Capture before/after screenshots if implementation happens.
+3. Check desktop and mobile if possible.
+4. Use frontend design and copywriting guidance for review discipline, while keeping implementation narrow.
+5. Remove only the hero support microcopy row:
+   - "Orientação pelo WhatsApp"
+   - "Monte seu roteiro com ajuda da nossa equipe"
+6. Review the footer for visual balance, spacing, hierarchy, link clarity, Cadastur trust mark placement, excessive empty space, mobile behavior, and copy clarity.
+7. Produce recommendations for possible footer and homepage polish before any broad changes.
+8. Implement only minimal safe polish if clearly inside this scope.
+
+Future forbidden scope:
+- No AI Concierge docs.
+- No backend, API route, database, migration, seed, auth change, booking logic, or payment logic.
+- No package file, lockfile, dependency install, deploy, or runtime behavior outside the scoped UI files.
+- No `.agents/` or `skills-lock.json` changes.
+- No broad redesign, full homepage rewrite, new sections, or broad copy rewrite.
+- No removal of the Cadastur logo or trust mark.
+- No unsupported credibility claims.
+- No testimonials, ratings, reviews, guarantees, insurance, official partnership, legal claims, or similar trust claims.
+- No broad git add, commit, or push without explicit authorization.
+
+Future validation criteria:
+- Playwright visual inspection performed for `/pt`.
+- Desktop and mobile checks performed if possible.
+- Before/after screenshots captured if implementation happens.
+- Hero support microcopy row removed and main CTAs preserved.
+- Footer review findings documented in `docs/validation/public-home-footer-ux-review.md`.
+- Recommendations are separated from implemented changes.
+- Changed files remain inside the allowed future file list.
+- `git diff --check` PASS.
+
+Risk: low to medium. The main risk is allowing a small cleanup to expand into a broad homepage/footer redesign or reintroduce unsupported credibility claims.
+
+READY decision: Promote RT-UX-002A to READY only because the future scope is narrow, visual-review driven, and explicitly blocks broad redesign or credibility-claim expansion.
+
+Restrictions preserved during READY opening:
+- No UI code, component, message, validation report, AI Concierge document, backend, API route, database, migration, seed, auth, booking, payment, package file, lockfile, dependency, deploy, runtime behavior, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed.

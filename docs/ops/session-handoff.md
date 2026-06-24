@@ -7,6 +7,38 @@ Data: 2026-05-14 (atualizado por RT-FINAL-04C2 - Add Final Catalog Assets and Se
 Sessao atualizada ate a Fase 3 - Operacao publica controlada do MVP seguindo o Protocolo Rick.
 RT-FINAL-DG aprovada. RT-FINAL-00 concluida como auditoria pura. RT-FINAL-00A Remote DONE confirmado. RT-FINAL-03A executada manualmente em producao pelo Trigger. RT-FINAL-04B Remote DONE (commit c7a1d47). RT-FINAL-04C1 CLOSED (Discussion Gate). RT-FINAL-04C2 Remote DONE (commit dfa7489). RT-FINAL-04C2B executada localmente; blocos `update` dos 6 schedules corrigidos para incluir `capacity` e `pricePerPersonCents`; aguardando aprovacao do Trigger para commit; seed nao executado em producao.
 
+## RT-UX-002A READY - Audit Footer and Clean Hero Support Microcopy
+
+Estado: READY em 2026-06-24.
+
+Objetivo futuro:
+- Auditar visualmente o footer publico e remover somente a linha pequena de support microcopy abaixo dos CTAs principais do hero.
+
+Escopo futuro permitido:
+- Inspecionar `/pt` com Playwright.
+- Capturar screenshots before/after se houver implementacao.
+- Checar desktop e mobile se possivel.
+- Remover somente:
+  - "Orientação pelo WhatsApp"
+  - "Monte seu roteiro com ajuda da nossa equipe"
+- Revisar footer quanto a visual balance, spacing, hierarchy, link clarity, Cadastur trust mark placement, excessive empty space, mobile behavior e copy clarity.
+- Registrar recomendacoes antes de qualquer mudanca ampla.
+- Implementar apenas polish minimo se claramente dentro do escopo.
+
+Arquivos futuros permitidos:
+- `components/hero-section.tsx`
+- `components/footer.tsx`
+- `messages/pt.json`
+- `messages/en.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `docs/validation/public-home-footer-ux-review.md`
+- Ops docs permitidos.
+
+Restricoes desta abertura READY:
+- Nenhuma mudanca de UI, componente, mensagens, validation report, AI Concierge docs, backend, API, banco, migration, seed, auth, booking/payment logic, package, lockfile, dependencia, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criada.
+- Nao remover Cadastur logo/trust mark, nao adicionar unsupported credibility claims, testimonials, ratings, reviews, guarantees, insurance, official partnership ou legal claims.
+
 ## RT-AI-017 REVIEW - Robust AI Concierge Backend and Learning Architecture
 
 Estado: REVIEW em 2026-06-17.
