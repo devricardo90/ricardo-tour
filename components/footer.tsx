@@ -30,22 +30,22 @@ export default function FooterSection() {
     ];
 
     return (
-        <footer className="border-t border-white/8 bg-[#071826] py-14 md:py-18">
-            <div className="mx-auto max-w-6xl px-5 lg:px-6">
-                <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
+        <footer className="border-t border-white/8 bg-[#071826] py-12 md:py-14">
+            <div className="mx-auto max-w-6xl px-5 lg:px-8">
+                <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-10">
                     <div className="col-span-2 md:col-span-1">
                         <Link href="/" aria-label="Rick Travel - Pagina inicial" className="block w-fit">
                             <RickTravelLogo variant="full" size="md" />
                         </Link>
-                        <p className="mt-4 max-w-[260px] text-sm leading-7 text-white/62">
+                        <p className="mt-3 max-w-[260px] text-sm leading-6 text-white/62">
                             Experiencias no Rio de Janeiro com planejamento claro e atendimento humano.
                         </p>
                     </div>
 
                     {columns.map((column) => (
                         <div key={column.title}>
-                            <h3 className="mb-4 text-sm font-semibold text-white">{column.title}</h3>
-                            <ul className="space-y-3">
+                            <h3 className="mb-3 text-sm font-semibold text-white">{column.title}</h3>
+                            <ul className="space-y-2.5">
                                 {column.links.map((link) => (
                                     <li key={link.label}>
                                         <Link
@@ -61,9 +61,9 @@ export default function FooterSection() {
                     ))}
                 </div>
 
-                <div className="my-12 border-t border-white/8" />
+                <div className="my-10 border-t border-white/8" />
 
-                <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
+                <div className="flex flex-col items-center gap-5 sm:flex-row sm:justify-between">
                     <div className="flex items-center gap-4">
                         <Image
                             src="/cadastro/cadastur.png"
