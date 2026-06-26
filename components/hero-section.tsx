@@ -18,25 +18,25 @@ function HeroContent() {
   });
 
   return (
-    <div className="relative mx-auto flex max-w-7xl flex-col px-5 lg:px-12">
-      <div className="mx-auto max-w-5xl text-center">
-        <h1 className="mx-auto max-w-[15ch] text-balance text-4xl font-semibold leading-[0.98] tracking-[-0.045em] text-white md:text-6xl lg:text-[5rem]">
+    <div className="relative mx-auto flex max-w-6xl flex-col px-5 lg:px-8">
+      <div className="mx-auto max-w-4xl text-center">
+        <h1 className="mx-auto max-w-[14ch] text-balance text-4xl font-semibold leading-[0.98] tracking-[-0.045em] text-white md:text-6xl lg:text-[4.625rem]">
           {t("title")}
         </h1>
 
-        <p className="mx-auto mt-6 max-w-3xl text-balance text-[15px] leading-7 text-white/72 md:text-lg md:leading-8">
+        <p className="mx-auto mt-5 max-w-2xl text-balance text-[15px] leading-7 text-white/72 md:text-[17px] md:leading-8">
           {t("description")}
         </p>
 
-        <div className="mt-8">
+        <div className="mt-6 md:mt-7">
           <HeroSearch />
         </div>
 
-        <div className="mt-6 flex flex-col items-center justify-center gap-3 sm:flex-row">
+        <div className="mt-5 flex flex-col items-center justify-center gap-2.5 sm:flex-row">
           <Button
             asChild
             size="lg"
-            className="h-12 w-full rounded-2xl px-6 text-[15px] font-semibold text-white shadow-[0_18px_40px_rgba(18,58,40,0.32)] transition-all duration-200 hover:-translate-y-px active:translate-y-0 sm:min-w-[230px] sm:w-auto"
+            className="h-11 w-full rounded-2xl px-5 text-[15px] font-semibold text-white shadow-[0_14px_34px_rgba(18,58,40,0.28)] transition-all duration-200 hover:-translate-y-px active:translate-y-0 sm:min-w-[210px] sm:w-auto"
             style={{
               background: "linear-gradient(135deg, #123A28 0%, #184731 100%)",
               border: "1px solid rgba(56, 122, 91, 0.4)",
@@ -52,7 +52,7 @@ function HeroContent() {
             asChild
             size="lg"
             variant="ghost"
-            className="h-11 w-full rounded-2xl border border-white/14 bg-white/[0.05] px-6 text-[15px] font-semibold text-white/90 backdrop-blur-md transition-all duration-200 hover:-translate-y-px hover:bg-white/[0.09] hover:text-white active:translate-y-0 sm:h-12 sm:min-w-[230px] sm:w-auto"
+            className="h-11 w-full rounded-2xl border border-white/14 bg-white/[0.05] px-5 text-[15px] font-semibold text-white/90 backdrop-blur-md transition-all duration-200 hover:-translate-y-px hover:bg-white/[0.09] hover:text-white active:translate-y-0 sm:min-w-[210px] sm:w-auto"
           >
             <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
               <span>{t("secondaryButton")}</span>
@@ -67,7 +67,7 @@ function HeroContent() {
 
 function HeroMedia() {
   return (
-    <div className="absolute inset-1 -z-10 aspect-[2/3] overflow-hidden rounded-[2rem] border border-white/6 lg:aspect-video lg:rounded-[3rem]">
+    <div className="absolute inset-1 -z-10 aspect-[2/3] overflow-hidden rounded-[1.75rem] border border-white/6 lg:aspect-video lg:rounded-[2.5rem]">
       <Image
         src="/videos/imagem-rio-perfil.jpg"
         alt=""
@@ -80,9 +80,9 @@ function HeroMedia() {
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,14,24,0.08),rgba(4,14,24,0.22)_32%,rgba(4,14,24,0.82)_100%)]" />
       <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(7,24,38,0.42),transparent_48%,rgba(200,168,107,0.12)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(900px_360px_at_50%_0%,rgba(255,255,255,0.08),transparent_68%)]" />
-      <div className="absolute inset-x-8 bottom-8 hidden rounded-[26px] border border-white/10 bg-[#0a1d2b]/56 px-6 py-5 text-white/78 backdrop-blur-xl lg:block">
+      <div className="absolute inset-x-8 bottom-7 hidden rounded-[22px] border border-white/10 bg-[#0a1d2b]/56 px-5 py-4 text-white/78 backdrop-blur-xl lg:block">
         <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#C8A86B]">Rio de Janeiro curated travel</div>
-        <div className="mt-2 max-w-xl text-sm leading-6">
+        <div className="mt-1.5 max-w-xl text-sm leading-6">
           Rio experiences, clear planning and team confirmation before final details.
         </div>
       </div>
@@ -93,7 +93,7 @@ function HeroMedia() {
 export default function HeroSection() {
   return (
     <section className="overflow-x-hidden bg-[#071826]">
-      <div className="relative py-24 md:pb-32 lg:pb-36 lg:pt-56">
+      <div className="relative pb-18 pt-28 sm:pt-32 md:pb-24 lg:pb-28 lg:pt-40">
         <HeroContent />
         <HeroMedia />
       </div>
