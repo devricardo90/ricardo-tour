@@ -8,10 +8,10 @@ export default function TravelerSupportSection() {
   const items = ['orientation', 'languages', 'handoff'] as const
 
   return (
-    <section className="section-spacing">
-      <div className="mx-auto max-w-6xl px-5 lg:px-6">
-        <div className="mx-auto mb-14 max-w-2xl space-y-4 text-center">
-          <div className="inline-flex rounded-full border border-white/10 bg-white/[0.05] px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#c8a86b]">
+    <section className="section-spacing-sm">
+      <div className="mx-auto max-w-6xl px-5 lg:px-8">
+        <div className="mx-auto mb-9 max-w-2xl space-y-3 text-center md:mb-10">
+          <div className="inline-flex rounded-full border border-white/10 bg-white/[0.05] px-3.5 py-1.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-[#c8a86b]">
             {t('eyebrow')}
           </div>
           <h2 className="text-3xl font-semibold tracking-[-0.04em] text-white md:text-4xl">
@@ -22,7 +22,7 @@ export default function TravelerSupportSection() {
           </p>
         </div>
 
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => (
             <SupportCard
               key={item}
@@ -45,21 +45,21 @@ interface SupportCardProps {
 
 function SupportCard({ title, text, footer }: SupportCardProps) {
   return (
-    <Card className="relative h-full overflow-hidden rounded-[24px] border border-white/8 bg-[#0d2436] text-white shadow-[0_16px_48px_rgba(0,0,0,0.18)] transition-all duration-300 hover:-translate-y-1 hover:border-[#c8a86b]/20 hover:shadow-[0_24px_64px_rgba(0,0,0,0.26)]">
-      <div className="absolute right-5 top-5 h-10 w-10 rounded-full border border-[#c8a86b]/20 bg-[#c8a86b]/10" aria-hidden="true" />
+    <Card className="relative h-full overflow-hidden rounded-[22px] border border-white/8 bg-[#0d2436] text-white shadow-[0_14px_40px_rgba(0,0,0,0.18)] transition-all duration-300 hover:-translate-y-0.5 hover:border-[#c8a86b]/20 hover:shadow-[0_20px_54px_rgba(0,0,0,0.25)]">
+      <div className="absolute right-5 top-5 h-9 w-9 rounded-full border border-[#c8a86b]/20 bg-[#c8a86b]/10" aria-hidden="true" />
 
-      <CardContent className="relative flex h-full flex-col justify-between p-7">
-        <div className="space-y-4">
-          <h3 className="text-lg font-semibold tracking-[-0.03em] text-white">
+      <CardContent className="relative flex h-full flex-col justify-between p-5 md:p-6">
+        <div className="space-y-3">
+          <h3 className="text-[17px] font-semibold tracking-[-0.03em] text-white md:text-lg">
             {title}
           </h3>
 
-          <p className="text-[15px] leading-[1.75] text-white/70">
+          <p className="text-[15px] leading-7 text-white/68">
             {text}
           </p>
         </div>
 
-        <div className="mt-8 border-t border-white/8 pt-5 text-xs font-semibold uppercase tracking-[0.14em] text-[#d8c18f]">
+        <div className="mt-6 border-t border-white/8 pt-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#d8c18f]">
           {footer}
         </div>
       </CardContent>
