@@ -2798,7 +2798,7 @@ Restrictions preserved during execution:
 
 ## RT-UX-002A - Audit Footer and Clean Hero Support Microcopy
 
-State: READY
+State: REVIEW
 
 Objective: Audit the public footer visually and remove the small hero support microcopy row below the main CTAs without broad redesign.
 
@@ -2863,3 +2863,8 @@ READY decision: Promote RT-UX-002A to READY only because the future scope is nar
 
 Restrictions preserved during READY opening:
 - No UI code, component, message, validation report, AI Concierge document, backend, API route, database, migration, seed, auth, booking, payment, package file, lockfile, dependency, deploy, runtime behavior, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed.
+
+Execution state: RT-UX-002A executed as small UX polish. `components/hero-section.tsx` removed the support microcopy row below the main CTAs and its now-unused helper/icon imports. `docs/validation/public-home-footer-ux-review.md` records before-state production Playwright observations, local Playwright limitation due Prisma `ECONNREFUSED`, changes made, footer recommendations not implemented, validation commands, Cadastur preservation, and unsupported-claim restrictions.
+
+Restrictions preserved during execution:
+- No footer implementation change, message change, broad redesign, full homepage rewrite, new section, Cadastur removal, unsupported credibility claim, testimonial, rating, review count, guarantee, insurance claim, official partnership claim, legal claim, AI Concierge doc, backend, API route, database, migration, seed, auth change, booking/payment logic, package file, lockfile, dependency install, deploy, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed.

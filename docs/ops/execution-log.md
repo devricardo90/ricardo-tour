@@ -21,6 +21,27 @@ Open RT-UX-002A as a small controlled frontend/UX polish task to audit the publi
 
 ---
 
+## 2026-06-24 - RT-UX-002A Footer Audit and Hero Support Microcopy
+
+**Executed by:** Codex
+**Environment:** local edits; production Playwright visual reference
+**Status:** REVIEW
+**Evidence:** `docs/validation/public-home-footer-ux-review.md`
+
+**Summary:**
+- Confirmed start from `155c4c5` with `origin/main` synchronized.
+- Read project frontend design, web design, and copywriting skill guidance without editing `.agents/`.
+- Attempted local `/pt`; local page returned HTTP 500 due Prisma `ECONNREFUSED` from `components/trip-list.tsx`.
+- Used production `/pt` as before-state visual reference and captured desktop/mobile screenshots to `C:\tmp`.
+- Removed the hero support microcopy row below the main CTAs from `components/hero-section.tsx`.
+- Preserved hero CTAs, search, title, description, and media.
+- Documented footer observations and recommendations without implementing broad footer changes.
+
+**Restrictions preserved:**
+- No footer implementation change, message change, broad redesign, full homepage rewrite, new section, Cadastur removal, unsupported credibility claim, testimonial, rating, review count, guarantee, insurance claim, official partnership claim, legal claim, AI Concierge doc, backend, API route, database, migration, seed, auth change, booking/payment logic, package file, lockfile, dependency install, deploy, `.agents/`, `skills-lock.json`, broad git add, commit, or push.
+
+---
+
 ## 2026-06-16 - RT-UX-001F - Home Video Removal
 
 **Executado por:** Codex

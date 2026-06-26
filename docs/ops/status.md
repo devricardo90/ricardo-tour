@@ -1,5 +1,33 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-06-24 - RT-UX-002A Footer Audit and Hero Support Microcopy
+
+State: REVIEW.
+
+RT-UX-002A removed the public Home hero support microcopy row and documented the footer UX review.
+
+Files changed:
+- `components/hero-section.tsx`
+- `docs/validation/public-home-footer-ux-review.md`
+- Operational docs.
+
+Result:
+- Removed the row below the main hero CTAs containing "Orientação pelo WhatsApp" and "Monte seu roteiro com ajuda da nossa equipe".
+- Preserved hero title, description, search, primary CTA, secondary WhatsApp CTA, and hero media.
+- Reviewed footer from production before-state screenshots because local `/pt` was blocked by Prisma `ECONNREFUSED`.
+- Documented footer recommendations without implementing broad footer changes.
+- Preserved the Cadastur trust mark.
+- Added no unsupported credibility claims.
+
+Validation note:
+- Production Playwright before screenshots were captured at `C:\tmp\rt-ux-002a-before-desktop.png` and `C:\tmp\rt-ux-002a-before-mobile.png`.
+- Local Playwright `/pt` returned HTTP 500 because the local DB was unavailable; this limitation is documented in `docs/validation/public-home-footer-ux-review.md`.
+
+Restrictions preserved:
+- No footer implementation change, message change, broad redesign, full homepage rewrite, new section, Cadastur removal, unsupported credibility claim, testimonial, rating, review count, guarantee, insurance claim, official partnership claim, legal claim, AI Concierge doc, backend, API route, database, migration, seed, auth, booking/payment logic, package file, lockfile, dependency install, deploy, `.agents/`, `skills-lock.json`, broad git add, commit, or push change was made.
+
+---
+
 ## Update 2026-06-24 - RT-UX-002A Footer Audit and Hero Support Microcopy READY
 
 State: READY.

@@ -4,43 +4,13 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { HeroSearch } from "@/components/hero-search";
-import {
-  ChevronRight,
-  MessageCircleMore,
-  Clock3,
-} from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { buildWhatsAppQuoteUrl } from "@/lib/whatsapp";
-
-function getHeroSupportCopy(locale: string) {
-  switch (locale) {
-    case "en":
-      return {
-        responseTime: "Contact guidance by WhatsApp",
-        quoteNote: "Build your itinerary with our team",
-      };
-    case "es":
-      return {
-        responseTime: "Orientación por WhatsApp",
-        quoteNote: "Arma tu itinerario con ayuda de nuestro equipo",
-      };
-    case "sv":
-      return {
-        responseTime: "Vagledning via WhatsApp",
-        quoteNote: "Bygg din resplan tillsammans med vårt team",
-      };
-    default:
-      return {
-        responseTime: "Orientação pelo WhatsApp",
-        quoteNote: "Monte seu roteiro com ajuda da nossa equipe",
-      };
-  }
-}
 
 function HeroContent() {
   const t = useTranslations("HomePage.Hero");
   const locale = useLocale();
-  const supportCopy = getHeroSupportCopy(locale);
   const whatsappUrl = buildWhatsAppQuoteUrl({
     locale,
     source: "home",
@@ -89,18 +59,6 @@ function HeroContent() {
               <ChevronRight className="ml-1 h-4 w-4 opacity-70" />
             </a>
           </Button>
-        </div>
-
-        <div className="mt-5 flex flex-wrap items-center justify-center gap-3 text-xs font-medium text-white/70 md:text-sm">
-          <span className="inline-flex items-center gap-2">
-            <Clock3 className="h-4 w-4 text-[#C8A86B]" />
-            {supportCopy.responseTime}
-          </span>
-          <span className="hidden h-1 w-1 rounded-full bg-white/30 sm:inline-flex" />
-          <span className="inline-flex items-center gap-2">
-            <MessageCircleMore className="h-4 w-4 text-[#C8A86B]" />
-            {supportCopy.quoteNote}
-          </span>
         </div>
       </div>
     </div>

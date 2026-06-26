@@ -39,6 +39,26 @@ Restricoes desta abertura READY:
 - Nenhuma mudanca de UI, componente, mensagens, validation report, AI Concierge docs, backend, API, banco, migration, seed, auth, booking/payment logic, package, lockfile, dependencia, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criada.
 - Nao remover Cadastur logo/trust mark, nao adicionar unsupported credibility claims, testimonials, ratings, reviews, guarantees, insurance, official partnership ou legal claims.
 
+## RT-UX-002A REVIEW - Audit Footer and Clean Hero Support Microcopy
+
+Estado: REVIEW em 2026-06-24.
+
+Resultado:
+- `components/hero-section.tsx` removeu a linha pequena de support microcopy abaixo dos CTAs principais do hero.
+- A remocao cobriu "Orientação pelo WhatsApp" e "Monte seu roteiro com ajuda da nossa equipe".
+- O helper local de support copy e os imports de icones agora inutilizados foram removidos.
+- `docs/validation/public-home-footer-ux-review.md` registra before-state observations, screenshots de producao, limitacao local por Prisma `ECONNREFUSED`, mudancas feitas, recomendacoes nao implementadas e regras de claims/trust preservadas.
+- Footer foi revisado visualmente como recomendacao; nenhuma mudanca de footer foi implementada nesta execucao.
+
+Evidencia visual:
+- `C:\tmp\rt-ux-002a-before-desktop.png`
+- `C:\tmp\rt-ux-002a-before-mobile.png`
+
+Restricoes mantidas:
+- Cadastur foi preservado.
+- Nenhum unsupported credibility claim, testimonial, rating, review count, guarantee, insurance claim, official partnership claim ou legal claim foi adicionado.
+- Nenhum AI Concierge doc, backend, API, banco, migration, seed, auth, booking/payment logic, package, lockfile, dependency install, deploy, `.agents/`, `skills-lock.json`, commit ou push foi criado.
+
 ## RT-AI-017 REVIEW - Robust AI Concierge Backend and Learning Architecture
 
 Estado: REVIEW em 2026-06-17.
