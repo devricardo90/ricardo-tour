@@ -21,7 +21,7 @@ function PhysicalLevelBadge({ level }: { level: string }) {
     const labels: Record<string, { label: string; className: string; icon: string }> = {
         LIGHT: { label: "Leve", className: "level-light", icon: "L" },
         MODERATE: { label: "Moderado", className: "level-moderate", icon: "M" },
-        HARD: { label: "Dificil", className: "level-hard", icon: "H" },
+        HARD: { label: "Dif\u00edcil", className: "level-hard", icon: "H" },
         EXTREME: { label: "Extremo", className: "level-extreme", icon: "E" },
     };
     const data = labels[level] || labels.LIGHT;
