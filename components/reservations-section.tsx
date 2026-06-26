@@ -3,10 +3,8 @@ import { ReservationHeaders } from "./reservation-headers";
 
 export function ReservationsSection() {
   return (
-    <section className="section-spacing">
-      <ReservationHeaders>
-        <TripList />
-      </ReservationHeaders>
-    </section>
+    <ReservationHeaders>
+      <TripList />
+    </ReservationHeaders>
   );
 }
