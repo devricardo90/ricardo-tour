@@ -6,7 +6,7 @@ import { getLanguageAlternates } from "@/i18n/routing";
 import dynamic from "next/dynamic";
 
 const TravelerSupport = dynamic(() => import("@/components/testimonials"), {
-    loading: () => <div className="section-spacing h-96 animate-pulse" />,
+    loading: () => <div className="section-spacing-sm h-72 animate-pulse" />,
 });
 
 const FooterSection = dynamic(() => import("@/components/footer"));
@@ -76,12 +76,12 @@ export default function Home() {
                         "radial-gradient(1200px 560px at 50% 0%, rgba(255,255,255,0.07), transparent 58%), linear-gradient(180deg, #081b2a 0%, #071826 32%, #0a1f30 100%)",
                 }}
             >
-                <div className="pointer-events-none absolute inset-x-0 top-0 h-56 bg-[linear-gradient(180deg,rgba(200,168,107,0.08),transparent)]" />
-                <div className="pointer-events-none absolute inset-x-0 top-[30rem] h-px bg-white/8" />
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-40 bg-[linear-gradient(180deg,rgba(200,168,107,0.08),transparent)]" />
+                <div className="pointer-events-none absolute inset-x-0 top-[24rem] h-px bg-white/8" />
 
                 <ReservationsSection />
 
-                <FadeInSection delay={0.2}>
+                <FadeInSection delay={0.15}>
                     <TravelerSupport />
                 </FadeInSection>
 
