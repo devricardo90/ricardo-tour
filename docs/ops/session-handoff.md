@@ -1185,3 +1185,23 @@ Restrictions preserved:
 
 Next step:
 - Review the RT-UX-001F diff and validation evidence; commit only after explicit approval.
+
+## RT-UX-003A Handoff - Compact Landing Page Visual Rhythm
+
+Current state:
+- RT-UX-003A is READY only.
+- PR #1 is closed and was not merged.
+- Remote and local `rt-ux-density-layout` branches were deleted.
+- Visual reference patch is saved at `C:\tmp\rt-ux-003a\implementation-ui.diff`.
+- `main` remains synchronized with `origin/main`.
+
+Next safe step:
+- Commit and push the READY documentation first.
+- After READY is remote, apply the saved implementation patch locally.
+- Run lint, typecheck, build, diff checks, Cadastur check, and visual review before implementation commit.
+
+Do not:
+- Do not merge PR #1.
+- Do not recreate the deleted branch.
+- Do not stage `.agents/` or `skills-lock.json`.
+- Do not touch backend, database, booking, payment, admin, package files, lockfiles, dependencies, or deployment.

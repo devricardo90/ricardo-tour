@@ -1802,3 +1802,16 @@ Objective: Create the documentation-only product format specification for future
 - Included Markdown-only pseudo-record examples and explicitly stated that they are not real JSON/YAML records, database rows, API payloads, seed data, embeddings, vector-store content, or chatbot behavior.
 - Documented future migration paths toward JSON/YAML records, database records, and validation scripts without implementing them.
 - No backend, API route, database schema, migration, seed, real JSON/YAML data file, actual structured record data file, validation script, tests, dependency, runtime, frontend, package, lockfile, LangChain, LangGraph, embedding, vector store, deploy, `.agents/`, or `skills-lock.json` change was made.
+
+## 2026-06-27 - RT-UX-003A Compact Landing Page Visual Rhythm READY
+
+Status: READY opening.
+
+Summary:
+- Registered RT-UX-003A as the correct Protocolo Rick task for the landing page spacing/card-density refactor.
+- Previous out-of-protocol PR #1 was closed without merge.
+- Remote and local `rt-ux-density-layout` branches were deleted.
+- Approved visual reference patch remains saved at `C:\tmp\rt-ux-003a\implementation-ui.diff`.
+
+Restrictions preserved:
+- No implementation, merge, patch application, backend, API, database, schema, migration, seed, booking, payment, admin, package, lockfile, dependency, deploy, `.agents/`, or `skills-lock.json` change was made during this READY opening.

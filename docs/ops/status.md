@@ -1472,3 +1472,22 @@ Valores propostos para a execução:
 Restrições preservadas:
 - `docs/product/ai-concierge-approved-public-business-evidence-values.md` não foi alterado nesta abertura de READY.
 - Nenhum valor real de negócio, JSON, YAML, seed, `data/`, `prisma/`, API, frontend, backend, database, schema, arquivos de pacote, lockfiles, RAG, embeddings, LangChain, LangGraph, chatbot, deploy, ingestão em runtime, commit ou push.
+
+## 2026-06-27 - RT-UX-003A Compact Landing Page Visual Rhythm READY
+
+State: READY.
+
+RT-UX-003A is open as a controlled frontend/UX refactor to improve the public landing page visual density, section rhythm, and tour card proportions.
+
+Context:
+- PR #1 was closed without merge.
+- Remote and local `rt-ux-density-layout` branches were deleted.
+- The visually approved reference patch is saved locally at `C:\tmp\rt-ux-003a\implementation-ui.diff`.
+- Implementation must happen only after this READY registration is committed and pushed.
+
+Restrictions:
+- Do not merge PR #1.
+- Do not recreate the deleted branch.
+- Do not alter backend, API, database, schema, migrations, seeds, auth, booking, payment, admin, packages, lockfiles, dependencies, deployment, `.agents/`, or `skills-lock.json`.
+- Preserve Cadastur.
+- Do not add unsupported credibility claims.

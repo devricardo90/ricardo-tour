@@ -2868,3 +2868,80 @@ Execution state: RT-UX-002A executed as small UX polish. `components/hero-sectio
 
 Restrictions preserved during execution:
 - No footer implementation change, message change, broad redesign, full homepage rewrite, new section, Cadastur removal, unsupported credibility claim, testimonial, rating, review count, guarantee, insurance claim, official partnership claim, legal claim, AI Concierge doc, backend, API route, database, migration, seed, auth change, booking/payment logic, package file, lockfile, dependency install, deploy, `.agents/`, `skills-lock.json`, broad git add, commit, or push was created or changed.
+
+## RT-UX-003A - Compact Landing Page Visual Rhythm
+
+State: READY
+
+Objective: Refactor the public Rick Travel landing page visual rhythm to reduce excessive vertical spacing, improve section density, and compact tour cards while preserving the current premium brand identity.
+
+Type: CONTROLLED FRONTEND/UX REFACTOR. This READY opening is documentation-only.
+
+Context:
+- A previous visual experiment was created outside the expected Protocolo Rick flow in branch `rt-ux-density-layout`.
+- PR #1 was closed without merge.
+- Remote and local `rt-ux-density-layout` branches were deleted.
+- The owner visually reviewed the experimental result and approved the direction.
+- The implementation reference is preserved locally at `C:\tmp\rt-ux-003a\implementation-ui.diff`.
+
+Future implementation files allowed:
+- `app/[locale]/(public)/page.tsx`
+- `app/globals.css`
+- `components/hero-section.tsx`
+- `components/reservations-section.tsx`
+- `components/reservation-headers.tsx`
+- `components/trip-grid.tsx`
+- `components/trips/trip-card.tsx`
+- `components/trips/tour-media-badges.tsx`
+- `components/testimonials.tsx`
+- `components/footer.tsx`
+- `docs/validation/landing-page-visual-rhythm-003a.md`
+- `docs/ops/status.md`
+- `docs/ops/backlog.md`
+- `docs/ops/execution-log.md`
+- `docs/ops/session-handoff.md`
+
+Future implementation scope:
+- Reduce excessive vertical padding between navbar, hero, reservations, tour grid, traveler support, and footer.
+- Remove duplicated section spacing where present.
+- Refine hero height and CTA spacing without changing the approved commercial message.
+- Compact tour cards by adjusting image ratio, internal padding, grid gaps, price area, CTA spacing, border radius, and shadow weight.
+- Preserve accessible touch targets on mobile.
+- Refine shared spacing/container utilities only if useful for consistency.
+
+Future forbidden scope:
+- Do not merge PR #1.
+- Do not recreate the deleted `rt-ux-density-layout` branch.
+- Do not change backend, API routes, database, Prisma schema, migrations, seeds, auth, booking, payment, admin logic, package files, lockfiles, dependencies, environment files, or deployment configuration.
+- Do not remove Cadastur.
+- Do not add unsupported Cadastur numbers, CNPJ, guide credentials, testimonials, ratings, review counts, guarantees, insurance claims, official partnership claims, legal claims, safety guarantees, fake social proof, or unsupported credibility claims.
+- Do not alter locale message files unless separately approved.
+- Do not stage or commit `.agents/` or `skills-lock.json`.
+- Do not perform broad redesign beyond visual rhythm, density, and card proportion.
+
+Future validation criteria:
+- `git diff --check`
+- `npm.cmd run lint`
+- `npm.cmd run typecheck`
+- `npm.cmd run build`
+- Visual review of `/pt` landing page on desktop and mobile.
+- Cadastur presence check.
+- Confirm changed files remain inside the allowed future file list.
+- Confirm `.agents/` and `skills-lock.json` remain untracked and unstaged.
+
+Acceptance criteria:
+- Landing page feels more compact, balanced, and premium.
+- Excessive vertical empty space is reduced.
+- Tour cards are visually lighter and better proportioned.
+- Hero remains premium and clear but no longer occupies unnecessary height.
+- Section rhythm is more consistent and maintainable.
+- Cadastur remains present.
+- No unsupported credibility or legal/trust claims are introduced.
+- No backend, database, booking, payment, package, lockfile, dependency, or deployment scope is touched.
+
+Risk: medium. The main risk is turning a spacing correction into a broad redesign or accidentally introducing unsupported trust/credibility claims.
+
+READY decision: Promote RT-UX-003A to READY only because the owner approved the visual direction and the previous out-of-protocol branch has been closed, deleted, and preserved only as a local patch reference.
+
+Restrictions preserved during READY opening:
+- No implementation file, component, style file, validation artifact, backend, API route, database, schema, migration, seed, auth, booking, payment, admin, package file, lockfile, dependency, deploy, `.agents/`, `skills-lock.json`, broad git add, merge, or push was created or changed in this READY opening.
