@@ -2871,7 +2871,7 @@ Restrictions preserved during execution:
 
 ## RT-UX-003A - Compact Landing Page Visual Rhythm
 
-State: READY
+State: BLOCKED
 
 Objective: Refactor the public Rick Travel landing page visual rhythm to reduce excessive vertical spacing, improve section density, and compact tour cards while preserving the current premium brand identity.
 
@@ -2883,6 +2883,14 @@ Context:
 - Remote and local `rt-ux-density-layout` branches were deleted.
 - The owner visually reviewed the experimental result and approved the direction.
 - The implementation reference is preserved locally at `C:\tmp\rt-ux-003a\implementation-ui.diff`.
+
+Blocked note:
+- Owner decided not to continue the design/rhythm refactor now.
+- No implementation patch was applied.
+- No UI/component/style file changed.
+- The saved local patch remains outside the repository only as temporary reference and must not be applied unless a future owner-approved READY reopens the work.
+- Do not apply `C:\tmp\rt-ux-003a\implementation-ui.diff`.
+- Do not touch design/rhythm now; continue only with stable development tasks under a separate READY scope.
 
 Future implementation files allowed:
 - `app/[locale]/(public)/page.tsx`

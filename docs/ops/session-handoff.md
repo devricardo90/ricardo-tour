@@ -1205,3 +1205,16 @@ Do not:
 - Do not recreate the deleted branch.
 - Do not stage `.agents/` or `skills-lock.json`.
 - Do not touch backend, database, booking, payment, admin, package files, lockfiles, dependencies, or deployment.
+
+## RT-UX-003A Closure Handoff - Blocked
+
+Current state:
+- RT-UX-003A is BLOCKED by owner decision.
+- No UI implementation was performed.
+- Do not apply `C:\tmp\rt-ux-003a\implementation-ui.diff`.
+- Do not continue the design/rhythm refactor now.
+- Keep development focused on stable implementation tasks only.
+
+Next safe step:
+- Commit this docs-only status correction.
+- Continue only with stable development tasks under a separate READY scope.

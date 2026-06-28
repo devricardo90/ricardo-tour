@@ -1815,3 +1815,21 @@ Summary:
 
 Restrictions preserved:
 - No implementation, merge, patch application, backend, API, database, schema, migration, seed, booking, payment, admin, package, lockfile, dependency, deploy, `.agents/`, or `skills-lock.json` change was made during this READY opening.
+
+## 2026-06-27 - RT-UX-003A Owner Decision: No Design Change Now
+
+State: BLOCKED.
+
+RT-UX-003A is blocked by owner decision. The owner decided not to continue the landing page design/rhythm refactor now and to keep the current development state stable.
+
+Result:
+- No implementation patch was applied.
+- No UI/component/style file was changed.
+- No design refactor will proceed under RT-UX-003A.
+- The saved local patch remains outside the repository only as temporary reference and must not be applied unless a new owner decision reopens the task.
+- Do not apply `C:\tmp\rt-ux-003a\implementation-ui.diff`.
+- Do not touch design/rhythm now.
+- Continue only with stable development tasks under a separate READY scope.
+
+Restrictions preserved:
+- No backend, API, database, schema, migration, seed, auth, booking, payment, admin, package, lockfile, dependency, deployment, `.agents/`, or `skills-lock.json` changes.

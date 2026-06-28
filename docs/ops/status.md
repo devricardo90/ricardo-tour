@@ -1491,3 +1491,18 @@ Restrictions:
 - Do not alter backend, API, database, schema, migrations, seeds, auth, booking, payment, admin, packages, lockfiles, dependencies, deployment, `.agents/`, or `skills-lock.json`.
 - Preserve Cadastur.
 - Do not add unsupported credibility claims.
+
+## 2026-06-27 - RT-UX-003A Blocked by Owner Decision
+
+State: BLOCKED.
+
+RT-UX-003A will not proceed now. Owner decision: do not change the landing page design/rhythm at this time; keep development stable.
+
+Current safe state:
+- Main remains synchronized with origin/main.
+- No UI implementation was performed.
+- No UI/component/style file changed.
+- `.agents/` and `skills-lock.json` remain untracked and unstaged.
+- Do not apply `C:\tmp\rt-ux-003a\implementation-ui.diff`.
+- Do not touch design/rhythm now.
+- Continue only with stable development tasks under a separate READY scope.
