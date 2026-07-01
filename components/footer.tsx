@@ -11,18 +11,18 @@ export default function FooterSection() {
 
     const columns = [
         {
-            title: "Empresa",
+            title: t("columns.company"),
             links: [
                 { label: t("links.home"), href: "/" },
                 { label: t("links.about"), href: "/quem-somos" },
             ],
         },
         {
-            title: "Servicos",
-            links: [{ label: "Tours", href: "/tours" }],
+            title: t("columns.services"),
+            links: [{ label: t("links.tours"), href: "/tours" }],
         },
         {
-            title: "Suporte",
+            title: t("columns.support"),
             links: [
                 { label: t("links.help"), href: "/contato" },
             ],
@@ -34,11 +34,11 @@ export default function FooterSection() {
             <div className="mx-auto max-w-6xl px-5 lg:px-6">
                 <div className="grid grid-cols-2 gap-10 md:grid-cols-4">
                     <div className="col-span-2 md:col-span-1">
-                        <Link href="/" aria-label="Rick Travel - Pagina inicial" className="block w-fit">
+                        <Link href="/" aria-label={t("logoAria")} className="block w-fit">
                             <RickTravelLogo variant="full" size="md" />
                         </Link>
                         <p className="mt-4 max-w-[260px] text-sm leading-7 text-white/62">
-                            Experiencias no Rio de Janeiro com planejamento claro e atendimento humano.
+                            {t("description")}
                         </p>
                     </div>
 
@@ -73,7 +73,7 @@ export default function FooterSection() {
                             className="object-contain opacity-70"
                         />
                         <span className="text-xs font-semibold uppercase tracking-[0.14em] text-white/48">
-                            {"Cadastro tur\u00edstico"}
+                            {t("cadasturLabel")}
                         </span>
                     </div>
                     <span className="text-center text-sm text-white/50">

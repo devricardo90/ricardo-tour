@@ -4,7 +4,9 @@
             "title": "Tours guiados en Río de Janeiro",
             "description": "Experiencias auténticas y soporte personalizado para tu viaje a Río.",
             "primaryButton": "Ver tours",
-            "secondaryButton": "Solicitar presupuesto"
+            "secondaryButton": "Solicitar presupuesto",
+            "mediaCaptionTitle": "Río de Janeiro con orientación local",
+            "mediaCaptionText": "Experiencias en Río con planificación clara y confirmación directa del equipo."
         },
         "Logos": {
             "title": "Nuestros Servicios"
@@ -12,7 +14,9 @@
         "Search": {
             "placeholder": "Buscar tours, atracciones, ciudades...",
             "button": "Buscar",
-            "noResults": "No se encontraron tours. Intenta otra búsqueda."
+            "noResults": "No se encontraron tours. Intenta otra búsqueda.",
+            "helper": "Busca por destino o experiencia",
+            "viewAll": "Ver todos los tours relacionados"
         },
         "Reservations": {
             "title": "Reserva Tu Tour",
@@ -28,11 +32,11 @@
             "questions": {
                 "q1": {
                     "question": "¿Cuánto tiempo tarda la confirmación de la reserva?",
-                    "answer": "El equipo Rick Travel confirma los detalles de la reserva por los canales publicos aprobados."
+                    "answer": "Después de enviar tu solicitud, el equipo Rick Travel habla contigo para confirmar disponibilidad, horario y próximos pasos."
                 },
                 "q2": {
                     "question": "¿Qué métodos de pago aceptan?",
-                    "answer": "Las preguntas sobre pago son tratadas directamente por el equipo Rick Travel en los canales publicos aprobados."
+                    "answer": "El equipo te explica las opciones de pago durante la atención, antes de la confirmación final del paseo."
                 },
                 "q3": {
                     "question": "¿Puedo cambiar o cancelar mi reserva?",
@@ -40,11 +44,11 @@
                 },
                 "q4": {
                     "question": "¿Atienden a turistas internacionales?",
-                    "answer": "Atendemos a viajeros interesados en Rio de Janeiro. El soporte esta disponible en portugues, espanol e ingles."
+                    "answer": "Atendemos a viajeros interesados en Río de Janeiro. El soporte está disponible en portugués, español e inglés."
                 },
                 "q5": {
                     "question": "¿Cuál es la política de reembolso?",
-                    "answer": "Las preguntas sobre cancelacion y reembolso requieren confirmacion del equipo Rick Travel por los canales publicos aprobados."
+                    "answer": "El equipo te orienta sobre cancelaciones y reembolsos según el paseo, la fecha y la situación de la reserva."
                 }
             }
         },
@@ -64,7 +68,7 @@
                 },
                 "handoff": {
                     "title": "Confirmación del equipo",
-                    "text": "Valores, horarios, reservas, disponibilidad y pagos siempre son confirmados directamente por el equipo Rick Travel antes de la finalización."
+                    "text": "Antes de finalizar, el equipo confirma contigo valores, horarios, disponibilidad y próximos pasos."
                 }
             }
         }
@@ -74,16 +78,26 @@
         "about": "Quiénes somos",
         "tours": "Nuestros tours",
         "contact": "Contacto",
+        "logoAria": "Rick Travel - Página inicial",
         "openMenu": "Abrir menú de navegación",
         "closeMenu": "Cerrar menú de navegación"
     },
     "Footer": {
+        "logoAria": "Rick Travel - Página inicial",
+        "description": "Experiencias en Río de Janeiro con planificación clara y atención humana.",
+        "columns": {
+            "company": "Empresa",
+            "services": "Servicios",
+            "support": "Soporte"
+        },
         "links": {
             "home": "Inicio",
             "pricing": "Precios",
             "help": "Ayuda",
-            "about": "Sobre Nosotros"
+            "about": "Sobre nosotros",
+            "tours": "Tours"
         },
+        "cadasturLabel": "Cadastur",
         "copyright": "Todos los derechos reservados."
     },
     "ThemeToggle": {
@@ -96,7 +110,7 @@
         "intro": "Rick Travel nació de la pasión por Río de Janeiro y del deseo de proporcionar experiencias inolvidables a nuestros visitantes.",
         "mission": {
             "title": "Misión",
-            "description": "Apoyar a viajeros con experiencias de turismo local, informacion clara y atencion humana en Rio de Janeiro."
+            "description": "Apoyar a viajeros con experiencias de turismo local, información clara y atención humana en Río de Janeiro."
         },
         "vision": {
             "title": "Visión",
@@ -104,15 +118,15 @@
         },
         "values": {
             "title": "Valores",
-            "item1": "Informacion clara",
+            "item1": "Información clara",
             "item2": "Puntualidad y compromiso",
             "item3": "Respeto a la cultura local",
             "item4": "Excelencia en el servicio"
         },
         "certification": {
-            "title": "Informacion clara y atencion humana",
-            "description1": "Rick Travel ayuda a viajeros a planificar experiencias de turismo local en Rio de Janeiro con canales publicos aprobados.",
-            "description2": "Para presupuestos, reservas, horarios, pago y confirmacion final, contacta al equipo Rick Travel."
+            "title": "Información clara y atención humana",
+            "description1": "Rick Travel ayuda a viajeros a planificar experiencias de turismo local en Río de Janeiro con atención humana y orientación clara.",
+            "description2": "Para presupuestos, reservas, horarios, pago y confirmación final, contacta al equipo Rick Travel."
         }
     },
     "ToursPage": {
@@ -238,12 +252,17 @@
     },
     "TourActions": {
         "pricePerPerson": "Precio por persona",
+        "selectDate": "Elige la fecha",
+        "reserveCta": "Enviar pre-reserva",
+        "manualNotice": "Aquí no se inicia ningún pago online. El equipo confirma disponibilidad, valor y próximos pasos manualmente.",
+        "whatsappQuote": "Solicitar itinerario por WhatsApp",
+        "whatsappHelpText": "Usa WhatsApp si quieres confirmar fecha, formato del paseo o atención personalizada.",
         "processing": "Procesando...",
         "reserved": "Reservado",
         "reserveNow": "Reservar Ahora",
-        "alreadyReserved": "¡Ya tienes una reserva para este tour!",
-        "successMessage": "Reserva confirmada con exito!",
-        "pendingMessage": "La reserva fue creada con exito y ahora esta pendiente de confirmacion.",
+        "alreadyReserved": "Ya tienes una reserva para este tour.",
+        "successMessage": "Reserva enviada correctamente.",
+        "pendingMessage": "La reserva fue creada correctamente y ahora está pendiente de confirmación.",
         "errorMessage": "Error al realizar la reserva.",
         "connectionError": "Error de conexión.",
         "freeCancellation": "Cancelación gratuita hasta 24h antes."
@@ -254,6 +273,26 @@
         "reserved": "Reservado",
         "reserveNow": "Ver tour",
         "viewDetails": "Ver detalles del tour",
-        "imageAlt": "{title} en {city}"
+        "imageAlt": "{title} en {city}",
+        "durationDays": "{count, plural, one {# día} other {# días}}",
+        "dateConnector": "a",
+        "physicalLevels": {
+            "light": "Leve",
+            "moderate": "Moderado",
+            "hard": "Difícil",
+            "extreme": "Extremo"
+        }
+    },
+    "WhatsApp": {
+        "intro": "Hola. Me gustaría solicitar un presupuesto para un paseo con Rick Travel.",
+        "tripTitleLabel": "Paseo",
+        "cityLabel": "Ciudad",
+        "scheduleLabel": "Fecha de interés",
+        "sourceLabel": "Origen",
+        "sources": {
+            "home": "Página inicial",
+            "tour_detail": "Página del paseo",
+            "bookings": "Reservas"
+        }
     }
 }

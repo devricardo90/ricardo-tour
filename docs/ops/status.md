@@ -1,5 +1,47 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-07-01 - RT-I18N-001A Public Homepage i18n/copy Integrity
+
+State: REVIEW; DONE candidate pending owner review and the single final commit.
+
+RT-I18N-001A implemented the scoped public homepage i18n/copy integrity pass.
+
+Files changed:
+- `messages/pt.json`
+- `messages/en.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `components/header.tsx`
+- `components/footer.tsx`
+- `components/hero-section.tsx`
+- `components/hero-search.tsx`
+- `components/trips/tour-actions.tsx`
+- `components/trips/trip-card.tsx`
+- `lib/whatsapp.ts`
+- Operational docs.
+
+Result:
+- Localized header/footer logo aria labels.
+- Localized footer column labels, footer description, tour link label, Cadastur label, and copyright-adjacent copy.
+- Localized hero media caption and hero-search helper/view-all copy.
+- Localized tour action select/manual notice/pre-booking/WhatsApp helper copy.
+- Localized trip-card physical levels, duration plural, date connector, and image alt.
+- Localized WhatsApp quote intro and field labels for PT, EN, ES, and SV.
+- Rephrased public homepage procedural trust copy into natural traveler-facing guidance.
+- Preserved Cadastur and avoided unsupported claims.
+
+Validation:
+- `pnpm lint`: blocked by PowerShell execution policy for `pnpm.ps1`; equivalent `pnpm.cmd lint` PASS.
+- `pnpm typecheck`: equivalent `pnpm.cmd typecheck` PASS.
+- `pnpm build`: equivalent `pnpm.cmd build` PASS with `NEXT_PRIVATE_OUTPUT_TRACE_ROOT` set to the repo path and elevated Next worker spawning.
+- Validation emitted the existing Node engine warning: project wants Node `22.x`; current runtime is `v24.15.0`.
+- Initial build attempts were blocked by local environment issues only: stale `.next` lock from old port `3220` dev server, parent `C:\Users\ricardodev\pnpm-lock.yaml` root inference, and sandbox worker spawn denial.
+
+Restrictions preserved:
+- No redesign, layout refactor, backend, API, database, migration, seed, admin, booking logic, package file, lockfile, route change, Cadastur removal, `.admin_backup`, `.bak`, deploy, commit, or push change was made.
+
+---
+
 ## Update 2026-06-24 - RT-UX-002A Footer Audit and Hero Support Microcopy
 
 State: REVIEW.

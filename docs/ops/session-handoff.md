@@ -1257,3 +1257,28 @@ Restrictions for this READY opening:
 
 Next step:
 - Execute RT-I18N-001A only when explicitly authorized by a separate implementation gate.
+
+## RT-I18N-001A REVIEW - Public Homepage i18n/copy Integrity
+
+State: REVIEW on 2026-07-01; DONE candidate pending owner review and the single final commit.
+
+Result:
+- Localized public homepage/header/footer/search/tour-action/trip-card/WhatsApp copy surfaces across PT, EN, ES, and SV.
+- Added message keys for footer labels, logo aria labels, Cadastur label, hero media caption, hero-search helper/view-all copy, tour actions, trip-card physical levels/duration/date connector/image alt, and WhatsApp labels.
+- Replaced hardcoded wrong-language public copy in `components/header.tsx`, `components/footer.tsx`, `components/hero-section.tsx`, `components/hero-search.tsx`, `components/trips/tour-actions.tsx`, `components/trips/trip-card.tsx`, and `lib/whatsapp.ts`.
+- Rephrased public homepage FAQ/traveler-support trust copy into natural traveler-facing language.
+- Cadastur remained present.
+
+Validation:
+- `pnpm.cmd lint`: PASS after `pnpm lint` was blocked by PowerShell execution policy for `pnpm.ps1`.
+- `pnpm.cmd typecheck`: PASS.
+- `pnpm.cmd build`: PASS with `NEXT_PRIVATE_OUTPUT_TRACE_ROOT` set to the repo path and elevated Next worker spawning.
+- Existing environment warning remains: project expects Node `22.x`; current runtime was `v24.15.0`.
+- Initial build blockers were local environment issues: stale `.next` lock from old port `3220` dev server, parent `C:\Users\ricardodev\pnpm-lock.yaml` root inference, and sandbox worker `spawn EPERM`.
+
+Restrictions preserved:
+- No redesign, layout refactor, backend, API, database, migration, seed, admin, booking logic, package file, lockfile, route change, Cadastur removal, `.admin_backup`, `.bak`, deploy, commit, push, or broad git add was performed.
+
+Next step:
+- Owner review of the local diff.
+- After approval, create only one final commit for RT-I18N-001A.

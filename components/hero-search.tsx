@@ -24,31 +24,6 @@ function normalizeText(value: string | null | undefined) {
         .trim()
 }
 
-function getSearchMetaCopy(locale: string) {
-    switch (locale) {
-        case 'en':
-            return {
-                helper: 'Search destination or experience',
-                viewAll: 'See all matching tours',
-            }
-        case 'es':
-            return {
-                helper: 'Busca destino o experiencia',
-                viewAll: 'Ver todos los tours relacionados',
-            }
-        case 'sv':
-            return {
-                helper: 'Sök destination eller upplevelse',
-                viewAll: 'Visa alla matchande turer',
-            }
-        default:
-            return {
-                helper: 'Busque destino ou experiência',
-                viewAll: 'Ver todos os passeios relacionados',
-            }
-    }
-}
-
 export function HeroSearch() {
     const [query, setQuery] = useState('')
     const [trips, setTrips] = useState<Trip[]>([])
@@ -61,7 +36,6 @@ export function HeroSearch() {
     const router = useRouter()
     const locale = useLocale()
     const t = useTranslations('HomePage.Search')
-    const metaCopy = getSearchMetaCopy(locale)
 
     useEffect(() => {
         async function loadTrips() {
@@ -215,7 +189,7 @@ export function HeroSearch() {
             </form>
 
             <p className="mt-3 text-center text-xs font-medium text-white/58 sm:text-sm">
-                {metaCopy.helper}
+                {t('helper')}
             </p>
 
             {showSuggestions && query.length >= 2 && (
@@ -287,7 +261,7 @@ export function HeroSearch() {
                                     onClick={() => router.push({ pathname: '/tours', query: { search: query.trim() } })}
                                     className="mt-1 flex w-full items-center justify-center rounded-2xl border border-white/8 px-4 py-3 text-sm font-semibold text-white/80 transition-colors hover:bg-white/5 hover:text-white"
                                 >
-                                    {metaCopy.viewAll}
+                                    {t('viewAll')}
                                 </button>
                             </>
                         ) : (

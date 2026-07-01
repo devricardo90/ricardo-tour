@@ -17,19 +17,34 @@ interface TripCardProps {
     trip: TripCardData;
 }
 
-function PhysicalLevelBadge({ level }: { level: string }) {
-    const labels: Record<string, { label: string; className: string; icon: string }> = {
-        LIGHT: { label: "Leve", className: "level-light", icon: "L" },
-        MODERATE: { label: "Moderado", className: "level-moderate", icon: "M" },
-        HARD: { label: "Difícil", className: "level-hard", icon: "H" },
-        EXTREME: { label: "Extremo", className: "level-extreme", icon: "E" },
+function PhysicalLevelBadge({ level, label }: { level: string; label: string }) {
+    const labels: Record<string, { className: string; icon: string }> = {
+        LIGHT: { className: "level-light", icon: "L" },
+        MODERATE: { className: "level-moderate", icon: "M" },
+        HARD: { className: "level-hard", icon: "H" },
+        EXTREME: { className: "level-extreme", icon: "E" },
     };
     const data = labels[level] || labels.LIGHT;
     return (
         <span className={data.className}>
-            {data.icon} {data.label}
+            {data.icon} {label}
         </span>
     );
+}
+
+function getPhysicalLevelKey(level: string) {
+    const keys: Record<string, string> = {
+        LIGHT: "light",
+        MODERATE: "moderate",
+        HARD: "hard",
+        EXTREME: "extreme",
+    };
+
+    return keys[level] || keys.LIGHT;
+}
+
+function getDateFormat(locale: string) {
+    return locale === "pt" || locale === "es" ? "dd 'de' MMMM" : "dd MMMM";
 }
 
 export function TripCard({ trip }: TripCardProps) {
@@ -46,7 +61,10 @@ export function TripCard({ trip }: TripCardProps) {
         sv: sv,
     };
     const dateLocale = localeMap[locale] || ptBR;
-    const imageAlt = `${title} - ${trip.city}${trip.location ? ", " + trip.location : ""}`;
+    const place = `${trip.city}${trip.location ? ", " + trip.location : ""}`;
+    const imageAlt = t("imageAlt", { title, city: place });
+    const physicalLevelKey = getPhysicalLevelKey(String(trip.physicalLevel));
+    const dateFormat = getDateFormat(locale);
 
     return (
         <div className="group overflow-hidden rounded-[28px] border border-white/8 bg-[#0d2436] text-white shadow-[0_20px_60px_rgba(0,0,0,0.22)] transition-all duration-300 ease-out hover:-translate-y-1 hover:border-white/14 hover:shadow-[0_26px_80px_rgba(0,0,0,0.3)]">
@@ -93,10 +111,15 @@ export function TripCard({ trip }: TripCardProps) {
                     {trip.durationDays ? (
                         <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 text-xs font-medium text-white/72">
                             <Clock className="h-3 w-3" />
-                            {trip.durationDays} {trip.durationDays === 1 ? "dia" : "dias"}
+                            {t("durationDays", { count: trip.durationDays })}
                         </span>
                     ) : null}
-                    {trip.physicalLevel ? <PhysicalLevelBadge level={String(trip.physicalLevel)} /> : null}
+                    {trip.physicalLevel ? (
+                        <PhysicalLevelBadge
+                            level={String(trip.physicalLevel)}
+                            label={t(`physicalLevels.${physicalLevelKey}`)}
+                        />
+                    ) : null}
                     {trip.maxGuests ? (
                         <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 text-xs font-medium text-white/72">
                             <Users className="h-3 w-3" />
@@ -108,8 +131,8 @@ export function TripCard({ trip }: TripCardProps) {
                 {startDate ? (
                     <div className="mt-4 flex items-center text-sm text-white/60">
                         <Calendar className="mr-2 h-4 w-4 shrink-0" />
-                        {format(startDate, "dd 'de' MMMM", { locale: dateLocale })}
-                        {endDate ? ` - ${format(endDate, "dd 'de' MMMM", { locale: dateLocale })}` : ""}
+                        {format(startDate, dateFormat, { locale: dateLocale })}
+                        {endDate ? ` ${t("dateConnector")} ${format(endDate, dateFormat, { locale: dateLocale })}` : ""}
                     </div>
                 ) : null}
 

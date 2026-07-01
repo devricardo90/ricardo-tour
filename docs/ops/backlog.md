@@ -2956,7 +2956,7 @@ Restrictions preserved during READY opening:
 
 ## RT-I18N-001A - Fix public homepage i18n/copy integrity
 
-State: READY
+State: REVIEW
 
 Objective: Prepare a scoped implementation task to fix public homepage i18n and copy integrity across PT, EN, ES, and SV.
 
@@ -3028,3 +3028,13 @@ READY decision: Promote RT-I18N-001A to READY only because the future scope is n
 
 Restrictions preserved during READY opening:
 - No implementation file, component, message file, backend, API route, database, schema, migration, seed, admin, booking logic, package file, lockfile, dependency, route, Cadastur asset, `.admin_backup`, `.bak`, deploy, commit, or push was created or changed in this READY opening.
+
+Execution state: RT-I18N-001A implemented locally and moved to REVIEW as a DONE candidate pending owner review and the single final commit. Public homepage copy keys were added or corrected across `messages/pt.json`, `messages/en.json`, `messages/es.json`, and `messages/sv.json`. Header/footer logo aria labels, footer column labels/description/tour link/Cadastur label, hero media caption, hero search helper/view-all copy, tour action copy, trip-card physical level/duration/date connector/image alt, and WhatsApp intro/field labels were localized. Procedural trust copy in the public homepage FAQ/traveler-support surfaces was rewritten into traveler-facing support language.
+
+Validation evidence:
+- `pnpm lint`: blocked by PowerShell execution policy for `pnpm.ps1`; equivalent `pnpm.cmd lint` PASS with existing Node engine warning.
+- `pnpm typecheck`: equivalent `pnpm.cmd typecheck` PASS after the WhatsApp line array type inference fix, with existing Node engine warning.
+- `pnpm build`: equivalent `pnpm.cmd build` PASS when run with `NEXT_PRIVATE_OUTPUT_TRACE_ROOT` set to the repo path and elevated worker spawning; initial failures were environmental (`.next` locked by old local dev server on port 3220, then parent `pnpm-lock.yaml` root inference, then sandbox `spawn EPERM`).
+
+Restrictions preserved during execution:
+- No redesign, layout refactor, backend, API route, database, migration, seed, admin, booking logic, package file, lockfile, route change, Cadastur removal, `.admin_backup`, `.bak`, deploy, commit, or push was performed.

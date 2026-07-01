@@ -31,47 +31,9 @@ function formatScheduleLabel(date: string, locale: string) {
     }).format(new Date(date));
 }
 
-function getTourActionCopy(locale: string) {
-    switch (locale) {
-        case "en":
-            return {
-                selectDate: "Choose a date",
-                reserveCta: "Send pre-booking",
-                manualNotice: "No online payment starts here. The team confirms availability and payment details manually.",
-                whatsappQuote: "Ask for itinerary on WhatsApp",
-                whatsappHelpText: "Use WhatsApp if you want to confirm dates, trip format or personalized support.",
-            };
-        case "es":
-            return {
-                selectDate: "Elige la fecha",
-                reserveCta: "Enviar pre-reserva",
-                manualNotice: "Aqui no se inicia ningun pago online. El equipo confirma disponibilidad y detalles de pago manualmente.",
-                whatsappQuote: "Solicitar itinerario por WhatsApp",
-                whatsappHelpText: "Usa WhatsApp si quieres validar fecha, formato del paseo o soporte personalizado.",
-            };
-        case "sv":
-            return {
-                selectDate: "Valj datum",
-                reserveCta: "Skicka forbokning",
-                manualNotice: "Ingen onlinebetalning startar har. Teamet bekraftar tillganglighet och betalningsdetaljer manuellt.",
-                whatsappQuote: "Begar resplan pa WhatsApp",
-                whatsappHelpText: "Anvand WhatsApp om du vill bekrfta datum, upplagg eller fa personlig hjalp.",
-            };
-        default:
-            return {
-                selectDate: "Escolha a data",
-                reserveCta: "Enviar pre-reserva",
-                manualNotice: "Nenhum pagamento online e iniciado aqui. A equipe confirma disponibilidade, valor e proximos passos manualmente.",
-                whatsappQuote: "Solicitar roteiro no WhatsApp",
-                whatsappHelpText: "Use o WhatsApp se quiser validar agenda, formato do passeio ou atendimento personalizado.",
-            };
-    }
-}
-
 export function TourActions({ tripId, priceCents, tripTitle, city, schedules = [] }: TourActionsProps) {
     const t = useTranslations('TourActions');
     const locale = useLocale();
-    const copy = getTourActionCopy(locale);
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState<string | null>(null);
     const [selectedScheduleId, setSelectedScheduleId] = useState<string>(schedules[0]?.id ?? "");
@@ -160,7 +122,7 @@ export function TourActions({ tripId, priceCents, tripTitle, city, schedules = [
             {schedules.length > 0 && (
                 <div className="mt-5 space-y-2">
                     <label htmlFor="schedule-select" className="block text-sm font-medium text-white/74">
-                        {copy.selectDate}
+                        {t('selectDate')}
                     </label>
                     <div className="relative">
                         <CalendarDays className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/42" />
@@ -182,7 +144,7 @@ export function TourActions({ tripId, priceCents, tripTitle, city, schedules = [
 
             <div className="mt-5 space-y-3">
                 <p className="rounded-2xl border border-[#d8c18f]/15 bg-[#d8c18f]/10 px-4 py-3 text-xs leading-6 text-[#f0ddaf]">
-                    {copy.manualNotice}
+                    {t('manualNotice')}
                 </p>
 
                 <Button
@@ -197,14 +159,14 @@ export function TourActions({ tripId, priceCents, tripTitle, city, schedules = [
                             {t('processing')}
                         </>
                     ) : (
-                        copy.reserveCta
+                        t('reserveCta')
                     )}
                 </Button>
 
                 <Button asChild variant="outline" className="h-12 w-full rounded-2xl border-white/12 bg-white/[0.03] text-white hover:bg-white/[0.07] hover:text-white">
                     <a href={whatsappUrl} target="_blank" rel="noopener noreferrer">
                         <MessageCircleMore className="mr-2 h-4 w-4" />
-                        {copy.whatsappQuote}
+                        {t('whatsappQuote')}
                     </a>
                 </Button>
             </div>
@@ -220,7 +182,7 @@ export function TourActions({ tripId, priceCents, tripTitle, city, schedules = [
                     {t('freeCancellation')}
                 </p>
                 <p className="text-xs leading-6 text-white/44">
-                    {copy.whatsappHelpText}
+                    {t('whatsappHelpText')}
                 </p>
             </div>
         </div>

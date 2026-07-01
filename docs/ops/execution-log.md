@@ -1,5 +1,31 @@
 ﻿# Execution Log - Rick Travel
 
+## 2026-07-01 - RT-I18N-001A Public Homepage i18n/copy Integrity
+
+**Executed by:** Codex
+**Environment:** local implementation and validation
+**Status:** REVIEW; DONE candidate pending owner review and single final commit
+
+**Objective:**
+Execute the scoped RT-I18N-001A implementation to fix public homepage i18n and copy integrity across PT, EN, ES, and SV without redesign, backend, admin, booking logic, package/lockfile changes, route changes, commit, or push.
+
+**Result:**
+- Added/updated localized message keys for footer labels, logo aria labels, Cadastur label, hero media caption, hero-search helper/view-all copy, tour action helper/manual copy, trip-card physical levels/duration/date connector/image alt, and WhatsApp intro/field labels.
+- Replaced hardcoded wrong-language public copy in header, footer, hero media, hero search, tour actions, trip cards, and WhatsApp URL text generation.
+- Rephrased public homepage FAQ/traveler-support procedural trust copy into natural traveler-facing support language.
+- Preserved Cadastur and avoided invented numbers, reviews, guarantees, awards, certifications, credentials, official partnerships, safety promises, insurance claims, or response-time promises.
+
+**Validation:**
+- `pnpm lint`: blocked by PowerShell execution policy for `pnpm.ps1`; equivalent `pnpm.cmd lint` PASS with existing Node engine warning.
+- `pnpm typecheck`: equivalent `pnpm.cmd typecheck` PASS with existing Node engine warning.
+- `pnpm build`: equivalent `pnpm.cmd build` PASS with `NEXT_PRIVATE_OUTPUT_TRACE_ROOT` set to the repo path and elevated Next worker spawning.
+- Build caveats: initial build was blocked by stale `.next` lock from an old local server on port `3220`; after stopping that process, plain build hit parent `pnpm-lock.yaml` workspace-root inference and sandbox worker `spawn EPERM`. The final build passed with the repo-scoped trace-root environment override and elevated worker permission.
+
+**Restrictions preserved:**
+- No redesign, layout refactor, backend, API route, database, schema, migration, seed, admin, booking logic, package file, lockfile, route change, Cadastur removal, `.admin_backup`, `.bak`, deploy, commit, push, or broad git add was performed.
+
+---
+
 ## 2026-06-24 - RT-UX-002A Footer Audit and Hero Support Microcopy READY Opening
 
 **Executed by:** Codex

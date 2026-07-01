@@ -56,7 +56,7 @@ export const HeroHeader = () => {
           <div className="relative flex items-center justify-between py-3 lg:py-4">
             <Link
               href="/"
-              aria-label="Rick Travel - Página inicial"
+              aria-label={t('logoAria')}
               className="relative z-50 flex items-center"
             >
               <RickTravelLogo variant="full" size="sm" />

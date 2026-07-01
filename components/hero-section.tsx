@@ -66,6 +66,8 @@ function HeroContent() {
 }
 
 function HeroMedia() {
+  const t = useTranslations("HomePage.Hero");
+
   return (
     <div className="absolute inset-1 -z-10 aspect-[2/3] overflow-hidden rounded-[2rem] border border-white/6 lg:aspect-video lg:rounded-[3rem]">
       <Image
@@ -81,9 +83,9 @@ function HeroMedia() {
       <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(7,24,38,0.42),transparent_48%,rgba(200,168,107,0.12)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(900px_360px_at_50%_0%,rgba(255,255,255,0.08),transparent_68%)]" />
       <div className="absolute inset-x-8 bottom-8 hidden rounded-[26px] border border-white/10 bg-[#0a1d2b]/56 px-6 py-5 text-white/78 backdrop-blur-xl lg:block">
-        <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#C8A86B]">Rio de Janeiro curated travel</div>
+        <div className="text-[11px] font-semibold uppercase tracking-[0.16em] text-[#C8A86B]">{t("mediaCaptionTitle")}</div>
         <div className="mt-2 max-w-xl text-sm leading-6">
-          Rio experiences, clear planning and team confirmation before final details.
+          {t("mediaCaptionText")}
         </div>
       </div>
     </div>

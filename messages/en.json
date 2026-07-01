@@ -4,7 +4,9 @@
             "title": "Guided tours in Rio de Janeiro",
             "description": "Authentic experiences and personalized support for your trip to Rio.",
             "primaryButton": "Explore tours",
-            "secondaryButton": "Request a quote"
+            "secondaryButton": "Request a quote",
+            "mediaCaptionTitle": "Rio de Janeiro with local guidance",
+            "mediaCaptionText": "Rio experiences with clear planning and direct team confirmation."
         },
         "Logos": {
             "title": "Our Services"
@@ -12,7 +14,9 @@
         "Search": {
             "placeholder": "Search tours...",
             "button": "Search",
-            "noResults": "No tours found. Try another search."
+            "noResults": "No tours found. Try another search.",
+            "helper": "Search by destination or experience",
+            "viewAll": "See all related tours"
         },
         "Reservations": {
             "title": "Book Your Tour",
@@ -28,11 +32,11 @@
             "questions": {
                 "q1": {
                     "question": "How long does it take to confirm the booking?",
-                    "answer": "The Rick Travel team confirms reservation details through the approved public channels."
+                    "answer": "After you send your request, the Rick Travel team contacts you to confirm availability, timing, and next steps."
                 },
                 "q2": {
                     "question": "What payment methods do you accept?",
-                    "answer": "Payment questions are handled directly by the Rick Travel team through the approved public channels."
+                    "answer": "The team explains the payment options during support, before the tour is finally confirmed."
                 },
                 "q3": {
                     "question": "Can I change or cancel my booking?",
@@ -44,7 +48,7 @@
                 },
                 "q5": {
                     "question": "What is the refund policy?",
-                    "answer": "Cancellation and refund questions require confirmation from the Rick Travel team through the approved public channels."
+                    "answer": "The team guides you on cancellations and refunds according to the tour, date, and booking situation."
                 }
             }
         },
@@ -64,7 +68,7 @@
                 },
                 "handoff": {
                     "title": "Team confirmation",
-                    "text": "Prices, schedules, reservations, availability, and payments are always confirmed directly by the Rick Travel team before finalization."
+                    "text": "Before anything is finalized, the team confirms prices, schedules, availability, and next steps with you."
                 }
             }
         }
@@ -74,16 +78,26 @@
         "about": "About Us",
         "tours": "Our Tours",
         "contact": "Contact",
+        "logoAria": "Rick Travel - Home page",
         "openMenu": "Open navigation menu",
         "closeMenu": "Close navigation menu"
     },
     "Footer": {
+        "logoAria": "Rick Travel - Home page",
+        "description": "Rio de Janeiro experiences with clear planning and human support.",
+        "columns": {
+            "company": "Company",
+            "services": "Services",
+            "support": "Support"
+        },
         "links": {
             "home": "Home",
             "pricing": "Pricing",
             "help": "Help",
-            "about": "About Us"
+            "about": "About Us",
+            "tours": "Tours"
         },
+        "cadasturLabel": "Cadastur",
         "copyright": "All rights reserved."
     },
     "ThemeToggle": {
@@ -318,6 +332,11 @@
     },
     "TourActions": {
         "pricePerPerson": "Price per person",
+        "selectDate": "Choose a date",
+        "reserveCta": "Send pre-booking",
+        "manualNotice": "No online payment starts here. The team confirms availability, price, and next steps manually.",
+        "whatsappQuote": "Ask for an itinerary on WhatsApp",
+        "whatsappHelpText": "Use WhatsApp if you want to confirm dates, tour format, or personalized support.",
         "processing": "Processing...",
         "reserved": "Reserved",
         "reserveNow": "Reserve Now",
@@ -334,6 +353,26 @@
         "reserved": "Reserved",
         "reserveNow": "View tour",
         "viewDetails": "View tour details",
-        "imageAlt": "{title} in {city}"
+        "imageAlt": "{title} in {city}",
+        "durationDays": "{count, plural, one {# day} other {# days}}",
+        "dateConnector": "to",
+        "physicalLevels": {
+            "light": "Light",
+            "moderate": "Moderate",
+            "hard": "Hard",
+            "extreme": "Extreme"
+        }
+    },
+    "WhatsApp": {
+        "intro": "Hello! I would like to request a quote for a tour with Rick Travel.",
+        "tripTitleLabel": "Tour",
+        "cityLabel": "City",
+        "scheduleLabel": "Date of interest",
+        "sourceLabel": "Source",
+        "sources": {
+            "home": "Home page",
+            "tour_detail": "Tour page",
+            "bookings": "Bookings"
+        }
     }
 }

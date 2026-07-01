@@ -4,7 +4,9 @@
             "title": "Guidade turer i Rio de Janeiro",
             "description": "Autentiska upplevelser och personligt stöd för din resa till Rio.",
             "primaryButton": "Utforska turer",
-            "secondaryButton": "Begär offert"
+            "secondaryButton": "Begär offert",
+            "mediaCaptionTitle": "Rio de Janeiro med lokal vägledning",
+            "mediaCaptionText": "Upplevelser i Rio med tydlig planering och direkt bekräftelse från teamet."
         },
         "Logos": {
             "title": "Våra Tjänster"
@@ -12,7 +14,9 @@
         "Search": {
             "placeholder": "Sök turer, attraktioner, städer...",
             "button": "Sök",
-            "noResults": "Inga turer hittades. Försök med en annan sökning."
+            "noResults": "Inga turer hittades. Försök med en annan sökning.",
+            "helper": "Sök efter destination eller upplevelse",
+            "viewAll": "Visa alla relaterade turer"
         },
         "Reservations": {
             "title": "Boka Din Tur",
@@ -28,11 +32,11 @@
             "questions": {
                 "q1": {
                     "question": "Hur lång tid tar det att bekräfta bokningen?",
-                    "answer": "Rick Travel-teamet bekraftar bokningsdetaljer via godkanda offentliga kanaler."
+                    "answer": "När du har skickat din förfrågan kontaktar Rick Travel-teamet dig för att bekräfta tillgänglighet, tid och nästa steg."
                 },
                 "q2": {
                     "question": "Vilka betalningsmetoder accepterar ni?",
-                    "answer": "Fragor om betalning hanteras direkt av Rick Travel-teamet via godkanda offentliga kanaler."
+                    "answer": "Teamet förklarar betalningsalternativen under kontakten, innan turen bekräftas slutligt."
                 },
                 "q3": {
                     "question": "Kan jag ändra eller avboka min bokning?",
@@ -40,11 +44,11 @@
                 },
                 "q4": {
                     "question": "Betjänar ni internationella turister?",
-                    "answer": "Vi hjalper resenarer som ar intresserade av Rio de Janeiro. Support finns pa portugisiska, spanska och engelska."
+                    "answer": "Vi hjälper resenärer som är intresserade av Rio de Janeiro. Support finns på portugisiska, spanska och engelska."
                 },
                 "q5": {
                     "question": "Vad är återbetalningspolicyn?",
-                    "answer": "Fragor om avbokning och aterbetalning kraver bekraftelse fran Rick Travel-teamet via godkanda offentliga kanaler."
+                    "answer": "Teamet vägleder dig kring avbokningar och återbetalningar utifrån turen, datumet och bokningens situation."
                 }
             }
         },
@@ -64,7 +68,7 @@
                 },
                 "handoff": {
                     "title": "Bekräftelse från teamet",
-                    "text": "Priser, tider, bokningar, tillgänglighet och betalningar bekräftas alltid direkt av Rick Travel-teamet innan allt slutförs."
+                    "text": "Innan något slutförs bekräftar teamet priser, tider, tillgänglighet och nästa steg med dig."
                 }
             }
         }
@@ -74,16 +78,26 @@
         "about": "Om oss",
         "tours": "Våra turer",
         "contact": "Kontakt",
+        "logoAria": "Rick Travel - Startsida",
         "openMenu": "Öppna navigeringsmeny",
         "closeMenu": "Stäng navigeringsmeny"
     },
     "Footer": {
+        "logoAria": "Rick Travel - Startsida",
+        "description": "Upplevelser i Rio de Janeiro med tydlig planering och mänsklig kontakt.",
+        "columns": {
+            "company": "Företag",
+            "services": "Tjänster",
+            "support": "Support"
+        },
         "links": {
             "home": "Hem",
             "pricing": "Priser",
             "help": "Hjälp",
-            "about": "Om Oss"
+            "about": "Om oss",
+            "tours": "Turer"
         },
+        "cadasturLabel": "Cadastur",
         "copyright": "Alla rättigheter förbehållna."
     },
     "ThemeToggle": {
@@ -96,7 +110,7 @@
         "intro": "Rick Travel föddes ur passion för Rio de Janeiro och önskan att erbjuda oförglömliga upplevelser till våra besökare.",
         "mission": {
             "title": "Mission",
-            "description": "Att stodja resenarer med lokala turismupplevelser, tydlig information och mansklig service i Rio de Janeiro."
+            "description": "Att stödja resenärer med lokala turismupplevelser, tydlig information och mänsklig service i Rio de Janeiro."
         },
         "vision": {
             "title": "Vision",
@@ -110,9 +124,9 @@
             "item4": "Excellens i service"
         },
         "certification": {
-            "title": "Tydlig information och mansklig kontakt",
-            "description1": "Rick Travel hjalper resenarer att planera lokala turismupplevelser i Rio de Janeiro via godkanda offentliga kanaler.",
-            "description2": "For offerter, bokningar, tider, betalning och slutlig bekraftelse kontaktar du Rick Travel-teamet."
+            "title": "Tydlig information och mänsklig kontakt",
+            "description1": "Rick Travel hjälper resenärer att planera lokala turismupplevelser i Rio de Janeiro med mänsklig kontakt och tydlig vägledning.",
+            "description2": "För offerter, bokningar, tider, betalning och slutlig bekräftelse kontaktar du Rick Travel-teamet."
         }
     },
     "ToursPage": {
@@ -238,6 +252,11 @@
     },
     "TourActions": {
         "pricePerPerson": "Pris per person",
+        "selectDate": "Välj datum",
+        "reserveCta": "Skicka förbokning",
+        "manualNotice": "Ingen onlinebetalning startar här. Teamet bekräftar tillgänglighet, pris och nästa steg manuellt.",
+        "whatsappQuote": "Be om resplan på WhatsApp",
+        "whatsappHelpText": "Använd WhatsApp om du vill bekräfta datum, turformat eller få personlig hjälp.",
         "processing": "Bearbetar...",
         "reserved": "Reserverad",
         "reserveNow": "Reservera Nu",
@@ -254,6 +273,26 @@
         "reserved": "Reserverad",
         "reserveNow": "Visa tur",
         "viewDetails": "Visa turdetaljer",
-        "imageAlt": "{title} i {city}"
+        "imageAlt": "{title} i {city}",
+        "durationDays": "{count, plural, one {# dag} other {# dagar}}",
+        "dateConnector": "till",
+        "physicalLevels": {
+            "light": "Lätt",
+            "moderate": "Måttlig",
+            "hard": "Svår",
+            "extreme": "Extrem"
+        }
+    },
+    "WhatsApp": {
+        "intro": "Hej! Jag vill be om en offert för en tur med Rick Travel.",
+        "tripTitleLabel": "Tur",
+        "cityLabel": "Stad",
+        "scheduleLabel": "Önskat datum",
+        "sourceLabel": "Källa",
+        "sources": {
+            "home": "Startsida",
+            "tour_detail": "Tursida",
+            "bookings": "Bokningar"
+        }
     }
 }

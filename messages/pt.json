@@ -4,7 +4,9 @@
             "title": "Passeios guiados no Rio de Janeiro",
             "description": "Experiências autênticas e suporte personalizado para sua viagem ao Rio.",
             "primaryButton": "Ver passeios",
-            "secondaryButton": "Solicitar orçamento"
+            "secondaryButton": "Solicitar orçamento",
+            "mediaCaptionTitle": "Rio de Janeiro com orientação local",
+            "mediaCaptionText": "Passeios no Rio com planejamento claro e confirmação direta pela equipe."
         },
         "Logos": {
             "title": "Nossos serviços"
@@ -12,7 +14,9 @@
         "Search": {
             "placeholder": "Buscar passeios, atrações ou bairros...",
             "button": "Buscar",
-            "noResults": "Nenhum passeio encontrado. Tente outra busca."
+            "noResults": "Nenhum passeio encontrado. Tente outra busca.",
+            "helper": "Busque por destino ou experiência",
+            "viewAll": "Ver todos os passeios relacionados"
         },
         "Reservations": {
             "title": "Planeje seu passeio",
@@ -28,11 +32,11 @@
             "questions": {
                 "q1": {
                     "question": "Quanto tempo leva para confirmar a reserva?",
-                    "answer": "A equipe Rick Travel confirma os detalhes da reserva pelos canais públicos aprovados."
+                    "answer": "Depois que você envia o pedido, a equipe Rick Travel conversa com você para confirmar disponibilidade, horário e próximos passos."
                 },
                 "q2": {
                     "question": "Quais métodos de pagamento vocês aceitam?",
-                    "answer": "Dúvidas sobre pagamento são tratadas diretamente pela equipe Rick Travel nos canais públicos aprovados."
+                    "answer": "A equipe informa as opções de pagamento durante o atendimento, antes da confirmação final do passeio."
                 },
                 "q3": {
                     "question": "Posso alterar ou cancelar minha reserva?",
@@ -44,7 +48,7 @@
                 },
                 "q5": {
                     "question": "Qual é a política de reembolso?",
-                    "answer": "Dúvidas sobre cancelamento e reembolso exigem confirmação da equipe Rick Travel pelos canais públicos aprovados."
+                    "answer": "A equipe orienta você sobre cancelamentos e reembolsos de acordo com o passeio, a data e a situação da reserva."
                 }
             }
         },
@@ -64,7 +68,7 @@
                 },
                 "handoff": {
                     "title": "Confirmação pela equipe",
-                    "text": "Valores, horários, reservas, disponibilidade e pagamentos são sempre confirmados diretamente pela equipe Rick Travel antes da finalização."
+                    "text": "Antes de finalizar, a equipe confirma com você valores, horários, disponibilidade e próximos passos."
                 }
             }
         }
@@ -74,16 +78,26 @@
         "about": "Quem somos",
         "tours": "Nossos tours",
         "contact": "Contatos",
+        "logoAria": "Rick Travel - Página inicial",
         "openMenu": "Abrir menu de navegação",
         "closeMenu": "Fechar menu de navegação"
     },
     "Footer": {
+        "logoAria": "Rick Travel - Página inicial",
+        "description": "Experiências no Rio de Janeiro com planejamento claro e atendimento humano.",
+        "columns": {
+            "company": "Empresa",
+            "services": "Serviços",
+            "support": "Suporte"
+        },
         "links": {
             "home": "Início",
             "pricing": "Preços",
             "help": "Ajuda",
-            "about": "Sobre nós"
+            "about": "Sobre nós",
+            "tours": "Passeios"
         },
+        "cadasturLabel": "Cadastur",
         "copyright": "Todos os direitos reservados."
     },
     "ThemeToggle": {
@@ -318,6 +332,11 @@
     },
     "TourActions": {
         "pricePerPerson": "Preço por pessoa",
+        "selectDate": "Escolha a data",
+        "reserveCta": "Enviar pré-reserva",
+        "manualNotice": "Nenhum pagamento online é iniciado aqui. A equipe confirma disponibilidade, valor e próximos passos manualmente.",
+        "whatsappQuote": "Solicitar roteiro no WhatsApp",
+        "whatsappHelpText": "Use o WhatsApp se quiser confirmar agenda, formato do passeio ou atendimento personalizado.",
         "processing": "Processando...",
         "reserved": "Reservado",
         "reserveNow": "Solicitar Reserva",
@@ -334,6 +353,26 @@
         "reserved": "Reservado",
         "reserveNow": "Consultar passeio",
         "viewDetails": "Ver detalhes do passeio",
-        "imageAlt": "{title} em {city}"
+        "imageAlt": "{title} em {city}",
+        "durationDays": "{count, plural, one {# dia} other {# dias}}",
+        "dateConnector": "a",
+        "physicalLevels": {
+            "light": "Leve",
+            "moderate": "Moderado",
+            "hard": "Difícil",
+            "extreme": "Extremo"
+        }
+    },
+    "WhatsApp": {
+        "intro": "Olá! Gostaria de solicitar um orçamento de passeio com a Rick Travel.",
+        "tripTitleLabel": "Passeio",
+        "cityLabel": "Cidade",
+        "scheduleLabel": "Data de interesse",
+        "sourceLabel": "Origem",
+        "sources": {
+            "home": "Página inicial",
+            "tour_detail": "Página do passeio",
+            "bookings": "Reservas"
+        }
     }
 }
