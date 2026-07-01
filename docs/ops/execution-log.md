@@ -1833,3 +1833,19 @@ Result:
 
 Restrictions preserved:
 - No backend, API, database, schema, migration, seed, auth, booking, payment, admin, package, lockfile, dependency, deployment, `.agents/`, or `skills-lock.json` changes.
+
+## 2026-07-01 - RT-I18N-001A Public Homepage i18n/copy Integrity READY Opening
+
+State: READY.
+
+Objective: Open RT-I18N-001A as a documentation-only READY registration for a future public homepage i18n/copy integrity fix.
+
+- RT-I18N-001A defined in `docs/ops/backlog.md`.
+- Operational status updated in `docs/ops/status.md`.
+- Session handoff updated in `docs/ops/session-handoff.md`.
+- Future scope is limited to PT/EN/ES/SV public homepage copy integrity in approved message/component files and `lib/whatsapp.ts`.
+- Evidence source is the Impeccable critique: mojibake/encoding artifacts, hardcoded Portuguese/English, localization leaks, procedural trust copy, and customer-facing copy issues.
+- Future validation requires `pnpm lint`, `pnpm typecheck`, `pnpm build`, and manual smoke on `/pt`, `/en`, `/es`, and `/sv`.
+
+Restrictions preserved:
+- No implementation, product code, message file, component, backend, API route, database, schema, migration, seed, admin, booking logic, package file, lockfile, route change, Cadastur removal, `.admin_backup`, `.bak`, deploy, commit, or push change was made during this READY opening.

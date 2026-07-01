@@ -1506,3 +1506,48 @@ Current safe state:
 - Do not apply `C:\tmp\rt-ux-003a\implementation-ui.diff`.
 - Do not touch design/rhythm now.
 - Continue only with stable development tasks under a separate READY scope.
+
+---
+
+## Update 2026-07-01 - RT-I18N-001A Public Homepage i18n/copy Integrity READY
+
+State: READY.
+
+RT-I18N-001A was opened as a documentation-only READY registration for a future scoped implementation task.
+
+Future objective:
+- Fix public homepage i18n and copy integrity across PT, EN, ES, and SV.
+
+Evidence:
+- Impeccable critique found mojibake/encoding artifacts, hardcoded Portuguese/English, localization leaks, procedural trust copy, and customer-facing copy issues on the public homepage.
+
+Future allowed files:
+- `messages/pt.json`
+- `messages/en.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `components/header.tsx`
+- `components/footer.tsx`
+- `components/hero-section.tsx`
+- `components/hero-search.tsx`
+- `components/trips/tour-actions.tsx`
+- `components/trips/trip-card.tsx`
+- `lib/whatsapp.ts`
+- Allowed operational docs.
+
+Future acceptance criteria:
+- No mojibake in PT, EN, ES, or SV public homepage.
+- No wrong-language hardcoded public copy.
+- WhatsApp copy is localized and natural.
+- Trust copy uses traveler-facing language.
+- Cadastur is preserved.
+- No structural visual redesign.
+
+Future validation:
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm build`
+- Manual smoke on `/pt`, `/en`, `/es`, and `/sv`.
+
+Restrictions preserved in this READY opening:
+- No product code, message file, component, backend, API route, database, schema, migration, seed, admin, booking logic, package file, lockfile, route, Cadastur asset, `.admin_backup`, `.bak`, deploy, commit, or push change was made beyond allowed operational documentation.

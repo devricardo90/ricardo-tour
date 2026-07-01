@@ -1218,3 +1218,42 @@ Current state:
 Next safe step:
 - Commit this docs-only status correction.
 - Continue only with stable development tasks under a separate READY scope.
+
+## RT-I18N-001A READY - Public Homepage i18n/copy Integrity
+
+State: READY on 2026-07-01.
+
+Objective: fix public homepage i18n and copy integrity across PT, EN, ES, and SV in a future implementation gate.
+
+Evidence:
+- Impeccable critique found mojibake/encoding artifacts, hardcoded Portuguese/English, localization leaks, procedural trust copy, and customer-facing copy issues on the public homepage.
+
+Future implementation files allowed:
+- `messages/pt.json`
+- `messages/en.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `components/header.tsx`
+- `components/footer.tsx`
+- `components/hero-section.tsx`
+- `components/hero-search.tsx`
+- `components/trips/tour-actions.tsx`
+- `components/trips/trip-card.tsx`
+- `lib/whatsapp.ts`
+
+Future forbidden scope:
+- No redesign, layout refactor, backend, admin, booking logic, `.admin_backup`, `.bak`, package or lockfile changes, route changes, Cadastur removal, or unsupported claims.
+- Do not invent numbers, reviews, guarantees, awards, credentials, official partnerships, safety promises, insurance claims, or response-time promises.
+
+Future validation:
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm build`
+- Manual smoke on `/pt`, `/en`, `/es`, and `/sv`.
+
+Restrictions for this READY opening:
+- Operational docs only.
+- No product code, component, message file, implementation file, backend, API, database, schema, route, package, lockfile, Cadastur asset, deploy, commit, or push was changed.
+
+Next step:
+- Execute RT-I18N-001A only when explicitly authorized by a separate implementation gate.

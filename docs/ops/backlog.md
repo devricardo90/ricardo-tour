@@ -2953,3 +2953,78 @@ READY decision: Promote RT-UX-003A to READY only because the owner approved the 
 
 Restrictions preserved during READY opening:
 - No implementation file, component, style file, validation artifact, backend, API route, database, schema, migration, seed, auth, booking, payment, admin, package file, lockfile, dependency, deploy, `.agents/`, `skills-lock.json`, broad git add, merge, or push was created or changed in this READY opening.
+
+## RT-I18N-001A - Fix public homepage i18n/copy integrity
+
+State: READY
+
+Objective: Prepare a scoped implementation task to fix public homepage i18n and copy integrity across PT, EN, ES, and SV.
+
+Type: DOCUMENTATION-ONLY READY REGISTRATION. This opening does not implement the fix.
+
+Context:
+- Impeccable critique found mojibake/encoding artifacts, hardcoded Portuguese/English, localization leaks, procedural trust copy, and customer-facing copy issues on the public homepage.
+- The future implementation must be a narrow copy/i18n integrity pass, not a redesign.
+- The task exists to make the public homepage feel linguistically trustworthy across supported locales while preserving the current structure.
+
+Future implementation files allowed:
+- `messages/pt.json`
+- `messages/en.json`
+- `messages/es.json`
+- `messages/sv.json`
+- `components/header.tsx`
+- `components/footer.tsx`
+- `components/hero-section.tsx`
+- `components/hero-search.tsx`
+- `components/trips/tour-actions.tsx`
+- `components/trips/trip-card.tsx`
+- `lib/whatsapp.ts`
+- `docs/ops/status.md`
+- `docs/ops/backlog.md`
+- `docs/ops/execution-log.md`
+- `docs/ops/session-handoff.md`
+
+Future implementation scope:
+1. Remove mojibake/encoding artifacts from public homepage copy in PT, EN, ES, and SV.
+2. Replace wrong-language hardcoded public copy with localized strings or locale-aware copy.
+3. Make WhatsApp quote copy localized and natural in each supported locale.
+4. Rewrite procedural trust copy into traveler-facing language.
+5. Preserve Cadastur and avoid weakening existing legitimate trust markers.
+6. Keep implementation narrow to copy/i18n integrity only.
+
+Future forbidden scope:
+- No redesign.
+- No layout refactor.
+- No backend.
+- No admin.
+- No booking logic.
+- No `.admin_backup`.
+- No `.bak` files.
+- No package or lockfile changes.
+- No route changes.
+- Do not remove Cadastur.
+- Do not invent numbers, reviews, guarantees, awards, credentials, official partnerships, safety promises, insurance claims, response-time promises, or unsupported claims.
+- No broad git add, commit, or push without explicit authorization.
+
+Acceptance criteria:
+- No mojibake in PT, EN, ES, or SV public homepage copy.
+- No wrong-language hardcoded public copy remains in the allowed scope.
+- WhatsApp copy is localized and natural.
+- Trust copy uses traveler-facing language.
+- Cadastur is preserved.
+- No structural visual redesign is performed.
+
+Future validation:
+- `pnpm lint`
+- `pnpm typecheck`
+- `pnpm build`
+- Manual smoke on `/pt`, `/en`, `/es`, and `/sv`.
+- Confirm changed files remain inside the allowed future file list.
+- Confirm no `.admin_backup`, `.bak`, admin, backend, booking, package, lockfile, or route files changed.
+
+Risk: medium. The main risks are expanding copy cleanup into redesign, introducing unsupported trust claims, or changing booking/WhatsApp behavior while editing text.
+
+READY decision: Promote RT-I18N-001A to READY only because the future scope is narrow, evidence-backed by the Impeccable critique, and explicitly limited to public homepage i18n/copy integrity.
+
+Restrictions preserved during READY opening:
+- No implementation file, component, message file, backend, API route, database, schema, migration, seed, admin, booking logic, package file, lockfile, dependency, route, Cadastur asset, `.admin_backup`, `.bak`, deploy, commit, or push was created or changed in this READY opening.
