@@ -3038,3 +3038,49 @@ Validation evidence:
 
 Restrictions preserved during execution:
 - No redesign, layout refactor, backend, API route, database, migration, seed, admin, booking logic, package file, lockfile, route change, Cadastur removal, `.admin_backup`, `.bak`, deploy, commit, or push was performed.
+
+## RT-I18N-001B - Public Header Localization
+
+State: REVIEW
+
+Objective: Remove remaining hardcoded public header/mobile utility strings and homepage empty-state strings after RT-I18N-001A.
+
+Context:
+- Impeccable audit found remaining public header/mobile utilities and homepage empty states with hardcoded strings or non-localized copy.
+- Owner approved implementation after pre-edit inspection listed the exact strings and minimal file-by-file fix plan.
+
+Files changed:
+- `components/mobile-menu.tsx`
+- `components/auth-status.tsx`
+- `components/LanguageSwitcher.tsx`
+- `components/ThemeToggleButton.tsx`
+- `components/reservation-headers.tsx`
+- `components/trip-list.tsx`
+- `components/trip-grid.tsx`
+- `app/[locale]/(public)/page.tsx`
+- `messages/pt.json`
+- `messages/en.json`
+- `messages/es.json`
+- `messages/sv.json`
+- Allowed operational docs.
+
+Result:
+- Public mobile menu labels, nav hints, greeting, dialog aria labels, close labels, auth CTAs, and user fallback now come from locale messages.
+- Desktop auth status labels and fallback now come from locale messages while preserving the existing username emphasis.
+- Language switcher aria label and option labels now come from locale messages.
+- Theme toggle screen-reader label and menu labels now come from locale messages.
+- Reservations badge, trip empty states, and homepage metadata title/description now come from locale messages.
+- PT/EN/ES/SV parity was kept for the new RT-I18N-001B keys only.
+- Existing out-of-scope `AboutPage` parity mismatch was not touched.
+
+Validation evidence:
+- `git diff --name-only`: implementation phase showed only the 12 approved app/message files before ops docs were updated.
+- `git diff --stat`: implementation phase showed 12 files changed, 225 insertions, 68 deletions before ops docs were updated.
+- `pnpm.cmd lint`: PASS outside sandbox after two sandboxed runs timed out after starting ESLint without diagnostics.
+- `pnpm.cmd typecheck`: PASS.
+- `pnpm.cmd build`: PASS outside sandbox with `NEXT_PRIVATE_OUTPUT_TRACE_ROOT` set to the repo path after a sandboxed parent-root `EPERM` build failure.
+- Manual smoke: PASS for `/pt`, `/en`, `/es`, and `/sv` on local `http://localhost:3217`, covering metadata, homepage/header text, desktop auth status, mobile menu, language switcher, theme button, and trip no-results empty state via public search.
+- Existing Node engine warning remained: project wants Node `22.x`; current runtime was `v24.15.0`.
+
+Restrictions preserved:
+- No redesign, layout refactor, backend, API route, database, migration, seed, admin, booking logic, cancellation policy change, package file, lockfile, route change, Cadastur copy/presentation change, `.admin_backup`, `.bak`, commit, push, or broad git add was performed.

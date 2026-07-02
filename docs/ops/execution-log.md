@@ -1875,3 +1875,30 @@ Objective: Open RT-I18N-001A as a documentation-only READY registration for a fu
 
 Restrictions preserved:
 - No implementation, product code, message file, component, backend, API route, database, schema, migration, seed, admin, booking logic, package file, lockfile, route change, Cadastur removal, `.admin_backup`, `.bak`, deploy, commit, or push change was made during this READY opening.
+
+## 2026-07-02 - RT-I18N-001B Public Header Localization
+
+State: REVIEW.
+
+Objective: localize the remaining public header/mobile utility strings and homepage/trip empty-state strings after RT-I18N-001A.
+
+Summary:
+- Replaced hardcoded public mobile menu nav hints, greeting, dialog labels, close labels, auth CTAs, and user fallback with locale messages.
+- Replaced hardcoded desktop auth status labels and fallback with locale messages while preserving username emphasis.
+- Replaced language switcher aria/option labels and theme toggle labels with locale messages.
+- Replaced reservations badge and trip empty states with locale messages.
+- Moved homepage metadata title/description into `HomePage.Metadata` messages.
+- Kept new RT-I18N-001B keys parallel across PT/EN/ES/SV.
+- Did not touch the existing out-of-scope `AboutPage` parity mismatch.
+
+Validation:
+- `git diff --name-only`: implementation phase showed only the 12 approved app/message files before ops docs were updated.
+- `git diff --stat`: implementation phase showed 12 files changed, 225 insertions, 68 deletions before ops docs were updated.
+- `pnpm.cmd lint`: PASS outside sandbox; sandboxed lint timed out twice after starting ESLint with no diagnostics.
+- `pnpm.cmd typecheck`: PASS.
+- `pnpm.cmd build`: PASS outside sandbox with `NEXT_PRIVATE_OUTPUT_TRACE_ROOT` set to the repo path; first sandboxed build failed on parent-root `EPERM`.
+- Manual smoke: PASS for `/pt`, `/en`, `/es`, and `/sv` on local `http://localhost:3217`, covering metadata, homepage/header text, desktop auth status, mobile menu, language switcher, theme button, and trip no-results empty state via public search.
+- Existing Node engine warning remains: project expects Node `22.x`; current runtime was `v24.15.0`.
+
+Restrictions preserved:
+- No redesign, layout refactor, backend, API route, database, migration, seed, admin, booking logic, cancellation policy change, package file, lockfile, route change, Cadastur copy/presentation change, `.admin_backup`, `.bak`, commit, push, or broad git add was performed.

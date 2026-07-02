@@ -8,6 +8,10 @@
             "mediaCaptionTitle": "Rio de Janeiro med lokal vägledning",
             "mediaCaptionText": "Upplevelser i Rio med tydlig planering och direkt bekräftelse från teamet."
         },
+        "Metadata": {
+            "title": "Rick Travel | Upplevelser i Rio de Janeiro",
+            "description": "Rick Travel erbjuder guidade turer, lokala turismupplevelser, personlig resevägledning och resenärsstöd i Rio de Janeiro, Brasilien."
+        },
         "Logos": {
             "title": "Våra Tjänster"
         },
@@ -23,6 +27,11 @@
             "subtitle": "Välj en upplevelse och säkra din plats med bara några klick.",
             "myBookings": "Mina Bokningar",
             "availableTrips": "Tillgängliga Turer"
+        },
+        "TripEmptyState": {
+            "title": "Inga turer hittades",
+            "description": "Justera filtren för att bredda sökningen och hitta rätt Rio-resplan för din resa.",
+            "empty": "Inga turer är tillgängliga just nu."
         },
         "FAQs": {
             "title": "Vanliga Frågor",
@@ -80,7 +89,13 @@
         "contact": "Kontakt",
         "logoAria": "Rick Travel - Startsida",
         "openMenu": "Öppna navigeringsmeny",
-        "closeMenu": "Stäng navigeringsmeny"
+        "closeMenu": "Stäng navigeringsmeny",
+        "hints": {
+            "home": "Startsida",
+            "about": "Om byrån",
+            "tours": "Destinationer och paket",
+            "contact": "Support och kontakt"
+        }
     },
     "Footer": {
         "logoAria": "Rick Travel - Startsida",
@@ -101,9 +116,34 @@
         "copyright": "Alla rättigheter förbehållna."
     },
     "ThemeToggle": {
+        "label": "Byt tema",
         "light": "Ljus",
         "dark": "Mörk",
         "system": "System"
+    },
+    "LanguageSwitcher": {
+        "label": "Byt språk",
+        "pt": "Português",
+        "en": "English",
+        "es": "Español",
+        "sv": "Svenska"
+    },
+    "AuthStatus": {
+        "login": "Logga in",
+        "createAccount": "Skapa konto",
+        "greetingPrefix": "Hej,",
+        "userFallback": "användare",
+        "myBookings": "Mina bokningar",
+        "logout": "Logga ut"
+    },
+    "MobileMenu": {
+        "welcomeBack": "Välkommen tillbaka",
+        "greeting": "Hej, {name}",
+        "closeMenu": "Stäng meny",
+        "navigation": "Navigering",
+        "dialogLabel": "Navigeringsmeny",
+        "userFallback": "Användare",
+        "readySubtitle": "Redo att utforska Rio?"
     },
     "AboutPage": {
         "title": "Om Oss",

@@ -8,6 +8,10 @@
             "mediaCaptionTitle": "Río de Janeiro con orientación local",
             "mediaCaptionText": "Experiencias en Río con planificación clara y confirmación directa del equipo."
         },
+        "Metadata": {
+            "title": "Rick Travel | Experiencias en Río de Janeiro",
+            "description": "Rick Travel ofrece tours guiados, experiencias de turismo local, orientación personalizada y soporte para viajeros en Río de Janeiro, Brasil."
+        },
         "Logos": {
             "title": "Nuestros Servicios"
         },
@@ -23,6 +27,11 @@
             "subtitle": "Elige una experiencia y asegura tu lugar en pocos clics.",
             "myBookings": "Mis Reservas",
             "availableTrips": "Tours Disponibles"
+        },
+        "TripEmptyState": {
+            "title": "No se encontraron tours",
+            "description": "Ajusta los filtros para ampliar la búsqueda y encontrar el itinerario ideal para tu viaje a Río.",
+            "empty": "No hay tours disponibles en este momento."
         },
         "FAQs": {
             "title": "Preguntas Frecuentes",
@@ -80,7 +89,13 @@
         "contact": "Contacto",
         "logoAria": "Rick Travel - Página inicial",
         "openMenu": "Abrir menú de navegación",
-        "closeMenu": "Cerrar menú de navegación"
+        "closeMenu": "Cerrar menú de navegación",
+        "hints": {
+            "home": "Página inicial",
+            "about": "Sobre la agencia",
+            "tours": "Destinos y paquetes",
+            "contact": "Soporte y contacto"
+        }
     },
     "Footer": {
         "logoAria": "Rick Travel - Página inicial",
@@ -101,9 +116,34 @@
         "copyright": "Todos los derechos reservados."
     },
     "ThemeToggle": {
+        "label": "Cambiar tema",
         "light": "Claro",
         "dark": "Oscuro",
         "system": "Sistema"
+    },
+    "LanguageSwitcher": {
+        "label": "Cambiar idioma",
+        "pt": "Português",
+        "en": "English",
+        "es": "Español",
+        "sv": "Svenska"
+    },
+    "AuthStatus": {
+        "login": "Login",
+        "createAccount": "Crear cuenta",
+        "greetingPrefix": "Hola,",
+        "userFallback": "usuario",
+        "myBookings": "Mis reservas",
+        "logout": "Salir"
+    },
+    "MobileMenu": {
+        "welcomeBack": "Bienvenido de nuevo",
+        "greeting": "Hola, {name}",
+        "closeMenu": "Cerrar menú",
+        "navigation": "Navegación",
+        "dialogLabel": "Menú de navegación",
+        "userFallback": "Usuario",
+        "readySubtitle": "¿Listo para explorar Río?"
     },
     "AboutPage": {
         "title": "Quiénes Somos",

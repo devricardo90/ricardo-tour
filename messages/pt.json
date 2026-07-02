@@ -8,6 +8,10 @@
             "mediaCaptionTitle": "Rio de Janeiro com orientação local",
             "mediaCaptionText": "Passeios no Rio com planejamento claro e confirmação direta pela equipe."
         },
+        "Metadata": {
+            "title": "Rick Travel | Passeios exclusivos no Rio de Janeiro",
+            "description": "A Rick Travel oferece passeios guiados, experiências de turismo local, orientação personalizada e suporte ao viajante no Rio de Janeiro, Brasil."
+        },
         "Logos": {
             "title": "Nossos serviços"
         },
@@ -23,6 +27,11 @@
             "subtitle": "Escolha uma experiência e solicite sua reserva com poucos cliques.",
             "myBookings": "Minhas reservas",
             "availableTrips": "Passeios disponíveis"
+        },
+        "TripEmptyState": {
+            "title": "Nenhum passeio encontrado",
+            "description": "Ajuste os filtros para ampliar a busca e encontrar o roteiro ideal para sua viagem no Rio.",
+            "empty": "Nenhum passeio disponível no momento."
         },
         "FAQs": {
             "title": "Dúvidas Frequentes",
@@ -80,7 +89,13 @@
         "contact": "Contatos",
         "logoAria": "Rick Travel - Página inicial",
         "openMenu": "Abrir menu de navegação",
-        "closeMenu": "Fechar menu de navegação"
+        "closeMenu": "Fechar menu de navegação",
+        "hints": {
+            "home": "Página inicial",
+            "about": "Sobre a agência",
+            "tours": "Destinos e pacotes",
+            "contact": "Suporte e contato"
+        }
     },
     "Footer": {
         "logoAria": "Rick Travel - Página inicial",
@@ -101,9 +116,34 @@
         "copyright": "Todos os direitos reservados."
     },
     "ThemeToggle": {
+        "label": "Alternar tema",
         "light": "Claro",
         "dark": "Escuro",
         "system": "Sistema"
+    },
+    "LanguageSwitcher": {
+        "label": "Alterar idioma",
+        "pt": "Português",
+        "en": "English",
+        "es": "Español",
+        "sv": "Svenska"
+    },
+    "AuthStatus": {
+        "login": "Login",
+        "createAccount": "Criar conta",
+        "greetingPrefix": "Olá,",
+        "userFallback": "usuário",
+        "myBookings": "Minhas reservas",
+        "logout": "Sair"
+    },
+    "MobileMenu": {
+        "welcomeBack": "Bem-vindo de volta",
+        "greeting": "Olá, {name}",
+        "closeMenu": "Fechar menu",
+        "navigation": "Navegação",
+        "dialogLabel": "Menu de navegação",
+        "userFallback": "Usuário",
+        "readySubtitle": "Pronto para explorar o Rio?"
     },
     "AboutPage": {
         "hero": {

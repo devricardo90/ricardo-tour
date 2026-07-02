@@ -3,17 +3,20 @@
 import { motion } from "motion/react";
 import { TripCard } from "./trips/trip-card";
 import { TripCardData } from "@/lib/types";
+import { useTranslations } from "next-intl";
 
 interface TripGridProps {
     trips: TripCardData[];
 }
 
 export function TripGrid({ trips }: TripGridProps) {
+    const t = useTranslations("HomePage.TripEmptyState");
+
     return (
         <div className="space-y-7">
             {trips.length === 0 ? (
                 <div className="surface-dark px-6 py-12 text-center text-white/62">
-                    Nenhum passeio disponivel no momento.
+                    {t("empty")}
                 </div>
             ) : (
                 <motion.div

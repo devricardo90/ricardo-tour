@@ -1,5 +1,50 @@
 # Status Operacional - Rick Travel
 
+## Update 2026-07-02 - RT-I18N-001B Public Header Localization
+
+State: REVIEW; DONE candidate pending owner review and the single final commit.
+
+RT-I18N-001B implemented the scoped public header/mobile utility and homepage empty-state localization pass after RT-I18N-001A.
+
+Files changed:
+- `components/mobile-menu.tsx`
+- `components/auth-status.tsx`
+- `components/LanguageSwitcher.tsx`
+- `components/ThemeToggleButton.tsx`
+- `components/reservation-headers.tsx`
+- `components/trip-list.tsx`
+- `components/trip-grid.tsx`
+- `app/[locale]/(public)/page.tsx`
+- `messages/pt.json`
+- `messages/en.json`
+- `messages/es.json`
+- `messages/sv.json`
+- Operational docs.
+
+Result:
+- Localized public mobile menu nav hints, greeting, dialog labels, close labels, auth CTAs, and user fallback.
+- Localized desktop auth status labels and user fallback while preserving the existing username emphasis.
+- Localized language switcher aria label and language option labels.
+- Localized theme toggle screen-reader label and menu items.
+- Localized reservations section badge and trip empty states.
+- Moved homepage metadata title/description into locale messages.
+- Preserved layout, routes, Cadastur copy/presentation, cancellation policy, backend, admin, booking logic, package files, lockfiles, `.admin_backup`, and `.bak` restrictions.
+- Existing `AboutPage` message parity mismatch was intentionally not touched.
+
+Validation:
+- `git diff --name-only`: implementation phase showed only the 12 approved app/message files before ops docs were updated.
+- `git diff --stat`: implementation phase showed 12 files changed, 225 insertions, 68 deletions before ops docs were updated.
+- `pnpm.cmd lint`: PASS outside sandbox after two sandboxed runs timed out after starting ESLint without diagnostics.
+- `pnpm.cmd typecheck`: PASS.
+- `pnpm.cmd build`: PASS outside sandbox with `NEXT_PRIVATE_OUTPUT_TRACE_ROOT` set to the repo path; first sandboxed build failed on the known parent-root `EPERM` readlink issue.
+- Manual smoke: PASS for `/pt`, `/en`, `/es`, and `/sv` on local `http://localhost:3217`, covering metadata, homepage/header text, desktop auth status, mobile menu, language switcher, theme button, and trip no-results empty state via public search.
+- Existing environment warning remains: project expects Node `22.x`; current runtime was `v24.15.0`.
+
+Restrictions preserved:
+- No redesign, layout refactor, backend, API, database, migration, seed, admin, booking logic, cancellation policy change, package file, lockfile, route change, Cadastur copy/presentation change, `.admin_backup`, `.bak`, commit, push, or broad git add was performed.
+
+---
+
 ## Update 2026-07-01 - RT-I18N-001A Public Homepage i18n/copy Integrity
 
 State: REVIEW; DONE candidate pending owner review and the single final commit.

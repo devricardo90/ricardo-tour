@@ -4,6 +4,7 @@ import { ReservationsSection } from "@/components/reservations-section";
 import { FadeInSection } from "@/components/ui/fade-in-section";
 import { getLanguageAlternates } from "@/i18n/routing";
 import dynamic from "next/dynamic";
+import { getTranslations } from "next-intl/server";
 
 const TravelerSupport = dynamic(() => import("@/components/testimonials"), {
     loading: () => <div className="section-spacing h-96 animate-pulse" />,
@@ -11,38 +12,17 @@ const TravelerSupport = dynamic(() => import("@/components/testimonials"), {
 
 const FooterSection = dynamic(() => import("@/components/footer"));
 
-function getHomeMetadataCopy(locale: string) {
-    switch (locale) {
-        case "en":
-            return {
-                title: "Rick Travel | Rio de Janeiro Experiences",
-                description: "Rick Travel offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil.",
-            };
-        case "es":
-            return {
-                title: "Rick Travel | Experiencias en Rio de Janeiro",
-                description: "Rick Travel ofrece tours guiados, experiencias de turismo local, orientacion personalizada y soporte para viajeros en Rio de Janeiro, Brasil.",
-            };
-        case "sv":
-            return {
-                title: "Rick Travel | Upplevelser i Rio de Janeiro",
-                description: "Rick Travel erbjuder guidade turer, lokala turismupplevelser, personlig reseorientering och resenarstod i Rio de Janeiro, Brasilien.",
-            };
-        default:
-            return {
-                title: "Rick Travel | Passeios exclusivos no Rio de Janeiro",
-                description: "A Rick Travel oferece passeios guiados, experiencias de turismo local, orientacao personalizada e suporte ao viajante no Rio de Janeiro, Brasil.",
-            };
-    }
-}
-
 export async function generateMetadata({
     params,
 }: {
     params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
     const { locale } = await params;
-    const copy = getHomeMetadataCopy(locale);
+    const t = await getTranslations({ locale, namespace: "HomePage.Metadata" });
+    const copy = {
+        title: t("title"),
+        description: t("description"),
+    };
     const path = `/${locale}`;
 
     return {

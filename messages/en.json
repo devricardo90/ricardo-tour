@@ -8,6 +8,10 @@
             "mediaCaptionTitle": "Rio de Janeiro with local guidance",
             "mediaCaptionText": "Rio experiences with clear planning and direct team confirmation."
         },
+        "Metadata": {
+            "title": "Rick Travel | Rio de Janeiro Experiences",
+            "description": "Rick Travel offers guided tours, local tourism experiences, personalized travel guidance, and traveler support in Rio de Janeiro, Brazil."
+        },
         "Logos": {
             "title": "Our Services"
         },
@@ -23,6 +27,11 @@
             "subtitle": "Choose an experience and secure your spot in just a few clicks.",
             "myBookings": "My Bookings",
             "availableTrips": "Available Tours"
+        },
+        "TripEmptyState": {
+            "title": "No tours found",
+            "description": "Adjust the filters to broaden your search and find the right Rio itinerary for your trip.",
+            "empty": "No tours are available at the moment."
         },
         "FAQs": {
             "title": "Frequently Asked Questions",
@@ -80,7 +89,13 @@
         "contact": "Contact",
         "logoAria": "Rick Travel - Home page",
         "openMenu": "Open navigation menu",
-        "closeMenu": "Close navigation menu"
+        "closeMenu": "Close navigation menu",
+        "hints": {
+            "home": "Home page",
+            "about": "About the agency",
+            "tours": "Destinations and packages",
+            "contact": "Support and contact"
+        }
     },
     "Footer": {
         "logoAria": "Rick Travel - Home page",
@@ -101,9 +116,34 @@
         "copyright": "All rights reserved."
     },
     "ThemeToggle": {
+        "label": "Toggle theme",
         "light": "Light",
         "dark": "Dark",
         "system": "System"
+    },
+    "LanguageSwitcher": {
+        "label": "Change language",
+        "pt": "Português",
+        "en": "English",
+        "es": "Español",
+        "sv": "Svenska"
+    },
+    "AuthStatus": {
+        "login": "Login",
+        "createAccount": "Create account",
+        "greetingPrefix": "Hello,",
+        "userFallback": "user",
+        "myBookings": "My bookings",
+        "logout": "Log out"
+    },
+    "MobileMenu": {
+        "welcomeBack": "Welcome back",
+        "greeting": "Hello, {name}",
+        "closeMenu": "Close menu",
+        "navigation": "Navigation",
+        "dialogLabel": "Navigation menu",
+        "userFallback": "User",
+        "readySubtitle": "Ready to explore Rio?"
     },
     "AboutPage": {
         "hero": {

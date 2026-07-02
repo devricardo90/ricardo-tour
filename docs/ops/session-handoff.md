@@ -1282,3 +1282,32 @@ Restrictions preserved:
 Next step:
 - Owner review of the local diff.
 - After approval, create only one final commit for RT-I18N-001A.
+
+## RT-I18N-001B REVIEW - Public Header Localization
+
+State: REVIEW on 2026-07-02; DONE candidate pending owner review and the single final commit.
+
+Result:
+- Localized remaining public mobile menu/header utility strings found in pre-edit inspection.
+- Localized desktop auth status labels and fallback.
+- Localized language switcher aria/option labels and theme toggle labels.
+- Localized reservations badge and trip empty states.
+- Moved homepage metadata title/description into locale messages.
+- Kept new RT-I18N-001B keys parallel across PT, EN, ES, and SV.
+- Existing `AboutPage` parity issues were explicitly not touched.
+
+Validation:
+- `git diff --name-only`: implementation phase showed only the 12 approved app/message files before ops docs were updated.
+- `git diff --stat`: implementation phase showed 12 files changed, 225 insertions, 68 deletions before ops docs were updated.
+- `pnpm.cmd lint`: PASS outside sandbox after two sandboxed lint runs timed out.
+- `pnpm.cmd typecheck`: PASS.
+- `pnpm.cmd build`: PASS outside sandbox with `NEXT_PRIVATE_OUTPUT_TRACE_ROOT` set to the repo path after a sandboxed parent-root `EPERM` failure.
+- Manual smoke: PASS for `/pt`, `/en`, `/es`, and `/sv` on local `http://localhost:3217`.
+- Existing Node engine warning remains: project expects Node `22.x`; current runtime was `v24.15.0`.
+
+Restrictions preserved:
+- No redesign, layout refactor, backend, admin, booking logic, cancellation policy change, package file, lockfile, route change, Cadastur copy/presentation change, `.admin_backup`, `.bak`, commit, push, or broad git add.
+
+Next step:
+- Owner review of the local RT-I18N-001B diff.
+- After approval, create only one final commit covering implementation, validation evidence, and ops docs.

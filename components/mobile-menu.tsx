@@ -98,11 +98,12 @@ function WaveText({
 /* ─── Nav items ─── */
 function useNavItems() {
     const t = useTranslations("Navigation");
+    const hints = useTranslations("Navigation.hints");
     return [
-        { href: "/", icon: <Home size={17} />, title: t("home"), hint: "Página inicial" },
-        { href: "/quem-somos", icon: <Users size={17} />, title: t("about"), hint: "Sobre a agência" },
-        { href: "/tours", icon: <Map size={17} />, title: t("tours"), hint: "Destinos e pacotes" },
-        { href: "/contato", icon: <Phone size={17} />, title: t("contact"), hint: "Suporte e contato" },
+        { href: "/", icon: <Home size={17} />, title: t("home"), hint: hints("home") },
+        { href: "/quem-somos", icon: <Users size={17} />, title: t("about"), hint: hints("about") },
+        { href: "/tours", icon: <Map size={17} />, title: t("tours"), hint: hints("tours") },
+        { href: "/contato", icon: <Phone size={17} />, title: t("contact"), hint: hints("contact") },
     ];
 }
 
@@ -155,13 +156,15 @@ function MenuItem({
 /* ─── HelloHeader (bloco de saudação premium) ─── */
 function HelloHeader({
     name,
-    subtitle = "Bem-vindo ao Rick Travel",
+    subtitle,
     onClose,
 }: {
     name: string;
-    subtitle?: string;
+    subtitle: string;
     onClose: () => void;
 }) {
+    const t = useTranslations("MobileMenu");
+
     // Iniciais do avatar
     const initials = name
         .split(" ")
@@ -179,7 +182,7 @@ function HelloHeader({
                 <div className="min-w-0">
                     {/* Label estilo referência */}
                     <p className="text-[11px] font-semibold tracking-[0.18em] text-white/55 uppercase">
-                        Bem-vindo de volta
+                        {t("welcomeBack")}
                     </p>
 
                     {/* Avatar + Nome */}
@@ -191,7 +194,7 @@ function HelloHeader({
 
                         <div className="min-w-0">
                             <h2 className="truncate text-base font-semibold tracking-[-0.02em] text-white">
-                                Olá, {name} <span className="text-white/80">👋</span>
+                                {t("greeting", { name })} <span className="text-white/80">👋</span>
                             </h2>
                             <p className="truncate text-xs text-white/55">{subtitle}</p>
                         </div>
@@ -203,7 +206,7 @@ function HelloHeader({
                     type="button"
                     onClick={onClose}
                     className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/5 text-white/60 transition hover:bg-white/10 hover:text-white/90"
-                    aria-label="Fechar menu"
+                    aria-label={t("closeMenu")}
                 >
                     <X size={14} />
                 </button>
@@ -214,6 +217,8 @@ function HelloHeader({
 
 /* ─── GuestHeader (cabeçalho para visitante não autenticado) ─── */
 function GuestHeader({ onClose }: { onClose: () => void }) {
+    const t = useTranslations("MobileMenu");
+
     return (
         <div className="rounded-2xl border border-white/10 bg-white/5 backdrop-blur-xl px-4 py-4 mb-3">
             <div className="flex items-center justify-between">
@@ -222,14 +227,14 @@ function GuestHeader({ onClose }: { onClose: () => void }) {
                         Rick Travel
                     </p>
                     <p className="mt-0.5 text-base font-semibold tracking-[-0.02em] text-white">
-                        Navegação
+                        {t("navigation")}
                     </p>
                 </div>
                 <button
                     type="button"
                     onClick={onClose}
                     className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-white/10 bg-white/5 text-white/60 transition hover:bg-white/10 hover:text-white/90"
-                    aria-label="Fechar menu"
+                    aria-label={t("closeMenu")}
                 >
                     <X size={14} />
                 </button>
@@ -246,6 +251,8 @@ export default function MobileMenu({ open, onClose }: Props) {
     const [authLoading, setAuthLoading] = useState(true);
     const locale = useLocale();
     const navItems = useNavItems();
+    const t = useTranslations("MobileMenu");
+    const authT = useTranslations("AuthStatus");
 
     /* Carrega sessão ao abrir */
     useEffect(() => {
@@ -345,7 +352,7 @@ export default function MobileMenu({ open, onClose }: Props) {
                 }}
                 role="dialog"
                 aria-modal="true"
-                aria-label="Menu de navegação"
+                aria-label={t("dialogLabel")}
                 aria-hidden={!open}
             >
                 {/* Handle */}
@@ -357,8 +364,8 @@ export default function MobileMenu({ open, onClose }: Props) {
                 <div data-item>
                     {!authLoading && user ? (
                         <HelloHeader
-                            name={user.name ?? "Usuário"}
-                            subtitle="Pronto para explorar o Rio?"
+                            name={user.name ?? t("userFallback")}
+                            subtitle={t("readySubtitle")}
                             onClose={onClose}
                         />
                     ) : (
@@ -400,7 +407,7 @@ export default function MobileMenu({ open, onClose }: Props) {
                                         className="flex items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90"
                                     >
                                         <Ticket size={15} />
-                                        Minhas reservas
+                                        {authT("myBookings")}
                                     </Link>
 
                                     {/* Sair — ghost discreta */}
@@ -412,7 +419,7 @@ export default function MobileMenu({ open, onClose }: Props) {
                                         className="flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white/70 transition-all hover:bg-white/10 hover:text-white"
                                     >
                                         <LogOut size={15} />
-                                        Sair
+                                        {authT("logout")}
                                     </button>
                                 </div>
 
@@ -441,7 +448,7 @@ export default function MobileMenu({ open, onClose }: Props) {
                                     className="flex items-center justify-center gap-2 rounded-2xl bg-primary px-4 py-3 text-sm font-semibold text-primary-foreground transition-all hover:opacity-90"
                                 >
                                     <LogIn size={15} />
-                                    Login
+                                    {authT("login")}
                                 </Link>
 
                                 <Link
@@ -453,7 +460,7 @@ export default function MobileMenu({ open, onClose }: Props) {
                                     className="flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm font-medium text-white/70 transition-all hover:bg-white/10 hover:text-white"
                                 >
                                     <UserPlus size={15} />
-                                    Criar conta
+                                    {authT("createAccount")}
                                 </Link>
                             </div>
                         )}

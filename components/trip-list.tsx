@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { TripGrid } from "@/components/trip-grid";
 import { asLocalizedList, asLocalizedText, type PhysicalLevel } from "@/lib/types";
 import { getLocalizedField } from "@/lib/localized-field";
+import { getTranslations } from "next-intl/server";
 
 type TripWhereInput = NonNullable<Parameters<typeof prisma.trip.findMany>[0]>["where"];
 
@@ -67,12 +68,14 @@ export default async function TripList({ searchParams, locale = "pt" }: TripList
   });
 
   if (trips.length === 0) {
+    const t = await getTranslations({ locale, namespace: "HomePage.TripEmptyState" });
+
     return (
       <div className="surface-dark px-6 py-16 text-center">
         <div className="mx-auto max-w-md">
-          <h3 className="text-xl font-semibold tracking-[-0.03em] text-white">Nenhum passeio encontrado</h3>
+          <h3 className="text-xl font-semibold tracking-[-0.03em] text-white">{t("title")}</h3>
           <p className="mt-3 text-[15px] leading-7 text-white/60">
-            Ajuste os filtros para ampliar a busca e encontrar o roteiro ideal para sua viagem no Rio.
+            {t("description")}
           </p>
         </div>
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { usePathname, useRouter } from '@/i18n/routing';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,6 +13,7 @@ import { Globe } from 'lucide-react';
 
 export function LanguageSwitcher() {
     const locale = useLocale();
+    const t = useTranslations('LanguageSwitcher');
     const router = useRouter();
     const pathname = usePathname();
     const handleLocaleChange = (newLocale: string) => {
@@ -20,16 +21,16 @@ export function LanguageSwitcher() {
     };
 
     const languages = [
-        { code: 'pt', label: 'Português' },
-        { code: 'en', label: 'English' },
-        { code: 'es', label: 'Español' },
-        { code: 'sv', label: 'Svenska' },
+        { code: 'pt', label: t('pt') },
+        { code: 'en', label: t('en') },
+        { code: 'es', label: t('es') },
+        { code: 'sv', label: t('sv') },
     ];
 
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Alterar idioma">
+                <Button variant="ghost" size="icon" aria-label={t('label')}>
                     <Globe className="h-[1.2rem] w-[1.2rem]" />
                 </Button>
             </DropdownMenuTrigger>

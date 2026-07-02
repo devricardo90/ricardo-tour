@@ -5,7 +5,7 @@ import { Link } from "@/i18n/routing";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { authClient } from "@/lib/auth-client";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 type SessionUser = {
   id: string;
@@ -18,6 +18,7 @@ export function AuthStatus() {
   const [user, setUser] = useState<SessionUser | null>(null);
   const [loading, setLoading] = useState(true);
   const locale = useLocale();
+  const t = useTranslations("AuthStatus");
 
   async function loadSession() {
     try {
@@ -63,11 +64,11 @@ export function AuthStatus() {
     return (
       <>
         <Button asChild variant="outline" size="sm">
-          <Link href="/login">Login</Link>
+          <Link href="/login">{t("login")}</Link>
         </Button>
 
         <Button asChild size="sm">
-          <Link href="/register">Criar conta</Link>
+          <Link href="/register">{t("createAccount")}</Link>
         </Button>
       </>
     );
@@ -77,11 +78,11 @@ export function AuthStatus() {
   return (
     <>
       <span className="hidden sm:block text-sm text-muted-foreground">
-        Olá, <strong>{user.name ?? "usuário"}</strong>
+        {t("greetingPrefix")} <strong>{user.name ?? t("userFallback")}</strong>
       </span>
 
       <Button asChild variant="outline" size="sm">
-        <Link href="/reservas">Minhas reservas</Link>
+        <Link href="/reservas">{t("myBookings")}</Link>
       </Button>
 
       {/* {user.role === "ADMIN" && (
@@ -91,7 +92,7 @@ export function AuthStatus() {
       )} */}
 
       <Button onClick={logout} size="sm">
-        Logout
+        {t("logout")}
       </Button>
     </>
   );
