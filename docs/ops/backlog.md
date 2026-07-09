@@ -3084,3 +3084,44 @@ Validation evidence:
 
 Restrictions preserved:
 - No redesign, layout refactor, backend, API route, database, migration, seed, admin, booking logic, cancellation policy change, package file, lockfile, route change, Cadastur copy/presentation change, `.admin_backup`, `.bak`, commit, push, or broad git add was performed.
+
+## RT-2 / AI-001 AI Concierge UI Shell and Mock Backend Contract
+
+Estado: REVIEW on 2026-07-09.
+
+Objective: create the first public AI Concierge UI shell with a mocked deterministic backend contract, feature flag, unit coverage, and Playwright proof of the chat flow.
+
+Implementation:
+- Added a public floating AI Concierge entry point to the public layout, gated by `AI_CONCIERGE_ENABLED` / `NEXT_PUBLIC_AI_CONCIERGE_ENABLED`.
+- Added a chat panel with message input, send button, loading state, response state, and error state.
+- Added `POST /api/ai-concierge` as a mocked deterministic endpoint.
+- Added TypeScript request, response, and error contract types.
+- Added deterministic mock response generation with human-handoff and no price/availability confirmation safety flags.
+- Added focused Vitest contract/config/mock tests.
+- Added Playwright coverage for opening the chat, sending a message, and rendering the mocked response.
+- Added a skippable Playwright global setup path through `E2E_SKIP_DB_SETUP=1` for public-only E2E specs.
+
+Files changed:
+- `app/[locale]/(public)/layout.tsx`
+- `app/api/ai-concierge/route.ts`
+- `components/ai-concierge/ai-concierge-widget.tsx`
+- `lib/ai-concierge/config.ts`
+- `lib/ai-concierge/contract.ts`
+- `lib/ai-concierge/mock-backend.ts`
+- `tests/ai-concierge-contract.test.ts`
+- `e2e/ai-concierge.spec.ts`
+- `e2e/global.setup.ts`
+- Operational docs.
+
+Validation:
+- `npm.cmd run lint`: PASS.
+- `npm.cmd run typecheck`: PASS.
+- `npm.cmd run test`: PASS, 5 files and 24 tests.
+- `$env:E2E_SKIP_DB_SETUP='1'; $env:NEXT_PRIVATE_OUTPUT_TRACE_ROOT=(Get-Location).Path; $env:PLAYWRIGHT_PORT='3111'; npm.cmd run test:e2e -- e2e/ai-concierge.spec.ts`: PASS, 1 Chromium test.
+
+UI evidence:
+- `test-results/ai-concierge-success.png` created by the passing Playwright run.
+- Failed intermediate Playwright context also showed the public AI Concierge button and panel before timeout tuning.
+
+Restrictions preserved:
+- No LangChain, real LLM provider, API keys, RAG, vector database, fine-tuning, Cadastur/trust mark change, footer change, homepage redesign, booking/payment/SEO/tour content change, unsupported business claim, commit, push, Jira DONE move, or AI-002 work.

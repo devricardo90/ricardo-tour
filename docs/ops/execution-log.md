@@ -1902,3 +1902,28 @@ Validation:
 
 Restrictions preserved:
 - No redesign, layout refactor, backend, API route, database, migration, seed, admin, booking logic, cancellation policy change, package file, lockfile, route change, Cadastur copy/presentation change, `.admin_backup`, `.bak`, commit, push, or broad git add was performed.
+
+## 2026-07-09 - RT-2 / AI-001 AI Concierge UI Shell and Mock Backend Contract
+
+Objective: implement the first public AI Concierge UI shell with a mocked deterministic backend contract and validation coverage.
+
+Actions:
+- Inspected required git state and operational docs before editing.
+- Identified validation scripts in `package.json`: `lint`, `typecheck`, `test`, `test:e2e`.
+- Added public AI Concierge widget behind feature flag.
+- Added mocked API route and TypeScript request/response/error contract.
+- Added deterministic mock response generation with handoff and no price/availability confirmation flags.
+- Added unit and Playwright tests.
+- Added public-only E2E DB setup skip flag.
+
+Validation:
+- `npm.cmd run lint`: PASS.
+- `npm.cmd run typecheck`: PASS.
+- `npm.cmd run test`: PASS, 5 files and 24 tests.
+- `$env:E2E_SKIP_DB_SETUP='1'; $env:NEXT_PRIVATE_OUTPUT_TRACE_ROOT=(Get-Location).Path; $env:PLAYWRIGHT_PORT='3111'; npm.cmd run test:e2e -- e2e/ai-concierge.spec.ts`: PASS, 1 Chromium test.
+
+Evidence:
+- `test-results/ai-concierge-success.png`.
+
+Restrictions:
+- No LangChain, real LLM provider, API keys, RAG, vector database, fine-tuning, Cadastur/trust mark change, footer change, homepage redesign, booking/payment/SEO/tour content change, unsupported business claim, commit, push, Jira DONE move, or AI-002 work.

@@ -1311,3 +1311,30 @@ Restrictions preserved:
 Next step:
 - Owner review of the local RT-I18N-001B diff.
 - After approval, create only one final commit covering implementation, validation evidence, and ops docs.
+
+## RT-2 / AI-001 REVIEW - AI Concierge UI Shell and Mock Backend Contract
+
+State: REVIEW on 2026-07-09; stop here for owner review. No commit, push, Jira DONE move, deploy, or AI-002 work was performed.
+
+Summary:
+- Added a visible public AI Concierge floating entry point through `components/ai-concierge/ai-concierge-widget.tsx`.
+- Added a chat panel with input, send button, loading, response, and error states.
+- Added mocked deterministic endpoint `POST /api/ai-concierge`.
+- Added contract/config/mock files under `lib/ai-concierge`.
+- Added feature flag support through `AI_CONCIERGE_ENABLED` / `NEXT_PUBLIC_AI_CONCIERGE_ENABLED`; production defaults disabled without explicit enablement.
+- Added Vitest coverage in `tests/ai-concierge-contract.test.ts`.
+- Added Playwright flow coverage in `e2e/ai-concierge.spec.ts`.
+- Updated `e2e/global.setup.ts` so public-only E2E specs can opt out of DB setup with `E2E_SKIP_DB_SETUP=1`; existing DB-backed specs still use the previous setup path by default.
+
+Validation:
+- `npm.cmd run lint`: PASS.
+- `npm.cmd run typecheck`: PASS.
+- `npm.cmd run test`: PASS, 5 files and 24 tests.
+- `$env:E2E_SKIP_DB_SETUP='1'; $env:NEXT_PRIVATE_OUTPUT_TRACE_ROOT=(Get-Location).Path; $env:PLAYWRIGHT_PORT='3111'; npm.cmd run test:e2e -- e2e/ai-concierge.spec.ts`: PASS, 1 Chromium test.
+
+Evidence:
+- Screenshot: `test-results/ai-concierge-success.png`.
+- Intermediate local blocker resolved: stale generated `.next/dev/lock` was removed after confirming no listener on the checked Playwright ports.
+
+Restrictions preserved:
+- No LangChain, real LLM provider, API keys, RAG, vector database, fine-tuning, Cadastur/trust mark change, footer change, homepage redesign, booking/payment/SEO/tour content change, unsupported business claim, package or lockfile change, deploy, commit, push, Jira DONE move, or AI-002 work.

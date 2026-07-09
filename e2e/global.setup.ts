@@ -1,19 +1,24 @@
 import "dotenv/config";
 import fs from "node:fs";
 import path from "node:path";
-import { PrismaClient } from "@prisma/client";
-import { PrismaPg } from "@prisma/adapter-pg";
 import { request, type FullConfig } from "@playwright/test";
-import {
-  E2E_ADMIN_EMAIL,
-  E2E_ADMIN_PASSWORD,
-  E2E_DATA_FILE,
-  E2E_TRIP_TITLE,
-  E2E_USER_EMAIL,
-  E2E_USER_PASSWORD,
-} from "./helpers/constants";
 
 export default async function globalSetup(config: FullConfig) {
+  if (process.env.E2E_SKIP_DB_SETUP === "1") {
+    return;
+  }
+
+  const { PrismaClient } = await import("@prisma/client");
+  const { PrismaPg } = await import("@prisma/adapter-pg");
+  const {
+    E2E_ADMIN_EMAIL,
+    E2E_ADMIN_PASSWORD,
+    E2E_DATA_FILE,
+    E2E_TRIP_TITLE,
+    E2E_USER_EMAIL,
+    E2E_USER_PASSWORD,
+  } = await import("./helpers/constants");
+
   const baseURL =
     config.projects[0]?.use?.baseURL?.toString() ??
     process.env.PLAYWRIGHT_BASE_URL ??

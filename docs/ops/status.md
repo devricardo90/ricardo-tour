@@ -1638,3 +1638,31 @@ Future validation:
 
 Restrictions preserved in this READY opening:
 - No product code, message file, component, backend, API route, database, schema, migration, seed, admin, booking logic, package file, lockfile, route, Cadastur asset, `.admin_backup`, `.bak`, deploy, commit, or push change was made beyond allowed operational documentation.
+
+---
+
+## Update 2026-07-09 - RT-2 / AI-001 AI Concierge UI Shell and Mock Backend Contract
+
+State: REVIEW; implementation and local validation complete; no commit or push.
+
+Result:
+- Public AI Concierge entry point added as a floating widget in the public layout.
+- Chat panel includes input, send button, loading state, deterministic mocked response state, and error state.
+- Mocked backend contract added at `POST /api/ai-concierge`.
+- Request/response/error types added under `lib/ai-concierge`.
+- Feature flag added: `AI_CONCIERGE_ENABLED` or `NEXT_PUBLIC_AI_CONCIERGE_ENABLED`; production defaults disabled unless explicitly enabled.
+- Unit tests added for feature flag, request validation, and deterministic mock response.
+- Playwright test added for opening the chat, sending a message, and rendering the mocked response.
+- Public-only Playwright specs can skip DB seeding with `E2E_SKIP_DB_SETUP=1`.
+
+Validation:
+- `npm.cmd run lint`: PASS.
+- `npm.cmd run typecheck`: PASS.
+- `npm.cmd run test`: PASS, 5 files and 24 tests.
+- `$env:E2E_SKIP_DB_SETUP='1'; $env:NEXT_PRIVATE_OUTPUT_TRACE_ROOT=(Get-Location).Path; $env:PLAYWRIGHT_PORT='3111'; npm.cmd run test:e2e -- e2e/ai-concierge.spec.ts`: PASS, 1 Chromium test.
+
+UI evidence:
+- `test-results/ai-concierge-success.png`.
+
+Restrictions preserved:
+- No LangChain, real LLM provider, API keys, RAG, vector database, fine-tuning, Cadastur/trust mark change, footer change, homepage redesign, booking/payment/SEO/tour content change, unsupported business claim, deploy, commit, push, Jira DONE move, or AI-002 work.
