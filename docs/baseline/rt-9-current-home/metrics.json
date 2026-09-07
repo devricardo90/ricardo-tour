@@ -1,0 +1,814 @@
+{
+  "task": "RT-9 / RT-RB-S0-05",
+  "subject": "current public Home",
+  "capturedAt": "2026-09-07T16:40:09.729Z",
+  "baseUrl": "http://127.0.0.1:3200",
+  "environment": {
+    "nodeEnv": "production",
+    "buildCommand": "next build --webpack",
+    "serveCommand": "next start",
+    "note": "AI_CONCIERGE_ENABLED and REBUILD_LAB_ENABLED left unset; both default to disabled in production."
+  },
+  "settleMs": 3000,
+  "screenshotMethod": {
+    "fold": "captured on arrival, before any scrolling",
+    "full": "captured after a scroll-through pass so FadeInSection (motion whileInView, initial opacity 0) sections are settled; taken after metrics were read, so load timings and CLS are unaffected"
+  },
+  "results": [
+    {
+      "route": "/pt",
+      "locale": "pt",
+      "viewport": "desktop",
+      "viewportPx": {
+        "width": 1440,
+        "height": 900
+      },
+      "runs": 3,
+      "httpStatus": 200,
+      "documentTitle": "Rick Travel | Passeios exclusivos no Rio de Janeiro",
+      "htmlLang": "pt",
+      "medians": {
+        "ttfbMs": 34,
+        "firstContentfulPaintMs": 184,
+        "largestContentfulPaintMs": 184,
+        "domContentLoadedMs": 83,
+        "loadEventMs": 220,
+        "cumulativeLayoutShift": 0.0027,
+        "totalTransferBytes": 1287244,
+        "totalRequests": 43
+      },
+      "perRun": [
+        {
+          "ttfbMs": 34,
+          "fcpMs": 216,
+          "lcpMs": 224,
+          "cls": 0.0027,
+          "loadMs": 250,
+          "totalTransferBytes": 1287258,
+          "totalRequests": 43
+        },
+        {
+          "ttfbMs": 50,
+          "fcpMs": 184,
+          "lcpMs": 184,
+          "cls": 0.0027,
+          "loadMs": 220,
+          "totalTransferBytes": 1287226,
+          "totalRequests": 43
+        },
+        {
+          "ttfbMs": 32,
+          "fcpMs": 160,
+          "lcpMs": 160,
+          "cls": 0.0027,
+          "loadMs": 190,
+          "totalTransferBytes": 1287244,
+          "totalRequests": 43
+        }
+      ],
+      "lcpElement": "img.absolute.inset-0",
+      "domNodes": 558,
+      "imgElements": 9,
+      "scriptElements": 20,
+      "pageHeightPx": 4353,
+      "byType": {
+        "document": {
+          "requests": 1,
+          "bytes": 22693
+        },
+        "stylesheet": {
+          "requests": 1,
+          "bytes": 18198
+        },
+        "image": {
+          "requests": 8,
+          "bytes": 920105
+        },
+        "script": {
+          "requests": 20,
+          "bytes": 315109
+        },
+        "fetch": {
+          "requests": 13,
+          "bytes": 11153
+        }
+      },
+      "heaviestRequests": [
+        {
+          "bytes": 474152,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fvideos%2Fimagem-rio-perfil.jpg&w=1920&q=75"
+        },
+        {
+          "bytes": 103668,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-buzios-praia.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 99852,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-tour-favela-rocinha.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 72054,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-igreja-centro-rio.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 63314,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js"
+        },
+        {
+          "bytes": 61000,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/3794-9e54f1de291f2323.js"
+        },
+        {
+          "bytes": 57388,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-morro-pao-de-acucar.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 39476,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-praia-ipanema.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 38182,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-pao-de-acucar.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 35333,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fconfeitaria-colombo-city-tour.jpeg&w=640&q=75"
+        }
+      ],
+      "screenshots": {
+        "fold": "home-pt-desktop-fold.png",
+        "full": "home-pt-desktop-full.png"
+      }
+    },
+    {
+      "route": "/pt",
+      "locale": "pt",
+      "viewport": "mobile",
+      "viewportPx": {
+        "width": 390,
+        "height": 844
+      },
+      "runs": 3,
+      "httpStatus": 200,
+      "documentTitle": "Rick Travel | Passeios exclusivos no Rio de Janeiro",
+      "htmlLang": "pt",
+      "medians": {
+        "ttfbMs": 31,
+        "firstContentfulPaintMs": 140,
+        "largestContentfulPaintMs": 140,
+        "domContentLoadedMs": 58,
+        "loadEventMs": 186,
+        "cumulativeLayoutShift": 0,
+        "totalTransferBytes": 893388,
+        "totalRequests": 38
+      },
+      "perRun": [
+        {
+          "ttfbMs": 27,
+          "fcpMs": 140,
+          "lcpMs": 140,
+          "cls": 0,
+          "loadMs": 187,
+          "totalTransferBytes": 893388,
+          "totalRequests": 38
+        },
+        {
+          "ttfbMs": 35,
+          "fcpMs": 136,
+          "lcpMs": 136,
+          "cls": 0,
+          "loadMs": 182,
+          "totalTransferBytes": 892087,
+          "totalRequests": 38
+        },
+        {
+          "ttfbMs": 31,
+          "fcpMs": 140,
+          "lcpMs": 140,
+          "cls": 0,
+          "loadMs": 186,
+          "totalTransferBytes": 896864,
+          "totalRequests": 38
+        }
+      ],
+      "lcpElement": "img.absolute.inset-0",
+      "domNodes": 562,
+      "imgElements": 9,
+      "scriptElements": 24,
+      "pageHeightPx": 6980,
+      "byType": {
+        "document": {
+          "requests": 1,
+          "bytes": 22693
+        },
+        "stylesheet": {
+          "requests": 1,
+          "bytes": 18198
+        },
+        "image": {
+          "requests": 7,
+          "bytes": 523689
+        },
+        "script": {
+          "requests": 20,
+          "bytes": 315109
+        },
+        "fetch": {
+          "requests": 9,
+          "bytes": 13699
+        }
+      },
+      "heaviestRequests": [
+        {
+          "bytes": 115918,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fvideos%2Fimagem-rio-perfil.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 103668,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-buzios-praia.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 99852,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-tour-favela-rocinha.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 72054,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-igreja-centro-rio.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 63314,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js"
+        },
+        {
+          "bytes": 61000,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/3794-9e54f1de291f2323.js"
+        },
+        {
+          "bytes": 57388,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-morro-pao-de-acucar.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 39476,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-praia-ipanema.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 35333,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fconfeitaria-colombo-city-tour.jpeg&w=640&q=75"
+        },
+        {
+          "bytes": 32717,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/47-88e1b257867587cb.js"
+        }
+      ],
+      "screenshots": {
+        "fold": "home-pt-mobile-fold.png",
+        "full": "home-pt-mobile-full.png"
+      }
+    },
+    {
+      "route": "/pt",
+      "locale": "pt",
+      "viewport": "tablet",
+      "viewportPx": {
+        "width": 768,
+        "height": 1024
+      },
+      "runs": 1,
+      "httpStatus": 200,
+      "documentTitle": "Rick Travel | Passeios exclusivos no Rio de Janeiro",
+      "htmlLang": "pt",
+      "medians": {
+        "ttfbMs": 22,
+        "firstContentfulPaintMs": 204,
+        "largestContentfulPaintMs": 204,
+        "domContentLoadedMs": 63,
+        "loadEventMs": 259,
+        "cumulativeLayoutShift": 0,
+        "totalTransferBytes": 731688,
+        "totalRequests": 39
+      },
+      "perRun": [
+        {
+          "ttfbMs": 22,
+          "fcpMs": 204,
+          "lcpMs": 204,
+          "cls": 0,
+          "loadMs": 259,
+          "totalTransferBytes": 731688,
+          "totalRequests": 39
+        }
+      ],
+      "lcpElement": "img.absolute.inset-0",
+      "domNodes": 560,
+      "imgElements": 9,
+      "scriptElements": 22,
+      "pageHeightPx": 4879,
+      "byType": {
+        "document": {
+          "requests": 1,
+          "bytes": 22693
+        },
+        "stylesheet": {
+          "requests": 1,
+          "bytes": 18198
+        },
+        "image": {
+          "requests": 8,
+          "bytes": 363310
+        },
+        "script": {
+          "requests": 20,
+          "bytes": 315109
+        },
+        "fetch": {
+          "requests": 9,
+          "bytes": 12378
+        }
+      },
+      "heaviestRequests": [
+        {
+          "bytes": 183530,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fvideos%2Fimagem-rio-perfil.jpg&w=828&q=75"
+        },
+        {
+          "bytes": 63314,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js"
+        },
+        {
+          "bytes": 61000,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/3794-9e54f1de291f2323.js"
+        },
+        {
+          "bytes": 39528,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-tour-favela-rocinha.jpg&w=384&q=75"
+        },
+        {
+          "bytes": 37617,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-buzios-praia.jpg&w=384&q=75"
+        },
+        {
+          "bytes": 32717,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/47-88e1b257867587cb.js"
+        },
+        {
+          "bytes": 31573,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/6518-1e30b304da298a6d.js"
+        },
+        {
+          "bytes": 28408,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-igreja-centro-rio.jpg&w=384&q=75"
+        },
+        {
+          "bytes": 22892,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-morro-pao-de-acucar.jpg&w=384&q=75"
+        },
+        {
+          "bytes": 22693,
+          "type": "Document",
+          "status": 200,
+          "url": "/pt"
+        }
+      ],
+      "screenshots": {
+        "fold": "home-pt-tablet-fold.png",
+        "full": "home-pt-tablet-full.png"
+      }
+    },
+    {
+      "route": "/en",
+      "locale": "en",
+      "viewport": "desktop",
+      "viewportPx": {
+        "width": 1440,
+        "height": 900
+      },
+      "runs": 1,
+      "httpStatus": 200,
+      "documentTitle": "Rick Travel | Rio de Janeiro Experiences",
+      "htmlLang": "en",
+      "medians": {
+        "ttfbMs": 29,
+        "firstContentfulPaintMs": 184,
+        "largestContentfulPaintMs": 184,
+        "domContentLoadedMs": 121,
+        "loadEventMs": 213,
+        "cumulativeLayoutShift": 0.003,
+        "totalTransferBytes": 1292391,
+        "totalRequests": 43
+      },
+      "perRun": [
+        {
+          "ttfbMs": 29,
+          "fcpMs": 184,
+          "lcpMs": 184,
+          "cls": 0.003,
+          "loadMs": 213,
+          "totalTransferBytes": 1292391,
+          "totalRequests": 43
+        }
+      ],
+      "lcpElement": "img.absolute.inset-0",
+      "domNodes": 562,
+      "imgElements": 9,
+      "scriptElements": 24,
+      "pageHeightPx": 4299,
+      "byType": {
+        "document": {
+          "requests": 1,
+          "bytes": 22197
+        },
+        "stylesheet": {
+          "requests": 1,
+          "bytes": 18198
+        },
+        "image": {
+          "requests": 8,
+          "bytes": 920105
+        },
+        "script": {
+          "requests": 20,
+          "bytes": 315109
+        },
+        "fetch": {
+          "requests": 13,
+          "bytes": 16782
+        }
+      },
+      "heaviestRequests": [
+        {
+          "bytes": 474152,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fvideos%2Fimagem-rio-perfil.jpg&w=1920&q=75"
+        },
+        {
+          "bytes": 103668,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-buzios-praia.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 99852,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-tour-favela-rocinha.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 72054,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-igreja-centro-rio.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 63314,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js"
+        },
+        {
+          "bytes": 61000,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/3794-9e54f1de291f2323.js"
+        },
+        {
+          "bytes": 57388,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-morro-pao-de-acucar.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 39476,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-praia-ipanema.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 38182,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-pao-de-acucar.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 35333,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fconfeitaria-colombo-city-tour.jpeg&w=640&q=75"
+        }
+      ],
+      "screenshots": {
+        "fold": "home-en-desktop-fold.png"
+      }
+    },
+    {
+      "route": "/es",
+      "locale": "es",
+      "viewport": "desktop",
+      "viewportPx": {
+        "width": 1440,
+        "height": 900
+      },
+      "runs": 1,
+      "httpStatus": 200,
+      "documentTitle": "Rick Travel | Experiencias en Río de Janeiro",
+      "htmlLang": "es",
+      "medians": {
+        "ttfbMs": 33,
+        "firstContentfulPaintMs": 172,
+        "largestContentfulPaintMs": 172,
+        "domContentLoadedMs": 70,
+        "loadEventMs": 202,
+        "cumulativeLayoutShift": 0.003,
+        "totalTransferBytes": 1288507,
+        "totalRequests": 43
+      },
+      "perRun": [
+        {
+          "ttfbMs": 33,
+          "fcpMs": 172,
+          "lcpMs": 172,
+          "cls": 0.003,
+          "loadMs": 202,
+          "totalTransferBytes": 1288507,
+          "totalRequests": 43
+        }
+      ],
+      "lcpElement": "img.absolute.inset-0",
+      "domNodes": 560,
+      "imgElements": 9,
+      "scriptElements": 22,
+      "pageHeightPx": 4299,
+      "byType": {
+        "document": {
+          "requests": 1,
+          "bytes": 21864
+        },
+        "stylesheet": {
+          "requests": 1,
+          "bytes": 18198
+        },
+        "image": {
+          "requests": 8,
+          "bytes": 920105
+        },
+        "script": {
+          "requests": 20,
+          "bytes": 315109
+        },
+        "fetch": {
+          "requests": 13,
+          "bytes": 13231
+        }
+      },
+      "heaviestRequests": [
+        {
+          "bytes": 474152,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fvideos%2Fimagem-rio-perfil.jpg&w=1920&q=75"
+        },
+        {
+          "bytes": 103668,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-buzios-praia.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 99852,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-tour-favela-rocinha.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 72054,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-igreja-centro-rio.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 63314,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js"
+        },
+        {
+          "bytes": 61000,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/3794-9e54f1de291f2323.js"
+        },
+        {
+          "bytes": 57388,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-morro-pao-de-acucar.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 39476,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-praia-ipanema.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 38182,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-pao-de-acucar.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 35333,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fconfeitaria-colombo-city-tour.jpeg&w=640&q=75"
+        }
+      ],
+      "screenshots": {
+        "fold": "home-es-desktop-fold.png"
+      }
+    },
+    {
+      "route": "/sv",
+      "locale": "sv",
+      "viewport": "desktop",
+      "viewportPx": {
+        "width": 1440,
+        "height": 900
+      },
+      "runs": 1,
+      "httpStatus": 200,
+      "documentTitle": "Rick Travel | Upplevelser i Rio de Janeiro",
+      "htmlLang": "sv",
+      "medians": {
+        "ttfbMs": 26,
+        "firstContentfulPaintMs": 172,
+        "largestContentfulPaintMs": 172,
+        "domContentLoadedMs": 56,
+        "loadEventMs": 199,
+        "cumulativeLayoutShift": 0.003,
+        "totalTransferBytes": 1286397,
+        "totalRequests": 43
+      },
+      "perRun": [
+        {
+          "ttfbMs": 26,
+          "fcpMs": 172,
+          "lcpMs": 172,
+          "cls": 0.003,
+          "loadMs": 199,
+          "totalTransferBytes": 1286397,
+          "totalRequests": 43
+        }
+      ],
+      "lcpElement": "img.absolute.inset-0",
+      "domNodes": 560,
+      "imgElements": 9,
+      "scriptElements": 22,
+      "pageHeightPx": 4325,
+      "byType": {
+        "document": {
+          "requests": 1,
+          "bytes": 21924
+        },
+        "stylesheet": {
+          "requests": 1,
+          "bytes": 18198
+        },
+        "image": {
+          "requests": 8,
+          "bytes": 920105
+        },
+        "script": {
+          "requests": 20,
+          "bytes": 315109
+        },
+        "fetch": {
+          "requests": 13,
+          "bytes": 11061
+        }
+      },
+      "heaviestRequests": [
+        {
+          "bytes": 474152,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fvideos%2Fimagem-rio-perfil.jpg&w=1920&q=75"
+        },
+        {
+          "bytes": 103668,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-buzios-praia.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 99852,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-tour-favela-rocinha.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 72054,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-igreja-centro-rio.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 63314,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/4bd1b696-c2f6e0877b6c10aa.js"
+        },
+        {
+          "bytes": 61000,
+          "type": "Script",
+          "status": 200,
+          "url": "/_next/static/chunks/3794-9e54f1de291f2323.js"
+        },
+        {
+          "bytes": 57388,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-morro-pao-de-acucar.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 39476,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-praia-ipanema.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 38182,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fimagem-pao-de-acucar.jpg&w=640&q=75"
+        },
+        {
+          "bytes": 35333,
+          "type": "Image",
+          "status": 200,
+          "url": "/_next/image?url=%2Fimages%2Ftrips%2Fconfeitaria-colombo-city-tour.jpeg&w=640&q=75"
+        }
+      ],
+      "screenshots": {
+        "fold": "home-sv-desktop-fold.png"
+      }
+    }
+  ]
+}
