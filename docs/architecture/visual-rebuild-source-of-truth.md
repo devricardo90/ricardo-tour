@@ -28,7 +28,7 @@ This file is the **in-repo registration** of the Source of Truth. It is not a co
 | Last modified | 2026-09-02T19:01:53Z |
 | Document status | PLANNING / APPROVED BASE WIREFRAME |
 | Version | Versão inicial — 02 setembro 2026 |
-| Verified | 2026-09-07, read end-to-end; all nine sections present. Link and metadata re-checked 2026-09-16: still live, `modifiedTime` unchanged |
+| Verified | 2026-09-07, read end-to-end; all nine sections present. Re-checked 2026-09-16 (RT-5 round): still live, `modifiedTime` reported unchanged at that check. **Re-checked again later the same day (RT-10 round): `modifiedTime` is now `2026-09-16T15:39:09.507Z` — the Doc *was* edited between the two checks.** Full text read at that time; content is consistent with the Change Log entries the Doc itself records for 2026-09-16 (Sprint 0 Owner Gate approval, RT-5/RT-6/RT-7/RT-8/RT-9 evidence reconciliation, Sprint 1 opening). See §10 correction below. |
 
 **Link verified, not assumed.** The document was located and read in full during RT-5. Its Sprint 0 table matches the canonical codes, modes, initial statuses and Definitions of Done that RT-6, RT-7, RT-8 and RT-9 were executed against.
 
@@ -255,6 +255,14 @@ Current state of the five Sprint 0 issues:
 
 Nothing in this file approves the gate, closes the sprint, or authorizes Sprint 1. Source of Truth §6 state 8 governs until the Owner approves: do not auto-start the next sprint while an Owner gate is pending.
 
+### Correction to the Sprint 0 gate table above (2026-09-16, RT-10 round)
+
+The "Gate" table above (Sprint 0 Owner approval: PENDING, closure: NOT AUTHORIZED, Sprint 1: NOT STARTED) is the state as RT-5 recorded it and is **left unedited above** as the historical snapshot at registration time, consistent with how this file already treats RT-9's record below.
+
+Reading the Google Doc directly during the RT-10 round found its own Change Log and a dedicated "Registro de execução — Sprint 0" block, both dated 16/09/2026, stating: Sprint 0 Owner Gate **APPROVED** by Ricardo Souza Francisco; Sprint 0 closure **AUTHORIZED**; Sprint 1 opening **AUTHORIZED**; and, distinctly, Sprint 1 Owner Visual Gate (RT-15) **PENDING** — not yet approved. The Doc is explicit that this Sprint 0 approval does not authorize asset deletion, unrelated risk remediation, or production replacement, and that the four pending governance decisions from §10 above remain open without blocking Sprint 1.
+
+This is the Doc exercising its own authority as primary source of truth (§1) — an Owner action taken in the Doc itself, not a claim made by this repository file or by any agent session. RT-10 (a Sprint 1 task) proceeded on this basis: Sprint 0 is Owner-approved per the Doc, Sprint 1 is open, and RT-15 (Sprint 1's own gate) remains separately pending.
+
 ### Correction to the RT-9 record
 
 `current-home-baseline.md` §"Source of truth availability" states the Source of Truth was "not readable from this environment", citing Confluence returning 404.
@@ -265,6 +273,14 @@ The practical effect on RT-9 was limited: its measurements are runtime evidence 
 
 RT-9's committed artifact is deliberately left untouched here — amending a closed task's record is not RT-5's call. Correcting that one paragraph is available as a follow-up if the Owner wants the file to stand alone without this cross-reference.
 
+### RT-10 — token approval registered (2026-09-16)
+
+Out of this file's original scope at registration (RT-5 registers Sprint 0), recorded here anyway because the Owner asked for it to be reflected in this document specifically, without disturbing the content above.
+
+**Ricardo Souza Francisco approved RT-RB-S1-01 (RT-10) with adjustments on 2026-09-16** — the design-tokens candidate (charcoal/warm-gold/off-white palette, surface/text/control/semantic tokens, spacing scale, grid, radius, elevation), plus the hero lighting direction with a specific recalibration (halo and light-spread values reduced; see `docs/architecture/rt-10-design-tokens.md`). Full scope, adjustments, and pending items: `.tmp/rt-10-owner-preview/README.md`. Typography (RT-11) is explicitly excluded. **This approval does not cover Sprint 0 as a whole (see correction above), does not release Sprint 1 in general, does not satisfy RT-15 Owner Visual Gate, and does not authorize production implementation or media production.** No file under `app/`, `components/`, or `app/globals.css` was changed to produce it.
+
+This entry was written to this file directly, because — unlike the Google Doc — this repository file is one this session can edit. The equivalent entry for the Google Doc's own §7 could not be written by this session (no available tool edits Google Doc content); the exact paste text is provided in `.tmp/rt-10-owner-preview/README.md` for Ricardo to apply there.
+
 ## 10. Governance findings
 
 Recorded, not acted on.
@@ -272,8 +288,9 @@ Recorded, not acted on.
 1. **Blocked state is recorded as a label, not a status.** No `Blocked` status or transition exists in the RT workflow, so the Doc's state model cannot be followed literally — but the state is not lost: RT-39 / RT-RB-S5-03 carries a `blocked` label, and it is the only issue of the 47 that does. The mismatch is one of mechanism, not of information. Two consequences: anything querying blocked work must use `labels = blocked` rather than status, and the `blocked` label is absent from the Doc's documented label set. Owner decision: add a Blocked status, or amend the Doc to adopt the label convention.
 2. **`Backlog` and `Ready` are one status** (`BACKLOG / READY`), so readiness is not visible from status alone. Every Sprint 0 issue executed so far was judged ready from its description fields.
 3. **Two Source of Truth files exist in Drive** — the Google Doc and an older `.docx`. Canonicality is asserted in §1; removing the duplicate is an Owner decision.
-4. **The Source of Truth has not been updated since 2026-09-02** (`modifiedTime` re-confirmed 2026-09-16), while Sprint 0 has since completed four of five tasks. Its §5 requires updating the Doc at sprint close with decisions that changed. Sprint 0 produced at least three: the rebuild lab route and its environment gate (RT-8), the lab's deliberate omission of header/footer/Concierge (RT-8), and the performance baseline with its explicit non-field-data caveat (RT-9). Updating the Doc is an **Owner action** — the Doc is Owner-owned and RT-5 does not write to it.
+4. **Superseded finding, corrected 2026-09-16 (RT-10 round).** This finding originally read: "The Source of Truth has not been updated since 2026-09-02, while Sprint 0 has since completed four of five tasks... Updating the Doc is an Owner action." **That was accurate only for the RT-5 check earlier the same day.** A later check the same day found `modifiedTime` at `2026-09-16T15:39:09.507Z`: the Doc *has* since been updated — its own §8 Change Log and the "Registro de execução — Sprint 0" block now record the Sprint 0 Owner Gate approval, the RT-6/RT-7/RT-8/RT-9 evidence reconciliation, and Sprint 1 opening, dated 16/09/2026. The underlying point — that updating the Doc is an Owner action, not something RT-5 (or RT-10) performs — still holds and was exercised correctly: the Doc was updated by/for the Owner, not by an agent editing it directly.
 5. **The repository identified the Source of Truth but could not resolve it.** RT-6 (`current-home-architecture-audit.md`) and RT-7 (`current-home-inventory.md`) both name the Google Doc "Rick Travel - Visual Rebuild Source of Truth" in writing and quote its Sprint 0 rows, so the reference was never absent. What was missing was a **resolvable** one: no canonical URL and no Drive document ID appeared anywhere in the repository, so nothing in-repo could lead a reader to the actual document. Registering that missing reference is precisely the gap RT-5 closes, and its absence is why RT-8 and RT-9 each had to restate the Doc's contents from second-hand evidence.
+6. **No available tool can write to the Google Doc's body in this session.** The Google Drive connector available here supports read, metadata, and title/parent updates only — it cannot edit a Google Doc's content. RT-10's approval-with-adjustments record was therefore written to `.tmp/rt-10-owner-preview/README.md` and this file, with the exact paste text for the Doc's own §7 left for Ricardo (or a future session with Docs write access) to apply. This is a tooling gap, not a decision not to update the Doc.
 
 ## 11. Non-goals
 
