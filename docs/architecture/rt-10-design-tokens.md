@@ -5,7 +5,7 @@
 - Canonical code: RT-RB-S1-01
 - Jira: RT-10, classification HYBRID, Sprint 1 — Design Foundation
 - Acceptance Criteria (Jira): "Tokens documentados e mapeáveis para código."
-- **State: Owner-approved with adjustments, 2026-09-16.** Approved by Ricardo Souza Francisco (`ricardodesouzafrancisco@gmail.com`) in the RT-10 review round documented in `.tmp/rt-10-owner-preview/README.md`.
+- **State: Owner-approved with adjustments, 2026-09-16.** Approved by Ricardo Souza Francisco in the RT-10 review round preserved at `docs/baseline/rt-10-approved/approved-parameters.md`.
 - This is documentation and mapping only. **No change was made to `app/globals.css`, any Tailwind config, or any production component.** Applying these tokens to the real codebase is a separate, not-yet-authorized implementation step (see "Non-goals" below).
 
 ## What Ricardo approved
@@ -84,7 +84,7 @@ Owner feedback this round softened all four values below to avoid a "neon" readi
 | Light-ray spread (mobile) | `210px` | `110px` |
 | Rio core (unchanged — keep intensity to preserve title/Cristo legibility) | `#FFF1CC` | `#FFF1CC` (unchanged) |
 
-Implemented in code at `.tmp/rt-10-owner-preview/concept.css` (`.planet`, `.rio-point`, `.rio-point::after`). **Not yet applied to the static mockup PNG** (`palette-a-lighting-proposal.png`) or to any final hero media — see `.tmp/rt-10-owner-preview/README.md`, section "Iluminação e hero", for what remains pending.
+The isolated working preview applied these values to the planet and Rio-point treatments. Its HTML/CSS working files were intentionally not versioned during consolidation. **The values are not applied to final hero media or to the production application**; see `docs/baseline/rt-10-approved/approved-parameters.md`, section "Limites e pendências preservados".
 
 ## Mapping to code — candidate, not applied
 
@@ -118,6 +118,6 @@ Open point carried forward, not decided here: whether the current `--primary` (`
 
 ## Evidence
 
-- Approved values and their rationale: `.tmp/rt-10-owner-preview/README.md`.
-- Rendered proof (contrast, no overflow, no broken images, both breakpoints): `.tmp/rt-10-owner-preview/validation.json`, `.tmp/rt-10-owner-preview/artifacts/`.
+- Approved values, rationale, integrity record and scope limits: `docs/baseline/rt-10-approved/approved-parameters.md`.
+- Approved rendered proof: `docs/baseline/rt-10-approved/desktop-approved.png`, `docs/baseline/rt-10-approved/mobile-approved.png` and `docs/baseline/rt-10-approved/owner-review.png`.
 - Jira: comment added to RT-10 recording this approval (see execution log).

@@ -3125,3 +3125,27 @@ UI evidence:
 
 Restrictions preserved:
 - No LangChain, real LLM provider, API keys, RAG, vector database, fine-tuning, Cadastur/trust mark change, footer change, homepage redesign, booking/payment/SEO/tour content change, unsupported business claim, commit, push, Jira DONE move, or AI-002 work.
+
+## RT-CONTENT-001 Replace unverified AI-composited image on the "Cristo Redentor de Helicóptero" trip
+
+Estado: READY (investigation complete; the image swap itself is BLOCKED on a real photo, see Dependencias).
+
+Origem: achado registrado durante a RT-10 (visual rebuild, Sprint 1), fora do escopo de execução dessa task. Não presumir que RT-15 (Sprint 1 Owner Visual Gate) cobre esta correção — são achados independentes.
+
+Objetivo: substituir `public/images/trips/imagem-helicoptero-cristo.jpg` — uma composição de múltiplas fotos com um render de produto (headset), tratada como montagem gerada por IA — por uma fotografia real com origem e direitos de uso verificados, sem alterar preço, disponibilidade ou qualquer outro dado do passeio.
+
+Achados da investigação (2026-09-16, sem alterar `prisma/seed.ts`, sem rodar migrations, sem tocar o banco):
+
+1. **Registro que usa a montagem:** `prisma/seed.ts`, trip `seed-007-helicoptero-cristo` ("Cristo Redentor de Helicóptero" / "Christ the Redeemer by Helicopter"), `priceCents: 149000`, `isPublished: true`. Constante `IMAGE_HELICOPTERO_CRISTO` (linha ~49), usada em dois pontos do upsert (`update.imageUrl` e `create.imageUrl`, linhas ~323 e ~343).
+2. **Caminho da imagem:** `/images/trips/imagem-helicoptero-cristo.jpg` (arquivo em `public/images/trips/`), servido como asset estático do Next.js.
+3. **Exibição em produção:** o caminho de código confirma que, **se este registro do seed foi aplicado ao banco que a aplicação lê**, a imagem é exibida publicamente: `app/api/trips/route.ts` e `app/[locale]/(public)/tours/[id]/page.tsx` filtram `isPublished: true` (que este registro satisfaz), e `components/trips/trip-card.tsx` renderiza `trip.imageUrl` diretamente (`<img src={normalizeTripImage(trip.imageUrl)} />`). Esta investigação **não conectou a nenhum banco de dados** para confirmar se o seed foi de fato executado contra o ambiente de produção atual — isso precisa ser confirmado por quem tem acesso a esse ambiente (Ricardo, ou uma sessão com acesso a banco/preview autorizado).
+4. **Execução do seed:** manual apenas. `package.json` define `"prisma": {"seed": "tsx prisma/seed.ts"}`, invocado por `npx prisma db seed` ou execução direta — **não** está referenciado em `postinstall`, `build`, `start`, nem em nenhum workflow `.github/`. Deploys no Vercel não re-executam este seed automaticamente.
+5. **Procedimento seguro proposto para a troca (não executado):**
+   - **Não existe hoje** uma tela de admin para editar um trip existente — `app/[locale]/admin/tours/` só tem `new/` (criação) e a listagem; `app/actions/admin.ts` não expõe uma action de update de trip.
+   - **Não recomendado:** editar `prisma/seed.ts` e re-rodar o seed inteiro — cada upsert reaplica incondicionalmente todos os campos do bloco `update` (`isPublished`, `imageUrl`, `priceCents`, etc.) para as 7 trips, o que sobrescreveria qualquer edição manual feita via admin desde o último seed, não só a imagem.
+   - **Recomendado:** um script Prisma pontual e revisável (ex. `scripts/update-trip-image.ts`), rodado manualmente, que faça `prisma.trip.update({ where: { id: 'seed-007-helicoptero-cristo' }, data: { imageUrl: '<novo caminho verificado>' } })` — toca apenas `imageUrl`, preserva preço/disponibilidade/demais campos, sem migration (não muda schema) e sem tocar as outras 6 trips.
+
+Criterios de aceite: nova fotografia real, com origem e direitos de uso verificados, aplicada apenas ao campo `imageUrl` de `seed-007-helicoptero-cristo`; preço, disponibilidade, título e descrição inalterados; nenhuma outra trip afetada; execução registrada com evidência (script usado, ambiente alvo, confirmação pós-troca).
+Dependencias: fotografia real do voo de helicóptero, sem geração por IA e com origem e direitos de uso verificados — pendência ativa, também registrada em `docs/baseline/rt-10-approved/approved-parameters.md`, seção "Limites e pendências preservados".
+Risco: baixo, se o procedimento pontual acima for seguido; médio-alto se o seed inteiro for re-executado sem antes conferir se outras trips têm edições manuais divergentes do seed.
+Evidencia esperada: diff do script pontual (ou da action de admin, se essa rota for construída), confirmação de qual ambiente foi alterado, e captura de tela do card/página do passeio com a nova imagem.
