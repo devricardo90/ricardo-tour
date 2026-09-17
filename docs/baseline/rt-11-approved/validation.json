@@ -1,0 +1,637 @@
+{
+  "generatedAt": "2026-09-17T14:09:35.448Z",
+  "source": "Isolated RT-10-approved preview composition; typography-only Option A family and card-text size adjustments.",
+  "approvedOption": {
+    "id": "owner-approved-option-a",
+    "display": "Cormorant Garamond",
+    "interface": "Inter"
+  },
+  "unchangedApprovedComposition": [
+    "palette",
+    "hero lighting and imagery",
+    "grid",
+    "spacing",
+    "component structure",
+    "approved copy and images"
+  ],
+  "validationScope": "Playwright/Chromium; desktop 1440x900 and mobile 390x844; no app/runtime/database access.",
+  "viewports": [
+    {
+      "viewport": {
+        "id": "desktop",
+        "width": 1440,
+        "height": 900
+      },
+      "screenshot": "owner-approved-desktop.png",
+      "evidencePath": "docs/baseline/rt-11-approved/owner-approved-desktop.png",
+      "screenshotBytes": 1741610,
+      "sha256": "5eeb5217c0923de639d178007e5b9e1f61c43a591f6c7dcc2fba4123674c8da9",
+      "dimensions": {
+        "width": 1440,
+        "height": 2607
+      },
+      "page": {
+        "width": 1440,
+        "height": 2607
+      },
+      "headingFonts": [
+        {
+          "familyName": "Cormorant Garamond Light",
+          "isCustomFont": true,
+          "glyphCount": 26
+        }
+      ],
+      "bodyFonts": [
+        {
+          "familyName": "Inter",
+          "isCustomFont": true,
+          "glyphCount": 76
+        }
+      ],
+      "cardFonts": [
+        {
+          "familyName": "Inter",
+          "isCustomFont": true,
+          "glyphCount": 15
+        }
+      ],
+      "cardText": [
+        {
+          "index": 0,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Cristo Redentor",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "A vista mais icônica da cidade.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            },
+            {
+              "selector": ".pending-flag",
+              "text": "FOTO PENDENTE",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Pão de Açúcar",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "Vistas inesquecíveis e história local.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Voo de Helicóptero",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "Veja o Rio de outra perspectiva.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            },
+            {
+              "selector": ".pending-flag",
+              "text": "FOTO PENDENTE",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Centro Histórico",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "Cultura, arquitetura e histórias locais.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Confeitaria Colombo",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "Café da manhã com vista para o Rio.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Experiência Privativa",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "Momentos sob medida, feitos para você.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        }
+      ],
+      "imagesLoaded": 5,
+      "longDescription": {
+        "fontSize": 13,
+        "paragraphWidth": 384,
+        "paragraphScrollWidth": 384,
+        "paragraphClientWidth": 384,
+        "wraps": true,
+        "cardContentTop": 1325.75,
+        "cardContentBottom": 1459.125,
+        "cardTop": 1185.125,
+        "cardBottom": 1475.125,
+        "remainsWithinCard": true
+      },
+      "experienceCarousel": {
+        "clientWidth": 1280,
+        "scrollWidth": 1280,
+        "overflowX": "visible",
+        "horizontalSwipeWorks": null,
+        "pageWidthAfterSwipe": 1440
+      },
+      "localeFonts": {
+        "pt.display": {
+          "family": "Cormorant Garamond",
+          "renderedGlyphCount": 50,
+          "expectedGlyphCount": 38,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "pt.interface": {
+          "family": "Inter",
+          "renderedGlyphCount": 50,
+          "expectedGlyphCount": 38,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "en.display": {
+          "family": "Cormorant Garamond",
+          "renderedGlyphCount": 57,
+          "expectedGlyphCount": 49,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "en.interface": {
+          "family": "Inter",
+          "renderedGlyphCount": 57,
+          "expectedGlyphCount": 49,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "es.display": {
+          "family": "Cormorant Garamond",
+          "renderedGlyphCount": 59,
+          "expectedGlyphCount": 47,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "es.interface": {
+          "family": "Inter",
+          "renderedGlyphCount": 59,
+          "expectedGlyphCount": 47,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "sv.display": {
+          "family": "Cormorant Garamond",
+          "renderedGlyphCount": 64,
+          "expectedGlyphCount": 52,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "sv.interface": {
+          "family": "Inter",
+          "renderedGlyphCount": 64,
+          "expectedGlyphCount": 52,
+          "allSampleGlyphsProvidedByFont": true
+        }
+      },
+      "sensitiveDataScan": {
+        "scannedRenderedText": true,
+        "patternsMatched": []
+      },
+      "browserErrors": [],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "id": "mobile",
+        "width": 390,
+        "height": 844
+      },
+      "screenshot": "owner-approved-mobile.png",
+      "evidencePath": "docs/baseline/rt-11-approved/owner-approved-mobile.png",
+      "screenshotBytes": 454661,
+      "sha256": "1f42de18d315408fa82bb262d29fcecee2fcadc64234ba47c6cc59d317d49e52",
+      "dimensions": {
+        "width": 390,
+        "height": 3502
+      },
+      "page": {
+        "width": 390,
+        "height": 3502
+      },
+      "headingFonts": [
+        {
+          "familyName": "Cormorant Garamond Light",
+          "isCustomFont": true,
+          "glyphCount": 26
+        }
+      ],
+      "bodyFonts": [
+        {
+          "familyName": "Inter",
+          "isCustomFont": true,
+          "glyphCount": 76
+        }
+      ],
+      "cardFonts": [
+        {
+          "familyName": "Inter",
+          "isCustomFont": true,
+          "glyphCount": 15
+        }
+      ],
+      "cardText": [
+        {
+          "index": 0,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Cristo Redentor",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "A vista mais icônica da cidade.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            },
+            {
+              "selector": ".pending-flag",
+              "text": "FOTO PENDENTE",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Pão de Açúcar",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "Vistas inesquecíveis e história local.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        },
+        {
+          "index": 2,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Voo de Helicóptero",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "Veja o Rio de outra perspectiva.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            },
+            {
+              "selector": ".pending-flag",
+              "text": "FOTO PENDENTE",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        },
+        {
+          "index": 3,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Centro Histórico",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "Cultura, arquitetura e histórias locais.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        },
+        {
+          "index": 4,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Confeitaria Colombo",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "Café da manhã com vista para o Rio.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        },
+        {
+          "index": 5,
+          "parts": [
+            {
+              "selector": "h3",
+              "text": "Experiência Privativa",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 20,
+              "weight": "600",
+              "lineHeight": "22px"
+            },
+            {
+              "selector": "p",
+              "text": "Momentos sob medida, feitos para você.",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 13,
+              "weight": "400",
+              "lineHeight": "18.85px"
+            },
+            {
+              "selector": "strong",
+              "text": "A PARTIR DE $XX",
+              "family": "Inter, ui-sans-serif, system-ui, sans-serif",
+              "size": 12,
+              "weight": "700",
+              "lineHeight": "14.4px"
+            }
+          ]
+        }
+      ],
+      "imagesLoaded": 5,
+      "longDescription": {
+        "fontSize": 13,
+        "paragraphWidth": 255,
+        "paragraphScrollWidth": 255,
+        "paragraphClientWidth": 255,
+        "wraps": true,
+        "cardContentTop": 1853.09375,
+        "cardContentBottom": 2024.15625,
+        "cardTop": 1720.15625,
+        "cardBottom": 2040.15625,
+        "remainsWithinCard": true
+      },
+      "experienceCarousel": {
+        "clientWidth": 350,
+        "scrollWidth": 1802,
+        "overflowX": "auto",
+        "horizontalSwipeWorks": true,
+        "pageWidthAfterSwipe": 390
+      },
+      "localeFonts": {
+        "pt.display": {
+          "family": "Cormorant Garamond",
+          "renderedGlyphCount": 50,
+          "expectedGlyphCount": 38,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "pt.interface": {
+          "family": "Inter",
+          "renderedGlyphCount": 50,
+          "expectedGlyphCount": 38,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "en.display": {
+          "family": "Cormorant Garamond",
+          "renderedGlyphCount": 57,
+          "expectedGlyphCount": 49,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "en.interface": {
+          "family": "Inter",
+          "renderedGlyphCount": 57,
+          "expectedGlyphCount": 49,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "es.display": {
+          "family": "Cormorant Garamond",
+          "renderedGlyphCount": 59,
+          "expectedGlyphCount": 47,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "es.interface": {
+          "family": "Inter",
+          "renderedGlyphCount": 59,
+          "expectedGlyphCount": 47,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "sv.display": {
+          "family": "Cormorant Garamond",
+          "renderedGlyphCount": 64,
+          "expectedGlyphCount": 52,
+          "allSampleGlyphsProvidedByFont": true
+        },
+        "sv.interface": {
+          "family": "Inter",
+          "renderedGlyphCount": 64,
+          "expectedGlyphCount": 52,
+          "allSampleGlyphsProvidedByFont": true
+        }
+      },
+      "sensitiveDataScan": {
+        "scannedRenderedText": true,
+        "patternsMatched": []
+      },
+      "browserErrors": [],
+      "pass": true
+    }
+  ],
+  "allPassed": true
+}
