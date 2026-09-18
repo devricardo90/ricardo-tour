@@ -1,0 +1,520 @@
+<!doctype html>
+<html lang="pt-BR" data-option="cormorant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="dark light" />
+    <meta name="description" content="Prévia isolada da Home Rick Travel — Fase A preservada e continuação inferior para revisão do Owner." />
+    <title>Rick Travel | AI Concierge — Owner Review · Refined</title>
+    <link rel="stylesheet" href="../rt-11-typography-proposal/concept.css" />
+    <link rel="stylesheet" href="../rt-11-typography-proposal/typography.css" />
+    <link rel="stylesheet" href="../home-consolidation-2026-09-17/home-consolidation.css" />
+    <link rel="stylesheet" href="phase-a-top.css" />
+    <link rel="stylesheet" href="phase-b-lower.css" />
+    <style>
+      /* Alternate institutional-mark proposal; the approved upper page is unchanged. */
+      .phase-b-reasons { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .phase-b-reason-pending {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: minmax(250px, .68fr) minmax(0, 1.32fr);
+        align-items: center;
+        gap: 36px;
+        min-height: 0;
+        padding: 26px 30px;
+        border-style: solid;
+        border-color: rgb(200 168 107 / 38%);
+        background: linear-gradient(112deg, #15191d, #0b0e11 72%);
+      }
+      .phase-b-credential-copy { min-width: 0; }
+      .phase-b-credential-copy .phase-b-credential-head { margin-bottom: 14px; }
+      .phase-b-credential-copy h3 { margin: 0 0 8px; }
+      .phase-b-credential-copy p { max-width: 43ch; }
+      .phase-b-institutional-art {
+        display: block;
+        width: min(100%, 760px);
+        height: auto;
+        justify-self: end;
+        object-fit: contain;
+      }
+      .phase-b-institutional-sprites { display: none; }
+      .phase-b-pending-label { text-transform: none; }
+      .phase-b-footer-seal {
+        display: flex;
+        width: min(100%, 820px);
+        align-items: center;
+        justify-content: center;
+        gap: 26px;
+        margin: 34px auto 0;
+        padding: 22px 18px 24px;
+        border-top: 1px solid rgb(232 199 128 / 22%);
+      }
+      .phase-b-footer-cadastur-copy { min-width: 0; max-width: 44ch; }
+      .phase-b-footer-cadastur-copy h2 {
+        margin: 0 0 6px;
+        color: var(--dark-text);
+        font: 600 14px/1.4 var(--interface-font), sans-serif;
+      }
+      .phase-b-footer-cadastur-copy p {
+        margin: 0;
+        color: var(--dark-text-secondary);
+        font: 400 12px/1.55 var(--interface-font), sans-serif;
+      }
+      .phase-b-footer-cadastur-logo {
+        display: block;
+        width: min(100%, 132px);
+        height: auto;
+        flex: 0 0 auto;
+        object-fit: contain;
+      }
+      .phase-b-footer-seal-note { display: none; }
+      /* Footer-only proposal: keeps the approved upper sections and lower content intact. */
+      .phase-b-footer-layout {
+        display: grid;
+        grid-template-columns: 1.2fr 1.25fr .9fr 1fr;
+        gap: 34px;
+      }
+      .phase-b-footer-block { display: flex; min-width: 0; flex-direction: column; align-items: flex-start; gap: 12px; }
+      .phase-b-footer-block h2,
+      .phase-b-footer-cadastur h2,
+      .phase-b-footer-legal h2 {
+        margin: 0 0 3px;
+        color: var(--dark-text);
+        font: 600 13px/1.4 var(--interface-font), sans-serif;
+      }
+      .phase-b-footer-block a {
+        color: var(--dark-text-secondary);
+        font: 400 12px/1.55 var(--interface-font), sans-serif;
+        text-decoration: none;
+        text-underline-offset: 3px;
+      }
+      .phase-b-footer-block a:hover { color: var(--gold-light); text-decoration: underline; }
+      .phase-b-footer-block a:focus-visible { outline: 3px solid #e8c780; outline-offset: 3px; }
+      .phase-b-footer-navigation > a:nth-of-type(n) { display: inline-flex; }
+      .phase-b-footer-contact .phase-b-footer-phone { white-space: nowrap; font-variant-numeric: tabular-nums; }
+      .phase-b-footer-contact .phase-b-footer-email { overflow-wrap: anywhere; }
+      .phase-b-footer-social-link { display: inline-flex; align-items: center; gap: 9px; }
+      .phase-b-footer-social-link svg { width: 17px; height: 17px; flex: 0 0 auto; color: var(--gold-light); }
+      .phase-b-footer-brand img { width: 190px; height: 58px; }
+      .phase-b-footer-brand p { max-width: 29ch; }
+      .phase-b-footer-institutional-row {
+        display: grid;
+        grid-template-columns: minmax(210px, .75fr) minmax(0, 1.25fr);
+        gap: 32px;
+        align-items: center;
+        margin-top: 38px;
+        padding: 24px 0 0;
+        border-top: 1px solid rgb(232 199 128 / 20%);
+      }
+      .phase-b-footer-cadastur,
+      .phase-b-footer-legal { min-width: 0; }
+      .phase-b-footer-cadastur { display: flex; width: 100%; max-width: 220px; flex-direction: column; align-items: flex-start; gap: 12px; }
+      .phase-b-footer-cadastur-logo {
+        display: block;
+        width: min(100%, 160px);
+        height: auto;
+        object-fit: contain;
+        object-position: left center;
+      }
+      .phase-b-footer-legal-items { display: flex; flex-wrap: wrap; gap: 10px 22px; }
+      .phase-b-footer-legal-items span {
+        color: var(--dark-text-secondary);
+        font: 400 12px/1.55 var(--interface-font), sans-serif;
+      }
+      .phase-b-footer-bottom { margin-top: 30px; }
+      /* About-only image treatment: source pixels remain untouched; only a responsive crop is applied. */
+      #about-rick-travel .phase-b-about-photo-frame {
+        width: min(100%, 460px);
+        min-height: 0;
+        aspect-ratio: 5 / 6;
+        justify-self: center;
+        margin: 0 auto;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid rgb(138 106 43 / 34%);
+        border-radius: 16px;
+        background: #e9e2d6;
+        box-shadow: 0 16px 38px rgb(17 26 36 / 12%);
+        text-align: initial;
+      }
+      #about-rick-travel .phase-b-about-photo-frame .phase-b-about-photo {
+        display: block;
+        width: 100%;
+        height: 100%;
+        max-height: none;
+        object-fit: cover;
+        object-position: 50% 18%;
+      }
+      @media (max-width: 900px) {
+        .phase-b-footer-layout { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; }
+        .phase-b-footer-brand { grid-column: 1 / -1; }
+        .phase-b-footer-institutional-row { grid-template-columns: minmax(180px, .7fr) minmax(0, 1.3fr); gap: 22px; }
+      }
+      @media (max-width: 900px) {
+        .phase-b-reasons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .phase-b-reason-pending { grid-column: 1 / -1; }
+        .phase-b-institutional-art { width: min(100%, 660px); }
+      }
+      @media (max-width: 620px) {
+        .phase-b-why .phase-b-container,
+        .phase-b-footer .phase-b-container { padding-inline: 12px; }
+        .phase-b-reasons { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .phase-b-reason:not(.phase-b-reason-pending):nth-child(3) { grid-column: 1 / -1; min-height: 156px; }
+        .phase-b-reason-pending {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 16px;
+          padding: 20px 12px;
+        }
+        .phase-b-credential-copy .phase-b-credential-head { margin-bottom: 12px; }
+        .phase-b-credential-copy p { max-width: none; }
+        .phase-b-institutional-art { display: none; }
+        .phase-b-institutional-sprites {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          width: 100%;
+          padding: 16px 12px;
+          border: 1px solid rgb(200 168 107 / 26%);
+          border-radius: 12px;
+          background: rgb(255 255 255 / 2.5%);
+        }
+        .phase-b-institutional-row {
+          display: grid;
+          align-items: center;
+          gap: 10px;
+        }
+        .phase-b-institutional-row-primary { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .phase-b-institutional-row-secondary {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+          width: min(100%, 240px);
+          margin-inline: auto;
+        }
+        .phase-b-institutional-sprite {
+          display: block;
+          width: 100%;
+          height: auto;
+          overflow: hidden;
+        }
+        .phase-b-footer-seal {
+          width: 100%;
+          flex-direction: column;
+          gap: 11px;
+          margin-top: 26px;
+          padding: 18px 0 20px;
+          text-align: center;
+        }
+        .phase-b-footer-cadastur-copy { width: 100%; }
+        .phase-b-footer-cadastur-logo { width: min(100%, 126px); }
+        .phase-b-footer { padding: 48px 0 24px; }
+        .phase-b-footer-layout { grid-template-columns: minmax(0, 1fr); gap: 26px; }
+        .phase-b-footer-brand { grid-column: auto; }
+        .phase-b-footer-brand img { width: 174px; height: 54px; }
+        .phase-b-footer-brand p { max-width: 32ch; margin-top: 10px; }
+        .phase-b-footer-block { gap: 10px; }
+        .phase-b-footer-block h2,
+        .phase-b-footer-cadastur h2,
+        .phase-b-footer-legal h2 { margin-bottom: 2px; font-size: 13px; }
+        .phase-b-footer-institutional-row { grid-template-columns: minmax(0, 1fr); gap: 22px; margin-top: 30px; padding-top: 22px; }
+        .phase-b-footer-cadastur { gap: 9px; }
+        .phase-b-footer-cadastur-logo { width: min(100%, 150px); }
+        .phase-b-footer-legal-items { flex-direction: column; gap: 8px; }
+        .phase-b-footer-bottom { gap: 6px; margin-top: 26px; }
+        #about-rick-travel .phase-b-about-photo-frame { width: min(100%, 390px); aspect-ratio: 5 / 6; }
+        #about-rick-travel .phase-b-about-photo-frame .phase-b-about-photo { object-position: 50% 18%; }
+      }
+    </style>
+    <link rel="stylesheet" href="phase-b-ai-concierge-review.css" />
+    <link rel="stylesheet" href="phase-b-ai-concierge-refinement.css" />
+    <script defer src="../home-consolidation-2026-09-17/home-consolidation-copy.js"></script>
+    <script defer src="phase-a-locale-overrides.js"></script>
+    <script defer src="phase-b-ai-concierge-refined-copy.js"></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#planner" data-copy="skipLink">Ir para o planejador</a>
+    <aside class="phase-a-review-note" aria-labelledby="review-note-title">
+      <h2 id="review-note-title" data-phase-b-copy="reviewTitle">PRÉVIA INTERNA · FASE B · OWNER REVIEW</h2>
+      <p data-phase-b-copy="reviewNote">Proposta isolada para revisão visual do uso da composição completa de marcas, autorizada pelo Owner. Não são feitas afirmações comerciais sobre as marcas. Fase A preservada; sem mudanças na aplicação.</p>
+    </aside>
+
+    <main id="approved-top-preview">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="rio-media" aria-hidden="true"></div>
+        <div class="planet" aria-hidden="true"><span class="rio-point"></span></div>
+        <header class="site-header">
+          <a class="brand" href="#hero-title" aria-label="Rick Travel, início" data-aria="brandLabel">
+            <img src="../rt-11-typography-proposal/assets/rick-travel-logo.svg" alt="Rick Travel" />
+          </a>
+          <nav aria-label="Navegação principal" data-aria="navigationLabel">
+            <a href="#experiences" data-copy="navExperiences">Experiências</a>
+            <a href="#planner" data-copy="navPlanner">Voos</a>
+            <a href="#ai-concierge" data-copy="navConcierge">AI Concierge</a>
+            <a href="#rio-story" data-copy="navRio">Sobre o Rio</a>
+          </nav>
+          <a class="header-cta" href="#planner" data-copy="headerCta">Planeje sua viagem</a>
+        </header>
+
+        <div class="hero-copy">
+          <p class="eyebrow" data-copy="heroEyebrow">Passeios e experiências no Rio</p>
+          <h1 id="hero-title" aria-label="Rio From Another Perspective">Rio <br /><span>From Another</span><br /> Perspective</h1>
+          <p data-copy="heroDescription">Passeios e experiências locais no Rio de Janeiro, com atendimento em português, espanhol e inglês.</p>
+          <a class="primary-cta" href="#experiences" data-copy="heroCta">Ver experiências</a>
+        </div>
+
+        <div class="journey" aria-label="Jornada cinematográfica" data-aria="journeyLabel">
+          <div class="journey-line" aria-hidden="true"></div>
+          <ol>
+            <li><span class="stage-node globe"></span><b>01</b><small data-copy="stageGlobe">Globo</small></li>
+            <li><span class="stage-node"></span><b>02</b><small data-copy="stageSouthAmerica">América do Sul</small></li>
+            <li><span class="stage-node active"></span><b>03</b><small data-copy="stageBrazil">Brasil</small></li>
+            <li><span class="stage-node"></span><b>04</b><small>Rio</small></li>
+            <li><span class="stage-node"></span><b>05</b><small data-copy="stageHelicopter">Helicóptero</small></li>
+            <li><span class="stage-node"></span><b>06</b><small data-copy="stageChrist">Cristo</small></li>
+          </ol>
+        </div>
+      </section>
+
+      <section id="planner" class="planner light-band" aria-labelledby="planner-title">
+        <div class="planner-intro">
+          <p class="light-eyebrow" data-copy="plannerEyebrow">Planeje sua viagem</p>
+          <h2 id="planner-title" data-copy="plannerTitle">Voos para o Rio de Janeiro</h2>
+        </div>
+        <form class="planner-panel" aria-label="Formulário visual de planejamento" data-aria="plannerFormLabel" onsubmit="return false">
+          <div class="planner-tabs" role="tablist" aria-label="Tipo de planejamento" data-aria="plannerTabsLabel">
+            <button class="active" type="button" role="tab" aria-selected="true" data-copy="plannerFlightsTab">Voos</button>
+            <button type="button" role="tab" aria-selected="false" data-copy="plannerExperiencesTab">Experiências no Rio</button>
+          </div>
+          <div class="planner-fields">
+            <label><span data-copy="originLabel">Origem</span><input aria-label="Origem" data-aria="originLabel" value="Stockholm (ARN)" /></label>
+            <label><span data-copy="destinationLabel">Destino</span><input aria-label="Destino" data-aria="destinationLabel" value="Rio de Janeiro (GIG)" /></label>
+            <label><span data-copy="departureLabel">Partida</span><input type="text" placeholder="Selecione" aria-label="Partida" data-placeholder="datePlaceholder" data-aria="departureLabel" /></label>
+            <label><span data-copy="returnLabel">Retorno</span><input type="text" placeholder="Selecione" aria-label="Retorno" data-placeholder="datePlaceholder" data-aria="returnLabel" /></label>
+            <label><span data-copy="travelersLabel">Viajantes</span><select aria-label="Viajantes" data-aria="travelersLabel"><option data-copy="travelerOption">1 viajante</option></select></label>
+            <button class="search-button" type="button" aria-disabled="true" data-copy="plannerButton">Em avaliação</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="experiences" class="experiences light-band" aria-labelledby="experiences-title">
+        <div class="section-title-row">
+          <div><p class="light-eyebrow" data-copy="experiencesEyebrow">Rio e arredores</p><h2 id="experiences-title" data-copy="experiencesTitle">Passeios e experiências</h2></div>
+          <a href="#experiences" data-copy="experiencesLink">Ver todos os passeios</a>
+        </div>
+        <div class="experience-grid">
+          <article class="experience-card">
+            <img class="approved-favela-photo" src="assets/favela-tour-owner-approved.jpeg" alt="Vista panorâmica de uma comunidade no Rio com a bandeira do Brasil." />
+            <div><h3 data-card-title="0">Tour pela Favela</h3><p data-card-description="0">Conheça a cultura local e descubra outra perspectiva do Rio.</p></div>
+          </article>
+          <article class="experience-card">
+            <img src="../../public/images/trips/imagem-casal-pao-de-acucar.jpg" alt="Vista do Pão de Açúcar no Rio de Janeiro" data-alt="sugarloafAlt" />
+            <div><h3 data-card-title="1">Pão de Açúcar</h3><p data-card-description="1">Visita ao Pão de Açúcar, no Rio de Janeiro.</p></div>
+          </article>
+          <article class="experience-card">
+            <img class="approved-buzios-photo" src="assets/buzios-night-owner-approved.jpeg" alt="Rua iluminada à noite em Búzios." />
+            <div><h3 data-card-title="2">Tour em Búzios</h3><p data-card-description="2">Descubra praias, paisagens e o charme de Búzios.</p></div>
+          </article>
+          <article class="experience-card">
+            <img src="../../public/images/trips/imagem-igreja-centro-rio.jpg" alt="Arquitetura do centro histórico do Rio" data-alt="historicCenterAlt" />
+            <div><h3 data-card-title="3">Centro Histórico</h3><p data-card-description="3">Visita ao Centro Histórico do Rio de Janeiro.</p></div>
+          </article>
+          <article class="experience-card">
+            <img class="approved-forte-photo" src="assets/forte-copacabana-owner-approved.jpeg" alt="Entrada do Forte de Copacabana." />
+            <div><h3 data-card-title="4">Forte de Copacabana &amp; Confeitaria Colombo</h3><p data-card-description="4">Viva uma experiência com café em um dos cenários mais icônicos da orla carioca.</p></div>
+          </article>
+          <article class="experience-card">
+            <img src="../../public/images/trips/imagem-praia-ipanema.jpg" alt="Praia de Ipanema no Rio de Janeiro" data-alt="privateExperienceAlt" />
+            <div><h3 data-card-title="5">Experiência Privativa</h3><p data-card-description="5">Uma experiência privativa no Rio de Janeiro.</p></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="why-rick-travel" class="phase-b-why" aria-labelledby="why-title">
+        <div class="phase-b-container">
+          <div class="phase-b-section-intro phase-b-section-intro-dark">
+            <p class="phase-b-eyebrow" data-phase-b-copy="whyEyebrow">WHY RICK TRAVEL</p>
+            <h2 id="why-title" data-phase-b-copy="whyTitle">Turismo local, com orientação humana.</h2>
+            <p data-phase-b-copy="whyIntro">Passeios guiados, orientação personalizada e atendimento em português, espanhol e inglês.</p>
+          </div>
+          <div class="phase-b-reasons">
+            <article class="phase-b-reason">
+              <span class="phase-b-index" aria-hidden="true">01</span>
+              <h3 data-phase-b-copy="whyOrientationTitle">Orientação personalizada</h3>
+              <p data-phase-b-copy="whyOrientationBody">Apoio para planejar passeios e experiências de turismo local no Rio de Janeiro.</p>
+            </article>
+            <article class="phase-b-reason">
+              <span class="phase-b-index" aria-hidden="true">02</span>
+              <h3 data-phase-b-copy="whyToursTitle">Turismo local no Rio</h3>
+              <p data-phase-b-copy="whyToursBody">Passeios guiados e experiências turísticas com foco no Rio de Janeiro.</p>
+            </article>
+            <article class="phase-b-reason">
+              <span class="phase-b-index" aria-hidden="true">03</span>
+              <h3 data-phase-b-copy="whyLanguagesTitle">Atendimento em três idiomas</h3>
+              <p data-phase-b-copy="whyLanguagesBody">Português, espanhol e inglês.</p>
+            </article>
+            <article class="phase-b-reason phase-b-reason-pending">
+              <div class="phase-b-credential-copy">
+                <div class="phase-b-credential-head">
+                  <span class="phase-b-index" aria-hidden="true">04</span>
+                </div>
+                <h3 data-phase-b-copy="cadasturTitle">Referência institucional</h3>
+              </div>
+              <img class="phase-b-institutional-art phase-b-full-institutional-art" src="../../public/logos/logo-turismo.webp" width="1324" height="122" alt="Composição completa de cinco marcas institucionais" />
+              <div class="phase-b-institutional-sprites" aria-label="Marcas institucionais dispostas em duas linhas no mobile">
+                <div class="phase-b-institutional-row phase-b-institutional-row-primary">
+                  <svg class="phase-b-institutional-sprite" viewBox="0 30 255 62" role="img" aria-label="Cadastur"><image href="../../public/logos/logo-turismo.webp" width="1324" height="122" /></svg>
+                  <svg class="phase-b-institutional-sprite" viewBox="325 8 168 107" role="img" aria-label="ABAV"><image href="../../public/logos/logo-turismo.webp" width="1324" height="122" /></svg>
+                  <svg class="phase-b-institutional-sprite" viewBox="565 11 145 100" role="img" aria-label="TripAdvisor"><image href="../../public/logos/logo-turismo.webp" width="1324" height="122" /></svg>
+                </div>
+                <div class="phase-b-institutional-row phase-b-institutional-row-secondary">
+                  <svg class="phase-b-institutional-sprite" viewBox="779 10 297 101" role="img" aria-label="Visit Rio"><image href="../../public/logos/logo-turismo.webp" width="1324" height="122" /></svg>
+                  <svg class="phase-b-institutional-sprite" viewBox="1149 0 175 122" role="img" aria-label="Visit Brasil"><image href="../../public/logos/logo-turismo.webp" width="1324" height="122" /></svg>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="rio-story" class="phase-b-rio" aria-labelledby="rio-story-title">
+        <div class="phase-b-container">
+          <div class="phase-b-section-intro phase-b-section-intro-light">
+            <p class="phase-b-eyebrow" data-phase-b-copy="rioEyebrow">RIO STORY</p>
+            <h2 id="rio-story-title" data-phase-b-copy="rioTitle">Rio de Janeiro, em foco.</h2>
+            <p data-phase-b-copy="rioIntro">Histórias, cenários e experiências que revelam diferentes formas de viver o Rio.</p>
+          </div>
+          <div class="phase-b-story-media" aria-label="Vídeo editorial e duas fotografias do Rio" data-phase-b-aria="storyMediaLabel">
+            <figure class="phase-b-media-slot phase-b-media-video">
+              <a class="phase-b-story-video" href="assets/rio-story-owner-approved.mp4" target="_blank" rel="noopener" aria-label="Abrir o vídeo editorial de praia enviado pelo Owner">
+                <img class="phase-b-story-video-poster" src="assets/rio-story-video-poster.jpeg" alt="" />
+                <span class="phase-b-story-play" aria-hidden="true"></span>
+              </a>
+              <figcaption class="phase-b-media-caption">
+                <span class="phase-b-media-kicker" data-phase-b-copy="videoKicker">VÍDEO EDITORIAL</span>
+                <span class="phase-b-media-title" data-phase-b-copy="videoTitle">Cenas do Rio</span>
+              </figcaption>
+            </figure>
+            <figure class="phase-b-media-slot phase-b-media-photo phase-b-media-photo-one">
+              <img src="assets/rio-story-sunset-owner-approved.jpeg" alt="Pôr do sol sobre o mar, emoldurado por palmeiras." />
+              <figcaption class="phase-b-media-caption">
+                <span class="phase-b-media-kicker" data-phase-b-copy="photoOneKicker">ATMOSFERA</span>
+                <span class="phase-b-media-title" data-phase-b-copy="photoOneTitle">Luz de fim de tarde</span>
+              </figcaption>
+            </figure>
+            <figure class="phase-b-media-slot phase-b-media-photo phase-b-media-photo-two">
+              <img src="assets/rio-story-church-interior-owner-approved.jpeg" alt="Interior de uma igreja, com detalhes arquitetônicos e ornamentação dourada." />
+              <figcaption class="phase-b-media-caption">
+                <span class="phase-b-media-kicker" data-phase-b-copy="photoTwoKicker">CULTURA</span>
+                <span class="phase-b-media-title" data-phase-b-copy="photoTwoTitle">Arquitetura e patrimônio</span>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="ai-concierge" class="phase-b-concierge" aria-labelledby="concierge-title" data-phase-b-aria="conciergeSectionLabel">
+        <div class="phase-b-container phase-b-concierge-layout">
+          <div class="phase-b-concierge-copy">
+            <p class="phase-b-eyebrow" data-phase-b-copy="conciergeEyebrow">ASSISTÊNCIA À DESCOBERTA</p>
+            <h2 id="concierge-title">AI Concierge</h2>
+            <p class="phase-b-concierge-intro" data-phase-b-copy="conciergeIntro">Uma forma mais prática de explorar experiências, passeios e possibilidades no Rio.</p>
+            <ul class="phase-b-concierge-benefits" data-phase-b-aria="conciergeBenefitsLabel">
+              <li><span aria-hidden="true"></span><span data-phase-b-copy="conciergeBenefitOne">Descubra experiências com mais rapidez</span></li>
+              <li><span aria-hidden="true"></span><span data-phase-b-copy="conciergeBenefitTwo">Receba sugestões iniciais com contexto</span></li>
+              <li><span aria-hidden="true"></span><span data-phase-b-copy="conciergeBenefitThree">Fluxo pensado para orientar sua escolha</span></li>
+            </ul>
+            <span class="phase-b-concept-label"><span class="phase-b-concept-label-mark" aria-hidden="true"></span><span data-phase-b-copy="conceptLabel">Prévia conceitual · não operacional</span></span>
+          </div>
+          <div class="phase-b-concierge-stage">
+            <article class="phase-b-concierge-card" aria-label="Demonstração visual do chat conceitual AI Concierge" data-phase-b-aria="conciergeCardLabel">
+              <header class="phase-b-concierge-card-head">
+                <span class="phase-b-concierge-monogram" aria-hidden="true">RT</span>
+                <div class="phase-b-concierge-identity"><strong data-phase-b-copy="conciergeName">Rick Travel Concierge</strong></div>
+              </header>
+              <div class="phase-b-concierge-thread" aria-label="Mensagem de abertura ilustrativa" data-phase-b-aria="conciergeThreadLabel">
+                <div class="phase-b-concierge-message">
+                  <div class="phase-b-concierge-bubble">
+                    <p data-phase-b-copy="conciergeGreeting">Olá! Posso ajudar você a explorar experiências e passeios da Rick Travel. Para começar, que tipo de experiência você procura no Rio?</p>
+                  </div>
+                </div>
+              </div>
+              <div class="phase-b-concierge-input">
+                <input type="text" aria-label="Campo desativado nesta prévia conceitual" data-phase-b-aria="conciergeInputLabel" placeholder="Interação não disponível nesta prévia" data-phase-b-placeholder="conciergePlaceholder" disabled />
+                <button type="button" aria-label="Envio desativado nesta prévia" data-phase-b-aria="conciergeButtonLabel" disabled>↗</button>
+              </div>
+              <p class="phase-b-concierge-footnote" data-phase-b-copy="conciergeFootnote">Demonstração visual. Nenhuma interação está ativa.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="about-rick-travel" class="phase-b-about" aria-labelledby="about-title">
+        <div class="phase-b-container phase-b-about-layout">
+          <div class="phase-b-about-copy">
+            <p class="phase-b-eyebrow" data-phase-b-copy="aboutEyebrow">QUEM SOMOS</p>
+            <h2 id="about-title" data-phase-b-copy="aboutTitle">Muito além dos cartões-postais.</h2>
+            <p data-phase-b-copy="aboutScene">Do alto do Pão de Açúcar às ruas do Centro, cada parte do Rio conta uma história.</p>
+            <p data-phase-b-copy="aboutBody">À frente da Rick Travel, Ricardo Souza une sua formação em Turismo ao olhar de guia para aproximar viajantes da cidade e proporcionar experiências que vão além dos roteiros convencionais.</p>
+            <a class="phase-b-about-link" href="/quem-somos"><span data-phase-b-copy="aboutLink">Conheça nossa história</span><span aria-hidden="true">↗</span></a>
+          </div>
+          <figure class="phase-b-about-media phase-b-about-photo-frame" data-phase-b-aria="aboutPhotoLabel">
+            <img class="phase-b-about-photo" src="about-ricardo-review/ricardo-pao-de-acucar-owner-supplied.png" alt="Ricardo olhando para a câmera na Estação III do Pão de Açúcar" data-phase-b-alt="aboutPhotoAlt" />
+          </figure>
+        </div>
+      </section>
+    </main>
+
+    <footer id="phase-b-footer" class="phase-b-footer" aria-labelledby="footer-title">
+      <div class="phase-b-container">
+        <div class="phase-b-footer-layout">
+          <div class="phase-b-footer-block phase-b-footer-brand">
+            <img src="../rt-11-typography-proposal/assets/rick-travel-logo.svg" alt="Rick Travel" />
+            <p data-phase-b-copy="footerDescription">Passeios e experiências no Rio com orientação personalizada.</p>
+          </div>
+          <section id="footer-contact" class="phase-b-footer-block phase-b-footer-contact" aria-labelledby="footer-title">
+            <h2 id="footer-title" data-phase-b-copy="footerContactTitle">Contato rápido</h2>
+            <a class="phase-b-footer-phone" href="https://wa.me/5521966819928" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp +55 21 96681-9928">
+              <span data-phase-b-copy="footerWhatsapp">WhatsApp</span> · <span data-phase-b-copy="footerPhone">+55 21 96681-9928</span>
+            </a>
+            <a class="phase-b-footer-email" href="mailto:contact@travelrick.com" data-phase-b-copy="footerEmail">contact@travelrick.com</a>
+            <a href="https://rick-travel.vercel.app/pt/contato" data-phase-b-copy="footerContactForm" data-phase-b-contact-route>Formulário de contato</a>
+          </section>
+          <nav class="phase-b-footer-block phase-b-footer-navigation" aria-labelledby="footer-navigation-title">
+            <h2 id="footer-navigation-title" data-phase-b-copy="footerNavTitle">Navegação</h2>
+            <a href="#experiences" data-phase-b-copy="footerExperiences">Experiências</a>
+            <a href="#rio-story" data-phase-b-copy="footerRioStory">Rio Story</a>
+            <a href="#about-rick-travel" data-phase-b-copy="footerAbout">Quem somos</a>
+            <a href="#footer-contact" data-phase-b-copy="footerContactNav">Contato</a>
+          </nav>
+          <div class="phase-b-footer-block phase-b-footer-social">
+            <h2 data-phase-b-copy="footerSocialTitle">Acompanhe a Rick Travel</h2>
+            <a class="phase-b-footer-social-link" href="https://www.instagram.com/ricktravelbrasil/" target="_blank" rel="noopener noreferrer" aria-label="Instagram Rick Travel">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.2" y="3.2" width="17.6" height="17.6" rx="5"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.6" cy="6.6" r=".8" fill="currentColor" stroke="none"/></svg>
+              <span data-phase-b-copy="footerInstagram">Instagram · @ricktravelbrasil</span>
+            </a>
+            <a class="phase-b-footer-social-link" href="https://wa.me/5521966819928" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp +55 21 96681-9928">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M20.2 11.7a8.2 8.2 0 0 1-12.1 7.2l-4.3 1.1 1.2-4.1a8.2 8.2 0 1 1 15.2-4.2Z"/><path d="M9.1 8.7c.3-.5.5-.5.8-.5h.5c.2 0 .4.1.5.4l.7 1.6c.1.3.1.5-.1.7l-.6.7c-.2.2-.2.4 0 .7.6 1 1.4 1.7 2.5 2.2.3.1.5.1.7-.1l.8-.9c.2-.2.4-.3.7-.2l1.6.8c.3.1.4.3.4.5 0 .5-.2 1-.6 1.3-.5.5-1.4.8-2.3.6-1.1-.2-2.5-.8-4-2.1-1.2-1.1-2.1-2.5-2.4-3.4-.3-.9 0-1.8.5-2.3Z"/></svg>
+              <span data-phase-b-copy="footerWhatsapp">WhatsApp</span>
+            </a>
+          </div>
+        </div>
+        <div class="phase-b-footer-institutional-row">
+          <section class="phase-b-footer-cadastur" aria-labelledby="footer-cadastur-title">
+            <h2 id="footer-cadastur-title" data-phase-b-copy="footerCadasturTitle">Referência institucional</h2>
+            <img class="phase-b-footer-cadastur-logo" src="../../public/cadastro/cadastur.png" width="490" height="110" alt="Cadastur" />
+          </section>
+          <section class="phase-b-footer-legal" aria-labelledby="footer-legal-title">
+            <h2 id="footer-legal-title" data-phase-b-copy="footerLegalTitle">Informações legais</h2>
+            <div class="phase-b-footer-legal-items">
+              <span data-phase-b-copy="footerPrivacy">Política de Privacidade</span>
+              <span data-phase-b-copy="footerTerms">Termos de Uso</span>
+              <span data-phase-b-copy="footerLegalCompany">Informações legais da empresa</span>
+            </div>
+          </section>
+        </div>
+        <div class="phase-b-footer-bottom">
+          <span>© 2026 Rick Travel</span>
+          <span data-phase-b-copy="footerCity">Rio de Janeiro, Brasil</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

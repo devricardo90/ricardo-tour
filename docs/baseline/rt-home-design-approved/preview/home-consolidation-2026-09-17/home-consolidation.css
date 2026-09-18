@@ -1,0 +1,7 @@
+/* RT-10/RT-11-approved styling remains shared and unchanged. */
+.media-pending-tag { top: 104px; }
+
+@media (max-width: 620px) {
+  /* Move the existing media-status badge below the header row, preserving its style. */
+  .media-pending-tag { top: 86px; right: 20px; }
+}

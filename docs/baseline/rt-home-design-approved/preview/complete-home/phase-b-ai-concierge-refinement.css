@@ -1,0 +1,143 @@
+/* Refined, lower-density AI Concierge treatment; all rules remain section-scoped. */
+.phase-b-concierge {
+  padding: 88px 0 94px;
+  border-top-color: rgb(200 168 107 / 10%);
+  background:
+    radial-gradient(ellipse at 80% 45%, rgb(200 168 107 / 7%), transparent 37%),
+    linear-gradient(112deg, #101316, #14181b 58%, #101316);
+}
+.phase-b-concierge-layout {
+  grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+  gap: clamp(46px, 6vw, 82px);
+}
+.phase-b-concierge-copy h2 { font-size: 54px; }
+.phase-b-concierge-intro {
+  max-width: 37ch;
+  margin-top: 15px;
+  font-size: 14px;
+  line-height: 1.68;
+}
+.phase-b-concierge-benefits { gap: 12px; margin-top: 23px; }
+.phase-b-concierge-benefits li { gap: 11px; font-size: 12px; line-height: 1.5; }
+.phase-b-concierge-benefits li > span:first-child {
+  width: 14px;
+  height: 14px;
+  flex-basis: 14px;
+  margin-top: 1px;
+  border-color: rgb(232 199 128 / 48%);
+}
+.phase-b-concierge-benefits li > span:first-child::after {
+  top: 3px;
+  left: 3px;
+  width: 6px;
+  height: 6px;
+}
+.phase-b-concept-label {
+  min-height: 31px;
+  margin-top: 24px;
+  padding: 6px 11px;
+  border-color: rgb(232 199 128 / 30%);
+  background: rgb(200 168 107 / 4%);
+  font-size: 10px;
+}
+.phase-b-concierge-stage { padding: 0; }
+.phase-b-concierge-route { display: none; }
+.phase-b-concierge-card {
+  max-width: 570px;
+  padding: 25px 27px 22px;
+  border-color: rgb(200 168 107 / 20%);
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgb(28 32 35 / 91%), rgb(20 24 27 / 94%));
+  box-shadow: 0 18px 48px rgb(0 0 0 / 22%);
+}
+.phase-b-concierge-card-head {
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: 12px;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+.phase-b-concierge-monogram {
+  width: 40px;
+  height: 40px;
+  border-color: rgb(232 199 128 / 48%);
+  background: rgb(200 168 107 / 5%);
+  font-size: 11px;
+}
+.phase-b-concierge-identity strong { font-size: 13px; font-weight: 500; }
+.phase-b-concierge-thread { margin: 27px 0 23px; }
+.phase-b-concierge-message {
+  padding-left: 15px;
+  border-left: 1px solid rgb(232 199 128 / 45%);
+}
+.phase-b-concierge-bubble {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: #dedbd3;
+  background: transparent;
+  font-size: 13px;
+  line-height: 1.68;
+}
+.phase-b-concierge-bubble p { margin: 0; }
+.phase-b-concierge-input {
+  min-height: 58px;
+  border-color: rgb(200 168 107 / 55%);
+  border-radius: 11px;
+  background: #e9e3d8;
+  box-shadow: 0 8px 22px rgb(0 0 0 / 14%), inset 0 1px 0 rgb(255 255 255 / 46%);
+}
+.phase-b-concierge-input input {
+  min-height: 56px;
+  padding: 0 15px;
+  color: #5c5a55;
+  font-size: 12px;
+}
+.phase-b-concierge-input input::placeholder { color: #5c5a55; }
+.phase-b-concierge-input button {
+  width: 40px;
+  height: 40px;
+  flex-basis: 40px;
+  margin-right: 8px;
+  border: 1px solid rgb(114 85 29 / 22%);
+  border-radius: 8px;
+  color: #62552f;
+  background: rgb(200 168 107 / 18%);
+  font-size: 17px;
+}
+.phase-b-concierge-footnote {
+  margin-top: 12px;
+  color: #b7b4ac;
+  font-size: 10px;
+}
+.phase-b-concierge-stage-caption { display: none; }
+
+@media (max-width: 1000px) {
+  .phase-b-concierge-layout { gap: 34px; }
+  .phase-b-concierge-copy h2 { font-size: 48px; }
+  .phase-b-concierge-card { padding: 22px; }
+}
+@media (max-width: 820px) {
+  .phase-b-concierge-layout { grid-template-columns: minmax(0, 1fr); gap: 30px; }
+  .phase-b-concierge-copy { max-width: 620px; }
+  .phase-b-concierge-copy h2 { font-size: 50px; }
+  .phase-b-concierge-stage { width: min(100%, 660px); justify-self: center; }
+}
+@media (max-width: 620px) {
+  .phase-b-concierge { padding-block: 62px 66px; }
+  .phase-b-concierge-layout { gap: 26px; }
+  .phase-b-concierge-copy h2 { font-size: 40px; line-height: 1; }
+  .phase-b-concierge-intro { margin-top: 12px; font-size: 13px; line-height: 1.62; }
+  .phase-b-concierge-benefits { gap: 11px; margin-top: 19px; }
+  .phase-b-concierge-benefits li { gap: 9px; font-size: 11px; }
+  .phase-b-concept-label { margin-top: 20px; font-size: 9px; }
+  .phase-b-concierge-card { padding: 18px 17px 16px; border-radius: 16px; }
+  .phase-b-concierge-card-head { grid-template-columns: 36px minmax(0, 1fr); gap: 10px; }
+  .phase-b-concierge-monogram { width: 36px; height: 36px; }
+  .phase-b-concierge-thread { margin: 21px 0 18px; }
+  .phase-b-concierge-message { padding-left: 12px; }
+  .phase-b-concierge-bubble { font-size: 12px; line-height: 1.6; }
+  .phase-b-concierge-input { min-height: 54px; }
+  .phase-b-concierge-input input { min-height: 52px; padding-inline: 10px; font-size: 10px; }
+  .phase-b-concierge-input button { width: 36px; height: 36px; flex-basis: 36px; margin-right: 7px; }
+  .phase-b-concierge-footnote { margin-top: 10px; font-size: 9px; }
+}
