@@ -16,7 +16,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const origin = process.env.RT17_ORIGIN || "http://127.0.0.1:3218";
-const outDir = path.resolve(".tmp/rt-17-3d-poc-review");
+const outDir = path.resolve(process.env.RT17_OUT_DIR || ".tmp/rt-17-3d-poc-review");
 fs.mkdirSync(outDir, { recursive: true });
 
 const viewports = [
@@ -152,6 +152,9 @@ try {
             return {
               progress: Number(host?.getAttribute("data-progress") || 0),
               state: Number(host?.getAttribute("data-state") ?? -1),
+              indicatorStage: Number(host?.querySelector("[data-progress-step][data-status='current']")?.getAttribute("data-progress-step") ?? -1),
+              indicatorProgress: Number.parseFloat(host?.querySelector("[data-journey-progress]")?.style.getPropertyValue("--journey-progress") || "NaN") / 100,
+              indicatorValue: Number(host?.querySelector("[data-journey-progress]")?.getAttribute("aria-valuenow") ?? -1),
               overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
               rioMarkerVisible: marker ? marker.getAttribute("data-visible") === "true" : null,
               scrollY: window.scrollY,
@@ -185,7 +188,24 @@ try {
         await page.waitForTimeout(400);
         const reverse = await page.evaluate(selector => Number(document.querySelector(selector)?.getAttribute("data-progress") || 0), JOURNEY);
 
-        results.push({ viewport, locale, variant: variant.name, expect3d: variant.expect3d, url, dimensions, navigationMs, webgl, performance: performanceReport, checkpoints: checkpointsResult, end, reverse, release, errors });
+        // Rapidly jump across the same canonical bands, then ensure the visual rail has
+        // settled on the active stage exposed by the cinematic timeline itself.
+        for (const target of [0.78, 0.12, 0.62, 0.28, 1, 0.44, 0.62]) {
+          await page.evaluate(({ start, distance, target }) => window.scrollTo({ top: start + distance * target, left: 0, behavior: "instant" }), { ...dimensions, target });
+        }
+        await page.waitForTimeout(250);
+        const rapidSync = await page.evaluate(selector => {
+          const host = document.querySelector(selector);
+          const progress = Number(host?.getAttribute("data-progress") || 0);
+          return {
+            progress,
+            state: Number(host?.getAttribute("data-state") ?? -1),
+            indicatorStage: Number(host?.querySelector("[data-progress-step][data-status='current']")?.getAttribute("data-progress-step") ?? -1),
+            indicatorProgress: Number.parseFloat(host?.querySelector("[data-journey-progress]")?.style.getPropertyValue("--journey-progress") || "NaN") / 100,
+          };
+        }, JOURNEY);
+
+        results.push({ viewport, locale, variant: variant.name, expect3d: variant.expect3d, url, dimensions, navigationMs, webgl, performance: performanceReport, checkpoints: checkpointsResult, end, reverse, rapidSync, release, errors });
         await page.close();
       }
     }
@@ -244,6 +264,13 @@ for (const result of results) {
     if (Math.abs(checkpoint.progress - checkpoint.target) > 0.04) {
       failures.push(`${tag}: checkpoint ${Math.round(checkpoint.target * 100)}% mismatch (${checkpoint.progress})`);
     }
+    const expectedStage = checkpoints.slice(0, -1).reduce((active, boundary, index) => checkpoint.target >= boundary ? index : active, 0);
+    if (result.expect3d && (checkpoint.state !== expectedStage || checkpoint.indicatorStage !== expectedStage || Math.abs(checkpoint.indicatorProgress - checkpoint.progress) > 0.00002 || checkpoint.indicatorValue !== Math.round(checkpoint.progress * 100))) {
+      failures.push(`${tag}: progress indicator mismatch at ${Math.round(checkpoint.target * 100)}% (stage ${checkpoint.indicatorStage}/${checkpoint.state}, expected ${expectedStage}, progress ${checkpoint.indicatorProgress}/${checkpoint.progress}, aria ${checkpoint.indicatorValue})`);
+    }
+  }
+  if (result.expect3d && (result.rapidSync.indicatorStage !== result.rapidSync.state || Math.abs(result.rapidSync.indicatorProgress - result.rapidSync.progress) > 0.00002)) {
+    failures.push(`${tag}: rapid scroll left progress indicator out of sync (${result.rapidSync.indicatorStage}/${result.rapidSync.state}, ${result.rapidSync.indicatorProgress}/${result.rapidSync.progress})`);
   }
   if (result.reverse > 0.03) failures.push(`${tag}: reverse scroll did not return to start (${result.reverse})`);
   if (!result.release) failures.push(`${tag}: sticky did not release to the next section`);

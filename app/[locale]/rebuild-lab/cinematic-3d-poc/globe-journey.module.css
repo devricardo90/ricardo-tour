@@ -50,6 +50,14 @@
 .media { font-size:12px; color:#cac7bf; margin-bottom:15px; }
 .readout { border-top:1px solid #c8a86b66; padding-top:16px; display:flex; justify-content:space-between; gap:12px; color:#e8c780; font-size:14px; }
 .readout output { font-variant-numeric:tabular-nums; }
+.progressIndicator { height:14px; margin-top:10px; color:#e8c780; }
+.progressTrack { position:relative; display:block; height:100%; }
+.progressTrack::before,.progressFill { position:absolute; top:6px; left:0; height:1px; content:""; }
+.progressTrack::before { right:0; background:rgba(232,199,128,.22); }
+.progressFill { width:var(--journey-progress,0%); background:linear-gradient(90deg,#8a7047,#e8c780); box-shadow:0 0 7px rgba(232,199,128,.28); }
+.progressStep { position:absolute; top:3px; width:7px; height:7px; margin-left:-3.5px; border:1px solid rgba(232,199,128,.48); border-radius:50%; background:#11161b; transition:background-color .22s ease,border-color .22s ease,box-shadow .22s ease; }
+.progressStep[data-status="complete"] { border-color:rgba(232,199,128,.8); background:#b79a61; }
+.progressStep[data-status="current"] { width:9px; height:9px; top:2px; margin-left:-4.5px; border-color:#f1d99e; background:#e8c780; box-shadow:0 0 9px rgba(232,199,128,.38); }
 .hint,.staticNote,.fallbackNote { color:#cac7bf; font-size:12px; margin-top:12px; }
 .fallbackNote { display:none; color:#e8c780; }
 .root[data-mode="motion"][data-webgl="unavailable"] .fallbackNote { display:block; }
@@ -74,7 +82,11 @@
   .heroCopy { top:16%; left:24px; width:calc(100% - 48px); }
   .heroCopy p { max-width:280px; font-size:11px; line-height:1.5; }
   .heroCopy h1 { font-size:58px; }
-  .bottom { bottom:24px; left:24px; right:24px; }
+  .bottom { bottom:20px; left:24px; right:24px; }
+  .progressIndicator { height:12px; margin-top:7px; }
+  .progressTrack::before,.progressFill { top:5px; }
+  .progressStep { top:2px; width:6px; height:6px; margin-left:-3px; }
+  .progressStep[data-status="current"] { top:1px; width:8px; height:8px; margin-left:-4px; }
   .scene { inset:-2%; background-position:center center; }
   .scene[data-scene="rio"] { background-position:86% center; }
   .scene[data-scene="flight"] { background-position:66% center; }
@@ -86,4 +98,5 @@
 @media(prefers-reduced-motion:reduce) {
   .root .runway { height:auto; }
   .root .stage { position:relative; height:100svh; min-height:640px; }
+  .progressStep { transition:none; }
 }

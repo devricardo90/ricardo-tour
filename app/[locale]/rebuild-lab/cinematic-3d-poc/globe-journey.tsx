@@ -14,6 +14,7 @@ const translations = {
     labels: ["Globo", "América do Sul", "Brasil", "Rio de Janeiro", "Helicóptero", "Cristo Redentor"],
     preview: "Rick Travel · Uma jornada pelo Rio", media: "Uma jornada cinematográfica pelo Rio",
     scroll: "Role para entrar na jornada", skip: "Ir para a próxima seção ↓", next: "Planeje sua viagem",
+    progress: "Progresso da jornada", stage: "Etapa", of: "de",
     nextBody: "O Rio convida você a desenhar uma viagem à sua própria medida.",
     static: "Uma jornada visual pelo Rio, em um quadro estático.",
     fallback: "Uma vista estática da jornada — continue para descobrir o Rio.",
@@ -23,6 +24,7 @@ const translations = {
     labels: ["Globe", "South America", "Brazil", "Rio de Janeiro", "Helicopter", "Christ the Redeemer"],
     preview: "Rick Travel · A journey through Rio", media: "A cinematic journey through Rio",
     scroll: "Scroll into the journey", skip: "Go to the next section ↓", next: "Plan your trip",
+    progress: "Journey progress", stage: "Stage", of: "of",
     nextBody: "Let Rio inspire a journey shaped around the way you want to travel.",
     static: "A visual journey through Rio, held in a still frame.",
     fallback: "A still view of the journey — continue to discover Rio.",
@@ -32,6 +34,7 @@ const translations = {
     labels: ["Globo", "América del Sur", "Brasil", "Río de Janeiro", "Helicóptero", "Cristo Redentor"],
     preview: "Rick Travel · Un viaje por Río", media: "Un viaje cinematográfico por Río",
     scroll: "Desplázate para entrar en el recorrido", skip: "Ir a la siguiente sección ↓", next: "Planifica tu viaje",
+    progress: "Progreso del viaje", stage: "Etapa", of: "de",
     nextBody: "Deja que Río inspire un viaje hecho a tu manera.",
     static: "Un viaje visual por Río, detenido en un instante.",
     fallback: "Una vista fija del viaje — continúa para descubrir Río.",
@@ -76,6 +79,7 @@ export default function GlobeJourney({ locale }: { locale: string }) {
   const root = useRef<HTMLDivElement>(null);
   const progressText = useRef<HTMLOutputElement>(null);
   const activeText = useRef<HTMLSpanElement>(null);
+  const progressIndicator = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -166,10 +170,23 @@ export default function GlobeJourney({ locale }: { locale: string }) {
       const update = (p: number) => {
         timeline.progress(p);
         element.dataset.progress = p.toFixed(5);
-        const index = boundaries.reduce((acc, boundary, i) => p >= boundary ? i : acc, 0);
+        // ScrollTrigger progress is quantized by the browser's integer scroll position.
+        // One pixel of tolerance keeps an exact storyboard checkpoint on its boundary
+        // stage without changing the timeline or adding a second progress calculation.
+        const boundaryTolerance = 1 / Math.max(1, section.offsetHeight - stage.offsetHeight);
+        const index = boundaries.reduce((acc, boundary, i) => p + boundaryTolerance >= boundary ? i : acc, 0);
         element.dataset.state = String(index);
+        if (progressIndicator.current) {
+          progressIndicator.current.style.setProperty("--journey-progress", `${p * 100}%`);
+          progressIndicator.current.setAttribute("aria-valuenow", String(Math.round(p * 100)));
+        }
         if (index !== previous) {
           if (activeText.current) activeText.current.textContent = `${String(index + 1).padStart(2, "0")} / 06 · ${labels[index]}`;
+          progressIndicator.current?.setAttribute("aria-valuetext", `${t.stage} ${index + 1} ${t.of} 6: ${labels[index]}`);
+          element.querySelectorAll<HTMLElement>("[data-progress-step]").forEach(step => {
+            const stepIndex = Number(step.dataset.progressStep);
+            step.dataset.status = stepIndex === index ? "current" : stepIndex < index ? "complete" : "upcoming";
+          });
           previous = index;
         }
         if (progressText.current) progressText.current.textContent = `${Math.round(p * 100)}%`;
@@ -213,7 +230,7 @@ export default function GlobeJourney({ locale }: { locale: string }) {
       };
     }, element);
     return () => media.revert();
-  }, [labels]);
+  }, [labels, t.of, t.stage]);
 
   return <div ref={root} className={styles.root} data-testid="globe-journey" data-progress="0" data-state="0">
     <div className={styles.review}><span>{t.preview}</span><nav aria-label="Language">{["pt", "en", "es"].map(l => <a key={l} href={`/${l}/rebuild-lab/cinematic-3d-poc`} aria-current={locale === l ? "page" : undefined}>{l.toUpperCase()}</a>)}</nav></div>
@@ -237,7 +254,29 @@ export default function GlobeJourney({ locale }: { locale: string }) {
         <div className={styles.heroCopy} data-hero-copy><p>{t.badge}</p><h1>Rio<br/><em>From Another</em><br/>Perspective</h1></div>
         <div className={styles.bottom}>
           <p className={styles.media}>{t.media}</p>
-          <div className={styles.readout}><span ref={activeText}>01 / 06 · {t.labels[0]}</span><output ref={progressText} aria-label="Scroll progress">0%</output></div>
+          <div className={styles.readout}><span ref={activeText} aria-live="polite" aria-atomic="true">01 / 06 · {t.labels[0]}</span><output ref={progressText} aria-label={t.progress}>0%</output></div>
+          <div
+            ref={progressIndicator}
+            className={styles.progressIndicator}
+            data-journey-progress
+            role="progressbar"
+            aria-label={t.progress}
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={0}
+            aria-valuetext={`${t.stage} 1 ${t.of} 6: ${t.labels[0]}`}
+          >
+            <span className={styles.progressTrack} aria-hidden="true">
+              <span className={styles.progressFill}/>
+              {boundaries.map((boundary, index) => <span
+                key={boundary}
+                className={styles.progressStep}
+                data-progress-step={index}
+                data-status={index === 0 ? "current" : "upcoming"}
+                style={{ left: `${boundary * 100}%` }}
+              />)}
+            </span>
+          </div>
           <p className={styles.hint}>{t.scroll}</p>
           <p className={styles.staticNote}>{t.static}</p>
           <p className={styles.fallbackNote}>{t.fallback}</p>
