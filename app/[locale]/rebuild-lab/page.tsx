@@ -49,7 +49,7 @@ const isolationBoundaries = [
 
 export default function RebuildLabPage() {
     return (
-        <div className="space-y-10">
+        <div className="mx-auto w-full max-w-5xl space-y-10 px-6 py-10">
             <header className="space-y-3">
                 <p className="font-mono text-xs uppercase tracking-widest text-muted-foreground">
                     RT-8 · RT-RB-S0-04 · Sprint 0 — Foundation &amp; Audit

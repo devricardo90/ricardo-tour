@@ -1,0 +1,89 @@
+/*
+ * RT-17 Version C — layout for the real 3D proof.
+ *
+ * RT-17's six-scene journey: real WebGL globe followed by original cinematic Rio
+ * plates. The imagery shares the charcoal, muted gold and atmospheric contrast of the
+ * globe so the change of medium still feels like one arrival.
+ */
+.root { background:#080c11; color:#f4f0e8; font-family:var(--journey-body),sans-serif; --travel:320svh; }
+.root * { box-sizing:border-box; }
+.review { display:flex; justify-content:space-between; gap:16px; padding:16px 4%; font-size:12px; color:#cac7bf; border-bottom:1px solid #3a4147; }
+.review nav { display:flex; gap:18px; }
+.review a[aria-current] { color:#e8c780; }
+.root a:focus-visible { outline:2px solid #e8c780; outline-offset:5px; }
+.runway { height:auto; }
+.stage { height:100svh; min-height:640px; position:relative; overflow:hidden; isolation:isolate; }
+.root[data-mode="motion"] .runway { height:calc(100svh + var(--travel)); }
+.root[data-mode="motion"] .stage { position:sticky; top:0; min-height:0; }
+.visual,.shade { position:absolute; inset:0; pointer-events:none; }
+.visual { background:radial-gradient(ellipse at 67% 44%,#28323a, #080c11 72%); }
+
+.starField { position:absolute; inset:0; opacity:.3; background-image:radial-gradient(circle at 16% 29%,#f8e9c1 0 1px,transparent 2px),radial-gradient(circle at 71% 18%,#f8e9c1 0 1px,transparent 2px),radial-gradient(circle at 82% 72%,#f8e9c1 0 1px,transparent 2px),radial-gradient(circle at 26% 83%,#f8e9c1 0 1px,transparent 2px),radial-gradient(circle at 46% 12%,#f8e9c1 0 1px,transparent 2px),radial-gradient(circle at 58% 88%,#f8e9c1 0 1px,transparent 2px); will-change:transform,opacity; }
+
+/* The camera frames the sphere, so the canvas only needs to sit where the globe belongs. */
+.globe { position:absolute; left:22%; right:-6%; top:0; bottom:0; will-change:opacity; }
+.globe canvas { display:block; width:100%; height:100%; }
+.glow { position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle at 50% 50%,rgba(215,186,121,.16),transparent 46%); mix-blend-mode:screen; }
+
+/* Rio anchor: positioned each frame from the real camera projection, so it is hidden
+   by the planet's own curvature at the limb rather than by a scripted fade. */
+.marker { position:absolute; top:0; left:0; width:15px; height:15px; margin:-7.5px 0 0 -7.5px; border-radius:50%; border:1px solid rgba(215,186,121,.85); background:radial-gradient(circle,#fff1cc 0 2.5px,transparent 3px); opacity:0; transition:opacity .18s linear; }
+.marker[data-visible="true"] { opacity:1; }
+
+.staticGlobe { position:absolute; left:50%; top:50%; width:min(62vw,620px); height:min(62vw,620px); transform:translate(-50%,-50%); }
+.root[data-mode="motion"][data-webgl="ready"] .staticGlobe { display:none; }
+.globe { display:none; }
+.root[data-mode="motion"][data-webgl="ready"] .globe { display:block; }
+
+.scene { position:absolute; inset:-3%; z-index:1; opacity:0; background-color:#080c11; background-size:cover; background-position:center 48%; background-repeat:no-repeat; transform-origin:center; will-change:transform,opacity; }
+.sceneAtmosphere { position:absolute; inset:0; z-index:2; pointer-events:none; background:linear-gradient(90deg,rgba(8,12,17,.32),rgba(8,12,17,.08) 43%,transparent 74%),linear-gradient(0deg,rgba(8,12,17,.66),transparent 32%,rgba(8,12,17,.03) 70%,rgba(8,12,17,.2)); mix-blend-mode:multiply; }
+.shade { z-index:3; background:linear-gradient(90deg,rgba(8,12,17,.24),transparent 69%),linear-gradient(0deg,#080c11,transparent 42%,transparent 80%,rgba(8,12,17,.28)); }
+.starField { z-index:0; }
+.globe { z-index:1; }
+.staticGlobe { z-index:1; }
+.topline { position:absolute; z-index:4; inset:32px 5% auto; display:flex; justify-content:space-between; gap:20px; color:#c8a86b; font-size:12px; letter-spacing:.2em; }
+.heroCopy { position:absolute; z-index:4; top:22%; left:7%; width:45%; }
+.heroCopy p { color:#d7ba79; font-size:11px; letter-spacing:.18em; }
+.heroCopy h1 { font-family:var(--journey-display),serif; font-weight:500; font-size:clamp(60px,6.7vw,108px); line-height:.91; margin:24px 0; letter-spacing:-.025em; }
+.heroCopy em { font-weight:400; font-size:.66em; color:#e5d7ba; }
+.bottom { position:absolute; z-index:4; bottom:30px; left:7%; right:7%; }
+.media { font-size:12px; color:#cac7bf; margin-bottom:15px; }
+.readout { border-top:1px solid #c8a86b66; padding-top:16px; display:flex; justify-content:space-between; gap:12px; color:#e8c780; font-size:14px; }
+.readout output { font-variant-numeric:tabular-nums; }
+.hint,.staticNote,.fallbackNote { color:#cac7bf; font-size:12px; margin-top:12px; }
+.fallbackNote { display:none; color:#e8c780; }
+.root[data-mode="motion"][data-webgl="unavailable"] .fallbackNote { display:block; }
+.bottom a { display:inline-block; font-size:14px; margin-top:14px; padding:8px 0; text-decoration:underline; text-underline-offset:5px; }
+.hint { display:none; }
+.root[data-mode="motion"] .hint { display:block; }
+.root[data-mode="motion"] .staticNote { display:none; }
+.next { min-height:100svh; padding:100px 7%; background:#f3efe6; color:#171a1e; }
+.next>p:first-child { font-size:12px; color:#53565a; letter-spacing:.08em; }
+.next h2 { font:500 clamp(44px,5vw,72px)/1 var(--journey-display),serif; margin:30px 0; }
+.next>p { max-width:640px; font-size:16px; line-height:1.7; }
+.next ol { display:flex; flex-wrap:wrap; gap:18px 28px; margin-top:60px; list-style:none; padding:0; font-size:14px; }
+.next li span { color:#8a6a2b; }
+@media(max-width:767px) {
+  .root { --travel:280svh; }
+  .review { padding:14px 20px; font-size:12px; }
+  .review>span { max-width:230px; }
+  .topline { inset:24px 20px auto; font-size:12px; letter-spacing:.07em; }
+  .topline>span:last-child { display:none; }
+  .globe { left:0; right:0; top:6%; bottom:10%; }
+  .staticGlobe { width:420px; height:420px; top:46%; }
+  .heroCopy { top:16%; left:24px; width:calc(100% - 48px); }
+  .heroCopy p { max-width:280px; font-size:11px; line-height:1.5; }
+  .heroCopy h1 { font-size:58px; }
+  .bottom { bottom:24px; left:24px; right:24px; }
+  .scene { inset:-2%; background-position:center center; }
+  .scene[data-scene="rio"] { background-position:86% center; }
+  .scene[data-scene="flight"] { background-position:66% center; }
+  .scene[data-scene="finale"] { background-position:70% center; }
+  .sceneAtmosphere { background:linear-gradient(0deg,rgba(8,12,17,.62),transparent 44%,rgba(8,12,17,.16)),linear-gradient(90deg,rgba(8,12,17,.12),transparent 70%); }
+  .shade { background:linear-gradient(0deg,#080c11,transparent 57%,#080c1166); }
+  .next { padding:70px 24px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .root .runway { height:auto; }
+  .root .stage { position:relative; height:100svh; min-height:640px; }
+}

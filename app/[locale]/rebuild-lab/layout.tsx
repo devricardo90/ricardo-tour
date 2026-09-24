@@ -50,7 +50,7 @@ export default function RebuildLabLayout({
                     </span>
                 </div>
             </div>
-            <main id="rebuild-lab-content" className="mx-auto w-full max-w-5xl px-6 py-10">
+            <main id="rebuild-lab-content" className="w-full">
                 {children}
             </main>
         </div>
