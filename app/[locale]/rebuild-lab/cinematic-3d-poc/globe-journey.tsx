@@ -46,6 +46,25 @@ const translations = {
 const boundaries = [0, 0.12, 0.28, 0.44, 0.62, 0.78];
 
 /**
+ * RT-19 pointer depth. A bounded, additive camera orbit applied only at render time;
+ * the timeline-owned camera and the scroll progress are never written by the pointer.
+ * Full influence during the RT-16 0–8% hold (the timeline's own hold), fading to zero
+ * by the end of the Globe stage, where scroll takes over the camera.
+ */
+const pointerDepth = {
+  holdEnd: 0.08,
+  fadeEnd: boundaries[1],
+  /** Degrees of camera orbit at the viewport edge. */
+  lon: 1.1,
+  lat: 0.7,
+  /** Pixels of star-field drift at the viewport edge. */
+  starsX: 6,
+  starsY: 4,
+  /** Exponential smoothing time constant, seconds: critically damped, never springy. */
+  tau: 0.45,
+};
+
+/**
  * Server-rendered stand-in, also used whenever WebGL is unavailable, reduced motion is
  * requested or data saving is on. Authored lab artwork, never photography.
  */
@@ -85,8 +104,11 @@ export default function GlobeJourney({ locale }: { locale: string }) {
     gsap.registerPlugin(ScrollTrigger);
     const element = root.current!;
     const media = gsap.matchMedia();
-    media.add({ reduce: "(prefers-reduced-motion: reduce)", mobile: "(max-width: 767px)", desktop: "(min-width: 768px)" }, context => {
-      const { reduce, mobile } = context.conditions!;
+    media.add({
+      reduce: "(prefers-reduced-motion: reduce)", mobile: "(max-width: 767px)", desktop: "(min-width: 768px)",
+      finePointer: "(hover: hover) and (pointer: fine)",
+    }, context => {
+      const { reduce, mobile, finePointer } = context.conditions!;
       const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
       if (reduce || connection?.saveData) { element.dataset.mode = "static"; return; }
 
@@ -166,9 +188,16 @@ export default function GlobeJourney({ locale }: { locale: string }) {
         .to(copy, { opacity: mobile ? 0.06 : 0.88, duration: 0.08 }, 0.84)
         .to({}, { duration: 0.1 }, 0.9);
 
+      // Pointer depth state: the pointer only writes the normalized target; the ticker eases
+      // `depth` towards target × weight, where the weight is read from scroll progress.
+      const depth = { x: 0, y: 0, targetX: 0, targetY: 0, weight: 1 };
+      const rendered: GlobeState = { ...camera };
+
       let previous = -1;
       const update = (p: number) => {
         timeline.progress(p);
+        const fade = gsap.utils.clamp(0, 1, (p - pointerDepth.holdEnd) / (pointerDepth.fadeEnd - pointerDepth.holdEnd));
+        depth.weight = 1 - fade * fade * (3 - 2 * fade);
         element.dataset.progress = p.toFixed(5);
         // ScrollTrigger progress is quantized by the browser's integer scroll position.
         // One pixel of tolerance keeps an exact storyboard checkpoint on its boundary
@@ -195,10 +224,29 @@ export default function GlobeJourney({ locale }: { locale: string }) {
 
       // Drawing is decoupled from the scroll callback so a fast flick coalesces into one
       // frame instead of queueing a redraw per wheel event.
-      const draw = () => {
+      const draw = (_time: number, deltaTime: number) => {
+        if (finePointer) {
+          const goalX = depth.targetX * depth.weight;
+          const goalY = depth.targetY * depth.weight;
+          if (depth.x !== goalX || depth.y !== goalY) {
+            const ease = 1 - Math.exp(-Math.min(deltaTime, 100) / 1000 / pointerDepth.tau);
+            depth.x += (goalX - depth.x) * ease;
+            depth.y += (goalY - depth.y) * ease;
+            // Settle exactly so the loop goes idle instead of redrawing sub-pixel drift.
+            if (Math.abs(goalX - depth.x) < 1e-4) depth.x = goalX;
+            if (Math.abs(goalY - depth.y) < 1e-4) depth.y = goalY;
+            stars.style.translate = `${(depth.x * pointerDepth.starsX).toFixed(2)}px ${(depth.y * pointerDepth.starsY).toFixed(2)}px`;
+            dirty = true;
+          }
+        }
         if (!dirty || !globe) return;
         dirty = false;
-        const projected = globe.render(camera);
+        // Scroll-owned camera + small pointer orbit. `camera` itself is never modified.
+        rendered.dist = camera.dist;
+        rendered.brazilMix = camera.brazilMix;
+        rendered.lon = camera.lon + depth.x * pointerDepth.lon;
+        rendered.lat = camera.lat - depth.y * pointerDepth.lat;
+        const projected = globe.render(rendered);
         marker.dataset.visible = String(projected.visible);
         if (projected.visible) {
           marker.style.transform = `translate(${projected.x}px, ${projected.y}px)`;
@@ -218,9 +266,27 @@ export default function GlobeJourney({ locale }: { locale: string }) {
       window.addEventListener("resize", onResize);
       const frame = requestAnimationFrame(() => ScrollTrigger.refresh());
 
+      // Pointer handlers only store a normalized target: no layout reads, no React state,
+      // no scroll or timeline access. Touch input is ignored even on hybrid devices.
+      const onPointerMove = (event: PointerEvent) => {
+        if (event.pointerType === "touch") return;
+        depth.targetX = gsap.utils.clamp(-1, 1, (event.clientX / window.innerWidth) * 2 - 1);
+        depth.targetY = gsap.utils.clamp(-1, 1, (event.clientY / window.innerHeight) * 2 - 1);
+      };
+      const onPointerLeave = () => { depth.targetX = 0; depth.targetY = 0; };
+      if (finePointer) {
+        stage.addEventListener("pointermove", onPointerMove, { passive: true });
+        stage.addEventListener("pointerleave", onPointerLeave);
+        element.dataset.pointerDepth = "on";
+      }
+
       return () => {
         cancelAnimationFrame(frame);
         window.removeEventListener("resize", onResize);
+        stage.removeEventListener("pointermove", onPointerMove);
+        stage.removeEventListener("pointerleave", onPointerLeave);
+        stars.style.translate = "";
+        delete element.dataset.pointerDepth;
         gsap.ticker.remove(draw);
         trigger.kill();
         timeline.kill();
