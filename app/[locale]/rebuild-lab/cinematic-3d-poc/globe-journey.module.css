@@ -65,6 +65,13 @@
 .hint { display:none; }
 .root[data-mode="motion"] .hint { display:block; }
 .root[data-mode="motion"] .staticNote { display:none; }
+/* RT-20: outside motion mode (reduced motion, data saver, no JS, or before hydration)
+   the timeline never runs, so a frozen "0% / Etapa 1 de 6" readout would misreport
+   progress rather than simply hold it. staticNote already explains the still frame,
+   and the six stages remain reachable as the ordered list in the next section, so the
+   rail is hidden instead of showing state that no longer means anything. */
+.root:not([data-mode="motion"]) .readout,
+.root:not([data-mode="motion"]) .progressIndicator { display:none; }
 .next { min-height:100svh; padding:100px 7%; background:#f3efe6; color:#171a1e; }
 .next>p:first-child { font-size:12px; color:#53565a; letter-spacing:.08em; }
 .next h2 { font:500 clamp(44px,5vw,72px)/1 var(--journey-display),serif; margin:30px 0; }
