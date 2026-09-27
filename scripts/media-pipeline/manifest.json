@@ -1,0 +1,45 @@
+{
+  "$schemaNote": "RT-26 Hero media manifest. Identity (id/scene) is kept separate from file path so RT-27 can consume assets by id without knowing the master's origin (Owner photo, licensed, generated). See docs/architecture/rt-26-media-pipeline.md for the full schema and the placeholder contract. Editing an entry's `master.path` here and re-running the pipeline is the whole 'replace before production' workflow — no pipeline code change is required.",
+  "version": 1,
+  "assets": [
+    {
+      "id": "rio-04",
+      "scene": "SHOT-04-rio",
+      "master": {
+        "path": "app/[locale]/rebuild-lab/cinematic-3d-poc/assets/rio-aerial-arrival.webp",
+        "provenanceStatus": "RIGHTS_NOT_VERIFIED",
+        "productionStatus": "PROTOTYPE_ONLY",
+        "replaceBeforeProduction": true,
+        "sourceRef": "RT-17 prototype layer; RT-24 candidate audit lists this as PENDING VERIFICATION, not promoted"
+      },
+      "focal": { "x": 0.62, "y": 0.4 },
+      "note": "Focal point favours the bay/city mid-ground per RT-23 SHOT-04 composition; not a center crop."
+    },
+    {
+      "id": "helicopter-05",
+      "scene": "SHOT-05-helicopter",
+      "master": {
+        "path": "app/[locale]/rebuild-lab/cinematic-3d-poc/assets/rio-helicopter-cockpit.webp",
+        "provenanceStatus": "RIGHTS_NOT_VERIFIED",
+        "productionStatus": "PROTOTYPE_ONLY",
+        "replaceBeforeProduction": true,
+        "sourceRef": "RT-17 prototype layer; RT-24 candidate audit lists this as PENDING VERIFICATION, not promoted"
+      },
+      "focal": { "x": 0.5, "y": 0.38 },
+      "note": "Focal point keeps the cockpit frame and the distant landmark peak in view. This specific temporary master shows Sugarloaf/Pao de Acucar through the windshield, not Corcovado; RT-23 SHOT-05 wants Corcovado/Christ, which is a media-selection question for RT-24, not something this pipeline entry can fix."
+    },
+    {
+      "id": "christ-06",
+      "scene": "SHOT-06-christ",
+      "master": {
+        "path": "app/[locale]/rebuild-lab/cinematic-3d-poc/assets/rio-christ-finale.webp",
+        "provenanceStatus": "RIGHTS_NOT_VERIFIED",
+        "productionStatus": "PROTOTYPE_ONLY",
+        "replaceBeforeProduction": true,
+        "sourceRef": "RT-17 prototype layer; RT-24 flags this as the highest provenance risk (looks professionally composed), not promoted"
+      },
+      "focal": { "x": 0.68, "y": 0.55 },
+      "note": "Focal point anchors the full Christ figure per RT-23 SHOT-06 / SS10 rule: never crop head or arms."
+    }
+  ]
+}

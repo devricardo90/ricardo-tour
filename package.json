@@ -20,7 +20,8 @@
     "preflight:staging": "npm run check:env -- --target=staging && npm run check:db && npm run lint && npm run typecheck && npm run test && npm run build",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "optimize-images": "node scripts/optimize-images.js"
+    "optimize-images": "node scripts/optimize-images.js",
+    "hero-media-pipeline": "node scripts/media-pipeline/run.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
