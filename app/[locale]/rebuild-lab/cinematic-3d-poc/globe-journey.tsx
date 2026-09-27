@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { createGlobe, type Globe, type GlobeState } from "./globe-3d";
-import { buildHeroScenes } from "./hero-media";
+import { buildHeroScenes, type HeroLayer, type HeroScene } from "./hero-media";
 import styles from "./globe-journey.module.css";
 
 const translations = {
@@ -111,8 +111,13 @@ export default function GlobeJourney({ locale }: { locale: string }) {
       finePointer: "(hover: hover) and (pointer: fine)",
     }, context => {
       const { reduce, mobile, finePointer } = context.conditions!;
-      const connection = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+      const connection = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
       if (reduce || connection?.saveData) { element.dataset.mode = "static"; return; }
+      // RT-28: a slow connection that hasn't opted into data-saver still gets the
+      // lighter mobile derivative, on any viewport size — bandwidth-based, not just
+      // width-based. Network Information API support varies, so this only ever narrows
+      // behavior when the browser actually reports it; nothing changes without evidence.
+      const slowConnection = Boolean(connection?.effectiveType && ["slow-2g", "2g", "3g"].includes(connection.effectiveType));
 
       const canvas = element.querySelector<HTMLCanvasElement>("[data-globe-canvas]")!;
       const marker = element.querySelector<HTMLElement>("[data-rio-marker]")!;
@@ -149,6 +154,41 @@ export default function GlobeJourney({ locale }: { locale: string }) {
           gsap.set(layerEl, layer.initial);
         }
       }
+
+      // RT-28: media is requested by scroll proximity (`layer.prepareAt`), never by a
+      // fixed timer. A layer's own `initial`/`keyframes` opacity is untouched either
+      // way — this only controls when its pixels exist to show, decoupled from when the
+      // (unchanged) timeline reveals it. `layerMediaState` also doubles as the
+      // dev-inspectable readiness record (mirrored onto `data-media-state`, never a
+      // user-visible label) and guarantees each layer's image is fetched at most once.
+      const layerMediaState = new Map<string, "requested" | "loaded" | "failed">();
+      const preferMobileDerivative = mobile || slowConnection;
+      const prepareLayer = (scene: HeroScene, layer: HeroLayer) => {
+        if (!layer.src) return;
+        const key = `${scene.id}:${layer.id}`;
+        if (layerMediaState.has(key)) return;
+        const layerEl = heroLayerElements.get(key);
+        if (!layerEl) return;
+        layerMediaState.set(key, "requested");
+        layerEl.dataset.mediaState = "requested";
+        const url = preferMobileDerivative && layer.srcMobile ? layer.srcMobile : layer.src;
+        const probe = new Image();
+        probe.onload = () => {
+          layerMediaState.set(key, "loaded");
+          layerEl.dataset.mediaState = "loaded";
+          layerEl.style.backgroundImage = `url(${url})`;
+        };
+        probe.onerror = () => {
+          layerMediaState.set(key, "failed");
+          layerEl.dataset.mediaState = "failed";
+          // No backgroundImage assigned: `.scene`'s own background-color (#080c11, the
+          // same charcoal the whole Hero already stands on) shows through instead of a
+          // broken-image icon or a transparent hole — a designed fallback, not an
+          // accidental blank frame. There is no <img> element anywhere in this
+          // architecture, so a broken-image icon is structurally impossible here.
+        };
+        probe.src = url;
+      };
 
       /**
        * The camera state is plain data. ScrollTrigger drives the same normalized
@@ -215,6 +255,11 @@ export default function GlobeJourney({ locale }: { locale: string }) {
       let previous = -1;
       const update = (p: number) => {
         timeline.progress(p);
+        for (const scene of heroScenes) {
+          for (const layer of scene.layers) {
+            if (layer.prepareAt !== undefined && p >= layer.prepareAt) prepareLayer(scene, layer);
+          }
+        }
         const fade = gsap.utils.clamp(0, 1, (p - pointerDepth.holdEnd) / (pointerDepth.fadeEnd - pointerDepth.holdEnd));
         depth.weight = 1 - fade * fade * (3 - 2 * fade);
         element.dataset.progress = p.toFixed(5);
@@ -329,6 +374,9 @@ export default function GlobeJourney({ locale }: { locale: string }) {
             <div className={styles.glow} aria-hidden="true"/>
             <div className={styles.marker} data-rio-marker data-visible="false" aria-hidden="true"/>
           </div>
+          {/* RT-28: no `backgroundImage` here — a layer's image is only assigned once
+              loaded (app/.../hero-media.ts `prepareAt`, applied in the effect below),
+              not at first render, so later scenes are never fetched at initial load. */}
           {heroScenesForRender.map(scene => scene.layers.map(layer => (
             <div
               key={`${scene.id}-${layer.id}`}
@@ -336,7 +384,7 @@ export default function GlobeJourney({ locale }: { locale: string }) {
               data-scene={scene.id}
               data-layer={layer.id}
               data-media-status={scene.mediaStatus.productionStatus}
-              style={layer.src ? { backgroundImage: `url(${layer.src})` } : undefined}
+              data-media-state={layer.src ? "idle" : undefined}
               aria-hidden="true"
             />
           )))}

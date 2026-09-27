@@ -1,0 +1,146 @@
+{
+  "generatedAt": "2026-09-27T17:19:48.911Z",
+  "manifest": "scripts\\media-pipeline\\manifest.json",
+  "outDir": "app\\[locale]\\rebuild-lab\\cinematic-3d-poc\\assets\\derivatives",
+  "assets": [
+    {
+      "id": "rio-04",
+      "scene": "SHOT-04-rio",
+      "master": {
+        "path": "app/[locale]/rebuild-lab/cinematic-3d-poc/assets/rio-aerial-arrival.webp",
+        "sourceWidth": 1672,
+        "sourceHeight": 941
+      },
+      "provenanceStatus": "RIGHTS_NOT_VERIFIED",
+      "productionStatus": "PROTOTYPE_ONLY",
+      "replaceBeforeProduction": true,
+      "focal": {
+        "x": 0.62,
+        "y": 0.4
+      },
+      "derivatives": {
+        "desktop": {
+          "path": "app\\[locale]\\rebuild-lab\\cinematic-3d-poc\\assets\\derivatives\\rio-04\\desktop.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 154470,
+          "format": "webp"
+        },
+        "mobile": {
+          "path": "app\\[locale]\\rebuild-lab\\cinematic-3d-poc\\assets\\derivatives\\rio-04\\mobile.webp",
+          "width": 720,
+          "height": 900,
+          "bytes": 54454,
+          "format": "webp",
+          "crop": {
+            "left": 660,
+            "top": 0,
+            "width": 753,
+            "height": 941
+          }
+        },
+        "preview": {
+          "path": "app\\[locale]\\rebuild-lab\\cinematic-3d-poc\\assets\\derivatives\\rio-04\\preview.webp",
+          "width": 24,
+          "height": 14,
+          "bytes": 122,
+          "format": "webp"
+        },
+        "layers": []
+      }
+    },
+    {
+      "id": "helicopter-05",
+      "scene": "SHOT-05-helicopter",
+      "master": {
+        "path": "app/[locale]/rebuild-lab/cinematic-3d-poc/assets/rio-helicopter-cockpit.webp",
+        "sourceWidth": 1672,
+        "sourceHeight": 941
+      },
+      "provenanceStatus": "RIGHTS_NOT_VERIFIED",
+      "productionStatus": "PROTOTYPE_ONLY",
+      "replaceBeforeProduction": true,
+      "focal": {
+        "x": 0.5,
+        "y": 0.38
+      },
+      "derivatives": {
+        "desktop": {
+          "path": "app\\[locale]\\rebuild-lab\\cinematic-3d-poc\\assets\\derivatives\\helicopter-05\\desktop.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 116256,
+          "format": "webp"
+        },
+        "mobile": {
+          "path": "app\\[locale]\\rebuild-lab\\cinematic-3d-poc\\assets\\derivatives\\helicopter-05\\mobile.webp",
+          "width": 720,
+          "height": 900,
+          "bytes": 45490,
+          "format": "webp",
+          "crop": {
+            "left": 460,
+            "top": 0,
+            "width": 753,
+            "height": 941
+          }
+        },
+        "preview": {
+          "path": "app\\[locale]\\rebuild-lab\\cinematic-3d-poc\\assets\\derivatives\\helicopter-05\\preview.webp",
+          "width": 24,
+          "height": 14,
+          "bytes": 176,
+          "format": "webp"
+        },
+        "layers": []
+      }
+    },
+    {
+      "id": "christ-06",
+      "scene": "SHOT-06-christ",
+      "master": {
+        "path": "app/[locale]/rebuild-lab/cinematic-3d-poc/assets/rio-christ-finale.webp",
+        "sourceWidth": 1672,
+        "sourceHeight": 941
+      },
+      "provenanceStatus": "RIGHTS_NOT_VERIFIED",
+      "productionStatus": "PROTOTYPE_ONLY",
+      "replaceBeforeProduction": true,
+      "focal": {
+        "x": 0.68,
+        "y": 0.55
+      },
+      "derivatives": {
+        "desktop": {
+          "path": "app\\[locale]\\rebuild-lab\\cinematic-3d-poc\\assets\\derivatives\\christ-06\\desktop.webp",
+          "width": 1672,
+          "height": 941,
+          "bytes": 150948,
+          "format": "webp"
+        },
+        "mobile": {
+          "path": "app\\[locale]\\rebuild-lab\\cinematic-3d-poc\\assets\\derivatives\\christ-06\\mobile.webp",
+          "width": 720,
+          "height": 900,
+          "bytes": 61956,
+          "format": "webp",
+          "crop": {
+            "left": 760,
+            "top": 0,
+            "width": 753,
+            "height": 941
+          }
+        },
+        "preview": {
+          "path": "app\\[locale]\\rebuild-lab\\cinematic-3d-poc\\assets\\derivatives\\christ-06\\preview.webp",
+          "width": 24,
+          "height": 14,
+          "bytes": 140,
+          "format": "webp"
+        },
+        "layers": []
+      }
+    }
+  ],
+  "failures": []
+}

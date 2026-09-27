@@ -25,6 +25,9 @@ const sourceHashes = {};
 function hashSourceAssets() {
   const dir = path.join(repoRoot, "app", "[locale]", "rebuild-lab", "cinematic-3d-poc", "assets");
   for (const file of fs.readdirSync(dir)) {
+    // RT-28 added a `derivatives/` subdirectory alongside the source masters; this
+    // fingerprint only covers the flat master files themselves.
+    if (fs.statSync(path.join(dir, file)).isDirectory()) continue;
     sourceHashes[file] = hash(fs.readFileSync(path.join(dir, file)));
   }
   // Also fingerprint the Hero implementation itself, to prove RT-26 never touched it.
