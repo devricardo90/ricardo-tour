@@ -36,6 +36,9 @@
 .root[data-mode="motion"][data-webgl="ready"] .globe { display:block; }
 
 .scene { position:absolute; inset:-3%; z-index:1; opacity:0; background-color:#080c11; background-size:cover; background-position:center 48%; background-repeat:no-repeat; transform-origin:center; will-change:transform,opacity; }
+/* RT-27 Brazil->Rio handoff bridge (hero-media.ts "bridge" layer): a code-only golden
+   pulse, no image, reusing the same gold as the globe's Fresnel rim/halo. */
+.bridge { position:absolute; inset:-3%; z-index:1; opacity:0; pointer-events:none; background:radial-gradient(ellipse at 58% 42%,rgba(215,186,121,.4),transparent 60%); mix-blend-mode:screen; will-change:opacity; }
 .sceneAtmosphere { position:absolute; inset:0; z-index:2; pointer-events:none; background:linear-gradient(90deg,rgba(8,12,17,.32),rgba(8,12,17,.08) 43%,transparent 74%),linear-gradient(0deg,rgba(8,12,17,.66),transparent 32%,rgba(8,12,17,.03) 70%,rgba(8,12,17,.2)); mix-blend-mode:multiply; }
 .shade { z-index:3; background:linear-gradient(90deg,rgba(8,12,17,.24),transparent 69%),linear-gradient(0deg,#080c11,transparent 42%,transparent 80%,rgba(8,12,17,.28)); }
 .starField { z-index:0; }

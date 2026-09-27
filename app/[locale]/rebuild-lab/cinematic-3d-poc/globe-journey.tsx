@@ -4,9 +4,7 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { createGlobe, type Globe, type GlobeState } from "./globe-3d";
-import rioArrival from "./assets/rio-aerial-arrival.webp";
-import rioFlight from "./assets/rio-helicopter-cockpit.webp";
-import rioFinale from "./assets/rio-christ-finale.webp";
+import { buildHeroScenes } from "./hero-media";
 import styles from "./globe-journey.module.css";
 
 const translations = {
@@ -99,6 +97,10 @@ export default function GlobeJourney({ locale }: { locale: string }) {
   const progressText = useRef<HTMLOutputElement>(null);
   const activeText = useRef<HTMLSpanElement>(null);
   const progressIndicator = useRef<HTMLDivElement>(null);
+  // Render-time layer list: only `id`/`type`/`src`/`mediaStatus` are read here, none of
+  // which vary with `mobile` (only each layer's keyframe tween values do, and those are
+  // consumed inside the effect once matchMedia resolves the real value).
+  const heroScenesForRender = buildHeroScenes(false);
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger);
@@ -129,14 +131,24 @@ export default function GlobeJourney({ locale }: { locale: string }) {
       const stage = element.querySelector<HTMLElement>("[data-stage]")!;
       const globeWrap = element.querySelector<HTMLElement>("[data-globe]")!;
       const stars = element.querySelector<HTMLElement>("[data-layer='stars']")!;
-      const rioScene = element.querySelector<HTMLElement>("[data-scene='rio']")!;
-      const flightScene = element.querySelector<HTMLElement>("[data-scene='flight']")!;
-      const finaleScene = element.querySelector<HTMLElement>("[data-scene='finale']")!;
       const copy = element.querySelector<HTMLElement>("[data-hero-copy]")!;
 
-      gsap.set(rioScene, { scale: 1.12, xPercent: 0, yPercent: 0, opacity: 0 });
-      gsap.set(flightScene, { scale: 1.12, xPercent: 0, yPercent: 0, opacity: 0 });
-      gsap.set(finaleScene, { scale: 1.1, xPercent: 0, yPercent: 0, opacity: 0 });
+      // RT-27: Rio/Helicopter/Christ are described declaratively (app/.../hero-media.ts)
+      // instead of three hardcoded scene variables. `mobile` is already resolved by the
+      // matchMedia context above, so every keyframe value below is identical to what the
+      // inline tweens used to hardcode; only where the numbers live has changed.
+      const heroScenes = buildHeroScenes(mobile);
+      const heroLayerElements = new Map<string, HTMLElement>();
+      for (const scene of heroScenes) {
+        for (const layer of scene.layers) {
+          const layerEl = element.querySelector<HTMLElement>(`[data-scene='${scene.id}'][data-layer='${layer.id}']`);
+          // A layer declared in hero-media.ts with no matching DOM node (e.g. a future
+          // layer added to the data before its markup lands) is skipped, not fatal.
+          if (!layerEl) continue;
+          heroLayerElements.set(`${scene.id}:${layer.id}`, layerEl);
+          gsap.set(layerEl, layer.initial);
+        }
+      }
 
       /**
        * The camera state is plain data. ScrollTrigger drives the same normalized
@@ -172,21 +184,28 @@ export default function GlobeJourney({ locale }: { locale: string }) {
         // continuous through the blend, so the location feels reached instead of cut to.
         .to(camera, { dist: 1.72, duration: 0.09, ease: "sine.in" }, 0.44)
         .to(globeWrap, { opacity: 0, duration: 0.09, ease: "sine.in" }, 0.44)
-        .to(rioScene, { opacity: 1, duration: 0.1 }, 0.44)
-        .to(rioScene, { scale: mobile ? 1.03 : 1.01, xPercent: mobile ? 0 : 1.5, yPercent: -1.2, duration: 0.2, ease: "sine.inOut" }, 0.44)
         // 58–76%: cross the bay through the helicopter windshield; the cabin frame is
         // part of the scene while a measured camera glide carries us towards Corcovado.
-        .to(rioScene, { opacity: 0, duration: 0.08 }, 0.58)
-        .to(flightScene, { opacity: 1, duration: 0.09 }, 0.58)
-        .to(flightScene, { scale: mobile ? 1.08 : 1.04, xPercent: mobile ? 0 : -1.2, yPercent: -1.8, duration: 0.2, ease: "sine.inOut" }, 0.58)
         .to(copy, { opacity: mobile ? 0.06 : 0.22, duration: 0.08 }, 0.58)
         // 76–100%: the windshield falls away into a close, warm landmark reveal.
-        .to(flightScene, { opacity: 0, duration: 0.1 }, 0.75)
-        .to(finaleScene, { opacity: 1, duration: 0.12 }, 0.75)
-        .to(finaleScene, { scale: mobile ? 1.05 : 1.02, xPercent: mobile ? -1 : 0.8, yPercent: -0.8, duration: 0.2, ease: "sine.inOut" }, 0.75)
-        .to(finaleScene, { scale: 1.08, yPercent: -1.4, duration: 0.12, ease: "sine.inOut" }, 0.88)
         .to(copy, { opacity: mobile ? 0.06 : 0.88, duration: 0.08 }, 0.84)
         .to({}, { duration: 0.1 }, 0.9);
+
+      // RT-27: the Rio/Helicopter/Christ layer tweens themselves — previously nine
+      // `.to(rioScene|flightScene|finaleScene, ...)` calls hardcoded inline — are now
+      // applied from each layer's own `keyframes` (app/.../hero-media.ts). The values are
+      // unchanged; only their home moved from inline literals to data the animation
+      // system consumes. Order doesn't matter: every position below is an absolute
+      // timeline time, identical in meaning to the chained calls above.
+      for (const scene of heroScenes) {
+        for (const layer of scene.layers) {
+          const layerEl = heroLayerElements.get(`${scene.id}:${layer.id}`);
+          if (!layerEl) continue;
+          for (const keyframe of layer.keyframes) {
+            timeline.to(layerEl, keyframe.vars, keyframe.at);
+          }
+        }
+      }
 
       // Pointer depth state: the pointer only writes the normalized target; the ticker eases
       // `depth` towards target × weight, where the weight is read from scroll progress.
@@ -310,9 +329,17 @@ export default function GlobeJourney({ locale }: { locale: string }) {
             <div className={styles.glow} aria-hidden="true"/>
             <div className={styles.marker} data-rio-marker data-visible="false" aria-hidden="true"/>
           </div>
-          <div className={styles.scene} data-scene="rio" style={{ backgroundImage: `url(${rioArrival.src})` }} aria-hidden="true" />
-          <div className={styles.scene} data-scene="flight" style={{ backgroundImage: `url(${rioFlight.src})` }} aria-hidden="true" />
-          <div className={styles.scene} data-scene="finale" style={{ backgroundImage: `url(${rioFinale.src})` }} aria-hidden="true" />
+          {heroScenesForRender.map(scene => scene.layers.map(layer => (
+            <div
+              key={`${scene.id}-${layer.id}`}
+              className={layer.type === "bridge" ? styles.bridge : styles.scene}
+              data-scene={scene.id}
+              data-layer={layer.id}
+              data-media-status={scene.mediaStatus.productionStatus}
+              style={layer.src ? { backgroundImage: `url(${layer.src})` } : undefined}
+              aria-hidden="true"
+            />
+          )))}
           <div className={styles.sceneAtmosphere} aria-hidden="true" />
         </div>
         <div className={styles.shade}/>
