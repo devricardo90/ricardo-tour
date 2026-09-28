@@ -11,7 +11,8 @@ const translations = {
   pt: {
     labels: ["Globo", "América do Sul", "Brasil", "Rio de Janeiro", "Helicóptero", "Cristo Redentor"],
     preview: "Rick Travel · Uma jornada pelo Rio", media: "Uma jornada cinematográfica pelo Rio",
-    scroll: "Role para entrar na jornada", skip: "Ir para a próxima seção ↓", next: "Planeje sua viagem",
+    scroll: "Role para entrar na jornada", skip: "Ir para a próxima seção ↓",
+    planEyebrow: "Planeje sua viagem", next: "Voos para o Rio de Janeiro",
     progress: "Progresso da jornada", stage: "Etapa", of: "de",
     nextBody: "O Rio convida você a desenhar uma viagem à sua própria medida.",
     static: "Uma jornada visual pelo Rio, em um quadro estático.",
@@ -21,7 +22,8 @@ const translations = {
   en: {
     labels: ["Globe", "South America", "Brazil", "Rio de Janeiro", "Helicopter", "Christ the Redeemer"],
     preview: "Rick Travel · A journey through Rio", media: "A cinematic journey through Rio",
-    scroll: "Scroll into the journey", skip: "Go to the next section ↓", next: "Plan your trip",
+    scroll: "Scroll into the journey", skip: "Go to the next section ↓",
+    planEyebrow: "Plan your trip", next: "Flights to Rio de Janeiro",
     progress: "Journey progress", stage: "Stage", of: "of",
     nextBody: "Let Rio inspire a journey shaped around the way you want to travel.",
     static: "A visual journey through Rio, held in a still frame.",
@@ -31,7 +33,8 @@ const translations = {
   es: {
     labels: ["Globo", "América del Sur", "Brasil", "Río de Janeiro", "Helicóptero", "Cristo Redentor"],
     preview: "Rick Travel · Un viaje por Río", media: "Un viaje cinematográfico por Río",
-    scroll: "Desplázate para entrar en el recorrido", skip: "Ir a la siguiente sección ↓", next: "Planifica tu viaje",
+    scroll: "Desplázate para entrar en el recorrido", skip: "Ir a la siguiente sección ↓",
+    planEyebrow: "Planea tu viaje", next: "Vuelos a Río de Janeiro",
     progress: "Progreso del viaje", stage: "Etapa", of: "de",
     nextBody: "Deja que Río inspire un viaje hecho a tu manera.",
     static: "Un viaje visual por Río, detenido en un instante.",
@@ -418,6 +421,9 @@ export default function GlobeJourney({ locale }: { locale: string }) {
               />)}
             </span>
           </div>
+          <ol className={styles.stageList} data-stage-list>
+            {t.labels.map((label, i) => <li key={label}><span>0{i + 1}</span> {label}</li>)}
+          </ol>
           <p className={styles.hint}>{t.scroll}</p>
           <p className={styles.staticNote}>{t.static}</p>
           <p className={styles.fallbackNote}>{t.fallback}</p>
@@ -425,9 +431,13 @@ export default function GlobeJourney({ locale }: { locale: string }) {
         </div>
       </div>
     </section>
-    <section id="globe-next" className={styles.next} tabIndex={-1}>
-      <p>RICK TRAVEL · {t.preview}</p><h2>{t.next}</h2><p>{t.nextBody}</p>
-      <ol>{t.labels.map((label, i) => <li key={label}><span>0{i + 1}</span> {label}</li>)}</ol>
+    {/* Compact planner bridge; the future Flight Planner mounts in this slot. */}
+    <section id="globe-next" className={styles.next} tabIndex={-1} aria-labelledby="globe-next-title">
+      <div>
+        <p className={styles.planEyebrow}>{t.planEyebrow}</p>
+        <h2 id="globe-next-title">{t.next}</h2>
+      </div>
+      <p className={styles.planBody}>{t.nextBody}</p>
     </section>
   </div>;
 }

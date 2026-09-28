@@ -107,6 +107,38 @@ for (const locale of ["pt", "en", "es"]) {
     await section.scrollIntoViewIfNeeded();
     await page.waitForTimeout(2500);
 
+    const planner = await page.evaluate(() => {
+      const next = document.querySelector("#globe-next");
+      const exp = document.querySelector("section[aria-labelledby='experiences-in-rio-heading']");
+      const r = next.getBoundingClientRect();
+      return {
+        height: Math.round(r.height),
+        gapToExperiences: Math.round(exp.getBoundingClientRect().top - r.bottom),
+        bg: getComputedStyle(next).backgroundColor,
+        eyebrow: next.querySelector("p")?.textContent,
+        heading: next.querySelector("h2")?.textContent,
+        headingPx: parseFloat(getComputedStyle(next.querySelector("h2")).fontSize),
+        expHeadingPx: parseFloat(getComputedStyle(exp.querySelector("h2")).fontSize),
+        lists: next.querySelectorAll("ol, ul").length,
+        formControls: next.querySelectorAll("form, input, select, textarea, button").length,
+        links: next.querySelectorAll("a").length,
+        brandMentions: (next.textContent.match(/rick travel/gi) || []).length,
+        left: Math.round(next.querySelector("h2").getBoundingClientRect().left),
+        expLeft: Math.round(exp.querySelector("h2").getBoundingClientRect().left),
+      };
+    });
+    const plannerCopy = { pt: ["Planeje sua viagem", "Voos para o Rio de Janeiro"], en: ["Plan your trip", "Flights to Rio de Janeiro"], es: ["Planea tu viaje", "Vuelos a Río de Janeiro"] }[locale];
+    check(planner.height <= vp.h * 0.6, `${tag}: planner bridge ${planner.height}px tall (> 60% of ${vp.h}px viewport)`);
+    check(planner.gapToExperiences === 0, `${tag}: gap between planner and Experiences ${planner.gapToExperiences}px`);
+    check(planner.bg === "rgb(243, 239, 230)", `${tag}: planner not off-white (${planner.bg})`);
+    check(planner.eyebrow === plannerCopy[0] && planner.heading === plannerCopy[1], `${tag}: planner copy "${planner.eyebrow}" / "${planner.heading}"`);
+    check(planner.lists === 0, `${tag}: six-stage recap still inside planner`);
+    check(planner.formControls === 0 && planner.links === 0, `${tag}: fake planner UI present (controls ${planner.formControls}, links ${planner.links})`);
+    check(planner.brandMentions === 0, `${tag}: duplicated brand eyebrow in planner`);
+    check(planner.headingPx <= planner.expHeadingPx, `${tag}: planner heading ${planner.headingPx}px outranks Experiences ${planner.expHeadingPx}px`);
+    check(Math.abs(planner.left - planner.expLeft) <= 1, `${tag}: planner left edge ${planner.left} vs Experiences ${planner.expLeft}`);
+    notes.push(`${tag}: planner ${planner.height}px (${Math.round(planner.height / vp.h * 100)}% vh), heading ${planner.headingPx}px vs Experiences ${planner.expHeadingPx}px, left ${planner.left}/${planner.expLeft}`);
+
     const data = await section.evaluate((sec) => {
       const cards = [...sec.querySelectorAll("ul > li")];
       const ul = sec.querySelector("ul");
@@ -140,8 +172,14 @@ for (const locale of ["pt", "en", "es"]) {
         durations: cards.map(c => [...c.querySelectorAll("span")].find(sp => sp.querySelector("svg"))?.textContent?.trim() ?? null),
         prices: cards.map(c => [...c.querySelectorAll("p")].find(p => p.textContent.startsWith("R$"))?.textContent),
         tabOrderOk: [...sec.querySelectorAll("a")].every(a => a.tabIndex === 0),
+        locations: cards.map(c => c.querySelector("h3")?.nextElementSibling?.textContent?.trim() ?? null),
+        summaryLines: cards.map(c => { const s = c.querySelector("p.line-clamp-2"); return s ? Math.round(s.getBoundingClientRect().height / parseFloat(getComputedStyle(s).lineHeight)) : 0; }),
+        imgRatio: cards.map(c => { const b = c.querySelector("img").parentElement.getBoundingClientRect(); return +(b.height / b.width).toFixed(2); }),
       };
     });
+    check(data.locations.every(l => !l || l.trim().toLowerCase() !== "rio de janeiro"), `${tag}: redundant city-only location shown: ${JSON.stringify(data.locations)}`);
+    check(data.summaryLines.every(n => n <= 2), `${tag}: summary longer than 2 lines: ${JSON.stringify(data.summaryLines)}`);
+    check(data.imgRatio.every(r => r >= 0.79 && r <= 0.81), `${tag}: image ratio not 5:4: ${JSON.stringify(data.imgRatio)}`);
 
     check(data.cardCount === dbTrips.length, `${tag}: ${data.cardCount} cards vs ${dbTrips.length} DB trips`);
     dbTrips.forEach((t, i) => {

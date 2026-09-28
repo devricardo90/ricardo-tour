@@ -14,8 +14,14 @@ function parseDescription(text: string) {
   const blocks = text.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
   const field = (label: string) =>
     blocks.find((b) => b.startsWith(`${label}:`))?.slice(label.length + 1).trim().replace(/\.$/, "") || null;
-  const summary = blocks.find((b) => !/^(Duracao|Categoria|Inclusoes|Exclusoes):/.test(b)) ?? null;
+  const lead = blocks.find((b) => !/^(Duracao|Categoria|Inclusoes|Exclusoes):/.test(b));
+  const summary = lead ? lead.split(/(?<=[.!?])\s+/)[0] : null;
   return { summary, duration: field("Duracao"), category: field("Categoria") };
+}
+
+function isCityOnly(location: string | null, city: string) {
+  const norm = (s: string) => s.trim().toLowerCase();
+  return !location || norm(location) === norm(city);
 }
 
 interface ExperiencesInRioSectionProps {
@@ -104,7 +110,7 @@ export async function ExperiencesInRioSection({ locale }: ExperiencesInRioSectio
               return (
                 <li key={trip.id} className="w-[82%] shrink-0 snap-start md:w-auto md:shrink">
                   <div className="group flex h-full flex-col overflow-hidden rounded-xl border border-white/8 bg-[#15191D]">
-                    <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-[#0B0E11]">
+                    <div className="relative aspect-[5/4] w-full shrink-0 overflow-hidden bg-[#0B0E11]">
                       <OptimizedImage
                         src={normalizeTripImage(trip.imageUrl)}
                         alt={title}
@@ -124,7 +130,7 @@ export async function ExperiencesInRioSection({ locale }: ExperiencesInRioSectio
                           <p className="mb-2 text-xs font-medium uppercase tracking-[0.14em] text-[#C8A86B]">{category}</p>
                         ) : null}
                         <h3 className="text-[20px] font-semibold leading-[1.1] text-[#F4F0E8]">{title}</h3>
-                        {trip.location ? (
+                        {!isCityOnly(trip.location, trip.city) ? (
                           <div className="mt-2 flex items-center gap-1 text-[13px] text-[#9DA3A5]">
                             <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
                             <span>{trip.location}</span>
@@ -133,30 +139,32 @@ export async function ExperiencesInRioSection({ locale }: ExperiencesInRioSectio
                       </div>
 
                       {summary ? (
-                        <p className="line-clamp-3 text-[13px] leading-[1.45] text-[#CAC7BF]">{summary}</p>
+                        <p className="line-clamp-2 text-[13px] leading-[1.45] text-[#CAC7BF]">{summary}</p>
                       ) : null}
 
-                      {duration ? (
-                        <div className="flex flex-wrap items-center gap-2 pt-1">
-                          <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs text-[#CAC7BF]">
-                            <Clock className="h-3 w-3" aria-hidden="true" />
-                            {duration}
-                          </span>
-                        </div>
-                      ) : null}
+                      <div className="mt-auto flex flex-col gap-4 pt-1">
+                        {duration ? (
+                          <div className="flex flex-wrap items-center gap-2">
+                            <span className="inline-flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-1 text-xs text-[#CAC7BF]">
+                              <Clock className="h-3 w-3" aria-hidden="true" />
+                              {duration}
+                            </span>
+                          </div>
+                        ) : null}
 
-                      <div className="mt-auto flex items-center justify-between gap-3 border-t border-white/8 pt-4">
-                        <div>
-                          <p className="text-[11px] text-[#9DA3A5]">{t.pricePerPerson}</p>
-                          <p className="mt-0.5 text-lg font-semibold text-[#F4F0E8]">R$ {price}</p>
+                        <div className="flex items-center justify-between gap-3 border-t border-white/8 pt-4">
+                          <div>
+                            <p className="text-[11px] text-[#9DA3A5]">{t.pricePerPerson}</p>
+                            <p className="mt-0.5 text-lg font-semibold text-[#F4F0E8]">R$ {price}</p>
+                          </div>
+                          <Link
+                            href={`/tours/${trip.id}`}
+                            aria-label={`${t.viewDetails} — ${title}`}
+                            className="shrink-0 rounded-lg border border-[#C8A86B]/40 px-4 py-2 text-[13px] font-medium text-[#E8C780] transition-colors hover:border-[#C8A86B] hover:bg-[#C8A86B]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8C780]"
+                          >
+                            {t.viewDetails}
+                          </Link>
                         </div>
-                        <Link
-                          href={`/tours/${trip.id}`}
-                          aria-label={`${t.viewDetails} — ${title}`}
-                          className="shrink-0 rounded-lg border border-[#C8A86B]/40 px-4 py-2 text-[13px] font-medium text-[#E8C780] transition-colors hover:border-[#C8A86B] hover:bg-[#C8A86B]/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#E8C780]"
-                        >
-                          {t.viewDetails}
-                        </Link>
                       </div>
                     </div>
                   </div>

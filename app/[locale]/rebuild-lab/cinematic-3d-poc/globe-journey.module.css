@@ -71,16 +71,21 @@
 /* RT-20: outside motion mode (reduced motion, data saver, no JS, or before hydration)
    the timeline never runs, so a frozen "0% / Etapa 1 de 6" readout would misreport
    progress rather than simply hold it. staticNote already explains the still frame,
-   and the six stages remain reachable as the ordered list in the next section, so the
-   rail is hidden instead of showing state that no longer means anything. */
+   and the six stages stay visible as .stageList in the rail's place, so the rail is
+   hidden instead of showing state that no longer means anything. */
 .root:not([data-mode="motion"]) .readout,
 .root:not([data-mode="motion"]) .progressIndicator { display:none; }
-.next { min-height:100svh; padding:100px 7%; background:#f3efe6; color:#171a1e; }
-.next>p:first-child { font-size:12px; color:#53565a; letter-spacing:.08em; }
-.next h2 { font:500 clamp(44px,5vw,72px)/1 var(--journey-display),serif; margin:30px 0; }
-.next>p { max-width:640px; font-size:16px; line-height:1.7; }
-.next ol { display:flex; flex-wrap:wrap; gap:18px 28px; margin-top:60px; list-style:none; padding:0; font-size:14px; }
-.next li span { color:#8a6a2b; }
+.stageList { display:flex; flex-wrap:wrap; gap:6px 18px; margin:12px 0 0; padding:0; list-style:none; font-size:12px; color:#cac7bf; }
+.stageList span { color:#e8c780; }
+.root[data-mode="motion"] .stageList { display:none; }
+/* Edges follow the Experiences container (1280px max, 48/40/20px gutters). */
+.next { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); align-items:end; gap:20px 64px; padding:80px max(48px,calc((100% - 1280px) / 2)); background:#f3efe6; color:#171a1e; }
+.planEyebrow { margin:0; font-size:12px; font-weight:500; letter-spacing:.2em; text-transform:uppercase; color:#53565a; }
+.next h2 { margin:14px 0 0; font:500 clamp(32px,3vw,40px)/1.02 var(--journey-display),serif; }
+.planBody { margin:0; max-width:480px; font-size:16px; line-height:1.6; color:#53565a; }
+@media(max-width:1023px) {
+  .next { padding:64px 40px; }
+}
 @media(max-width:767px) {
   .root { --travel:280svh; }
   .review { padding:14px 20px; font-size:12px; }
@@ -103,7 +108,8 @@
   .scene[data-scene="finale"] { background-position:70% center; }
   .sceneAtmosphere { background:linear-gradient(0deg,rgba(8,12,17,.62),transparent 44%,rgba(8,12,17,.16)),linear-gradient(90deg,rgba(8,12,17,.12),transparent 70%); }
   .shade { background:linear-gradient(0deg,#080c11,transparent 57%,#080c1166); }
-  .next { padding:70px 24px; }
+  .next { grid-template-columns:1fr; gap:16px; padding:48px 20px; }
+  .next h2 { font-size:32px; }
 }
 @media(prefers-reduced-motion:reduce) {
   .root .runway { height:auto; }

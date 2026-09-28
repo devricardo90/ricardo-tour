@@ -106,7 +106,9 @@ const snapshot = page => page.evaluate(selector => {
     fallbackNoteVisible: Array.from(host.querySelectorAll("p")).some(p =>
       p.textContent.includes("vista estática da jornada") && getComputedStyle(p).display !== "none"),
     nextReachable: Boolean(document.querySelector("section[id$='next']")),
-    labelCount: document.querySelectorAll("section[id$='next'] ol li").length,
+    // The static six-stage list now sits in the rail's place inside the stage.
+    labelCount: document.querySelectorAll("[data-stage-list] li").length,
+    labelsVisible: [...document.querySelectorAll("[data-stage-list] li")].every(li => li.getClientRects().length > 0),
     overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
   };
 }, HOST);
@@ -131,6 +133,7 @@ try {
     const s0 = await snapshot(page);
     check(s0.mode === "motion" && s0.webgl === "ready", `A: expected motion+ready, got ${s0.mode}/${s0.webgl}`);
     check(s0.fallbackNoteVisible === false, "A: fallback note wrongly shown while WebGL is ready");
+    check(s0.labelCount === 6 && !s0.labelsVisible, "A: static six-stage list should be hidden while the rail is shown");
     check(s0.progressBarVisible && s0.readoutVisible !== false, "A: progress rail should be visible in full motion mode");
     for (const p of [0, 0.12, 0.44, 0.78, 1]) {
       await scrollTo(page, d, p);
@@ -156,7 +159,7 @@ try {
     check(Math.abs(s.runwayHeight - s.stageHeight) < 4, `B: runway is not collapsed to a single frame (${s.runwayHeight} vs ${s.stageHeight})`);
     check(!s.progressBarVisible, "B: fake frozen progress bar is still visible under reduced motion");
     check(s.readoutVisible === false, "B: frozen readout ('0% / stage 1') is still visible under reduced motion");
-    check(s.nextReachable && s.labelCount === 6, "B: six-stage list not reachable as the accessible equivalent");
+    check(s.nextReachable && s.labelCount === 6 && s.labelsVisible, "B: six-stage list not reachable/visible as the accessible equivalent");
     check(!s.overflow, "B: overflow under reduced motion");
     check(errors.length === 0, `B: console/page errors ${errors.join("; ")}`);
     await page.screenshot({ path: path.join(outDir, "B-desktop-reduced-motion.png") });
@@ -201,7 +204,7 @@ try {
     check(s.mode === "static", `D: expected static mode, got ${s.mode}`);
     check(s.fallbackNoteVisible === false, "D: fallback note wrongly shown on mobile reduced motion");
     check(!s.progressBarVisible && s.readoutVisible === false, "D: frozen progress rail visible on mobile reduced motion");
-    check(s.nextReachable && s.labelCount === 6, "D: six-stage list not reachable on mobile reduced motion");
+    check(s.nextReachable && s.labelCount === 6 && s.labelsVisible, "D: six-stage list not reachable/visible on mobile reduced motion");
     check(!s.overflow, "D: overflow on mobile reduced motion");
     check(errors.length === 0, `D: console/page errors ${errors.join("; ")}`);
     await page.screenshot({ path: path.join(outDir, "D-mobile-reduced-motion.png") });

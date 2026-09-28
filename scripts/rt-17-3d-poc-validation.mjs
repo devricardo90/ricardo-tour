@@ -229,7 +229,10 @@ try {
         mode: document.querySelector(selector)?.getAttribute("data-mode") || null,
         overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
         nextReachable: Boolean(document.querySelector("section[id$='next']")),
-        labelCount: document.querySelectorAll("section[id$='next'] ol li").length,
+        // Version C renders the static six-stage list in the rail's place ([data-stage-list]);
+        // Version B still renders it in its next section. Both must total exactly 6.
+        labelCount: document.querySelectorAll("[data-stage-list] li, section[id$='next'] ol li").length,
+        labelsVisible: [...document.querySelectorAll("[data-stage-list] li, section[id$='next'] ol li")].every(li => li.getClientRects().length > 0),
       }), JOURNEY);
       fallbacks.push({ kind: "reduced-motion", viewport: viewport.name, variant: variant.name, ...reduced, errors: reducedErrors });
       await reducedPage.close();
@@ -241,7 +244,8 @@ try {
         mode: document.querySelector(selector)?.getAttribute("data-mode") || null,
         overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth,
         nextReachable: Boolean(document.querySelector("section[id$='next']")),
-        labelCount: document.querySelectorAll("section[id$='next'] ol li").length,
+        labelCount: document.querySelectorAll("[data-stage-list] li, section[id$='next'] ol li").length,
+        labelsVisible: [...document.querySelectorAll("[data-stage-list] li, section[id$='next'] ol li")].every(li => li.getClientRects().length > 0),
         headline: (document.querySelector("h1")?.textContent || "").replace(/\s+/g, " ").trim(),
       }), JOURNEY);
       fallbacks.push({ kind: "no-javascript", viewport: viewport.name, variant: variant.name, ...noJs, errors: noJsErrors });
@@ -284,6 +288,7 @@ for (const fallback of fallbacks) {
   if (fallback.overflow) failures.push(`${tag}: horizontal overflow`);
   if (!fallback.nextReachable) failures.push(`${tag}: next section unreachable`);
   if (fallback.labelCount !== 6) failures.push(`${tag}: expected 6 labels, found ${fallback.labelCount}`);
+  if (!fallback.labelsVisible) failures.push(`${tag}: six-stage labels present but not visible`);
 }
 
 if (failures.length) {
