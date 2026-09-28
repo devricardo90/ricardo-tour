@@ -18,20 +18,30 @@ const check = (cond, msg) => { if (!cond) failures.push(msg); };
 const canonical = {
   pt: {
     heading: "Turismo local, com orientação humana.",
+    intro: "Passeios guiados, orientação personalizada e atendimento em português, espanhol e inglês.",
     pillars: ["Orientação personalizada", "Turismo local no Rio", "Atendimento em três idiomas"],
+    references: "Referências institucionais",
     foreign: /\b(Local tourism|Service in|Turismo local en|Atención|Orientación)\b/,
   },
   en: {
     heading: "Local tourism, with human guidance.",
+    intro: "Guided tours, personalized travel orientation, and service in Portuguese, Spanish, and English.",
     pillars: ["Personalized orientation", "Local tourism in Rio", "Service in three languages"],
+    references: "Institutional references",
     foreign: /(ção|ções|Turismo local|Atendimento|Atención|Orientación|Português|Portugués)/,
   },
   es: {
     heading: "Turismo local, con orientación humana.",
+    intro: "Tours guiados, orientación personalizada y atención en portugués, español e inglés.",
     pillars: ["Orientación personalizada", "Turismo local en Río", "Atención en tres idiomas"],
+    references: "Referencias institucionales",
     foreign: /(ção|ções|Atendimento|Local tourism|Service in|Português|Portuguese)/,
   },
 };
+
+// Owner-authorized institutional marks, in order, framed from the unmodified composite.
+const MARK_NAMES = ["Cadastur", "ABAV", "TripAdvisor", "Visit Rio", "Visit Brasil"];
+const MARKS_SRC = "/logos/logo-turismo.webp";
 
 // Claims the approved-values register blocks or leaves pending (PT/EN/ES stems).
 const forbidden = /(melhor|best\b|mejor|garant|guarant|24\s*\/\s*7|24h|premiad|award|premio|certific|licen[cs]|seguro|insurance|oficial|official|minist|credenciad|accredit|acreditad|avalia|rating|review|reseña|estrelas|stars|estrellas|anos de|years of|años de|clientes|customers|exclusiv|parceir|partner|socio|embratur|abav|tripadvisor|visit rio|visit brasil|registro n|n[º°o]\s*\d)/i;
@@ -72,9 +82,25 @@ for (const locale of ["pt", "en", "es"]) {
       const bg = getComputedStyle(sec).backgroundColor;
       const textEls = [...sec.querySelectorAll("*")].filter(el => el.childElementCount === 0 && el.textContent.trim() && !el.closest("[aria-hidden='true']") && el.getClientRects().length);
       const exp = document.querySelector("section[aria-labelledby='experiences-in-rio-heading']");
-      const img = sec.querySelector("img");
-      const ir = img.getBoundingClientRect();
-      const plate = img.parentElement;
+      const marks = [...sec.querySelectorAll("svg[role='img']")].map(svg => {
+        const r = svg.getBoundingClientRect();
+        const [, , vw, vh] = svg.getAttribute("viewBox").split(/\s+/).map(Number);
+        const image = svg.querySelector("image");
+        return {
+          name: svg.getAttribute("aria-label"),
+          title: svg.querySelector("title")?.textContent,
+          href: image?.getAttribute("href"),
+          imageSize: [Number(image?.getAttribute("width")), Number(image?.getAttribute("height"))],
+          preserveAspect: image?.getAttribute("preserveAspectRatio"),
+          viewRatio: vw / vh,
+          renderRatio: r.width / r.height,
+          rendered: [Math.round(r.width), Math.round(r.height)],
+          filter: [getComputedStyle(svg).filter, getComputedStyle(image).filter],
+          transform: [svg.getAttribute("transform"), image?.getAttribute("transform")],
+        };
+      });
+      const pillarsBottom = sec.querySelector("ol").getBoundingClientRect().bottom;
+      const strip = sec.querySelector("ul").getBoundingClientRect();
       return {
         bg,
         prevBg: getComputedStyle(exp).backgroundColor,
@@ -84,19 +110,16 @@ for (const locale of ["pt", "en", "es"]) {
         h2Count: sec.querySelectorAll("h2").length,
         h3s: [...sec.querySelectorAll("h3")].map(h => h.textContent),
         text: sec.innerText,
+        intro: sec.querySelector("h2").parentElement.nextElementSibling?.textContent,
         imgs: sec.querySelectorAll("img").length,
-        imgSrc: img.getAttribute("src"),
-        imgAlt: img.alt,
-        imgLoaded: img.complete && img.naturalWidth > 0,
-        imgNatural: [img.naturalWidth, img.naturalHeight],
-        imgRendered: [Math.round(ir.width), Math.round(ir.height)],
-        imgFilter: getComputedStyle(img).filter,
-        plateBg: getComputedStyle(plate).backgroundColor,
-        plateWidthRatio: +(plate.getBoundingClientRect().width / sec.getBoundingClientRect().width).toFixed(2),
-        caption: sec.querySelector("figcaption")?.textContent,
+        marks,
+        referencesLabel: document.getElementById(sec.querySelector("ul").getAttribute("aria-labelledby") ?? "")?.textContent,
+        stripBelowPillars: strip.top >= pillarsBottom - 1,
+        maxMarkHeight: Math.max(...marks.map(m => m.rendered[1])),
+        h3Px: parseFloat(getComputedStyle(sec.querySelector("h3")).fontSize),
         decorativeHidden: [...sec.querySelectorAll("ol li > span")].every(s => s.getAttribute("aria-hidden") === "true"),
-        minFont: Math.min(...textEls.map(el => parseFloat(getComputedStyle(el).fontSize))),
-        lowContrast: textEls.filter(el => !el.closest("figure > div")).map(el => ({ t: el.textContent.trim().slice(0, 24), r: +ratio(getComputedStyle(el).color, bg).toFixed(2) })).filter(x => x.r < 4.5),
+        minFont: Math.min(...textEls.filter(el => !el.closest("svg")).map(el => parseFloat(getComputedStyle(el).fontSize))),
+        lowContrast: textEls.filter(el => !el.closest("svg")).map(el => ({ t: el.textContent.trim().slice(0, 24), r: +ratio(getComputedStyle(el).color, bg).toFixed(2) })).filter(x => x.r < 4.5),
         overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
         links: sec.querySelectorAll("a, button").length,
       };
@@ -110,23 +133,34 @@ for (const locale of ["pt", "en", "es"]) {
     check(!forbidden.test(d.text), `${tag}: forbidden/unsupported claim term: "${(d.text.match(forbidden) || [])[0]}"`);
     check(!c.foreign.test(d.text), `${tag}: mixed-language text: "${(d.text.match(c.foreign) || [])[0]}"`);
     check(!/\d{2}\.\d{3}|\d{6,}/.test(d.text), `${tag}: number that looks like a registration id in section text`);
-    check(d.imgs === 1 && (d.imgSrc.includes("cadastro%2Fcadastur.png") || d.imgSrc.endsWith("/cadastro/cadastur.png")),`${tag}: unexpected Cadastur image ${d.imgSrc} (${d.imgs} imgs)`);
-    check(d.imgAlt === "Cadastur" && d.imgLoaded, `${tag}: Cadastur image alt/load (${d.imgAlt}, loaded ${d.imgLoaded})`);
-    const natural = d.imgNatural[0] / d.imgNatural[1], rendered = d.imgRendered[0] / d.imgRendered[1];
-    check(Math.abs(rendered - natural) / natural < 0.03, `${tag}: Cadastur mark distorted (natural ${natural.toFixed(2)}, rendered ${rendered.toFixed(2)})`);
-    check(d.imgFilter === "none", `${tag}: Cadastur mark recolored (filter ${d.imgFilter})`);
-    check(d.caption?.includes("Cadastur"), `${tag}: Cadastur not present as text (${d.caption})`);
-    check(d.plateWidthRatio <= 0.7, `${tag}: Cadastur block oversized (${d.plateWidthRatio} of section width)`);
+    check(d.intro === c.intro, `${tag}: intro "${d.intro}"`);
+    check(d.referencesLabel === c.references, `${tag}: references label "${d.referencesLabel}"`);
+    check(d.imgs === 0, `${tag}: unexpected <img> in section (${d.imgs})`);
+    check(JSON.stringify(d.marks.map(m => m.name)) === JSON.stringify(MARK_NAMES), `${tag}: marks ${JSON.stringify(d.marks.map(m => m.name))}`);
+    for (const m of d.marks) {
+      check(m.title === m.name, `${tag}: ${m.name} lacks a matching <title>`);
+      check(m.href === MARKS_SRC && m.imageSize[0] === 1324 && m.imageSize[1] === 122, `${tag}: ${m.name} not drawn from the unmodified composite (${m.href} ${m.imageSize})`);
+      check(!m.preserveAspect || m.preserveAspect === "xMidYMid meet", `${tag}: ${m.name} preserveAspectRatio ${m.preserveAspect}`);
+      check(Math.abs(m.renderRatio - m.viewRatio) / m.viewRatio < 0.02, `${tag}: ${m.name} distorted (frame ${m.viewRatio.toFixed(2)}, rendered ${m.renderRatio.toFixed(2)})`);
+      check(m.filter.every(f => f === "none") && m.transform.every(t => !t), `${tag}: ${m.name} recolored/transformed (${m.filter} / ${m.transform})`);
+      check(m.rendered[1] >= 24, `${tag}: ${m.name} too small (${m.rendered.join("x")})`);
+    }
+    const cadastur = d.marks.find(m => m.name === "Cadastur");
+    check(cadastur && cadastur.rendered[1] >= (vp.w >= 768 ? 34 : 30), `${tag}: Cadastur not prominent enough to stay legible (${cadastur?.rendered.join("x")})`);
+    check(d.stripBelowPillars, `${tag}: institutional strip not placed after the pillars`);
+    check(d.maxMarkHeight <= 60, `${tag}: logos dominate the section (tallest mark ${d.maxMarkHeight}px)`);
     check(d.decorativeHidden, `${tag}: decorative pillar numerals exposed to AT`);
     check(d.minFont >= 12, `${tag}: text below 12px (${d.minFont})`);
     check(d.lowContrast.length === 0, `${tag}: low-contrast text ${JSON.stringify(d.lowContrast)}`);
     check(d.overflow <= 0, `${tag}: horizontal overflow ${d.overflow}px`);
     check(d.links === 0, `${tag}: unexpected interactive elements (${d.links})`);
-    check(d.height <= (vp.w >= 1024 ? 700 : 1000), `${tag}: section too tall (${d.height}px)`);
+    check(d.height <= (vp.w >= 1024 ? 620 : 1000), `${tag}: section too tall (${d.height}px)`);
+    const src = await page.request.get(BASE + MARKS_SRC).catch(() => page.request.get(BASE + MARKS_SRC));
+    check(src.status() === 200 && (src.headers()["content-type"] ?? "").includes("image/webp"), `${tag}: marks source not served (${src.status()})`);
     await page.waitForTimeout(500);
     check(errors.length === 0, `${tag}: errors -> ${errors.join(" | ")}`);
 
-    notes.push(`${tag}: ${d.height}px, cadastur ${d.imgRendered.join("x")} (plate ${Math.round(d.plateWidthRatio * 100)}% width), minFont ${d.minFont}px`);
+    notes.push(`${tag}: ${d.height}px, marks ${d.marks.map(m => `${m.name} ${m.rendered.join("x")}`).join(", ")}, minFont ${d.minFont}px`);
     await section.screenshot({ path: path.join(outDir, `why-${locale}-${vp.name}.png`) });
     await context.close();
   }
