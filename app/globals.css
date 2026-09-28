@@ -1,4 +1,9 @@
-@import "tailwindcss";
+/* Explicit allowlist: automatic detection also scanned docs/ and emitted invalid CSS
+   from markdown token examples. Only runtime source directories are scanned. */
+@import "tailwindcss" source(none);
+@source "../app/**/*.{js,jsx,ts,tsx}";
+@source "../components/**/*.{js,jsx,ts,tsx}";
+@source "../lib/**/*.{js,jsx,ts,tsx}";
 
 @custom-variant dark (&:is(.dark *));
 
