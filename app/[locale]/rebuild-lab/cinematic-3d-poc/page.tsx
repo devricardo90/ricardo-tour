@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import GlobeJourney from "./globe-journey";
+import { ExperiencesInRioSection } from "@/components/experiences-in-rio-section";
 
 const display = localFont({
   src: "../../../../docs/baseline/rt-home-design-approved/preview/rt-11-typography-proposal/assets/fonts/cormorant-garamond/latin.woff2",
@@ -18,5 +19,10 @@ export const metadata: Metadata = {
 
 export default async function GlobePocPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
-  return <div className={`${display.variable} ${body.variable}`}><GlobeJourney locale={locale} /></div>;
+  return (
+    <div className={`${display.variable} ${body.variable}`}>
+      <GlobeJourney locale={locale} />
+      <ExperiencesInRioSection locale={locale} />
+    </div>
+  );
 }
