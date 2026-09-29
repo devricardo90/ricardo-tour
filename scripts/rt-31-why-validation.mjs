@@ -65,8 +65,12 @@ for (const locale of ["pt", "en", "es"]) {
     const errors = [];
     page.on("console", m => { if (m.type() === "error") errors.push(`console: ${m.text()}`); });
     page.on("pageerror", e => errors.push(`pageerror: ${e.message}`));
+    const markRequests = [];
+    page.on("request", r => { if (r.url().includes("logo-turismo")) markRequests.push(r.url()); });
     await page.goto(`${BASE}/${locale}/rebuild-lab/cinematic-3d-poc`, { waitUntil: "domcontentloaded", timeout: 180000 });
     await page.waitForLoadState("load", { timeout: 180000 }).catch(() => {});
+    await page.waitForTimeout(2000);
+    check(markRequests.length === 0, `${tag}: institutional marks fetched at initial load (${markRequests.length})`);
 
     const section = page.locator("section[aria-labelledby='why-rick-travel-heading']");
     check(await section.count() === 1, `${tag}: section missing`);
@@ -82,21 +86,29 @@ for (const locale of ["pt", "en", "es"]) {
       const bg = getComputedStyle(sec).backgroundColor;
       const textEls = [...sec.querySelectorAll("*")].filter(el => el.childElementCount === 0 && el.textContent.trim() && !el.closest("[aria-hidden='true']") && el.getClientRects().length);
       const exp = document.querySelector("section[aria-labelledby='experiences-in-rio-heading']");
-      const marks = [...sec.querySelectorAll("svg[role='img']")].map(svg => {
-        const r = svg.getBoundingClientRect();
-        const [, , vw, vh] = svg.getAttribute("viewBox").split(/\s+/).map(Number);
-        const image = svg.querySelector("image");
+      const marks = [...sec.querySelectorAll("[data-mark-frame]")].map(frame => {
+        const r = frame.getBoundingClientRect();
+        const [x, y, vw, vh] = frame.dataset.markFrame.split(/\s+/).map(Number);
+        const img = frame.querySelector("img");
+        const ir = img.getBoundingClientRect();
+        const scale = ir.width / 1324;
         return {
-          name: svg.getAttribute("aria-label"),
-          title: svg.querySelector("title")?.textContent,
-          href: image?.getAttribute("href"),
-          imageSize: [Number(image?.getAttribute("width")), Number(image?.getAttribute("height"))],
-          preserveAspect: image?.getAttribute("preserveAspectRatio"),
+          name: frame.getAttribute("aria-label"),
+          role: frame.getAttribute("role"),
+          imgAlt: img.getAttribute("alt"),
+          src: img.getAttribute("src"),
+          natural: [img.naturalWidth, img.naturalHeight],
+          loading: img.getAttribute("loading"),
+          // Rendered framing must reproduce the approved viewBox: offset and window size in source pixels.
+          offset: [(r.left - ir.left) / scale, (r.top - ir.top) / scale].map(v => Math.round(v)),
+          window: [r.width / scale, r.height / scale].map(v => Math.round(v)),
+          expected: { x, y, w: vw, h: vh },
+          imageRatio: ir.width / ir.height,
           viewRatio: vw / vh,
           renderRatio: r.width / r.height,
           rendered: [Math.round(r.width), Math.round(r.height)],
-          filter: [getComputedStyle(svg).filter, getComputedStyle(image).filter],
-          transform: [svg.getAttribute("transform"), image?.getAttribute("transform")],
+          filter: [getComputedStyle(frame).filter, getComputedStyle(img).filter],
+          transform: [getComputedStyle(frame).transform, getComputedStyle(img).transform],
         };
       });
       const pillarsBottom = sec.querySelector("ol").getBoundingClientRect().bottom;
@@ -118,8 +130,8 @@ for (const locale of ["pt", "en", "es"]) {
         maxMarkHeight: Math.max(...marks.map(m => m.rendered[1])),
         h3Px: parseFloat(getComputedStyle(sec.querySelector("h3")).fontSize),
         decorativeHidden: [...sec.querySelectorAll("ol li > span")].every(s => s.getAttribute("aria-hidden") === "true"),
-        minFont: Math.min(...textEls.filter(el => !el.closest("svg")).map(el => parseFloat(getComputedStyle(el).fontSize))),
-        lowContrast: textEls.filter(el => !el.closest("svg")).map(el => ({ t: el.textContent.trim().slice(0, 24), r: +ratio(getComputedStyle(el).color, bg).toFixed(2) })).filter(x => x.r < 4.5),
+        minFont: Math.min(...textEls.map(el => parseFloat(getComputedStyle(el).fontSize))),
+        lowContrast: textEls.map(el => ({ t: el.textContent.trim().slice(0, 24), r: +ratio(getComputedStyle(el).color, bg).toFixed(2) })).filter(x => x.r < 4.5),
         overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
         links: sec.querySelectorAll("a, button").length,
       };
@@ -135,14 +147,17 @@ for (const locale of ["pt", "en", "es"]) {
     check(!/\d{2}\.\d{3}|\d{6,}/.test(d.text), `${tag}: number that looks like a registration id in section text`);
     check(d.intro === c.intro, `${tag}: intro "${d.intro}"`);
     check(d.referencesLabel === c.references, `${tag}: references label "${d.referencesLabel}"`);
-    check(d.imgs === 0, `${tag}: unexpected <img> in section (${d.imgs})`);
+    check(d.imgs === MARK_NAMES.length, `${tag}: expected ${MARK_NAMES.length} mark images, found ${d.imgs}`);
     check(JSON.stringify(d.marks.map(m => m.name)) === JSON.stringify(MARK_NAMES), `${tag}: marks ${JSON.stringify(d.marks.map(m => m.name))}`);
     for (const m of d.marks) {
-      check(m.title === m.name, `${tag}: ${m.name} lacks a matching <title>`);
-      check(m.href === MARKS_SRC && m.imageSize[0] === 1324 && m.imageSize[1] === 122, `${tag}: ${m.name} not drawn from the unmodified composite (${m.href} ${m.imageSize})`);
-      check(!m.preserveAspect || m.preserveAspect === "xMidYMid meet", `${tag}: ${m.name} preserveAspectRatio ${m.preserveAspect}`);
-      check(Math.abs(m.renderRatio - m.viewRatio) / m.viewRatio < 0.02, `${tag}: ${m.name} distorted (frame ${m.viewRatio.toFixed(2)}, rendered ${m.renderRatio.toFixed(2)})`);
-      check(m.filter.every(f => f === "none") && m.transform.every(t => !t), `${tag}: ${m.name} recolored/transformed (${m.filter} / ${m.transform})`);
+      check(m.role === "img" && m.imgAlt === "", `${tag}: ${m.name} accessible name not on its frame (role ${m.role}, img alt "${m.imgAlt}")`);
+      check(m.src === MARKS_SRC && m.natural[0] === 1324 && m.natural[1] === 122, `${tag}: ${m.name} not drawn from the unmodified composite (${m.src} ${m.natural})`);
+      check(m.loading === "lazy", `${tag}: ${m.name} not lazy-loaded (${m.loading})`);
+      check(Math.abs(m.imageRatio - 1324 / 122) / (1324 / 122) < 0.01, `${tag}: ${m.name} composite distorted (ratio ${m.imageRatio.toFixed(3)})`);
+      check(Math.abs(m.renderRatio - m.viewRatio) / m.viewRatio < 0.02, `${tag}: ${m.name} frame distorted (frame ${m.viewRatio.toFixed(2)}, rendered ${m.renderRatio.toFixed(2)})`);
+      check(Math.abs(m.offset[0] - m.expected.x) <= 2 && Math.abs(m.offset[1] - m.expected.y) <= 2 && Math.abs(m.window[0] - m.expected.w) <= 2 && Math.abs(m.window[1] - m.expected.h) <= 2,
+        `${tag}: ${m.name} framing differs from the approved box (offset ${m.offset}, window ${m.window}, expected ${JSON.stringify(m.expected)})`);
+      check(m.filter.every(f => f === "none") && m.transform.every(t => t === "none"), `${tag}: ${m.name} recolored/transformed (${m.filter} / ${m.transform})`);
       check(m.rendered[1] >= 24, `${tag}: ${m.name} too small (${m.rendered.join("x")})`);
     }
     const cadastur = d.marks.find(m => m.name === "Cadastur");
@@ -162,6 +177,33 @@ for (const locale of ["pt", "en", "es"]) {
 
     notes.push(`${tag}: ${d.height}px, marks ${d.marks.map(m => `${m.name} ${m.rendered.join("x")}`).join(", ")}, minFont ${d.minFont}px`);
     await section.screenshot({ path: path.join(outDir, `why-${locale}-${vp.name}.png`) });
+    await context.close();
+  }
+}
+
+// Reduced motion and data saver must not pull the institutional marks before the section is near.
+for (const mode of ["reduced-motion", "save-data"]) {
+  for (const vp of [{ w: 1440, h: 900 }, { w: 390, h: 844, touch: true }]) {
+    const tag = `${mode}@${vp.w}`;
+    const context = await browser.newContext({ viewport: { width: vp.w, height: vp.h }, hasTouch: !!vp.touch, isMobile: !!vp.touch, reducedMotion: mode === "reduced-motion" ? "reduce" : "no-preference" });
+    if (mode === "save-data") {
+      await context.addInitScript(() => Object.defineProperty(Navigator.prototype, "connection", { get: () => ({ saveData: true, effectiveType: "4g" }), configurable: true }));
+    }
+    const page = await context.newPage();
+    const markRequests = [];
+    page.on("request", r => { if (r.url().includes("logo-turismo")) markRequests.push(r.url()); });
+    await page.goto(`${BASE}/pt/rebuild-lab/cinematic-3d-poc`, { waitUntil: "load", timeout: 180000 });
+    await page.waitForTimeout(2500);
+    const initial = markRequests.length;
+    check(initial === 0, `${tag}: institutional marks fetched at initial load (${initial})`);
+    await page.locator("section[aria-labelledby='why-rick-travel-heading'] ul").scrollIntoViewIfNeeded();
+    await page.waitForTimeout(1500);
+    const loaded = await page.evaluate(() => {
+      const imgs = [...document.querySelectorAll("[data-mark-frame] img")];
+      return imgs.length === 5 && imgs.every(i => i.complete && i.naturalWidth === 1324);
+    });
+    check(markRequests.length === 1 && loaded, `${tag}: marks did not load exactly once when the section was reached (${markRequests.length} req, loaded ${loaded})`);
+    notes.push(`${tag}: marks requests at initial load ${initial}, after reaching the section ${markRequests.length}`);
     await context.close();
   }
 }

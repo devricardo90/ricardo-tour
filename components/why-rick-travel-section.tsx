@@ -1,3 +1,5 @@
+import { InstitutionalMarks } from "@/components/institutional-marks";
+
 // Canonical approved Home copy; claims map to docs/product/ai-concierge-approved-public-business-evidence-values.md.
 // Institutional marks are owner-authorized for display only: no partner/endorsement/certification wording,
 // and Cadastur carries no number/status/validity (not approved for website use).
@@ -36,17 +38,6 @@ const copy = {
     institutional: "Referencias institucionales",
   },
 } as const;
-
-// viewBoxes frame each mark inside the unmodified composite (same framing as the approved RT-12/13 preview);
-// Cadastur is uniformly enlarged because its frame is short, which made its wordmark the smallest.
-const MARKS_SRC = "/logos/logo-turismo.webp";
-const marks = [
-  { name: "Cadastur", box: [0, 30, 255, 62], boost: 1.3 },
-  { name: "ABAV", box: [325, 8, 168, 107], boost: 1 },
-  { name: "TripAdvisor", box: [565, 11, 145, 100], boost: 1 },
-  { name: "Visit Rio", box: [779, 10, 297, 101], boost: 1 },
-  { name: "Visit Brasil", box: [1149, 0, 175, 122], boost: 1 },
-] as const;
 
 export function WhyRickTravelSection({ locale }: { locale: string }) {
   const t = copy[locale as keyof typeof copy] ?? copy.pt;
@@ -92,25 +83,7 @@ export function WhyRickTravelSection({ locale }: { locale: string }) {
           <p id="why-rick-travel-references" className="shrink-0 text-xs font-medium uppercase tracking-[0.14em] text-[#53565A]">
             {t.institutional}
           </p>
-          <ul
-            aria-labelledby="why-rick-travel-references"
-            className="flex flex-wrap items-center gap-x-8 gap-y-5 [--mark-scale:0.4] md:gap-x-10 md:[--mark-scale:0.44]"
-          >
-            {marks.map(({ name, box: [x, y, w, h], boost }) => (
-              <li key={name}>
-                <svg
-                  role="img"
-                  aria-label={name}
-                  viewBox={`${x} ${y} ${w} ${h}`}
-                  className="block"
-                  style={{ width: `calc(${w * boost}px * var(--mark-scale))`, height: `calc(${h * boost}px * var(--mark-scale))` }}
-                >
-                  <title>{name}</title>
-                  <image href={MARKS_SRC} width={1324} height={122} />
-                </svg>
-              </li>
-            ))}
-          </ul>
+          <InstitutionalMarks labelledBy="why-rick-travel-references" />
         </div>
       </div>
     </section>
