@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { AboutPortrait } from "@/components/about-portrait";
 import { Link } from "@/i18n/routing";
 
 // Evidence-grounded copy only. Sources:
@@ -56,16 +56,7 @@ export function AboutRickTravelSection({ locale }: { locale: string }) {
     >
       <div className="mx-auto grid max-w-[1280px] items-center gap-10 md:grid-cols-12 md:gap-12 lg:gap-16">
         <div className="mx-auto w-full max-w-[420px] md:col-span-5 md:max-w-none">
-          <div className="group relative aspect-[4/5] overflow-hidden rounded-[2px] bg-[#E6DFD2]">
-            <Image
-              src="/images/about/ricardo-guia-home.webp"
-              alt={t.imageAlt}
-              fill
-              loading="lazy"
-              sizes="(min-width: 1280px) 500px, (min-width: 768px) 40vw, 420px"
-              className="object-cover object-[50%_20%] motion-safe:transition-transform motion-safe:duration-700 motion-safe:ease-out motion-safe:group-hover:scale-[1.03]"
-            />
-          </div>
+          <AboutPortrait src="/images/about/ricardo-guia-home.webp" alt={t.imageAlt} />
         </div>
 
         <div className="md:col-span-7 lg:col-span-6 lg:col-start-7">

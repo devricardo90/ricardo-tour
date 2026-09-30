@@ -111,7 +111,7 @@ for (const locale of ["pt", "en", "es"]) {
     check(d.imgAlt && d.imgAlt.length > 20 && d.imgLoaded && d.imgLoading === "lazy", `${tag}: image (alt ${!!d.imgAlt}, loaded ${d.imgLoaded}, loading ${d.imgLoading})`);
     check(imgBeforeScroll === 0, `${tag}: About image fetched before any scroll (${imgBeforeScroll}): ${imgRequests[0]}`);
     check(firstFetch !== null && firstFetch.scrollY > 0, `${tag}: About image never requested during scroll`);
-    check(firstFetch === null || firstFetch.sectionTopBelowViewport <= 3000, `${tag}: image fetched too early (${firstFetch && firstFetch.sectionTopBelowViewport}px below viewport)`);
+    check(firstFetch === null || firstFetch.sectionTopBelowViewport <= 700, `${tag}: image fetched too early (${firstFetch && firstFetch.sectionTopBelowViewport}px below viewport)`);
     check(!imgRequests.some((u) => /ricardo-guia-cracha/.test(u)), `${tag}: 2.1 MB original requested`);
     check(imgRequests.length > 0 && imgRequests.every((u) => /ricardo-guia-home.webp/.test(u)), `${tag}: unexpected About image requests ${JSON.stringify([...new Set(imgRequests)])}`);
     check(d.listCount === 0, `${tag}: About contains list/grid structure (${d.listCount})`);
