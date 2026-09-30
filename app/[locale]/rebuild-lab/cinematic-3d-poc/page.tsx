@@ -5,6 +5,7 @@ import { ExperiencesInRioSection } from "@/components/experiences-in-rio-section
 import { WhyRickTravelSection } from "@/components/why-rick-travel-section";
 import { RioStorySection } from "@/components/rio-story-section";
 import { AIConciergeSection } from "@/components/ai-concierge-section";
+import { AboutRickTravelSection } from "@/components/about-rick-travel-section";
 
 const display = localFont({
   src: "../../../../docs/baseline/rt-home-design-approved/preview/rt-11-typography-proposal/assets/fonts/cormorant-garamond/latin.woff2",
@@ -29,6 +30,7 @@ export default async function GlobePocPage({ params }: { params: Promise<{ local
       <WhyRickTravelSection locale={locale} />
       <RioStorySection locale={locale} />
       <AIConciergeSection locale={locale} />
+      <AboutRickTravelSection locale={locale} />
     </div>
   );
 }
