@@ -47,19 +47,19 @@ export function AIConciergeSection({ locale }: { locale: string }) {
   return (
     <section
       aria-labelledby="ai-concierge-heading"
-      className="bg-[#0B0E11] px-5 py-20 text-[#F4F0E8] md:px-10 md:py-24 lg:px-12"
+      className="bg-[#0B0E11] px-5 py-10 text-[#F4F0E8] md:px-10 md:py-12 lg:px-12"
     >
-      <div className="mx-auto grid max-w-[1280px] items-center gap-12 lg:grid-cols-12 lg:gap-6">
+      <div className="mx-auto grid max-w-[1280px] items-center gap-6 lg:grid-cols-12 lg:gap-6">
         <div className="lg:col-span-5">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#C8A86B] md:text-[13px]">AI Concierge</p>
           <h2
             id="ai-concierge-heading"
-            className="mt-4 text-balance text-[32px] font-medium leading-[1.05] md:text-[44px]"
+            className="mt-3 text-balance text-[28px] font-medium leading-[1.05] md:text-[36px]"
             style={{ fontFamily: "var(--journey-display), serif" }}
           >
             {t.heading}
           </h2>
-          <p className="mt-5 max-w-md text-[15px] leading-[1.6] text-[#CAC7BF]">{t.body}</p>
+          <p className="mt-3 max-w-md text-[14px] leading-[1.6] text-[#CAC7BF]">{t.body}</p>
         </div>
         <div className="lg:col-span-6 lg:col-start-7">
           <AIConciergeShell copy={t.shell} statusId="ai-concierge-status" />

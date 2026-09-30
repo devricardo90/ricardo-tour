@@ -114,7 +114,7 @@ for (const locale of ["pt", "en", "es"]) {
     check(d.minFont >= 12, `${tag}: text below 12px (${d.minFont})`);
     check(d.lowContrast.length === 0, `${tag}: low-contrast text ${JSON.stringify(d.lowContrast)}`);
     check(d.placeholderContrast >= 4.5, `${tag}: placeholder contrast ${d.placeholderContrast}`);
-    check(d.height <= (vp.w >= 1024 ? 700 : 1000), `${tag}: section too tall (${d.height}px)`);
+    check(d.height <= (vp.w >= 1024 ? 400 : 620), `${tag}: section too tall (${d.height}px)`);
     check(errors.length === 0, `${tag}: errors ${errors.join(" | ")}`);
 
     notes.push(`${tag}: ${d.height}px, concierge requests ${conciergeRequests.length}, status "${d.status}", placeholder contrast ${d.placeholderContrast}`);

@@ -13,8 +13,8 @@ export type AIConciergeShellCopy = {
 // replacing this static composer with a client component that owns input state and a transport adapter.
 export function AIConciergeShell({ copy, statusId }: { copy: AIConciergeShellCopy; statusId: string }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#15191D] shadow-[0_28px_70px_rgba(0,0,0,0.34)]" data-concierge-shell>
-      <div className="flex items-center justify-between gap-4 border-b border-white/8 px-5 py-4 md:px-6">
+    <div className="overflow-hidden rounded-2xl border border-white/10 bg-[#15191D] shadow-[0_18px_44px_rgba(0,0,0,0.3)]" data-concierge-shell>
+      <div className="flex items-center justify-between gap-4 border-b border-white/8 px-4 py-3 md:px-5">
         <p className="text-[15px] font-semibold text-[#F4F0E8]">AI Concierge</p>
         <p
           id={statusId}
@@ -25,22 +25,22 @@ export function AIConciergeShell({ copy, statusId }: { copy: AIConciergeShellCop
         </p>
       </div>
 
-      <div className="px-5 pb-5 pt-6 md:px-6">
+      <div className="px-4 pb-4 pt-4 md:px-5">
         <p id={`${statusId}-examples`} className="text-xs font-medium uppercase tracking-[0.14em] text-[#9DA3A5]">
           {copy.examplesLabel}
         </p>
-        <ul aria-labelledby={`${statusId}-examples`} className="mt-3 flex flex-col gap-2">
+        <ul aria-labelledby={`${statusId}-examples`} className="mt-2.5 flex flex-wrap gap-2">
           {copy.examples.map((example) => (
             <li
               key={example}
-              className="rounded-xl border border-white/8 bg-white/[0.03] px-4 py-3 text-[14px] leading-[1.45] text-[#CAC7BF]"
+              className="rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[13px] leading-[1.4] text-[#CAC7BF]"
             >
               {example}
             </li>
           ))}
         </ul>
 
-        <div className="mt-5 flex items-center gap-3 rounded-xl border border-white/10 bg-[#0B0E11] py-2 pl-4 pr-2">
+        <div className="mt-3.5 flex items-center gap-3 rounded-xl border border-white/10 bg-[#0B0E11] py-2 pl-4 pr-2">
           <input
             type="text"
             disabled
@@ -54,7 +54,7 @@ export function AIConciergeShell({ copy, statusId }: { copy: AIConciergeShellCop
             disabled
             aria-label={copy.send}
             aria-describedby={statusId}
-            className="grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-[#343B42] bg-[#252B30] text-[#9DA3A5] disabled:cursor-not-allowed"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-[#343B42] bg-[#252B30] text-[#9DA3A5] disabled:cursor-not-allowed"
           >
             <ArrowUp className="h-4 w-4" aria-hidden="true" />
           </button>
