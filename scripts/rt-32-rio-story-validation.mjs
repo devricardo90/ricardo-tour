@@ -259,7 +259,7 @@ try {
       if (vp.w >= 768) {
         check(primary.top === a.top && a.top === b.top, `${tag}: desktop/tablet media not on one row`);
         check(primary.w >= a.w * 1.3 && primary.w >= b.w * 1.3, `${tag}: primary not dominant (${primary.w} vs ${a.w}/${b.w})`);
-        check(d.height <= 900, `${tag}: section too tall (${d.height}px)`);
+        check(d.height <= 640, `${tag}: section too tall (${d.height}px)`);
       } else {
         check(primary.top < a.top && a.top === b.top, `${tag}: mobile order not primary → two stills`);
         check(primary.w > a.w * 1.8, `${tag}: mobile primary not full width (${primary.w} vs ${a.w})`);

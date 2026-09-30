@@ -67,25 +67,25 @@ export function RioStorySection({ locale }: { locale: string }) {
 
   return (
     <section aria-labelledby="rio-story-heading" className="bg-[#F3EFE6] px-5 text-[#171A1E] md:px-10 lg:px-12">
-      <div className="mx-auto max-w-[1280px] border-t border-[#CFC7BA] py-16 md:py-20">
+      <div className="mx-auto max-w-[1280px] border-t border-[#CFC7BA] py-10 md:py-12">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#53565A] md:text-[13px]">Rio Story</p>
           <h2
             id="rio-story-heading"
-            className="mt-4 text-balance text-[32px] font-medium leading-[1.05] md:text-[44px]"
+            className="mt-3 text-balance text-[28px] font-medium leading-[1.05] md:text-[36px]"
             style={{ fontFamily: "var(--journey-display), serif" }}
           >
             {t.heading}
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-[15px] leading-[1.6] text-[#53565A]">{t.intro}</p>
+          <p className="mx-auto mt-3 max-w-xl text-[14px] leading-[1.6] text-[#53565A]">{t.intro}</p>
         </div>
 
         <div
           role="group"
           aria-label={t.mediaLabel}
-          className="mt-10 grid grid-cols-2 gap-3 md:mt-12 md:h-[clamp(360px,34vw,480px)] md:grid-cols-[1.5fr_1fr_1fr] md:gap-4"
+          className="mt-6 grid grid-cols-2 gap-3 md:mt-8 md:h-[clamp(260px,24vw,340px)] md:grid-cols-[1.5fr_1fr_1fr] md:gap-4"
         >
-          <figure className="relative col-span-2 aspect-[4/5] overflow-hidden rounded-2xl bg-[#171A1E] md:col-span-1 md:aspect-auto md:h-full">
+          <figure className="relative col-span-2 aspect-[4/3] overflow-hidden rounded-2xl bg-[#171A1E] md:col-span-1 md:aspect-auto md:h-full">
             <RioStoryVideo
               desktopSrc={`${MEDIA}/rio-story-desktop.mp4`}
               mobileSrc={`${MEDIA}/rio-story-mobile.mp4`}
@@ -99,7 +99,7 @@ export function RioStorySection({ locale }: { locale: string }) {
           </figure>
 
           {t.photos.map((photo, i) => (
-            <figure key={photo.title} className="group relative aspect-[3/4] overflow-hidden rounded-2xl bg-[#171A1E] md:aspect-auto md:h-full">
+            <figure key={photo.title} className="group relative aspect-square overflow-hidden rounded-2xl bg-[#171A1E] md:aspect-auto md:h-full">
               <Image
                 src={photoMedia[i].src}
                 alt={photo.alt}
