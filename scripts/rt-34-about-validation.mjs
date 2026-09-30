@@ -38,18 +38,28 @@ for (const locale of ["pt", "en", "es"]) {
     const errors = [];
     const conciergeRequests = [];
     const imgRequests = [];
+    let firstFetch = null;
     page.on("console", (m) => { if (m.type() === "error") errors.push(`console: ${m.text()}`); });
     page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
     page.on("request", (r) => {
       if (r.url().includes("/api/ai-concierge")) conciergeRequests.push(r.url());
-      if (r.url().includes("ricardo-guia-home")) imgRequests.push(r.url());
+      if (/ricardo-guia|images[/]about/.test(decodeURIComponent(r.url()))) {
+        imgRequests.push(decodeURIComponent(r.url()));
+        // Measure at the moment of the request, before later layout shifts move the section.
+        if (!firstFetch) page.evaluate(() => { const r = document.querySelector("section[aria-labelledby='about-rick-travel-heading']").getBoundingClientRect(); return { scrollY: Math.round(scrollY), sectionTopBelowViewport: Math.round(r.top - innerHeight) }; }).then((v) => { firstFetch ??= v; }).catch(() => {});
+      }
     });
 
     await page.goto(`${BASE}/${locale}/rebuild-lab/${process.env.RT34_ROUTE || "cinematic-3d-poc"}`, { waitUntil: "load", timeout: 180000 });
     if (!process.env.RT34_ROUTE) await page.waitForSelector("[data-testid='globe-journey'][data-mode]", { timeout: 180000 }).catch(() => {});
     await page.waitForTimeout(800);
     const imgBeforeScroll = imgRequests.length;
-    await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += innerHeight) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); } });
+    // Scroll in half-viewport steps; note where the About image is first requested.
+    for (let y = 0; y < (await page.evaluate(() => document.body.scrollHeight)); y += 250) {
+      await page.evaluate((yy) => scrollTo(0, yy), y);
+      await page.waitForTimeout(220);
+    }
+    await page.waitForTimeout(600);
     const section = page.locator(SECTION);
     check(await section.count() === 1, `${tag}: section missing`);
     await section.scrollIntoViewIfNeeded();
@@ -96,11 +106,16 @@ for (const locale of ["pt", "en", "es"]) {
     check(!unsupported.test(d.text), `${tag}: unsupported claim wording: "${(d.text.match(unsupported) || [])[0]}"`);
     check(conciergeRequests.length === 0, `${tag}: ${conciergeRequests.length} request(s) to /api/ai-concierge`);
     check(d.bg === "rgb(251, 248, 242)" && d.aiBg === "rgb(11, 14, 17)" && d.seam === 0, `${tag}: rhythm wrong (About ${d.bg}, AI ${d.aiBg}, gap ${d.seam})`);
-    check(d.order.join(",").endsWith("ai-concierge-heading,about-rick-travel-heading"), `${tag}: section order ${d.order.join(",")}`);
+    const expectedOrder = ["globe-next-title", "experiences-in-rio-heading", "why-rick-travel-heading", "rio-story-heading", "ai-concierge-heading", "about-rick-travel-heading"];
+    check(d.order.join(",") === expectedOrder.join(","), `${tag}: section order ${d.order.join(",")}`);
     check(d.imgAlt && d.imgAlt.length > 20 && d.imgLoaded && d.imgLoading === "lazy", `${tag}: image (alt ${!!d.imgAlt}, loaded ${d.imgLoaded}, loading ${d.imgLoading})`);
-    if (!process.env.RT34_ROUTE) check(imgBeforeScroll === 0, `${tag}: About image fetched before scrolling (${imgBeforeScroll})`);
+    check(imgBeforeScroll === 0, `${tag}: About image fetched before any scroll (${imgBeforeScroll}): ${imgRequests[0]}`);
+    check(firstFetch !== null && firstFetch.scrollY > 0, `${tag}: About image never requested during scroll`);
+    check(firstFetch === null || firstFetch.sectionTopBelowViewport <= 3000, `${tag}: image fetched too early (${firstFetch && firstFetch.sectionTopBelowViewport}px below viewport)`);
+    check(!imgRequests.some((u) => /ricardo-guia-cracha/.test(u)), `${tag}: 2.1 MB original requested`);
+    check(imgRequests.length > 0 && imgRequests.every((u) => /ricardo-guia-home.webp/.test(u)), `${tag}: unexpected About image requests ${JSON.stringify([...new Set(imgRequests)])}`);
     check(d.listCount === 0, `${tag}: About contains list/grid structure (${d.listCount})`);
-    check(d.linkCount === 1 && /\/tours$/.test(d.linkHref) && (linkOk !== 404 && linkOk !== 0), `${tag}: CTA (${d.linkCount}, ${d.linkHref}, HTTP ${linkOk})`);
+    check(d.linkCount === 1 && /\/tours$/.test(d.linkHref) && linkOk === 200, `${tag}: CTA (${d.linkCount}, ${d.linkHref}, HTTP ${linkOk})`);
     if (vp.w >= 768) check(d.splitSideBySide, `${tag}: expected side-by-side split`);
     else check(!d.splitSideBySide, `${tag}: expected stacked layout on mobile`);
     check(d.overflow <= 0, `${tag}: horizontal overflow ${d.overflow}`);
@@ -111,7 +126,7 @@ for (const locale of ["pt", "en", "es"]) {
     await page.locator(`${SECTION} a`).focus();
     check(await page.evaluate((s) => document.activeElement?.closest(s) !== null, SECTION), `${tag}: CTA not keyboard focusable`);
 
-    notes.push(`${tag}: ${d.height}px, CTA ${d.linkHref} HTTP ${linkOk}, overflow ${d.overflow}, minFont ${d.minFont}`);
+    notes.push(`${tag}: first image fetch ${JSON.stringify(firstFetch)}, ${d.height}px, CTA ${d.linkHref} HTTP ${linkOk}, overflow ${d.overflow}, minFont ${d.minFont}`);
     await section.screenshot({ path: path.join(outDir, `about-${locale}-${vp.name}.png`) });
     await context.close();
   }
