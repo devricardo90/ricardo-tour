@@ -45,15 +45,15 @@ export function WhyRickTravelSection({ locale }: { locale: string }) {
   return (
     <section
       aria-labelledby="why-rick-travel-heading"
-      className="bg-[#F3EFE6] px-5 py-16 text-[#171A1E] md:px-10 md:py-20 lg:px-12"
+      className="bg-[#F3EFE6] px-5 py-10 text-[#171A1E] md:px-10 md:py-12 lg:px-12"
     >
       <div className="mx-auto max-w-[1280px]">
-        <div className="grid gap-5 lg:grid-cols-12 lg:items-end lg:gap-6">
+        <div className="grid gap-3 lg:grid-cols-12 lg:items-end lg:gap-6">
           <div className="lg:col-span-6">
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#53565A] md:text-[13px]">{t.eyebrow}</p>
             <h2
               id="why-rick-travel-heading"
-              className="mt-4 text-balance text-[32px] font-medium leading-[1.05] md:text-[44px]"
+              className="mt-3 text-balance text-[28px] font-medium leading-[1.05] md:text-[36px]"
               style={{ fontFamily: "var(--journey-display), serif" }}
             >
               {t.heading}
@@ -62,11 +62,11 @@ export function WhyRickTravelSection({ locale }: { locale: string }) {
           <p className="max-w-md text-[15px] leading-[1.6] text-[#53565A] lg:col-span-5 lg:col-start-8">{t.intro}</p>
         </div>
 
-        <ol className="mt-10 grid border-t border-[#CFC7BA] md:mt-12 md:grid-cols-3">
+        <ol className="mt-6 grid border-t border-[#CFC7BA] md:mt-7 md:grid-cols-3">
           {t.pillars.map((pillar, i) => (
             <li
               key={pillar.title}
-              className="grid grid-cols-[2rem_1fr] gap-x-3 py-5 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-[#CFC7BA] md:py-6 md:pr-8 md:[&:not(:first-child)]:border-l md:[&:not(:first-child)]:pl-8 md:[&:not(:last-child)]:border-b-0"
+              className="grid grid-cols-[2rem_1fr] gap-x-3 py-3.5 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-[#CFC7BA] md:py-4 md:pr-8 md:[&:not(:first-child)]:border-l md:[&:not(:first-child)]:pl-8 md:[&:not(:last-child)]:border-b-0"
             >
               <span aria-hidden="true" className="pt-0.5 text-[13px] font-medium tabular-nums text-[#8A6A2B]">
                 0{i + 1}
@@ -79,7 +79,7 @@ export function WhyRickTravelSection({ locale }: { locale: string }) {
           ))}
         </ol>
 
-        <div className="flex flex-col gap-5 border-t border-[#CFC7BA] pt-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+        <div className="flex flex-col gap-3 border-t border-[#CFC7BA] pt-4 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
           <p id="why-rick-travel-references" className="shrink-0 text-xs font-medium uppercase tracking-[0.14em] text-[#53565A]">
             {t.institutional}
           </p>

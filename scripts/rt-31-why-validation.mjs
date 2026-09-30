@@ -169,7 +169,7 @@ for (const locale of ["pt", "en", "es"]) {
     check(d.lowContrast.length === 0, `${tag}: low-contrast text ${JSON.stringify(d.lowContrast)}`);
     check(d.overflow <= 0, `${tag}: horizontal overflow ${d.overflow}px`);
     check(d.links === 0, `${tag}: unexpected interactive elements (${d.links})`);
-    check(d.height <= (vp.w >= 1024 ? 620 : 1000), `${tag}: section too tall (${d.height}px)`);
+    check(d.height <= (vp.w >= 1024 ? 440 : 720), `${tag}: section too tall (${d.height}px)`);
     const src = await page.request.get(BASE + MARKS_SRC).catch(() => page.request.get(BASE + MARKS_SRC));
     check(src.status() === 200 && (src.headers()["content-type"] ?? "").includes("image/webp"), `${tag}: marks source not served (${src.status()})`);
     await page.waitForTimeout(500);
