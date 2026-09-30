@@ -52,10 +52,10 @@ export function AboutRickTravelSection({ locale }: { locale: string }) {
   return (
     <section
       aria-labelledby="about-rick-travel-heading"
-      className="bg-[#FBF8F2] px-5 py-16 text-[#171A1E] md:px-10 md:py-24 lg:px-12"
+      className="bg-[#FBF8F2] px-5 py-10 text-[#171A1E] md:px-10 md:py-12 lg:px-12"
     >
-      <div className="mx-auto grid max-w-[1280px] items-center gap-10 md:grid-cols-12 md:gap-12 lg:gap-16">
-        <div className="mx-auto w-full max-w-[420px] md:col-span-5 md:max-w-none">
+      <div className="mx-auto grid max-w-[1280px] items-center gap-5 md:grid-cols-12 md:gap-8 lg:gap-12">
+        <div className="md:col-span-5">
           <AboutPortrait src="/images/about/ricardo-guia-home.webp" alt={t.imageAlt} />
         </div>
 
@@ -63,31 +63,32 @@ export function AboutRickTravelSection({ locale }: { locale: string }) {
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#53565A] md:text-[13px]">{t.eyebrow}</p>
           <h2
             id="about-rick-travel-heading"
-            className="mt-4 text-balance text-[34px] font-medium leading-[1.05] md:text-[48px]"
+            className="mt-3 text-balance text-[28px] font-medium leading-[1.05] md:text-[36px]"
             style={{ fontFamily: "var(--journey-display), serif" }}
           >
             {t.heading}
           </h2>
-          <div className="mt-6 max-w-[52ch] space-y-4 text-[16px] leading-[1.7] text-[#3F4247]">
+          <div className="mt-4 max-w-[54ch] space-y-3 text-[15px] leading-[1.6] text-[#3F4247]">
             {t.paragraphs.map((p) => (
               <p key={p}>{p}</p>
             ))}
           </div>
 
-          <div className="mt-8 flex items-center gap-4 border-t border-[#CFC7BA] pt-5">
-            <span aria-hidden="true" className="h-px w-8 bg-[#8A6A2B]" />
-            <p className="text-[14px] leading-[1.4]">
-              <span className="font-semibold">{t.signatureName}</span>
-              <span className="text-[#53565A]"> · {t.signatureRole}</span>
-            </p>
+          <div className="mt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-[#CFC7BA] pt-4">
+            <div className="flex items-center gap-3">
+              <span aria-hidden="true" className="h-px w-6 bg-[#8A6A2B]" />
+              <p className="text-[14px] leading-[1.4]">
+                <span className="font-semibold">{t.signatureName}</span>
+                <span className="text-[#53565A]"> · {t.signatureRole}</span>
+              </p>
+            </div>
+            <Link
+              href="/tours"
+              className="inline-block text-[14px] font-medium text-[#171A1E] underline decoration-[#8A6A2B] underline-offset-[6px] transition-colors hover:text-[#8A6A2B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8A6A2B]"
+            >
+              {t.cta} <span aria-hidden="true">→</span>
+            </Link>
           </div>
-
-          <Link
-            href="/tours"
-            className="mt-6 inline-block text-[14px] font-medium text-[#171A1E] underline decoration-[#8A6A2B] underline-offset-[6px] transition-colors hover:text-[#8A6A2B] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#8A6A2B]"
-          >
-            {t.cta} <span aria-hidden="true">→</span>
-          </Link>
         </div>
       </div>
     </section>

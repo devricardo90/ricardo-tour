@@ -88,6 +88,7 @@ for (const locale of ["pt", "en", "es"]) {
         seam: Math.round(rect.top - ai.getBoundingClientRect().bottom),
         height: Math.round(rect.height), viewportH: innerHeight, text: sec.innerText,
         imgAlt: img.getAttribute("alt"), imgLoaded: img.complete && img.naturalWidth > 0, imgLoading: img.getAttribute("loading"),
+        frameRatio: +(img.closest("[role], div").getBoundingClientRect().width / img.closest("[role], div").getBoundingClientRect().height).toFixed(2),
         splitSideBySide: ir.right <= tr.left + 1,
         linkHref: link?.getAttribute("href"), linkCount: sec.querySelectorAll("a").length,
         listCount: sec.querySelectorAll("li, ol, ul").length,
@@ -118,10 +119,11 @@ for (const locale of ["pt", "en", "es"]) {
     check(d.linkCount === 1 && /\/tours$/.test(d.linkHref) && linkOk === 200, `${tag}: CTA (${d.linkCount}, ${d.linkHref}, HTTP ${linkOk})`);
     if (vp.w >= 768) check(d.splitSideBySide, `${tag}: expected side-by-side split`);
     else check(!d.splitSideBySide, `${tag}: expected stacked layout on mobile`);
+    check(vp.w >= 768 ? d.frameRatio >= 1.45 && d.frameRatio <= 1.55 : d.frameRatio >= 1.55 && d.frameRatio <= 1.65, `${tag}: portrait frame not landscape 3:2 / 16:10 (ratio ${d.frameRatio})`);
     check(d.overflow <= 0, `${tag}: horizontal overflow ${d.overflow}`);
     check(d.minFont >= 12, `${tag}: text below 12px (${d.minFont})`);
     check(d.lowContrast.length === 0, `${tag}: low-contrast ${JSON.stringify(d.lowContrast)}`);
-    check(d.height < (vp.w >= 1024 ? 900 : 1300), `${tag}: section too tall (${d.height}px)`);
+    check(d.height <= (vp.w >= 768 ? 520 : 760), `${tag}: section too tall (${d.height}px)`);
     check(errors.length === 0, `${tag}: errors ${errors.join(" | ")}`);
     await page.locator(`${SECTION} a`).focus();
     check(await page.evaluate((s) => document.activeElement?.closest(s) !== null, SECTION), `${tag}: CTA not keyboard focusable`);
