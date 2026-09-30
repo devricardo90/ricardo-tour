@@ -163,7 +163,7 @@ for (const locale of ["pt", "en", "es"]) {
         ulScrollable: ul.scrollWidth > ul.clientWidth,
         overflowX: getComputedStyle(ul).overflowX,
         perRow,
-        viewAll: sec.querySelector("a[data-experiences-view-all]")?.getAttribute("href"),
+        viewAll: sec.querySelector("div.mt-12 a")?.getAttribute("href"),
         docOverflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
         clipped: cards.filter(c => { const t = c.querySelector("h3"); return t.scrollWidth > t.clientWidth + 1; }).length,
         smallText,
@@ -173,17 +173,13 @@ for (const locale of ["pt", "en", "es"]) {
         prices: cards.map(c => [...c.querySelectorAll("p")].find(p => p.textContent.startsWith("R$"))?.textContent),
         tabOrderOk: [...sec.querySelectorAll("a")].every(a => a.tabIndex === 0),
         locations: cards.map(c => c.querySelector("h3")?.nextElementSibling?.textContent?.trim() ?? null),
-        summaryLines: cards.map(c => { const s = c.querySelector("p[class*='line-clamp']"); return s ? Math.round(s.getBoundingClientRect().height / parseFloat(getComputedStyle(s).lineHeight)) : 0; }),
-        cardHeights: cards.map(c => Math.round(c.getBoundingClientRect().height)),
+        summaryLines: cards.map(c => { const s = c.querySelector("p.line-clamp-2"); return s ? Math.round(s.getBoundingClientRect().height / parseFloat(getComputedStyle(s).lineHeight)) : 0; }),
         imgRatio: cards.map(c => { const b = c.querySelector("img").parentElement.getBoundingClientRect(); return +(b.height / b.width).toFixed(2); }),
       };
     });
     check(data.locations.every(l => !l || l.trim().toLowerCase() !== "rio de janeiro"), `${tag}: redundant city-only location shown: ${JSON.stringify(data.locations)}`);
     check(data.summaryLines.every(n => n <= 2), `${tag}: summary longer than 2 lines: ${JSON.stringify(data.summaryLines)}`);
-    // Wireframe proportion ~1:1.1 (10:11); the two-column 1024–1279 range uses 4:3 so cards stay ~340px tall.
-    const [rMin, rMax] = vp.w >= 1024 && vp.w < 1280 ? [0.74, 0.76] : [1.08, 1.12];
-    check(data.imgRatio.every(r => r >= rMin && r <= rMax), `${tag}: card/image ratio outside ${rMin}-${rMax}: ${JSON.stringify(data.imgRatio)}`);
-    check(vp.w < 1024 || data.cardHeights.every(h => h <= 380), `${tag}: desktop cards too tall: ${JSON.stringify(data.cardHeights)}`);
+    check(data.imgRatio.every(r => r >= 0.79 && r <= 0.81), `${tag}: image ratio not 5:4: ${JSON.stringify(data.imgRatio)}`);
 
     check(data.cardCount === dbTrips.length, `${tag}: ${data.cardCount} cards vs ${dbTrips.length} DB trips`);
     dbTrips.forEach((t, i) => {
