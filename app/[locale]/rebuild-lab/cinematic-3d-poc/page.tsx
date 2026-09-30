@@ -6,6 +6,8 @@ import { WhyRickTravelSection } from "@/components/why-rick-travel-section";
 import { RioStorySection } from "@/components/rio-story-section";
 import { AIConciergeSection } from "@/components/ai-concierge-section";
 import { AboutRickTravelSection } from "@/components/about-rick-travel-section";
+import { HomeHeader } from "@/components/home-header";
+import { HomeFooter } from "@/components/home-footer";
 
 const display = localFont({
   src: "../../../../docs/baseline/rt-home-design-approved/preview/rt-11-typography-proposal/assets/fonts/cormorant-garamond/latin.woff2",
@@ -21,16 +23,21 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Logo/home link target: the top of the rebuilt Home until it replaces the public Home.
+const HOME_HREF = "#top-of-home";
+
 export default async function GlobePocPage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return (
-    <div className={`${display.variable} ${body.variable}`}>
+    <div id="top-of-home" className={`${display.variable} ${body.variable} [&_section[id]]:scroll-mt-16`}>
+      <HomeHeader locale={locale} homeHref={HOME_HREF} />
       <GlobeJourney locale={locale} />
       <ExperiencesInRioSection locale={locale} />
       <WhyRickTravelSection locale={locale} />
       <RioStorySection locale={locale} />
       <AIConciergeSection locale={locale} />
       <AboutRickTravelSection locale={locale} />
+      <HomeFooter locale={locale} homeHref={HOME_HREF} />
     </div>
   );
 }

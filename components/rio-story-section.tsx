@@ -66,7 +66,7 @@ export function RioStorySection({ locale }: { locale: string }) {
   const t = copy[locale as keyof typeof copy] ?? copy.pt;
 
   return (
-    <section aria-labelledby="rio-story-heading" className="bg-[#F3EFE6] px-5 text-[#171A1E] md:px-10 lg:px-12">
+    <section id="rio-story" aria-labelledby="rio-story-heading" className="bg-[#F3EFE6] px-5 text-[#171A1E] md:px-10 lg:px-12">
       <div className="mx-auto max-w-[1280px] border-t border-[#CFC7BA] py-10 md:py-12">
         <div className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-[#53565A] md:text-[13px]">Rio Story</p>

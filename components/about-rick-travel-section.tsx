@@ -51,6 +51,7 @@ export function AboutRickTravelSection({ locale }: { locale: string }) {
 
   return (
     <section
+      id="about-rick-travel"
       aria-labelledby="about-rick-travel-heading"
       className="bg-[#FBF8F2] px-5 py-10 text-[#171A1E] md:px-10 md:py-12 lg:px-12"
     >

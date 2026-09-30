@@ -46,6 +46,7 @@ export function AIConciergeSection({ locale }: { locale: string }) {
 
   return (
     <section
+      id="ai-concierge"
       aria-labelledby="ai-concierge-heading"
       className="bg-[#0B0E11] px-5 py-10 text-[#F4F0E8] md:px-10 md:py-12 lg:px-12"
     >

@@ -74,6 +74,7 @@ export async function ExperiencesInRioSection({ locale }: ExperiencesInRioSectio
 
   return (
     <section
+      id="experiences"
       aria-labelledby="experiences-in-rio-heading"
       className="relative bg-[#0B0E11] px-5 py-20 text-[#F4F0E8] md:px-10 md:py-28 lg:px-12"
     >
