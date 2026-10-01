@@ -1,4 +1,5 @@
-import { prisma } from "@/lib/prisma";
+import { getPublicTrips } from "@/lib/catalog/public-trips";
+import { isCityOnly, parseDescription } from "@/lib/catalog/trip-presentation";
 import { Link } from "@/i18n/routing";
 import { OptimizedImage } from "@/components/ui/optimized-image";
 import { normalizeTripImage } from "@/lib/image-utils";
@@ -8,21 +9,8 @@ import { MapPin, Clock } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
-// scripts/import-real-trips.mjs stores "summary\n\nDuracao: X.\n\nCategoria: Y.\n\n..." in
-// `description`. `durationDays` is only a schema default (1), so duration is read from here.
-function parseDescription(text: string) {
-  const blocks = text.split(/\n\s*\n/).map((b) => b.trim()).filter(Boolean);
-  const field = (label: string) =>
-    blocks.find((b) => b.startsWith(`${label}:`))?.slice(label.length + 1).trim().replace(/\.$/, "") || null;
-  const lead = blocks.find((b) => !/^(Duracao|Categoria|Inclusoes|Exclusoes):/.test(b));
-  const summary = lead ? lead.split(/(?<=[.!?])\s+/)[0] : null;
-  return { summary, duration: field("Duracao"), category: field("Categoria") };
-}
-
-function isCityOnly(location: string | null, city: string) {
-  const norm = (s: string) => s.trim().toLowerCase();
-  return !location || norm(location) === norm(city);
-}
+// Description parsing and the public catalog gate are shared with /tours (lib/catalog), so the Home and the listing
+// cannot drift into different definitions of what is publicly sellable.
 
 interface ExperiencesInRioSectionProps {
   locale: string;
@@ -65,12 +53,8 @@ function resolveCopy(locale: string) {
 export async function ExperiencesInRioSection({ locale }: ExperiencesInRioSectionProps) {
   const t = resolveCopy(locale);
 
-  // Same query shape as components/trip-list.tsx. The exact canonical city value is
-  // deliberate: lowercase "rio de janeiro" records are admin drafts with mismatched copy.
-  const trips = await prisma.trip.findMany({
-    where: { isPublished: true, city: "Rio de Janeiro" },
-    orderBy: { createdAt: "desc" },
-  });
+  // Only the Owner-approved launch trips (public catalog gate), in launch order.
+  const trips = await getPublicTrips();
 
   return (
     <section

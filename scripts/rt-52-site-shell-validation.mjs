@@ -300,16 +300,13 @@ try {
   //  (A) design tokens/typography unchanged and nothing from the new shell mounted;
   //  (B) structural assertions: HTTP 200, no console/page errors, no horizontal overflow, expected legacy structure/H1;
   //  (C) pixel comparison against the pre-change baseline (RT52_BASELINE dir), SCOPED to the region that is
-  //      deterministic. /pt/tours renders lazy, nondeterministic card content: two fresh captures of the same
-  //      unchanged route differ by ~4.5% (cards area, y 300-674), so a full-frame diff cannot be a regression signal there.
-  //      For /pt/tours only the stable top band (header + title, y 0-280) is compared pixel-for-pixel, and the card
-  //      area is covered structurally (card count must equal the published trips in the database).
+  //      deterministic (pages with lazy, nondeterministic content are compared on their stable regions only).
+  //      Note: /pt/tours was part of this list in RT-52 (its card area differed ~4.5% between two captures of the
+  //      same unchanged route) and was migrated by RT-53, which now has its own validator.
   const legacy = [
     { name: "login", path: "/pt/login", h1: "Entre para acompanhar suas reservas", pixels: { top: 0, height: 900 } },
     { name: "register", path: "/pt/register", h1: "Crie sua conta para reservar com mais clareza", pixels: { top: 0, height: 900 } },
-    // The legacy header's nav/auth controls (x>600, y<90) render their text colour depending on theme hydration timing, so
-    // that strip is masked; the logo area and everything between the header and the lazy cards are compared exactly.
-    { name: "tours", path: "/pt/tours", h1: "Nossos tours", pixels: { regions: [{ left: 0, top: 90, width: 1440, height: 190 }, { left: 0, top: 0, width: 600, height: 90 }] }, legacyHeader: true, tripCards: true },
+    // /pt/tours was migrated to the (site) group by RT-53 and is validated by scripts/rt-53-tours-listing-validation.mjs.
     { name: "home-legacy", path: "/pt", h1: "Passeios guiados no Rio de Janeiro", pixels: { top: 0, height: 900 }, legacyHeader: true },
     { name: "contato", path: "/pt/contato", h1: "Fale com a Rick Travel sobre sua viagem no Rio", pixels: { top: 0, height: 900 }, legacyHeader: true },
     { name: "admin-guard", path: "/pt/admin", h1: "Entre para acompanhar suas reservas" },
