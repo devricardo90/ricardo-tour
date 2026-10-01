@@ -6,6 +6,7 @@ import { getPublicTripById } from "@/lib/catalog/public-trips";
 import { getLocalizedField } from "@/lib/localized-field";
 import { asLocalizedText } from "@/lib/types";
 import { sendTourRequestNotification } from "@/lib/services/tour-request-notification";
+import { clientKeyFromHeaders, createRateLimiter } from "@/lib/security/rate-limit";
 import { buildStoredRequestMessage, normalizeValues, validateTourRequest, type TourRequestErrors } from "@/lib/tour-request";
 
 // Guest tour request (RT-55): no account, no payment, no availability confirmation. It reuses the existing
@@ -22,28 +23,14 @@ export type TourRequestState =
   | { ok: false; reason: "rate_limited" | "not_found" | "unavailable" };
 
 const LOCALES = ["pt", "en", "es"] as const;
-const RATE_LIMIT = 5;
-const RATE_WINDOW_MS = 10 * 60 * 1000;
-const hits = new Map<string, number[]>();
-
-function isRateLimited(key: string, now = Date.now()) {
-  const recent = (hits.get(key) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
-  if (recent.length >= RATE_LIMIT) {
-    hits.set(key, recent);
-    return true;
-  }
-  recent.push(now);
-  hits.set(key, recent);
-  return false;
-}
+const limiter = createRateLimiter({ limit: 5, windowMs: 10 * 60 * 1000 });
 
 export async function submitTourRequest(formData: FormData): Promise<TourRequestState> {
   // Honeypot: real visitors never see or fill this field. Pretend success and store nothing.
   if (String(formData.get("company_website") ?? "").trim() !== "") return { ok: true };
 
   const h = await headers();
-  const forwarded = h.get("x-forwarded-for")?.split(",")[0]?.trim();
-  if (isRateLimited(forwarded || h.get("x-real-ip") || "unknown")) return { ok: false, reason: "rate_limited" };
+  if (limiter.isLimited(clientKeyFromHeaders(h))) return { ok: false, reason: "rate_limited" };
 
   const rawLocale = String(formData.get("locale") ?? "pt");
   const locale = (LOCALES as readonly string[]).includes(rawLocale) ? rawLocale : "pt";

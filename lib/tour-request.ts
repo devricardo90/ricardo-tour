@@ -44,6 +44,16 @@ function digitsOf(value: string) {
   return value.replace(/\D/g, "");
 }
 
+/** One definition of a valid contact e-mail / phone, shared by every public form (tour request, contact message). */
+export function isValidEmail(value: string) {
+  return EMAIL_RE.test(value);
+}
+
+export function isValidPhone(value: string) {
+  const digits = digitsOf(value).length;
+  return digits >= 8 && digits <= 15;
+}
+
 export function normalizeValues(input: Partial<Record<keyof TourRequestValues, unknown>>): TourRequestValues {
   const text = (v: unknown) => (typeof v === "string" ? v.trim() : "");
   return { name: text(input.name), email: text(input.email), phone: text(input.phone), date: text(input.date), party: text(input.party), notes: text(input.notes) };
@@ -57,8 +67,8 @@ export function validateTourRequest(values: TourRequestValues, today: string = t
 
   const hasEmail = values.email.length > 0;
   const hasPhone = values.phone.length > 0;
-  if (hasEmail && !EMAIL_RE.test(values.email)) errors.email = "email_invalid";
-  if (hasPhone && (digitsOf(values.phone).length < 8 || digitsOf(values.phone).length > 15)) errors.phone = "phone_invalid";
+  if (hasEmail && !isValidEmail(values.email)) errors.email = "email_invalid";
+  if (hasPhone && !isValidPhone(values.phone)) errors.phone = "phone_invalid";
   if (!hasEmail && !hasPhone) errors.contact = "contact_required";
 
   if (!values.date) errors.date = "date_required";

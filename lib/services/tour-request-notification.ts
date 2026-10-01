@@ -22,12 +22,13 @@ export function resolveEmailMode(env: Record<string, string | undefined> = proce
   return env.RESEND_API_KEY ? "send" : "off";
 }
 
-export async function sendTourRequestNotification(input: { submissionId: string; tripTitle: string; message: string; replyTo?: string }): Promise<NotificationResult> {
+export async function sendContactNotification(input: { submissionId: string; subject: string; message: string; replyTo?: string; logTag?: string }): Promise<NotificationResult> {
   const mode = resolveEmailMode();
-  const subject = `Nova solicitação de passeio: ${input.tripTitle}`;
+  const subject = input.subject;
+  const tag = input.logTag ?? "contact";
   if (mode === "off") return "skipped";
   if (mode === "log") {
-    console.info(`[tour-request] email muted submission=${input.submissionId} to=${NOTIFICATION_RECIPIENT} replyTo=${input.replyTo ? "set" : "none"} subject="${subject}"`);
+    console.info(`[${tag}] email muted submission=${input.submissionId} to=${NOTIFICATION_RECIPIENT} replyTo=${input.replyTo ? "set" : "none"} subject="${subject}"`);
     return "muted";
   }
   try {
@@ -40,12 +41,16 @@ export async function sendTourRequestNotification(input: { submissionId: string;
       ...(input.replyTo ? { replyTo: input.replyTo } : {}),
     });
     if (error) {
-      console.error("[tour-request] notification failed", error.message);
+      console.error(`[${tag}] notification failed`, error.message);
       return "failed";
     }
     return "sent";
   } catch (error) {
-    console.error("[tour-request] notification error", error instanceof Error ? error.message : error);
+    console.error(`[${tag}] notification error`, error instanceof Error ? error.message : error);
     return "failed";
   }
+}
+
+export function sendTourRequestNotification(input: { submissionId: string; tripTitle: string; message: string; replyTo?: string }) {
+  return sendContactNotification({ submissionId: input.submissionId, subject: `Nova solicitação de passeio: ${input.tripTitle}`, message: input.message, replyTo: input.replyTo, logTag: "tour-request" });
 }

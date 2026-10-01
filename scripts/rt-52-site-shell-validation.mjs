@@ -308,7 +308,7 @@ try {
     { name: "register", path: "/pt/register", h1: "Crie sua conta para reservar com mais clareza", pixels: { top: 0, height: 900 } },
     // /pt/tours was migrated to the (site) group by RT-53 and is validated by scripts/rt-53-tours-listing-validation.mjs.
     { name: "home-legacy", path: "/pt", h1: "Passeios guiados no Rio de Janeiro", pixels: { top: 0, height: 900 }, legacyHeader: true },
-    { name: "contato", path: "/pt/contato", h1: "Fale com a Rick Travel sobre sua viagem no Rio", pixels: { top: 0, height: 900 }, legacyHeader: true },
+    // /pt/contato was migrated to the (site) group by RT-56 and is validated by scripts/rt-56-contact-about-validation.mjs.
     { name: "admin-guard", path: "/pt/admin", h1: "Entre para acompanhar suas reservas" },
   ];
   let publishedTrips = null;
