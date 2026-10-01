@@ -3,7 +3,7 @@
     "matchByTitlePt": "Passeio Confeitaria Colombo",
     "nome": "Confeitaria Colombo + City Tour Rio",
     "slug": "confeitaria-colombo-city-tour",
-    "descricao": "Explore o principal cartão-postal do Brasil com visita a confeitaria colombo r e passeio pelos pontos históricos do Rio de Janeiro. Inclui transporte confortável e guia credenciado.",
+    "descricao": "Explore o principal cartão-postal do Brasil com visita a confeitaria colombo r e passeio pelos pontos históricos do Rio de Janeiro. Inclui transporte confortável e acompanhamento guiado.",
     "duracao": "5 horas",
     "preco_base": 245,
     "local": "Rio de Janeiro",
@@ -16,7 +16,7 @@
     ],
     "inclusoes": [
       "Transporte ida e volta",
-      "Guia turístico credenciado",
+      "Guia turístico",
       "Paradas para fotos"
     ],
     "exclusoes": [
@@ -109,7 +109,7 @@
     "matchByTitlePt": "Tour Favela",
     "nome": "Tour Favela Rocinha com Guia Local",
     "slug": "tour-favela-rocinha",
-    "descricao": "Conheça a cultura local da maior favela do Brasil com guia especializado e experiência segura.",
+    "descricao": "Conheça a cultura local da maior favela do Brasil com guia especializado e experiência guiada na Rocinha.",
     "duracao": "3 a 4 horas",
     "preco_base": 120,
     "local": "Rio de Janeiro",
