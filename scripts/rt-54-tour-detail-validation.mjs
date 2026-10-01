@@ -26,9 +26,9 @@ const TRIPS = [
 const EXCLUDED = ["cmljpnazn0001t0zq92ywd6xk", "cmljpsn0j0002t0zqsv6g1los", "cmlibqq5g0001z4zqopyzqlpz", "cmoa70dy400002kzqugm2oulu", "doesnotexist"];
 
 const copy = {
-  pt: { back: "Voltar para os passeios", facts: "INFORMAÇÕES DO PASSEIO", price: "Preço por pessoa", duration: "Duração", about: "Sobre o passeio", schedule: "PRÓXIMAS DATAS", noSchedule: "As datas são combinadas diretamente com a equipe.", slot: "Fale com a equipe", cta: "Falar com a equipe", foreign: /(Back to|Tour details|Price per person|Duration|About this tour|Upcoming dates|Talk to the team|Volver a|Información del tour|Precio por|Habla con)/ },
-  en: { back: "Back to all tours", facts: "TOUR DETAILS", price: "Price per person", duration: "Duration", about: "About this tour", schedule: "UPCOMING DATES", noSchedule: "Dates are arranged directly with the team.", slot: "Talk to the team", cta: "Contact the team", foreign: /(Voltar para|Informações do passeio|Preço por pessoa|Duração|Sobre o passeio|Próximas datas|Fale com|Volver a|Información del tour|Precio por|Habla con)/ },
-  es: { back: "Volver a los tours", facts: "INFORMACIÓN DEL TOUR", price: "Precio por persona", duration: "Duración", about: "Sobre este tour", schedule: "PRÓXIMAS FECHAS", noSchedule: "Las fechas se coordinan directamente con el equipo.", slot: "Habla con el equipo", cta: "Contactar al equipo", foreign: /(Voltar para|Informações do passeio|Preço por pessoa|Duração|Sobre o passeio|Próximas datas|Fale com|Back to|Tour details|Price per person|Talk to the team)/ },
+  pt: { back: "Voltar para os passeios", facts: "INFORMAÇÕES DO PASSEIO", price: "Preço por pessoa", duration: "Duração", about: "Sobre o passeio", schedule: "PRÓXIMAS DATAS", noSchedule: "As datas são combinadas diretamente com a equipe.", slot: "Solicite este passeio", cta: "Falar com a equipe", foreign: /(Back to|Tour details|Price per person|Duration|About this tour|Upcoming dates|Talk to the team|Volver a|Información del tour|Precio por|Habla con)/ },
+  en: { back: "Back to all tours", facts: "TOUR DETAILS", price: "Price per person", duration: "Duration", about: "About this tour", schedule: "UPCOMING DATES", noSchedule: "Dates are arranged directly with the team.", slot: "Request this tour", cta: "Contact the team", foreign: /(Voltar para|Informações do passeio|Preço por pessoa|Duração|Sobre o passeio|Próximas datas|Fale com|Volver a|Información del tour|Precio por|Habla con)/ },
+  es: { back: "Volver a los tours", facts: "INFORMACIÓN DEL TOUR", price: "Precio por persona", duration: "Duración", about: "Sobre este tour", schedule: "PRÓXIMAS FECHAS", noSchedule: "Las fechas se coordinan directamente con el equipo.", slot: "Solicita este tour", cta: "Contactar al equipo", foreign: /(Voltar para|Informações do passeio|Preço por pessoa|Duração|Sobre o passeio|Próximas datas|Fale com|Back to|Tour details|Price per person|Talk to the team)/ },
 };
 
 const rawMetadata = /(Duracao:|Duração:|Categoria:|Inclusoes:|Inclusões:|Exclusoes:|Exclusões:)/;
@@ -53,8 +53,8 @@ const browser = await chromium.launch({ args: ["--disable-gpu", "--enable-unsafe
 const dataClaims = new Set();
 
 // ---- static: backend preserved, /api/trips untouched ----
-const untouched = execSync("git diff --name-only HEAD -- app/api lib/services/booking.service.ts lib/whatsapp.ts components/trips/tour-actions.tsx", { encoding: "utf8" }).trim();
-check(untouched === "", `booking backend / legacy WhatsApp builder / /api changed: ${untouched}`);
+const untouched = execSync("git diff --name-only HEAD -- app/api lib/services/booking.service.ts components/trips/tour-actions.tsx", { encoding: "utf8" }).trim();
+check(untouched === "", `booking backend / /api changed (lib/whatsapp.ts is intentionally updated by RT-55): ${untouched}`);
 notes.push("booking backend (app/api/bookings, booking.service) and /api/trips unchanged; API_TRIPS_GATE: DEFERRED_TO_RT57");
 
 // ---- excluded ids -> 404 in every locale ----
@@ -116,7 +116,7 @@ for (const { locale, vp, trip } of runs) {
       // Location elements (not the title text): the city/place must be shown once, never as repeated chips.
       cityOccurrencesInHeader: [...(main.querySelector("article header")?.querySelectorAll("p, span, li") ?? [])].filter((e) => e.children.length === 0 && e.textContent.trim() === "Rio de Janeiro").length,
       back: back && { text: back.textContent.trim(), href: back.getAttribute("href"), h: Math.round(rect(back).height), contrast: +ratio(backCs.color, bgOf(back)).toFixed(2) },
-      slot: !!main.querySelector("[data-conversion-slot='rt-55']"), formCount: main.querySelectorAll("form").length, buttons: [...main.querySelectorAll("button")].map((b) => b.textContent.trim()),
+      slot: !!main.querySelector("[data-conversion-slot='rt-55']"), formCount: main.querySelectorAll("form").length, formsPostingToBookings: [...main.querySelectorAll("form")].filter((f) => /bookings|login|register/.test(f.getAttribute("action") || "")).length, buttons: [...main.querySelectorAll("button")].map((b) => b.textContent.trim()),
       price: main.querySelector("article header .text-\\[30px\\]")?.textContent.trim() ?? (main.innerText.match(/R\$ \d+,\d{2}/) || [])[0],
       dt, dl: !!main.querySelector("dl"), ulCount: main.querySelectorAll("ul").length,
       asidePosition: aside && getComputedStyle(aside).position, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -138,8 +138,8 @@ for (const { locale, vp, trip } of runs) {
   check(!trust.test(d.chromeText), `${tag}: unsupported trust/credential claim in the interface "${(d.chromeText.match(trust) || [])[0]}"`);
   (d.contentText.match(new RegExp(trust.source, "gi")) || []).forEach((m) => dataClaims.add(`${trip.id.slice(-6)}: "${m}"`));
   check(!accentDebt.test(d.mainText), `${tag}: unaccented legacy copy "${(d.mainText.match(accentDebt) || [])[0]}"`);
-  check(!accountEntry.test(d.mainText) && !d.links.some((l) => /login|register|\/api\/bookings/.test(l.href || "")) && d.formCount === 0 && d.buttons.length === 0, `${tag}: login-gated or booking action on the page (${JSON.stringify(d.buttons)})`);
-  check(d.slot && d.links.some((l) => l.href === "#tour-contact") && d.links.some((l) => new RegExp(`^/${locale}/contato$`).test(l.href || "")), `${tag}: RT-55 slot / contact CTAs missing`);
+  check(!accountEntry.test(d.mainText) && !d.links.some((l) => /login|register|\/api\/bookings/.test(l.href || "")) && d.formsPostingToBookings === 0, `${tag}: login-gated or booking action on the page`); // RT-55 added the guest request form (validated by scripts/rt-55-guest-conversion-validation.mjs)
+  check(d.slot && d.links.some((l) => l.href === "#tour-contact"), `${tag}: conversion slot / shortcut missing`);
   const wa = d.links.find((l) => /wa\.me/.test(l.href || ""));
   const mail = d.links.find((l) => (l.href || "").startsWith("mailto:"));
   check(wa && wa.href.startsWith("https://wa.me/5522998461906?text=") && wa.target === "_blank" && /noopener/.test(wa.rel || ""), `${tag}: WhatsApp link ${JSON.stringify(wa)}`);

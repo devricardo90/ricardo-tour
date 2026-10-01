@@ -1,4 +1,8 @@
-const WHATSAPP_PHONE = "5521971168114";
+import { PUBLIC_CONTACT } from "@/lib/public-contact";
+
+// RT-55: the public WhatsApp number has a single source (lib/public-contact.ts); this legacy quote builder only
+// formats its message, so no code path keeps sending visitors to a superseded number.
+const WHATSAPP_PHONE = PUBLIC_CONTACT.whatsappDigits;
 
 type WhatsAppSource = "home" | "tour_detail" | "bookings";
 

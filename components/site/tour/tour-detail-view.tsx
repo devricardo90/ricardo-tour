@@ -198,7 +198,7 @@ export function TourDetailView({ trip, locale }: { trip: DetailTrip; locale: str
 
             <aside className="lg:col-span-5">
               <div className="lg:sticky lg:top-24">
-                <TourConversionSlot t={t} title={title} />
+                <TourConversionSlot tripId={trip.id} title={title} locale={locale} />
               </div>
             </aside>
           </div>

@@ -3,7 +3,8 @@
 //
 // Superseded values that must NOT appear in new public UI:
 //   contact@travelrick.com (and any travelrick.com address), +55 21 96681-9928, +55 21 97116-8114.
-// Legacy code paths that still hold them (e.g. lib/whatsapp.ts) are migrated by their own tickets (RT-55, RT-56).
+// lib/whatsapp.ts now reads the WhatsApp number from here (RT-55); other legacy holders (components/about/*) are
+// migrated by their own ticket (RT-56).
 
 export const PUBLIC_CONTACT = {
   email: "contato@ricardotour.com",
