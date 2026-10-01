@@ -7,6 +7,8 @@
 export type ParsedTripDescription = {
   /** First sentence of the lead paragraph: safe public summary, never raw metadata. */
   summary: string | null;
+  /** Every non-metadata paragraph, in order: natural prose for a detail page (never raw metadata). */
+  paragraphs: string[];
   /** Raw duration text, e.g. "5 a 6 horas". */
   duration: string | null;
   category: string | null;
@@ -28,6 +30,7 @@ export function parseTripDescription(text: string): ParsedTripDescription {
   const summary = lead ? lead.split(/(?<=[.!?])\s+/)[0] : null;
   return {
     summary,
+    paragraphs: blocks.filter((b) => !METADATA_LABELS.test(b)),
     duration: field("Duracao"),
     category: field("Categoria"),
     includes: splitList(field("Inclusoes")),

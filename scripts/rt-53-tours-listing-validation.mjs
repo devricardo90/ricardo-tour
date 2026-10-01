@@ -188,7 +188,8 @@ for (const { locale, vp } of runs) {
   const page = await context.newPage();
   await page.goto(`${BASE}/pt/tours/${APPROVED[0]}`, { waitUntil: "load", timeout: 120000 });
   const legacy = await page.evaluate(() => ({ siteTheme: document.querySelectorAll(".site-theme").length, header: document.querySelector("header")?.getAttribute("role") ?? "legacy" }));
-  notes.push(`DETAIL_DESIGN: LEGACY_PENDING_RT54 (site-theme ${legacy.siteTheme}, header ${legacy.header})`);
+  // RT-54 migrated the detail page; its own validator (scripts/rt-54-tour-detail-validation.mjs) checks its design.
+  notes.push(`DETAIL_DESIGN: ${legacy.siteTheme === 1 ? "migrated to the (site) group by RT-54" : "LEGACY_PENDING_RT54"} (site-theme ${legacy.siteTheme}, header ${legacy.header})`);
   await context.close();
 }
 

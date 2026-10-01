@@ -128,7 +128,11 @@ export async function getPublicTrips() {
 /** One public trip by id, or null when it is not part of the public catalog (RT-54 uses this to 404 hidden records). */
 export async function getPublicTripById(id: string) {
   if (!isLaunchApproved(id)) return null;
-  const row = await prisma.trip.findFirst({ where: { id, isPublished: true }, include: { schedules: true } });
+  const row = await prisma.trip.findFirst({
+    where: { id, isPublished: true },
+    // Only OPEN schedules that have not started yet (past dates are never shown), earliest first.
+    include: { schedules: { where: { status: "OPEN", startAt: { gte: new Date() } }, orderBy: { startAt: "asc" } } },
+  });
   return row && evaluatePublicTrip(row).included ? row : null;
 }
 

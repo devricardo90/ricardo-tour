@@ -9,6 +9,8 @@ describe("trip presentation helpers (RT-53)", () => {
     const parsed = parseTripDescription(raw);
     expect(parsed.summary).toBe("Visite os dois pontos turísticos mais famosos do Rio em um único passeio com transporte, guia e ingressos inclusos.");
     expect(parsed.summary).not.toMatch(/Duracao|Categoria|Inclusoes|Exclusoes/);
+    expect(parsed.paragraphs).toEqual(["Visite os dois pontos turísticos mais famosos do Rio em um único passeio com transporte, guia e ingressos inclusos."]);
+    expect(parsed.paragraphs.join(" ")).not.toMatch(/Duracao|Categoria|Inclusoes|Exclusoes/);
     expect(parsed.duration).toBe("5 a 6 horas");
     expect(parsed.category).toBe("Passeio Clássico");
     expect(parsed.includes).toEqual(["Transporte em van", "Guia turístico"]);
