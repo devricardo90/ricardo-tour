@@ -9,7 +9,7 @@ import fs from "node:fs";
 import path from "node:path";
 
 const BASE = "http://127.0.0.1:3218";
-const ROUTE = (locale) => `${BASE}/${locale}/rebuild-lab/cinematic-3d-poc`;
+const ROUTE = (locale) => `${BASE}/${locale}`;
 const SECTION = "section[aria-labelledby='rio-story-heading']";
 const DESKTOP_MP4 = "/media/rio-story/rio-story-desktop.mp4";
 const MOBILE_MP4 = "/media/rio-story/rio-story-mobile.mp4";

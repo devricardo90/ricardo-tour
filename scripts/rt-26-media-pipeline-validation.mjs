@@ -23,7 +23,7 @@ const hash = buf => crypto.createHash("sha256").update(buf).digest("hex");
 const sourceHashes = {};
 
 function hashSourceAssets() {
-  const dir = path.join(repoRoot, "app", "[locale]", "rebuild-lab", "cinematic-3d-poc", "assets");
+  const dir = path.join(repoRoot, "components", "home", "hero", "assets");
   for (const file of fs.readdirSync(dir)) {
     // RT-28 added a `derivatives/` subdirectory alongside the source masters; this
     // fingerprint only covers the flat master files themselves.
@@ -31,8 +31,8 @@ function hashSourceAssets() {
     sourceHashes[file] = hash(fs.readFileSync(path.join(dir, file)));
   }
   // Also fingerprint the Hero implementation itself, to prove RT-26 never touched it.
-  const heroDir = path.join(repoRoot, "app", "[locale]", "rebuild-lab", "cinematic-3d-poc");
-  for (const file of ["globe-journey.tsx", "globe-journey.module.css", "globe-3d.ts", "world-atlas.ts", "page.tsx"]) {
+  const heroDir = path.join(repoRoot, "components", "home", "hero");
+  for (const file of ["globe-journey.tsx", "globe-journey.module.css", "globe-3d.ts", "world-atlas.ts"]) {
     sourceHashes[`hero:${file}`] = hash(fs.readFileSync(path.join(heroDir, file)));
   }
 }
@@ -100,7 +100,7 @@ try {
     version: 1,
     assets: [{
       id: "missing-test", scene: "TEST",
-      master: { path: "app/[locale]/rebuild-lab/cinematic-3d-poc/assets/does-not-exist.webp", provenanceStatus: "RIGHTS_NOT_VERIFIED", productionStatus: "PROTOTYPE_ONLY" },
+      master: { path: "components/home/hero/assets/does-not-exist.webp", provenanceStatus: "RIGHTS_NOT_VERIFIED", productionStatus: "PROTOTYPE_ONLY" },
     }],
   }));
   let badExitCode = 0;
@@ -141,14 +141,14 @@ try {
   fs.rmSync(alphaOutDir, { recursive: true, force: true });
 
   // ---- No source overwrite / no Hero regression ----
-  const dir = path.join(repoRoot, "app", "[locale]", "rebuild-lab", "cinematic-3d-poc", "assets");
+  const dir = path.join(repoRoot, "components", "home", "hero", "assets");
   for (const file of fs.readdirSync(dir)) {
     if (!(file in sourceHashes)) continue;
     const rehash = hash(fs.readFileSync(path.join(dir, file)));
     check(rehash === sourceHashes[file], `temporary source asset was modified: ${file}`);
   }
-  const heroDir = path.join(repoRoot, "app", "[locale]", "rebuild-lab", "cinematic-3d-poc");
-  for (const file of ["globe-journey.tsx", "globe-journey.module.css", "globe-3d.ts", "world-atlas.ts", "page.tsx"]) {
+  const heroDir = path.join(repoRoot, "components", "home", "hero");
+  for (const file of ["globe-journey.tsx", "globe-journey.module.css", "globe-3d.ts", "world-atlas.ts"]) {
     const rehash = hash(fs.readFileSync(path.join(heroDir, file)));
     check(rehash === sourceHashes[`hero:${file}`], `Hero implementation file changed: ${file}`);
   }

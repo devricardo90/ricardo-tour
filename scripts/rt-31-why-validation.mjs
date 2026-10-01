@@ -67,7 +67,7 @@ for (const locale of ["pt", "en", "es"]) {
     page.on("pageerror", e => errors.push(`pageerror: ${e.message}`));
     const markRequests = [];
     page.on("request", r => { if (r.url().includes("logo-turismo")) markRequests.push(r.url()); });
-    await page.goto(`${BASE}/${locale}/rebuild-lab/cinematic-3d-poc`, { waitUntil: "domcontentloaded", timeout: 180000 });
+    await page.goto(`${BASE}/${locale}`, { waitUntil: "domcontentloaded", timeout: 180000 });
     await page.waitForLoadState("load", { timeout: 180000 }).catch(() => {});
     await page.waitForTimeout(2000);
     check(markRequests.length === 0, `${tag}: institutional marks fetched at initial load (${markRequests.length})`);
@@ -169,7 +169,9 @@ for (const locale of ["pt", "en", "es"]) {
     check(d.lowContrast.length === 0, `${tag}: low-contrast text ${JSON.stringify(d.lowContrast)}`);
     check(d.overflow <= 0, `${tag}: horizontal overflow ${d.overflow}px`);
     check(d.links === 0, `${tag}: unexpected interactive elements (${d.links})`);
-    check(d.height <= (vp.w >= 1024 ? 440 : 720), `${tag}: section too tall (${d.height}px)`);
+    // RT-57: on the public route the section body text renders in Inter (the (site) theme font) instead of the lab system font,
+    // which is slightly wider; the mobile cap moved from 720px to 740px (measured 729px at 360px wide).
+    check(d.height <= (vp.w >= 1024 ? 440 : 740), `${tag}: section too tall (${d.height}px)`);
     const src = await page.request.get(BASE + MARKS_SRC).catch(() => page.request.get(BASE + MARKS_SRC));
     check(src.status() === 200 && (src.headers()["content-type"] ?? "").includes("image/webp"), `${tag}: marks source not served (${src.status()})`);
     await page.waitForTimeout(500);
@@ -192,7 +194,7 @@ for (const mode of ["reduced-motion", "save-data"]) {
     const page = await context.newPage();
     const markRequests = [];
     page.on("request", r => { if (r.url().includes("logo-turismo")) markRequests.push(r.url()); });
-    await page.goto(`${BASE}/pt/rebuild-lab/cinematic-3d-poc`, { waitUntil: "load", timeout: 180000 });
+    await page.goto(`${BASE}/pt`, { waitUntil: "load", timeout: 180000 });
     await page.waitForTimeout(2500);
     const initial = markRequests.length;
     check(initial === 0, `${tag}: institutional marks fetched at initial load (${initial})`);

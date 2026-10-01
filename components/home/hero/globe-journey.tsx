@@ -10,7 +10,7 @@ import styles from "./globe-journey.module.css";
 const translations = {
   pt: {
     labels: ["Globo", "América do Sul", "Brasil", "Rio de Janeiro", "Helicóptero", "Cristo Redentor"],
-    preview: "Rick Travel · Uma jornada pelo Rio", media: "Uma jornada cinematográfica pelo Rio",
+    regionLabel: "Rick Travel · Uma jornada pelo Rio", media: "Uma jornada cinematográfica pelo Rio",
     scroll: "Role para entrar na jornada", skip: "Ir para a próxima seção ↓",
     planEyebrow: "Planeje sua viagem", next: "Voos para o Rio de Janeiro",
     progress: "Progresso da jornada", stage: "Etapa", of: "de",
@@ -21,7 +21,7 @@ const translations = {
   },
   en: {
     labels: ["Globe", "South America", "Brazil", "Rio de Janeiro", "Helicopter", "Christ the Redeemer"],
-    preview: "Rick Travel · A journey through Rio", media: "A cinematic journey through Rio",
+    regionLabel: "Rick Travel · A journey through Rio", media: "A cinematic journey through Rio",
     scroll: "Scroll into the journey", skip: "Go to the next section ↓",
     planEyebrow: "Plan your trip", next: "Flights to Rio de Janeiro",
     progress: "Journey progress", stage: "Stage", of: "of",
@@ -32,7 +32,7 @@ const translations = {
   },
   es: {
     labels: ["Globo", "América del Sur", "Brasil", "Río de Janeiro", "Helicóptero", "Cristo Redentor"],
-    preview: "Rick Travel · Un viaje por Río", media: "Un viaje cinematográfico por Río",
+    regionLabel: "Rick Travel · Un viaje por Río", media: "Un viaje cinematográfico por Río",
     scroll: "Desplázate para entrar en el recorrido", skip: "Ir a la siguiente sección ↓",
     planEyebrow: "Planea tu viaje", next: "Vuelos a Río de Janeiro",
     progress: "Progreso del viaje", stage: "Etapa", of: "de",
@@ -366,8 +366,7 @@ export default function GlobeJourney({ locale }: { locale: string }) {
   }, [labels, t.of, t.stage]);
 
   return <div ref={root} className={styles.root} data-testid="globe-journey" data-progress="0" data-state="0">
-    <div className={styles.review}><span>{t.preview}</span><nav aria-label="Language">{["pt", "en", "es"].map(l => <a key={l} href={`/${l}/rebuild-lab/cinematic-3d-poc`} aria-current={locale === l ? "page" : undefined}>{l.toUpperCase()}</a>)}</nav></div>
-    <section className={styles.runway} data-runway aria-label={t.preview}>
+    <section className={styles.runway} data-runway aria-label={t.regionLabel}>
       <div className={styles.stage} data-stage>
         <div className={styles.visual}>
           <div className={styles.starField} data-layer="stars" aria-hidden="true"/>

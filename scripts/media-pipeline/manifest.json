@@ -6,7 +6,7 @@
       "id": "rio-04",
       "scene": "SHOT-04-rio",
       "master": {
-        "path": "app/[locale]/rebuild-lab/cinematic-3d-poc/assets/rio-aerial-arrival.webp",
+        "path": "components/home/hero/assets/rio-aerial-arrival.webp",
         "provenanceStatus": "RIGHTS_NOT_VERIFIED",
         "productionStatus": "PROTOTYPE_ONLY",
         "replaceBeforeProduction": true,
@@ -19,7 +19,7 @@
       "id": "helicopter-05",
       "scene": "SHOT-05-helicopter",
       "master": {
-        "path": "app/[locale]/rebuild-lab/cinematic-3d-poc/assets/rio-helicopter-cockpit.webp",
+        "path": "components/home/hero/assets/rio-helicopter-cockpit.webp",
         "provenanceStatus": "RIGHTS_NOT_VERIFIED",
         "productionStatus": "PROTOTYPE_ONLY",
         "replaceBeforeProduction": true,
@@ -32,7 +32,7 @@
       "id": "christ-06",
       "scene": "SHOT-06-christ",
       "master": {
-        "path": "app/[locale]/rebuild-lab/cinematic-3d-poc/assets/rio-christ-finale.webp",
+        "path": "components/home/hero/assets/rio-christ-finale.webp",
         "provenanceStatus": "RIGHTS_NOT_VERIFIED",
         "productionStatus": "PROTOTYPE_ONLY",
         "replaceBeforeProduction": true,

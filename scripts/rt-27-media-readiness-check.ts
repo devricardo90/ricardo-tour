@@ -14,7 +14,7 @@
  *
  *   npx tsx scripts/rt-27-media-readiness-check.ts
  */
-import { HERO_MEDIA_STATUS } from "../app/[locale]/rebuild-lab/cinematic-3d-poc/hero-media-status";
+import { HERO_MEDIA_STATUS } from "../components/home/hero/hero-media-status";
 
 const notReady = Object.entries(HERO_MEDIA_STATUS).filter(
   ([, status]) => status.productionStatus !== "PRODUCTION_APPROVED" || status.provenanceStatus !== "RIGHTS_VERIFIED",

@@ -17,7 +17,7 @@ const origin = process.env.RT20_ORIGIN || "http://127.0.0.1:3218";
 const outDir = path.resolve(process.env.RT20_OUT_DIR || ".tmp/rt-20-fallback-review");
 fs.mkdirSync(outDir, { recursive: true });
 
-const ROUTE = "/pt/rebuild-lab/cinematic-3d-poc";
+const ROUTE = "/pt";
 const HOST = "[data-testid='globe-journey']";
 const boundaries = [0, 0.12, 0.28, 0.44, 0.62, 0.78];
 const expectedStage = p => boundaries.reduce((active, boundary, index) => p >= boundary ? index : active, 0);

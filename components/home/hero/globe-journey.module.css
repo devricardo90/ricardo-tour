@@ -7,9 +7,6 @@
  */
 .root { background:#080c11; color:#f4f0e8; font-family:var(--journey-body),sans-serif; --travel:320svh; }
 .root * { box-sizing:border-box; }
-.review { display:flex; justify-content:space-between; gap:16px; padding:16px 4%; font-size:12px; color:#cac7bf; border-bottom:1px solid #3a4147; }
-.review nav { display:flex; gap:18px; }
-.review a[aria-current] { color:#e8c780; }
 .root a:focus-visible { outline:2px solid #e8c780; outline-offset:5px; }
 .runway { height:auto; }
 .stage { height:100svh; min-height:640px; position:relative; overflow:hidden; isolation:isolate; }
@@ -88,8 +85,6 @@
 }
 @media(max-width:767px) {
   .root { --travel:280svh; }
-  .review { padding:14px 20px; font-size:12px; }
-  .review>span { max-width:230px; }
   .topline { inset:24px 20px auto; font-size:12px; letter-spacing:.07em; }
   .topline>span:last-child { display:none; }
   .globe { left:0; right:0; top:6%; bottom:10%; }

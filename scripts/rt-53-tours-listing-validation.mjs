@@ -168,7 +168,7 @@ for (const { locale, vp } of runs) {
     }
     if (locale === "pt") {
       const home = await context.newPage();
-      await home.goto(`${BASE}/pt/rebuild-lab/cinematic-3d-poc`, { waitUntil: "load", timeout: 180000 });
+      await home.goto(`${BASE}/pt`, { waitUntil: "load", timeout: 180000 });
       const homeIds = await home.evaluate(() => [...new Set([...document.querySelectorAll("#experiences ul a[href*='/tours/']")].map((a) => a.getAttribute("href").split("/tours/")[1]))]);
       check(JSON.stringify(homeIds) === JSON.stringify(ids), `Home Experiences ids ${JSON.stringify(homeIds)} != listing ids ${JSON.stringify(ids)}`);
       notes.push(`home vs listing: same ${homeIds.length} trips in the same order`);

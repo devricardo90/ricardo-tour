@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { RickTravelLogo } from "@/components/rick-travel-logo";
-import { SiteAnchor } from "@/components/site/site-anchor";
+import { SiteAnchor, SiteHomeLink } from "@/components/site/site-anchor";
 import { navHashes, resolveSiteChromeCopy, type AnchorMode } from "@/components/site/site-chrome-copy";
 import { PUBLIC_CONTACT } from "@/lib/public-contact";
 
@@ -31,15 +31,9 @@ export function SiteFooter({ locale, anchorMode = "home", homeHref = "#top-of-ho
       <div className="mx-auto max-w-[1280px]">
         <div className="grid gap-5 md:grid-cols-12 md:gap-8 lg:gap-10">
           <div className="md:col-span-4 lg:col-span-5">
-            {anchorMode === "page" ? (
-              <a href={homeHref} aria-label={t.logoAria} className={logoClass}>
-                <RickTravelLogo variant="full" size="sm" className="h-10" />
-              </a>
-            ) : (
-              <Link href="/" aria-label={t.logoAria} className={logoClass}>
-                <RickTravelLogo variant="full" size="sm" className="h-10" />
-              </Link>
-            )}
+            <SiteHomeLink mode={anchorMode} homeHref={homeHref} aria-label={t.logoAria} className={logoClass}>
+              <RickTravelLogo variant="full" size="sm" className="h-10" />
+            </SiteHomeLink>
             <p className="mt-3 max-w-[34ch] text-[14px] leading-[1.6] text-[var(--site-on-dark-muted,#CAC7BF)]">{f.description}</p>
           </div>
 

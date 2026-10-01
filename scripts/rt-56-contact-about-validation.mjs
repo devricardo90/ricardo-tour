@@ -73,7 +73,8 @@ const noticed = execSync("git diff --name-only HEAD -- app/api prisma/schema.pri
 check(noticed === "", `schema / booking / email service / admin / auth changed: ${noticed}`);
 const notifier = fs.readFileSync("lib/services/tour-request-notification.ts", "utf8");
 check(/NOTIFICATION_SENDER = "Rick Travel <reservas@ricktravel\.com\.br>"/.test(notifier) && /NOTIFICATION_RECIPIENT = PUBLIC_CONTACT\.email/.test(notifier), "notification sender/recipient configuration changed");
-check(fs.existsSync("components/about/security-section.tsx") && fs.existsSync("components/contact-form.tsx") && fs.existsSync("app/actions/contact.ts"), "a legacy component was deleted (cleanup is deferred)");
+// RT-57 retired the unreferenced legacy About/contact components; the contact Server Action must remain.
+check(fs.existsSync("app/actions/contact.ts"), "app/actions/contact.ts was deleted");
 notes.push("static: no stale values in new files; no schema/booking/email-service/admin/auth change; sender reservas@ricktravel.com.br unchanged, recipient contato@ricardotour.com; legacy contact/about components kept (unreferenced by routes)");
 
 // ---------- every route x locale x viewport ----------

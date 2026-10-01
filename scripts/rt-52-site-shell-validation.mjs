@@ -61,7 +61,10 @@ let browser;
 try {
   // ---------- static checks (no browser) ----------
   const adminPaths = ["app/globals.css", "components/ui", "app/[locale]/admin", "app/[locale]/layout.tsx"];
-  const adminDiff = execSync(`git diff --name-only 1da2abd -- ${adminPaths.map((p) => `"${p}"`).join(" ")}`, { encoding: "utf8" }).trim();
+  // RT-57 intentionally changed two of these paths: the root locale layout (production SEO metadata: sv noindex, no missing
+  // OG image / stale preconnect) and components/ui/fade-in-section.tsx (legacy Home helper, deleted with the legacy Home).
+  const RT57_EXPECTED = new Set(["app/[locale]/layout.tsx", "components/ui/fade-in-section.tsx"]);
+  const adminDiff = execSync(`git diff --name-only 1da2abd -- ${adminPaths.map((p) => `"${p}"`).join(" ")}`, { encoding: "utf8" }).split(/\r?\n/).map((l) => l.trim()).filter((l) => l && !RT57_EXPECTED.has(l)).join("; ");
   check(adminDiff === "", `ADMIN/global files changed vs RT-35 baseline: ${adminDiff}`);
   const layoutSrc = fs.readFileSync("app/[locale]/(site)/layout.tsx", "utf8");
   check(!/AIConciergeWidget|ai-concierge-widget/.test(layoutSrc), "(site) layout imports the AI widget");
@@ -307,7 +310,7 @@ try {
     { name: "login", path: "/pt/login", h1: "Entre para acompanhar suas reservas", pixels: { top: 0, height: 900 } },
     { name: "register", path: "/pt/register", h1: "Crie sua conta para reservar com mais clareza", pixels: { top: 0, height: 900 } },
     // /pt/tours was migrated to the (site) group by RT-53 and is validated by scripts/rt-53-tours-listing-validation.mjs.
-    { name: "home-legacy", path: "/pt", h1: "Passeios guiados no Rio de Janeiro", pixels: { top: 0, height: 900 }, legacyHeader: true },
+    // /pt (legacy Home) was retired and replaced by the rebuilt Home by RT-57; see scripts/rt-57-public-promotion-validation.mjs.
     // /pt/contato was migrated to the (site) group by RT-56 and is validated by scripts/rt-56-contact-about-validation.mjs.
     { name: "admin-guard", path: "/pt/admin", h1: "Entre para acompanhar suas reservas" },
   ];

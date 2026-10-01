@@ -62,7 +62,7 @@ async function stylingProbe(page) {
 }
 
 // ---- Site-wide route recovery + styling ----
-for (const route of ["/pt", "/pt/tours", "/pt/rebuild-lab", "/pt/rebuild-lab/cinematic-3d-poc"]) {
+for (const route of ["/pt", "/pt/tours", "/pt/rebuild-lab"]) {
   const { context, page, errors, status } = await openPage(BASE + route, { width: 1440, height: 900 });
   const s = await stylingProbe(page);
   check(status === 200, `${route}: HTTP ${status}`);
@@ -88,14 +88,14 @@ const viewports = [
 for (const locale of ["pt", "en", "es"]) {
   for (const vp of viewports) {
     if (locale !== "pt" && !["1440x900", "390x844"].includes(vp.name)) continue;
-    const url = `${BASE}/${locale}/rebuild-lab/cinematic-3d-poc`;
+    const url = `${BASE}/${locale}`;
     const { context, page, errors, imageRequests } = await openPage(url, { width: vp.w, height: vp.h }, { touch: vp.touch });
     const tag = `${locale}@${vp.name}`;
 
     await page.waitForTimeout(3000);
     const early = imageRequests.filter(r => r.url.includes("images%2Ftrips") || r.url.includes("/images/trips/"));
     const earlyKB = Math.round(early.reduce((a, r) => a + r.bytes, 0) / 1024);
-    const heroEarly = imageRequests.filter(r => r.url.includes("cinematic-3d-poc") || r.url.includes("rio-04") || r.url.includes("helicopter-05") || r.url.includes("christ-06")).length;
+    const heroEarly = imageRequests.filter(r => r.url.includes("components/home/hero") || r.url.includes("rio-04") || r.url.includes("helicopter-05") || r.url.includes("christ-06")).length;
     check(heroEarly === 0, `${tag}: RT-28 regression — ${heroEarly} Hero photos fetched at initial load`);
     notes.push(`${tag}: before scroll — trip images fetched ${early.length} (${earlyKB} KB, native lazy threshold), Hero photos fetched ${heroEarly}`);
     const mode = await page.evaluate(() => document.querySelector("[data-testid=globe-journey]")?.dataset.mode);
@@ -196,7 +196,7 @@ for (const locale of ["pt", "en", "es"]) {
     check(data.clipped === 0, `${tag}: ${data.clipped} clipped titles`);
     check(data.smallText.length === 0, `${tag}: text below 11px: ${data.smallText.join(", ")}`);
     check(data.viewAll === `/${locale}/tours`, `${tag}: view-all href ${data.viewAll}`);
-    check(/^display[ ,]|journey-display|Cormorant/i.test(data.h2Font), `${tag}: heading font ${data.h2Font}`);
+    check(/^(display|siteDisplay)[ ,]|journey-display|Cormorant/i.test(data.h2Font), `${tag}: heading font ${data.h2Font}`);
     check(data.heroH1Font === data.h2Font, `${tag}: section heading font ${data.h2Font} differs from Hero h1 ${data.heroH1Font}`);
     check(!/Duracao:|Categoria:|Inclusoes:|Exclusoes:/.test(data.text), `${tag}: raw description metadata leaked into cards`);
     check(!/(^|[^0-9])1 (dia|day|día)[^s]/.test(data.text + " "), `${tag}: schema-default duration shown`);
@@ -228,7 +228,7 @@ for (const locale of ["pt", "en", "es"]) {
 
 // ---- Keyboard: Tab reaches card CTAs in order ----
 {
-  const { context, page } = await openPage(`${BASE}/pt/rebuild-lab/cinematic-3d-poc`, { width: 390, height: 844 });
+  const { context, page } = await openPage(`${BASE}/pt`, { width: 390, height: 844 });
   const section = page.locator("section[aria-labelledby='experiences-in-rio-heading']");
   await section.scrollIntoViewIfNeeded();
   const firstLink = section.locator("ul a").first();

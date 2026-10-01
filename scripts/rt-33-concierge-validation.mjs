@@ -45,7 +45,7 @@ for (const locale of ["pt", "en", "es"]) {
     page.on("pageerror", (e) => errors.push(`pageerror: ${e.message}`));
     page.on("request", (r) => { if (r.url().includes("/api/ai-concierge")) conciergeRequests.push(r.url()); });
 
-    await page.goto(`${BASE}/${locale}/rebuild-lab/cinematic-3d-poc`, { waitUntil: "load", timeout: 180000 });
+    await page.goto(`${BASE}/${locale}`, { waitUntil: "load", timeout: 180000 });
     await page.waitForSelector("[data-testid='globe-journey'][data-mode]", { timeout: 180000 }).catch(() => {});
     // Walk the whole page so every section mounts, then settle on the Concierge.
     await page.evaluate(async () => { for (let y = 0; y < document.body.scrollHeight; y += innerHeight) { scrollTo(0, y); await new Promise((r) => setTimeout(r, 60)); } });

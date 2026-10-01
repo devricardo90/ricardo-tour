@@ -1,5 +1,5 @@
 /**
- * RT-35 validation — rebuilt Home navbar + footer.
+ * RT-35 validation — rebuilt Home navbar + footer (re-pointed at the public Home /{locale} by RT-57; chrome now comes from the (site) layout).
  * Requires a dev server on :3218 and the local Postgres (the Home renders the real Experiences query).
  *
  *   node scripts/rt-35-chrome-validation.mjs
@@ -9,7 +9,6 @@ import fs from "node:fs";
 import path from "node:path";
 
 const BASE = "http://127.0.0.1:3218";
-const ROUTE = "rebuild-lab/cinematic-3d-poc";
 const outDir = path.resolve(".tmp/rt-35-evidence");
 fs.mkdirSync(outDir, { recursive: true });
 const failures = [];
@@ -55,7 +54,7 @@ for (const { locale, vp } of runs) {
     if (decodeURIComponent(r.url()).includes("cadastro/cadastur")) cadasturRequests.push(r.url());
   });
 
-  await page.goto(`${BASE}/${locale}/${ROUTE}`, { waitUntil: "load", timeout: 180000 });
+  await page.goto(`${BASE}/${locale}`, { waitUntil: "load", timeout: 180000 });
   await page.waitForSelector("[data-testid='globe-journey'][data-mode]", { timeout: 180000 }).catch(() => {});
   await page.waitForTimeout(1000);
   const cadasturAtLoad = cadasturRequests.length;
@@ -77,7 +76,7 @@ for (const { locale, vp } of runs) {
     const root = document.getElementById("top-of-home");
     return {
       position: cs.position, bg: cs.backgroundColor, height: Math.round(r.height), top: Math.round(r.top), width: Math.round(r.width),
-      role: header.getAttribute("role"), firstChild: root.firstElementChild === header,
+      role: header.getAttribute("role"), firstChild: header.parentElement.classList.contains("site-theme") && document.querySelectorAll("header[role='banner']").length === 1 && header.nextElementSibling?.id === "main-content",
       logoRatio: lr ? +(lr.width / lr.height).toFixed(3) : null, logoH: lr ? Math.round(lr.height) : null,
       logoLabel: header.querySelector("a[aria-label]")?.getAttribute("aria-label"),
       navLabel: nav?.getAttribute("aria-label"), navLinks, desktopNavVisible: vis(nav),
@@ -111,7 +110,7 @@ for (const { locale, vp } of runs) {
     check(JSON.stringify(h.navLinks.map((l) => l.text)) === JSON.stringify(c.nav), `${tag}: nav labels ${JSON.stringify(h.navLinks.map((l) => l.text))}`);
     check(JSON.stringify(h.navLinks.map((l) => l.href)) === JSON.stringify(anchors), `${tag}: nav destinations ${JSON.stringify(h.navLinks.map((l) => l.href))}`);
     check(h.menu && !h.menu.visible, `${tag}: menu button visible on desktop`);
-    check(h.langLinks.length === 3 && h.langLinks.filter((l) => l.cur === "true").length === 1 && h.langLinks.find((l) => l.cur === "true").t === locale.toUpperCase() && h.langLinks.every((l) => l.href === `/${l.t.toLowerCase()}/${ROUTE}`), `${tag}: language links ${JSON.stringify(h.langLinks)}`);
+    check(h.langLinks.length === 3 && h.langLinks.filter((l) => l.cur === "true").length === 1 && h.langLinks.find((l) => l.cur === "true").t === locale.toUpperCase() && h.langLinks.every((l) => l.href === `/${l.t.toLowerCase()}`), `${tag}: language links ${JSON.stringify(h.langLinks)}`);
   } else {
     check(!h.desktopNavVisible, `${tag}: desktop nav visible on small screen`);
     check(h.menu && h.menu.visible && h.menu.expanded === "false" && h.panelHidden === true && h.menu.w >= 44 && h.menu.h >= 44 && h.menu.label, `${tag}: menu trigger ${JSON.stringify(h.menu)} panelHidden ${h.panelHidden}`);
@@ -131,7 +130,7 @@ for (const { locale, vp } of runs) {
   if (desktop) {
     for (const a of anchors) await landing(() => page.locator(`header nav[aria-label]:visible a[href='${a}']`).click(), a, `nav ${a}`);
     await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" })); await settle();
-    await landing(() => page.locator("header a[href='#globe-next']").click(), "#globe-next", "CTA");
+    await landing(() => page.locator(`header a[href='#globe-next']`).click(), "#globe-next", "CTA");
   } else {
     // Mobile disclosure: open → links visible → Escape closes and restores focus → re-open → link closes + lands.
     const btn = page.locator("button[aria-controls='site-mobile-navigation']");
@@ -150,7 +149,7 @@ for (const { locale, vp } of runs) {
     await btn.click();
     await page.waitForTimeout(200);
     await page.screenshot({ path: path.join(outDir, `menu-${locale}-${vp.name}.png`), clip: { x: 0, y: 0, width: vp.w, height: Math.min(vp.h, 460) } });
-    await landing(() => page.locator("#site-mobile-navigation a[href='#ai-concierge']").click(), "#ai-concierge", "menu #ai-concierge");
+    await landing(() => page.locator(`#site-mobile-navigation a[href='#ai-concierge']`).click(), "#ai-concierge", "menu #ai-concierge");
     const afterLink = await page.evaluate(() => document.getElementById("site-mobile-navigation").hidden);
     check(afterLink, `${tag}: menu stayed open after activating a link`);
     // outside click closes
@@ -158,14 +157,14 @@ for (const { locale, vp } of runs) {
     await page.mouse.click(vp.w / 2, vp.h - 20); await page.waitForTimeout(200);
     check(await page.evaluate(() => document.getElementById("site-mobile-navigation").hidden), `${tag}: outside click did not close the menu`);
     await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" })); await settle();
-    await landing(() => page.locator("header a[href='#globe-next']").click(), "#globe-next", "CTA");
+    await landing(() => page.locator(`header a[href='#globe-next']`).click(), "#globe-next", "CTA");
   }
 
   // Header stays put while scrolling (sticky) and keyboard focus is visible on a nav link.
   await page.evaluate(() => scrollTo(0, 1500)); await page.waitForTimeout(400);
   const stuck = await page.evaluate(() => Math.round(document.querySelector("header[role='banner']").getBoundingClientRect().top));
   check(stuck === 0, `${tag}: header not stuck at top while scrolled (${stuck})`);
-  const focusSel = desktop ? "header nav[aria-label]:visible a" : "header a[href='#globe-next']";
+  const focusSel = desktop ? "header nav[aria-label]:visible a" : `header a[href='#globe-next']`;
   await page.keyboard.press("Tab").catch(() => {});
   await page.locator(focusSel).first().focus();
   await page.keyboard.press("Shift+Tab"); await page.keyboard.press("Tab");
@@ -188,7 +187,7 @@ for (const { locale, vp } of runs) {
     const navs = [...footer.querySelectorAll("nav")].map((n) => n.getAttribute("aria-labelledby") || n.getAttribute("aria-label"));
     return {
       bg: getComputedStyle(footer).backgroundColor, aboutBg: getComputedStyle(about).backgroundColor, seam: Math.round(r.top - about.getBoundingClientRect().bottom),
-      height: Math.round(r.height), last: root.lastElementChild === footer, links, cadastur, text: txt, headings: hs, navs,
+      height: Math.round(r.height), last: footer.parentElement.classList.contains("site-theme") && footer.nextElementSibling === null, links, cadastur, text: txt, headings: hs, navs,
       minLinkFont: Math.min(...[...footer.querySelectorAll("a")].map((a) => parseFloat(getComputedStyle(a).fontSize))),
       minFont: Math.min(...[...footer.querySelectorAll("*")].filter((e) => e.childElementCount === 0 && e.textContent.trim() && e.getClientRects().length).map((e) => parseFloat(getComputedStyle(e).fontSize))),
       overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -213,9 +212,9 @@ for (const { locale, vp } of runs) {
   check(conciergeRequests.length === 0, `${tag}: ${conciergeRequests.length} request(s) to /api/ai-concierge`);
 
   // ---- Link classification (PT @ desktop + each locale once) ----
-  const internal = f.links.filter((l) => l.href.startsWith("/") && !l.href.startsWith("//"));
+  const internal = f.links.filter((l) => l.href.startsWith("/") && !l.href.startsWith("//") && !l.href.includes("#"));
   const external = f.links.filter((l) => /^https?:/.test(l.href));
-  const anchorsF = f.links.filter((l) => l.href.startsWith("#"));
+  const anchorsF = f.links.filter((l) => l.href.includes("#")).map((l) => ({ ...l, href: l.href.slice(l.href.indexOf("#")) }));
   for (const l of anchorsF) check(await page.evaluate((s) => !!document.querySelector(s), l.href), `${tag}: footer anchor ${l.href} has no target`);
   for (const l of internal) {
     const code = await page.request.get(`${BASE}${l.href}`, { timeout: 120000 }).then((r) => r.status()).catch(() => 0);

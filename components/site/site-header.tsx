@@ -1,7 +1,6 @@
-import { Link } from "@/i18n/routing";
 import { RickTravelLogo } from "@/components/rick-travel-logo";
 import { SiteLanguageNav, SiteMobileMenu } from "@/components/site/site-header-controls";
-import { SiteAnchor } from "@/components/site/site-anchor";
+import { SiteAnchor, SiteHomeLink } from "@/components/site/site-anchor";
 import { navHashes, PLAN_HASH, resolveSiteChromeCopy, type AnchorMode } from "@/components/site/site-chrome-copy";
 
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--site-focus,#E8C780)]";
@@ -9,8 +8,9 @@ const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:o
 // Public-site header (RT-52, generalized from the RT-35 Home header): compact sticky charcoal bar, server-rendered;
 // only the mobile disclosure and the language links are client islands. Four primary destinations, the "Plan your
 // trip" CTA and PT/EN/ES links. No account entry, no Contato link, no SV control.
-//  - anchorMode "page": the Home itself (in-page hashes; the logo goes to `homeHref`, default #top-of-home).
-//  - anchorMode "home": any other route (locale-aware links to `/{locale}#section`; the logo goes to `/{locale}`).
+//  - anchorMode "page": always in-page hashes (logo goes to `homeHref`, default #top-of-home).
+//  - anchorMode "home": the default used by the (site) layout (RT-57): links resolve per route at render time, so on
+//    the Home they are in-page hashes and on any other route locale-aware links to `/{locale}#section`.
 export function SiteHeader({ locale, anchorMode = "home", homeHref = "#top-of-home" }: { locale: string; anchorMode?: AnchorMode; homeHref?: string }) {
   const t = resolveSiteChromeCopy(locale);
   const items = [
@@ -25,15 +25,9 @@ export function SiteHeader({ locale, anchorMode = "home", homeHref = "#top-of-ho
     <header role="banner" className="sticky top-0 z-50 border-b border-[var(--site-gold,#C8A86B)]/25 bg-[var(--site-charcoal,#0B0E11)] text-[var(--site-on-dark,#F4F0E8)]">
       <div className="px-5 md:px-10 lg:px-12">
         <div className="relative mx-auto flex h-14 max-w-[1280px] items-center justify-between gap-3 md:h-16">
-          {anchorMode === "page" ? (
-            <a href={homeHref} aria-label={t.logoAria} className={logoClass}>
-              <RickTravelLogo variant="full" size="sm" className="h-8 md:h-9" />
-            </a>
-          ) : (
-            <Link href="/" aria-label={t.logoAria} className={logoClass}>
-              <RickTravelLogo variant="full" size="sm" className="h-8 md:h-9" />
-            </Link>
-          )}
+          <SiteHomeLink mode={anchorMode} homeHref={homeHref} aria-label={t.logoAria} className={logoClass}>
+            <RickTravelLogo variant="full" size="sm" className="h-8 md:h-9" />
+          </SiteHomeLink>
 
           <nav aria-label={t.nav.label} className="hidden lg:block">
             <ul className="flex items-center gap-8 text-[14px]">

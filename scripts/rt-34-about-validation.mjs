@@ -50,7 +50,7 @@ for (const locale of ["pt", "en", "es"]) {
       }
     });
 
-    await page.goto(`${BASE}/${locale}/rebuild-lab/${process.env.RT34_ROUTE || "cinematic-3d-poc"}`, { waitUntil: "load", timeout: 180000 });
+    await page.goto(`${BASE}/${locale}`, { waitUntil: "load", timeout: 180000 });
     if (!process.env.RT34_ROUTE) await page.waitForSelector("[data-testid='globe-journey'][data-mode]", { timeout: 180000 }).catch(() => {});
     await page.waitForTimeout(800);
     const imgBeforeScroll = imgRequests.length;

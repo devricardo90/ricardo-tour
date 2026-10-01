@@ -17,7 +17,7 @@ const origin = process.env.RT27_ORIGIN || "http://127.0.0.1:3218";
 const outDir = path.resolve(process.env.RT27_OUT_DIR || ".tmp/rt-27-hero-media-review");
 fs.mkdirSync(outDir, { recursive: true });
 
-const ROUTE = "/pt/rebuild-lab/cinematic-3d-poc";
+const ROUTE = "/pt";
 const HOST = "[data-testid='globe-journey']";
 const boundaries = [0, 0.12, 0.28, 0.44, 0.62, 0.78];
 const expectedStage = p => boundaries.reduce((a, b, i) => p >= b ? i : a, 0);
