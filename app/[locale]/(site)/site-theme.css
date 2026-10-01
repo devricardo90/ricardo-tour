@@ -1,0 +1,47 @@
+/*
+ * Public-site design tokens (RT-52). Scoped to `.site-theme`, which only the (site) layout renders, so nothing
+ * here touches :root, the shadcn variables (--primary, --background, ...) or the admin/legacy routes.
+ * Values are the approved rebuilt Home surfaces (RT-10/11/12/13 + Home sections RT-30..RT-35).
+ */
+.site-theme {
+  /* surfaces */
+  --site-charcoal: #0b0e11;
+  --site-charcoal-raised: #15191d;
+  --site-cream: #f3efe6;
+  --site-cream-soft: #fbf8f2;
+  /* text */
+  --site-ink: #171a1e;
+  --site-ink-muted: #53565a;
+  --site-on-dark: #f4f0e8;
+  --site-on-dark-muted: #cac7bf;
+  --site-on-dark-subtle: #9da3a5;
+  /* matte gold accent */
+  --site-gold: #c8a86b;
+  --site-gold-bright: #e8c780;
+  --site-gold-deep: #8a6a2b;
+  /* rules and focus */
+  --site-rule-light: #cfc7ba;
+  --site-rule-dark: rgb(255 255 255 / 0.1);
+  --site-focus: #e8c780;
+
+  /* Compatibility aliases for the Home section components, which still read the lab variable names.
+     They resolve to the public fonts so those sections render correctly once mounted in this group. */
+  --journey-display: var(--site-display);
+  --journey-body: var(--site-body);
+
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  background-color: var(--site-cream-soft);
+  color: var(--site-ink);
+  font-family: var(--site-body), ui-sans-serif, system-ui, sans-serif;
+}
+
+.site-theme > main {
+  flex: 1 1 auto;
+}
+
+/* Editorial/display headings. */
+.site-theme .site-display {
+  font-family: var(--site-display), Georgia, serif;
+}

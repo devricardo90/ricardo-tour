@@ -10,11 +10,11 @@ import { HomeHeader } from "@/components/home-header";
 import { HomeFooter } from "@/components/home-footer";
 
 const display = localFont({
-  src: "../../../../docs/baseline/rt-home-design-approved/preview/rt-11-typography-proposal/assets/fonts/cormorant-garamond/latin.woff2",
+  src: "../../../fonts/cormorant-garamond/latin.woff2",
   variable: "--journey-display", weight: "300 700", display: "swap",
 });
 const body = localFont({
-  src: "../../../../docs/baseline/rt-home-design-approved/preview/rt-11-typography-proposal/assets/fonts/inter/latin.woff2",
+  src: "../../../fonts/inter/latin.woff2",
   variable: "--journey-body", weight: "100 900", display: "swap",
 });
 

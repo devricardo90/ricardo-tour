@@ -23,8 +23,10 @@ const copy = {
 };
 const anchors = ["#experiences", "#rio-story", "#ai-concierge", "#about-rick-travel"];
 const expectedOrder = ["globe-next-title", "experiences-in-rio-heading", "why-rick-travel-heading", "rio-story-heading", "ai-concierge-heading", "about-rick-travel-heading"];
-// Contact data that must NOT appear (conflicting/stale sources, see components/home-chrome-copy.ts).
-const forbidden = /(travelrick|@[a-z0-9-]+\.(com|br)|\+?55\s?21|9\d{4}[- ]?\d{4}|wa\.me|mailto:|tel:|\d{2}\.\d{3}\.\d{3}|cnpj|privacidade|privacy|termos|terms)/i;
+// Stale/unapproved contact data and legal placeholders that must NOT appear. Since RT-52 the Owner-approved canonical
+// contact (contato@ricardotour.com, +55 22 99846-1906, wa.me/5522998461906) is allowed; see lib/public-contact.ts.
+const forbidden = /(travelrick|\+?55\s?21|96681|97116|tel:|\d{2}\.\d{3}\.\d{3}|cnpj|privacidade|privacy|termos|terms)/i;
+const approved = { email: "contato@ricardotour.com", wa: "https://wa.me/5522998461906" };
 
 const viewports = [
   { name: "1440x900", w: 1440, h: 900 }, { name: "1024x768", w: 1024, h: 768 },
@@ -70,7 +72,7 @@ for (const { locale, vp } of runs) {
     const navLinks = [...header.querySelectorAll("nav[aria-label] a")].filter((a) => a.closest("nav") === nav).map((a) => ({ text: a.textContent.trim(), href: a.getAttribute("href"), visible: vis(a) }));
     const cta = [...header.querySelectorAll("a")].find((a) => a.getAttribute("href") === "#globe-next");
     const ctaRect = cta?.getBoundingClientRect();
-    const menuBtn = header.querySelector("button[aria-controls='home-mobile-navigation']");
+    const menuBtn = header.querySelector("button[aria-controls='site-mobile-navigation']");
     const langLinks = [...header.querySelectorAll("nav[aria-label] a[hreflang]")].filter(vis).map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), cur: a.getAttribute("aria-current") }));
     const root = document.getElementById("top-of-home");
     return {
@@ -81,7 +83,7 @@ for (const { locale, vp } of runs) {
       navLabel: nav?.getAttribute("aria-label"), navLinks, desktopNavVisible: vis(nav),
       cta: cta && { text: cta.textContent.trim(), visible: vis(cta), w: Math.round(ctaRect.width), h: Math.round(ctaRect.height), right: Math.round(ctaRect.right) },
       menu: menuBtn && { visible: vis(menuBtn), expanded: menuBtn.getAttribute("aria-expanded"), label: menuBtn.getAttribute("aria-label"), w: Math.round(menuBtn.getBoundingClientRect().width), h: Math.round(menuBtn.getBoundingClientRect().height) },
-      panelHidden: document.getElementById("home-mobile-navigation")?.hidden,
+      panelHidden: document.getElementById("site-mobile-navigation")?.hidden,
       langLinks, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
       hrefHash: [...document.querySelectorAll("header a[href], footer a[href]")].filter((a) => a.getAttribute("href") === "#" || a.getAttribute("href") === "").length,
       inheadImgs: header.querySelectorAll("img").length,
@@ -132,10 +134,10 @@ for (const { locale, vp } of runs) {
     await landing(() => page.locator("header a[href='#globe-next']").click(), "#globe-next", "CTA");
   } else {
     // Mobile disclosure: open → links visible → Escape closes and restores focus → re-open → link closes + lands.
-    const btn = page.locator("button[aria-controls='home-mobile-navigation']");
+    const btn = page.locator("button[aria-controls='site-mobile-navigation']");
     await btn.click();
     await page.waitForTimeout(250);
-    const open = await page.evaluate(() => { const p = document.getElementById("home-mobile-navigation"); const b = document.querySelector("button[aria-controls='home-mobile-navigation']"); const r = p.getBoundingClientRect(); return { hidden: p.hidden, expanded: b.getAttribute("aria-expanded"), label: b.getAttribute("aria-label"), links: [...p.querySelector("nav").querySelectorAll("a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(a.getBoundingClientRect().height) })), lang: p.querySelectorAll("a[hreflang]").length, allTargets: [...p.querySelectorAll("a")].map((a) => { const r = a.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; }), inView: r.left >= 0 && r.right <= innerWidth && r.bottom <= innerHeight, scrollLocked: getComputedStyle(document.body).overflow === "hidden" || getComputedStyle(document.documentElement).overflow === "hidden", role: p.querySelector("[role=menu]") !== null }; });
+    const open = await page.evaluate(() => { const p = document.getElementById("site-mobile-navigation"); const b = document.querySelector("button[aria-controls='site-mobile-navigation']"); const r = p.getBoundingClientRect(); return { hidden: p.hidden, expanded: b.getAttribute("aria-expanded"), label: b.getAttribute("aria-label"), links: [...p.querySelector("nav").querySelectorAll("a")].map((a) => ({ t: a.textContent.trim(), href: a.getAttribute("href"), h: Math.round(a.getBoundingClientRect().height) })), lang: p.querySelectorAll("a[hreflang]").length, allTargets: [...p.querySelectorAll("a")].map((a) => { const r = a.getBoundingClientRect(); return [Math.round(r.width), Math.round(r.height)]; }), inView: r.left >= 0 && r.right <= innerWidth && r.bottom <= innerHeight, scrollLocked: getComputedStyle(document.body).overflow === "hidden" || getComputedStyle(document.documentElement).overflow === "hidden", role: p.querySelector("[role=menu]") !== null }; });
     check(!open.hidden && open.expanded === "true" && open.label !== h.menu.label, `${tag}: menu did not open / state not announced (${JSON.stringify({ h: open.hidden, e: open.expanded, l: open.label })})`);
     check(JSON.stringify(open.links.map((l) => l.t)) === JSON.stringify(c.nav) && JSON.stringify(open.links.map((l) => l.href)) === JSON.stringify(anchors), `${tag}: menu links ${JSON.stringify(open.links)}`);
     check(open.allTargets.every(([w, h]) => w >= 44 && h >= 44), `${tag}: menu touch targets below 44x44 ${JSON.stringify(open.allTargets)}`);
@@ -143,18 +145,18 @@ for (const { locale, vp } of runs) {
     check(open.inView && !open.scrollLocked && !open.role, `${tag}: menu panel not contained / scroll locked / role=menu (${JSON.stringify({ inView: open.inView, locked: open.scrollLocked, role: open.role })})`);
     await page.keyboard.press("Escape");
     await page.waitForTimeout(200);
-    const closed = await page.evaluate(() => ({ hidden: document.getElementById("home-mobile-navigation").hidden, expanded: document.querySelector("button[aria-controls='home-mobile-navigation']").getAttribute("aria-expanded"), focusOnBtn: document.activeElement === document.querySelector("button[aria-controls='home-mobile-navigation']") }));
+    const closed = await page.evaluate(() => ({ hidden: document.getElementById("site-mobile-navigation").hidden, expanded: document.querySelector("button[aria-controls='site-mobile-navigation']").getAttribute("aria-expanded"), focusOnBtn: document.activeElement === document.querySelector("button[aria-controls='site-mobile-navigation']") }));
     check(closed.hidden && closed.expanded === "false" && closed.focusOnBtn, `${tag}: Escape did not close/return focus (${JSON.stringify(closed)})`);
     await btn.click();
     await page.waitForTimeout(200);
     await page.screenshot({ path: path.join(outDir, `menu-${locale}-${vp.name}.png`), clip: { x: 0, y: 0, width: vp.w, height: Math.min(vp.h, 460) } });
-    await landing(() => page.locator("#home-mobile-navigation a[href='#ai-concierge']").click(), "#ai-concierge", "menu #ai-concierge");
-    const afterLink = await page.evaluate(() => document.getElementById("home-mobile-navigation").hidden);
+    await landing(() => page.locator("#site-mobile-navigation a[href='#ai-concierge']").click(), "#ai-concierge", "menu #ai-concierge");
+    const afterLink = await page.evaluate(() => document.getElementById("site-mobile-navigation").hidden);
     check(afterLink, `${tag}: menu stayed open after activating a link`);
     // outside click closes
     await btn.click(); await page.waitForTimeout(150);
     await page.mouse.click(vp.w / 2, vp.h - 20); await page.waitForTimeout(200);
-    check(await page.evaluate(() => document.getElementById("home-mobile-navigation").hidden), `${tag}: outside click did not close the menu`);
+    check(await page.evaluate(() => document.getElementById("site-mobile-navigation").hidden), `${tag}: outside click did not close the menu`);
     await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" })); await settle();
     await landing(() => page.locator("header a[href='#globe-next']").click(), "#globe-next", "CTA");
   }
@@ -200,7 +202,8 @@ for (const { locale, vp } of runs) {
   check(f.overflow <= 0, `${tag}: footer overflow ${f.overflow}px`);
   check(f.minLinkFont >= 14, `${tag}: footer link text ${f.minLinkFont}px < 14px`);
   check(f.minFont >= 12, `${tag}: footer text ${f.minFont}px < 12px`);
-  check(!forbidden.test(f.text) && !f.links.some((l) => forbidden.test(l.href)), `${tag}: forbidden contact/legal content in footer`);
+  check(!forbidden.test(f.text) && !f.links.some((l) => forbidden.test(l.href)), `${tag}: stale/unapproved contact or legal content in footer`);
+  check(f.links.filter((l) => l.href.startsWith("mailto:")).every((l) => l.href === `mailto:${approved.email}`) && f.links.filter((l) => /wa.me/.test(l.href)).every((l) => l.href === approved.wa), `${tag}: footer mailto/wa.me not the approved values`);
   check(!c.foreign.test(f.text), `${tag}: mixed-language footer text "${(f.text.match(c.foreign) || [])[0]}"`);
   check(f.links.every((l) => l.href !== "#" && l.href !== ""), `${tag}: placeholder href in footer`);
   check(f.headings.length >= 2 && f.headings.every((x) => x === "H2") && f.navs.length === 1, `${tag}: footer heading/nav structure ${JSON.stringify({ h: f.headings, n: f.navs })}`);
