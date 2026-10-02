@@ -169,8 +169,10 @@ for (const locale of ["pt", "en", "es"]) {
     check(d.lowContrast.length === 0, `${tag}: low-contrast text ${JSON.stringify(d.lowContrast)}`);
     check(d.overflow <= 0, `${tag}: horizontal overflow ${d.overflow}px`);
     check(d.links === 0, `${tag}: unexpected interactive elements (${d.links})`);
-    // RT-57: on the public route the section body text renders in Inter (the (site) theme font) instead of the lab system font,
-    // which is slightly wider; the mobile cap moved from 720px to 740px (measured 729px at 360px wide).
+    // RT-57 (measured, same DOM and CSS at 360px): 683px with the lab body font (Segoe UI/Arial) -> 729px with the public Inter
+    // body font. The +46px is exactly three extra wrapped text lines (intro 48->72px, two item descriptions 43->65px); section
+    // spacing, institutional marks and header/footer are unchanged. Inter is the public body typography (RT-52), so the
+    // composition is the approved one with different font metrics; the mobile cap is 740px (was 720px). Desktop cap unchanged (440px).
     check(d.height <= (vp.w >= 1024 ? 440 : 740), `${tag}: section too tall (${d.height}px)`);
     const src = await page.request.get(BASE + MARKS_SRC).catch(() => page.request.get(BASE + MARKS_SRC));
     check(src.status() === 200 && (src.headers()["content-type"] ?? "").includes("image/webp"), `${tag}: marks source not served (${src.status()})`);

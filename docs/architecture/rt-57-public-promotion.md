@@ -32,3 +32,18 @@ when the domain resolves and is attached to the Vercel project.
 5. **Privacy / Terms** pages do not exist; no legal links were added and no legal copy was invented.
 6. Unreferenced generic UI primitives and barrels (`components/index.ts`, `ui/accordion|avatar|select|slider|switch|skeleton|infinite-slider|progressive-blur`, `components/logos/*`) remain for a later cleanup.
 7. Home body text now renders in the public Inter font (previously the lab's system font), consistent with `/tours`, `/contato`, `/quem-somos`.
+
+## Remote content sync — values for the later targeted update (REMOTE_CONTENT_SYNC: BLOCKED_NOT_VERIFIED)
+
+Canonical tracked source (`data/real-trips.json`, commit `024d705`) and the local database are correct. The remote database was
+**not** read or written. When the remote environment can be identified explicitly and safely, update only these two `Trip` rows,
+only the `description` JSON (every locale key whose text contains the old string), recording before values first.
+Do not run `scripts/import-real-trips.mjs` (matches by title and upserts every trip).
+
+| Trip id | Title | Field | Old text (remove) | Canonical text |
+|---|---|---|---|---|
+| `cmlibniq40000z4zqkbujnutt` | Confeitaria Colombo + City Tour Rio | `description` | `Inclui transporte confortável e guia credenciado.` | `Inclui transporte confortável e acompanhamento guiado.` |
+| `cmlibniq40000z4zqkbujnutt` | Confeitaria Colombo + City Tour Rio | `description` (included-services line, if present as text) | `Guia turístico credenciado` | `Guia turístico` |
+| `cmli1a6im000034zqqzc9sppb` | Tour Favela Rocinha com Guia Local | `description` | `com guia especializado e experiência segura.` | `com guia especializado e experiência guiada na Rocinha.` |
+
+Verification after the update: no `credenciad` / `experiência segura` match in any `Trip.description` row, and `/pt|en|es/tours/{id}` for both ids shows the canonical wording.

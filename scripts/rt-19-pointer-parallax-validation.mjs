@@ -87,6 +87,15 @@ const snapshot = page => page.evaluate(selector => {
 const scrollTo = (page, dims, p) => page.evaluate(({ start, distance, p }) =>
   window.scrollTo({ top: start + distance * p, left: 0, behavior: "instant" }), { ...dims, p });
 
+// RT-57 timing: the pointer easing is frame-driven, and the dev-server SwiftShader frame rate varies, so the fixed sleeps below
+// were sometimes shorter than the decay. Poll until the SAME original condition holds (or time out and fail on it).
+const snapshotWhen = async (page, done, timeoutMs) => {
+  const t0 = Date.now();
+  let s = await snapshot(page);
+  while (!done(s) && Date.now() - t0 < timeoutMs) { await page.waitForTimeout(250); s = await snapshot(page); }
+  return s;
+};
+
 const sameJourney = (a, b) => a.progress === b.progress && a.state === b.state && a.railStage === b.railStage
   && a.railProgress === b.railProgress && a.ariaNow === b.ariaNow && a.readout === b.readout && a.scrollY === b.scrollY;
 
@@ -130,10 +139,8 @@ try {
     }
     await page.mouse.move(720, 450, { steps: 20 });
     await page.waitForTimeout(3000);
-    const recentred = await snapshot(page);
-    // RT-57: the Hero stage now starts under the 65px sticky site header, so the viewport centre (720,450) is ~65px above the stage centre;
-    // the residual offset is bounded by 0.12 (of a 5.5 maximum) instead of 0.05.
-    check(Math.abs(recentred.starsX) < 0.12 && Math.abs(recentred.starsY) < 0.12, `T1: drift accumulated (${recentred.starsX}, ${recentred.starsY})`);
+    const recentred = await snapshotWhen(page, s => Math.abs(s.starsX) < 0.05 && Math.abs(s.starsY) < 0.05, 12000);
+    check(Math.abs(recentred.starsX) < 0.05 && Math.abs(recentred.starsY) < 0.05, `T1: drift accumulated (${recentred.starsX}, ${recentred.starsY})`);
     check(sameJourney(neutral, recentred), "T2/T3: pointer circling changed journey state");
 
     // TEST 6 — leave the stage (into the review bar above it): smooth return to neutral.
@@ -148,12 +155,12 @@ try {
     const leaveSamples = [];
     for (let i = 0; i < 12; i += 1) { leaveSamples.push((await snapshot(page)).starsX); await page.waitForTimeout(120); }
     await page.waitForTimeout(2500);
-    const left = await snapshot(page);
+    const left = await snapshotWhen(page, s => s.starsX === 0 && s.starsY === 0, 12000);
     report.leave = { samples: leaveSamples, final: left };
     const decreasing = leaveSamples.every((v, i) => i === 0 || v <= leaveSamples[i - 1] + 1e-6);
     const intermediate = leaveSamples.some(v => v > 0.3 && v < 5.5);
     check(decreasing && intermediate, `T6: return to neutral is not smooth ${JSON.stringify(leaveSamples)}`);
-    check(Math.abs(left.starsX) < 0.05 && Math.abs(left.starsY) < 0.05, `T6: did not settle at neutral (${left.starsX}, ${left.starsY})`);
+    check(left.starsX === 0 && left.starsY === 0, `T6: did not settle at neutral (${left.starsX}, ${left.starsY})`);
     check(sameJourney(beforeLeave, left), "T6: leaving changed journey state");
 
     // TEST 4 / 5 — scroll authority with the pointer parked in a corner and moving.
@@ -167,13 +174,13 @@ try {
       await page.mouse.move(40, 120, { steps: 8 });
       await page.mouse.move(1400, 860, { steps: 8 });
       await page.waitForTimeout(2200);
-      const after = await snapshot(page);
+      const after = await snapshotWhen(page, s => s.progress < 0.12 - 1e-3 || (s.starsX === 0 && s.starsY === 0), 12000);
       scroll.push({ p, before, after });
       check(sameJourney(before, after), `T4: pointer moved journey at ${p} ${JSON.stringify({ before, after })}`);
       check(Math.abs(after.progress - p) <= 0.01, `T4/T5: progress ${after.progress} != ${p}`);
       check(after.state === expectedStage(p) && after.railStage === after.state, `T9: rail stage ${after.railStage}/${after.state} at ${p}`);
       check(Math.abs(after.railProgress - after.progress) < 2e-5 && after.ariaNow === Math.round(after.progress * 100), `T9: rail progress out of sync at ${p}`);
-      if (after.progress >= 0.12 - 1e-3) check(Math.abs(after.starsX) < 0.02 && Math.abs(after.starsY) < 0.02, `activation: influence not zero at ${p} (${after.starsX}, ${after.starsY})`);
+      if (after.progress >= 0.12 - 1e-3) check(after.starsX === 0 && after.starsY === 0, `activation: influence not zero at ${p} (${after.starsX}, ${after.starsY})`);
       if (p === 0.1) check(after.starsX > 0.3 && after.starsX < 5.5, `activation: no gradual fade at 10% (${after.starsX})`);
       if (after.overflow) failures.push(`T10: overflow at ${p}`);
       if (p === 0.1 || p === 0.2) await page.screenshot({ path: path.join(outDir, `desktop-${String(Math.round(p * 100)).padStart(3, "0")}-corner.png`) });
