@@ -1,7 +1,7 @@
 # RT-65 — Flight Commercial Architecture
 
 - Jira: RT-65 (`RT-RB-C-01`), Sprint 6 — Flight Commerce. Companion: RT-37 (`docs/architecture/rt-37-flight-planner-ux-contract.md`).
-- Status of this document: **DRAFT FOR OWNER REVIEW** (2026-10-03). Documentation only. No code, no Prisma models, no provider calls, no credentials, no payment implementation.
+- Status of this document: **APPROVED by the Owner (2026-10-03)** — architecture is authoritative; decisions recorded in §30. Documentation only. No code, no Prisma models, no provider calls, no credentials, no payment implementation.
 - Governing rule: **no Flytour/MaisFly (or any provider) behavior is invented here.** Anything that depends on provider documentation or a commercial/legal agreement is marked `EXTERNAL_DECISION_REQUIRED` and listed in §27 for RT-39. Anything only the Owner can decide is marked `OWNER_DECISION_REQUIRED` (§24). Legal questions are in §25.
 
 Markers used throughout:
@@ -178,6 +178,8 @@ Candidate orderings (the chosen one is an Owner decision constrained by provider
 | **O2 Pay → Reserve+Issue** | Charge first, then create PNR and issue | Works with providers lacking hold | **Largest** exposure: money captured before availability is secured → refund-heavy failure mode |
 | **O3 Request only** | Customer submits a request; staff/consolidator quotes, reserves, issues, collects payment out-of-band or via payment link | Lowest integration and liability risk; fits current "request" pattern | Not instant commerce; manual operations |
 
+**Owner commercial target (2026-10-03):** the business target is SEARCH → SELECT → PAY → ISSUE. This is a *target*, **not permission to implement payment-before-reservation**; the exact reservation/payment/issuance ordering remains dependent on RT-39 provider capabilities (§30).
+
 Technical (non-binding) observation: O1 minimizes the payment-success/issuance-failure case (§19) and is preferred **if** the provider supports holds. O3 is the safe fallback if provider documentation is unavailable or legal structure is unresolved. The commercial choice is `OWNER_DECISION_REQUIRED`.
 
 ## 10. Confirmation boundary
@@ -203,7 +205,7 @@ All specifics `EXTERNAL_DECISION_REQUIRED` + `OWNER_DECISION_REQUIRED` + `LEGAL_
 
 - Prices in search results are **indicative**. Before any passenger data or payment, the platform **revalidates** the selected offer (`revalidate` capability `EXTERNAL_DECISION_REQUIRED`).
 - Outcomes: `VALID` (continue), `PRICE_CHANGED` (new total differs), `UNAVAILABLE` (offer no longer purchasable), `REVALIDATION_FAILED` (timeout/provider error).
-- **PRICE_CHANGED**: the customer must see old vs new total and **explicitly accept** before proceeding. No implicit acceptance, no auto-proceed. Tolerance (a threshold under which a change is auto-accepted) is **not** assumed: `OWNER_DECISION_REQUIRED`; default is **always require acceptance**.
+- **PRICE_CHANGED**: the customer must see old vs new total and **explicitly accept** before proceeding. No implicit acceptance, no auto-proceed. **Owner-approved (2026-10-03):** any *material* fare/price change after validation requires explicit customer acceptance before continuation; the updated amount is **never charged silently**. No auto-accept tolerance is defined; until the Owner defines what "material" means, **every** price change requires acceptance.
 - A second revalidation occurs **immediately before payment creation** if the previous validation is older than a threshold derived from the offer validity window (`EXTERNAL_DECISION_REQUIRED`) so payment amount equals a freshly validated amount.
 - If the provider cannot revalidate: the UI must say the price is not guaranteed and the order must not capture payment before a price-bearing reservation exists (forces O1 or O3).
 - Currency changes are never silent. Display-currency conversion is out of scope unless the Owner decides otherwise.
@@ -234,7 +236,7 @@ All specifics `EXTERNAL_DECISION_REQUIRED` + `OWNER_DECISION_REQUIRED` + `LEGAL_
 - Rotation procedure and ownership documented before production use.
 - Browser-facing API surface for flights is **our own**: search, select/validate, create order, order status. It exposes no provider ids beyond opaque, signed, short-lived offer handles and no commission/net-fare/markup data.
 - Rate limiting (distributed, RT-82) and bot protection on search and order creation; abusive search volume can incur provider cost or throttling (`EXTERNAL_DECISION_REQUIRED`: provider rate limits/costs).
-- Authorization: an order is accessible only to its owner (account) or to a signed guest token (if guest checkout is chosen: `OWNER_DECISION_REQUIRED`) — never by guessable id.
+- Authorization: an order is accessible only to its owner (account) or to a signed guest token — **guest checkout must be supported** (Owner direction, §30), so the guest-token path is required, not optional — never by guessable id.
 
 **Never reaches the browser:** provider credentials/tokens; raw provider responses; commissions, net fares, markup logic; internal provider/PNR secrets beyond what the customer needs; other customers' data; full passenger documents after submission; PSP secrets; webhook secrets.
 
@@ -364,7 +366,7 @@ Rules:
 - Every outbound call has a **timeout budget** shorter than the platform function limit, with values set from provider SLAs (`EXTERNAL_DECISION_REQUIRED`); no unbounded waits.
 - **Timeout after a state-changing call is ambiguous** (the provider may have acted). It is never treated as failure: the order stays in its pending state, a status query runs, and unresolved ambiguity → `MANUAL_REVIEW`.
 - Search/revalidate timeouts are recoverable by the customer (retry, change criteria); the UI must say so.
-- Degraded mode: if the provider is down, the Flight Planner shows a clear unavailable state with a human/WhatsApp **request fallback** (existing contact channels). Whether a request-only fallback is offered is `OWNER_DECISION_REQUIRED`.
+- Degraded mode: if the provider is down, the Flight Planner shows a clear unavailable state with a human/WhatsApp **request fallback** (existing contact channels). A clearly labeled human-request fallback is **approved conceptually** (§30); it must never present mock or stale data as live availability.
 - The customer is never shown "success" for an unconfirmed step; pending states use neutral language.
 - Customer-visible errors never expose provider codes, stack traces or secrets.
 
@@ -399,17 +401,21 @@ No commercial policy is chosen here; the choices above that need approval are in
 
 ## 24. OWNER_DECISION_REQUIRED items
 
-1. Commercial model: online purchase (O1/O2) vs request-only (O3) for launch; possibility of phasing (O3 first).
-2. Payment provider (Mercado Pago or other), methods (card/Pix/other), installments, capture mode.
-3. Payment-before-issuance exposure the business accepts (which ordering).
-4. Refund and cancellation policy, fee retention, who absorbs issuance-failure costs.
-5. Price-change tolerance (default proposed: always require customer acceptance).
-6. Guest checkout vs mandatory account.
-7. Seller-of-record presentation (how Rick Travel presents itself on flights).
-8. Request-only fallback when the provider is unavailable.
-9. Customer-communication SLAs for incidents (update cadence, contact channels).
-10. Markup/commission display policy (what is never shown) and currency policy.
-11. Operations ownership: who staffs the `MANUAL_REVIEW` queue and when.
+Status after the Owner review of 2026-10-03 (details in §30):
+
+| # | Item | Status |
+| --- | --- | --- |
+| 1 | Commercial model: online purchase (O1/O2) vs request-only (O3) | **Partly decided:** business target SEARCH → SELECT → PAY → ISSUE; exact ordering depends on RT-39. Request-only remains the fallback path. |
+| 2 | Payment provider, methods, installments, capture mode | **OPEN.** PSP remains `OWNER_DECISION_REQUIRED`; Mercado Pago is **not** selected because legacy variables exist. |
+| 3 | Payment-before-issuance exposure the business accepts | **OPEN** (depends on RT-39 provider capability). |
+| 4 | Refund and cancellation policy, who absorbs issuance-failure costs | **OPEN** (pending RT-39/provider evidence and legal). |
+| 5 | Price-change tolerance | **DECIDED:** any material change requires explicit customer acceptance; never silently charged. Definition of "material" open; interim rule: any change. |
+| 6 | Guest checkout vs mandatory account | **DECIDED (direction):** guest checkout must be supported; no account required solely to buy/request a flight unless a future legal/provider constraint requires it. |
+| 7 | Seller-of-record presentation | **OPEN.** |
+| 8 | Request-only fallback when the provider is unavailable | **DECIDED conceptually:** a clearly labeled human-request fallback is allowed; mock availability is never shown as live. |
+| 9 | Customer-communication SLAs for incidents | **OPEN.** |
+| 10 | Markup/commission display policy and currency policy | **OPEN** (markup, currency/conversion). |
+| 11 | Operations ownership: manual-review staffing and hours | **OPEN.** |
 
 ## 25. Legal / compliance questions (`LEGAL_REVIEW_REQUIRED`)
 
@@ -514,3 +520,36 @@ Provider-facing technical and commercial checklist. Each answer is recorded in R
 - RT-37's price/fare disclosure and selection/revalidation wording follow §12.
 - Provider-dependent fields appear in RT-37 only as `IF_PROVIDER_SUPPORTED` and are resolved by RT-39 answers.
 - The browser-facing `Offer view model` (RT-37 §21) is Rick Travel's contract; the provider gateway (§6) maps into it.
+
+## 30. Owner approval and decisions (2026-10-03)
+
+**RT-65: APPROVED.** The architecture in this document is authoritative.
+
+### 30.1 Approved architecture (unchanged by review)
+
+- **Flight is a separate commercial/domain aggregate.** The existing tour `Booking` model is **not** extended. FlightOrder and its reservation/issuance/payment lifecycle are independent from tour Booking.
+- Shared infrastructure may be reused where appropriate: authentication, email, analytics, observability, distributed rate limiting, optional PSP adapter infrastructure.
+- Retained decisions: server-only provider gateway; signed PSP webhook as payment authority; no card-data handling by Rick Travel; no blind retry of reservation/issuance; explicit `MANUAL_REVIEW` state; reconciliation and audit trail; the payment-success / issuance-failure treatment (§23); no automatic refund without an authorized policy.
+
+### 30.2 Product decisions recorded
+
+| Id | Decision |
+| --- | --- |
+| A | **Commercial target:** SEARCH → SELECT → PAY → ISSUE. A business target, **not** permission to implement payment-before-reservation. Reservation/payment/issuance ordering depends on RT-39 provider capabilities. |
+| B | **PSP:** `OWNER_DECISION_REQUIRED`. Do not select Mercado Pago because legacy environment variables exist. |
+| C | **Price change:** any material fare/price change after validation requires explicit customer acceptance before continuation. Never silently charge the updated amount. |
+| D | **Checkout account:** guest checkout must be supported. Account creation must not be required solely to purchase/request a flight unless a future legal/provider constraint requires it. |
+| E | **Provider-down fallback:** approved conceptually — a clearly labeled human-request fallback may be exposed when live search/purchase is unavailable. Mock availability is never displayed as live. |
+| F | **Still open, pending RT-39/provider evidence:** exact PSP; authorization vs capture strategy; reservation/payment ordering; seller-of-record presentation; issuance-failure liability; cancellation/refund responsibility; markup policy; currency/conversion policy; incident communication SLA; manual-review staffing and operating hours. |
+
+### 30.3 Consequences recorded in the architecture
+
+- Guest checkout makes the signed guest-token access path (§15) mandatory.
+- The passenger/PII boundary (§13) applies equally to guest orders; guest orders still require retention, access and deletion rules (`LEGAL_REVIEW_REQUIRED`).
+- Payment-before-reservation (O2) is **not authorized**; O1/O2/O3 remain analysis only until RT-39.
+- Follow-up backlog derived from this document (Jira, Sprint 6, **backlog only — not started**):
+  - `RT-RB-C-03` / RT-85 — Flight Order domain model + state machine
+  - `RT-RB-C-04` / RT-86 — PSP adapter + payment webhook contract (provider-neutral; no PSP chosen)
+  - `RT-RB-C-05` / RT-87 — Provider reservation + issuance orchestration (**blocked by RT-39**)
+  - `RT-RB-C-06` / RT-88 — Reconciliation + operator / manual-review tooling
+  - `RT-RB-C-07` / RT-89 — Passenger + checkout UX (guest checkout supported)

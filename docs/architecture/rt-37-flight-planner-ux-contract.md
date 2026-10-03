@@ -1,7 +1,7 @@
 # RT-37 — Flight Planner UX Contract
 
 - Jira: RT-37 (`RT-RB-S5-01`), Sprint 6 — Flight Commerce. Companion: RT-65 (`docs/architecture/rt-65-flight-commercial-architecture.md`).
-- Status of this document: **DRAFT FOR OWNER REVIEW** (2026-10-03). Documentation only. No UI, no components, no routes, no API calls, no provider integration.
+- Status of this document: **APPROVED WITH CORRECTIONS by the Owner (2026-10-03)** — corrections applied; see §28 for the recorded decisions. Documentation only. No UI, no components, no routes, no API calls, no provider integration.
 - Purpose: one agreed product/UX behavior so **RT-38** (mock UI) and later **RT-41** (integration) build against the same contract without further UX decisions.
 - Source-of-Truth principles that bind this contract: Rio de Janeiro stays the protagonist; the flight engine is a tool of the journey; **no flight integration is presented as real until API/documentation and functional validation exist.**
 
@@ -46,15 +46,15 @@ Non-goals of this document and of RT-38 are in §25. Passenger-data and payment 
 
 ## 3. Where the Flight Planner appears
 
-**PROPOSED** (Owner to approve):
+Owner-approved: the canonical route. Everything else in this table is **proposed or deferred** as marked.
 
 | Entry point | Behavior |
 | --- | --- |
-| **Dedicated route** `/{locale}/voos` | The Flight Planner page: search form + tabs (§4). Canonical home of the feature. |
-| **Header nav (desktop)** | New item "Flights" (PT *Voos*, EN *Flights*, ES *Vuelos*) after "Experiences". Links to the route. |
-| **Mobile menu** | Same item in the existing menu. |
-| **Home** | A compact **entry bar** (not the full form): "Plan your flight to Rio" with origin/destination/dates preview that deep-links to `/{locale}/voos` with prefilled query params. It must not create a second implementation of the form. Placement within the Home composition is a design decision for RT-38 within the approved Home structure (Owner gate RT-36 approved the Home structure; no new section is added without review). |
-| **Tour pages** | Optional contextual link "Need flights to Rio?" → `/{locale}/voos` with destination prefilled (GIG/Rio). `OWNER_DECISION_REQUIRED` whether to include in RT-38. |
+| **Dedicated route** `/{locale}/voos` — **APPROVED** for PT / EN / ES locale routing | The Flight Planner page: search form + tabs (§4). Canonical home of the feature. **Not implemented in this step.** |
+| **Header nav (desktop)** | `OWNER_DECISION_REQUIRED`. A "Flights" item (PT *Voos*, EN *Flights*, ES *Vuelos*) would alter the shared site chrome approved at the Owner visual gate (RT-36). Not part of RT-38; the route is reachable by direct URL only until the Owner decides. |
+| **Mobile menu** | `OWNER_DECISION_REQUIRED` (same reason as the header). |
+| **Home** — `HOME_ENTRY_INTEGRATION = OWNER_DECISION_REQUIRED` | **NOT APPROVED.** The Home passed its Owner gate; any insertion or structural change needs a **separate Owner gate**. RT-38 builds and tests the Flight Planner as an **isolated public-route experience** without modifying the Home. *Concept retained for a future gate only:* a compact **entry bar**  (not the full form): "Plan your flight to Rio" with origin/destination/dates preview that deep-links to `/{locale}/voos` with prefilled query params. It must not create a second implementation of the form. No placement is decided here and nothing about the Home is implemented or tested in RT-38. |
+| **Tour pages** | Optional contextual link "Need flights to Rio?" → `/{locale}/voos` with destination prefilled. It changes an approved page, so it is `OWNER_DECISION_REQUIRED` and **not** part of RT-38. |
 
 Query-param deep link: criteria only (origin, destination, dates, passenger counts, trip type). **Never** passenger data, offer handles, prices or tokens in URLs.
 
@@ -64,6 +64,7 @@ The route is **noindex and excluded from the sitemap** while it uses mock data (
 
 - The Flight Planner page has two tabs: **Flights** (default) and **Experiences** (the approved Rio catalog, same four tours, same cards as `/tours`; no new content, no new claims).
 - Rio de Janeiro remains the protagonist: the destination field is **not locked** to Rio (the provider may serve other routes) but the page copy, suggestions and Experiences tab frame the journey around Rio. Whether non-Rio destinations are allowed at launch is `OWNER_DECISION_REQUIRED`; the contract works either way.
+- **Flights and Experiences are two separate travel-product categories** (Owner-approved). A **FlightOrder is never an Experience booking**, and an Experience booking is never a flight order: separate terminology, separate lifecycles (RT-65 §5), separate prices, separate confirmations. UI copy must never describe a flight as an "experience" or a tour as a "flight".
 - Flights and Experiences are **independent purchases** in v1. No bundling, no combined price, no cross-sell pricing. Cross-links only: after results, a non-intrusive "Add experiences in Rio" link to the Experiences tab; on a tour page, a link to Flights.
 - Switching tabs preserves the flight criteria and (if present) results in the session; it does not re-run the search.
 - The Experiences tab never shows flight data; the Flights tab never shows tour pricing.
@@ -109,11 +110,15 @@ Rules:
 
 ## 9. Passengers (adults / children / infants)
 
-- A **popover/sheet** with three steppers: **Adults** (12+), **Children** (2–11), **Infants** (under 2, travel on an adult's lap). Age bands follow common airline convention and are **PROPOSED**; the provider's real bands `EXTERNAL_DECISION_REQUIRED`.
-- Summary on the field: "2 adults, 1 child" (localized, pluralized).
-- **Defaults:** 1 adult, 0 children, 0 infants. Minimum 1 adult; children/infants cannot travel without an adult.
-- **Rules (PROPOSED, confirm with provider):** infants ≤ adults; maximum total passengers per search `IF_PROVIDER_SUPPORTED`; children's exact ages are **not** collected at search in v1 (age band only) unless the provider requires ages (`EXTERNAL_DECISION_REQUIRED`) — if required, the sheet adds a per-child age selector and the contract is amended before RT-38 uses it.
-- Violations show inline, plain-language messages (§11), and the steppers disable at limits with an explanatory help text.
+**Rick Travel defines no passenger age rules of its own.** Age bands, minimum/maximum ages, infant and child rules, accompanied-minor rules and passenger-count limits are **provider/airline rules** and are `IF_PROVIDER_SUPPORTED` / `EXTERNAL_DECISION_REQUIRED` until RT-39 confirms them (RT-65 §27 Q19). **No threshold (e.g. "12+", "2–11", "under 2") may be hard-coded as a provider-independent rule** in the UX, the mock, copy or validation.
+
+- A **popover/sheet** groups passengers by **passenger type** as the provider defines them. The labels and the number of types come from a single configuration (the *passenger-type configuration*) that RT-38 fills with **explicit mock placeholder values** (visibly mock, §21) and that RT-41 later populates from provider rules.
+- The control shows age-band help text **only when supplied by that configuration**; if no band text exists, it shows the type label with no age claim.
+- Summary on the field: "2 adults, 1 child" (localized, pluralized) built from the configured type labels.
+- **Defaults:** configurable; the mock default is 1 adult, 0 children, 0 infants (a UI default, not a rule).
+- **Validation rules** (minimum adults, children/infants without an adult, infant-to-adult ratio, maximum passengers, per-child ages) are **driven by the configuration** and are `IF_PROVIDER_SUPPORTED`. The UI may only enforce a rule that exists in the active configuration; when a rule is unknown the UI does not block, and the server/provider validation result is shown through the standard error classes (§14).
+- If the provider needs **exact ages** at search time, the sheet adds a per-passenger age selector and this contract is amended before RT-38/RT-41 use it.
+- Violations show inline, plain-language messages (§11), and steppers disable at configured limits with explanatory help text.
 - No personal data is collected at this stage.
 
 ## 10. Cabin class (conditional)
@@ -168,7 +173,7 @@ Common rules:
 
 - Inputs and the form state are **never lost** on an error.
 - Errors are announced to assistive tech (`role="alert"` for blocking errors, polite live region for non-blocking notices).
-- **Human fallback:** every blocking error offers WhatsApp/email using the verified public contact data. A **"request this itinerary"** path (O3-style) is `OWNER_DECISION_REQUIRED` (RT-65 §24-8); until decided, the fallback is contact only.
+- **Human fallback:** every blocking error offers WhatsApp/email using the verified public contact data. When live flight search/purchase is unavailable, the product **may expose a clearly labeled human-request fallback** (Owner-approved conceptually, 2026-10-03): the customer sends their itinerary request to Rick Travel staff, and the page states plainly that this is a request, not a purchase or a guaranteed fare. **Mock availability is never shown as live availability**, and mock/sample offers are never offered as a substitute for a real result. The exact request form and handling are not defined here; until built, the fallback is contact only.
 - Copy never blames the customer, never promises recovery time, never exposes stack traces, provider names or codes.
 
 ## 15. Results hierarchy
@@ -229,7 +234,7 @@ An **offer card** shows (each field marked required `R` or conditional `C = IF_P
 2. The UI immediately begins **revalidation** (RT-65 §12): a modal/inline panel "Confirming price and availability…" (polite live region); the rest of the page is inert but the customer can **Cancel**.
 3. Outcomes:
    - **Valid** (`VALID`): panel shows the validated total and a **Continue** action (hand-off, §19).
-   - **Price changed** (`PRICE_CHANGED`): show **old total → new total** and the difference; the customer must press an explicit **Accept new price** or **Back to results**. No auto-continue, no default-focused "accept". The change message uses neutral wording.
+   - **Price changed** (`PRICE_CHANGED`) — **Owner-approved rule:** any *material* fare/price change after validation requires **explicit customer acceptance before continuation**, and the updated amount is **never charged silently**. What counts as "material" is not defined here; until the Owner defines a threshold the contract treats **any** change as requiring acceptance. Show **old total → new total** and the difference; the customer must press an explicit **Accept new price** or **Back to results**. No auto-continue, no default-focused "accept". The change message uses neutral wording.
    - **Sold out / no longer available** (`OFFER_UNAVAILABLE`): "This offer is no longer available." Return to results with the card marked unavailable (not removed silently) and the criteria intact; propose adjacent options from the current list.
    - **Stale offer** (`OFFER_STALE`, validity elapsed before selection or between steps): same as above with wording "This fare has expired; prices change often." Offer **Search again** (re-runs with the same criteria).
    - **Revalidation failure/timeout:** retry or return; never proceed unvalidated.
@@ -245,7 +250,7 @@ RT-37/RT-38 define the **hand-off only**:
 - In **RT-38 (mock)** *Continue* leads to a **terminal informational panel**: "The next steps (passenger details and payment) are not available yet. This is a preview." with a **Talk to us** action and **Back to results**. It must not collect any data, must not call any API, and must not imply a real purchase.
 - In the real product (after RT-65 approval and later tickets) *Continue* proceeds to passenger data → payment/request, whose UX is **specified in a follow-up ticket** (not RT-37). The hand-off must carry only a validated-offer reference created by the server, never prices or itinerary data trusted from the client.
 - The wording of the step after *Continue* depends on the commercial model (online purchase vs request-only; RT-65 §24) — **do not hard-code "Pay"**; the button stays "Continue".
-- Account vs guest checkout: `OWNER_DECISION_REQUIRED`; the hand-off must be compatible with both.
+- **Guest checkout must be supported** (Owner direction, 2026-10-03). An account is **not** required solely to purchase or request a flight unless a future legal or provider constraint requires it. Account creation may be offered as optional; the hand-off must work without a signed-in user.
 
 ## 20. Mobile behavior
 
@@ -255,7 +260,7 @@ RT-37/RT-38 define the **hand-off only**:
 - Results: cards are compact (route + times + price + select), with fare conditions in a bottom sheet; the search summary bar is collapsible; sort/filter is a single sheet.
 - No horizontal scrolling at 320 px width; text reflows at 200% zoom.
 - Date selection: native pickers are acceptable if they satisfy §8 rules; a custom picker must meet §22.
-- Header: the Flights item is in the mobile menu; the Home entry bar collapses to a single "Flights to Rio" tap target.
+- Entry from the header/mobile menu and from the Home is **not part of RT-38** (`OWNER_DECISION_REQUIRED`, §3); on mobile the Flight Planner is reached by direct URL.
 - Dedicated mobile polish remains **deferred** (RT-76); this section is the *baseline* behavior RT-38 must meet, not a polish pass.
 
 ## 21. Mock-data contract and the Offer view model
@@ -381,7 +386,7 @@ RT-38 **will not**:
 - be indexed, in the sitemap, or exposed to the Concierge;
 - implement filters that rely on data the mock does not model;
 - ship final copy (RT-78), final mobile polish (RT-76), or legal text (RT-80/RT-81);
-- change the approved Home structure beyond the entry bar of §3, which needs Owner confirmation.
+- **modify the Home, the header or the mobile menu in any way**; Home/header integration is `OWNER_DECISION_REQUIRED` and needs a separate Owner gate (`HOME_ENTRY_INTEGRATION = OWNER_DECISION_REQUIRED`).
 
 ## 26. Provider-dependent items and open questions
 
@@ -392,7 +397,7 @@ Everything below is **not promised** by this contract until RT-39 answers it (nu
 | Search criteria supported, flexible dates, multi-city | §5, §7, §8 | Q3 |
 | Offer validity | §18 | Q4 |
 | Revalidation and price change behavior | §18 | Q5 |
-| Passenger age bands, limits, infant rules, child ages needed | §9 | Q19 |
+| Passenger age bands, limits, infant/child rules, child ages needed (`IF_PROVIDER_SUPPORTED`, `EXTERNAL_DECISION_REQUIRED`) | §9 | Q19 |
 | Cabin classes | §10 | Q18 |
 | Baggage data | §16, §17 | Q16 |
 | Fare-rule data and language | §17 | Q17 |
@@ -403,7 +408,7 @@ Everything below is **not promised** by this contract until RT-39 answers it (nu
 | Carrier logos rights | §16 | RT-79 |
 | Maximum advance-sale horizon | §8 | Q3 |
 
-Owner decisions consumed by this document: non-Rio destinations allowed? (§4), popular-places list (§6), tour-page flight link (§3), request-only fallback (§14), guest vs account (§19), Home entry bar placement (§3).
+Owner decisions still open: non-Rio destinations allowed? (§4), popular-places list (§6), tour-page flight link (§3), header/mobile-menu entry (§3), **Home entry integration (§3, `OWNER_DECISION_REQUIRED`)**. Decisions taken on 2026-10-03 are recorded in §28.
 
 ## 27. Consistency with RT-65 and acceptance mapping
 
@@ -429,3 +434,20 @@ Owner decisions consumed by this document: non-Rio destinations allowed? (§4), 
 | analytics event points | §24 |
 | mock-data contract | §21 |
 | non-goals for RT-38 | §25 |
+
+## 28. Owner review record (2026-10-03)
+
+**RT-37: APPROVED WITH CORRECTIONS.** Corrections applied in this revision (§3, §4, §9, §14, §18, §19, §20, §25, §26).
+
+| # | Decision | Effect |
+| --- | --- | --- |
+| 1 | Canonical route `/{locale}/voos` approved for PT/EN/ES | §3. Not implemented in this step. |
+| 2 | Flights and Experiences are separate product categories; a FlightOrder is not an Experience booking; terminology stays separate | §0, §4 |
+| 3 | `HOME_ENTRY_INTEGRATION = OWNER_DECISION_REQUIRED`. Home entry bar **not approved**. RT-38 may build/test the Flight Planner as an isolated public-route experience without modifying the Home. Any Home change needs a separate Owner gate. (By the same reasoning the header/mobile-menu entry is also deferred.) | §3, §20, §25 |
+| 4 | Passenger age bands and rules are `IF_PROVIDER_SUPPORTED` / `EXTERNAL_DECISION_REQUIRED` until RT-39; no hard-coded thresholds | §9 |
+| 5 | Commercial target: SEARCH → SELECT → PAY → ISSUE — a business target, **not** permission for payment-before-reservation; ordering depends on RT-39 | RT-65 §9, §30 |
+| 6 | PSP remains `OWNER_DECISION_REQUIRED`; Mercado Pago not selected because legacy variables exist | RT-65 §7, §30 |
+| 7 | Material price change after validation requires explicit customer acceptance; never silently charge the updated amount | §18 |
+| 8 | Guest checkout must be supported; account not required solely to buy/request a flight | §19 |
+| 9 | Provider-down: a clearly labeled human-request fallback is allowed; mock availability is never shown as live | §14 |
+| 10 | Still unresolved pending RT-39/provider evidence: exact PSP; authorization vs capture; reservation/payment ordering; seller of record; issuance-failure liability; cancellation/refund responsibility; markup; currency/conversion; incident SLA; manual-review staffing/hours | RT-65 §24, §30 |
