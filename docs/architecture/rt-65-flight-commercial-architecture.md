@@ -493,6 +493,27 @@ Provider-facing technical and commercial checklist. Each answer is recorded in R
 31. **Data handling**: passenger data retention/transfer on the provider side, data-processing terms.
 32. **Production onboarding**: certification/test scenarios required before go-live, commercial agreement prerequisites.
 
+### 27a. Product-family questions (added 2026-10-03, Owner correction — RT-37 §29)
+
+Distribution family is Flights / Hotels / Flight + Hotel. These extend 1–32 and are likewise `EXTERNAL_DECISION_REQUIRED` until answered with date and source. **Do not assume API access merely because a widget exists.**
+
+33. Does the provider offer **Flights**?
+34. Does the provider offer **Hotels**?
+35. Does the provider offer **Flight + Hotel packages**?
+36. For each of the three: available through **widget only, API only, or both**?
+37. Is the **same API** used for all three products?
+38. Does **checkout remain inside the provider platform**, or can Rick Travel own the UI?
+39. Can Rick Travel **control the search/results UI**?
+40. Can Rick Travel **control the checkout UI**?
+41. **Who handles payment**?
+42. **Who creates the reservation**?
+43. **Who issues flight tickets**?
+44. **Who confirms hotel bookings**?
+45. Are package transactions **atomic**, or composed from separate flight and hotel reservations?
+46. Does the provider support **white-label branding**?
+47. Are **redirect / iframe / script / widget** integrations required?
+48. Are **production domain approval and certification** required? (Complements Q29 and Q32.)
+
 ## 28. Explicit dependencies
 
 **RT-40 (map API and secure integration layer) may start only when:**

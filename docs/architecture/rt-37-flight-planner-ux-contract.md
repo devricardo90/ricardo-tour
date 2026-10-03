@@ -451,3 +451,32 @@ Owner decisions still open: non-Rio destinations allowed? (§4), popular-places 
 | 8 | Guest checkout must be supported; account not required solely to buy/request a flight | §19 |
 | 9 | Provider-down: a clearly labeled human-request fallback is allowed; mock availability is never shown as live | §14 |
 | 10 | Still unresolved pending RT-39/provider evidence: exact PSP; authorization vs capture; reservation/payment ordering; seller of record; issuance-failure liability; cancellation/refund responsibility; markup; currency/conversion; incident SLA; manual-review staffing/hours | RT-65 §24, §30 |
+
+## 29. Post-Owner-gate product correction (2026-10-03, later Owner decision)
+
+This section records a **later** Owner product decision made after the §28 review, once the provider-side search-engine configuration was seen. It **supersedes §4 (and the matching tab references in §3, §20, §24)** where they place Flights and Experiences as peer tabs. §28 and every other historical approval record are left unchanged.
+
+**Distribution product family**
+
+- Flights
+- Hotels
+- Flight + Hotel
+
+These are the only product types in the planner's product selector.
+
+**Experiences**
+
+- Experiences is a **separate first-party Ricardo Tour catalog/product domain**. It is not a distribution product.
+- It may be cross-sold or shown near the travel planner (e.g. a secondary "Complete your trip in Rio" pointer below the planner/results), but it **must not share the product-type selector** with Flights / Hotels / Flight + Hotel.
+- The existing Experiences catalog (`/tours`, `LAUNCH_TRIP_IDS`) and the Home are not redesigned or modified by this decision.
+- The §0/§4 separation of terminology (a FlightOrder is never an Experience booking) is unchanged and still applies.
+
+**Rules for the selector**
+
+- The selector is **product navigation, not proof of a shared backend**. Flights, Hotels and Flight + Hotel may need different data models, provider interfaces, checkout flows and lifecycles; none is assumed.
+- Only Flights is built (RT-38, mock-only). Hotels and Flight + Hotel are shown as "Coming soon / Provider integration pending": no search, no fabricated inventory, no implied provider support, no claim of future commercial capability.
+- No Hotel or Package domain models and no placeholder provider interfaces are created. Flights keep the approved `FlightSource` / Offer boundary (§21, RT-65 §6).
+- The prototype route stays `/{locale}/voos`. `/hoteis`, `/voo-hotel` and a broader `/planeje` are not created; a broader route is evaluated only after provider capabilities are confirmed (RT-39).
+- The §24 analytics event `flight_tab_switched` ("Flights ⇄ Experiences") becomes a product-tab event across Flights / Hotels / Flight + Hotel.
+
+**Provider impact:** RT-65 §27 gains questions 33–48 covering Flights/Hotels/packages availability, widget vs API, checkout ownership, payment, reservation, ticketing/hotel confirmation, package atomicity, white-label and integration constraints. Do not assume API access merely because a widget exists.
