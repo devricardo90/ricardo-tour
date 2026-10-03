@@ -217,6 +217,8 @@ Label conformance was checked issue by issue against the Doc's convention and is
 
 Modes are the Source of Truth's, and were confirmed to match Jira's mode labels on all 47 issues. Statuses are Jira's, read 2026-09-07 and again 2026-09-16.
 
+> **Historical snapshot.** Sprint 5 / Sprint 6 above, and the statuses in this table, describe the roadmap as registered on 2026-09-07 / 2026-09-16. On 2026-10-03 the Owner re-baselined Sprint 5–8; see **§12**. Canonical codes (`RT-RB-S5-*`, `RT-RB-S6-*`) and Jira keys are unchanged; only their sprint membership moved.
+
 ## 9. Sprint 0 evidence index
 
 Where the completed Sprint 0 work lives. These artifacts are **not modified by RT-5**.
@@ -309,3 +311,74 @@ RT-5 registers and documents. It does not:
 - Add a dependency or touch `package.json` / `package-lock.json`.
 
 Nothing in this file approves anything. It records what was already approved, and where the record lives.
+
+## 12. Roadmap rebaseline — Sprint 5–8 (Owner-approved 2026-10-03)
+
+Added after the fact. §1–§11 are left as the historical record and are **not** rewritten. The product moved from visual rebuild to operational production: Sprints 0–4 and the public-site promotion (RT-52 to RT-57) are complete, and the Owner approved the public visual gate (RT-36, 2026-10-03). The Google Doc is canonical; this section is the in-repo registration of the approved structure and **has not been mirrored into the Doc** (an Owner action).
+
+### 12.1 Sprint structure
+
+| Sprint | Jira name | Jira id | Goal |
+| --- | --- | --- | --- |
+| 5 — Production Foundation & External Integrations | Sprint 5 — Prod Foundation | 138 (new) | Domain/DNS/HTTPS, `PUBLIC_SITE_URL` + env contract, business email + Resend, flight-provider onboarding, minimal observability |
+| 6 — Flight Commerce | Sprint 6 — Flight Commerce | 103 (renamed; was "Sprint 5 — Flight Planner") | Flight UX and commercial architecture first; real provider integration only after architecture + provider docs/credentials |
+| 7 — AI Concierge | Sprint 7 — AI Concierge | 139 (new) | Real, governed concierge replacing the mock backend |
+| 8 — Launch Readiness | Sprint 8 — Launch Readiness | 106 (renamed; was "Sprint 6 — QA, Perf & Launch") | QA, performance, a11y, SEO, legal, media rights, polish, final audits and gate |
+
+Sprint ids are still not in sprint order; order by canonical sprint number.
+
+### 12.2 Owner constraints (preserved)
+
+- Domain/DNS, `PUBLIC_SITE_URL` production activation, Resend sender verification and the business email-domain choice were **deliberately deferred** by the Owner (2026-10-02). They are now explicit tickets marked `OWNER / DEFERRED` or `BLOCKED BY OWNER DOMAIN DECISION`, and **must not block** Flight Planner UX or architecture work.
+- No DNS, Vercel custom-domain, Resend, registrar or provider-credential change is made by an agent until the Owner confirms the domain and access.
+- Flytour/MaisFly is **not** assumed to require the custom domain unless the provider's documentation explicitly proves it.
+- The AI Concierge backlog exists now but is **not executed in parallel** with the main Flight integration unless the Owner explicitly authorizes. The mock `app/api/ai-concierge` endpoint stays disabled until the real backend passes its Owner gate.
+- **Technical debt, recorded:** the in-memory per-instance limiter (`lib/security/rate-limit.ts`, used by the tour-request and contact-message actions) is best-effort only and is **not** production-grade. A distributed limiter must exist before final launch and is verified by the final gate.
+
+### 12.3 Ticket map
+
+New canonical codes avoid the old `S5`/`S6` codes. Existing tickets keep their codes and keys.
+
+**Sprint 5 — Production Foundation**
+
+| Code | Jira | Mode | State |
+| --- | --- | --- | --- |
+| RT-RB-F-01 Confirm domain + registrar access | RT-58 | OWNER | OWNER / DEFERRED |
+| RT-RB-F-02 Vercel custom domain + DNS + HTTPS | RT-59 | HYBRID | blocked by F-01 |
+| RT-RB-F-03 `PUBLIC_SITE_URL` + env contract | RT-60 | AGENT | contract can start; activation after F-02 |
+| RT-RB-F-04 Canonical business email identity | RT-61 | OWNER | OWNER / DEFERRED |
+| RT-RB-F-05 Resend sender + fix `email.service.ts` | RT-62 | HYBRID | blocked by F-01, F-04 |
+| RT-RB-F-06 Activate canonical/hreflang/sitemap on prod domain | RT-63 | AGENT | blocked by F-02, F-03 (split from RT-47) |
+| RT-RB-F-07 Minimal error/performance observability | RT-64 | AGENT | not blocked |
+| RT-RB-S5-03 Provider docs/credentials | RT-39 | OWNER | moved here; `blocked` |
+
+**Sprint 6 — Flight Commerce:** RT-37, RT-38 (may start now), RT-40, RT-41, RT-42, RT-43 (codes `RT-RB-S5-*` unchanged), plus **RT-RB-C-01 Flight Commercial Architecture (RT-65)** — must precede RT-40/RT-41; and RT-RB-C-02 flight analytics (RT-66, split from RT-48).
+
+RT-65 must define: Search → Results → Fare/selection → Passenger data → Payment OR booking request → Consolidator reservation → Issuance → Confirmation → Failure/refund/cancellation boundary; Rick Travel / Flytour-MaisFly / payment-provider responsibilities; whether Mercado Pago participates; whether the existing booking flow is reused; who legally and technically issues the ticket; behavior when payment succeeds but issuance fails; data that must never reach the browser; webhook and idempotency requirements.
+
+**Sprint 7 — AI Concierge:** RT-67 (replace mock backend), RT-68 (approved RAG sources), RT-69 (ingestion/update), RT-70 (persistence + retention), RT-71 (human/WhatsApp handoff), RT-72 (distributed rate limiting), RT-73 (analytics/observability), RT-74 (safety + fallback), RT-75 (Owner gate). Codes `RT-RB-AI-01..08` and `RT-RB-AI-GATE`.
+
+**Sprint 8 — Launch Readiness:** RT-44 to RT-51 (codes `RT-RB-S6-*` unchanged), plus RT-76 mobile polish, RT-77 scroll/motion polish, RT-78 PT/EN/ES copy review, RT-79 hero/media licensing, RT-80 Privacy, RT-81 Terms, RT-82 distributed rate limit, RT-83 cross-device/browser QA, RT-84 monitoring review (codes `RT-RB-L-01..09`).
+
+### 12.4 Splits
+
+- **RT-47:** canonical/hreflang/sitemap activation on the production domain → RT-63 (Sprint 5). OG image and structured-data validation stay in RT-47 (Sprint 8).
+- **RT-48:** Flight analytics ship with Flight (RT-66); Concierge analytics with the Concierge (RT-73); RT-48 becomes the final analytics audit (Sprint 8).
+- **RT-44:** Playwright critical-flow coverage applies to the complete public production surface (Home, Tours, Tour detail, Contact, About, in PT/EN/ES), not only the Home (Owner-confirmed 2026-10-03).
+- **RT-51 (final gate)** must explicitly validate: production domain, HTTPS, canonical/hreflang/sitemap, business email, Resend, legal pages, media rights, Flight production path, AI Concierge production state, analytics, monitoring, distributed rate limiting, rollback readiness.
+
+### 12.5 Dependencies
+
+```
+RT-58 domain ─► RT-59 Vercel domain/DNS/HTTPS ─► RT-60 PUBLIC_SITE_URL ─► RT-63 SEO activation ─► RT-51
+RT-58 ─► RT-61 email identity ─► RT-62 Resend ─► RT-51
+RT-37 ─► RT-38                      (may start now; no domain dependency)
+RT-65 commercial architecture ─┐
+RT-39 provider docs/credentials ┴─► RT-40 ─► RT-41 ─► RT-42 ─► RT-43 ─► RT-51
+RT-68/69/70/74 ─► RT-67 ─► RT-75 ◄─ RT-71/72/73 ;  RT-75 ─► RT-51
+RT-64 ─► RT-84 ─► RT-51 ;  RT-66, RT-73 ─► RT-48 ─► RT-51
+```
+
+### 12.6 Next execution units
+
+RT-37 (Flight Planner UX contract) and RT-65 (Flight Commercial Architecture). Neither depends on domain/DNS.
