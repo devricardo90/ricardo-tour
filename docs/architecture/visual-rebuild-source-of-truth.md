@@ -356,6 +356,21 @@ New canonical codes avoid the old `S5`/`S6` codes. Existing tickets keep their c
 
 RT-65 must define: Search → Results → Fare/selection → Passenger data → Payment OR booking request → Consolidator reservation → Issuance → Confirmation → Failure/refund/cancellation boundary; Rick Travel / Flytour-MaisFly / payment-provider responsibilities; whether Mercado Pago participates; whether the existing booking flow is reused; who legally and technically issues the ticket; behavior when payment succeeds but issuance fails; data that must never reach the browser; webhook and idempotency requirements.
 
+**Sprint 6 follow-up backlog (added 2026-10-03, after the RT-37 / RT-65 Owner review).** All are `backlog-only`: defined, **not started**, not moved into execution.
+
+| Code | Jira | Mode | Scope | Blocked by |
+| --- | --- | --- | --- | --- |
+| RT-RB-C-03 | RT-85 | AGENT | Flight Order domain model + state machine (FlightOrder, passenger/PII boundary, payment relationship, ProviderReservation, TicketIssuance, OrderEvent audit, persistence/transitions). No Prisma yet. | RT-65 |
+| RT-RB-C-04 | RT-86 | HYBRID | Provider-neutral PSP adapter + payment webhook contract (signed webhook, payment authority, idempotency, capture/refund interface, PCI boundary). **No PSP chosen.** | RT-65, **RT-90** |
+| RT-RB-C-05 | RT-87 | AGENT | Provider reservation + issuance orchestration (validation, PNR, issuance, timeouts, ambiguous-result lookup, retry policy, MANUAL_REVIEW). | **RT-39**, RT-85, RT-86, RT-40, **RT-90** |
+| RT-RB-C-06 | RT-88 | HYBRID | Reconciliation + operator / manual-review tooling. | RT-85, RT-86 |
+| RT-RB-C-07 | RT-89 | HYBRID | Passenger + checkout UX (guest checkout supported; provider-unknown rules blocked). | RT-37, RT-65, RT-39, RT-86 |
+| RT-RB-C-08 | RT-90 | HYBRID | **Flight Security Architecture Review** — documentation/review only (credentials, server-only boundary, webhook signature/replay, idempotency, auth/capture/refund boundary, PII isolation/encryption, log redaction, audit integrity, operator access control, guest-token security, CSRF/session, rate limiting, abuse protection, timeout/retry implications, preview/production secrets, retention/deletion, incident response). | RT-65 |
+
+**Status after the Owner review of 2026-10-03:** RT-37 (UX contract) and RT-65 (commercial architecture) are **Concluído**. RT-65's closure confirms the commercial/domain architecture **only**; Owner approval is **not** a substitute for an independent security review, which is RT-90. RT-90 **blocks RT-40, RT-86 and RT-87** (real payment/provider orchestration is not production-ready until it is complete) and does **not** block RT-38 (mock-only).
+
+**Owner navigation decision:** `HOME_ENTRY_INTEGRATION = OWNER_DECISION_REQUIRED`. Header, mobile-menu and tour-page Flights links are deferred (not rejected). The approved Home and shared chrome are not modified by RT-38; the isolated mock route `/{locale}/voos` is reached by direct URL during the mock phase.
+
 **Sprint 7 — AI Concierge:** RT-67 (replace mock backend), RT-68 (approved RAG sources), RT-69 (ingestion/update), RT-70 (persistence + retention), RT-71 (human/WhatsApp handoff), RT-72 (distributed rate limiting), RT-73 (analytics/observability), RT-74 (safety + fallback), RT-75 (Owner gate). Codes `RT-RB-AI-01..08` and `RT-RB-AI-GATE`.
 
 **Sprint 8 — Launch Readiness:** RT-44 to RT-51 (codes `RT-RB-S6-*` unchanged), plus RT-76 mobile polish, RT-77 scroll/motion polish, RT-78 PT/EN/ES copy review, RT-79 hero/media licensing, RT-80 Privacy, RT-81 Terms, RT-82 distributed rate limit, RT-83 cross-device/browser QA, RT-84 monitoring review (codes `RT-RB-L-01..09`).
@@ -377,8 +392,11 @@ RT-65 commercial architecture ─┐
 RT-39 provider docs/credentials ┴─► RT-40 ─► RT-41 ─► RT-42 ─► RT-43 ─► RT-51
 RT-68/69/70/74 ─► RT-67 ─► RT-75 ◄─ RT-71/72/73 ;  RT-75 ─► RT-51
 RT-64 ─► RT-84 ─► RT-51 ;  RT-66, RT-73 ─► RT-48 ─► RT-51
+(added 2026-10-03) RT-90 security review ─► RT-40, RT-86, RT-87 ;  RT-85, RT-86 ─► RT-87, RT-88 ;  RT-39 ─► RT-87 ;  RT-86 ─► RT-89   (RT-38 mock-only: not blocked by RT-90)
 ```
 
 ### 12.6 Next execution units
 
 RT-37 (Flight Planner UX contract) and RT-65 (Flight Commercial Architecture). Neither depends on domain/DNS.
+
+*Update 2026-10-03:* RT-37 and RT-65 are complete (see the Sprint 6 follow-up backlog above). The next authorized unit is **RT-38** (isolated mock-only Flight Planner at `/{locale}/voos`). RT-40, RT-41 and RT-85 to RT-90 are not started.
