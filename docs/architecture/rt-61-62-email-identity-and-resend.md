@@ -152,13 +152,17 @@ Owner action to finish RT-62 (any one):
 
 ### 7.3 Key, DNS, and follow-up security state
 
-- The Owner reports the Resend API key/domain issue resolved. The exact production/local `RESEND_API_KEY` equality could not be independently compared: Vercel classifies the production value as sensitive and `vercel env pull` returns `[SENSITIVE]` placeholders. No key value was printed or recorded. The Vercel connector also lacks authorization to this project's team scope.
+- The Owner reports the Resend API key/domain issue resolved. Do not compare or expose local and Vercel `RESEND_API_KEY` values; production/local equality is not an RT-62 acceptance criterion.
 - Resend domain `ricardotour.com` remains Owner-confirmed Verified (eu-west-1); the previous DNS audit recorded Resend records present and Titan MX unchanged. No DNS changes were made in this correction.
 - The Owner separately reports Titan's DKIM/reputation recommendation banner. Do not change Titan DNS automatically. DMARC and Titan mail hardening remain separate security follow-up work.
 
-### 7.4 RT-62 disposition
+### 7.4 Production gate and RT-62 disposition
+
+- A production-path send is still required. This execution could not submit the form because no browser session was available; the existing production contact form can be used at `https://www.ricardotour.com/pt/contato`. Its action stores the `ContactSubmission` before calling the Resend notification path. No special endpoint is needed or permitted.
+- Submit exactly one clearly identified test: name `RT-62 Production Test — 2026-10-04`; e-mail `contato@ricardotour.com`; phone blank; message `TESTE CONTROLADO DE PRODUÇÃO — RT-62. Não é uma solicitação real. Verificação única do envio do formulário de contato.` Do not submit again. The Owner must confirm receipt in Titan; the form's success screen alone does not prove delivery.
+- The prior controlled Resend-path message is Owner-confirmed delivered; do not repeat the local send.
 
 | Ticket | State |
 | --- | --- |
-| RT-62 | **Open; not transitioned.** Delivery is Owner-confirmed and the active code payload is correct, but the received `From` display-name header is unresolved. Inspect the original delivered message and confirm its raw `From` and `Reply-To` headers before closing. No second test is needed unless that evidence indicates a real payload/header defect. |
+| RT-62 | **Open; not transitioned.** Resend domain verification, active sender code, no legacy sender, and prior controlled delivery are confirmed. The Owner's raw `From`/`Reply-To` check and one production-form send plus Titan receipt confirmation remain pending. Production/local API key equality is not required. Close only after raw headers show the approved From name/address and Reply-To, and the Owner confirms the single production message arrived. |
 | DMARC / Titan hardening | Separate security follow-up; not part of RT-62 and no DNS changes authorized or made. |
