@@ -1,7 +1,7 @@
 # RT-61 / RT-62 — Business e-mail identity and Resend sender readiness
 
 - Date: 2026-10-04. Tickets: RT-61 (RT-RB-F-04), RT-62 (RT-RB-F-05).
-- Sections 1–5 are the audit of 2026-10-04 morning (historical; the legacy sender and the plan are kept as recorded). **§6 records what happened afterwards and supersedes §2 (sender proposal) and §4 (code change plan).**
+- Sections 1–5 are the audit of 2026-10-04 morning (historical; the legacy sender and the plan are kept as recorded). **§6 records the afternoon state; §7 is the latest correction check and supersedes the RT-62 status in §6.**
 
 ## 1. Verified state (read-only)
 
@@ -133,3 +133,32 @@ Owner action to finish RT-62 (any one):
 | RT-61 | satisfied (closed). Transactional identity decided by the Owner: `notificacoes@ricardotour.com`; human inbox `contato@ricardotour.com` |
 | RT-62 | **open**: code and tests done; Resend dashboard shows Verified; **delivery not yet demonstrated** (key/account mismatch suspected) |
 | DMARC | follow-up, separate e-mail-security task: TXT at `_dmarc.ricardotour.com` with value `v=DMARC1; p=none;` as a monitoring baseline (a reporting address can be added later). Not applied. |
+
+## 7. Final correction check — 2026-10-04
+
+### 7.1 Owner-confirmed delivery
+
+- The Owner confirms that the controlled test message arrived in the Titan inbox at `contato@ricardotour.com`, with subject `[TESTE] Ricardo Tour — Resend verificado`.
+- Titan currently displays `Ricardo <notificacoes@ricardotour.com>`. The Owner expects the display name `Ricardo Tour`.
+- The associated Resend-accepted send is recorded in Jira comment history as message ID `01a106b8-4e3c-7038-903a-883dd6428764`. No second test was sent or is currently required; inspect this delivered message's original source instead.
+
+### 7.2 Active payload and header evidence
+
+- Active `From` payload: `lib/email-identity.ts` defines `TRANSACTIONAL_FROM = "Ricardo Tour <notificacoes@ricardotour.com>"`. Both `lib/services/email.service.ts` and `lib/services/tour-request-notification.ts` use that shared constant.
+- Active Reply-To payload: booking e-mails use `BUSINESS_REPLY_TO` (`contato@ricardotour.com`). Contact and tour-request notifications use a plain valid visitor address when supplied and otherwise fall back to `contato@ricardotour.com`; the controlled test without a visitor address should use the business inbox.
+- Static inspection confirms the application code constructs the requested From and Reply-To values. **The received RFC message headers have not been inspected**: no Titan connector or browser session was available in this execution. The inbox label alone cannot determine whether Titan shortened the display name or the received `From` header differs.
+- No code change was made, and no repeat send was made. Keep the current sender constant unless the original message header proves it differs from the approved identity.
+- Legacy sender address `reservas@ricktravel.com.br` is absent from active code paths in `lib/`, `app/`, and `components/`; its domain remains in explanatory comments and historical evidence only.
+
+### 7.3 Key, DNS, and follow-up security state
+
+- The Owner reports the Resend API key/domain issue resolved. The exact production/local `RESEND_API_KEY` equality could not be independently compared: Vercel classifies the production value as sensitive and `vercel env pull` returns `[SENSITIVE]` placeholders. No key value was printed or recorded. The Vercel connector also lacks authorization to this project's team scope.
+- Resend domain `ricardotour.com` remains Owner-confirmed Verified (eu-west-1); the previous DNS audit recorded Resend records present and Titan MX unchanged. No DNS changes were made in this correction.
+- The Owner separately reports Titan's DKIM/reputation recommendation banner. Do not change Titan DNS automatically. DMARC and Titan mail hardening remain separate security follow-up work.
+
+### 7.4 RT-62 disposition
+
+| Ticket | State |
+| --- | --- |
+| RT-62 | **Open; not transitioned.** Delivery is Owner-confirmed and the active code payload is correct, but the received `From` display-name header is unresolved. Inspect the original delivered message and confirm its raw `From` and `Reply-To` headers before closing. No second test is needed unless that evidence indicates a real payload/header defect. |
+| DMARC / Titan hardening | Separate security follow-up; not part of RT-62 and no DNS changes authorized or made. |
