@@ -64,7 +64,7 @@ No ticket is marked complete: each acceptance criterion involves Owner approval 
 | 6 | RT-72: shared-limiter decision (with RT-82) and a store available in all environments | Owner decision, then implementation |
 | 7 | RT-73: decision to extend the analytics enum or create a separate Concierge event store | engineering, after RT-70 |
 | 8 | Model/provider decision (not in scope of any foundation ticket): which LLM/embedding service, cost ceiling, data-processing terms | Owner |
-| 9 | F1 resolved: production mock route disabled | Owner approval |
+| 9 | F1 production mock route disabled | Resolved in §5.1; no longer a backend-start blocker |
 | 10 | Production domain not required for RT-67 itself; RT-71 e-mail identity depends on RT-61 | — |
 
 RT-67 also must not run in parallel with the Flight integration without Owner authorization (ticket constraint); that is currently moot because Flight is externally blocked.
@@ -80,7 +80,8 @@ Scope: final F1 safety correction, RT-68 source inventory proposal, and readines
 - Prior live probe evidence in §1 established that the mock route returned HTTP 200 in Production. Static review also showed that `AI_CONCIERGE_ENABLED=true` could override the default-off behavior.
 - `lib/ai-concierge/config.ts` now makes Production an unconditional deny before reading either enable flag. The public layout therefore does not mount the interactive mock widget in Production, and `POST /api/ai-concierge` returns the existing `503 FEATURE_DISABLED` envelope even if an enable flag is set.
 - The Home `AIConciergeSection` remains a visual-only “Em breve / Coming soon / Próximamente” shell with a disabled input and no API transport. It makes no live RAG, booking, price, availability, or provider claims.
-- A targeted contract/route test asserts that an explicit Production enable flag still yields HTTP 503. The production deployment must include this change before live behavior can be called corrected; no test data is stored or sent to Resend.
+- A targeted contract/route test asserts that an explicit Production enable flag still yields HTTP 503. Commit `09b26f7fc023ce393f13ef3b3a3e9ada1a89db5f` reached Vercel Production deployment `dpl_H1psjVqjneLUXiLhibPws9cM39Ha` (`READY`, alias `www.ricardotour.com`). One live POST to the existing `/api/ai-concierge` returned HTTP 503 with `FEATURE_DISABLED`; the request was rejected before parsing or storing its body.
+- A live GET of `https://www.ricardotour.com/pt` returned HTTP 200. The response contains the Concierge section and “Em breve”/disabled composer, and does not contain the interactive “Abrir AI Concierge” widget entry. The shell has no API transport. Neither live check sent e-mail or created a contact, booking, or Concierge record.
 
 ### 5.2 RT-68 initial source inventory
 
@@ -92,9 +93,9 @@ The exact proposed allowlist is recorded in RT-68 §4.1–4.2. Existing KB inven
 | --- | --- |
 | `OWNER_DECISION` | Approve RT-68 exact inventory and exclusions; approve any price use, locales (especially `sv`), freshness periods, RT-69 approver/publish process, model/provider and spend ceiling, and shared limiter approach with RT-82; complete RT-75 only after implementation/evaluation. |
 | `LEGAL_DECISION` | RT-70 needs decisions on conversation persistence, retention, consent/notice, deletion, and Privacy page alignment. |
-| `SECURITY_DEPENDENCY` | Deploy the F1 deny-by-default correction; select/provision shared distributed limiter with RT-82; finalize RT-74 safety/fallback policy and RT-73 content-free telemetry. No Concierge limiter currently exists. |
+| `SECURITY_DEPENDENCY` | F1 is resolved and live-verified in Production (§5.1). Select/provision the shared distributed limiter with RT-82; finalize RT-74 safety/fallback policy and RT-73 content-free telemetry. No Concierge limiter currently exists. |
 | `CONTENT_DEPENDENCY` | Owner approval/registration of the proposed catalog, business, contact, and narrow request/handoff sources; source reconciliation for old contact evidence; approved Rio content, FAQ, and operational policies are absent. |
-| `IMPLEMENTATION_READY` | The small F1 safety fix and its focused test are ready. Real backend, retrieval, persistence, telemetry, distributed limits, and production enablement are not ready. |
+| `IMPLEMENTATION_READY` | The F1 safety fix is deployed and live-verified. Real backend, retrieval, persistence, telemetry, distributed limits, and production enablement are not ready. |
 
 ### 5.4 Sprint 7 issue state
 
