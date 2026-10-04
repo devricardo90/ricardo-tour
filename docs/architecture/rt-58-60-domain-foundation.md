@@ -3,7 +3,8 @@
 - Tickets: RT-58 (RT-RB-F-01), RT-59 (RT-RB-F-02), RT-60 (RT-RB-F-03). Related: RT-39.
 - Target domain: **ricardotour.com**.
 - History preserved: domain/DNS work was deferred by the Owner on 2026-10-02 (Source of Truth §12.2). It is **reactivated on 2026-10-03** because of new provider evidence (§1). The earlier deferral is not rewritten.
-- This document records verified state only. No DNS, registrar, Vercel domain or production environment change was made.
+- Sections 1–8 record the state **as verified on 2026-10-03** (historical). **§9 records the final state completed and verified on 2026-10-04 and supersedes the planned values in §4–§7.** The Owner performed the DNS, Vercel and environment changes; no agent changed DNS, Vercel or environment.
+- Timeline: deferred 2026-10-02 → reactivated 2026-10-03 (provider requirement) → **completed 2026-10-04**.
 
 ## 1. Provider evidence (Oner Travel, relayed by the Owner, 2026-10-03)
 
@@ -56,7 +57,7 @@ Owner action required (any one confirms access):
 
 ### 4.1 Canonical host decision (proposed)
 
-**Canonical: `ricardotour.com` (apex).** `www.ricardotour.com` redirects to it (permanent redirect, configured in Vercel). Rationale: it matches the Owner's stated target and the public contact address (`contato@ricardotour.com`); one canonical host keeps canonical/hreflang/sitemap consistent. The Owner may choose `www` instead; the decision must be recorded before RT-60 activation.
+**[Superseded 2026-10-04 — final canonical host is `https://www.ricardotour.com`, see §9.]** Proposed at the time: `ricardotour.com` (apex); `www.ricardotour.com` redirects to it (permanent redirect, configured in Vercel). Rationale: it matches the Owner's stated target and the public contact address (`contato@ricardotour.com`); one canonical host keeps canonical/hreflang/sitemap consistent. The Owner may choose `www` instead; the decision must be recorded before RT-60 activation.
 
 ### 4.2 DNS options (Owner action at the registrar/DNS host)
 
@@ -66,8 +67,8 @@ Owner action required (any one confirms access):
 
 | Host | Type | Value |
 | --- | --- | --- |
-| `@` | A | `76.76.21.21` |
-| `www` | CNAME | `cname.vercel-dns.com` |
+| `@` | A | `76.76.21.21` *(legacy value; **not used** — see §9)* |
+| `www` | CNAME | `cname.vercel-dns.com` *(legacy value; **not used** — see §9)* |
 
 Vercel may show project-specific values when the domain is added. **The values shown in the Vercel dashboard are authoritative over this table.** Confirm them at attach time.
 
@@ -89,7 +90,7 @@ Status: **contract prepared; activation not performed.** Nothing was set in Verc
 
 ### 5.1 `PUBLIC_SITE_URL`
 
-- Value on activation: `https://ricardotour.com` (the canonical host from §4.1).
+- Value on activation: ~~`https://ricardotour.com`~~ **`https://www.ricardotour.com`** (final canonical host, §9; the earlier planned value is obsolete).
 - Accepted by `lib/public-site-url.ts` only when set, starting with `https://`, and not containing `localhost`; otherwise the fallback `https://rick-travel.vercel.app` applies.
 - Scope: **Production only.** Preview and Development keep the fallback so preview pages do not claim the production canonical.
 - Activation gate: set only **after** the domain resolves, HTTPS is valid and the redirect rules are verified (§4.3). No production env change without Owner approval. A redeploy is required for the value to take effect.
@@ -135,7 +136,7 @@ Form: `https://onertravel.com/solicitacao-de-widget/` (fields read from the publ
 | Nome do Solicitante | Owner's name as the requester | **Owner to provide** |
 | CNPJ da Agência | Ricardo Tour agency CNPJ | **Owner to provide** (not in the repository; not invented) |
 | E-mail do Solicitante | requester e-mail | **Owner to provide** (the site's public contact is `contato@ricardotour.com`, but that mailbox depends on the e-mail setup in §6; the Owner chooses) |
-| Link do site em que será adicionado o widget | `https://ricardotour.com` (canonical host, §4.1) | **Only after the domain is live and serving over HTTPS** |
+| Link do site em que será adicionado o widget | **`https://www.ricardotour.com`** (final canonical host, §9) | **READY** — domain live over HTTPS (verified 2026-10-04) |
 
 Pre-submission checklist:
 
@@ -148,7 +149,7 @@ Pre-submission checklist:
 
 Submitting the form is an Owner action. This work did not submit anything.
 
-## 8. Status summary
+## 8. Status summary (as of 2026-10-03; superseded by §9)
 
 | Ticket | State |
 | --- | --- |
@@ -156,3 +157,37 @@ Submitting the form is an Owner action. This work did not submit anything.
 | RT-58 | reactivated; **Owner action required** (registrar access confirmation) |
 | RT-59 | reactivated; not started; blocked on RT-58 and DNS access |
 | RT-60 | contract prepared; activation gated on RT-59 |
+
+## 9. Final state (completed 2026-10-04)
+
+Source: Owner manual validation on 2026-10-04, plus read-only checks by the agent on 2026-10-04 (DNS-over-HTTPS, HTTP headers and page source). No DNS, Vercel or environment change was made by the agent.
+
+| Item | Final state | Agent re-check 2026-10-04 |
+| --- | --- | --- |
+| Canonical production URL | **`https://www.ricardotour.com`** | — |
+| DNS provider | HostGator remains the DNS provider (nameservers `ns00080.hostgator.com.br`, `ns00081.hostgator.com.br`) | confirmed (NS) |
+| Apex `ricardotour.com` | `A 216.198.79.1` | confirmed |
+| `www.ricardotour.com` | `CNAME 3dbc0dde6b93740b.vercel-dns-017.com` | confirmed |
+| Legacy Vercel values (`76.76.21.21`, `cname.vercel-dns.com`) | **not used; do not replace the records above with them** | — |
+| E-mail | Titan preserved: MX 10 `mx1.titan.email`, MX 20 `mx2.titan.email`; SPF and DKIM configured; **no DMARC yet** (future improvement, **not** a blocker for RT-58/59/60) | MX confirmed; `_dmarc` returns NXDOMAIN |
+| Vercel project | `rick-travel`; `www.ricardotour.com` = Valid Configuration, **Production**; `ricardotour.com` = Valid Configuration, **308 redirect to www** | apex returns `308` → `https://www.ricardotour.com/` |
+| HTTPS | working on both hosts; apex redirects over HTTPS | confirmed (no TLS errors) |
+| Technical fallback | `rick-travel.vercel.app` remains available | responds (307 → `/pt`) |
+| `PUBLIC_SITE_URL` | Production = `https://www.ricardotour.com`; production redeploy succeeded | effect visible in output below |
+| `robots.txt` | `Sitemap: https://www.ricardotour.com/sitemap.xml` | confirmed |
+| `sitemap.xml` | URLs on `https://www.ricardotour.com`; `/voos` absent | confirmed (0 `voos` entries) |
+| Canonical `/pt` | `https://www.ricardotour.com/pt` | confirmed |
+| hreflang | `pt`, `en`, `es` → `/pt`, `/en`, `/es` on www; `x-default` → `/pt` | confirmed |
+| `og:url` | `https://www.ricardotour.com/pt` | confirmed |
+| `/voos` mock route | not in sitemap; `noindex, nofollow` | confirmed |
+
+### 9.1 Ticket outcomes
+
+- **RT-58** — satisfied: domain control confirmed operationally by Owner access to HostGator/cPanel; DNS management access confirmed; definitive production domain confirmed; canonical host `www.ricardotour.com`.
+- **RT-59** — satisfied: custom domain attached, DNS correct, `www` Production, apex 308 to `www`, HTTPS valid, HostGator DNS and Titan e-mail records preserved, `vercel.app` fallback kept. Rollback path: remove the domain from the Vercel project or revert the two DNS records; `rick-travel.vercel.app` is unaffected.
+- **RT-60** — satisfied for the `PUBLIC_SITE_URL` activation and SEO URL checks listed above. Items in §5.3 that were flagged for cutover review (`BETTER_AUTH_URL`, Mercado Pago return/webhook URLs, the inert root `robots.ts`, the legacy `api.ricktravel.com` preconnect) were **not part of this validation and are not changed here**; they remain tracked for RT-63 (SEO activation) and the auth/payment tickets.
+- **RT-39** — `DOMAIN_PREREQUISITE = SATISFIED`. Still `BLOCKED / EXTERNAL_DEPENDENCY`; remaining blocker `ONER_WIDGET_REQUEST_AND_PROVIDER_RESPONSE` (§9.2).
+
+### 9.2 Oner widget form readiness
+
+`ONER_FORM_URL_READY = YES` — production URL to submit: **`https://www.ricardotour.com`**. The form has not been submitted; the Owner submits it manually. Requester name, agency CNPJ and requester e-mail are still **Owner-provided** and are not in the repository or invented here. After submission: record the date on RT-39 and wait for Oner's reply (up to 72 business hours per Oner's statement). The domain prerequisite does not prove API access.
