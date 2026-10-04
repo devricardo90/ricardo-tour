@@ -233,3 +233,39 @@ Minimum to unblock RT-40 (RT-65 §28): Q1–Q11, Q21–Q23, plus sandbox credent
 > Obrigado,
 > [Nome] — Ricardo Tour
 > [Telefone / e-mail]
+
+
+---
+
+# Provider evidence log (internal, append only)
+
+## 2026-10-03: Oner Travel, relayed by the Owner
+
+`CUSTOM_DOMAIN_REQUIRED_FOR_WIDGET_RELEASE`: the agency must already have its own URL; the URL is essential for release of the search engine; the widget request form must be submitted; response may take up to 72 business hours. Does not prove API access.
+
+## 2026-10-04: domain prerequisite satisfied; request submitted
+
+- `DOMAIN_PREREQUISITE = SATISFIED`: production domain `https://www.ricardotour.com` is live (`rt-58-60-domain-foundation.md` section 9).
+- `ONER_FORM_SUBMITTED = YES` (submitted manually by the Owner). Submission date/time and requester data are held by the Owner and are not recorded here.
+- `STATUS = AWAITING_PROVIDER_RESPONSE` (Jira status stays BACKLOG / READY; labels `blocked`, `external-dependency`, `awaiting-provider-response`).
+
+## 2026-10-04: widget integration instructions (Oner, relayed by the Owner)
+
+| Element | Value |
+| --- | --- |
+| HEAD stylesheet | `https://static.onertravel.com/widget/search/production/styles.css` |
+| HTML / custom element | `<befly-widget language="pt-br" new-tab="true"></befly-widget>` |
+| Script | `https://static.onertravel.com/widget/search/production/widget-befly.js` |
+| Provider note | the widget only works on the domain specified in the request form; it is not displayed in local, edit or development environments |
+
+Interpretation:
+
+- `WIDGET_INTEGRATION = CONFIRMED` (a search widget delivered as a custom element with a hosted script and stylesheet).
+- `API_INTEGRATION = NOT CONFIRMED`. No API capability is inferred from the widget instructions.
+- The instructions name only a search widget. Nothing received yet covers hotels, Flight + Hotel, checkout ownership, payment, reservation, issuance, webhooks or sandbox. Questionnaire section 2 (integration matrix) stays open for those products.
+- `new-tab="true"` suggests results/checkout open on the provider side (provider-owned checkout). This is an inference to confirm with Oner, not a fact: see questions 2.3, 2.4 and 6.1.
+- The widget is not implemented by this record. Implementation needs its own ticket, an Owner decision and an RT-90-style review of loading a third-party script/stylesheet on the public site (CSP, privacy, performance).
+
+## Remaining external dependency
+
+`ONER_RESPONSE`, widget authorization, provider documentation, credentials/configuration instructions, and confirmation whether API access exists. RT-39 stays open.
