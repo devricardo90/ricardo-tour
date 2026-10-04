@@ -65,6 +65,29 @@ Verified in the repository during the audit: tours and prices live in the platfo
 - business hours / response-time statement for the human team (needed for handoff wording, RT-71)
 - language policy: whether `sv` is a supported answer language (the contract lists it; its UI copy is English)
 
+### 4.1 Proposed exact initial source inventory — Owner approval required
+
+This is the proposed allowlist for the first real Concierge version. It is an inventory only: **no records have been created or ingested**. Owner approval under §9 and the RT-69 registration/review process are still required before implementation.
+
+| Proposed source ID | Exact source and scope | Initial disposition |
+| --- | --- | --- |
+| `public-tour-catalog` | Current database rows read through `lib/catalog/public-trips.ts` (`getPublicTrips` / `getPublicTripById`), which restricts the set to `LAUNCH_TRIP_IDS`, `isPublished=true`, and integrity-approved rows; public renderers are `/[locale]/tours`, `/[locale]/tours/[id]`, and `components/experiences-in-rio-section.tsx`. Fields proposed: localized public title/description, city, location, and explicit inclusions/highlights only where those are present in the approved public description. Experiences is a view of this same catalog, not a duplicate source. | Candidate Tier 1. Re-read live through the public gate; never snapshot `prisma/seed.ts`, unpublished records, or `data/real-trips.json`. Exclude `TripSchedule` and availability. Exclude prices from the initial set until the Owner explicitly approves RT-68 §5 price use. |
+| `business-identity-approved-values` | `docs/product/ai-concierge-approved-public-business-evidence-values.md`: approved records 1–6 and 10 (brand, approved short description, Rio service base/region, PT/ES/EN support, general services, institutional copy), together with the matching public page sources `components/site/about/about-copy.ts` and `components/about-rick-travel-section.tsx`. | Candidate Tier 1 for exact, reviewed wording only. Reconcile each locale against the public page and current Owner-approved record before registration; no inference or unreviewed translation. Swedish is excluded. |
+| `canonical-public-contact` | `lib/public-contact.ts` and the current public Contact / Quem Somos page renderers (`components/site/contact/contact-copy.ts`, `components/site/about/about-copy.ts`). Approved values for this proposal: `contato@ricardotour.com` and `+55 22 99846-1906` / `https://wa.me/5522998461906`. | Candidate Tier 1 from current canonical public values and Owner instruction. Do **not** use historical approved-values records 7–9 from the evidence register as contact truth: they contain superseded `contact@travelrick.com` and `+55 21 96681-9928` values and need reconciliation. Instagram is out of this initial allowlist pending current value-level review. |
+| `public-request-and-human-handoff` | Public wording in `components/site/tour/tour-request-copy.ts` and `components/site/contact/contact-copy.ts`; implementation boundary in `app/actions/tour-request.ts`: a request is stored and reviewed by the team, and the team follows up to arrange details; it is not a confirmed booking or availability promise. Handoff channel values come only from `lib/public-contact.ts`. | Candidate Tier 1 for the narrow request/handoff flow and mandatory product guardrails. Do not treat draft AI architecture documents as published commercial policy. No payment, cancellation, refund, timing, or availability claims. |
+| `rio-destination-editorial` | No standalone reviewed destination guide or per-locale attraction/neighborhood editorial source was found. `components/rio-story-section.tsx` contains high-level brand/editorial copy only; the public tour catalog may describe the listed tours but is not a general destination guide. | **Not in the initial set.** `OWNER_CONTENT_REQUIRED` for any destination advice beyond exact approved business description and live published tour content. No outside web results or model knowledge. |
+| `operational-policy-text` | No approved repository source for payment methods/deposits, cancellation/refund/rescheduling, business hours, response times, or case-specific booking policy was found. Existing Concierge scope/answer/safety contracts may constrain the system but are drafts and are not customer-facing policy sources. | **Not in the initial factual set.** Use fixed handoff guardrails only; missing policies remain `OWNER_CONTENT_REQUIRED`. |
+| `approved-faq` | No separate reviewed and approved FAQ source was found. | **Not in the initial set.** `OWNER_CONTENT_REQUIRED`. |
+
+### 4.2 Explicitly excluded sources and claims for the initial set
+
+- Random web results, external destination feeds, and model general knowledge.
+- `Oner` inventory, Flight mock data, any flight/hotel/package inventory or pricing; RT-39 remains externally blocked.
+- Unverified, stale, or historic prices; any catalog price until the separate Owner approval in §5.
+- `TripSchedule`, capacity, schedule status, future dates, booking records, payment state, ContactSubmission data, and private/admin data.
+- Legacy Rick Travel contact values in older product evidence records, `data/real-trips.json`, unpublished/seed-only catalog rows, and unreviewed `messages/*.json` or `docs/ops/*` ingestion.
+- Cancellation, refund, payment, safety, legal, credential, insurance, accessibility, or response-time assertions without exact current approved evidence.
+
 ## 5. Prices
 
 - Only T1-PRICES may be quoted: the stored price for the tour, with currency, stated as indicative, with "final price and availability are confirmed by the team".

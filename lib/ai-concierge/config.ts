@@ -13,6 +13,12 @@ function normalizeFlag(value: string) {
 }
 
 export function isAIConciergeEnabled(env: ConciergeEnv = process.env) {
+  // This endpoint is a mock until RT-67 and the RT-75 Owner gate authorize a real backend.
+  // A configured feature flag must never make the mock available in a production deployment.
+  if (env.VERCEL_ENV === "production" || env.NODE_ENV === "production") {
+    return false;
+  }
+
   const configuredValue =
     env.AI_CONCIERGE_ENABLED ?? env.NEXT_PUBLIC_AI_CONCIERGE_ENABLED;
 
@@ -26,10 +32,6 @@ export function isAIConciergeEnabled(env: ConciergeEnv = process.env) {
     if (DISABLED_VALUES.has(normalized)) {
       return false;
     }
-  }
-
-  if (env.VERCEL_ENV === "production" || env.NODE_ENV === "production") {
-    return false;
   }
 
   return true;

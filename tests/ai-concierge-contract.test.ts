@@ -1,4 +1,5 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { POST as postAIConcierge } from "@/app/api/ai-concierge/route";
 import { isAIConciergeEnabled } from "@/lib/ai-concierge/config";
 import {
   AI_CONCIERGE_MAX_MESSAGE_LENGTH,
@@ -6,19 +7,49 @@ import {
 } from "@/lib/ai-concierge/contract";
 import { createMockAIConciergeResponse } from "@/lib/ai-concierge/mock-backend";
 
+afterEach(() => {
+  vi.unstubAllEnvs();
+});
+
 describe("AI Concierge feature flag", () => {
   it("can be disabled explicitly", () => {
     expect(isAIConciergeEnabled({ AI_CONCIERGE_ENABLED: "false" })).toBe(false);
     expect(isAIConciergeEnabled({ NEXT_PUBLIC_AI_CONCIERGE_ENABLED: "0" })).toBe(false);
   });
 
-  it("defaults to disabled for production when no flag is set", () => {
+  it("keeps production disabled even when an enable flag is set", () => {
     expect(isAIConciergeEnabled({ NODE_ENV: "production" })).toBe(false);
     expect(isAIConciergeEnabled({ VERCEL_ENV: "production" })).toBe(false);
+    expect(
+      isAIConciergeEnabled({ VERCEL_ENV: "production", AI_CONCIERGE_ENABLED: "true" })
+    ).toBe(false);
+    expect(
+      isAIConciergeEnabled({ NODE_ENV: "production", NEXT_PUBLIC_AI_CONCIERGE_ENABLED: "on" })
+    ).toBe(false);
   });
 
   it("defaults to enabled outside production for the UI shell", () => {
     expect(isAIConciergeEnabled({ NODE_ENV: "development" })).toBe(true);
+  });
+
+  it("returns 503 from the API in production even when the mock flag is enabled", async () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv("AI_CONCIERGE_ENABLED", "true");
+
+    const response = await postAIConcierge(
+      new Request("https://www.ricardotour.com/api/ai-concierge", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ locale: "en", message: "safe production gate probe" }),
+      })
+    );
+
+    expect(response.status).toBe(503);
+    expect(await response.json()).toMatchObject({
+      status: "error",
+      error: { code: "FEATURE_DISABLED" },
+    });
   });
 });
 

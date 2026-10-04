@@ -166,3 +166,20 @@ Owner action to finish RT-62 (any one):
 | --- | --- |
 | RT-62 | **Open; not transitioned.** Resend domain verification, active sender code, no legacy sender, and prior controlled delivery are confirmed. The Owner's raw `From`/`Reply-To` check and one production-form send plus Titan receipt confirmation remain pending. Production/local API key equality is not required. Close only after raw headers show the approved From name/address and Reply-To, and the Owner confirms the single production message arrived. |
 | DMARC / Titan hardening | Separate security follow-up; not part of RT-62 and no DNS changes authorized or made. |
+
+## 8. Final production validation — 2026-10-04
+
+This Owner confirmation supersedes the pending items in §7.4. No additional email test was sent during this closure.
+
+| Gate | Final evidence |
+| --- | --- |
+| Resend domain | `ricardotour.com` is Verified (Owner-confirmed, eu-west-1). |
+| Local controlled send | PASS — prior controlled Resend send to `contato@ricardotour.com` was delivered to Titan. |
+| Production contact-form send | PASS — the Owner confirms one controlled request through the deployed production contact form succeeded after storing the request. |
+| Production delivery | PASS — Owner confirms the message arrived in Titan at `contato@ricardotour.com`. |
+| From header | VERIFIED — Owner confirms the raw header is `Ricardo Tour <notificacoes@ricardotour.com>`. |
+| Reply-To header | VERIFIED — Owner confirms the raw header is `contato@ricardotour.com` for the controlled production request. Valid visitor Reply-To remains supported for visitor-originated tour/contact notifications. |
+| Production sender | PASS — Owner confirms the Vercel Production Resend configuration sends successfully. No comparison or disclosure of secret values is used as evidence. |
+| Legacy sender | PASS — no active sender under `ricktravel.com.br` remains in `lib/`, `app/`, or `components/`. Historical references remain only in explanatory/audit material. |
+
+RT-62 is ready to transition to **Concluído**. No email implementation change was required. DMARC and Titan mail hardening remain separate follow-up security work; no Titan DNS change was made.
