@@ -1,14 +1,14 @@
 // Notification e-mail for guest tour requests (RT-55). The request is ALREADY stored (ContactSubmission) before this
 // runs, so a delivery problem never loses a request and never turns a stored request into a fake failure.
 //
-// Sender: unchanged. This reuses the sender the project already sends booking e-mails from (see
-// lib/services/email.service.ts). Its domain verification state could not be confirmed from here (the Resend key is
-// restricted to sending), so the sender is deliberately NOT switched to ricardotour.com; that is infrastructure debt
-// reported for the Owner. The visitor's e-mail, when given, is used as Reply-To.
+// Sender (RT-62): the verified transactional identity from lib/email-identity.ts. The
+// earlier sender on the retired ricktravel.com.br domain was removed. The visitor's e-mail, when it is a plain valid
+// address, is used as Reply-To; otherwise replies go to the business inbox.
+import { TRANSACTIONAL_FROM, resolveReplyTo, toSingleLine } from "@/lib/email-identity";
 import { PUBLIC_CONTACT } from "@/lib/public-contact";
 
 export const NOTIFICATION_RECIPIENT = PUBLIC_CONTACT.email;
-export const NOTIFICATION_SENDER = "Rick Travel <reservas@ricktravel.com.br>";
+export const NOTIFICATION_SENDER = TRANSACTIONAL_FROM;
 
 export type NotificationResult = "sent" | "muted" | "skipped" | "failed";
 
@@ -24,7 +24,7 @@ export function resolveEmailMode(env: Record<string, string | undefined> = proce
 
 export async function sendContactNotification(input: { submissionId: string; subject: string; message: string; replyTo?: string; logTag?: string }): Promise<NotificationResult> {
   const mode = resolveEmailMode();
-  const subject = input.subject;
+  const subject = toSingleLine(input.subject);
   const tag = input.logTag ?? "contact";
   if (mode === "off") return "skipped";
   if (mode === "log") {
@@ -38,7 +38,7 @@ export async function sendContactNotification(input: { submissionId: string; sub
       to: [NOTIFICATION_RECIPIENT],
       subject,
       text: input.message,
-      ...(input.replyTo ? { replyTo: input.replyTo } : {}),
+      replyTo: resolveReplyTo(input.replyTo),
     });
     if (error) {
       console.error(`[${tag}] notification failed`, error.message);

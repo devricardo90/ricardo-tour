@@ -1,3 +1,4 @@
+import { BUSINESS_REPLY_TO, TRANSACTIONAL_FROM } from "@/lib/email-identity";
 import { prisma } from "@/lib/prisma";
 import { getLocalizedField } from "@/lib/localized-field";
 import { resend } from "@/lib/resend";
@@ -94,7 +95,8 @@ export async function sendBookingEmail(bookingId: string, template: BookingEmail
     });
 
     const { data, error } = await resend.emails.send({
-      from: "Rick Travel <reservas@ricktravel.com.br>",
+      from: TRANSACTIONAL_FROM,
+      replyTo: BUSINESS_REPLY_TO,
       to: [booking.user.email],
       subject: content.subject,
       html: content.html,

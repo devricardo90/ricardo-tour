@@ -1,7 +1,7 @@
 # RT-61 / RT-62 — Business e-mail identity and Resend sender readiness
 
 - Date: 2026-10-04. Tickets: RT-61 (RT-RB-F-04), RT-62 (RT-RB-F-05).
-- Scope: audit and documentation. No DNS, Resend, mailbox or code change was made.
+- Sections 1–5 are the audit of 2026-10-04 morning (historical; the legacy sender and the plan are kept as recorded). **§6 records what happened afterwards and supersedes §2 (sender proposal) and §4 (code change plan).**
 
 ## 1. Verified state (read-only)
 
@@ -93,3 +93,43 @@ No application code was modified in this execution.
 | --- | --- |
 | RT-61 | satisfied: canonical identity `contato@ricardotour.com` on `ricardotour.com`; a separate transactional alias is `OWNER_DECISION_REQUIRED` and non-blocking |
 | RT-62 | open; waiting for the Owner to add the domain to Resend and add the DNS records; code change after verification |
+
+## 6. Update 2026-10-04 (afternoon): domain verified in Resend, sender changed
+
+### 6.1 Owner actions and direction
+
+- Owner added `ricardotour.com` to Resend (region Ireland / eu-west-1) and added the DNS records at HostGator. The Resend dashboard shows the domain as **Verified** ("Your domain is ready to send emails"). Agent re-check of DNS: `resend._domainkey` TXT present; `rsend` CNAME → `rsend-euw1.forge.rmta.net`; `send` CNAME → `send.forge.rmta.net`; Titan MX unchanged. (Resend's current setup uses CNAMEs on `send` and `rsend`, not the MX/TXT shape predicted in §3.1.)
+- Owner e-mail direction (supersedes the §2 proposal of `contato@` as sender): **From `Ricardo Tour <notificacoes@ricardotour.com>`** (automated mail only; no Titan mailbox needed unless inbound use appears) and **Reply-To `contato@ricardotour.com`** (canonical human inbox). The legacy `reservas@ricktravel.com.br` is retired. DMARC is not required.
+
+### 6.2 Code change (done, tested)
+
+| File | Change |
+| --- | --- |
+| `lib/email-identity.ts` (new) | single source: `TRANSACTIONAL_FROM`, `BUSINESS_REPLY_TO` (from `PUBLIC_CONTACT.email`), `resolveReplyTo()` (plain valid visitor address, else the business inbox), `toSingleLine()` for subjects |
+| `lib/services/email.service.ts` | booking e-mails: `from: TRANSACTIONAL_FROM`, `replyTo: BUSINESS_REPLY_TO` |
+| `lib/services/tour-request-notification.ts` | `NOTIFICATION_SENDER = TRANSACTIONAL_FROM`; Reply-To is the visitor's address when plain and valid, otherwise `contato@ricardotour.com`; subject forced to one line |
+| `tests/email-identity.test.ts` (new) | sender/reply-to constants; no `@ricktravel.com.br` in `lib/`, `app/`, `components/`; sender string defined only in `email-identity.ts`; Reply-To injection cases (display name, lists, CRLF, `;`, quoted, no TLD) fall back; subject CRLF stripped; the notification payload is asserted with a mocked Resend client |
+
+The From address is a constant; no user input reaches it. Not touched: Titan MX/SPF/DKIM, DMARC, mailboxes, abandoned `.bak` files. Historical validation scripts `scripts/rt-55-*` and `scripts/rt-56-*` still contain assertions about the old sender and the earlier diff baselines; they are one-shot evidence harnesses for those tickets and were not edited.
+
+Checks: `tsc --noEmit` clean; ESLint clean on the changed files; full Vitest suite 16 files / 122 tests passed.
+
+### 6.3 Controlled delivery test: NOT successful
+
+One send was made through the project's real notification path (`sendContactNotification`), to `contato@ricardotour.com`, subject `[TESTE] Ricardo Tour — Resend verificado`, using the `RESEND_API_KEY` from the local `.env`. The request payload was as intended (`from: Ricardo Tour <notificacoes@ricardotour.com>`, `replyTo: contato@ricardotour.com`). **Resend rejected it** with HTTP 403 `validation_error`: *"The ricardotour.com domain is not verified."* No message was delivered; no retry was made.
+
+Interpretation: the Owner's dashboard shows the domain as verified, so the API key in the local `.env` most likely belongs to a different Resend account/team than the one that verified the domain (or an older project key). The production key in Vercel (value hidden) was not tested and may be correct. This is not confirmed.
+
+Owner action to finish RT-62 (any one):
+
+1. Confirm that the API key used by Production (Vercel `RESEND_API_KEY`) was created in the same Resend team where `ricardotour.com` shows Verified; if not, create a sending key in that team and update Vercel (Production and Preview) and the local `.env`. Never paste the key in chat or tickets.
+2. After the code deploys to production, submit one test message through the production contact form, or tell the agent to repeat the controlled send once the local key is corrected.
+3. Confirm the test message arrived in the Titan inbox with sender "Ricardo Tour" and Reply-To `contato@ricardotour.com`.
+
+### 6.4 State
+
+| Ticket | State |
+| --- | --- |
+| RT-61 | satisfied (closed). Transactional identity decided by the Owner: `notificacoes@ricardotour.com`; human inbox `contato@ricardotour.com` |
+| RT-62 | **open**: code and tests done; Resend dashboard shows Verified; **delivery not yet demonstrated** (key/account mismatch suspected) |
+| DMARC | follow-up, separate e-mail-security task: TXT at `_dmarc.ricardotour.com` with value `v=DMARC1; p=none;` as a monitoring baseline (a reporting address can be added later). Not applied. |
