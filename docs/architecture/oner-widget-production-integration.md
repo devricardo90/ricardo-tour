@@ -1,6 +1,6 @@
 # Oner widget — production integration evidence
 
-Status: integration code pushed (commit 7148a62). **Production validation PENDING** (see §6). Classification: PROVIDER_CONFIRMED / OBSERVED / INFERRED / UNKNOWN.
+Status: integration code live (commit 7148a62). Production render confirmed by the Owner; search/new-tab/checkout/mobile validation still PENDING (see §6). Jira: RT-91 (implementation), RT-39 (evidence), RT-40 (blocked). Classification: PROVIDER_CONFIRMED / OBSERVED / INFERRED / UNKNOWN.
 
 ## 1. Provider evidence (PROVIDER_CONFIRMED)
 
@@ -34,12 +34,28 @@ Audit: no CSP header exists (no `headers()` in `next.config.ts`, no `vercel.json
 
 - `id="wrapper"` is kept per provider snippet; it is a generic id (no site CSS targets it today).
 - Whether the widget registers `befly-widget` lazily, uses shadow DOM or iframes: UNKNOWN until observed in production.
-- Products (flights / hotels / flight+hotel), new-tab destination, checkout and payment ownership, branding, EN/ES: **UNKNOWN** — not observed.
+- New-tab destination, results location, checkout and payment ownership, branding, EN/ES: **UNKNOWN** — not observed.
 
-## 6. Production validation — NOT DONE
+## 6. Production evidence
 
-At the time of writing `https://www.ricardotour.com/pt/oner-lab` returned 404 (deployment of 7148a62 not yet live or not auto-deployed from `main`) and the Chrome extension was not connected, so no live observation was possible. All fields below are UNKNOWN: WIDGET_RENDER, CSS_LOAD, SCRIPT_LOAD, CONSOLE_ERRORS, NETWORK_ORIGINS, DESKTOP_STATUS, MOBILE_STATUS, PRODUCTS_OBSERVED, search/new-tab/checkout/payment behavior, style isolation.
+PROVIDER_CONFIRMED
+- Widget configured for Ricardo Tour; installation authorized; official CSS/script/custom element (§1).
+- Widget works only on the domain registered in the Oner form.
 
-## 7. Commercial V1 recommendation
+OWNER_OBSERVED
+- `https://ricardotour.com/pt/oner-lab`: `WIDGET_RENDER = PASS`.
+- Visible products: Voos, Hotéis, Pacotes (Voo + Hotel), Carros, Exclusivos, Seguros.
+- Search UI shows trip type, passengers, origin, destination, departure date, return date, search CTA.
+- `https://rick-travel.vercel.app/pt/oner-lab`: provider shows "Não autorizado! Infelizmente o conteúdo não pode ser exibido." → `DOMAIN_RESTRICTION = CONFIRMED BY OBSERVATION`. Expected provider behavior, not a defect; no bypass is attempted (no widget on vercel.app/localhost).
 
-None yet — it must be based on production evidence. Options A (widget as `/pt/voos`), B (RT-38 awaiting API), C (hybrid shell → provider flow) remain open; C is the lowest-risk candidate only if the widget renders and hands off as expected.
+Still UNKNOWN (not observed by anyone yet): CONSOLE_ERRORS, NETWORK_ORIGINS beyond static.onertravel.com, search execution, new-tab behavior and destination domain, results location, checkout/payment/issuance ownership, branding, state on return, mobile status, style isolation, EN/ES.
+
+`API_INTEGRATION = NOT_CONFIRMED`. The visible products are widget UI, not API capability.
+
+## 7. Commercial V1 — preliminary analysis (no option promoted)
+
+The live widget already exposes six product categories (flights, hotels, packages, cars, exclusives, insurance). Rebuilding that breadth in RT-38 would need an API we do not have (RT-40 blocked), plus the order/payment architecture of RT-65. That favors A or C in the near term and leaves B as a future target once API access exists. The decision needs the §6 UNKNOWNs closed first, in particular checkout/payment ownership and what new-tab opens.
+
+## 8. `/pt/voos` promotion proposal (NOT implemented)
+
+Proposal only, pending Owner gate: `/pt/voos` = Ricardo Tour branded header/intro → `OnerWidget` (existing adapter, PT only) → Ricardo Tour assistance/handoff section (WhatsApp/e-mail, reusing `OnerWidgetFallback` contact block). RT-38 code and history stay in the repo (`FlightPlanner`, `lib/flights/*`), reachable e.g. under a lab route. `/en/voos` and `/es/voos` unchanged until Oner confirms languages. Indexing, Home entry and sitemap are separate Owner decisions. Needed before promotion: closed §6 UNKNOWNs, mobile validation, Owner approval.
