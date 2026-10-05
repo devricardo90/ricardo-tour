@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { OnerWidgetFallback } from "./oner-widget-fallback";
 import { loadOnerWidget } from "./oner-widget-loader";
-import { ONER_EVENTS, emitOnerEvent } from "./oner-widget-events";
+import { ONER_EVENTS, emitOnerEvent, type OnerEventName } from "./oner-widget-events";
 
 // Typed declaration for the provider custom element (no global suppression).
 declare module "react" {
@@ -23,13 +23,13 @@ type Status = "loading" | "ready" | "error";
 
 // Provider-approved first implementation: language and new-tab are exactly what Oner documented. No other
 // language codes are known to be supported (EN/ES = PROVIDER_CONFIRMATION_REQUIRED).
-export function OnerWidget() {
+export function OnerWidget({ trackPageView = ONER_EVENTS.pageView }: { trackPageView?: OnerEventName } = {}) {
   const [status, setStatus] = useState<Status>("loading");
   const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
-    if (attempt === 0) emitOnerEvent(ONER_EVENTS.pageView);
+    if (attempt === 0) emitOnerEvent(trackPageView);
     emitOnerEvent(ONER_EVENTS.loadStarted);
     loadOnerWidget().then(
       () => {
@@ -46,7 +46,7 @@ export function OnerWidget() {
     return () => {
       cancelled = true;
     };
-  }, [attempt]);
+  }, [attempt, trackPageView]);
 
   if (status === "error") {
     return (

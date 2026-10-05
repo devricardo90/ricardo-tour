@@ -11,6 +11,10 @@ export const ONER_EVENTS = {
   loadStarted: "oner_widget_load_started",
   loaded: "oner_widget_loaded",
   loadFailed: "oner_widget_load_failed",
+  // Ricardo Tour-owned interactions on the public travel-planner page (links we render ourselves).
+  travelPlannerView: "travel_planner_view",
+  rioExperiencesClicked: "rio_experiences_clicked",
+  travelPlannerHandoffClicked: "travel_planner_handoff_clicked",
 } as const;
 
 export type OnerEventName = (typeof ONER_EVENTS)[keyof typeof ONER_EVENTS];
