@@ -18,6 +18,8 @@ export const siteChromeCopy = {
     logoAria: "Rick Travel, início",
     nav: { label: "Navegação principal", experiences: "Experiências", rio: "Sobre o Rio", concierge: "AI Concierge", about: "Quem somos" },
     cta: "Planeje sua viagem",
+    // Live travel planner (RT-91) exists in PT only; EN/ES keep the Home anchor until provider localization is confirmed.
+    planPath: "/planeje-sua-viagem" as string | null,
     menu: { open: "Abrir menu de navegação", close: "Fechar menu de navegação" },
     language: { label: "Idioma" },
     footer: {
@@ -40,6 +42,7 @@ export const siteChromeCopy = {
     logoAria: "Rick Travel, home",
     nav: { label: "Main navigation", experiences: "Experiences", rio: "About Rio", concierge: "AI Concierge", about: "About us" },
     cta: "Plan your trip",
+    planPath: null as string | null,
     menu: { open: "Open navigation menu", close: "Close navigation menu" },
     language: { label: "Language" },
     footer: {
@@ -62,6 +65,7 @@ export const siteChromeCopy = {
     logoAria: "Rick Travel, inicio",
     nav: { label: "Navegación principal", experiences: "Experiencias", rio: "Sobre Río", concierge: "AI Concierge", about: "Quiénes somos" },
     cta: "Planifica tu viaje",
+    planPath: null as string | null,
     menu: { open: "Abrir menú de navegación", close: "Cerrar menú de navegación" },
     language: { label: "Idioma" },
     footer: {

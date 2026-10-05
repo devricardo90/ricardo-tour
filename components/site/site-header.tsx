@@ -1,5 +1,6 @@
 import { RickTravelLogo } from "@/components/rick-travel-logo";
 import { SiteLanguageNav, SiteMobileMenu } from "@/components/site/site-header-controls";
+import { Link } from "@/i18n/routing";
 import { SiteAnchor, SiteHomeLink } from "@/components/site/site-anchor";
 import { navHashes, PLAN_HASH, resolveSiteChromeCopy, type AnchorMode } from "@/components/site/site-chrome-copy";
 
@@ -19,6 +20,7 @@ export function SiteHeader({ locale, anchorMode = "home", homeHref = "#top-of-ho
     { label: t.nav.concierge, hash: navHashes.concierge },
     { label: t.nav.about, hash: navHashes.about },
   ] as const;
+  const ctaClass = `inline-flex h-10 items-center whitespace-nowrap rounded-md border border-[var(--site-gold,#C8A86B)] px-3 text-[13px] font-medium text-[var(--site-gold-bright,#E8C780)] transition-colors hover:bg-[var(--site-gold,#C8A86B)]/10 ${focusRing} focus-visible:outline-offset-2 md:px-4 md:text-[14px]`;
   const logoClass = `flex shrink-0 items-center rounded ${focusRing} focus-visible:outline-offset-4`;
 
   return (
@@ -47,13 +49,15 @@ export function SiteHeader({ locale, anchorMode = "home", homeHref = "#top-of-ho
 
           <div className="flex items-center gap-2 md:gap-3">
             <SiteLanguageNav locale={locale} label={t.language.label} className="hidden lg:flex" />
-            <SiteAnchor
-              hash={PLAN_HASH}
-              mode={anchorMode}
-              className={`inline-flex h-10 items-center whitespace-nowrap rounded-md border border-[var(--site-gold,#C8A86B)] px-3 text-[13px] font-medium text-[var(--site-gold-bright,#E8C780)] transition-colors hover:bg-[var(--site-gold,#C8A86B)]/10 ${focusRing} focus-visible:outline-offset-2 md:px-4 md:text-[14px]`}
-            >
-              {t.cta}
-            </SiteAnchor>
+            {t.planPath ? (
+              <Link href={t.planPath} className={ctaClass}>
+                {t.cta}
+              </Link>
+            ) : (
+              <SiteAnchor hash={PLAN_HASH} mode={anchorMode} className={ctaClass}>
+                {t.cta}
+              </SiteAnchor>
+            )}
             <SiteMobileMenu
               items={items}
               anchorMode={anchorMode}

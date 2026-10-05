@@ -17,9 +17,9 @@ const headingClass = "text-[12px] font-medium uppercase tracking-[0.16em] text-[
 export function SiteFooter({ locale, anchorMode = "home", homeHref = "#top-of-home" }: { locale: string; anchorMode?: AnchorMode; homeHref?: string }) {
   const t = resolveSiteChromeCopy(locale);
   const f = t.footer;
-  const links = [
+  const links: { label: string; hash: string; href?: string | null }[] = [
     { label: t.nav.experiences, hash: navHashes.experiences },
-    { label: f.plan, hash: navHashes.plan },
+    { label: f.plan, hash: navHashes.plan, href: t.planPath },
     { label: t.nav.concierge, hash: navHashes.concierge },
     { label: t.nav.rio, hash: navHashes.rio },
     { label: t.nav.about, hash: navHashes.about },
@@ -42,7 +42,11 @@ export function SiteFooter({ locale, anchorMode = "home", homeHref = "#top-of-ho
             <ul className="mt-2 grid grid-cols-2 md:mt-3 md:flex md:flex-col">
               {links.map((link) => (
                 <li key={link.hash}>
-                  <SiteAnchor hash={link.hash} mode={anchorMode} className={linkClass}>{link.label}</SiteAnchor>
+                  {link.href ? (
+                    <Link href={link.href} className={linkClass}>{link.label}</Link>
+                  ) : (
+                    <SiteAnchor hash={link.hash} mode={anchorMode} className={linkClass}>{link.label}</SiteAnchor>
+                  )}
                 </li>
               ))}
             </ul>
