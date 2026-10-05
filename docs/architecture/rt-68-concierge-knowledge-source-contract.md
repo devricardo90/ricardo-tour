@@ -1,6 +1,6 @@
 # RT-68 — AI Concierge Knowledge Source Contract
 
-- Ticket: RT-68 (RT-RB-AI-02). Status: **Owner-approved source inventory; no ingestion. Current business-page copy needs canonical identity reconciliation before it is eligible.**
+- Ticket: RT-68 (RT-RB-AI-02). Status: **Em andamento — Owner-approved source boundary; no source version is active or ingested. Current business-page copy needs canonical identity reconciliation before it is eligible.**
 - Builds on `ai-concierge-rag-strategy.md`; does not implement anything.
 - Rule: **no business information is invented here.** Where the content does not exist or has not been approved, the entry is marked `OWNER_CONTENT_REQUIRED`.
 - Core rule: the Concierge may only state as fact what comes from an approved, current source. Everything else is "I don't have verified information for that" plus handoff (see RT-74).
@@ -29,7 +29,7 @@ Allowed only after explicit Owner approval **per source**, recorded in the RT-69
 - All tour prices in RAG, including prices that happen to be visible on a product page; the user must be directed to the current tour page or approved booking flow for live commercial value (§5).
 - Availability, changeable schedules, dates, inventory, capacity, discounts, or provider offers.
 - Unverified safety claims (including "safe/unsafe" statements about areas).
-- Flight, hotel or package inventory/prices not received through an approved provider integration (RT-39 is blocked; **no flight or hotel facts may be asserted**).
+- Oner flight, hotel or package inventory/prices, even though the separate public Planeje sua viagem commercial flow is operational. RT-39 remains open and RT-40 API access is not confirmed; **the Concierge has no authorized provider tool or flight/hotel source**. Do not assert provider facts from RAG.
 - Private data: user, booking, payment, admin data, logs, secrets, environment values.
 - RIC Studio / Protocolo RIC content (internal; never a source for tourist answers).
 - Old Rick Travel / travelrick content, superseded contact information, drafts, screenshots, historical documentation, rebuild evidence, unpublished internal assumptions, and generated FAQ/Rio facts without Owner approval.
@@ -39,7 +39,7 @@ The model's general knowledge may be used only for language, tone and explaining
 
 ## 2. Source ownership and registry fields
 
-Each knowledge item carries the RT-69 provenance fields: `source_id`, `source_type`, `source_path`, `locale`, immutable `version`, `updated_at`, `approved_at` / `approved_by` when applicable, `status`, and `supersedes`. Catalog publication state is checked against the live public gate; approval fields are never fabricated when the source does not supply an actor or approval event. Details and lifecycle: RT-69.
+Each knowledge item carries the RT-69 provenance fields: `source_id`, `source_type`, `source_path`, `locale`, immutable `version`, `updated_at`, `approved_at` / `approved_by` when applicable, `status`, and `supersedes`, plus an explicit `approved_for_rag` eligibility flag. `status = ACTIVE` and `approved_for_rag = true` are both required; an approved *source class* is not an active *source version*. Catalog publication state is checked against the live public gate; approval fields are never fabricated when the source does not supply an actor or approval event. Details and lifecycle: RT-69.
 
 ## 3. Freshness requirements
 
@@ -79,11 +79,33 @@ This is the approved source allowlist and boundary for the first real Concierge 
 ### 4.2 Explicitly excluded sources and claims for the initial set
 
 - Random web results, external destination feeds, and model general knowledge.
-- `Oner` inventory, Flight mock data, any flight/hotel/package inventory or pricing; RT-39 remains externally blocked.
+- `Oner` inventory, Flight mock data, any flight/hotel/package inventory or pricing. The live Planeje sua viagem widget is a separate provider-hosted commercial flow, not a Concierge knowledge source or API integration; RT-39 remains open and RT-40 remains blocked by unconfirmed API access.
 - All tour prices from RAG, `TripSchedule`, schedules/dates, availability, capacity, booking records, payment state, ContactSubmission data, and private/admin data.
 - Old Rick Travel / travelrick business content, superseded email/phone/social values, `data/real-trips.json`, unpublished/seed-only catalog rows, old screenshots/historical docs/rebuild evidence, unreviewed `messages/*.json`, and bulk `docs/ops/*` ingestion.
 - Generated FAQ content and generated Rio destination facts without an exact canonical source and Owner approval.
 - Cancellation, refund, payment, safety, legal, credential, insurance, accessibility, or response-time assertions without exact current approved evidence.
+
+### 4.3 Authoritative V1 source registry and eligibility state
+
+The exact source paths and allowed fields in §4.1 are the **authoritative source-class allowlist** for V1. This section defines the registry eligibility contract for individual source versions. It is governance only: there is no `knowledge/concierge/` runtime registry, source manifest, indexed file, or `ACTIVE` record in the repository at this point. An Owner-approved class must not be treated as already indexed or answerable.
+
+| Registry source class | Future stable `source_id` pattern (not minted yet) | Current eligibility |
+| --- | --- | --- |
+| `public-tour-catalog` | `public-tour-catalog:<Trip.id>:<locale>`; exact localized title/description from the current public gate in §4.1 | **No active versions.** Each tour/locale must independently pass the public gate and registration. Experiences reuses that item; it is not a second source. |
+| `canonical-public-contact` | `canonical-public-contact:<locale>`; only the email, WhatsApp display number and canonical link in §4.1 | **No active versions.** The contact constants are approved as canonical, but a future retrieved version still requires validation and registration. The handoff UI may use the canonical constants directly under RT-71; that does not make an index version active. |
+| `public-request-and-handoff-wording` | `public-request-and-handoff-wording:<canonical-path-and-key>:<locale>`; exact approved UI copy path/key in §4.1 | **No active versions.** Service wording may describe a request or contact step, never a booking, price, availability, policy, or response-time commitment. |
+| `current-about-and-institutional-content` | `current-about-and-institutional-content:<canonical-path-and-key>:<locale>` after exact reconciled Ricardo Tour copy and explicit Owner approval | **BLOCKED.** The source class is allowed, but checked-in Rick Travel copy and the older evidence register are ineligible. |
+| `rio-destination-editorial`, `operational-policy-text`, `approved-faq` | A new exact canonical source and Owner approval would be needed | **EXCLUDED.** No such V1 source exists or may be promoted by inference. |
+
+For a future version to be eligible for retrieval and factual use, **all** of these conditions must hold at query time and again before returning an answer:
+
+1. Its source class, exact canonical path/field, and locale match §4.1; the individual `source_id` is stable and the immutable `version` maps to that exact source revision. Every registry entry records the §2 provenance fields and the approval/publication evidence applicable to that source.
+2. `status = ACTIVE` **and** `approved_for_rag = true`. Missing flags, pending validation, superseded/retired/rejected status, or a prior approval for a different version are ineligible. No entry in this document is currently `ACTIVE`.
+3. A catalog item still passes `getPublicTrips` / `getPublicTripById`, including launch ID, `isPublished`, and integrity checks, and the requested locale has approved text. Source approval never overrides an unpublish or missing locale.
+4. The exact content contains no price, availability, schedule/capacity, private data, Oner/provider result, unsupported safety fact, stale contact, unreconciled About copy, or inferred commercial claim. If a permitted page includes excluded fields, only the allowed fields can become a future version.
+5. The active version is current under RT-69. A canonical source change, withdrawal, failed validation, or conflict makes the old version ineligible immediately; an asynchronous search-index deletion is not an eligibility signal. In a conflict that cannot be resolved by the approved precedence, withhold the claim and hand off.
+
+The lifecycle remains the Owner-approved RT-69 contract: **CANONICAL → VALIDATE → NORMALIZE → VERSION → CHUNK/INDEX → PUBLISH → RETIRE/ROLLBACK**. RT-68 defines which sources may enter it; registry/event transport, atomic activation, index operations, and audit-trail implementation remain RT-69 work. No source is promoted by a model, and this document performs no ingestion.
 
 ## 5. Pricing policy — AI V1
 
