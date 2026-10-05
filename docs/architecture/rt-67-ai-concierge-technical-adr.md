@@ -1,6 +1,6 @@
 # RT-67 — AI Concierge V1 technical architecture ADR
 
-- Status: **proposed technical decision for Owner review**, 2026-10-05. Documentation only; RT-67 remains in `BACKLOG / READY`. No provider account, index, model call, backend, or Flight integration is created here.
+- Status: **OWNER_APPROVED architecture decision — Option A**, 2026-10-05. Documentation only; RT-67 remains in `BACKLOG / READY`. No provider account, index, model call, backend, or Flight integration is created here. Approval closes the architecture choice, not the legal, security, content, benchmark, implementation, or RT-75 gates.
 - Scope: choose the smallest production-safe implementation shape under the accepted RT-68–RT-74 directions. This ADR does not replace those contracts or pass RT-75.
 
 ## 1. Context
@@ -42,7 +42,7 @@ Scores are 1 (weak for this V1) to 5 (strong), equal weighted. These are archite
 | Ricardo Tour V1 suitability | 5 | 4 | 2 | Small approved corpus and narrow routes |
 | **Total / 50** | **40** | **34** | **30** | |
 
-**Decision: Option A.** A small typed application pipeline is sufficient, provided the RT-69 active-manifest check and RT-74 output gate are implemented and tested. The Owner's LangGraph candidate remains a migration option if measured branching or multi-tool workflow complexity warrants it. LangChain is **not required in V1**: loaders, retrievers, model wrappers, and chains do not remove the deterministic provenance/approval work, while the native SDK exposes the required Responses and vector-store APIs directly. If B becomes necessary, use LangGraph with the native OpenAI SDK; add LangChain only for a specific missing integration, not by default.
+**Owner-approved decision: Option A.** A small typed application pipeline is sufficient, provided the RT-69 active-manifest check and RT-74 output gate are implemented and tested. LangGraph is **deferred for V1** and remains a migration option if measured branching or multi-tool workflow complexity warrants it. LangChain is **not required in V1**: loaders, retrievers, model wrappers, and chains do not remove the deterministic provenance/approval work, while the native SDK exposes the required Responses and vector-store APIs directly. If B becomes necessary, use LangGraph with the native OpenAI SDK; add LangChain only for a specific missing integration, not by default. Custom PostgreSQL/pgvector retrieval is deferred as a migration option.
 
 ## 5. Recommended V1 architecture
 
@@ -70,7 +70,7 @@ Transient request state: locale, opaque conversation ID/turn index, bounded curr
 
 ## 7. RAG design and retrieval decision
 
-**Choose OpenAI hosted vector-store search for V1, behind a `KnowledgeRetriever` interface.** RT-69 remains the authority for source registration and publication. Each indexed file represents a single source item/version/locale, with compact attributes such as `source_id`, `version`, `locale`, `source_type`, and status; the full immutable provenance record (`source_path`, `updated_at`, `approved_at/by`, `supersedes`, content hash) stays in the application registry. OpenAI file attributes and metadata filters are documented, but their limits and retrieval behavior must be validated with the actual corpus ([Retrieval attributes](https://developers.openai.com/api/docs/guides/retrieval), [File Search filters](https://developers.openai.com/api/docs/guides/tools-file-search)).
+**Owner-approved V1 direction: OpenAI hosted vector-store search, behind a `KnowledgeRetriever` interface.** RT-69 remains the authority for source registration and publication. Each indexed file represents a single source item/version/locale, with compact attributes such as `source_id`, `version`, `locale`, `source_type`, and status; the full immutable provenance record (`source_path`, `updated_at`, `approved_at/by`, `supersedes`, content hash) stays in the application registry. OpenAI file attributes and metadata filters are documented, but their limits and retrieval behavior must be validated with the actual corpus ([Retrieval attributes](https://developers.openai.com/api/docs/guides/retrieval), [File Search filters](https://developers.openai.com/api/docs/guides/tools-file-search)).
 
 Ingestion follows RT-69 exactly: canonical event → validate → deterministic normalize/version/chunk → upload and wait for indexing → atomically publish a new active manifest → retire old version. On unpublish/change/withdrawal, mark the old manifest entry inactive **before** asynchronous index deletion. Search filters narrow results; the server independently rechecks every returned result against the live active manifest and, for catalog, the public publication gate before sending it to the model. This closes the documented eventual-consistency window for file removal. Missing manifest, version mismatch, inactive source, wrong locale, conflict, or retrieval timeout means no factual answer. Run a race test where a tour is unpublished between search and generation; recheck immediately before generation and before returning an answer.
 
@@ -80,7 +80,7 @@ Move to pgvector only if hosted retrieval fails locale/provenance/retirement eva
 
 ## 8. Model benchmark plan
 
-**Candidates as of 2026-10-05:** `gpt-6-luna` (focused, low-cost tier; Standard $0.10/M input, $0.50/M output) and `gpt-6.1-sol` (quality tier; $2/M input, $10/M output). Both official model pages list Responses and File Search support ([Luna](https://developers.openai.com/api/docs/models/gpt-6-luna), [Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol)). These are candidates, not a production model approval. Benchmark snapshots/version and exact reasoning settings must be recorded; no assumption that the higher-cost model is better for this narrow task.
+**Candidates as of 2026-10-05:** `gpt-6-luna` (focused, low-cost tier; Standard $0.10/M input, $0.50/M output) and `gpt-6.1-sol` (quality tier; $2/M input, $10/M output). Both official model pages list Responses and File Search support ([Luna](https://developers.openai.com/api/docs/models/gpt-6-luna), [Sol](https://developers.openai.com/api/docs/models/gpt-6.1-sol)). These are benchmark candidates only; **no production model is selected**. Before implementation, verify the exact identifiers against the project's API-account availability and current provider contract. Do not silently substitute names. Benchmark snapshots/version and exact reasoning settings must be recorded; no assumption that the higher-cost model is better for this narrow task.
 
 Use **33 cases: the 11 rows below in each of PT, EN, ES**. All prompts are synthetic; attach a frozen, Owner-approved source manifest and exact expected allowed source IDs. Do not use unapproved facts as gold answers. For the stale/conflict row, the harness injects one inactive or contradictory fixture alongside the approved manifest; it must never make that fixture authoritative.
 
@@ -152,9 +152,16 @@ No LangGraph runtime/checkpointer, LangChain wrapper stack, custom embedding job
 
 ## 15. RT-67 implementation readiness and open decisions
 
-**Architecture recommendation is ready for Owner review; RT-67 implementation is not authorized by this ADR.** RT-68–RT-74 remain the governing contracts; RT-75 is unpassed. The current About/institutional content remains excluded. No benchmark outcome or model selection is claimed.
+**ARCHITECTURE_DECISION = CLOSED / OWNER_APPROVED. RT-67 remains open and implementation has not started.** RT-68–RT-74 remain the governing contracts; RT-75 is unpassed. The current About/institutional content remains excluded. No benchmark outcome or production model selection is claimed.
 
-Before RT-67 coding: Owner accepts or changes Option A and the model/provider shortlist; legal/security accepts OpenAI processing region, data terms, `store:false` plus standard abuse-log behavior, retention periods, Privacy disclosure, and session expiry; Owner sets expected use/spend ceiling; RT-82/RT-72 shared limiter design is chosen; RT-69 registry/event transport, atomic manifest, reindex/rollback and processing latency are specified; fixed PT/EN/ES fallback/handoff/emergency wording is approved; the 33-case benchmark and hard release thresholds are approved. Before public enablement: run the real benchmark, source retirement race and abuse tests, configure production limits/kill switch, verify content-free telemetry, and pass RT-75. Keep the mock Production deny until that gate.
+| Remaining gate | Required decision or evidence |
+| --- | --- |
+| `LEGAL_DECISION_REQUIRED` | Approve active-session and metadata/log/analytics retention periods, OpenAI processing region and data terms, standard abuse-log behavior with `store: false`, and published Privacy disclosure/consent treatment. |
+| `SECURITY_DECISION_REQUIRED` | Choose the RT-72/RT-82 distributed limiter; set abuse/cost controls, production quotas and spend ceiling, and emergency-stop behavior. Specify RT-69 registry/event transport, active-manifest retirement, reindex/rollback, and processing-latency controls. |
+| `CONTENT_DECISION_REQUIRED` | Approve fixed PT/EN/ES fallback, handoff, and emergency copy. Keep About content excluded until canonical Ricardo Tour copy is approved. |
+| `BENCHMARK_REQUIRED` | Build the deterministic synthetic harness; verify exact candidate model IDs in the project API account/provider contract; run candidate evaluations and hard-fail safety gates. Do not silently substitute a model. |
+
+Before public enablement: pass the real benchmark, source-retirement race and abuse tests, configure production limits/kill switch, verify content-free telemetry, and pass RT-75. Keep the mock Production deny until that gate.
 
 ## Sources checked
 
