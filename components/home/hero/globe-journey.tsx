@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { Link } from "@/i18n/routing";
 import { createGlobe, type Globe, type GlobeState } from "./globe-3d";
 import { buildHeroScenes, type HeroLayer, type HeroScene } from "./hero-media";
 import styles from "./globe-journey.module.css";
@@ -12,9 +13,11 @@ const translations = {
     labels: ["Globo", "América do Sul", "Brasil", "Rio de Janeiro", "Helicóptero", "Cristo Redentor"],
     regionLabel: "Rick Travel · Uma jornada pelo Rio", media: "Uma jornada cinematográfica pelo Rio",
     scroll: "Role para entrar na jornada", skip: "Ir para a próxima seção ↓",
-    planEyebrow: "Planeje sua viagem", next: "Voos para o Rio de Janeiro",
+    planEyebrow: "Planeje sua viagem", next: "Tudo para sua viagem em um só lugar",
+    // Bridge to the live travel planner (RT-92). PT only until the provider confirms EN/ES widget localization.
+    cta: "Planejar minha viagem" as string | null, ctaHref: "/planeje-sua-viagem" as string | null,
     progress: "Progresso da jornada", stage: "Etapa", of: "de",
-    nextBody: "O Rio convida você a desenhar uma viagem à sua própria medida.",
+    nextBody: "Pesquise voos, hotéis, pacotes, carros e outros serviços para organizar sua viagem.",
     static: "Uma jornada visual pelo Rio, em um quadro estático.",
     fallback: "Uma vista estática da jornada — continue para descobrir o Rio.",
     badge: "UM NOVO OLHAR SOBRE O RIO",
@@ -24,6 +27,7 @@ const translations = {
     regionLabel: "Rick Travel · A journey through Rio", media: "A cinematic journey through Rio",
     scroll: "Scroll into the journey", skip: "Go to the next section ↓",
     planEyebrow: "Plan your trip", next: "Flights to Rio de Janeiro",
+    cta: null as string | null, ctaHref: null as string | null,
     progress: "Journey progress", stage: "Stage", of: "of",
     nextBody: "Let Rio inspire a journey shaped around the way you want to travel.",
     static: "A visual journey through Rio, held in a still frame.",
@@ -35,6 +39,7 @@ const translations = {
     regionLabel: "Rick Travel · Un viaje por Río", media: "Un viaje cinematográfico por Río",
     scroll: "Desplázate para entrar en el recorrido", skip: "Ir a la siguiente sección ↓",
     planEyebrow: "Planea tu viaje", next: "Vuelos a Río de Janeiro",
+    cta: null as string | null, ctaHref: null as string | null,
     progress: "Progreso del viaje", stage: "Etapa", of: "de",
     nextBody: "Deja que Río inspire un viaje hecho a tu manera.",
     static: "Un viaje visual por Río, detenido en un instante.",
@@ -430,13 +435,20 @@ export default function GlobeJourney({ locale }: { locale: string }) {
         </div>
       </div>
     </section>
-    {/* Compact planner bridge; the future Flight Planner mounts in this slot. */}
+    {/* Compact bridge to the live travel planner (/planeje-sua-viagem, RT-91/RT-92). No search form or widget on the Home. */}
     <section id="globe-next" className={styles.next} tabIndex={-1} aria-labelledby="globe-next-title">
       <div>
         <p className={styles.planEyebrow}>{t.planEyebrow}</p>
         <h2 id="globe-next-title">{t.next}</h2>
       </div>
-      <p className={styles.planBody}>{t.nextBody}</p>
+      <div>
+        <p className={styles.planBody}>{t.nextBody}</p>
+        {t.cta && t.ctaHref ? (
+          <Link href={t.ctaHref} className={styles.planCta}>
+            {t.cta}
+          </Link>
+        ) : null}
+      </div>
     </section>
   </div>;
 }
