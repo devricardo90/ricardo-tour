@@ -1,6 +1,6 @@
 # Oner widget — production integration evidence
 
-Status: integration code live (commit 7148a62). Production render confirmed by the Owner; search/new-tab/checkout/mobile validation still PENDING (see §6). Jira: RT-91 (implementation), RT-39 (evidence), RT-40 (blocked). Classification: PROVIDER_CONFIRMED / OBSERVED / INFERRED / UNKNOWN.
+Status: integration code live (commit 7148a62). Production render and downstream commercial flow observed by the Owner (§6–§7); Option C approved; mobile validation and checkout/payment/issuance boundary still PENDING. Jira: RT-91 (implementation), RT-39 (evidence), RT-40 (blocked). Classification: PROVIDER_CONFIRMED / OBSERVED / INFERRED / UNKNOWN.
 
 ## 1. Provider evidence (PROVIDER_CONFIRMED)
 
@@ -34,7 +34,7 @@ Audit: no CSP header exists (no `headers()` in `next.config.ts`, no `vercel.json
 
 - `id="wrapper"` is kept per provider snippet; it is a generic id (no site CSS targets it today).
 - Whether the widget registers `befly-widget` lazily, uses shadow DOM or iframes: UNKNOWN until observed in production.
-- New-tab destination, results location, checkout and payment ownership, branding, EN/ES: **UNKNOWN** — not observed.
+- Payment, issuance and refund ownership, mobile behavior, EN/ES: **UNKNOWN** — not observed (see §7).
 
 ## 6. Production evidence
 
@@ -48,14 +48,46 @@ OWNER_OBSERVED
 - Search UI shows trip type, passengers, origin, destination, departure date, return date, search CTA.
 - `https://rick-travel.vercel.app/pt/oner-lab`: provider shows "Não autorizado! Infelizmente o conteúdo não pode ser exibido." → `DOMAIN_RESTRICTION = CONFIRMED BY OBSERVATION`. Expected provider behavior, not a defect; no bypass is attempted (no widget on vercel.app/localhost).
 
-Still UNKNOWN (not observed by anyone yet): CONSOLE_ERRORS, NETWORK_ORIGINS beyond static.onertravel.com, search execution, new-tab behavior and destination domain, results location, checkout/payment/issuance ownership, branding, state on return, mobile status, style isolation, EN/ES.
+Search execution, destination and branding are now OWNER_OBSERVED (§7). Still UNKNOWN: CONSOLE_ERRORS, NETWORK_ORIGINS beyond static.onertravel.com and compraviagem.com.br, state on return, mobile status, style isolation, payment/issuance/refund ownership, EN/ES.
 
 `API_INTEGRATION = NOT_CONFIRMED`. The visible products are widget UI, not API capability.
 
-## 7. Commercial V1 — preliminary analysis (no option promoted)
+## 7. Owner-observed commercial flow (production)
 
-The live widget already exposes six product categories (flights, hotels, packages, cars, exclusives, insurance). Rebuilding that breadth in RT-38 would need an API we do not have (RT-40 blocked), plus the order/payment architecture of RT-65. That favors A or C in the near term and leaves B as a future target once API access exists. The decision needs the §6 UNKNOWNs closed first, in particular checkout/payment ownership and what new-tab opens.
+Classification: PROVIDER_CONFIRMED / OWNER_OBSERVED / OWNER_DECISION / INFERRED / UNKNOWN.
 
-## 8. `/pt/voos` promotion proposal (NOT implemented)
+OWNER_OBSERVED
+- Flow: Ricardo Tour production site → Oner widget → search criteria → BUSCAR → `compraviagem.com.br/ricardotour/...` (example route pattern `/ricardotour/flight-list?...`).
+- Destination is **not** a Ricardo Tour DNS subdomain: it is a Ricardo Tour-branded tenant/path inside the Comprar Viagem domain (Comprar Viagem / Oner ecosystem).
+- The downstream page shows the Ricardo Tour identity/logo area; the environment is provider-hosted but Ricardo Tour-branded.
+- Real inventory: results with airlines, departure/arrival, duration, connections, baggage/filter options, prices, price details, Select CTA, commercial filters; hundreds of options for the example search. `REAL_INVENTORY_DISPLAY = CONFIRMED_BY_OBSERVATION`. This is not API access (`API_INTEGRATION = NOT_CONFIRMED`).
 
-Proposal only, pending Owner gate: `/pt/voos` = Ricardo Tour branded header/intro → `OnerWidget` (existing adapter, PT only) → Ricardo Tour assistance/handoff section (WhatsApp/e-mail, reusing `OnerWidgetFallback` contact block). RT-38 code and history stay in the repo (`FlightPlanner`, `lib/flights/*`), reachable e.g. under a lab route. `/en/voos` and `/es/voos` unchanged until Oner confirms languages. Indexing, Home entry and sitemap are separate Owner decisions. Needed before promotion: closed §6 UNKNOWNs, mobile validation, Owner approval.
+Observed boundary (OWNER_OBSERVED / appears)
+- Ricardo Tour owns: public site, brand positioning, Rio experiences/tours, discovery, customer relationship, search entry, human support handoff, marketing.
+- Oner / Comprar Viagem owns or appears to own: live inventory, result rendering, filtering, commercial selection flow, provider-hosted downstream commerce.
+
+Responsibility classification
+| Item | Status |
+| --- | --- |
+| Results rendering/ownership | OWNER_OBSERVED (provider-hosted) |
+| Checkout ownership | INFERRED (provider-hosted flow; checkout step not observed) |
+| Payment ownership | UNKNOWN |
+| Reservation / issuance ownership | UNKNOWN |
+| Refund / cancellation ownership | UNKNOWN |
+| Agency commission on sale | Owner statement; contractual terms not provider-confirmed in this repo |
+| Mobile behavior | UNKNOWN (not yet tested) |
+| EN/ES localization | UNKNOWN (PROVIDER_CONFIRMATION_REQUIRED) |
+
+The Owner's view that the Ricardo Tour-branded provider flow supports customer trust is **OWNER_DECISION / product reasoning**, not a provider endorsement.
+
+## 8. Product positioning and commercial V1 (OWNER_DECISION)
+
+- Primary positioning remains **tours, experiences and Rio services**. Flights/hotels/packages are complementary services and must not become the dominant visual identity. The search engine is a journey tool.
+- **Option C (hybrid) is approved for V1**: Ricardo Tour shell → Oner widget → provider-hosted Ricardo Tour-branded commerce. Revisit only if API access later gives a strong reason to migrate.
+- RT-38 is preserved as historical UX work and a possible future custom/API-based planner. Not deleted.
+- Routes unchanged. Open product question: the widget covers Flights, Hotels, Flight + Hotel, Cars, Exclusives and Insurance, so `/pt/voos` may be semantically too narrow. Candidate future route: `/pt/planeje-sua-viagem` (or another Owner-approved route). No rename now.
+
+## 9. `/pt/voos` promotion proposal (NOT implemented)
+
+
+Proposal only, pending Owner gate (route name may change per §8): `/pt/voos` = Ricardo Tour branded header/intro → `OnerWidget` (existing adapter, PT only) → Ricardo Tour assistance/handoff section (WhatsApp/e-mail, reusing `OnerWidgetFallback` contact block). RT-38 code and history stay in the repo (`FlightPlanner`, `lib/flights/*`), reachable e.g. under a lab route. `/en/voos` and `/es/voos` unchanged until Oner confirms languages. Indexing, Home entry and sitemap are separate Owner decisions. Needed before promotion: closed §6 UNKNOWNs, mobile validation, Owner approval.
