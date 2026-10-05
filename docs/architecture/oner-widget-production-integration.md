@@ -1,6 +1,6 @@
 # Oner widget — production integration evidence
 
-Status: integration code live (commit 7148a62). Production render and downstream commercial flow observed by the Owner (§6–§7); Option C approved; mobile validation and checkout/payment/issuance boundary still PENDING. Jira: RT-91 (implementation), RT-39 (evidence), RT-40 (blocked). Classification: PROVIDER_CONFIRMED / OBSERVED / INFERRED / UNKNOWN.
+Status: LIVE. Public route /pt/planeje-sua-viagem (RT-91), commercial V1 = Option C (hybrid). See §6–§9. Jira: RT-91, RT-39 (open), RT-40 (blocked).
 
 ## 1. Provider evidence (PROVIDER_CONFIRMED)
 
@@ -87,7 +87,14 @@ The Owner's view that the Ricardo Tour-branded provider flow supports customer t
 - RT-38 is preserved as historical UX work and a possible future custom/API-based planner. Not deleted.
 - Routes unchanged. Open product question: the widget covers Flights, Hotels, Flight + Hotel, Cars, Exclusives and Insurance, so `/pt/voos` may be semantically too narrow. Candidate future route: `/pt/planeje-sua-viagem` (or another Owner-approved route). No rename now.
 
-## 9. `/pt/voos` promotion proposal (NOT implemented)
+## 9. Public activation (Owner validated desktop + mobile on https://www.ricardotour.com/pt/planeje-sua-viagem)
 
+OWNER_OBSERVED: DESKTOP = PASS, MOBILE = PASS, ONER_WIDGET = PASS, LAYOUT and BRAND_INTEGRATION approved. END_TO_END_BRAND_CONTINUITY = PASS.
 
-Proposal only, pending Owner gate (route name may change per §8): `/pt/voos` = Ricardo Tour branded header/intro → `OnerWidget` (existing adapter, PT only) → Ricardo Tour assistance/handoff section (WhatsApp/e-mail, reusing `OnerWidgetFallback` contact block). RT-38 code and history stay in the repo (`FlightPlanner`, `lib/flights/*`), reachable e.g. under a lab route. `/en/voos` and `/es/voos` unchanged until Oner confirms languages. Indexing, Home entry and sitemap are separate Owner decisions. Needed before promotion: closed §6 UNKNOWNs, mobile validation, Owner approval.
+OWNER_DECISION / implemented
+- Public route `/pt/planeje-sua-viagem` (PT only; EN/ES equivalents wait for provider localization). `TRAVEL_PLANNER_PUBLIC_ACTIVE = true` in `lib/travel-planner/config.ts`: indexable, canonical `https://www.ricardotour.com/pt/planeje-sua-viagem`, listed in `app/sitemap.ts`.
+- `/pt/voos` → `/pt/planeje-sua-viagem` permanent redirect (HTTP 308) in `next.config.ts`. `/en/voos` and `/es/voos` unchanged.
+- `/pt/oner-lab` retired (route removed → 404). Its source remains in Git history (commit 7148a62). The shared `OnerWidget` adapter is kept and used by the public page.
+- RT-38 (`FlightPlanner`, `lib/flights/*`, `/en|/es/voos`) preserved as historical UX work and future custom/API planner foundation.
+
+Still UNKNOWN / not claimed: payment, issuance and refund responsibility; API access (`API_INTEGRATION = NOT_CONFIRMED`); provider languages beyond pt-br. Analytics events are Ricardo Tour-owned only and not persisted (see §2).

@@ -2,6 +2,7 @@ import { MetadataRoute } from "next";
 import { getAbsoluteLanguageAlternates, publicLocaleCodes } from "@/i18n/routing";
 import { getPublicTrips } from "@/lib/catalog/public-trips";
 import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
+import { TRAVEL_PLANNER_CANONICAL, TRAVEL_PLANNER_PUBLIC_ACTIVE } from "@/lib/travel-planner/config";
 
 // Public sitemap (RT-57): only the launched locales (pt/en/es) and only public routes. Login/register are not listed,
 // Swedish is not advertised, and trips come from the same catalog gate as /tours and the Home (RT-53), never from
@@ -41,5 +42,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }))
   );
 
-  return [...routes, ...tripRoutes];
+  // PT-only: the widget provider confirmed only pt-br, so no EN/ES equivalents or hreflang alternates.
+  const travelPlannerRoutes = TRAVEL_PLANNER_PUBLIC_ACTIVE
+    ? [{ url: TRAVEL_PLANNER_CANONICAL, lastModified: new Date(), changeFrequency: "monthly" as const, priority: 0.6 }]
+    : [];
+
+  return [...routes, ...travelPlannerRoutes, ...tripRoutes];
 }
