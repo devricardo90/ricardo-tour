@@ -1,6 +1,6 @@
 # RT-73 — Concierge Analytics and Observability Contract
 
-- Ticket: RT-73 (RT-RB-AI-07, split of RT-48). Status: **DRAFT.** Final audit stays in RT-48 (Sprint 8).
+- Ticket: RT-73 (RT-RB-AI-07, split of RT-48). Status: **Owner-approved event categories and privacy boundary; implementation and retention remain open.** Final audit stays in RT-48 (Sprint 8).
 - Principle: measure usage, quality and safety **without raw conversation content and without personal data**. Product analytics and operational metrics are separate systems with different audiences and retention.
 
 ## 1. Current state
@@ -15,20 +15,21 @@ Anonymous session id only (existing client session id pattern); no user id by de
 
 | Event | When | Allowed properties |
 | --- | --- | --- |
-| `concierge_opened` | widget opened | locale, surface (`public_site`/`tour_detail`/`contact`/`unknown`), page path (no query string) |
-| `message_sent` | user submits | locale, surface, `message_length_bucket` (e.g. 1–50, 51–200, 201–800), `turn_index`, `intent_category` (classifier output, not text) |
-| `answer_returned` | answer shown | locale, `answer_kind` (`grounded`, `clarify`, `refusal`, `handoff`), `source_count`, `source_classes[]`, `latency_bucket`, `handoff_required` |
-| `fallback_triggered` | degraded/fallback path | `fallback_reason` (`rag_failure`, `llm_timeout`, `llm_error`, `provider_unavailable`, `stale_source`, `unsupported_language`, `rate_limited`) |
-| `handoff_requested` | server decides to offer handoff | `handoff_reason` (H1–H12) |
-| `handoff_clicked` | user opens a channel | `channel` (`whatsapp`/`email`), `handoff_reason` |
-| `knowledge_miss` | no verified source | `intent_category`, `topic_category` (closed list), locale |
-| `error` | unexpected error | `error_code` (closed list), stage (`validate`, `retrieve`, `generate`, `post`) |
-| `rate_limited` | limit hit | `dimension` (`burst`, `visitor`, `conversation`, `daily`, `global`) |
-| `feedback_given` (optional) | thumbs up/down | `value`, `answer_kind` |
+| `concierge_opened` | Concierge shell opened | minimal locale/surface metadata if needed |
+| `message_sent` | user submits a message | event only or message-length bucket; never the message itself |
+| `answer_returned` | answer shown | outcome kind, latency bucket, source count/IDs where useful |
+| `knowledge_hit` | approved source retrieved | source IDs/version and retrieval outcome metadata only |
+| `knowledge_miss` | no current verified source found | closed event/reason category only; no free-text topic |
+| `fallback_triggered` | uncertainty/degraded fallback used | fixed fallback category only |
+| `handoff_offered` | human channel offered | fixed handoff reason category only |
+| `handoff_clicked` | visitor opens a human channel | channel type and fixed reason category only |
+| `error` | unexpected error | closed error category and processing stage |
+| `timeout` | processing timeout | stage and latency bucket |
+| `rate_limited` | limit reached | limit dimension/category only |
 
-Never in analytics: message text, answer text, names, e-mails, phones, document numbers, booking/payment ids, IP addresses, raw user agents, prompts, model outputs.
+The approved event vocabulary is exactly the eleven categories in this table. Do not emit raw user messages, raw assistant answers, names, e-mails, phones, document numbers, booking/payment IDs, IP addresses, raw user agents, prompts, or model outputs to product analytics. No unlisted product event categories are approved.
 
-`intent_category` and `topic_category` come from closed lists defined at RT-67; free-text topics are not recorded. Counting "top unanswered topics" uses the closed topic list plus an Owner-reviewed sampling process if the Owner later allows review of content (that requires RT-70 consent decisions; not enabled by default).
+Metadata must be allowlisted and content-free. Source IDs and retrieval metadata may be recorded without copying complete source text. Do not sample or retain raw conversation content for analytics.
 
 ## 3. Operational metrics (separate)
 
@@ -54,7 +55,7 @@ Operational logs carry correlation id, stage, outcome, error code, versions of k
 - Error or timeout rate above threshold for a sustained window.
 - RAG-empty rate spike (possible ingestion failure).
 - Any use of superseded/expired content detected (should be zero; page-worthy).
-- Cost at 80%/100% of daily ceiling (RT-72).
+- Configured cost-ceiling thresholds and limit reached (RT-72).
 - Limiter store errors.
 - Feature flag enabled in production without an approved RT-75 gate record (a configuration check).
 
@@ -66,7 +67,7 @@ Operational logs carry correlation id, stage, outcome, error code, versions of k
 
 ## 6. Consent and privacy
 
-Events use an anonymous session id and no personal data; whether a consent notice is required for this analytics is a Privacy page (RT-RB-L-05) / legal question (`OWNER_LEGAL_DECISION_REQUIRED`). Retention of events: RT-70 decision. Analytics must not be joinable to stored conversations (RT-70 §3).
+Product analytics and operational observability are separate systems with separate audiences and access. Product analytics may use an anonymous session/conversation ID only when necessary. No raw message text or raw answer text by default. Source IDs/retrieval metadata are permitted; full source/user content is not. Privacy notice/consent requirements and retention periods remain legal decisions under RT-70; events must not be joinable to any stored raw conversation (none is retained by default).
 
 ## 7. Acceptance for implementation
 
@@ -75,3 +76,7 @@ Events use an anonymous session id and no personal data; whether a consent notic
 3. Event names and properties match this contract.
 4. Operational metrics are emitted for each stage.
 5. The `knowledge_miss` and `rag_stale_filtered` signals reach the owner dashboards.
+
+## 8. Owner direction — 2026-10-04
+
+Approved product event categories: `concierge_opened`, `message_sent`, `answer_returned`, `knowledge_hit`, `knowledge_miss`, `fallback_triggered`, `handoff_offered`, `handoff_clicked`, `error`, `timeout`, `rate_limited`. Keep product analytics separate from operational observability. Never send raw user/assistant messages by default; source IDs and retrieval metadata may be retained without full source or conversation text. RT-73 remains open pending schema implementation, privacy/retention decisions, and acceptance evidence.

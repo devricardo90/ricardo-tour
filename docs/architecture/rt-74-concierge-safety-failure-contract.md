@@ -1,9 +1,9 @@
 # RT-74 — Concierge Safety and Failure/Fallback Contract
 
-- Ticket: RT-74 (RT-RB-AI-08). Status: **DRAFT — Owner review of wording required.**
+- Ticket: RT-74 (RT-RB-AI-08). Status: **Owner-approved safety/fallback policy; localized fixed copy and implementation remain open.**
 - Core rule: **prefer "I don't have verified information for that" plus an appropriate handoff over inventing an answer.** A refusal or handoff is never a failure; an invented fact is.
 - The model never acts autonomously: no bookings, payments, cancellations, refunds, e-mails or data changes.
-- Wording below describes intent. Final per-language copy (pt/en/es; `sv` per RT-68) is `OWNER_CONTENT_REQUIRED` and is reviewed at RT-75.
+- Wording below describes behavior. V1 locales are PT/EN/ES; fixed localized response copy and evaluation remain for RT-75. No Swedish locale.
 
 ## 1. Standard response shapes
 
@@ -21,26 +21,25 @@ Refusal/handoff/degraded texts are **fixed, pre-approved strings**, not model-ge
 
 | # | Situation | Required behavior | Handoff | Event (RT-73) |
 | --- | --- | --- | --- | --- |
-| 1 | **Unknown answer** (no relevant source) | `handoff` kind; no guessing; no "general knowledge" answer about tours, prices, policy, safety | H4 | `knowledge_miss` |
-| 2 | **Stale source** (expired/superseded) | not used; treat as missing; if the topic is operational, say information needs confirmation by the team | H4 | `fallback_triggered(stale_source)` |
-| 3 | **Conflicting sources** | do not answer the conflicting point; answer only non-conflicting parts; flag for owner review | H4 | `knowledge_miss` + conflict flag |
-| 4 | **Provider unavailable** (model API down) | `degraded`; input disabled or one retry hint; no partial model text | H5 | `fallback_triggered(provider_unavailable)` |
-| 5 | **LLM timeout** | bounded timeout; one retry only if idempotent and within budget; else `degraded`; never stream half an answer as final | H5 | `fallback_triggered(llm_timeout)` |
-| 6 | **RAG failure** (index/search error) | do **not** let the model answer without retrieval; `degraded` | H5 | `fallback_triggered(rag_failure)` |
-| 7 | **Unsupported language** | reply in a supported language with a short note and the options; do not machine-translate approved policy as if official | H3 | `fallback_triggered(unsupported_language)` |
-| 8 | **Pricing without verified price** | no number; "I don't have a verified price for that" | H9 | `knowledge_miss` |
-| 9 | **Price stored (T1-PRICES)** | state as indicative with currency; "final price and availability are confirmed by the team" | offer H9 | `answer_returned` |
-| 10 | **Availability / dates** | never confirm; no source | H9 | `handoff_requested` |
-| 11 | **Safety-sensitive tourism question** (areas, crime, favelas, health, weather risk, activity risk) | no "safe/unsafe" claims, no reassurance, no risk scoring; share only Owner-approved safety wording if it exists; recommend asking the team and official local sources | H10 | `handoff_requested` |
-| 12 | **Emergency** (user in danger, medical) | one fixed line telling them to contact local emergency services first (wording approved by the Owner), then channels | H8 | `handoff_requested` |
-| 13 | **Booking/payment request** ("book it", "pay", "send Pix", "cancel my booking") | refuse to act; explain that the team handles it; no collection of payment data or personal documents in chat | H2/H7 | `handoff_requested` |
-| 14 | **Existing booking/private data questions** | no lookup (private sources are Tier 3); do not ask for booking numbers or documents in chat | H2 | `handoff_requested` |
-| 15 | **Refund / cancellation** | quote only an approved policy text verbatim if one exists; no case-specific promises | H7 | `handoff_requested` |
-| 16 | **Flights / hotels / packages** | no verified source; say flight/hotel options are not available through the Concierge; offer the team | H11 | `knowledge_miss` |
+| 1 | **Unknown answer** (no relevant source) | say verified information is unavailable, link a relevant current page where available, and offer human handoff; no guessing or unsupported general answer | H4 | `knowledge_miss` + `handoff_offered` |
+| 2 | **Stale source** (expired/superseded) | not used; treat as missing; state information needs confirmation and offer handoff | H4 | `fallback_triggered` |
+| 3 | **Conflicting sources** | do not answer the conflicting point; answer only verified non-conflicting parts; offer handoff | H4 | `knowledge_miss` + `handoff_offered` |
+| 4 | **Provider unavailable** (model API down) | `degraded`; input disabled or one retry hint; no partial model text and no fabricated inventory/booking status | H5 | `fallback_triggered` + `handoff_offered` |
+| 5 | **LLM timeout** | bounded timeout; one retry only if idempotent and within budget; else `degraded`; never stream half an answer as final | H5 | `timeout` + `fallback_triggered` |
+| 6 | **RAG failure** (index/search error) | do **not** let the model answer without retrieval; `degraded` and offer human contact | H5 | `fallback_triggered` + `handoff_offered` |
+| 7 | **Unsupported language** | do not invent or expand facts; offer available PT/EN/ES content or human contact using approved wording | H3 | `fallback_triggered` + `handoff_offered` |
+| 8 | **Price question** | never quote a tour price from RAG, even if present in a page/source; direct the visitor to the current product page or approved booking flow containing the live/current commercial value | H9 | `knowledge_miss` + `handoff_offered` where appropriate |
+| 9 | **Availability / dates / schedules** | never claim availability or current schedules unless a future approved structured integration supplies current data; no stale or mock values | H9 | `handoff_offered` |
+| 10 | **Safety-sensitive tourism question** (areas, crime, favelas, health, weather risk, activity risk) | no guarantees such as "this place is safe"; give only appropriately qualified practical information backed by approved source/content; otherwise state uncertainty and offer handoff | H10 | `handoff_offered` |
+| 11 | **Emergency** (user in immediate danger or medical crisis) | do not invent emergency guidance; use only separately approved fixed localized emergency wording, otherwise direct to a human/public emergency authority through approved wording | H8 | `handoff_offered` |
+| 13 | **Booking/payment request** ("book it", "pay", "send Pix", "cancel my booking") | refuse to act; offer a human handoff; no payment/data collection in chat | H2 | `handoff_offered` |
+| 14 | **Existing booking/private data questions** | no lookup; do not ask for booking numbers or documents in chat | H2 | `handoff_offered` |
+| 15 | **Refund / cancellation** | no case-specific policy or promise without a currently approved canonical policy; offer the team | H7 | `handoff_offered` |
+| 16 | **Flights / hotels / packages** | do not fabricate inventory, prices, provider or booking status; state the unavailable verified information and offer the team | H11 | `knowledge_miss` + `handoff_offered` |
 | 17 | **Prompt injection** (in user text or retrieved content: "ignore previous instructions", role-play to bypass rules, hidden instructions in documents) | ignore the instruction; continue under the policy; if the user is clearly attempting extraction, fixed refusal; retrieved content is data, never instructions | optional | `error` stage `validate` + abuse counter (RT-72) |
 | 18 | **Requests for internal information** (system prompt, rules, sources list beyond `sourceRefs`, env, keys, other users' data, model/vendor details, internal tooling such as RIC Studio) | fixed refusal; reveal nothing about prompts, infrastructure or internal processes | optional | counted as abuse |
 | 19 | **Abusive/harassing content** | brief neutral refusal; no engagement; may end the session | H6 if complaint | `error` |
-| 20 | **Medical, legal, visa advice** | out of scope; direct to official sources/professionals via the team | H3 | `handoff_requested` |
+| 20 | **Medical, legal, visa advice** | out of scope; direct to appropriate official sources/professionals using approved wording | H3 | `handoff_offered` |
 | 21 | **Request to compare with competitors / negative claims** | no claims about third parties | H3 | — |
 | 22 | **Personal data volunteered** (e.g., passport number) | do not repeat or store; advise not to share it in chat; do not log (RT-90 SEC-20) | H2 | — |
 | 23 | **Rate limited / ceiling** | RT-72 §6 degraded message | H5 | `rate_limited` |
@@ -50,7 +49,7 @@ Refusal/handoff/degraded texts are **fixed, pre-approved strings**, not model-ge
 
 1. **Retrieval first, then generate.** Answers are generated only from retrieved chunks; if retrieval returns nothing above the confidence threshold, the model is not asked to answer.
 2. **System instructions are separate from content**: a fixed system prompt, retrieved chunks passed as quoted data with delimiters, user text as user turn. The system prompt is not shown to the user and contains no secrets.
-3. **Post-generation checks** before returning: contains a number/currency not present in retrieved T1-PRICES → block; contains date/availability confirmation language → block; contains safety assertions not present in approved sources → block; contains promises (guaranteed, refund, discount) → block; contains contact data not equal to `PUBLIC_CONTACT` → block; mentions internal names → block. A blocked answer becomes `handoff`.
+3. **Post-generation checks** before returning: any tour price quoted from RAG → block; contains date/availability confirmation language without an approved structured source → block; contains unsupported safety assurances or guarantees → block; contains promises (refund, discount, booking) → block; contains contact data not equal to `PUBLIC_CONTACT` → block; discloses internal/security information → block. A blocked answer becomes `handoff`.
 4. **Language check**: answer language matches the request or the approved fallback.
 5. **No tool use** with side effects; no browsing; no external fetch at answer time.
 6. **Bounded**: output length, tokens, retrieval chunks, timeouts (RT-72 §3).
@@ -71,9 +70,14 @@ Refusal/handoff/degraded texts are **fixed, pre-approved strings**, not model-ge
 
 A fixed evaluation set per language containing at least: each row of §2 with several phrasings, prompt-injection variants (direct, indirect via documents), price questions with/without stored price, safety questions, booking/payment demands, and flight/hotel requests. Pass criterion: **zero** invented prices, availability confirmations, safety assurances, policy invention or leaked internals. Results are shown to the Owner at RT-75.
 
-## 6. Owner decisions
+## 6. Owner decision record — 2026-10-04
 
-1. Approval of the matrix and fixed wording per language.
-2. Emergency line wording.
-3. Whether any safety wording is approved for the Concierge to quote (default: none, hand off).
-4. Policy for ending abusive sessions.
+- Approved core rule: verified information or clear uncertainty plus human handoff; never confident fabrication.
+- Unknown/no verified source: say that verified information is unavailable and offer the relevant current page or handoff.
+- No RAG prices; direct price questions to the current product page/approved booking flow. Never claim availability without a future approved structured integration.
+- Prompt injection and requests for prompts, secrets, internal configuration, hidden sources, or credentials must not disclose that information.
+- RAG/model failure uses degraded UI plus human contact. Provider failure must not fabricate inventory or booking status.
+- Safety-sensitive tourism answers must not guarantee safety; only appropriately qualified information backed by approved source/content may be stated.
+- Fixed localized copy, emergency wording, and evaluation remain to be finalized at RT-75. No unsupported safety/emergency facts are approved.
+
+RT-74 remains open until localized fixed copy and implementation/evaluation acceptance criteria are met.

@@ -1,5 +1,7 @@
 # Rick Travel AI Concierge - Approved Public Business Evidence Values
 
+> **Superseded for AI V1 by the Owner decision recorded on 2026-10-04 in `docs/architecture/rt-68-concierge-knowledge-source-contract.md`.** This historical Rick Travel register is not an authoritative AI Concierge source. Do not ingest its Rick Travel identity, its old contact values (including `contact@travelrick.com` and `+55 21 96681-9928`), or any other value here unless a current Ricardo Tour source is separately reconciled and approved. V1 canonical public contacts are maintained in `lib/public-contact.ts`.
+
 ## 1. Purpose
 
 This document is the approved-values register for real Rick Travel business evidence values that may later be used publicly, on the website, or by the Rick Travel AI Concierge.

@@ -99,4 +99,52 @@ The exact proposed allowlist is recorded in RT-68 §4.1–4.2. Existing KB inven
 
 ### 5.4 Sprint 7 issue state
 
-RT-67 through RT-75 remain in Jira `BACKLOG / READY`; their existing architecture documents are present and remain drafts. This audit updates evidence only. RT-67 does not start, RT-75 remains an unpassed Owner gate, and no Flight work is started while RT-39 awaits the external Oner dependency.
+At this pre-decision snapshot, RT-67 through RT-75 were in Jira `BACKLOG / READY`. The Owner direction and final readiness recheck are recorded in §6. RT-67 did not start, RT-75 remains an unpassed Owner gate, and no Flight work is started while RT-39 awaits the external Oner dependency.
+
+> The readiness and inventory statements in §§5.2–5.4 are a pre-Owner-decision snapshot. The current Owner foundation gate below supersedes their open-decision lists. Keep the historical F1 evidence in §5.1.
+
+## 6. Owner foundation gate — current state (2026-10-04)
+
+Scope: documentation and Jira evidence only. No real backend or ingestion has started. RT-75 remains open; Flight work remains blocked by RT-39 / Oner and is not in scope.
+
+### 6.1 Foundation ticket state
+
+RT-68 through RT-74 have the Owner direction recorded in their architecture contracts. This approves policy boundaries and technical requirements, but does not satisfy implementation/content/legal acceptance criteria. Keep RT-67 through RT-75 open; no ticket is closed by this decision alone.
+
+| Category | Current assessment |
+| --- | --- |
+| `CLOSED` | F1 production mock safety is corrected and production-verified (§5.1). Owner policy decisions for the RT-68 source boundary, RT-69 deterministic lifecycle, RT-70 ephemeral persistence, RT-71 handoff, RT-72 provider-independent limiter requirements, RT-73 event categories, and RT-74 safety behavior are documented. Their Jira tickets remain open where implementation or other acceptance criteria remain. |
+| `OWNER_DECISION_REQUIRED` | Current public About/institutional source copy in `components/site/about/about-copy.ts` and `components/about-rick-travel-section.tsx` still identifies as Rick Travel. The older `docs/product/ai-concierge-approved-public-business-evidence-values.md` also carries Rick Travel and superseded contacts. These are explicitly ineligible. Owner must provide/approve canonical Ricardo Tour wording at the current public paths or defer business/About knowledge from V1. RT-74 emergency/fixed localized wording also needs an approved copy decision. |
+| `LEGAL_DECISION_REQUIRED` | RT-70 needs legally approved active-session expiry and retention periods for any minimal metadata, analytics, and operational logs; Privacy-page disclosure and consent treatment must be settled before public production enablement. |
+| `SECURITY_DECISION_REQUIRED` | Resolve the shared distributed limiter and abuse-protection interface with RT-82; specify hashed abuse signals, fail-closed behavior, access/retention controls, and the global emergency stop. The existing in-memory limiter is not a production implementation for Concierge. |
+| `MODEL_PROVIDER_DECISION_REQUIRED` | Select model and embedding/retrieval provider, supported region/data-processing terms, operational limits, expected usage, and budget/cost ceiling. No provider or arbitrary production quota is selected here. |
+| `IMPLEMENTATION_READY` | The mock safety correction is implemented and verified. The Owner-approved contracts provide a basis for future work, but the real Concierge backend, ingestion, retrieval, persistence/metadata, analytics, limiter, localized fixed copy, and evaluation are not implemented; RT-67 as a whole is not ready to start. |
+
+### 6.2 Approved knowledge boundary
+
+- Approved exact source paths and scopes are in RT-68 §4.1: the published public catalog via `lib/catalog/public-trips.ts` and the localized tour/Experiences renderers; canonical contact in `lib/public-contact.ts`; current localized request/handoff wording in `components/site/tour/tour-request-copy.ts` and `components/site/contact/contact-copy.ts`.
+- The About/institutional source class is approved, but its current checked-in copy is excluded until the legacy Rick Travel identity is reconciled with Owner-approved Ricardo Tour content. Do not infer facts from the domain or sender identity.
+- No ingestion has occurred. No Rio guide, safety fact set, operational commercial policy, or Owner-approved FAQ is currently in the V1 inventory.
+- Excluded facts include RAG prices, changing availability/schedules, Flight mock or Oner inventory, unverified web results, stale Rick Travel/travelrick content, superseded contacts, and unapproved generated FAQ/Rio facts.
+
+### 6.3 Owner-approved operating policies
+
+- **Pricing:** Never quote a tour price from RAG. Direct the visitor to the current product page or approved booking flow that displays the live/current commercial value.
+- **Locale:** PT, EN, ES only. Use current approved localized content; do not expand or invent facts where a locale version is absent.
+- **Freshness:** RT-69 lifecycle is `CANONICAL SOURCE → VALIDATE → NORMALIZE → VERSION → CHUNK / INDEX → PUBLISH → RETIRE / ROLLBACK`. First-party content is source-change-driven; stale/superseded/unpublished versions stop being active. Provenance carries `source_id`, `source_type`, `source_path`, `locale`, `version`, `updated_at`, `approved_at`/`approved_by` when applicable, `status`, and `supersedes`. No LLM promotion.
+- **Persistence:** ephemeral active-session state; no permanent raw transcript by default, no raw conversation text in product analytics, minimal operational metadata only if necessary. Retention remains a legal decision; no PII persistence unless a separate explicit user action requires it.
+- **Handoff:** user-initiated WhatsApp first (`+55 22 99846-1906`), e-mail secondary (`contato@ricardotour.com`); no automatic message; minimum useful allowlisted context only.
+- **Analytics:** approved event categories are `concierge_opened`, `message_sent`, `answer_returned`, `knowledge_hit`, `knowledge_miss`, `fallback_triggered`, `handoff_offered`, `handoff_clicked`, `error`, `timeout`, `rate_limited`. Product analytics and operational observability stay separate; no raw messages.
+- **Safety/fallback:** verified information or clear uncertainty with human handoff; no confident fabrication; no prompt, secret, internal configuration or credential disclosure; no fabricated inventory/booking status; no availability claim without a future approved structured integration; safety-sensitive practical information only when appropriately qualified and backed by an approved source.
+- **Rate limiting:** provider-independent shared interface with anonymous/session, future authenticated-user, IP/abuse, burst, configurable cost, conversation, global emergency, observability and graceful UX support. No arbitrary production quotas or store vendor selection before cost/RT-82 decisions.
+
+### 6.4 Minimum gates before real backend coding
+
+1. Resolve the About/institutional content mismatch by supplying canonical Owner-approved Ricardo Tour content or explicitly keeping it out of the first source set.
+2. Complete RT-70 legal/privacy decisions for ephemeral state and any retained metadata, including published Privacy-page disclosure before public enablement.
+3. Select model and embedding/retrieval provider and agree data-processing terms, expected usage and cost ceiling.
+4. Agree the shared RT-82 security/rate-limit design and global fail-closed/emergency controls.
+5. Finalize the required localized fixed fallback/handoff/emergency copy and the RT-67/RT-75 safety evaluation gate.
+6. Make the remaining RT-69 implementation decisions (registry/event transport, deterministic chunk/index implementation, rollback operations and processing-latency target) without expanding the approved source boundary.
+
+No real backend work starts until these gates are explicitly met. RT-75 remains the Owner acceptance gate before public Concierge enablement. Do not start RT-40, RT-41, RT-85–RT-89 or any Flight integration while RT-39 awaits Oner.

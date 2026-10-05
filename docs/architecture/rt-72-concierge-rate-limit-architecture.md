@@ -1,6 +1,6 @@
 # RT-72 — Concierge Distributed Rate Limiting and Abuse Protection
 
-- Ticket: RT-72 (RT-RB-AI-06). Status: **DRAFT.** Architecture only. **No vendor is selected.**
+- Ticket: RT-72 (RT-RB-AI-06). Status: **Owner-approved provider-independent requirements; implementation and shared limiter decision remain open.** No vendor is selected.
 - Shared decision: Jira says to decide the limiter **once** with RT-RB-L-07 (RT-82) and reuse it. This document defines requirements both tickets must satisfy.
 - Related: RT-90 SEC-60 to SEC-65.
 
@@ -14,7 +14,7 @@
 | --- | --- |
 | R1 | State shared across all instances/regions that serve the endpoint |
 | R2 | Atomic check-and-increment (no race that lets bursts through) |
-| R3 | Sliding or token-bucket semantics with per-key windows from seconds to a day |
+| R3 | Configurable sliding-window or token-bucket semantics for burst through longer-term protection; exact production windows are undecided |
 | R4 | Low added latency (budget: a small fraction of the endpoint's time, decided at implementation) |
 | R5 | Works in Development/Preview/Production with separate namespaces (no cross-environment counters) |
 | R6 | Cost and operational simplicity acceptable to the Owner; data stored is limited to hashed keys and counters |
@@ -29,18 +29,18 @@ Layering: platform/edge rules for coarse IP flood protection **plus** applicatio
 
 | Dimension | Key (stored hashed) | Purpose |
 | --- | --- | --- |
-| Anonymous visitor | hashed IP + hashed anonymous session id | baseline per-visitor use |
-| Authenticated user | user id | higher allowance, still bounded |
-| IP / device abuse | hashed IP, and coarse device signal if available | stop rotation of sessions from one source |
-| Conversation | conversation id | cap messages and total input size per conversation |
-| Burst | short window (seconds) | stop scripted bursts |
-| Daily | 24h window per visitor/user | bound per-person daily cost |
-| Global cost ceiling | single counter per hour/day | hard stop on total LLM spend |
-| Unknown client | shared "unknown" bucket must be small and strict; never an unlimited fallback | missing/forged `x-forwarded-for` |
+| Anonymous/session | anonymous session identifier, with privacy-reviewed abuse signals as needed | baseline session protection |
+| Authenticated user (if accounts are introduced) | authenticated account identifier | bounded per-user protection |
+| IP / abuse protection | privacy-reviewed, preferably hashed IP signal | resist abuse and session rotation |
+| Conversation | ephemeral conversation identifier | cap messages and total input per active conversation |
+| Burst | configurable short window | stop scripted bursts |
+| Cost cap | configurable per-user/session and global emergency ceiling | bound spend after model cost is known |
+| Global emergency protection | global disable/ceiling path | stop all model calls during cost or safety incidents |
+| Unknown client | strict bounded fallback; never unlimited | handle missing/untrusted client signals safely |
 
-Numeric values are **not set here**. They are chosen at implementation from the expected cost per answer and the Owner's budget (`OWNER_DECISION_REQUIRED`: daily spend ceiling, anonymous vs authenticated allowance).
+Production quotas are **not set here**. Do not choose arbitrary limits before expected usage and model cost are known. Vendor-specific and model-specific values remain open; this contract approves the provider-independent interface and graceful limit UX.
 
-Inputs are also bounded independent of counters: message length (current 800 chars), history length, maximum output tokens, maximum retrieval chunks, request timeout.
+Inputs are also bounded independently of counters: message/history length, output tokens, retrieval chunks, and request timeout must be configurable and set as part of cost/security implementation; this contract does not set production numbers.
 
 ## 4. Order of checks (cheapest first)
 
@@ -81,7 +81,7 @@ There is no fail-open path to the model.
 
 ## 8. Monitoring
 
-Metrics (RT-73 operational): requests, limited by dimension, limiter store errors/latency, global-ceiling proximity (% of daily ceiling), estimated cost per day. Alerts: ceiling at 80% and 100%, limiter errors above a threshold, sudden growth in a single hashed key.
+Metrics (RT-73 operational): requests, limited by dimension, limiter store errors/latency, global-ceiling proximity, and estimated cost. Alert thresholds are set only after the provider, expected usage, and Owner budget are known; do not hard-code arbitrary quotas here.
 
 ## 9. Acceptance for implementation
 
@@ -90,3 +90,7 @@ Metrics (RT-73 operational): requests, limited by dimension, limiter store error
 3. Daily and global ceilings tested with a fake clock.
 4. Responses localized and contain no internals.
 5. The same limiter serves RT-82 without duplication.
+
+## 10. Owner direction — 2026-10-04
+
+The interface must support anonymous/session limits, authenticated-user limits if accounts are later introduced, IP/abuse protection, burst protection, configurable cost caps, conversation-level protection, global emergency protection, observability, and graceful rate-limit UX. Keep the architecture provider-independent and decide the shared store with RT-82. Do not select a distributed-store vendor solely to close RT-72 or hard-code production quotas before model cost and expected usage are known. RT-72 remains open pending the shared security/implementation decisions and acceptance evidence.
