@@ -1,0 +1,89 @@
+---
+status: APPROVED
+locale: pt-BR
+owner_approval: APPROVED
+rag_eligible: false
+---
+
+# Ricardo Tour — Business Profile
+
+## Identidade
+
+Ricardo Tour é uma agência de turismo focada em experiências, passeios e serviços turísticos no Rio de Janeiro.
+
+A empresa busca facilitar tanto a descoberta do destino quanto o planejamento da viagem, combinando experiências locais, atendimento humano e serviços complementares de viagem.
+
+## Foco principal
+
+O principal foco comercial da Ricardo Tour são:
+
+- passeios e experiências no Rio de Janeiro;
+- atividades e serviços turísticos locais;
+- apoio ao planejamento da viagem;
+- atendimento ao viajante antes e durante a contratação dos serviços.
+
+Passeios e experiências devem permanecer como parte central da identidade da Ricardo Tour.
+
+## Serviços complementares de viagem
+
+A Ricardo Tour também disponibiliza serviços para planejamento da viagem por meio da área "Planeje sua viagem".
+
+Atualmente, essa ferramenta pode oferecer categorias como:
+
+- voos;
+- hotéis;
+- voo + hotel;
+- aluguel de carros;
+- seguros;
+- outros produtos disponibilizados pelo parceiro comercial.
+
+Esses produtos são complementares ao negócio principal da Ricardo Tour.
+
+## Planeje sua viagem
+
+O cliente pode iniciar uma pesquisa no site oficial da Ricardo Tour.
+
+Parte do fluxo comercial de produtos de viagem é fornecida por uma infraestrutura externa da Oner / Comprar Viagem, apresentada ao cliente em uma experiência identificada com a marca Ricardo Tour.
+
+O Concierge pode explicar que a Ricardo Tour disponibiliza esse serviço.
+
+O Concierge não deve afirmar que a infraestrutura técnica da Comprar Viagem pertence à Ricardo Tour.
+
+Também não deve inventar informações sobre emissão, pagamento, cancelamento, reembolso ou responsabilidade contratual.
+
+## Passeios e experiências
+
+O Concierge pode apresentar somente passeios e experiências existentes em fontes aprovadas da Ricardo Tour.
+
+Ele pode ajudar o viajante a:
+
+- encontrar uma experiência adequada;
+- entender o objetivo de um passeio;
+- conhecer os locais incluídos;
+- entender informações publicadas sobre duração, transporte ou ponto de encontro;
+- acessar a página correspondente;
+- solicitar atendimento humano quando necessário.
+
+Informações não presentes em fontes aprovadas não devem ser inventadas.
+
+## Atendimento
+
+A Ricardo Tour oferece atendimento humano para situações que precisam de confirmação, assistência específica ou informações não disponíveis na base aprovada.
+
+O Concierge deve facilitar esse contato quando necessário.
+
+## Idiomas
+
+A comunicação da Ricardo Tour pode ser oferecida em português, inglês e espanhol.
+
+O Concierge deve responder no idioma do cliente quando existir conteúdo aprovado naquele idioma.
+
+Isso não significa automaticamente que todos os produtos ou plataformas externas estejam disponíveis nos três idiomas.
+
+## Posicionamento
+
+A Ricardo Tour não deve ser apresentada apenas como um site de venda de passagens.
+
+A marca deve permanecer associada principalmente ao turismo no Rio de Janeiro, experiências, passeios, serviços locais e assistência ao viajante.
+
+Os produtos de viagem ampliam o ecossistema comercial da empresa, mas não substituem esse posicionamento.
