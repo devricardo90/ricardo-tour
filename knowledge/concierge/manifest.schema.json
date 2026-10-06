@@ -1,0 +1,131 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Ricardo Tour AI Concierge V1 knowledge manifest",
+  "type": "object",
+  "required": ["schema_version", "source_classes", "sources"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema_version": { "const": "1.0.0" },
+    "source_classes": {
+      "type": "object",
+      "required": [
+        "public-tour-catalog",
+        "canonical-public-contact",
+        "public-request-and-handoff-wording",
+        "current-about-and-institutional-content"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "public-tour-catalog": { "$ref": "#/definitions/classRule" },
+        "canonical-public-contact": { "$ref": "#/definitions/classRule" },
+        "public-request-and-handoff-wording": { "$ref": "#/definitions/classRule" },
+        "current-about-and-institutional-content": {
+          "allOf": [
+            { "$ref": "#/definitions/classRule" },
+            { "properties": { "registration_status": { "const": "BLOCKED" } } }
+          ]
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/sourceVersion" }
+    }
+  },
+  "definitions": {
+    "classRule": {
+      "type": "object",
+      "required": ["title", "source_id_pattern", "source_location", "registration_status", "approved_for_rag", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "type": "string", "minLength": 1 },
+        "source_id_pattern": { "type": "string", "minLength": 1 },
+        "source_location": { "type": "string", "minLength": 1 },
+        "registration_status": { "enum": ["DRAFT", "BLOCKED"] },
+        "approved_for_rag": { "const": false },
+        "notes": { "type": "string" }
+      }
+    },
+    "sourceVersion": {
+      "type": "object",
+      "required": [
+        "source_id", "source_class", "title", "locale", "source_location", "version",
+        "status", "approved_for_rag", "last_reviewed", "approved_at", "approved_by", "notes"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "source_id": { "type": "string", "minLength": 1 },
+        "source_class": {
+          "enum": [
+            "public-tour-catalog",
+            "canonical-public-contact",
+            "public-request-and-handoff-wording",
+            "current-about-and-institutional-content"
+          ]
+        },
+        "title": { "type": "string", "minLength": 1 },
+        "locale": { "enum": ["pt", "en", "es"] },
+        "source_location": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "status": { "enum": ["ACTIVE", "DRAFT", "BLOCKED", "RETIRED"] },
+        "approved_for_rag": { "type": "boolean" },
+        "last_reviewed": { "anyOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] },
+        "approved_at": { "anyOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] },
+        "approved_by": { "anyOf": [{ "type": "string", "minLength": 1 }, { "type": "null" }] },
+        "notes": { "type": "string" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "approved_for_rag": { "const": true } } },
+          "then": {
+            "properties": {
+              "status": { "const": "ACTIVE" },
+              "last_reviewed": { "type": "string", "format": "date-time" },
+              "approved_at": { "type": "string", "format": "date-time" },
+              "approved_by": { "type": "string", "minLength": 1 }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "source_class": { "const": "public-tour-catalog" } } },
+          "then": {
+            "properties": {
+              "source_id": { "pattern": "^public-tour-catalog:[^:]+:(pt|en|es)$" },
+              "source_location": { "pattern": "^lib/catalog/public-trips\\.ts#Trip/[^#]+$" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "source_class": { "const": "canonical-public-contact" } } },
+          "then": {
+            "properties": {
+              "source_id": { "pattern": "^canonical-public-contact:(pt|en|es)$" },
+              "source_location": { "const": "lib/public-contact.ts#PUBLIC_CONTACT" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "source_class": { "const": "public-request-and-handoff-wording" } } },
+          "then": {
+            "properties": {
+              "source_id": { "pattern": "^public-request-and-handoff-wording:.+:(pt|en|es)$" },
+              "source_location": { "pattern": "^components/site/(tour/tour-request-copy|contact/contact-copy)\\.ts#[^#]+$" }
+            }
+          }
+        },
+        {
+          "if": { "properties": { "source_class": { "const": "current-about-and-institutional-content" } } },
+          "then": {
+            "properties": {
+              "source_id": { "pattern": "^current-about-and-institutional-content:.+:(pt|en|es)$" },
+              "source_location": { "pattern": "^components/(site/about/about-copy\\.ts|about-rick-travel-section\\.tsx)#[^#]+$" },
+              "approved_for_rag": { "const": false },
+              "status": { "const": "BLOCKED" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

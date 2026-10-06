@@ -1,0 +1,13 @@
+# AI Concierge V1 knowledge registry
+
+This directory is the machine-readable RT-68 governance contract. [The RT-68 source contract](../../docs/architecture/rt-68-concierge-knowledge-source-contract.md) remains the policy authority; `manifest.json` declares its four V1 source classes, and `manifest.schema.json` constrains future per-version records. These files do not ingest or publish content.
+
+`source_classes` are registration rules, **not knowledge records**. The three approved source classes start with `registration_status: DRAFT` because no concrete version has been validated and activated. Institutional/About content is `BLOCKED` until current Ricardo Tour wording is reconciled and explicitly approved. `sources` is empty: **ACTIVE_SOURCES = 0**. No source ID, Trip ID, version, approval actor, or source path/key has been fabricated.
+
+A future source version is retrieval-eligible only when `status == ACTIVE` **and** `approved_for_rag == true`, and it still passes the exact RT-68 canonical-path, locale, publication, field, and freshness checks. `ACTIVE` alone is insufficient; a class declaration never grants retrieval eligibility. DRAFT, BLOCKED, and RETIRED versions must never be retrieved. The schema prevents non-ACTIVE versions from setting `approved_for_rag: true` and requires approval metadata for eligible versions.
+
+The RT-69 lifecycle is **CANONICAL → VALIDATE → NORMALIZE → VERSION → CHUNK/INDEX → PUBLISH → RETIRE/ROLLBACK**. RT-69 will register actual versions, verify approval evidence, activate them atomically, and handle ingestion. A source change or withdrawal retires the old version before asynchronous index removal. Rollback requires fresh verification that the exact canonical version is still published, approved, and eligible; it never silently reactivates withdrawn content.
+
+No tour price, availability, schedule/capacity, private data, unsupported safety fact, legacy Rick Travel claim, or unapproved institutional/About copy belongs in Concierge RAG. Price questions go to the current product/booking page or human handoff. The operational Oner widget is a separate commercial flow: Oner inventory, flights, hotels, packages, provider prices, and provider availability are not Concierge sources. No open-web source is enabled.
+
+The manifest uses Draft-07 JSON Schema so a standard validator can check future records. Current RT-68 validation must also assert that `sources` is empty and that all class rules have `approved_for_rag: false`. Before RT-69 relies on this contract in CI or runtime, it must add a pinned validator and tests; this RT-68 task creates no runtime dependency or ingestion path.

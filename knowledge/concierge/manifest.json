@@ -1,0 +1,39 @@
+{
+  "$schema": "./manifest.schema.json",
+  "schema_version": "1.0.0",
+  "source_classes": {
+    "public-tour-catalog": {
+      "title": "Published Ricardo Tour catalog and Experiences",
+      "source_id_pattern": "public-tour-catalog:<Trip.id>:<locale>",
+      "source_location": "lib/catalog/public-trips.ts",
+      "registration_status": "DRAFT",
+      "approved_for_rag": false,
+      "notes": "Only current public-gate Trip titles and descriptions in an approved PT/EN/ES locale. Experiences is the same catalog source. No prices, schedules, capacity, or availability."
+    },
+    "canonical-public-contact": {
+      "title": "Canonical Ricardo Tour public contact",
+      "source_id_pattern": "canonical-public-contact:<locale>",
+      "source_location": "lib/public-contact.ts",
+      "registration_status": "DRAFT",
+      "approved_for_rag": false,
+      "notes": "Only contato@ricardotour.com, +55 22 99846-1906, and the canonical WhatsApp link; no other contact or social claims."
+    },
+    "public-request-and-handoff-wording": {
+      "title": "Current public request and human handoff wording",
+      "source_id_pattern": "public-request-and-handoff-wording:<canonical-path-and-key>:<locale>",
+      "source_location": "components/site/tour/tour-request-copy.ts; components/site/contact/contact-copy.ts",
+      "registration_status": "DRAFT",
+      "approved_for_rag": false,
+      "notes": "Only current PT/EN/ES wording for sending a request or contacting the team. No booking, policy, price, availability, or response-time promise."
+    },
+    "current-about-and-institutional-content": {
+      "title": "Ricardo Tour institutional and About content",
+      "source_id_pattern": "current-about-and-institutional-content:<canonical-path-and-key>:<locale>",
+      "source_location": "components/site/about/about-copy.ts; components/about-rick-travel-section.tsx",
+      "registration_status": "BLOCKED",
+      "approved_for_rag": false,
+      "notes": "Current checked-in Rick Travel wording is ineligible until replaced or reconciled with explicitly Owner-approved Ricardo Tour copy."
+    }
+  },
+  "sources": []
+}

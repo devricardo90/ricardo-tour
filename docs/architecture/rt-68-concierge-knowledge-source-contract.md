@@ -87,7 +87,7 @@ This is the approved source allowlist and boundary for the first real Concierge 
 
 ### 4.3 Authoritative V1 source registry and eligibility state
 
-The exact source paths and allowed fields in §4.1 are the **authoritative source-class allowlist** for V1. This section defines the registry eligibility contract for individual source versions. It is governance only: there is no `knowledge/concierge/` runtime registry, source manifest, indexed file, or `ACTIVE` record in the repository at this point. An Owner-approved class must not be treated as already indexed or answerable.
+The exact source paths and allowed fields in §4.1 are the **authoritative source-class allowlist** for V1. This section defines the registry eligibility contract for individual source versions. The machine-readable governance manifest is in `knowledge/concierge/`; it has no source-version entries. There is no runtime registry, indexed file, or `ACTIVE` record. An Owner-approved class must not be treated as already indexed or answerable.
 
 | Registry source class | Future stable `source_id` pattern (not minted yet) | Current eligibility |
 | --- | --- | --- |
