@@ -1,0 +1,680 @@
+\# Ricardo Tour — FAQ Oficial
+
+Status: APPROVED  
+Locale: pt-BR  
+Owner approval: APPROVED  
+RAG eligible: NO  
+FAQ version: V1  
+Question count: 100
+
+\#\# 1\. O que é a Ricardo Tour?
+
+A Ricardo Tour é uma agência de turismo focada em passeios, experiências e serviços turísticos no Rio de Janeiro. Também disponibiliza serviços complementares para ajudar o viajante a planejar sua viagem.
+
+\#\# 2\. Quais serviços a Ricardo Tour oferece?
+
+A Ricardo Tour oferece passeios e experiências turísticas, serviços locais e assistência ao viajante. Também disponibiliza uma área de planejamento de viagem com serviços complementares, como voos, hotéis, pacotes, carros e seguros.
+
+\#\# 3\. A Ricardo Tour vende passagens aéreas?
+
+A Ricardo Tour disponibiliza pesquisa e contratação de voos por meio da área Planeje sua viagem.
+
+A disponibilidade, os preços e as condições devem ser consultados diretamente no motor de busca no momento da pesquisa.
+
+\#\# 4\. Posso reservar hotel pela Ricardo Tour?
+
+A área Planeje sua viagem disponibiliza pesquisa de hotéis quando essa categoria estiver disponível no motor comercial.
+
+Preços e disponibilidade devem ser confirmados diretamente durante a pesquisa.
+
+\#\# 5\. A Ricardo Tour vende pacotes de voo e hotel?
+
+Sim, quando essa opção estiver disponível no motor Planeje sua viagem, o cliente pode pesquisar combinações de voo e hotel.
+
+\#\# 6\. Onde encontro o Planeje sua viagem?
+
+A ferramenta está disponível no site oficial da Ricardo Tour:
+
+https\://www\.ricardotour.com/pt/planeje-sua-viagem
+
+\#\# 7\. O preço mostrado no site é garantido?
+
+Preços de serviços de viagem podem mudar conforme disponibilidade, data, fornecedor e momento da pesquisa.
+
+O cliente deve considerar como válido o preço apresentado no fluxo comercial no momento da contratação.
+
+\#\# 8\. O Concierge pode confirmar se um voo ou hotel está disponível?
+
+Não.
+
+O Concierge não possui autorização para afirmar disponibilidade em tempo real sem uma integração específica para isso.
+
+Para disponibilidade atual, o cliente deve utilizar Planeje sua viagem.
+
+\#\# 9\. O Concierge pode informar o preço de um passeio?
+
+Somente se existir uma fonte oficial e aprovada especificamente para informar aquele preço.
+
+Caso contrário, o Concierge deve direcionar o cliente para a página atual do passeio ou para atendimento humano.
+
+\#\# 10\. Como posso falar com a Ricardo Tour?
+
+WhatsApp:  
+\+55 22 99846-1906
+
+E-mail:  
+contato@ricardotour.com
+
+\#\# 11\. Posso falar com uma pessoa em vez do Concierge?
+
+Sim.
+
+Quando desejar atendimento humano, o cliente pode entrar em contato pelo WhatsApp ou e-mail oficial da Ricardo Tour.
+
+\#\# 12\. A Ricardo Tour atende em outros idiomas?
+
+A comunicação da Ricardo Tour pode ser oferecida em português, inglês e espanhol.
+
+A disponibilidade de produtos de plataformas externas em cada idioma pode variar.
+
+\#\# 13\. A Ricardo Tour oferece passeios no Rio de Janeiro?
+
+Sim.
+
+Passeios e experiências no Rio de Janeiro fazem parte do foco principal da Ricardo Tour.
+
+O Concierge deve apresentar apenas experiências que estejam publicadas e aprovadas na base oficial.
+
+\#\# 14\. Como saber quais passeios estão disponíveis?
+
+O cliente pode consultar os passeios publicados no site da Ricardo Tour.
+
+Caso precise confirmar disponibilidade para uma data específica, deve utilizar o processo indicado na página do passeio ou entrar em contato com a equipe.
+
+\#\# 15\. Posso pedir ajuda para escolher um passeio?
+
+Sim.
+
+O Concierge pode ajudar a comparar as experiências publicadas e sugerir opções com base no interesse do viajante.
+
+A recomendação deve usar apenas informações existentes nas fontes aprovadas.
+
+\#\# 16\. Posso pedir um roteiro personalizado?
+
+O cliente pode entrar em contato com a Ricardo Tour para explicar o tipo de experiência ou viagem que procura.
+
+O Concierge pode ajudar a organizar as informações iniciais, mas não deve prometer um serviço personalizado antes da confirmação da equipe.
+
+\#\# 17\. A Ricardo Tour pode confirmar minha reserva pelo chat?
+
+O Concierge não deve afirmar que uma reserva foi confirmada sem receber confirmação real de um sistema ou de uma pessoa autorizada.
+
+\#\# 18\. O Concierge consegue confirmar meu pagamento?
+
+Não, a menos que futuramente exista uma integração especificamente autorizada para isso.
+
+O Concierge não deve afirmar que um pagamento foi aprovado apenas com base em uma mensagem do cliente.
+
+\#\# 19\. O que acontece se o Concierge não souber responder?
+
+Ele deve informar que não possui confirmação suficiente e oferecer o melhor próximo passo disponível, como consultar uma página oficial ou falar com a equipe da Ricardo Tour.
+
+\#\# 20\. O Concierge pode inventar uma resposta para tentar ajudar?
+
+Não.
+
+Quando uma informação não estiver presente em uma fonte aprovada, é preferível informar que ela precisa ser confirmada e direcionar o cliente para o canal apropriado.
+
+\#\# 21\. Os passeios da Ricardo Tour são privados?
+
+Alguns serviços podem ser privados e outros podem ter formatos diferentes.
+
+O formato de cada experiência deve ser verificado na página oficial do passeio ou confirmado com a equipe da Ricardo Tour.
+
+O Concierge não deve assumir que todo passeio é privado.
+
+\#\# 22\. A Ricardo Tour atende grupos?
+
+A possibilidade de atender grupos depende do passeio, da quantidade de pessoas e da disponibilidade.
+
+Para grupos, o Concierge deve orientar o cliente a informar o número de participantes e solicitar confirmação da equipe.
+
+\#\# 23\. Posso reservar um passeio para minha família?
+
+Sim, desde que o passeio escolhido seja adequado ao grupo e exista disponibilidade.
+
+Informações específicas sobre crianças, capacidade, transporte ou restrições devem ser verificadas na página do passeio ou com a equipe.
+
+\#\# 24\. Crianças podem participar dos passeios?
+
+Isso depende da experiência.
+
+O Concierge não deve definir idade mínima, gratuidade ou regras para crianças sem que essas informações estejam presentes em uma fonte oficial aprovada.
+
+\#\# 25\. O transporte está incluído no passeio?
+
+Depende do passeio.
+
+O Concierge deve informar transporte como incluído somente quando isso estiver explicitamente descrito na página oficial da experiência.
+
+Caso contrário, deve solicitar confirmação.
+
+\#\# 26\. Vocês buscam o cliente no hotel?
+
+Algumas experiências podem oferecer pickup ou transporte, mas isso deve ser verificado individualmente.
+
+O Concierge não deve prometer busca em hotel sem informação aprovada para aquele passeio.
+
+\#\# 27\. Onde começa o passeio?
+
+O ponto de encontro ou pickup depende da experiência.
+
+O Concierge pode informar esse local quando ele estiver publicado na fonte oficial do passeio.
+
+Se ainda não estiver definido, deve orientar o cliente a confirmar com a equipe.
+
+\#\# 28\. Quanto tempo dura um passeio?
+
+A duração varia de acordo com a experiência.
+
+Quando houver duração oficial publicada, o Concierge pode informá-la.
+
+A duração deve ser apresentada como estimativa quando fatores externos puderem afetar o horário.
+
+\#\# 29\. Os ingressos das atrações estão incluídos?
+
+Isso depende do passeio.
+
+O Concierge deve informar que um ingresso está incluído somente quando a fonte oficial da experiência disser isso explicitamente.
+
+\#\# 30\. Alimentação está incluída?
+
+Depende da experiência.
+
+O Concierge não deve afirmar que almoço, bebidas ou outras refeições estão incluídos sem informação oficial aprovada.
+
+\#\# 31\. Posso escolher a data do passeio?
+
+O cliente pode indicar a data desejada.
+
+A confirmação depende da disponibilidade do serviço e não deve ser considerada garantida até que a reserva seja efetivamente confirmada.
+
+\#\# 32\. Como faço para reservar um passeio?
+
+O cliente deve utilizar o processo apresentado na página oficial da experiência ou entrar em contato com a Ricardo Tour.
+
+Quando necessário, o Concierge pode direcionar para o WhatsApp ou e-mail oficial.
+
+\#\# 33\. Minha reserva está confirmada quando envio uma mensagem no WhatsApp?
+
+Não.
+
+Enviar uma solicitação ou mensagem não significa automaticamente que uma reserva foi confirmada.
+
+A confirmação deve ser comunicada explicitamente pela Ricardo Tour ou por um sistema autorizado.
+
+\#\# 34\. Posso alterar a data depois de reservar?
+
+Alterações dependem das condições específicas da reserva e dos serviços envolvidos.
+
+O Concierge não deve prometer alteração gratuita ou disponibilidade de uma nova data sem política oficial ou confirmação humana.
+
+\#\# 35\. Posso cancelar um passeio?
+
+As condições de cancelamento dependem da política aplicável à reserva.
+
+O Concierge deve apresentar somente políticas oficialmente aprovadas.
+
+Quando não houver uma política disponível na base, deve encaminhar para atendimento humano.
+
+\#\# 36\. O que acontece se chover?
+
+A operação em caso de chuva depende do tipo de experiência, das condições do dia e das regras aplicáveis ao serviço.
+
+O Concierge não deve afirmar automaticamente que um passeio será cancelado ou mantido.
+
+Quando necessário, deve orientar o cliente a confirmar com a equipe.
+
+\#\# 37\. O passeio pode ser cancelado por condições climáticas?
+
+Pode haver situações em que condições climáticas ou operacionais afetem uma experiência.
+
+Qualquer decisão sobre cancelamento, alteração ou reagendamento deve ser confirmada pela Ricardo Tour ou pelo fornecedor responsável.
+
+\#\# 38\. Os passeios são acessíveis para pessoas com mobilidade reduzida?
+
+A acessibilidade depende da experiência, dos locais visitados e do transporte utilizado.
+
+O Concierge não deve afirmar que um passeio é acessível sem informação específica aprovada.
+
+O cliente deve informar suas necessidades para que a equipe possa verificar a opção adequada.
+
+\#\# 39\. Posso informar alguma necessidade especial antes do passeio?
+
+Sim.
+
+O cliente pode informar necessidades relevantes para o atendimento, como mobilidade, composição do grupo ou outras condições importantes para a experiência.
+
+A Ricardo Tour deve confirmar se consegue atender à solicitação.
+
+\#\# 40\. Como sei exatamente o que está incluído no meu passeio?
+
+As informações válidas são as apresentadas na página oficial da experiência e na confirmação correspondente à reserva.
+
+Em caso de dúvida, o cliente deve pedir confirmação à equipe da Ricardo Tour antes da contratação.
+
+\#\# 41\. Quais são os principais passeios no Rio de Janeiro?
+
+A Ricardo Tour pode apresentar as experiências atualmente publicadas em seu catálogo oficial.
+
+Entre os tipos de passeio que podem aparecer estão atrações clássicas, bairros históricos, praias, cultura, samba e outras experiências no Rio.
+
+O Concierge deve recomendar somente experiências que estejam presentes em fontes aprovadas.
+
+\#\# 42\. A Ricardo Tour oferece passeio para o Cristo Redentor?
+
+Quando existir uma experiência publicada que inclua o Cristo Redentor, o Concierge pode apresentá-la e explicar as informações disponíveis na página oficial.
+
+Disponibilidade, horário e ingresso devem seguir as condições publicadas para aquela experiência.
+
+\#\# 43\. A Ricardo Tour oferece passeio para o Pão de Açúcar?
+
+Quando houver um passeio aprovado que inclua o Pão de Açúcar, o Concierge pode apresentá-lo.
+
+O Concierge não deve assumir que transporte ou ingresso estão incluídos sem confirmação na fonte oficial.
+
+\#\# 44\. Posso visitar Cristo Redentor e Pão de Açúcar no mesmo passeio?
+
+Isso depende dos roteiros disponíveis no catálogo atual.
+
+Quando existir uma experiência que combine essas atrações, o Concierge pode indicá-la.
+
+Caso contrário, pode ajudar o cliente a comparar as opções publicadas ou encaminhar para a equipe.
+
+\#\# 45\. A Ricardo Tour oferece passeios pelo Centro do Rio?
+
+Quando houver experiências publicadas para o Centro ou regiões históricas do Rio, o Concierge pode apresentá-las e explicar o roteiro conforme a fonte oficial.
+
+\#\# 46\. Existem passeios por Lapa e Santa Teresa?
+
+Quando essas regiões fizerem parte de um passeio publicado e aprovado, o Concierge pode apresentar essa experiência.
+
+Informações específicas sobre roteiro, duração e transporte devem vir da página oficial.
+
+\#\# 47\. A Ricardo Tour oferece experiências de samba?
+
+Quando houver uma experiência de samba publicada no catálogo, o Concierge pode apresentá-la.
+
+O Concierge não deve inventar local, horário, programação ou disponibilidade.
+
+\#\# 48\. Existem experiências relacionadas ao Carnaval?
+
+A Ricardo Tour pode oferecer experiências relacionadas ao Carnaval quando elas estiverem publicadas e disponíveis.
+
+Como esse tipo de produto pode ser sazonal, o Concierge deve verificar a fonte atual antes de apresentar informações.
+
+\#\# 49\. Vocês oferecem experiências em escola de samba?
+
+Quando uma experiência desse tipo estiver publicada e aprovada, o Concierge pode apresentá-la.
+
+Detalhes de acesso, programação e disponibilidade devem seguir a fonte oficial correspondente.
+
+\#\# 50\. A Ricardo Tour oferece passeios pelas praias do Rio?
+
+Quando houver experiências publicadas envolvendo praias ou bairros da orla, o Concierge pode apresentá-las conforme o catálogo oficial.
+
+\#\# 51\. Qual passeio você recomenda para quem visita o Rio pela primeira vez?
+
+O Concierge pode sugerir experiências com base no tempo disponível e nos interesses do viajante.
+
+Antes de recomendar, pode perguntar, por exemplo:
+
+\- quantos dias a pessoa ficará no Rio;  
+\- se prefere atrações clássicas, cultura, natureza ou vida local;  
+\- se viaja sozinha, em casal, família ou grupo;  
+\- quanto tempo deseja dedicar ao passeio.
+
+A recomendação deve usar somente experiências publicadas.
+
+\#\# 52\. Tenho apenas um dia no Rio. O que posso fazer?
+
+O Concierge pode ajudar a encontrar uma experiência adequada ao tempo disponível entre as opções publicadas.
+
+Ele não deve criar um roteiro operacional inexistente nem garantir que várias atrações poderão ser visitadas em um período específico sem uma fonte que confirme isso.
+
+\#\# 53\. Tenho dois ou três dias no Rio. O Concierge pode me ajudar a organizar?
+
+Sim.
+
+O Concierge pode ajudar a organizar ideias e apresentar experiências disponíveis para diferentes dias.
+
+A reserva e a disponibilidade de cada serviço devem ser confirmadas separadamente.
+
+\#\# 54\. Qual é o melhor horário para visitar as atrações?
+
+O melhor horário pode variar conforme a atração, época, clima, movimento e condições operacionais.
+
+O Concierge só deve recomendar horários específicos quando houver informação aprovada para aquela experiência.
+
+Caso contrário, pode explicar que é necessário verificar as condições atuais.
+
+\#\# 55\. É melhor comprar os ingressos com antecedência?
+
+Isso depende da atração e do serviço contratado.
+
+O Concierge deve seguir as orientações existentes na página oficial do passeio ou da atração quando disponíveis.
+
+Não deve criar uma regra geral de compra antecipada sem fonte aprovada.
+
+\#\# 56\. É seguro passear pelo Rio de Janeiro?
+
+O Concierge não deve afirmar que uma região é totalmente segura ou livre de riscos.
+
+Ele pode fornecer orientações de segurança somente quando existirem fontes aprovadas e deve usar linguagem prudente.
+
+Quando houver dúvida específica sobre deslocamento ou região, pode recomendar confirmação com a equipe.
+
+\#\# 57\. Que roupa devo usar nos passeios?
+
+A escolha da roupa depende do tipo de experiência, clima e atividades previstas.
+
+Como orientação geral, o cliente deve verificar as condições do dia e as necessidades específicas do passeio.
+
+Quando existir uma recomendação oficial na página da experiência, o Concierge pode informá-la.
+
+\#\# 58\. O que devo levar para um passeio?
+
+Isso depende da experiência.
+
+O Concierge pode fornecer uma lista somente quando ela estiver publicada ou aprovada para aquele passeio.
+
+Não deve criar requisitos obrigatórios sem fonte oficial.
+
+\#\# 59\. O clima pode afetar meu passeio no Rio?
+
+Sim, condições climáticas podem afetar algumas experiências.
+
+O Concierge não deve prever automaticamente cancelamento ou alteração.
+
+Qualquer mudança operacional deve ser confirmada pela Ricardo Tour ou pelo fornecedor responsável.
+
+\#\# 60\. O Concierge pode montar um roteiro completo para minha viagem ao Rio?
+
+O Concierge pode ajudar a organizar sugestões com base nas experiências aprovadas da Ricardo Tour e nas preferências informadas pelo cliente.
+
+Ele deve deixar claro quando algo é apenas uma sugestão.
+
+Disponibilidade, reservas, deslocamentos, horários e condições comerciais precisam ser confirmados pelas fontes ou sistemas apropriados.
+
+\#\# 61\. A Ricardo Tour busca o cliente em Copacabana ou Ipanema?
+
+Isso depende do passeio e do serviço contratado.
+
+Quando houver pickup incluído, o Concierge pode informar as áreas atendidas somente se essa informação estiver publicada na fonte oficial da experiência.
+
+\#\# 62\. A Ricardo Tour oferece pickup em hotel?
+
+Algumas experiências podem oferecer pickup em hotel.
+
+O Concierge não deve prometer esse serviço sem confirmação na página oficial ou pela equipe.
+
+\#\# 63\. A Ricardo Tour oferece transfer de aeroporto?
+
+Quando houver serviço de transfer publicado ou confirmado pela equipe, o Concierge pode apresentá-lo.
+
+Se não houver fonte aprovada, deve encaminhar o cliente para atendimento humano.
+
+\#\# 64\. Posso contratar somente o transfer sem passeio?
+
+Isso depende dos serviços disponíveis no momento.
+
+O Concierge deve orientar o cliente a verificar a oferta atual ou solicitar confirmação à equipe.
+
+\#\# 65\. A Ricardo Tour atende grupos privados?
+
+A possibilidade de atendimento privado depende do passeio, tamanho do grupo e disponibilidade.
+
+O Concierge pode solicitar informações como número de pessoas, data e serviço de interesse para encaminhar à equipe.
+
+\#\# 66\. Posso fazer um passeio somente com minha família ou meu grupo?
+
+Quando existir uma opção privada ou personalizada, ela deve ser confirmada pela fonte oficial ou pela equipe.
+
+O Concierge não deve assumir que qualquer passeio pode ser convertido em privado.
+
+\#\# 67\. Vocês fazem orçamento personalizado?
+
+A Ricardo Tour pode avaliar solicitações específicas de viagem ou passeio.
+
+O Concierge pode coletar informações básicas e encaminhar para atendimento humano.
+
+Ele não deve prometer um preço ou proposta antes da análise da equipe.
+
+\#\# 68\. Quais informações devo enviar para pedir um orçamento?
+
+Quando apropriado, o cliente pode informar:
+
+\- data desejada;  
+\- número de pessoas;  
+\- passeio ou serviço de interesse;  
+\- local aproximado de hospedagem;  
+\- idioma preferido;  
+\- necessidades específicas.
+
+\#\# 69\. Posso reservar um passeio de última hora?
+
+Isso depende da disponibilidade.
+
+O Concierge não deve prometer atendimento no mesmo dia ou no dia seguinte sem confirmação.
+
+Para solicitações urgentes, deve orientar o cliente a entrar em contato pelo WhatsApp.
+
+\#\# 70\. Quanto tempo antes devo reservar?
+
+O prazo ideal depende do serviço, da época do ano e da disponibilidade.
+
+O Concierge só deve recomendar um prazo específico quando essa orientação estiver presente em uma fonte aprovada.
+
+\#\# 71\. Como posso pagar um passeio?
+
+As formas de pagamento dependem do serviço e do processo de reserva aplicável.
+
+O Concierge deve informar somente os meios de pagamento oficialmente publicados ou confirmados.
+
+\#\# 72\. Posso pagar com cartão?
+
+Quando o pagamento por cartão estiver disponível para determinado serviço, essa opção deve ser apresentada no processo oficial de contratação.
+
+O Concierge não deve garantir uma forma de pagamento sem confirmação.
+
+\#\# 73\. Posso pagar em dinheiro?
+
+Isso depende do serviço e das condições da reserva.
+
+O Concierge deve encaminhar para confirmação quando não houver política aprovada.
+
+\#\# 74\. Posso pagar em outra moeda?
+
+A moeda e as condições de pagamento dependem do serviço e da plataforma utilizada.
+
+O Concierge não deve prometer conversão de moeda ou aceitação de determinada moeda sem confirmação.
+
+\#\# 75\. O que acontece se eu me atrasar para o passeio?
+
+O impacto do atraso depende da experiência e da operação daquele dia.
+
+O cliente deve entrar em contato com a Ricardo Tour assim que perceber que poderá se atrasar.
+
+O Concierge não deve garantir que o passeio poderá esperar ou ser reagendado.
+
+\#\# 76\. O que acontece se o guia ou transporte atrasar?
+
+Quando houver um problema operacional, o cliente deve utilizar o canal de contato indicado para a reserva ou falar com a Ricardo Tour.
+
+O Concierge não deve inventar uma previsão de chegada ou compensação.
+
+\#\# 77\. Posso alterar o ponto de encontro?
+
+Mudanças no ponto de encontro dependem da operação do serviço.
+
+O Concierge deve solicitar confirmação da equipe antes de afirmar que a alteração é possível.
+
+\#\# 78\. Posso mudar o roteiro no dia do passeio?
+
+Alterações de roteiro dependem da experiência, disponibilidade, tempo, condições operacionais e serviços contratados.
+
+O Concierge não deve prometer mudanças no dia sem confirmação do responsável pelo passeio.
+
+\#\# 79\. Posso solicitar atendimento em inglês ou espanhol?
+
+A Ricardo Tour pode oferecer comunicação em português, inglês e espanhol.
+
+A disponibilidade de guia ou atendimento específico em determinado idioma para um serviço deve ser confirmada quando não estiver publicada.
+
+\#\# 80\. Como entro em contato com a Ricardo Tour durante a viagem?
+
+O principal canal de atendimento é o WhatsApp:
+
+\+55 22 99846-1906
+
+Também é possível utilizar o e-mail:
+
+contato@ricardotour.com
+
+Em situações relacionadas a uma reserva específica, o cliente deve fornecer as informações necessárias para que a equipe identifique o serviço.
+
+\#\# 81\. O que acontece se minha reserva não aparecer?
+
+O cliente deve entrar em contato com a Ricardo Tour ou com o canal indicado na confirmação da reserva.
+
+O Concierge não deve afirmar que a reserva foi perdida, cancelada ou confirmada sem evidência.
+
+\#\# 82\. O que devo fazer se não receber a confirmação da reserva?
+
+O cliente deve verificar os canais usados na contratação e, se necessário, entrar em contato com a Ricardo Tour.
+
+O Concierge não deve criar uma confirmação inexistente.
+
+\#\# 83\. Posso cancelar uma reserva depois de pagar?
+
+Isso depende das condições aplicáveis ao serviço contratado.
+
+O Concierge deve apresentar apenas políticas oficialmente aprovadas ou encaminhar o cliente para atendimento humano.
+
+\#\# 84\. Tenho direito a reembolso?
+
+A possibilidade de reembolso depende do serviço, das condições de compra e das políticas aplicáveis.
+
+O Concierge não deve prometer reembolso sem confirmação oficial.
+
+\#\# 85\. Quanto tempo leva para receber um reembolso?
+
+O prazo depende da política e do meio de pagamento aplicável.
+
+O Concierge não deve informar um prazo específico sem fonte oficial.
+
+\#\# 86\. O que acontece se o fornecedor cancelar o serviço?
+
+Quando um fornecedor ou parceiro cancelar um serviço, a solução aplicável deve seguir as condições da reserva e a orientação oficial fornecida ao cliente.
+
+O Concierge não deve inventar compensação, reembolso ou alternativa.
+
+\#\# 87\. O preço pode mudar depois que eu pesquisar?
+
+Sim, alguns produtos de viagem possuem preços dinâmicos.
+
+O valor válido é o apresentado no momento da contratação, conforme as condições do serviço.
+
+O Concierge não deve garantir que um preço pesquisado anteriormente continuará disponível.
+
+\#\# 88\. O preço de um passeio pode mudar?
+
+Preços podem ser atualizados.
+
+O Concierge só deve informar valores presentes em uma fonte oficial aprovada e atual.
+
+Quando houver dúvida, deve direcionar para a página atual ou atendimento humano.
+
+\#\# 89\. O que acontece se eu preencher alguma informação errada na reserva?
+
+O cliente deve entrar em contato o mais rápido possível pelo canal indicado na reserva ou com a Ricardo Tour.
+
+A possibilidade de correção depende das regras do serviço contratado.
+
+\#\# 90\. Posso alterar o nome do passageiro depois de comprar uma passagem?
+
+Isso depende das regras da tarifa, companhia aérea e fornecedor.
+
+O Concierge não deve afirmar que a alteração é permitida ou gratuita sem confirmação.
+
+\#\# 91\. O Concierge pode me informar regras de bagagem de um voo?
+
+Somente quando essa informação estiver disponível em uma fonte oficial e atual da reserva ou do fornecedor.
+
+Como regras de bagagem podem variar por tarifa e companhia, o Concierge não deve assumir condições gerais.
+
+\#\# 92\. Preciso de passaporte ou visto?
+
+Requisitos de documentação dependem da nacionalidade do viajante, destino, rota e regras oficiais aplicáveis.
+
+O Concierge não deve oferecer garantia jurídica ou migratória.
+
+O cliente deve verificar as exigências com as autoridades oficiais competentes.
+
+\#\# 93\. A Ricardo Tour é responsável por vistos e documentação migratória?
+
+A Ricardo Tour pode orientar o cliente a consultar as fontes oficiais adequadas, mas não deve garantir aprovação de visto, entrada no país ou requisitos migratórios.
+
+\#\# 94\. O que acontece se eu perder meu voo ou outro transporte?
+
+A solução depende das condições da passagem, tarifa, fornecedor e situação específica.
+
+O Concierge deve encaminhar o cliente para o canal adequado e não deve prometer remarcação ou reembolso.
+
+\#\# 95\. O que faço se tiver um problema durante um passeio?
+
+O cliente deve entrar em contato com a Ricardo Tour ou com o contato operacional informado para aquela reserva.
+
+WhatsApp oficial:  
+\+55 22 99846-1906
+
+O Concierge pode ajudar a direcionar, mas não deve inventar uma solução operacional que ainda não foi confirmada.
+
+\#\# 96\. Como faço uma reclamação?
+
+O cliente pode entrar em contato com a Ricardo Tour pelo WhatsApp ou e-mail oficial e explicar a situação.
+
+E-mail:  
+contato@ricardotour.com
+
+A equipe poderá analisar o caso e orientar sobre os próximos passos.
+
+\#\# 97\. O Concierge pode resolver uma reclamação sozinho?
+
+Não.
+
+O Concierge pode ajudar a organizar as informações e encaminhar o cliente, mas decisões sobre reembolso, compensação, alteração de serviço ou responsabilidade devem ser tomadas por uma pessoa ou sistema autorizado.
+
+\#\# 98\. O Concierge pode garantir que uma informação externa está correta?
+
+Não.
+
+Informações de fornecedores, plataformas externas ou condições operacionais podem mudar.
+
+O Concierge deve usar somente fontes autorizadas e deixar claro quando uma confirmação externa for necessária.
+
+\#\# 99\. Como o Concierge deve responder quando duas informações entrarem em conflito?
+
+Ele não deve escolher arbitrariamente uma delas.
+
+Deve priorizar a fonte canônica e ativa mais recente.
+
+Se o conflito não puder ser resolvido com segurança, deve informar que a informação precisa ser confirmada pela equipe.
+
+\#\# 100\. Qual é a principal regra do Concierge da Ricardo Tour?
+
+Ajudar o viajante com informações úteis sem inventar fatos.
+
+Quando houver uma fonte aprovada, o Concierge deve utilizá-la.
+
+Quando não houver confirmação suficiente, deve reconhecer a incerteza e direcionar o cliente para a página, sistema ou atendimento humano adequado.  
