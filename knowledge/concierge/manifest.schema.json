@@ -6,13 +6,17 @@
   "additionalProperties": false,
   "properties": {
     "$schema": { "type": "string" },
-    "schema_version": { "const": "1.0.0" },
+    "schema_version": { "const": "2.0.0" },
     "source_classes": {
       "type": "object",
       "required": [
         "public-tour-catalog",
         "canonical-public-contact",
         "public-request-and-handoff-wording",
+        "owner-approved-business-profile",
+        "owner-approved-human-handoff",
+        "approved-faq",
+        "rio-destination-editorial",
         "current-about-and-institutional-content"
       ],
       "additionalProperties": false,
@@ -20,6 +24,10 @@
         "public-tour-catalog": { "$ref": "#/definitions/classRule" },
         "canonical-public-contact": { "$ref": "#/definitions/classRule" },
         "public-request-and-handoff-wording": { "$ref": "#/definitions/classRule" },
+        "owner-approved-business-profile": { "$ref": "#/definitions/classRule" },
+        "owner-approved-human-handoff": { "$ref": "#/definitions/classRule" },
+        "approved-faq": { "$ref": "#/definitions/classRule" },
+        "rio-destination-editorial": { "$ref": "#/definitions/classRule" },
         "current-about-and-institutional-content": {
           "allOf": [
             { "$ref": "#/definitions/classRule" },
@@ -51,7 +59,8 @@
       "type": "object",
       "required": [
         "source_id", "source_class", "title", "locale", "source_location", "version",
-        "status", "approved_for_rag", "last_reviewed", "approved_at", "approved_by", "notes"
+        "status", "approved_for_rag", "last_reviewed", "approved_at", "approved_by", "notes",
+        "source_sha256", "normalized_sha256", "snapshot_path", "source_revision", "approval_evidence", "supersedes"
       ],
       "additionalProperties": false,
       "properties": {
@@ -61,13 +70,23 @@
             "public-tour-catalog",
             "canonical-public-contact",
             "public-request-and-handoff-wording",
+            "owner-approved-business-profile",
+            "owner-approved-human-handoff",
+            "approved-faq",
+            "rio-destination-editorial",
             "current-about-and-institutional-content"
           ]
         },
         "title": { "type": "string", "minLength": 1 },
         "locale": { "enum": ["pt", "en", "es"] },
         "source_location": { "type": "string", "minLength": 1 },
-        "version": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" },
+        "source_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "normalized_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "snapshot_path": { "type": "string", "pattern": "^knowledge/concierge/versions/[^.].+$" },
+        "source_revision": { "type": "string", "minLength": 1 },
+        "approval_evidence": { "type": "string", "minLength": 1 },
+        "supersedes": { "anyOf": [{ "type": "string", "pattern": "^sha256:[a-f0-9]{64}$" }, { "type": "null" }] },
         "status": { "enum": ["ACTIVE", "DRAFT", "BLOCKED", "RETIRED"] },
         "approved_for_rag": { "type": "boolean" },
         "last_reviewed": { "anyOf": [{ "type": "string", "format": "date-time" }, { "type": "null" }] },
@@ -76,6 +95,10 @@
         "notes": { "type": "string" }
       },
       "allOf": [
+        {
+          "if": { "properties": { "status": { "const": "ACTIVE" } } },
+          "then": { "properties": { "approved_for_rag": { "const": true } } }
+        },
         {
           "if": { "properties": { "approved_for_rag": { "const": true } } },
           "then": {
@@ -101,9 +124,37 @@
           "then": {
             "properties": {
               "source_id": { "pattern": "^canonical-public-contact:(pt|en|es)$" },
-              "source_location": { "const": "lib/public-contact.ts#PUBLIC_CONTACT" }
+              "source_location": { "enum": ["lib/public-contact.ts#PUBLIC_CONTACT", "knowledge/concierge/approved/pt/contact/contact-ricardo-tour.md"] }
             }
           }
+        },
+        {
+          "if": { "properties": { "source_class": { "const": "owner-approved-business-profile" } } },
+          "then": { "properties": {
+            "source_id": { "const": "owner-approved-business-profile:pt" },
+            "source_location": { "const": "knowledge/concierge/approved/pt/business/business-profile-ricardo-tour.md" }
+          } }
+        },
+        {
+          "if": { "properties": { "source_class": { "const": "owner-approved-human-handoff" } } },
+          "then": { "properties": {
+            "source_id": { "const": "owner-approved-human-handoff:pt" },
+            "source_location": { "const": "knowledge/concierge/approved/pt/service/handoff-ricardo-tour.md" }
+          } }
+        },
+        {
+          "if": { "properties": { "source_class": { "const": "approved-faq" } } },
+          "then": { "properties": {
+            "source_id": { "const": "approved-faq:pt" },
+            "source_location": { "const": "knowledge/concierge/approved/pt/service/faq-ricardo-tour-pt.md" }
+          } }
+        },
+        {
+          "if": { "properties": { "source_class": { "const": "rio-destination-editorial" } } },
+          "then": { "properties": {
+            "source_id": { "const": "rio-destination-editorial:pt" },
+            "source_location": { "const": "knowledge/concierge/approved/pt/business/rio-guide-pt.md" }
+          } }
         },
         {
           "if": { "properties": { "source_class": { "const": "public-request-and-handoff-wording" } } },

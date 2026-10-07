@@ -1,0 +1,29 @@
+{
+  "locale": "pt",
+  "entries": [
+    {
+      "source_id": "public-tour-catalog:cmljo0s1u0000t0zqa0bpd23p:pt",
+      "source_revision": "2026-03-27T15:03:08.202Z",
+      "snapshot_path": "knowledge/concierge/versions/public-tour-catalog/cmljo0s1u0000t0zqa0bpd23p/0a1f83d0fe5dbfeb1a3bc60d37c91200deccc51a2eaee1a330cc228144cf4fd7.json",
+      "sha256": "0a1f83d0fe5dbfeb1a3bc60d37c91200deccc51a2eaee1a330cc228144cf4fd7"
+    },
+    {
+      "source_id": "public-tour-catalog:cmlibniq40000z4zqkbujnutt:pt",
+      "source_revision": "2026-10-01T13:31:38.169Z",
+      "snapshot_path": "knowledge/concierge/versions/public-tour-catalog/cmlibniq40000z4zqkbujnutt/1ea4e7048e77098cae2283f82eb815b2ca4a5b1281ceb1e480505f914f1b8a8e.json",
+      "sha256": "1ea4e7048e77098cae2283f82eb815b2ca4a5b1281ceb1e480505f914f1b8a8e"
+    },
+    {
+      "source_id": "public-tour-catalog:cmli1a6im000034zqqzc9sppb:pt",
+      "source_revision": "2026-10-01T13:31:38.185Z",
+      "snapshot_path": "knowledge/concierge/versions/public-tour-catalog/cmli1a6im000034zqqzc9sppb/cf2f8372b4d748b79db65fe7167fe77bf4f069a5af3fe251cb0ec69d974468a0.json",
+      "sha256": "cf2f8372b4d748b79db65fe7167fe77bf4f069a5af3fe251cb0ec69d974468a0"
+    },
+    {
+      "source_id": "public-tour-catalog:cmlhxkpy9000028zq27rhytew:pt",
+      "source_revision": "2026-03-27T15:03:08.191Z",
+      "snapshot_path": "knowledge/concierge/versions/public-tour-catalog/cmlhxkpy9000028zq27rhytew/294e4944cf377cb5704e4152516b82c0ab7c961096b69a29cb55ef37ae6d7e69.json",
+      "sha256": "294e4944cf377cb5704e4152516b82c0ab7c961096b69a29cb55ef37ae6d7e69"
+    }
+  ]
+}
