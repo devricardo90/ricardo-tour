@@ -9,8 +9,9 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const manifest = JSON.parse(readFileSync(path.join(root, "knowledge/concierge/manifest.json"), "utf8"));
 const copy = () => structuredClone(manifest);
 
-test("current PT manifest has nine registered versions and no active retrieval source", () => {
-  assert.deepEqual(validate(copy()), { registered: 9, active: 0, catalog: 4 });
+test("current PT manifest has nine approved local versions with exact binding evidence", () => {
+  assert.deepEqual(validate(copy()), { registered: 9, active: 9, catalog: 4 });
+  assert.ok(manifest.sources.every((source) => source.status === "ACTIVE" && source.approved_for_rag && source.approved_by === "Owner" && source.approved_at && source.last_reviewed));
 });
 
 test("normalization removes metadata and exported Markdown escapes without rewriting words", () => {
@@ -20,13 +21,13 @@ test("normalization removes metadata and exported Markdown escapes without rewri
 
 test("ACTIVE requires approved_for_rag and attributable approval metadata", () => {
   const broken = copy();
-  broken.sources[0].status = "ACTIVE";
+  broken.sources[0].approved_for_rag = false;
   assert.throws(() => validate(broken), /Manifest schema|Invalid ACTIVE/);
 });
 
-test("approved_for_rag cannot be true for DRAFT", () => {
+test("approved_for_rag cannot remain true after retirement", () => {
   const broken = copy();
-  broken.sources[0].approved_for_rag = true;
+  broken.sources[0].status = "RETIRED";
   assert.throws(() => validate(broken), /Manifest schema|Non-active retrieval/);
 });
 
@@ -37,6 +38,21 @@ test("duplicate source versions and digest changes fail closed", () => {
   const changed = copy();
   changed.sources[0].normalized_sha256 = "0".repeat(64);
   assert.throws(() => validate(changed), /Snapshot digest mismatch/);
+});
+
+test("a second ACTIVE version for one source identity fails closed", () => {
+  const broken = copy();
+  const duplicate = structuredClone(broken.sources[0]);
+  duplicate.version = `sha256:${"1".repeat(64)}`;
+  duplicate.source_sha256 = "1".repeat(64);
+  broken.sources.push(duplicate);
+  assert.throws(() => validate(broken), /Duplicate current source/);
+});
+
+test("ACTIVE source cannot claim an unapproved locale", () => {
+  const broken = copy();
+  broken.sources[0].locale = "en";
+  assert.throws(() => validate(broken), /Invalid ACTIVE source/);
 });
 
 test("behavioral policy cannot enter factual registry", () => {

@@ -63,7 +63,7 @@ async function main() {
       console.log(`${projection.source_id} ${digest} ${file}`);
     }
     // Mutable local pointer to the exact live-gate observation; immutable version files stay untouched.
-    writeFileSync(path.join("knowledge", "concierge", "catalog-current.json"), `${JSON.stringify({ locale: "pt", entries: current }, null, 2)}\n`, "utf8");
+    writeFileSync(path.join("knowledge", "concierge", "catalog-current.json"), `${JSON.stringify({ locale: "pt", observed_at: new Date().toISOString(), entries: current }, null, 2)}\n`, "utf8");
   } finally {
     await prisma.$disconnect();
   }

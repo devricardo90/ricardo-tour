@@ -1,0 +1,22 @@
+{
+  "approved_by": "Owner",
+  "approval_recorded_at": "2026-10-07T17:18:58Z",
+  "approval_evidence": "RT-69 Jira comment 13290",
+  "editorial_versions": {
+    "owner-approved-business-profile:pt": "sha256:6a5dc6e2d6f11a9a31d24d67840487956c77fe02740018aeab13e2671369dc30",
+    "rio-destination-editorial:pt": "sha256:cda8b95ef0d939dbfebd51b619d4db019fb2508259d3d427fb62f4574ba6eb13",
+    "canonical-public-contact:pt": "sha256:21679afd03719871c4fd365f90e13ebc3d981ef7eb364630543802c472266a05",
+    "owner-approved-human-handoff:pt": "sha256:87fec8436d76c880f056e32b4d2a8b6d8897d507d89bcdec173e28525a0cd697",
+    "approved-faq:pt": "sha256:6c66930ef53426ccfe2fc77a5da29e9ab98344e8bc74d1e3335b7dd074cdc0a8"
+  },
+  "catalog_approval_basis": "RT-53 Owner-reviewed public launch gate; current publication verified through getPublicTrips",
+  "catalog_gate_observed_at": "2026-10-08T14:45:44.838Z",
+  "live_public_routes_verified_at": "2026-10-08T14:43:41Z",
+  "live_public_routes_result": "4/4 HTTP 200; matching public ID, PT title, and full published description",
+  "catalog_versions": {
+    "public-tour-catalog:cmljo0s1u0000t0zqa0bpd23p:pt": "sha256:0a1f83d0fe5dbfeb1a3bc60d37c91200deccc51a2eaee1a330cc228144cf4fd7",
+    "public-tour-catalog:cmlibniq40000z4zqkbujnutt:pt": "sha256:1ea4e7048e77098cae2283f82eb815b2ca4a5b1281ceb1e480505f914f1b8a8e",
+    "public-tour-catalog:cmli1a6im000034zqqzc9sppb:pt": "sha256:cf2f8372b4d748b79db65fe7167fe77bf4f069a5af3fe251cb0ec69d974468a0",
+    "public-tour-catalog:cmlhxkpy9000028zq27rhytew:pt": "sha256:294e4944cf377cb5704e4152516b82c0ab7c961096b69a29cb55ef37ae6d7e69"
+  }
+}
