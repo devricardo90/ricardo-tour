@@ -127,8 +127,8 @@ export type FlightsCopy = {
 };
 
 const pt: FlightsCopy = {
-  metaTitle: "Voos (demonstração) | Rick Travel",
-  metaDescription: "Protótipo do planejador de voos da Rick Travel. Dados de exemplo; não há busca real nem preços reais.",
+  metaTitle: "Voos (demonstração) | Ricardo Tour",
+  metaDescription: "Protótipo do planejador de voos da Ricardo Tour. Dados de exemplo; não há busca real nem preços reais.",
   eyebrow: "PLANEJADOR DE VOOS",
   heading: "Planeje seu voo para o Rio",
   intro: "Prévia do planejador de voos. Explore o fluxo de busca, ofertas e validação com dados de exemplo.",
@@ -295,8 +295,8 @@ const pt: FlightsCopy = {
 };
 
 const en: FlightsCopy = {
-  metaTitle: "Flights (demo) | Rick Travel",
-  metaDescription: "Prototype of the Rick Travel flight planner. Sample data only; there is no live search and no real prices.",
+  metaTitle: "Flights (demo) | Ricardo Tour",
+  metaDescription: "Prototype of the Ricardo Tour flight planner. Sample data only; there is no live search and no real prices.",
   eyebrow: "FLIGHT PLANNER",
   heading: "Plan your flight to Rio",
   intro: "A preview of the flight planner. Explore the search, offer and validation flow with sample data.",
@@ -463,8 +463,8 @@ const en: FlightsCopy = {
 };
 
 const es: FlightsCopy = {
-  metaTitle: "Vuelos (demostración) | Rick Travel",
-  metaDescription: "Prototipo del planificador de vuelos de Rick Travel. Solo datos de ejemplo; no hay búsqueda real ni precios reales.",
+  metaTitle: "Vuelos (demostración) | Ricardo Tour",
+  metaDescription: "Prototipo del planificador de vuelos de Ricardo Tour. Solo datos de ejemplo; no hay búsqueda real ni precios reales.",
   eyebrow: "PLANIFICADOR DE VUELOS",
   heading: "Planifica tu vuelo a Río",
   intro: "Vista previa del planificador de vuelos. Explora la búsqueda, las ofertas y la validación con datos de ejemplo.",

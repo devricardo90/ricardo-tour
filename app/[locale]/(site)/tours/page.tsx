@@ -12,22 +12,22 @@ function getToursMetadataCopy(locale: string) {
   switch (locale) {
     case "en":
       return {
-        title: "Tours in Rio de Janeiro | Rick Travel",
+        title: "Tours in Rio de Janeiro | Ricardo Tour",
         description: "Compare guided tours, schedules and premium experiences in Rio de Janeiro.",
       };
     case "es":
       return {
-        title: "Tours en Rio de Janeiro | Rick Travel",
+        title: "Tours en Rio de Janeiro | Ricardo Tour",
         description: "Compara tours guiados, fechas y experiencias premium en Rio de Janeiro.",
       };
     case "sv":
       return {
-        title: "Turer i Rio de Janeiro | Rick Travel",
+        title: "Turer i Rio de Janeiro | Ricardo Tour",
         description: "Jamfor guidade turer, datum och premiumupplevelser i Rio de Janeiro.",
       };
     default:
       return {
-        title: "Tours e experiencias no Rio | Rick Travel",
+        title: "Tours e experiencias no Rio | Ricardo Tour",
         description: "Compare passeios guiados, datas e experiencias premium no Rio de Janeiro.",
       };
   }

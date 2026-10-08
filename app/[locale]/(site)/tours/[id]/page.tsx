@@ -22,7 +22,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const trip = await getPublicTripById(id);
 
   if (!trip) {
-    return { title: "Tour not found | Rick Travel", robots: { index: false, follow: false } };
+    return { title: "Tour not found | Ricardo Tour", robots: { index: false, follow: false } };
   }
 
   const title = getLocalizedField<string>(asLocalizedText(trip.title), locale).trim();
@@ -32,7 +32,7 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
   const images = trip.imageUrl ? [trip.imageUrl] : [];
 
   return {
-    title: `${title} | Rick Travel`,
+    title: `${title} | Ricardo Tour`,
     description: summary,
     alternates: { canonical: path, languages: getLanguageAlternates(`/tours/${id}`) },
     openGraph: { title, description: summary, url: path, images },

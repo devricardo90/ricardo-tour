@@ -224,7 +224,7 @@ function GuestHeader({ onClose }: { onClose: () => void }) {
             <div className="flex items-center justify-between">
                 <div className="min-w-0">
                     <p className="text-[11px] font-semibold tracking-[0.18em] text-white/55 uppercase">
-                        Rick Travel
+                        Ricardo Tour
                     </p>
                     <p className="mt-0.5 text-base font-semibold tracking-[-0.02em] text-white">
                         {t("navigation")}

@@ -5,7 +5,7 @@ import { InstitutionalMarks } from "@/components/institutional-marks";
 // and Cadastur carries no number/status/validity (not approved for website use).
 const copy = {
   pt: {
-    eyebrow: "POR QUE A RICK TRAVEL",
+    eyebrow: "POR QUE A RICARDO TOUR",
     heading: "Turismo local, com orientação humana.",
     intro: "Passeios guiados, orientação personalizada e atendimento em português, espanhol e inglês.",
     pillars: [
@@ -16,7 +16,7 @@ const copy = {
     institutional: "Referências institucionais",
   },
   en: {
-    eyebrow: "WHY RICK TRAVEL",
+    eyebrow: "WHY RICARDO TOUR",
     heading: "Local tourism, with human guidance.",
     intro: "Guided tours, personalized travel orientation, and service in Portuguese, Spanish, and English.",
     pillars: [
@@ -27,7 +27,7 @@ const copy = {
     institutional: "Institutional references",
   },
   es: {
-    eyebrow: "POR QUÉ RICK TRAVEL",
+    eyebrow: "POR QUÉ RICARDO TOUR",
     heading: "Turismo local, con orientación humana.",
     intro: "Tours guiados, orientación personalizada y atención en portugués, español e inglés.",
     pillars: [

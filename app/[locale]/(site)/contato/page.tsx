@@ -14,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: t.metaTitle,
     description: t.metaDescription,
     alternates: { canonical: path, languages: getLanguageAlternates("/contato") },
-    openGraph: { title: t.metaTitle, description: t.metaDescription, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Rick Travel" },
+    openGraph: { title: t.metaTitle, description: t.metaDescription, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Ricardo Tour" },
   };
 }
 

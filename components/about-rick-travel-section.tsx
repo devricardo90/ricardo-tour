@@ -4,45 +4,45 @@ import { Link } from "@/i18n/routing";
 // Evidence-grounded copy only. Sources:
 //  - paragraph 1: existing public "Nossa História" copy (messages AboutPage.story.paragraph1, /quem-somos).
 //  - paragraph 2: approved institutional website text (docs/product/ai-concierge-approved-public-business-evidence-values.md, record 10).
-//  - founder line: "Ricardo, fundador da Rick Travel" is already public (AboutPage.story.imageAlt).
+//  - founder line: "Ricardo, fundador da Ricardo Tour" is already public (AboutPage.story.imageAlt).
 // No years, client counts, awards, guide-credential or accreditation claims (guide credential is PENDING_OWNER_APPROVAL).
 // Final copy polish is deferred to the Home polish pass; ES/EN are conservative translations of the PT source.
 const copy = {
   pt: {
-    eyebrow: "SOBRE A RICK TRAVEL",
+    eyebrow: "SOBRE A RICARDO TOUR",
     heading: "Por trás de cada experiência, uma pessoa.",
     paragraphs: [
-      "A Rick Travel nasceu da paixão pelo Rio de Janeiro e do desejo de oferecer experiências autênticas aos visitantes.",
+      "A Ricardo Tour nasceu da paixão pelo Rio de Janeiro e do desejo de oferecer experiências autênticas aos visitantes.",
       "Somos uma agência focada em turismo local: conectamos viajantes a passeios guiados e experiências no Rio, unindo conhecimento prático do destino e atendimento humano.",
     ],
     signatureName: "Ricardo",
-    signatureRole: "Fundador da Rick Travel",
+    signatureRole: "Fundador da Ricardo Tour",
     cta: "Conheça nossos passeios",
-    imageAlt: "Ricardo, fundador da Rick Travel, em um mirante com a Baía de Guanabara e o Pão de Açúcar ao fundo.",
+    imageAlt: "Ricardo, fundador da Ricardo Tour, em um mirante com a Baía de Guanabara e o Pão de Açúcar ao fundo.",
   },
   en: {
-    eyebrow: "ABOUT RICK TRAVEL",
+    eyebrow: "ABOUT RICARDO TOUR",
     heading: "Behind every experience, a person.",
     paragraphs: [
-      "Rick Travel was born from a passion for Rio de Janeiro and the desire to offer authentic experiences to visitors.",
+      "Ricardo Tour was born from a passion for Rio de Janeiro and the desire to offer authentic experiences to visitors.",
       "We are a travel agency focused on local tourism: we connect travelers with guided tours and experiences in Rio, combining practical knowledge of the destination with human service.",
     ],
     signatureName: "Ricardo",
-    signatureRole: "Founder of Rick Travel",
+    signatureRole: "Founder of Ricardo Tour",
     cta: "Explore our experiences",
-    imageAlt: "Ricardo, founder of Rick Travel, at a viewpoint with Guanabara Bay and Sugarloaf Mountain behind him.",
+    imageAlt: "Ricardo, founder of Ricardo Tour, at a viewpoint with Guanabara Bay and Sugarloaf Mountain behind him.",
   },
   es: {
-    eyebrow: "SOBRE RICK TRAVEL",
+    eyebrow: "SOBRE RICARDO TOUR",
     heading: "Detrás de cada experiencia, una persona.",
     paragraphs: [
-      "Rick Travel nació de la pasión por Río de Janeiro y del deseo de ofrecer experiencias auténticas a los visitantes.",
+      "Ricardo Tour nació de la pasión por Río de Janeiro y del deseo de ofrecer experiencias auténticas a los visitantes.",
       "Somos una agencia enfocada en turismo local: conectamos a los viajeros con tours guiados y experiencias en Río, uniendo conocimiento práctico del destino y atención humana.",
     ],
     signatureName: "Ricardo",
-    signatureRole: "Fundador de Rick Travel",
+    signatureRole: "Fundador de Ricardo Tour",
     cta: "Conoce nuestras experiencias",
-    imageAlt: "Ricardo, fundador de Rick Travel, en un mirador con la Bahía de Guanabara y el Pan de Azúcar al fondo.",
+    imageAlt: "Ricardo, fundador de Ricardo Tour, en un mirador con la Bahía de Guanabara y el Pan de Azúcar al fondo.",
   },
 } as const;
 

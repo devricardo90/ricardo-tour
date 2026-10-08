@@ -1,4 +1,4 @@
-import { RickTravelLogo } from "@/components/rick-travel-logo";
+import { RicardoTourLogo } from "@/components/ricardo-tour-logo";
 import { SiteLanguageNav, SiteMobileMenu } from "@/components/site/site-header-controls";
 import { Link } from "@/i18n/routing";
 import { SiteAnchor, SiteHomeLink } from "@/components/site/site-anchor";
@@ -28,7 +28,8 @@ export function SiteHeader({ locale, anchorMode = "home", homeHref = "#top-of-ho
       <div className="px-5 md:px-10 lg:px-12">
         <div className="relative mx-auto flex h-14 max-w-[1280px] items-center justify-between gap-3 md:h-16">
           <SiteHomeLink mode={anchorMode} homeHref={homeHref} aria-label={t.logoAria} className={logoClass}>
-            <RickTravelLogo variant="full" size="sm" className="h-8 md:h-9" />
+            <RicardoTourLogo priority variant="icon" className="md:hidden" />
+            <RicardoTourLogo priority className="hidden h-12 md:block lg:h-14" />
           </SiteHomeLink>
 
           <nav aria-label={t.nav.label} className="hidden lg:block">

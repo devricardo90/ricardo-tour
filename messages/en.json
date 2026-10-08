@@ -9,8 +9,8 @@
             "mediaCaptionText": "Rio experiences with clear planning and direct team confirmation."
         },
         "Metadata": {
-            "title": "Rick Travel | Rio de Janeiro Experiences",
-            "description": "Rick Travel offers guided tours, local tourism experiences, personalized travel guidance, and traveler support in Rio de Janeiro, Brazil."
+            "title": "Ricardo Tour | Rio de Janeiro Experiences",
+            "description": "Ricardo Tour offers guided tours, local tourism experiences, personalized travel guidance, and traveler support in Rio de Janeiro, Brazil."
         },
         "Logos": {
             "title": "Our Services"
@@ -41,7 +41,7 @@
             "questions": {
                 "q1": {
                     "question": "How long does it take to confirm the booking?",
-                    "answer": "After you send your request, the Rick Travel team contacts you to confirm availability, timing, and next steps."
+                    "answer": "After you send your request, the Ricardo Tour team contacts you to confirm availability, timing, and next steps."
                 },
                 "q2": {
                     "question": "What payment methods do you accept?",
@@ -64,7 +64,7 @@
         "TravelerSupport": {
             "eyebrow": "Traveler support",
             "title": "Clear guidance for planning your Rio experience",
-            "subtitle": "Rick Travel helps travelers plan tours and experiences in Rio with human support, clear guidance, and direct confirmation from the team.",
+            "subtitle": "Ricardo Tour helps travelers plan tours and experiences in Rio with human support, clear guidance, and direct confirmation from the team.",
             "cardFooter": "HUMAN SUPPORT",
             "items": {
                 "orientation": {
@@ -87,7 +87,7 @@
         "about": "About Us",
         "tours": "Our Tours",
         "contact": "Contact",
-        "logoAria": "Rick Travel - Home page",
+        "logoAria": "Ricardo Tour - Home page",
         "openMenu": "Open navigation menu",
         "closeMenu": "Close navigation menu",
         "hints": {
@@ -98,7 +98,7 @@
         }
     },
     "Footer": {
-        "logoAria": "Rick Travel - Home page",
+        "logoAria": "Ricardo Tour - Home page",
         "description": "Rio de Janeiro experiences with clear planning and human support.",
         "columns": {
             "company": "Company",
@@ -151,17 +151,17 @@
             "subtitle": "Discover Rio with those who know every detail",
             "cta1": "Explore our tours",
             "cta2": "Contact us",
-            "imageAlt": "Rick Travel team in Rio de Janeiro"
+            "imageAlt": "Ricardo Tour team in Rio de Janeiro"
         },
         "story": {
             "title": "Our Story",
-            "imageAlt": "Ricardo, founder of Rick Travel",
-            "paragraph1": "Rick Travel was born from a passion for Rio de Janeiro and the desire to provide authentic experiences to visitors. The company focuses on guided tours, local tourism experiences, personalized travel orientation, and traveler support.",
-            "paragraph2": "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
+            "imageAlt": "Ricardo, founder of Ricardo Tour",
+            "paragraph1": "Ricardo Tour was born from a passion for Rio de Janeiro and the desire to provide authentic experiences to visitors. The company focuses on guided tours, local tourism experiences, personalized travel orientation, and traveler support.",
+            "paragraph2": "For quotes, reservations, schedules, payment, and final confirmation, contact the Ricardo Tour team through the approved public channels."
         },
         "whyChoose": {
-            "title": "Why Choose Rick Travel",
-            "subtitle": "Practical reasons to choose Rick Travel in Rio de Janeiro",
+            "title": "Why Choose Ricardo Tour",
+            "subtitle": "Practical reasons to choose Ricardo Tour in Rio de Janeiro",
             "personalized": {
                 "title": "Personalized Service",
                 "description": "Itineraries adapted to your interests, pace, and preferences. Each client is unique to us."
@@ -172,7 +172,7 @@
             },
             "security": {
                 "title": "Human Support",
-                "description": "Quotes, reservations, schedules, payment, and final confirmation are handled by the Rick Travel team."
+                "description": "Quotes, reservations, schedules, payment, and final confirmation are handled by the Ricardo Tour team."
             },
             "local": {
                 "title": "Authentic Local Experience",
@@ -205,14 +205,14 @@
         "security": {
             "eyebrow": "Traveler support",
             "title": "Clear information and human support",
-            "subtitle": "Rick Travel helps travelers plan local tourism experiences in Rio de Janeiro with approved public contact channels.",
+            "subtitle": "Ricardo Tour helps travelers plan local tourism experiences in Rio de Janeiro with approved public contact channels.",
             "supportInfo": {
                 "title": "Personalized orientation",
-                "description": "Rick Travel offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil."
+                "description": "Ricardo Tour offers guided tours, local tourism experiences, personalized travel orientation, and traveler support in Rio de Janeiro, Brazil."
             },
             "handoffInfo": {
                 "title": "Human confirmation",
-                "description": "For quotes, reservations, schedules, payment, and final confirmation, contact the Rick Travel team through the approved public channels."
+                "description": "For quotes, reservations, schedules, payment, and final confirmation, contact the Ricardo Tour team through the approved public channels."
             },
             "operational": {
                 "title": "Planning support",
@@ -222,7 +222,7 @@
                 },
                 "handoff": {
                     "title": "Team follow-up",
-                    "description": "Quotes and final details handled by the Rick Travel team"
+                    "description": "Quotes and final details handled by the Ricardo Tour team"
                 },
                 "support": {
                     "title": "Language support",
@@ -230,7 +230,7 @@
                 }
             },
             "identity": {
-                "businessName": "Rick Travel",
+                "businessName": "Ricardo Tour",
                 "serviceFocus": "Guided tours and local tourism experiences in Rio de Janeiro, Brazil",
                 "serviceLabel": "Service",
                 "serviceValue": "Traveler support",
@@ -240,12 +240,12 @@
                 "languagesLabel": "Languages",
                 "languagesValue": "Portuguese, English and Spanish",
                 "nextStepLabel": "Next step",
-                "nextStepValue": "Contact the Rick Travel team"
+                "nextStepValue": "Contact the Ricardo Tour team"
             }
         },
         "ctaFinal": {
             "title": "Ready to experience the best of Rio?",
-            "subtitle": "Contact the Rick Travel team and plan your Rio de Janeiro tour with clear information and professional service.",
+            "subtitle": "Contact the Ricardo Tour team and plan your Rio de Janeiro tour with clear information and professional service.",
             "button": "Book your tour now"
         }
     },
@@ -293,7 +293,7 @@
     "BookingsPage": {
         "title": "My Bookings",
         "eyebrow": "Booking tracking",
-        "subtitle": "Check your pre-bookings, see each request status, and follow the Rick Travel team manual confirmation.",
+        "subtitle": "Check your pre-bookings, see each request status, and follow the Ricardo Tour team manual confirmation.",
         "manualBadge": "Manual team confirmation",
         "statusBadge": "Clear booking status",
         "loading": "Loading bookings...",
@@ -307,8 +307,8 @@
         "canceledTitle": "Canceled",
         "reservedAt": "Received on",
         "scheduledFor": "Date",
-        "pendingNote": "Your booking was received and is pending manual confirmation by the Rick Travel team.",
-        "manualFlowNotice": "This flow does not use online payment. The Rick Travel team will confirm availability, payment, and next steps manually.",
+        "pendingNote": "Your booking was received and is pending manual confirmation by the Ricardo Tour team.",
+        "manualFlowNotice": "This flow does not use online payment. The Ricardo Tour team will confirm availability, payment, and next steps manually.",
         "paymentLabel": "Payment",
         "statusLabel": "Status",
         "viewDetails": "View details",
@@ -318,7 +318,7 @@
         "guestCount": "{count, plural, one {# guest} other {# guests}}",
         "confirmationEyebrow": "Booking received",
         "confirmationTitle": "We received your pre-booking",
-        "confirmationIntro": "Your request was received with pending status. Confirmation and payment details will be handled manually by the Rick Travel team.",
+        "confirmationIntro": "Your request was received with pending status. Confirmation and payment details will be handled manually by the Ricardo Tour team.",
         "manualConfirmationNotice": "No online payment was started. Our team will check the request and contact you to confirm the booking.",
         "tour": "Tour",
         "tourFallback": "Tour",
@@ -404,7 +404,7 @@
         }
     },
     "WhatsApp": {
-        "intro": "Hello! I would like to request a quote for a tour with Rick Travel.",
+        "intro": "Hello! I would like to request a quote for a tour with Ricardo Tour.",
         "tripTitleLabel": "Tour",
         "cityLabel": "City",
         "scheduleLabel": "Date of interest",

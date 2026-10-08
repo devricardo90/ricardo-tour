@@ -1,7 +1,7 @@
 'use client';
 
 import { Link } from '@/i18n/routing'
-import { RickTravelLogo } from '@/components/rick-travel-logo'
+import { RicardoTourLogo } from '@/components/ricardo-tour-logo'
 import { Menu } from 'lucide-react'
 import React from 'react'
 import { useScroll } from 'motion/react'
@@ -57,9 +57,9 @@ export const HeroHeader = () => {
             <Link
               href="/"
               aria-label={t('logoAria')}
-              className="relative z-50 flex items-center"
+              className="relative z-50 flex items-center rounded-md bg-[#0B0E11] px-1"
             >
-              <RickTravelLogo variant="full" size="sm" />
+              <RicardoTourLogo priority className="h-12 sm:h-14" />
             </Link>
 
             <button

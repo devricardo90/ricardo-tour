@@ -11,16 +11,16 @@ import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
 
 const HOME_META: Record<string, { title: string; description: string }> = {
   pt: {
-    title: "Rick Travel | Passeios guiados no Rio de Janeiro",
-    description: "Passeios guiados e experiências no Rio de Janeiro com a Rick Travel. Conheça os roteiros e fale direto com o Ricardo.",
+    title: "Ricardo Tour | Passeios guiados no Rio de Janeiro",
+    description: "Passeios guiados e experiências no Rio de Janeiro com a Ricardo Tour. Conheça os roteiros e fale direto com o Ricardo.",
   },
   en: {
-    title: "Rick Travel | Guided tours in Rio de Janeiro",
-    description: "Guided tours and experiences in Rio de Janeiro with Rick Travel. Explore the itineraries and talk directly with Ricardo.",
+    title: "Ricardo Tour | Guided tours in Rio de Janeiro",
+    description: "Guided tours and experiences in Rio de Janeiro with Ricardo Tour. Explore the itineraries and talk directly with Ricardo.",
   },
   es: {
-    title: "Rick Travel | Tours guiados en Río de Janeiro",
-    description: "Tours guiados y experiencias en Río de Janeiro con Rick Travel. Conoce los itinerarios y habla directamente con Ricardo.",
+    title: "Ricardo Tour | Tours guiados en Río de Janeiro",
+    description: "Tours guiados y experiencias en Río de Janeiro con Ricardo Tour. Conoce los itinerarios y habla directamente con Ricardo.",
   },
 };
 
@@ -32,14 +32,14 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: t.title,
     description: t.description,
     alternates: { canonical: path, languages: getLanguageAlternates() },
-    openGraph: { title: t.title, description: t.description, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Rick Travel", type: "website" },
+    openGraph: { title: t.title, description: t.description, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Ricardo Tour", type: "website" },
     twitter: { card: "summary_large_image", title: t.title, description: t.description },
   };
 }
 
 // Public Home (RT-57): the rebuilt Home promoted from the Rebuild Lab. Header and footer come from the (site) layout
 // (exactly one SiteHeader/SiteFooter); this page only composes the sections in the approved order:
-// Hero -> Plan your trip (inside the Hero module) -> Experiences -> Why Rick Travel -> Rio Story -> AI Concierge
+// Hero -> Plan your trip (inside the Hero module) -> Experiences -> Why Ricardo Tour -> Rio Story -> AI Concierge
 // placeholder -> About. Nothing here depends on REBUILD_LAB_ENABLED.
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;

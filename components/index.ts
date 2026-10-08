@@ -4,16 +4,12 @@
  * 
  * Exemplo de uso:
  * ```tsx
- * import { RickTravelLogo } from '@/components'
+ * import { RicardoTourLogo } from '@/components'
  * ```
  */
 
-// Logo Rick Travel
-export {
-    RickTravelLogo,
-    RickTravelLogoIcon,
-    RickTravelLogoText,
-} from './rick-travel-logo'
+// Official Ricardo Tour logo
+export { RicardoTourLogo } from './ricardo-tour-logo'
 
 // Header
 export { HeroHeader } from './header'

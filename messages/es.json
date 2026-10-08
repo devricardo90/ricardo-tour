@@ -9,8 +9,8 @@
             "mediaCaptionText": "Experiencias en Río con planificación clara y confirmación directa del equipo."
         },
         "Metadata": {
-            "title": "Rick Travel | Experiencias en Río de Janeiro",
-            "description": "Rick Travel ofrece tours guiados, experiencias de turismo local, orientación personalizada y soporte para viajeros en Río de Janeiro, Brasil."
+            "title": "Ricardo Tour | Experiencias en Río de Janeiro",
+            "description": "Ricardo Tour ofrece tours guiados, experiencias de turismo local, orientación personalizada y soporte para viajeros en Río de Janeiro, Brasil."
         },
         "Logos": {
             "title": "Nuestros Servicios"
@@ -41,7 +41,7 @@
             "questions": {
                 "q1": {
                     "question": "¿Cuánto tiempo tarda la confirmación de la reserva?",
-                    "answer": "Después de enviar tu solicitud, el equipo Rick Travel habla contigo para confirmar disponibilidad, horario y próximos pasos."
+                    "answer": "Después de enviar tu solicitud, el equipo Ricardo Tour habla contigo para confirmar disponibilidad, horario y próximos pasos."
                 },
                 "q2": {
                     "question": "¿Qué métodos de pago aceptan?",
@@ -64,7 +64,7 @@
         "TravelerSupport": {
             "eyebrow": "Soporte al viajero",
             "title": "Orientación clara para planificar tu experiencia en Río",
-            "subtitle": "Rick Travel ayuda a viajeros a planificar paseos y experiencias en Río con atención humana, orientación clara y confirmación directa del equipo.",
+            "subtitle": "Ricardo Tour ayuda a viajeros a planificar paseos y experiencias en Río con atención humana, orientación clara y confirmación directa del equipo.",
             "cardFooter": "ATENCIÓN HUMANA",
             "items": {
                 "orientation": {
@@ -87,7 +87,7 @@
         "about": "Quiénes somos",
         "tours": "Nuestros tours",
         "contact": "Contacto",
-        "logoAria": "Rick Travel - Página inicial",
+        "logoAria": "Ricardo Tour - Página inicial",
         "openMenu": "Abrir menú de navegación",
         "closeMenu": "Cerrar menú de navegación",
         "hints": {
@@ -98,7 +98,7 @@
         }
     },
     "Footer": {
-        "logoAria": "Rick Travel - Página inicial",
+        "logoAria": "Ricardo Tour - Página inicial",
         "description": "Experiencias en Río de Janeiro con planificación clara y atención humana.",
         "columns": {
             "company": "Empresa",
@@ -147,7 +147,7 @@
     },
     "AboutPage": {
         "title": "Quiénes Somos",
-        "intro": "Rick Travel nació de la pasión por Río de Janeiro y del deseo de proporcionar experiencias inolvidables a nuestros visitantes.",
+        "intro": "Ricardo Tour nació de la pasión por Río de Janeiro y del deseo de proporcionar experiencias inolvidables a nuestros visitantes.",
         "mission": {
             "title": "Misión",
             "description": "Apoyar a viajeros con experiencias de turismo local, información clara y atención humana en Río de Janeiro."
@@ -165,8 +165,8 @@
         },
         "certification": {
             "title": "Información clara y atención humana",
-            "description1": "Rick Travel ayuda a viajeros a planificar experiencias de turismo local en Río de Janeiro con atención humana y orientación clara.",
-            "description2": "Para presupuestos, reservas, horarios, pago y confirmación final, contacta al equipo Rick Travel."
+            "description1": "Ricardo Tour ayuda a viajeros a planificar experiencias de turismo local en Río de Janeiro con atención humana y orientación clara.",
+            "description2": "Para presupuestos, reservas, horarios, pago y confirmación final, contacta al equipo Ricardo Tour."
         }
     },
     "ToursPage": {
@@ -213,7 +213,7 @@
     "BookingsPage": {
         "title": "Mis Reservas",
         "eyebrow": "Seguimiento de reservas",
-        "subtitle": "Consulta tus pre-reservas, verifica el estado de cada solicitud y sigue la confirmacion manual del equipo Rick Travel.",
+        "subtitle": "Consulta tus pre-reservas, verifica el estado de cada solicitud y sigue la confirmacion manual del equipo Ricardo Tour.",
         "manualBadge": "Confirmacion manual del equipo",
         "statusBadge": "Estado claro de la reserva",
         "loading": "Cargando reservas...",
@@ -227,8 +227,8 @@
         "canceledTitle": "Canceladas",
         "reservedAt": "Recibida el",
         "scheduledFor": "Fecha",
-        "pendingNote": "Tu reserva fue recibida y esta pendiente de confirmacion manual por el equipo Rick Travel.",
-        "manualFlowNotice": "Este flujo no usa pago online. El equipo Rick Travel confirmara disponibilidad, pago y proximos pasos manualmente.",
+        "pendingNote": "Tu reserva fue recibida y esta pendiente de confirmacion manual por el equipo Ricardo Tour.",
+        "manualFlowNotice": "Este flujo no usa pago online. El equipo Ricardo Tour confirmara disponibilidad, pago y proximos pasos manualmente.",
         "paymentLabel": "Pago",
         "statusLabel": "Estado",
         "viewDetails": "Ver detalles",
@@ -238,7 +238,7 @@
         "guestCount": "{count, plural, one {# huesped} other {# huespedes}}",
         "confirmationEyebrow": "Reserva recibida",
         "confirmationTitle": "Recibimos tu pre-reserva",
-        "confirmationIntro": "Tu solicitud fue recibida con estado pendiente. La confirmacion y los detalles de pago seran tratados manualmente por el equipo Rick Travel.",
+        "confirmationIntro": "Tu solicitud fue recibida con estado pendiente. La confirmacion y los detalles de pago seran tratados manualmente por el equipo Ricardo Tour.",
         "manualConfirmationNotice": "No se inicio ningun pago online. Nuestro equipo verificara la solicitud y te contactara para confirmar la reserva.",
         "tour": "Tour",
         "tourFallback": "Tour",
@@ -324,7 +324,7 @@
         }
     },
     "WhatsApp": {
-        "intro": "Hola. Me gustaría solicitar un presupuesto para un paseo con Rick Travel.",
+        "intro": "Hola. Me gustaría solicitar un presupuesto para un paseo con Ricardo Tour.",
         "tripTitleLabel": "Paseo",
         "cityLabel": "Ciudad",
         "scheduleLabel": "Fecha de interés",

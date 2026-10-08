@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { Link } from "@/i18n/routing";
-import { RickTravelLogo } from "@/components/rick-travel-logo";
+import { RicardoTourLogo } from "@/components/ricardo-tour-logo";
 import { SiteAnchor, SiteHomeLink } from "@/components/site/site-anchor";
 import { navHashes, resolveSiteChromeCopy, type AnchorMode } from "@/components/site/site-chrome-copy";
 import { PUBLIC_CONTACT } from "@/lib/public-contact";
@@ -32,7 +32,7 @@ export function SiteFooter({ locale, anchorMode = "home", homeHref = "#top-of-ho
         <div className="grid gap-5 md:grid-cols-12 md:gap-8 lg:gap-10">
           <div className="md:col-span-4 lg:col-span-5">
             <SiteHomeLink mode={anchorMode} homeHref={homeHref} aria-label={t.logoAria} className={logoClass}>
-              <RickTravelLogo variant="full" size="sm" className="h-10" />
+              <RicardoTourLogo className="h-14 sm:h-16" />
             </SiteHomeLink>
             <p className="mt-3 max-w-[34ch] text-[14px] leading-[1.6] text-[var(--site-on-dark-muted,#CAC7BF)]">{f.description}</p>
           </div>
@@ -86,7 +86,7 @@ export function SiteFooter({ locale, anchorMode = "home", homeHref = "#top-of-ho
             <Image src="/cadastro/cadastur.png" alt="Cadastur" width={490} height={110} loading="lazy" className="h-7 w-auto shrink-0" />
           </div>
           <p className="text-[13px] text-[var(--site-on-dark-subtle,#9DA3A5)]">
-            &copy; {new Date().getFullYear()} Rick Travel · {f.city}
+            &copy; {new Date().getFullYear()} Ricardo Tour · {f.city}
           </p>
         </div>
       </div>

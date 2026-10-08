@@ -57,7 +57,7 @@ export default function RegisterPage() {
               </h1>
 
               <p className="mt-5 max-w-3xl text-[15px] leading-8 text-white/68 md:text-lg">
-                Cadastre-se para enviar pre-reservas e acompanhar a confirmacao manual da equipe Rick Travel.
+                Cadastre-se para enviar pre-reservas e acompanhar a confirmacao manual da equipe Ricardo Tour.
               </p>
 
               <div className="mt-6 flex flex-wrap items-center gap-3">

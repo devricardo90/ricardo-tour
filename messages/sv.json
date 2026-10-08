@@ -9,8 +9,8 @@
             "mediaCaptionText": "Upplevelser i Rio med tydlig planering och direkt bekräftelse från teamet."
         },
         "Metadata": {
-            "title": "Rick Travel | Upplevelser i Rio de Janeiro",
-            "description": "Rick Travel erbjuder guidade turer, lokala turismupplevelser, personlig resevägledning och resenärsstöd i Rio de Janeiro, Brasilien."
+            "title": "Ricardo Tour | Upplevelser i Rio de Janeiro",
+            "description": "Ricardo Tour erbjuder guidade turer, lokala turismupplevelser, personlig resevägledning och resenärsstöd i Rio de Janeiro, Brasilien."
         },
         "Logos": {
             "title": "Våra Tjänster"
@@ -41,7 +41,7 @@
             "questions": {
                 "q1": {
                     "question": "Hur lång tid tar det att bekräfta bokningen?",
-                    "answer": "När du har skickat din förfrågan kontaktar Rick Travel-teamet dig för att bekräfta tillgänglighet, tid och nästa steg."
+                    "answer": "När du har skickat din förfrågan kontaktar Ricardo Tour-teamet dig för att bekräfta tillgänglighet, tid och nästa steg."
                 },
                 "q2": {
                     "question": "Vilka betalningsmetoder accepterar ni?",
@@ -64,7 +64,7 @@
         "TravelerSupport": {
             "eyebrow": "Resenärsstöd",
             "title": "Tydlig vägledning för att planera din upplevelse i Rio",
-            "subtitle": "Rick Travel hjälper resenärer att planera turer och upplevelser i Rio med mänsklig kontakt, tydlig vägledning och direkt bekräftelse från teamet.",
+            "subtitle": "Ricardo Tour hjälper resenärer att planera turer och upplevelser i Rio med mänsklig kontakt, tydlig vägledning och direkt bekräftelse från teamet.",
             "cardFooter": "MÄNSKLIG KONTAKT",
             "items": {
                 "orientation": {
@@ -87,7 +87,7 @@
         "about": "Om oss",
         "tours": "Våra turer",
         "contact": "Kontakt",
-        "logoAria": "Rick Travel - Startsida",
+        "logoAria": "Ricardo Tour - Startsida",
         "openMenu": "Öppna navigeringsmeny",
         "closeMenu": "Stäng navigeringsmeny",
         "hints": {
@@ -98,7 +98,7 @@
         }
     },
     "Footer": {
-        "logoAria": "Rick Travel - Startsida",
+        "logoAria": "Ricardo Tour - Startsida",
         "description": "Upplevelser i Rio de Janeiro med tydlig planering och mänsklig kontakt.",
         "columns": {
             "company": "Företag",
@@ -147,7 +147,7 @@
     },
     "AboutPage": {
         "title": "Om Oss",
-        "intro": "Rick Travel föddes ur passion för Rio de Janeiro och önskan att erbjuda oförglömliga upplevelser till våra besökare.",
+        "intro": "Ricardo Tour föddes ur passion för Rio de Janeiro och önskan att erbjuda oförglömliga upplevelser till våra besökare.",
         "mission": {
             "title": "Mission",
             "description": "Att stödja resenärer med lokala turismupplevelser, tydlig information och mänsklig service i Rio de Janeiro."
@@ -165,8 +165,8 @@
         },
         "certification": {
             "title": "Tydlig information och mänsklig kontakt",
-            "description1": "Rick Travel hjälper resenärer att planera lokala turismupplevelser i Rio de Janeiro med mänsklig kontakt och tydlig vägledning.",
-            "description2": "För offerter, bokningar, tider, betalning och slutlig bekräftelse kontaktar du Rick Travel-teamet."
+            "description1": "Ricardo Tour hjälper resenärer att planera lokala turismupplevelser i Rio de Janeiro med mänsklig kontakt och tydlig vägledning.",
+            "description2": "För offerter, bokningar, tider, betalning och slutlig bekräftelse kontaktar du Ricardo Tour-teamet."
         }
     },
     "ToursPage": {
@@ -213,7 +213,7 @@
     "BookingsPage": {
         "title": "Mina Bokningar",
         "eyebrow": "Bokningsoversikt",
-        "subtitle": "Se dina forbokningar, kontrollera status for varje begaran och folj Rick Travel-teamets manuella bekraftelse.",
+        "subtitle": "Se dina forbokningar, kontrollera status for varje begaran och folj Ricardo Tour-teamets manuella bekraftelse.",
         "manualBadge": "Manuell bekraftelse av teamet",
         "statusBadge": "Tydlig bokningsstatus",
         "loading": "Laddar bokningar...",
@@ -227,8 +227,8 @@
         "canceledTitle": "Avbokade",
         "reservedAt": "Mottagen den",
         "scheduledFor": "Datum",
-        "pendingNote": "Din bokning har tagits emot och vantar pa manuell bekraftelse av Rick Travel-teamet.",
-        "manualFlowNotice": "Detta flode anvander inte onlinebetalning. Rick Travel-teamet bekraftar tillganglighet, betalning och nasta steg manuellt.",
+        "pendingNote": "Din bokning har tagits emot och vantar pa manuell bekraftelse av Ricardo Tour-teamet.",
+        "manualFlowNotice": "Detta flode anvander inte onlinebetalning. Ricardo Tour-teamet bekraftar tillganglighet, betalning och nasta steg manuellt.",
         "paymentLabel": "Betalning",
         "statusLabel": "Status",
         "viewDetails": "Visa detaljer",
@@ -238,7 +238,7 @@
         "guestCount": "{count, plural, one {# gast} other {# gaster}}",
         "confirmationEyebrow": "Bokning mottagen",
         "confirmationTitle": "Vi har tagit emot din forbokning",
-        "confirmationIntro": "Din begaran har tagits emot med vantande status. Bekraftelse och betalningsdetaljer hanteras manuellt av Rick Travel-teamet.",
+        "confirmationIntro": "Din begaran har tagits emot med vantande status. Bekraftelse och betalningsdetaljer hanteras manuellt av Ricardo Tour-teamet.",
         "manualConfirmationNotice": "Ingen onlinebetalning har startats. Vart team kontrollerar begaran och kontaktar dig for att bekrafta bokningen.",
         "tour": "Tur",
         "tourFallback": "Tur",
@@ -324,7 +324,7 @@
         }
     },
     "WhatsApp": {
-        "intro": "Hej! Jag vill be om en offert för en tur med Rick Travel.",
+        "intro": "Hej! Jag vill be om en offert för en tur med Ricardo Tour.",
         "tripTitleLabel": "Tur",
         "cityLabel": "Stad",
         "scheduleLabel": "Önskat datum",

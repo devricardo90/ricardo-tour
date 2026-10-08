@@ -11,21 +11,21 @@ import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
 
 const baseMetadata: Metadata = {
   metadataBase: new URL(PUBLIC_SITE_URL),
-  title: "Rick Travel — City Tour no Rio",
+  title: "Ricardo Tour — City Tour no Rio",
   description: "Guided tours, local tourism experiences, and traveler support in Rio de Janeiro, Brazil. Support in Portuguese, Spanish, and English.",
-  authors: [{ name: "Rick Travel" }],
+  authors: [{ name: "Ricardo Tour" }],
   keywords: ["turismo", "rio de janeiro", "city tour", "guided tours", "local tourism", "traveler support"],
   openGraph: {
     type: "website",
     locale: "pt_BR",
     url: PUBLIC_SITE_URL,
-    title: "Rick Travel | City Tour no Rio de Janeiro",
+    title: "Ricardo Tour | City Tour no Rio de Janeiro",
     description: "Guided tours, local tourism experiences, and traveler support in Rio de Janeiro, Brazil.",
-    siteName: "Rick Travel",
+    siteName: "Ricardo Tour",
   },
   twitter: {
     card: 'summary',
-    title: 'Rick Travel | City Tour no Rio',
+    title: 'Ricardo Tour | City Tour no Rio',
     description:
       'Guided tours and local tourism experiences in Rio de Janeiro, Brazil.',
   },

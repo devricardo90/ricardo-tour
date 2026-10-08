@@ -11,7 +11,7 @@ import styles from "./globe-journey.module.css";
 const translations = {
   pt: {
     labels: ["Globo", "América do Sul", "Brasil", "Rio de Janeiro", "Helicóptero", "Cristo Redentor"],
-    regionLabel: "Rick Travel · Uma jornada pelo Rio", media: "Uma jornada cinematográfica pelo Rio",
+    regionLabel: "Ricardo Tour · Uma jornada pelo Rio", media: "Uma jornada cinematográfica pelo Rio",
     scroll: "Role para entrar na jornada", skip: "Ir para a próxima seção ↓",
     planEyebrow: "Planeje sua viagem", next: "Tudo para sua viagem em um só lugar",
     // Bridge to the live travel planner (RT-92). PT only until the provider confirms EN/ES widget localization.
@@ -24,7 +24,7 @@ const translations = {
   },
   en: {
     labels: ["Globe", "South America", "Brazil", "Rio de Janeiro", "Helicopter", "Christ the Redeemer"],
-    regionLabel: "Rick Travel · A journey through Rio", media: "A cinematic journey through Rio",
+    regionLabel: "Ricardo Tour · A journey through Rio", media: "A cinematic journey through Rio",
     scroll: "Scroll into the journey", skip: "Go to the next section ↓",
     planEyebrow: "Plan your trip", next: "Flights to Rio de Janeiro",
     cta: null as string | null, ctaHref: null as string | null,
@@ -36,7 +36,7 @@ const translations = {
   },
   es: {
     labels: ["Globo", "América del Sur", "Brasil", "Río de Janeiro", "Helicóptero", "Cristo Redentor"],
-    regionLabel: "Rick Travel · Un viaje por Río", media: "Un viaje cinematográfico por Río",
+    regionLabel: "Ricardo Tour · Un viaje por Río", media: "Un viaje cinematográfico por Río",
     scroll: "Desplázate para entrar en el recorrido", skip: "Ir a la siguiente sección ↓",
     planEyebrow: "Planea tu viaje", next: "Vuelos a Río de Janeiro",
     cta: null as string | null, ctaHref: null as string | null,
@@ -398,7 +398,7 @@ export default function GlobeJourney({ locale }: { locale: string }) {
           <div className={styles.sceneAtmosphere} aria-hidden="true" />
         </div>
         <div className={styles.shade}/>
-        <div className={styles.topline}><span>RICK TRAVEL</span><span>RIO DE JANEIRO · BRASIL</span></div>
+        <div className={styles.topline}><span>RICARDO TOUR</span><span>RIO DE JANEIRO · BRASIL</span></div>
         <div className={styles.heroCopy} data-hero-copy><p>{t.badge}</p><h1>Rio<br/><em>From Another</em><br/>Perspective</h1></div>
         <div className={styles.bottom}>
           <p className={styles.media}>{t.media}</p>
