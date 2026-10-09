@@ -36,7 +36,10 @@ export type UpstreamErrorClass =
   | "generation"
   | "malformed";
 
-export type RuntimeInput = { message: string; locale: string };
+/** Client-held session context. Untrusted: it is validated, bounded and never stored by the server. */
+export type HistoryTurn = { role: "user" | "assistant"; text: string };
+
+export type RuntimeInput = { message: string; locale: string; history: HistoryTurn[] };
 
 export type RuntimeResult = {
   outcome: RuntimeOutcome;

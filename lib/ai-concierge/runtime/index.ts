@@ -3,6 +3,8 @@ import { readRuntimeConfig } from "./config";
 import { createOpenAIDeps } from "./openai";
 import { loadRegistry } from "./provenance";
 import { runConcierge } from "./run";
+
+export { CONCIERGE_PRIVACY } from "./privacy";
 import type { RuntimeResult } from "./types";
 
 /**

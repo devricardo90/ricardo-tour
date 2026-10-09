@@ -54,3 +54,7 @@ Stateless single-turn runtime: nothing is persisted, there is no chat-history ta
 ## 9. Extension points
 
 Multi-turn context and session state (after RT-70), distributed rate limiting (RT-72), analytics (RT-73), failure/fallback hardening (RT-74), EN/ES with separately approved sources, the final model decision, and route wiring after the RT-75 gate.
+
+## 10. Update (RT-70)
+
+Session context (client-held, bounded), data minimization and the AI disclosure/notice were added by RT-70; see `rt-70-concierge-privacy-architecture.md`. The single-turn statement in §6 is superseded: the server still stores nothing, but accepts bounded client-held history.

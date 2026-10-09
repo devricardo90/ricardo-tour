@@ -23,7 +23,8 @@ const client = new OpenAI({
 const deps = { ...createOpenAIDeps(config, client), onEvent: () => undefined };
 const registry = loadRegistry();
 
-const prompts = process.argv.slice(2).length
+const followupOnly = process.argv[2] === "--followup";
+const prompts = followupOnly ? [] : process.argv.slice(2).length
   ? process.argv.slice(2)
   : [
       "O que é a Ricardo Tour?",
@@ -48,6 +49,17 @@ for (const message of prompts) {
     reason: result.dynamic_reason ?? result.handoff_reason ?? result.invalid_reason ?? result.error_class,
     answer: result.answer.slice(0, 600),
   }));
+}
+if (followupOnly || !process.argv.slice(2).length) {
+  // RT-70: session context is client-held. A follow-up that only makes sense with the previous turns.
+  const first = await runConcierge({ message: "Quais passeios clássicos vocês têm no Rio?", locale: "pt" }, deps, registry);
+  const before = apiCalls;
+  const second = await runConcierge({
+    message: "Qual desses é melhor para quem tem pouco tempo?",
+    locale: "pt",
+    history: [{ role: "user", text: "Quais passeios clássicos vocês têm no Rio?" }, { role: "assistant", text: first.answer }],
+  }, deps, registry);
+  console.log(JSON.stringify({ followup: true, first: first.outcome, second: second.outcome, api_calls_followup: apiCalls - before, answer: second.answer.slice(0, 500) }));
 }
 console.log(JSON.stringify({ total_api_calls: apiCalls, model_class: "DEVELOPMENT / VALIDATION MODEL" }));
 }

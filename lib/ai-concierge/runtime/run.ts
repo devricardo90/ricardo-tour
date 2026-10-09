@@ -5,6 +5,7 @@ import { checkGeneratedAnswer } from "./postcheck";
 import { filterHits, type Registry } from "./provenance";
 import { isSupportedRuntimeLocale, validateRuntimeInput } from "./input";
 import { UpstreamFailure, classifyProviderError } from "./openai";
+import { redactPersonalData } from "./privacy";
 import type { RuntimeDeps, RuntimeEvent, RuntimeResult } from "./types";
 
 /** Hits below this relevance are never shown to the model. Tuned against the RT-69 hosted store (see RT-67 doc). */
@@ -41,9 +42,16 @@ export async function runConcierge(raw: unknown, deps: RuntimeDeps, registry: Re
 
   const input = validateRuntimeInput(raw);
   if (!input.ok) return finish({ outcome: "INVALID_INPUT", answer: INVALID_INPUT_MESSAGE, invalid_reason: input.reason, ...noSources() });
-  const { message, locale } = input.value;
+  const { message, locale, history } = input.value;
   if (!isSupportedRuntimeLocale(locale)) return finish({ outcome: "UNSUPPORTED_LOCALE", answer: UNSUPPORTED_LOCALE_MESSAGE, ...noSources() });
 
+  // Session context is untrusted: an injection attempt in a prior user turn, or any unsafe/forged assistant turn, fails closed.
+  if (history.some((turn) => turn.role === "user" && detectInjection(turn.text))) {
+    return finish({ outcome: "REFUSED", answer: REFUSAL_MESSAGE, refusal_reason: "prompt_injection_history", ...noSources() });
+  }
+  if (history.some((turn) => turn.role === "assistant" && !checkGeneratedAnswer(turn.text).ok)) {
+    return finish({ outcome: "INVALID_INPUT", answer: INVALID_INPUT_MESSAGE, invalid_reason: "history_unsafe_assistant_turn", ...noSources() });
+  }
   if (detectInjection(message)) return finish({ outcome: "REFUSED", answer: REFUSAL_MESSAGE, refusal_reason: "prompt_injection", ...noSources() });
 
   const gate = runGates(message);
@@ -61,9 +69,16 @@ export async function runConcierge(raw: unknown, deps: RuntimeDeps, registry: Re
   const insufficient = (invalid_reason?: string) =>
     finish({ outcome: "INSUFFICIENT_EVIDENCE", answer: handoffMessage("insufficient_evidence"), handoff_reason: "insufficient_evidence", invalid_reason, ...noSources() });
 
+  // Data minimization: identifiers are removed before anything leaves our server for the model provider.
+  const safeMessage = redactPersonalData(message);
+  const safeHistory = history.map((turn) => ({ role: turn.role, text: redactPersonalData(turn.text) }));
+  const lastUser = [...safeHistory].reverse().find((turn) => turn.role === "user");
+  // A short follow-up ("e o segundo?") is retrieved together with the previous user turn.
+  const retrievalQuery = lastUser && safeMessage.length < 80 ? `${lastUser.text} ${safeMessage}` : safeMessage;
+
   let hits;
   try {
-    hits = await deps.retrieve(message);
+    hits = await deps.retrieve(retrievalQuery);
   } catch (error) {
     return upstream(error, "retrieval");
   }
@@ -83,7 +98,7 @@ export async function runConcierge(raw: unknown, deps: RuntimeDeps, registry: Re
 
   let generated: string;
   try {
-    generated = await deps.generate({ instructions: buildInstructions(), input: buildInput(message, evidence) });
+    generated = await deps.generate({ instructions: buildInstructions(), input: buildInput(safeMessage, evidence, safeHistory) });
   } catch (error) {
     return upstream(error, "generation");
   }

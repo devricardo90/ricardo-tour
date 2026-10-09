@@ -1,6 +1,6 @@
 # RT-70 — Concierge Persistence and Retention (DRAFT)
 
-- Ticket: RT-70 (RT-RB-AI-04). Status: **Owner-approved V1 direction; retention/legal requirements remain open.** No retention duration is chosen here. Every duration is `LEGAL_DECISION_REQUIRED`.
+- Ticket: RT-70 (RT-RB-AI-04). Status: **superseded in part by `rt-70-concierge-privacy-architecture.md` (technical architecture implemented 2026-10-09); legal retention/disclosure approval still open.** No retention duration is chosen here. Every duration is `LEGAL_DECISION_REQUIRED`.
 - Owner direction (2026-10-04): keep conversation/session state ephemeral by default; do not persist full raw transcripts; do not put raw conversation text in product analytics. Only minimal operational metadata may be retained if necessary. A Privacy-page disclosure is required before public production enablement.
 - Today: nothing is stored (audited). The widget keeps messages in browser memory only.
 - Aligns with: Privacy page (RT-RB-L-05), RT-90 SEC-10 to SEC-16 and §3 retention boundaries, RT-73.
