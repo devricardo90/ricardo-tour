@@ -7,7 +7,7 @@ export default defineConfig({
     globals: true,
     clearMocks: true,
     restoreMocks: true,
-    exclude: ["e2e/**", "node_modules/**"],
+    exclude: ["e2e/**", "node_modules/**", "tests/rt-69-*.test.mjs"], // RT-69 suites run with node --test
   },
   resolve: {
     alias: {
