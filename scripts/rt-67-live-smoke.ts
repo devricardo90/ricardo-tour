@@ -46,6 +46,7 @@ for (const message of prompts) {
     outcome: result.outcome,
     api_calls: apiCalls - before,
     sources: result.source_ids.length,
+    handoff: result.handoff?.code,
     reason: result.dynamic_reason ?? result.handoff_reason ?? result.invalid_reason ?? result.error_class,
     answer: result.answer.slice(0, 600),
   }));

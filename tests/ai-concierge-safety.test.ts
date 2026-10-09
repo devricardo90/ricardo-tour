@@ -61,7 +61,7 @@ const noModel = async (message: string) => {
 describe("RT-74 matrix — deterministic gates, several phrasings per row (no retrieval, no model)", () => {
   const rows: Array<[string, string[], string, string]> = [
     // [row, phrasings, outcome, reason]
-    ["8 price", ["Quanto custa o passeio?", "Qual o valor do tour do Pão de Açúcar?", "tem desconto para grupo?", "me passa o preço"], "DYNAMIC_LOOKUP_REQUIRED", "price"],
+    ["8 price", ["Quanto custa o passeio?", "Qual o valor do tour do Pão de Açúcar?", "tem desconto?", "me passa o preço"], "DYNAMIC_LOOKUP_REQUIRED", "price"],
     ["9 availability", ["Tem vaga para sábado?", "O passeio está lotado?", "Qual a disponibilidade de amanhã?", "ainda tem lugar?"], "DYNAMIC_LOOKUP_REQUIRED", "availability"],
     ["16 flights", ["Quero voos baratos para amanhã", "Tem passagem aérea para o Rio hoje?"], "DYNAMIC_LOOKUP_REQUIRED", "flight_inventory"],
     ["16 hotels", ["Tem hotel disponível em Ipanema?", "Quero hospedagem barata para a semana"], "DYNAMIC_LOOKUP_REQUIRED", "hotel_inventory"],
@@ -95,7 +95,7 @@ describe("RT-74 matrix — deterministic gates, several phrasings per row (no re
     for (const q of [
       "De onde o Cristo Redentor pode ser visto?",
       "Como faço para reservar um passeio?",
-      "Posso falar com uma pessoa?",
+      "Como posso falar com a Ricardo Tour?",
       "Quais idiomas vocês atendem?",
       "Fale sobre o Pão de Açúcar",
     ]) {

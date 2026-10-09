@@ -8,6 +8,11 @@ import {
   isSafetySensitive,
   runGates,
 } from "./gates";
+import {
+  HANDOFF_CODE_BY_DYNAMIC,
+  HANDOFF_CODE_BY_REASON,
+  buildHandoffOffer,
+} from "./handoff";
 import { isSupportedRuntimeLocale, validateRuntimeInput } from "./input";
 import {
   INVALID_INPUT_MESSAGE,
@@ -17,6 +22,7 @@ import {
   degradedMessage,
   dynamicMessage,
   handoffMessage,
+  isFixedMissMessage,
   refusalMessage,
 } from "./messages";
 import { UpstreamFailure, classifyProviderError } from "./openai";
@@ -47,6 +53,14 @@ const noSources = () => ({
   source_versions: [] as string[],
   chunk_ids: [] as string[],
 });
+
+const HANDOFF_OUTCOMES = new Set<RuntimeResult["outcome"]>([
+  "HANDOFF",
+  "DYNAMIC_LOOKUP_REQUIRED",
+  "INSUFFICIENT_EVIDENCE",
+  "UPSTREAM_ERROR",
+  "UNSUPPORTED_LOCALE",
+]);
 
 const KIND: Record<RuntimeResult["outcome"], ResponseKind> = {
   ANSWER: "grounded",
@@ -92,6 +106,8 @@ export async function runConcierge(
     retried: false,
   };
   let personalDataShared = false;
+  // RT-71 H12: the previous assistant turn was already a fixed "could not help" text.
+  let previousMiss = false;
 
   const finish = (draft: Draft): RuntimeResult => {
     const result: RuntimeResult = {
@@ -102,6 +118,17 @@ export async function runConcierge(
     if (result.outcome === "UPSTREAM_ERROR") {
       result.reference_id = randomUUID().slice(0, 8);
       result.answer = degradedMessage(result.reference_id);
+    }
+    // RT-71: structured, user-initiated handoff built from static canonical data; it works with every backend down.
+    if (HANDOFF_OUTCOMES.has(result.outcome)) {
+      const reason = result.handoff_reason ?? result.dynamic_reason ?? "unsupported_locale";
+      const base = result.handoff_reason
+        ? HANDOFF_CODE_BY_REASON[result.handoff_reason]
+        : result.dynamic_reason
+          ? HANDOFF_CODE_BY_DYNAMIC[result.dynamic_reason]
+          : "H3";
+      const missed = result.outcome === "INSUFFICIENT_EVIDENCE" || result.outcome === "UPSTREAM_ERROR";
+      result.handoff = buildHandoffOffer(previousMiss && missed ? "H12" : base, reason);
     }
     // The personal-data reminder is deterministic and never depends on the model.
     if (
@@ -124,6 +151,7 @@ export async function runConcierge(
         dynamic_reason: result.dynamic_reason,
         error_class: result.error_class,
         refusal_reason: result.refusal_reason,
+        handoff_offered: result.handoff?.code,
         retried: stats.retried || undefined,
       });
     } catch {
@@ -165,10 +193,17 @@ export async function runConcierge(
       answer: UNSUPPORTED_LOCALE_MESSAGE,
     });
 
+  const lastAssistant = [...history].reverse().find((turn) => turn.role === "assistant");
+  previousMiss = lastAssistant ? isFixedMissMessage(lastAssistant.text) : false;
+
   const safeMessage = redactPersonalData(message);
   personalDataShared =
     safeMessage !== message ||
-    history.some((turn) => redactPersonalData(turn.text) !== turn.text);
+    // Only visitor-typed text counts: our own earlier answers legitimately contain the canonical contact number.
+    history.some(
+      (turn) =>
+        turn.role === "user" && redactPersonalData(turn.text) !== turn.text,
+    );
 
   // Emergencies take priority over every other rule: fixed wording only, no retrieval, no model.
   if (detectEmergency(message)) return handoff("emergency");
@@ -211,7 +246,7 @@ export async function runConcierge(
     safetySensitive
       ? handoff("safety_sensitive", "INSUFFICIENT_EVIDENCE", invalid_reason)
       : handoff(
-          "insufficient_evidence",
+          previousMiss ? "repeated_failure" : "insufficient_evidence",
           "INSUFFICIENT_EVIDENCE",
           invalid_reason,
         );

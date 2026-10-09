@@ -20,6 +20,10 @@ export type DynamicReason =
   | "oner_inventory";
 
 export type HandoffReason =
+  | "explicit_request"
+  | "unsupported_request"
+  | "complaint"
+  | "repeated_failure"
   | "booking_status"
   | "payment_status"
   | "refund_decision"
@@ -50,6 +54,8 @@ export type UpstreamErrorClass =
   | "generation"
   | "malformed";
 
+import type { HandoffCode, HandoffOffer } from "./handoff";
+
 /** Client-held session context. Untrusted: it is validated, bounded and never stored by the server. */
 export type HistoryTurn = { role: "user" | "assistant"; text: string };
 
@@ -69,6 +75,8 @@ export type RuntimeResult = {
   invalid_reason?: string;
   refusal_reason?: RefusalReason;
   response_kind: ResponseKind;
+  /** RT-71: structured, user-initiated handoff (links only). Present whenever the visitor should be offered the team. */
+  handoff?: HandoffOffer;
   /** Support reference for degraded responses only (random, carries no request data). */
   reference_id?: string;
 };
@@ -101,5 +109,7 @@ export type RuntimeEvent = {
   dynamic_reason?: DynamicReason;
   error_class?: UpstreamErrorClass;
   refusal_reason?: RefusalReason;
+  /** RT-71 `handoff_offered`: code only, never message content. (`handoff_clicked` is emitted by the UI under RT-73.) */
+  handoff_offered?: HandoffCode;
   retried?: boolean;
 };

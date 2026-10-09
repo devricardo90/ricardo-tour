@@ -24,6 +24,11 @@ const CHECKS: Array<[string, RegExp]> = [
   ],
   // RT-74 §2 row 11: emergency wording/numbers are not Owner-approved; the model must never supply them from memory.
   ["emergency_number", /\b(?:190|191|192|193|197|199|188|180|112|911|samu|bombeiros?|policia militar|ambulancia)\b/],
+  // RT-71: no response-time or opening-hours claims unless the Owner supplies an approved public statement.
+  [
+    "response_time_claim",
+    /\b(?:responderemos|retornaremos|respondemos|respondem|responde) (?:em|ate|rapid\w*|imediat\w*)|\bem ate \d+ ?(?:minutos?|horas?)|\batendimento (?:24|vinte e quatro)|\bhorario de atendimento\b|\bresposta (?:imediata|em minutos)/,
+  ],
   ["promise",/\b(?:garanto|garantimos|prometo|prometemos|reembolso (?:integral|garantido|total)|cancelamento gratuito|desconto de|sem custo adicional garantido)\b/],
   [
     "schedule_claim",

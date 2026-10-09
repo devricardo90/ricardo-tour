@@ -30,7 +30,15 @@ export const handoffMessage = (reason: HandoffReason) => {
     case "refund_decision":
       return `Decisões sobre reembolso ou cancelamento dependem da análise da equipe, e eu não posso prometer nada nesse sentido. ${CHANNELS}`;
     case "operational_confirmation":
-      return `Não consigo confirmar operação ou condições de um passeio em uma data específica. ${CHANNELS}`;
+      return `Não consigo confirmar operação ou condições de um passeio em uma data específica, nem acompanhar um passeio em andamento. Se for urgente (atraso, ponto de encontro, alguém não chegou), fale agora com a equipe. ${CHANNELS}`;
+    case "explicit_request":
+      return `Claro! Eu não transfiro conversas nem aciono a equipe por você: você escolhe o canal abaixo e envia a sua mensagem. ${CHANNELS}`;
+    case "unsupported_request":
+      return `Pedidos personalizados, de grupo ou de orçamento específico precisam da análise da equipe da Ricardo Tour, e eu não consigo prometer valores ou condições. ${CHANNELS}`;
+    case "complaint":
+      return `Sinto muito pela situação. Ela precisa ser analisada pela equipe da Ricardo Tour; eu não consigo resolvê-la nem opinar sobre ela. ${CHANNELS}`;
+    case "repeated_failure":
+      return `Ainda não consegui ajudar com segurança. O melhor caminho agora é falar com a equipe. ${CHANNELS}`;
     case "insufficient_evidence":
       return `Não tenho informação confirmada suficiente para responder isso com segurança. Você pode ver os passeios publicados em ${TOURS_URL}. ${CHANNELS}`;
     case "booking_request":
@@ -60,6 +68,16 @@ export const refusalMessage = (reason: RefusalReason) => {
       return REFUSAL_MESSAGE;
   }
 };
+
+/** True when a previous assistant turn was one of our fixed "could not help" texts (RT-71 H12 repeated failure). */
+export function isFixedMissMessage(text: string) {
+  const t = text.trim();
+  return (
+    t.startsWith("Não tenho informação confirmada suficiente") ||
+    t.startsWith("Não consegui responder agora") ||
+    t.startsWith("Ainda não consegui ajudar")
+  );
+}
 
 /** Degraded response (RT-74 §1): fixed text plus a support reference that carries no request data. */
 export const degradedMessage = (referenceId: string) => `${handoffMessage("upstream_error")} (ref. ${referenceId})`;

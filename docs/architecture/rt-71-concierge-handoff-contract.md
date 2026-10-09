@@ -90,3 +90,37 @@ All copy per V1 locale (PT/EN/ES). No promise of a response time unless current 
 - Trigger set includes explicit human request; unsupported booking/payment; refund/cancellation; missing or low-confidence verified knowledge; model/retrieval failure; complaint; unavailable provider; and operational questions requiring staff confirmation.
 - No automatic WhatsApp send. Pass only minimum useful allowlisted context, visible and editable by the visitor. Never include raw conversation text or unnecessary PII.
 - Final localized copy and implementation acceptance remain open; RT-71 is not closed.
+
+## 9. Implementation status — 2026-10-09 (PT V1 backend runtime)
+
+Implemented in `lib/ai-concierge/runtime/handoff.ts` and the runtime pipeline. **Not** changed: `app/api/ai-concierge`, the public widget/UI, the Home, production flags. Production stays disabled until RT-75.
+
+### 9.1 Specification review (before implementation)
+
+| Finding | Resolution |
+| --- | --- |
+| Dependency RT-RB-F-04 (RT-61) and the e-mail identity check (RT-62) | Both Concluído in Jira; `contato@ricardotour.com` is the confirmed canonical secondary channel. No blocker |
+| H1, H3, H6, H12 and urgent operations (H8) had no trigger; no structured handoff object or prefill builder existed | Implemented (below) |
+| §7 asks for a test per trigger "in each supported locale" while V1 is PT only | PT tests per trigger; EN/ES return `UNSUPPORTED_LOCALE` with an H3 handoff to the team |
+| §3 channel list must not depend on the backend | Channels are static data built from `PUBLIC_CONTACT` and attached even to degraded and configuration-error results; `getHandoffChannels()` is exported for the always-visible entry |
+| §4 prefill must be visitor-visible/editable and never carry chat text or PII | The prefill is a fixed sentence keyed only by the handoff code (12 closed topics, ≤160 characters). The builder accepts no free text and throws on unknown codes |
+| `handoff_clicked` and "closed hours"/team-availability wording | `handoff_clicked` belongs to the UI and RT-73. No approved hours or response time exist (`OWNER_CONTENT_REQUIRED`), so none are shown and a post-check blocks any generated response-time or opening-hours claim |
+| Found by tests: the personal-data reminder fired because the conversation history contained our own canonical phone number | Only visitor-typed text is considered now |
+
+### 9.2 Behavior
+
+- `RuntimeResult.handoff = { required, code (H1–H12), reason, channels [WhatsApp, e-mail], prefill }` is present for `HANDOFF`, `DYNAMIC_LOOKUP_REQUIRED`, `INSUFFICIENT_EVIDENCE`, `UPSTREAM_ERROR` and `UNSUPPORTED_LOCALE`; absent for answers, refusals and invalid input.
+- Triggers (all deterministic, before retrieval/model unless noted): H1 explicit human/WhatsApp/phone request; H2 booking/payment actions and status; H3 custom/group/quote requests, out-of-scope advice, unsupported locale; H4 no verified evidence (after retrieval); H5 provider/configuration failure; H6 complaint (empathetic fixed text, no defense or policy interpretation); H7 refund/cancellation; H8 operational/urgent/emergency; H9 price/availability; H10 safety-sensitive without approved evidence; H11 flights/hotels/Oner; H12 a second consecutive miss, detected from the client-held history (no server state).
+- Texts state that the Concierge does **not** transfer conversations or contact the team; the visitor chooses a channel and sends the message. The WhatsApp link opens `wa.me` with the fixed prefill, e-mail opens `mailto:` with a fixed subject and body. Nothing is sent automatically, no transcript is attached.
+- Observability: the `handoff_offered` event carries the code only.
+
+### 9.3 UI direction (design contract only, no UI built)
+
+The Owner-approved concept is an expandable right-hand side panel on desktop and a near-full-screen responsive panel on mobile, with a premium, editorial, accessible Ricardo Tour look (not a generic robot-chat aesthetic). When the UI ticket is authorized after RT-75, it should render from `response_kind` and `handoff` as follows: offer card inside an answer (WhatsApp primary button, e-mail secondary, prefill visible), a persistent "Falar com a equipe" entry in the panel header fed by `getHandoffChannels()`, and a degraded state with input disabled and both channels. The history stays in component memory (RT-70). Existing Home design untouched.
+
+### 9.4 Still open for RT-71 (why it is not closed)
+
+1. UI rendering of the offer / persistent entry / degraded state (public UI out of scope until RT-75).
+2. `handoff_clicked` event (UI + RT-73).
+3. Owner-approved team availability/response-time wording and emergency wording (`OWNER_CONTENT_REQUIRED`); EN/ES copy (V1 is PT only).
+4. Owner review at RT-75.

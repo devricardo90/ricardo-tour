@@ -5,7 +5,10 @@ import { createOpenAIDeps } from "./openai";
 import { loadRegistry } from "./provenance";
 import { runConcierge } from "./run";
 
+import { buildHandoffOffer } from "./handoff";
+
 export { CONCIERGE_PRIVACY } from "./privacy";
+export { getHandoffChannels } from "./handoff";
 import type { RuntimeResult } from "./types";
 
 /**
@@ -21,6 +24,8 @@ export async function handleConciergeMessage(raw: unknown, env: Record<string, s
       answer: degradedMessage(reference_id),
       response_kind: "degraded",
       reference_id,
+      // RT-71: handoff is static data and stays available even when configuration or every backend is unavailable.
+      handoff: buildHandoffOffer("H5", "upstream_error"),
       handoff_reason: "upstream_error",
       error_class: "config",
       source_ids: [],

@@ -51,8 +51,19 @@ export type GateDecision =
   | { kind: "handoff"; reason: HandoffReason }
   | { kind: "pass" };
 
+// RT-71 triggers. H1 explicit human/WhatsApp request, H3 custom/group requests, H6 complaints, H8 urgent operations.
+const EXPLICIT_REQUEST = /\b(?:(?:falar|conversar|atendimento|contato) (?:com )?(?:uma? )?(?:pessoa|humano|humana|atendente|alguem|gente de verdade|equipe|time|consultor\w*)|(?:quero|preciso de|gostaria de) (?:um |uma )?(?:atendente|atendimento humano|humano)|atendimento humano|atendente humano|(?:me )?(?:passa|passe|manda|mande|envia|envie|qual(?: e)?) (?:o |seu |o seu )?(?:whatsapp|zap|telefone|numero de contato)|chamar (?:no )?(?:whatsapp|zap)|falar no (?:whatsapp|zap))\b/;
+const UNSUPPORTED_REQUEST = /\b(?:roteiro (?:personalizado|sob medida|exclusivo)|passeio (?:personalizado|sob medida|exclusivo|privativo)|pacote personalizado|cotacao|orcamento|grupo (?:de|com) \d+|grupo grande|excursao|evento corporativo|casamento|pedido especial|necessidade especial|negociar|negociacao|desconto para grupo)\b/;
+const COMPLAINT = /\b(?:reclama\w*|insatisf\w*|pessim[oa]|horrivel|decepcion\w*|absurdo|inaceitavel|vou processar|acao judicial|enganad[oa]|golpe|fui lesad\w*)\b/;
+const URGENT_OPERATION = /\b(?:(?:guia|motorista|van|transporte) (?:nao|ainda nao) (?:chegou|apareceu|veio)|estou (?:esperando|aguardando|perdid[oa]|atrasad[oa]|no local|no ponto)|(?:perdi|perdemos) (?:o|meu|nosso|a) (?:passeio|voo|guia|van|onibus|encontro)|vou (?:me )?atrasar|onde (?:esta|fica) (?:o )?(?:guia|ponto de encontro)|em cima da hora)\b/;
+
 /** Out-of-scope professional advice and booking/payment actions are handoffs; evaluated with the other handoff gates. */
 function actionOrAdviceGate(text: string): GateDecision {
+  // RT-71 handoff intents take precedence over the generic gates below (e.g. a complaint that mentions "procon").
+  if (EXPLICIT_REQUEST.test(text)) return { kind: "handoff", reason: "explicit_request" };
+  if (COMPLAINT.test(text)) return { kind: "handoff", reason: "complaint" };
+  if (UNSUPPORTED_REQUEST.test(text)) return { kind: "handoff", reason: "unsupported_request" };
+  if (URGENT_OPERATION.test(text)) return { kind: "handoff", reason: "operational_confirmation" };
   if (ACTION_REQUEST.test(text)) return { kind: "handoff", reason: "booking_request" };
   if (OUT_OF_SCOPE_ADVICE.test(text)) return { kind: "handoff", reason: "out_of_scope_advice" };
   return { kind: "pass" };
