@@ -24,8 +24,22 @@ export type HandoffReason =
   | "payment_status"
   | "refund_decision"
   | "operational_confirmation"
+  | "booking_request"
+  | "safety_sensitive"
+  | "out_of_scope_advice"
+  | "emergency"
   | "insufficient_evidence"
   | "upstream_error";
+
+/** RT-74 §1 standard response shapes, so a future UI can render each kind without inspecting outcomes. */
+export type ResponseKind = "grounded" | "clarify" | "refusal" | "handoff" | "degraded";
+
+export type RefusalReason =
+  | "prompt_injection"
+  | "prompt_injection_history"
+  | "internal_information"
+  | "abusive_content"
+  | "third_party_comparison";
 
 export type UpstreamErrorClass =
   | "config"
@@ -53,7 +67,10 @@ export type RuntimeResult = {
   dynamic_reason?: DynamicReason;
   error_class?: UpstreamErrorClass;
   invalid_reason?: string;
-  refusal_reason?: string;
+  refusal_reason?: RefusalReason;
+  response_kind: ResponseKind;
+  /** Support reference for degraded responses only (random, carries no request data). */
+  reference_id?: string;
 };
 
 /** Hosted search hit, reduced to what provenance validation needs. */
@@ -68,6 +85,8 @@ export type RuntimeDeps = {
   retrieve: (query: string) => Promise<HostedHit[]>;
   generate: (request: { instructions: string; input: string }) => Promise<string>;
   onEvent?: (event: RuntimeEvent) => void;
+  /** Injectable clock (ms) for the bounded-retry budget; defaults to Date.now. */
+  now?: () => number;
 };
 
 /** Content-free observability record. */
@@ -81,4 +100,6 @@ export type RuntimeEvent = {
   handoff_reason?: HandoffReason;
   dynamic_reason?: DynamicReason;
   error_class?: UpstreamErrorClass;
+  refusal_reason?: RefusalReason;
+  retried?: boolean;
 };

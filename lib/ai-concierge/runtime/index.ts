@@ -1,4 +1,5 @@
-import { handoffMessage } from "./messages";
+import { randomUUID } from "node:crypto";
+import { degradedMessage } from "./messages";
 import { readRuntimeConfig } from "./config";
 import { createOpenAIDeps } from "./openai";
 import { loadRegistry } from "./provenance";
@@ -14,7 +15,18 @@ import type { RuntimeResult } from "./types";
 export async function handleConciergeMessage(raw: unknown, env: Record<string, string | undefined> = process.env): Promise<RuntimeResult> {
   const config = readRuntimeConfig(env);
   if (!config) {
-    return { outcome: "UPSTREAM_ERROR", answer: handoffMessage("upstream_error"), handoff_reason: "upstream_error", error_class: "config", source_ids: [], source_versions: [], chunk_ids: [] };
+    const reference_id = randomUUID().slice(0, 8);
+    return {
+      outcome: "UPSTREAM_ERROR",
+      answer: degradedMessage(reference_id),
+      response_kind: "degraded",
+      reference_id,
+      handoff_reason: "upstream_error",
+      error_class: "config",
+      source_ids: [],
+      source_versions: [],
+      chunk_ids: [],
+    };
   }
   return runConcierge(raw, createOpenAIDeps(config), loadRegistry());
 }

@@ -258,12 +258,16 @@ describe("RT-67 runtime — upstream failures and configuration", () => {
     ];
     for (const [error, errorClass] of cases) {
       const d = deps([hit("approved-faq", "## 1. x\n\ny\n")]);
-      d.generate.mockRejectedValueOnce(error);
+      d.generate.mockRejectedValue(error);
       const result = await ask("O que é a Ricardo Tour?", d);
       expect(result.outcome).toBe("UPSTREAM_ERROR");
       expect(result.error_class).toBe(errorClass);
+      expect(result.response_kind).toBe("degraded");
+      expect(result.reference_id).toMatch(/^[0-9a-f]{8}$/);
       expect(result.answer).not.toMatch(/sk-|secret|boom|429|401/);
       expect(result.answer).toContain("contato@ricardotour.com");
+      // RT-74: one bounded retry for transient failures only (timeout / 5xx); never for auth or rate limits.
+      expect(d.generate).toHaveBeenCalledTimes(errorClass === "timeout" || errorClass === "generation" ? 2 : 1);
     }
     const retrievalFail = deps([]);
     retrievalFail.retrieve.mockRejectedValueOnce(new Error("store unreachable"));

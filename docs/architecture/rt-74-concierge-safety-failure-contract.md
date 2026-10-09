@@ -81,3 +81,42 @@ A fixed evaluation set per language containing at least: each row of §2 with se
 - Fixed localized copy, emergency wording, and evaluation remain to be finalized at RT-75. No unsupported safety/emergency facts are approved.
 
 RT-74 remains open until localized fixed copy and implementation/evaluation acceptance criteria are met.
+
+## 7. Implementation status — 2026-10-09 (PT V1 backend runtime)
+
+Scope implemented: the server-side runtime (`lib/ai-concierge/runtime`). **Not** changed: `app/api/ai-concierge`, the public widget/UI, production flags. Production stays disabled until RT-75.
+
+### 7.1 Specification review (before implementation)
+
+| Finding | Resolution |
+| --- | --- |
+| §2 rows 10, 11, 13, 17–21 and §3.3 checks had no runtime coverage (only price/availability/booking/payment/refund/injection existed) | Implemented as deterministic gates and post-generation checks (below) |
+| Row 18 forbids revealing "model/vendor details", but the RT-70 privacy notice must name the AI provider | Resolved: the Concierge refuses to discuss model, version, keys, sources, infrastructure and other users; the fixed, Owner-reviewed privacy notice (RT-70) is the only place the provider is named |
+| Row 11 requires Owner-approved fixed emergency wording, which does not exist yet | Proposed fixed text implemented with **no numbers or procedures**, flagged `EMERGENCY_COPY_STATUS = PROPOSED_PENDING_OWNER_APPROVAL`; approval stays at RT-75. A live test showed the model volunteering 190/192/193 from memory; those numbers are now blocked in output and prohibited in the instructions |
+| Contract lists PT/EN/ES copy; Owner scope for V1 is PT only | PT only implemented; EN/ES copy remains out of scope (unsupported locale returns the fixed handoff) |
+| §2 row 5 allows one bounded retry; RT-72 (budgets/rate limits) is not delivered | Local constants (`RETRY_BUDGET_MS`); RT-72 may replace them. Not a prerequisite: Jira links RT-74 only to RT-67 (Concluído) |
+| "Degraded UI" in the Jira goal vs. instruction not to touch the public UI | Runtime exposes `response_kind` (`grounded | refusal | handoff | degraded`) and a data-free `reference_id`; rendering is left to the UI ticket after the RT-75 gate |
+| Row 3 (conflicting sources) cannot be detected deterministically across chunks | Instruction rule 11 makes the model answer only the non-conflicting part or report no evidence; RT-69 guarantees one ACTIVE version per source |
+
+### 7.2 Behavior implemented
+
+- **Deterministic, no model call:** emergency (highest priority, fixed wording), booking/payment/cancel action requests, booking/payment status, refunds, operational confirmation, medical/legal/visa/vaccine out-of-scope, price, availability, flights/hotels/Oner (RT-67/70 gates kept).
+- **Fixed refusals:** prompt injection (current and prior turns), requests for internal information (keys, config, vector store, model/sources, other users, internal tooling), abusive content, third-party comparisons.
+- **Safety-sensitive topics:** answered only from approved evidence; model assurances ("é seguro", "sem risco", guarantees, promises of refund/discount) are blocked and become the fixed no-guarantee handoff (`safety_sensitive`); with no evidence the same handoff is used and the model is not called.
+- **Post-generation checks added:** safety assurances, promises, schedule claims, emergency numbers, answers drifting out of Portuguese (plus the RT-67 checks for prices, availability, booking/payment confirmation, Oner, fake handoff, leaks, non-canonical contact).
+- **Retrieved content is data:** a chunk that reads like an injection is dropped before generation even if it passed provenance.
+- **Failures:** one bounded retry for timeouts and provider 5xx inside a 20 s budget, never for auth/rate limit; RAG failure never falls through to an ungrounded model answer; degraded text is fixed and carries a random `reference_id`; telemetry failures are swallowed.
+- **Personal data:** deterministic reminder appended whenever redaction occurred (not dependent on the model).
+- **Unknown answer:** fixed text now links the published tours page and the canonical channels.
+- **Configuration:** API key, vector-store ID and model are shape-validated; a malformed or tampered value fails closed.
+
+### 7.3 Evaluation (PT, `tests/ai-concierge-safety.test.ts`, 54 deterministic tests)
+
+Every row of §2 that applies to PT V1 with several phrasings, injection variants (user, history, retrieved), unsafe-model-output families (price, availability, booking, payment, Oner, fake handoff, promises, schedules, contacts, URLs, leaks, English, emergency numbers), retry/budget/degraded behavior, canonical-contact integrity of all fixed strings, secret non-leakage and config tampering. Pass criterion met: zero invented prices, availability, safety assurances, policy or leaked internals. A small live run (8 + 1 calls) confirmed grounded answers, deterministic blocking and the emergency-number fix.
+
+### 7.4 Still open for RT-74 (why it is not closed)
+
+1. Degraded/handoff **UI rendering** (public UI is out of scope until RT-75).
+2. Owner approval of the emergency wording and of EN/ES fixed copy (V1 is PT only).
+3. Owner review of the evaluation results at RT-75.
+4. Residual: for a safety question without evidence the model may still add a vague, non-factual pointer ("consulte serviços públicos de apoio ao turismo"); no invented facts, numbers or assurances pass the checks.
