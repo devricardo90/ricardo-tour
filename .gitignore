@@ -41,6 +41,8 @@ dev.err
 # env files (can opt-in for committing if needed)
 .env*
 !.env.example
+/knowledge/concierge/.hosted-publication.local.json
+/knowledge/concierge/.hosted-publication.local.json.tmp
 
 # vercel
 .vercel

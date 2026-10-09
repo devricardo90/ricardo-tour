@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "source_id": "approved-faq:pt",
+  "source_version": "sha256:6c66930ef53426ccfe2fc77a5da29e9ab98344e8bc74d1e3335b7dd074cdc0a8",
+  "source_sha256": "6c66930ef53426ccfe2fc77a5da29e9ab98344e8bc74d1e3335b7dd074cdc0a8",
+  "normalized_sha256": "819b6ace13b6f5c95f2f31bf5e7ed915a881d5943f3b419ee2fb8615e5a57d4e",
+  "policy": "A = customer-facing factual or explanatory business rule, published verbatim as whole sections. Classification of the rest is computed deterministically in scripts/rt-69-hosted-plan.mjs (D reviewed high-risk, B dynamic commercial/operational, C Concierge runtime behavior, E other). Any change of the FAQ source digest invalidates this review.",
+  "publish": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    10,
+    11,
+    12,
+    23,
+    33,
+    39,
+    40,
+    68,
+    79,
+    80,
+    89,
+    96
+  ],
+  "high_risk": [
+    56,
+    90,
+    91,
+    92,
+    93,
+    94
+  ]
+}
