@@ -6,6 +6,7 @@ import { loadRegistry } from "./provenance";
 import { runConcierge } from "./run";
 
 import { buildHandoffOffer } from "./handoff";
+import { getServerObservability } from "../observability";
 
 export { CONCIERGE_PRIVACY } from "./privacy";
 export { getHandoffChannels } from "./handoff";
@@ -19,6 +20,13 @@ export async function handleConciergeMessage(raw: unknown, env: Record<string, s
   const config = readRuntimeConfig(env);
   if (!config) {
     const reference_id = randomUUID().slice(0, 8);
+    // A missing/invalid configuration must be visible to operators (content-free, best-effort).
+    getServerObservability().onEvent({
+      outcome: "UPSTREAM_ERROR", latency_ms: 0, retrieval_results: 0, accepted_results: 0, rejected_results: 0, source_classes: [],
+      handoff_reason: "upstream_error", error_class: "config", handoff_offered: "H5", response_kind: "degraded",
+      message_length_bucket: "short", stage_ms: {}, provider_calls: { retrieve: 0, generate: 0 }, rag_empty: false,
+      stale_filtered: 0, stale_content_served: 0, rejected_by_reason: {}, source_ids: [], failed_stage: "config",
+    });
     return {
       outcome: "UPSTREAM_ERROR",
       answer: degradedMessage(reference_id),
@@ -33,5 +41,5 @@ export async function handleConciergeMessage(raw: unknown, env: Record<string, s
       chunk_ids: [],
     };
   }
-  return runConcierge(raw, createOpenAIDeps(config), loadRegistry());
+  return runConcierge(raw, { ...createOpenAIDeps(config), onEvent: getServerObservability().onEvent }, loadRegistry());
 }

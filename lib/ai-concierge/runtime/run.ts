@@ -104,6 +104,17 @@ export async function runConcierge(
     rejected_results: 0,
     source_classes: [] as string[],
     retried: false,
+    // RT-73: measured values only.
+    stage_ms: {} as { retrieve?: number; generate?: number },
+    provider_calls: { retrieve: 0, generate: 0 },
+    usage: undefined as { input_tokens: number; output_tokens: number } | undefined,
+    rag_empty: false,
+    stale_filtered: 0,
+    stale_content_served: 0,
+    rejected_by_reason: {} as Record<string, number>,
+    source_ids: [] as string[],
+    failed_stage: undefined as "retrieve" | "generate" | "config" | undefined,
+    message_length_bucket: "short" as "short" | "medium" | "long",
   };
   let personalDataShared = false;
   // RT-71 H12: the previous assistant turn was already a fixed "could not help" text.
@@ -153,6 +164,17 @@ export async function runConcierge(
         refusal_reason: result.refusal_reason,
         handoff_offered: result.handoff?.code,
         retried: stats.retried || undefined,
+        response_kind: result.response_kind,
+        message_length_bucket: stats.message_length_bucket,
+        stage_ms: stats.stage_ms,
+        provider_calls: stats.provider_calls,
+        usage: stats.usage,
+        rag_empty: stats.rag_empty,
+        stale_filtered: stats.stale_filtered,
+        stale_content_served: stats.stale_content_served,
+        rejected_by_reason: stats.rejected_by_reason,
+        source_ids: stats.source_ids,
+        failed_stage: stats.failed_stage,
       });
     } catch {
       // Telemetry sink failure is intentionally ignored.
@@ -187,6 +209,7 @@ export async function runConcierge(
       invalid_reason: input.reason,
     });
   const { message, locale, history } = input.value;
+  stats.message_length_bucket = message.length <= 80 ? "short" : message.length <= 300 ? "medium" : "long";
   if (!isSupportedRuntimeLocale(locale))
     return finish({
       outcome: "UNSUPPORTED_LOCALE",
@@ -253,6 +276,7 @@ export async function runConcierge(
 
   const upstream = (error: unknown, fallback: "retrieval" | "generation") => {
     const failure = classifyProviderError(error, fallback);
+    stats.failed_stage = fallback === "retrieval" ? "retrieve" : "generate";
     return finish({
       outcome: "UPSTREAM_ERROR",
       answer: "",
@@ -261,6 +285,16 @@ export async function runConcierge(
     });
   };
   /** One bounded retry for transient failures; never for auth/rate-limit and never past the retry budget. */
+  /** Measures each provider call (retries included): call count and wall-clock per stage. */
+  const timed = async <T>(stage: "retrieve" | "generate", call: () => Promise<T>) => {
+    stats.provider_calls[stage]++;
+    const t0 = now();
+    try {
+      return await call();
+    } finally {
+      stats.stage_ms[stage] = (stats.stage_ms[stage] ?? 0) + (now() - t0);
+    }
+  };
   const withRetry = async <T>(
     call: () => Promise<T>,
     fallback: "retrieval" | "generation",
@@ -297,7 +331,7 @@ export async function runConcierge(
 
   let hits;
   try {
-    hits = await withRetry(() => deps.retrieve(retrievalQuery), "retrieval");
+    hits = await withRetry(() => timed("retrieve", () => deps.retrieve(retrievalQuery)), "retrieval");
   } catch (error) {
     return upstream(error, "retrieval");
   }
@@ -306,35 +340,47 @@ export async function runConcierge(
   stats.retrieval_results = hits.length;
 
   // Rejected evidence is dropped here and never reaches the model.
-  const { accepted, rejected } = filterHits(hits, registry);
+  const { accepted, rejected, reasons } = filterHits(hits, registry);
   // Retrieved text is data, never instructions: a chunk that reads like an injection is dropped (defense in depth).
   const clean = accepted.filter((item) => !detectInjection(item.text));
   stats.rejected_results = rejected + (accepted.length - clean.length);
-  const evidence = clean
+  stats.rejected_by_reason = reasons;
+  stats.stale_filtered = ["stale_version", "retired_source", "blocked_source", "not_approved_for_rag"].reduce((sum, reason) => sum + (reasons[reason] ?? 0), 0);
+  const ranked = clean
     .filter((item) => item.score >= MIN_RELEVANCE_SCORE)
     .sort((a, b) => b.score - a.score)
     .slice(0, MAX_EVIDENCE_CHUNKS);
+  // Defensive invariant (RT-73 alert): superseded/inactive content must never reach the model.
+  const evidence = ranked.filter((item) => registry.get(`${item.source_id}
+${item.source_version}`)?.status === "ACTIVE");
+  stats.stale_content_served = ranked.length - evidence.length;
+  stats.rag_empty = evidence.length === 0;
+  stats.source_ids = [...new Set(evidence.map((item) => item.source_id))];
   stats.accepted_results = evidence.length;
   stats.source_classes = [
     ...new Set(evidence.map((item) => item.source_class)),
   ];
   if (!evidence.length) return noAnswer("no_accepted_evidence");
 
-  let generated: string;
+  let generated: Awaited<ReturnType<RuntimeDeps["generate"]>>;
   try {
     generated = await withRetry(
       () =>
-        deps.generate({
-          instructions: buildInstructions(),
-          input: buildInput(safeMessage, evidence, safeHistory),
-        }),
+        timed("generate", () =>
+          deps.generate({
+            instructions: buildInstructions(),
+            input: buildInput(safeMessage, evidence, safeHistory),
+          }),
+        ),
       "generation",
     );
   } catch (error) {
     return upstream(error, "generation");
   }
 
-  const checked = checkGeneratedAnswer(generated);
+  const generatedText = typeof generated === "string" ? generated : generated.text;
+  if (typeof generated !== "string" && generated.usage) stats.usage = generated.usage;
+  const checked = checkGeneratedAnswer(generatedText);
   if (!checked.ok) return noAnswer(checked.reason);
 
   return finish({

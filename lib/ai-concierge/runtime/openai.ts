@@ -58,7 +58,9 @@ export function createOpenAIDeps(config: RuntimeConfig, client?: OpenAI): Pick<R
           max_output_tokens: GENERATION_MAX_OUTPUT_TOKENS,
         });
         if (typeof response.output_text !== "string") throw new UpstreamFailure("malformed");
-        return response.output_text;
+        // Token usage is the provider-reported (measured) value; absent when the provider omits it.
+        const usage = response.usage ? { input_tokens: response.usage.input_tokens, output_tokens: response.usage.output_tokens } : undefined;
+        return { text: response.output_text, usage };
       } catch (error) {
         throw classifyProviderError(error, "generation");
       }

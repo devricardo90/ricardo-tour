@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import OpenAI from "openai";
 import { readRuntimeConfig } from "../lib/ai-concierge/runtime/config";
 import { createOpenAIDeps } from "../lib/ai-concierge/runtime/openai";
+import { createObservability } from "../lib/ai-concierge/observability";
 import { loadRegistry } from "../lib/ai-concierge/runtime/provenance";
 import { runConcierge } from "../lib/ai-concierge/runtime/run";
 
@@ -20,7 +21,9 @@ const client = new OpenAI({
     return fetch(...args);
   },
 });
-const deps = { ...createOpenAIDeps(config, client), onEvent: () => undefined };
+// RT-73: real observability layer (logger silenced here; prints the aggregated snapshot at the end).
+const observability = createObservability({ logger: () => undefined });
+const deps = { ...createOpenAIDeps(config, client), onEvent: observability.onEvent };
 const registry = loadRegistry();
 
 const followupOnly = process.argv[2] === "--followup";
@@ -62,6 +65,7 @@ if (followupOnly || !process.argv.slice(2).length) {
   }, deps, registry);
   console.log(JSON.stringify({ followup: true, first: first.outcome, second: second.outcome, api_calls_followup: apiCalls - before, answer: second.answer.slice(0, 500) }));
 }
+console.log(JSON.stringify({ metrics: observability.metrics.snapshot() }));
 console.log(JSON.stringify({ total_api_calls: apiCalls, model_class: "DEVELOPMENT / VALIDATION MODEL" }));
 }
 main().catch((error) => {

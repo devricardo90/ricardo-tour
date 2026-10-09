@@ -77,16 +77,18 @@ export function validateHit(hit: HostedHit, registry: Registry): HitCheck {
 export function filterHits(hits: HostedHit[], registry: Registry) {
   const accepted: AcceptedEvidence[] = [];
   let rejected = 0;
+  const reasons: Record<string, number> = {};
   const seen = new Set<string>();
   for (const hit of hits) {
     const check = validateHit(hit, registry);
     if (!check.ok) {
       rejected++;
+      reasons[check.reason] = (reasons[check.reason] ?? 0) + 1;
       continue;
     }
     if (seen.has(check.evidence.chunk_id)) continue;
     seen.add(check.evidence.chunk_id);
     accepted.push(check.evidence);
   }
-  return { accepted, rejected };
+  return { accepted, rejected, reasons };
 }

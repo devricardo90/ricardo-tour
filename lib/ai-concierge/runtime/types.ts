@@ -56,6 +56,9 @@ export type UpstreamErrorClass =
 
 import type { HandoffCode, HandoffOffer } from "./handoff";
 
+/** Generation output with provider-measured token usage (RT-73). A bare string is accepted for tests and fakes. */
+export type GenerationResult = { text: string; usage?: { input_tokens: number; output_tokens: number } };
+
 /** Client-held session context. Untrusted: it is validated, bounded and never stored by the server. */
 export type HistoryTurn = { role: "user" | "assistant"; text: string };
 
@@ -91,7 +94,7 @@ export type HostedHit = {
 
 export type RuntimeDeps = {
   retrieve: (query: string) => Promise<HostedHit[]>;
-  generate: (request: { instructions: string; input: string }) => Promise<string>;
+  generate: (request: { instructions: string; input: string }) => Promise<string | GenerationResult>;
   onEvent?: (event: RuntimeEvent) => void;
   /** Injectable clock (ms) for the bounded-retry budget; defaults to Date.now. */
   now?: () => number;
@@ -112,4 +115,24 @@ export type RuntimeEvent = {
   /** RT-71 `handoff_offered`: code only, never message content. (`handoff_clicked` is emitted by the UI under RT-73.) */
   handoff_offered?: HandoffCode;
   retried?: boolean;
+  // ---- RT-73 observability. Every field below is MEASURED by the runtime and content-free (numbers / closed strings). ----
+  response_kind: ResponseKind;
+  /** Bucketed only; the message itself and its exact length are never recorded. */
+  message_length_bucket: "short" | "medium" | "long";
+  stage_ms: { retrieve?: number; generate?: number };
+  /** Provider calls actually made, retries included. */
+  provider_calls: { retrieve: number; generate: number };
+  /** Provider-reported token usage; absent when no generation happened or the provider omitted it. */
+  usage?: { input_tokens: number; output_tokens: number };
+  /** Retrieval ran but produced no usable evidence. */
+  rag_empty: boolean;
+  /** Hits rejected for being superseded/retired/blocked/unapproved (RT-69 invariants). */
+  stale_filtered: number;
+  /** Evidence reaching the model whose registry entry is not ACTIVE. Must be 0; page-worthy otherwise. */
+  stale_content_served: number;
+  /** Closed provenance rejection reasons with counts. */
+  rejected_by_reason: Record<string, number>;
+  /** Approved source IDs used (identifiers only, never source text). */
+  source_ids: string[];
+  failed_stage?: "retrieve" | "generate" | "config";
 };

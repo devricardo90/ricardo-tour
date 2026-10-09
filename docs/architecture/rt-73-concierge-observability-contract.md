@@ -80,3 +80,39 @@ Product analytics and operational observability are separate systems with separa
 ## 8. Owner direction — 2026-10-04
 
 Approved product event categories: `concierge_opened`, `message_sent`, `answer_returned`, `knowledge_hit`, `knowledge_miss`, `fallback_triggered`, `handoff_offered`, `handoff_clicked`, `error`, `timeout`, `rate_limited`. Keep product analytics separate from operational observability. Never send raw user/assistant messages by default; source IDs and retrieval metadata may be retained without full source or conversation text. RT-73 remains open pending schema implementation, privacy/retention decisions, and acceptance evidence.
+
+## 9. Implementation status — 2026-10-09 (storage-agnostic observability layer)
+
+Code: `lib/ai-concierge/observability/` (events, metrics, alerts, wiring) and measured, content-free fields added to the runtime event. **Not** changed: `app/api/ai-concierge`, `/api/analytics`, the Prisma schema, any UI, production flags. No analytics vendor, database, network call or recurring cost was introduced.
+
+### 9.1 Specification review
+
+| Finding | Resolution |
+| --- | --- |
+| The Jira draft comment lists `handoff_requested` and optional feedback; the later Owner direction (§8) fixes exactly eleven categories and says no unlisted category is approved | §8 wins. Exactly the eleven categories are implemented; `handoff_requested` / feedback / conversion / revenue events are rejected by the validator |
+| §1 asks for an enum migration or a separate event table (engineering decision) | Both change the production database schema and RT-70 retention is unresolved, so this is **not** done. Events are validated and delivered to a `ProductEventSink` interface with no default destination; the persistence choice stays an open decision (see 9.5) |
+| §3 needs stage latency, tokens, RAG-empty and stale-filtered counts | The runtime now measures per-stage time, provider calls (retries included), provider-reported token usage, provenance rejection reasons, empty retrieval and a defensive stale-content-served counter |
+| §3 cost estimate | ESTIMATE only: generation tokens × operator-supplied prices (`OPENAI_CONCIERGE_PRICE_INPUT/OUTPUT_PER_MTOK_USD`). No price is hardcoded; without prices the estimate is `null` with the reason. Retrieval/file-search charges are not modelled |
+| §4 alert thresholds are not specified | Not invented: rate and cost alerts run only when the operator passes a threshold; zero-tolerance alerts (superseded content served, limiter store errors) and the production flag check are built in |
+| §3 counters owned by other tickets (`limiter_store_errors`, `ingestion_events`, `flag_state`, `limited`/`disabled` outcomes) | Declared in the registry but emitted by RT-72, the RT-69 scripts and the route respectively; they read zero until those exist |
+| `message_sent`/`concierge_opened`/`handoff_clicked`/`rate_limited` originate outside the runtime | The same strict validator is the single entry (`ingestClientEvent`), so the future UI/RT-72 code cannot send extra properties. `handoff_clicked` carries only channel and handoff code |
+| §2 session id | Optional opaque id supplied by the client analytics layer (validated pattern); the runtime creates no identifier and stores nothing |
+
+### 9.2 What is measured vs estimated
+
+Measured: request outcomes, grounded/degraded counts, per-stage latency histograms, provider calls and retries, provider error classes, timeouts by stage, provider-reported tokens (with a coverage counter for responses that lack usage), RAG-empty, stale-filtered, stale-content-served, handoff codes. Estimated (and labelled): generation cost. Metrics are **per server instance, since process start**; aggregation across instances is the job of the platform log pipeline or a future shared store.
+
+### 9.3 Privacy (RT-70 preserved)
+
+Events and metrics hold only numbers, buckets and closed strings (plus approved source IDs). Strict schemas reject free text; a canary test sends e-mails, CPF, card, phone, booking ids, unique words, a model answer and source text through the runtime and proves none appears in logs, product events or the metrics snapshot. No transcript, prompt, answer, PII, IP or user agent is collected; nothing is persisted. Telemetry (sink, logger, metrics) failures are swallowed and never affect the customer response.
+
+### 9.4 Alerts / dashboards
+
+`evaluateAlerts(snapshot, thresholds)` and `checkFlagGate(env)` are pure functions ready for a scheduled check or dashboard feed. The `knowledge_miss` and stale-filtered signals are available in the snapshot; the dashboard itself needs a destination (9.5).
+
+### 9.5 Still open (why RT-73 is not closed)
+
+1. Persistence/destination of product events and metrics: extend the existing `/api/analytics` enum (migration) vs. a separate store vs. platform logs only; includes retention (RT-70, `OWNER_LEGAL_DECISION_REQUIRED`) and any vendor/cost decision.
+2. Dashboards and alert delivery (need the destination above) and the quality-review cadence (`OWNER_DECISION_REQUIRED`).
+3. Client emission of `concierge_opened` / `handoff_clicked` (UI, after RT-75) and `rate_limited` (RT-72).
+4. Final audit remains RT-48.
