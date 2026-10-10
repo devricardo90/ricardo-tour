@@ -3,15 +3,15 @@
 import { headers } from "next/headers";
 import { prisma } from "@/lib/prisma";
 import { sendContactNotification } from "@/lib/services/tour-request-notification";
-import { clientKeyFromHeaders, createRateLimiter } from "@/lib/security/rate-limit";
+import { isFormSubmissionLimited } from "@/lib/rate-limit/server";
 import { buildStoredContactMessage, normalizeContactValues, validateContactMessage, type ContactMessageErrors } from "@/lib/contact-message";
 
 // General contact message (RT-56, /contato). Same pipeline as the RT-55 tour request: the message is stored in the
 // existing ContactSubmission table first (no schema change), then a notification goes to the approved recipient with the
 // current technically safe sender; a notification problem never loses the message or turns it into a visible failure.
 //
-// Abuse protection: server validation, Next's same-origin check for Server Actions, a hidden honeypot and a best-effort
-// per-IP rate limit (per server instance; a durable shared limit is launch debt).
+// Abuse protection: server validation, Next's same-origin check for Server Actions, a hidden honeypot and the shared
+// rate limiter (RT-82: Upstash Redis Free plan when configured; otherwise a counted, per-instance fallback).
 //
 // Replaces the legacy submitContactForm for the migrated page: that action required an e-mail, had no protection,
 // sent no notification and returned raw error messages to the visitor. It stays in place (unused) until cleanup.
@@ -22,14 +22,13 @@ export type ContactMessageState =
   | { ok: false; reason: "rate_limited" | "unavailable" };
 
 const LOCALES = ["pt", "en", "es"] as const;
-const limiter = createRateLimiter({ limit: 5, windowMs: 10 * 60 * 1000 });
 
 export async function submitContactMessage(formData: FormData): Promise<ContactMessageState> {
   // Honeypot: real visitors never see this field. Pretend success and store nothing.
   if (String(formData.get("company_website") ?? "").trim() !== "") return { ok: true };
 
   const h = await headers();
-  if (limiter.isLimited(clientKeyFromHeaders(h))) return { ok: false, reason: "rate_limited" };
+  if (await isFormSubmissionLimited(h, "contact_message")) return { ok: false, reason: "rate_limited" };
 
   const rawLocale = String(formData.get("locale") ?? "pt");
   const locale = (LOCALES as readonly string[]).includes(rawLocale) ? rawLocale : "pt";

@@ -49,6 +49,9 @@ export const handoffMessage = (reason: HandoffReason) => {
       return `Eu não posso orientar sobre saúde, documentos, vistos ou questões jurídicas. Consulte as fontes oficiais e profissionais adequados. Para dúvidas sobre os serviços da Ricardo Tour: ${CHANNELS}`;
     case "emergency":
       return `Se você está em perigo ou precisa de ajuda médica urgente, procure imediatamente as autoridades locais de emergência. Sou um assistente virtual e não consigo prestar socorro. Depois, a equipe da Ricardo Tour pode ajudar. ${CHANNELS}`;
+    case "rate_limited":
+      // RT-72 §6: friendly, no counts and no window sizes (only Retry-After is exposed, by the caller).
+      return `Você atingiu o limite de mensagens por agora. Tente novamente em alguns minutos ou fale com a equipe. ${CHANNELS}`;
     case "upstream_error":
       return `Não consegui responder agora. Tente novamente em instantes. ${CHANNELS}`;
   }

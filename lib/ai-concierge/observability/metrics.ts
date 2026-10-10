@@ -1,3 +1,4 @@
+import type { LimiterEvent } from "@/lib/rate-limit/types";
 import type { RuntimeEvent } from "../runtime/types";
 
 /**
@@ -32,7 +33,7 @@ export function estimateGenerationCostUsd(usage: { input_tokens: number; output_
   return (usage.input_tokens * pricing.input_per_mtok_usd + usage.output_tokens * pricing.output_per_mtok_usd) / 1_000_000;
 }
 
-const REQUEST_BUCKET: Record<RuntimeEvent["outcome"], "ok" | "refusal" | "handoff" | "error"> = {
+const REQUEST_BUCKET: Record<RuntimeEvent["outcome"], "ok" | "refusal" | "handoff" | "error" | "limited"> = {
   ANSWER: "ok",
   REFUSED: "refusal",
   INVALID_INPUT: "refusal",
@@ -41,6 +42,7 @@ const REQUEST_BUCKET: Record<RuntimeEvent["outcome"], "ok" | "refusal" | "handof
   INSUFFICIENT_EVIDENCE: "handoff",
   UNSUPPORTED_LOCALE: "handoff",
   UPSTREAM_ERROR: "error",
+  RATE_LIMITED: "limited",
 };
 
 export function createMetrics(pricing: Pricing | null = null) {
@@ -64,6 +66,10 @@ export function createMetrics(pricing: Pricing | null = null) {
     handoff_offered_total: {} as Record<string, number>,
     // Declared for the owners named in the contract; emitted by RT-72 / RT-69 scripts / the route, not by the runtime.
     limiter_store_errors_total: 0,
+    limiter_store_errors_by_class: {} as Record<string, number>,
+    limiter_checks_total: { store: 0, local_deny_cache: 0, fallback: 0 },
+    limiter_denied_total: 0,
+    limiter_fallback_in_use_total: 0,
     ingestion_events_total: {} as Record<string, number>,
     flag_state: {} as Record<string, "enabled" | "disabled">,
   };
@@ -94,6 +100,16 @@ export function createMetrics(pricing: Pricing | null = null) {
       state.rag_stale_filtered_total += event.stale_filtered;
       state.stale_content_served_total += event.stale_content_served;
       if (event.handoff_offered) state.handoff_offered_total[event.handoff_offered] = (state.handoff_offered_total[event.handoff_offered] ?? 0) + 1;
+    },
+    /** Content-free limiter telemetry (RT-72 / RT-82). Counts and closed labels only. */
+    recordLimiterEvent(event: LimiterEvent) {
+      if (event.type === "store_error") {
+        state.limiter_store_errors_total++;
+        state.limiter_store_errors_by_class[event.errorClass] = (state.limiter_store_errors_by_class[event.errorClass] ?? 0) + 1;
+      } else if (event.type === "checked") {
+        state.limiter_checks_total[event.source]++;
+        if (!event.allowed) state.limiter_denied_total++;
+      } else state.limiter_fallback_in_use_total++;
     },
     setFlagState(environment: string, value: "enabled" | "disabled") {
       state.flag_state[environment] = value;

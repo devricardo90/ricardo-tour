@@ -116,3 +116,7 @@ Events and metrics hold only numbers, buckets and closed strings (plus approved 
 2. Dashboards and alert delivery (need the destination above) and the quality-review cadence (`OWNER_DECISION_REQUIRED`).
 3. Client emission of `concierge_opened` / `handoff_clicked` (UI, after RT-75) and `rate_limited` (RT-72).
 4. Final audit remains RT-48.
+
+### 9.6 Update — 2026-10-10 (RT-72 limiter wiring)
+
+The shared limiter now feeds the RT-73 layer: `RATE_LIMITED` responses emit the approved `rate_limited` product event with a closed dimension (`ip_hash`, `session`, `global`) and count in the `limited` request bucket; limiter store failures increment `limiter_store_errors_total` (with a per-class breakdown) and surface as `error` events with stage `limiter`; fallback use is counted in `limiter_fallback_in_use_total`. No new event category was added. The limiter is not yet backed by a real Upstash database, so these signals have been verified with fakes/emulator only.

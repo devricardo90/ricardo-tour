@@ -71,6 +71,7 @@ const KIND: Record<RuntimeResult["outcome"], ResponseKind> = {
   REFUSED: "refusal",
   INVALID_INPUT: "refusal",
   UPSTREAM_ERROR: "degraded",
+  RATE_LIMITED: "degraded",
 };
 
 function defaultEmit(event: RuntimeEvent) {

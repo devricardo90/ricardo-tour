@@ -10,7 +10,8 @@ export type RuntimeOutcome =
   | "INSUFFICIENT_EVIDENCE"
   | "REFUSED"
   | "INVALID_INPUT"
-  | "UPSTREAM_ERROR";
+  | "UPSTREAM_ERROR"
+  | "RATE_LIMITED";
 
 export type DynamicReason =
   | "price"
@@ -33,7 +34,8 @@ export type HandoffReason =
   | "out_of_scope_advice"
   | "emergency"
   | "insufficient_evidence"
-  | "upstream_error";
+  | "upstream_error"
+  | "rate_limited";
 
 /** RT-74 §1 standard response shapes, so a future UI can render each kind without inspecting outcomes. */
 export type ResponseKind = "grounded" | "clarify" | "refusal" | "handoff" | "degraded";
@@ -52,7 +54,8 @@ export type UpstreamErrorClass =
   | "rate_limit"
   | "retrieval"
   | "generation"
-  | "malformed";
+  | "malformed"
+  | "limiter";
 
 import type { HandoffCode, HandoffOffer } from "./handoff";
 
@@ -82,6 +85,8 @@ export type RuntimeResult = {
   handoff?: HandoffOffer;
   /** Support reference for degraded responses only (random, carries no request data). */
   reference_id?: string;
+  /** RT-72: only on RATE_LIMITED. Seconds until the window resets; the only limit detail ever exposed. */
+  retry_after_seconds?: number;
 };
 
 /** Hosted search hit, reduced to what provenance validation needs. */
@@ -134,5 +139,7 @@ export type RuntimeEvent = {
   rejected_by_reason: Record<string, number>;
   /** Approved source IDs used (identifiers only, never source text). */
   source_ids: string[];
-  failed_stage?: "retrieve" | "generate" | "config";
+  failed_stage?: "retrieve" | "generate" | "config" | "limiter";
+  /** RT-72 `rate_limited` product event: which limit dimension was reached. */
+  rate_limited_dimension?: "session" | "ip_hash" | "global" | "cost_ceiling";
 };

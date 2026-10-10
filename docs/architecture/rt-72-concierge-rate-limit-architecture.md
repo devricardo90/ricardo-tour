@@ -94,3 +94,7 @@ Metrics (RT-73 operational): requests, limited by dimension, limiter store error
 ## 10. Owner direction — 2026-10-04
 
 The interface must support anonymous/session limits, authenticated-user limits if accounts are later introduced, IP/abuse protection, burst protection, configurable cost caps, conversation-level protection, global emergency protection, observability, and graceful rate-limit UX. Keep the architecture provider-independent and decide the shared store with RT-82. Do not select a distributed-store vendor solely to close RT-72 or hard-code production quotas before model cost and expected usage are known. RT-72 remains open pending the shared security/implementation decisions and acceptance evidence.
+
+## 11. Implementation status — 2026-10-10
+
+Owner decision recorded (Upstash Redis **Free plan only, USD 0/month**, no paid upgrade): see `rt-72-82-shared-limiter-decision-report.md`. Implemented: the provider-independent `RateLimitStore`, the Upstash REST adapter (one atomic EVAL per check, TTL, HMAC keys), the closed/degrade limiter with local deny-cache and circuit breaker, the Concierge policy (kill switch, IP burst, session, global ceiling; limits from `AI_CONCIERGE_RATE_LIMITS`, none invented) and the `RATE_LIMITED` outcome. §9 acceptance: items 2–4 are covered by deterministic and emulator tests; **item 1 (distributed proof) is emulator-verified only — real Upstash verification is pending** until the Owner authorizes creating the database. Production quotas are still undefined on purpose.

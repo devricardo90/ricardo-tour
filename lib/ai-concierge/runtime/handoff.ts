@@ -36,6 +36,7 @@ export const HANDOFF_CODE_BY_REASON: Record<HandoffReason, HandoffCode> = {
   out_of_scope_advice: "H3",
   insufficient_evidence: "H4",
   upstream_error: "H5",
+  rate_limited: "H5",
   complaint: "H6",
   refund_decision: "H7",
   operational_confirmation: "H8",

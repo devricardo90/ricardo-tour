@@ -6,7 +6,7 @@ import { getPublicTripById } from "@/lib/catalog/public-trips";
 import { getLocalizedField } from "@/lib/localized-field";
 import { asLocalizedText } from "@/lib/types";
 import { sendTourRequestNotification } from "@/lib/services/tour-request-notification";
-import { clientKeyFromHeaders, createRateLimiter } from "@/lib/security/rate-limit";
+import { isFormSubmissionLimited } from "@/lib/rate-limit/server";
 import { buildStoredRequestMessage, normalizeValues, validateTourRequest, type TourRequestErrors } from "@/lib/tour-request";
 
 // Guest tour request (RT-55): no account, no payment, no availability confirmation. It reuses the existing
@@ -14,8 +14,8 @@ import { buildStoredRequestMessage, normalizeValues, validateTourRequest, type T
 // admin contacts view and the notification e-mail read it from there.
 //
 // Abuse protection (honest summary): server-side validation, Next's same-origin check for Server Actions, a hidden
-// honeypot field, and a best-effort in-memory rate limit per IP. The rate limit is per server instance (not durable
-// across serverless instances), so a shared store is launch debt if abuse appears.
+// honeypot field, and the shared rate limiter (RT-82: Upstash Redis Free plan when configured; otherwise a counted,
+// per-instance fallback that behaves like the previous limiter).
 
 export type TourRequestState =
   | { ok: true }
@@ -23,14 +23,13 @@ export type TourRequestState =
   | { ok: false; reason: "rate_limited" | "not_found" | "unavailable" };
 
 const LOCALES = ["pt", "en", "es"] as const;
-const limiter = createRateLimiter({ limit: 5, windowMs: 10 * 60 * 1000 });
 
 export async function submitTourRequest(formData: FormData): Promise<TourRequestState> {
   // Honeypot: real visitors never see or fill this field. Pretend success and store nothing.
   if (String(formData.get("company_website") ?? "").trim() !== "") return { ok: true };
 
   const h = await headers();
-  if (limiter.isLimited(clientKeyFromHeaders(h))) return { ok: false, reason: "rate_limited" };
+  if (await isFormSubmissionLimited(h, "tour_request")) return { ok: false, reason: "rate_limited" };
 
   const rawLocale = String(formData.get("locale") ?? "pt");
   const locale = (LOCALES as readonly string[]).includes(rawLocale) ? rawLocale : "pt";

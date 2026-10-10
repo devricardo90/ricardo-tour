@@ -27,13 +27,13 @@ const handoffCode = z.enum(["H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9"
 const handoffReason = z.enum([
   "explicit_request", "unsupported_request", "complaint", "repeated_failure", "booking_status", "payment_status",
   "refund_decision", "operational_confirmation", "booking_request", "safety_sensitive", "out_of_scope_advice", "emergency",
-  "insufficient_evidence", "upstream_error", "price", "availability", "flight_inventory", "hotel_inventory",
+  "insufficient_evidence", "upstream_error", "rate_limited", "price", "availability", "flight_inventory", "hotel_inventory",
   "oner_inventory", "unsupported_locale",
 ]);
 const latencyBucket = z.enum(["lt_500ms", "lt_1s", "lt_2s", "lt_5s", "gte_5s"]);
-const stage = z.enum(["retrieve", "generate", "validate", "config"]);
+const stage = z.enum(["retrieve", "generate", "validate", "config", "limiter"]);
 const responseKind = z.enum(["grounded", "clarify", "refusal", "handoff", "degraded"]);
-const errorClass = z.enum(["config", "timeout", "auth", "rate_limit", "retrieval", "generation", "malformed"]);
+const errorClass = z.enum(["config", "timeout", "auth", "rate_limit", "retrieval", "generation", "malformed", "limiter"]);
 const locale = z.enum(["pt"]);
 const common = { session_id: sessionId.optional(), locale: locale.optional() };
 
@@ -89,6 +89,7 @@ export function deriveProductEvents(event: RuntimeEvent, session_id?: string): P
     else out.push({ name: "knowledge_hit", source_ids: event.source_ids, result_count: event.accepted_results, ...base });
   }
   if (event.outcome === "UPSTREAM_ERROR") out.push({ name: "fallback_triggered", category: "degraded", ...base });
+  if (event.outcome === "RATE_LIMITED" && event.rate_limited_dimension) out.push({ name: "rate_limited", dimension: event.rate_limited_dimension, ...base });
   if (event.outcome === "INSUFFICIENT_EVIDENCE") {
     const category = event.handoff_reason === "safety_sensitive" ? "safety_sensitive" : event.handoff_reason === "repeated_failure" ? "repeated_failure" : "insufficient_evidence";
     out.push({ name: "fallback_triggered", category, ...base });
