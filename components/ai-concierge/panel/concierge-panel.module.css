@@ -275,7 +275,7 @@
 
 .welcome {
   display: grid;
-  grid-template-columns: 32px minmax(0, 1fr);
+  grid-template-columns: 56px minmax(0, 1fr);
   gap: 12px;
   margin: 0 0 20px;
 }
@@ -399,12 +399,66 @@
 }
 
 .avatarConcierge {
+  position: relative;
+  overflow: hidden;
+  color: var(--cp-gold-bright);
+  background: var(--cp-bg);
+  border: 1px solid rgb(200 168 107 / 75%);
+  box-shadow: 0 0 0 3px rgb(200 168 107 / 8%);
+}
+
+.avatarSm {
   width: 32px;
   height: 32px;
-  color: var(--cp-gold-bright);
-  background: radial-gradient(circle at 30% 25%, #232a30, var(--cp-bg) 75%);
-  border: 1px solid rgb(200 168 107 / 70%);
-  box-shadow: 0 0 0 3px rgb(200 168 107 / 8%);
+}
+
+.avatarMd {
+  width: 44px;
+  height: 44px;
+  margin-top: 2px;
+}
+
+.avatarLg {
+  width: 56px;
+  height: 56px;
+  overflow: visible;
+}
+
+.avatarLg svg {
+  border-radius: 50%;
+}
+
+/* explicit AI marker on the large portrait */
+.avatarBadge {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  display: grid;
+  place-items: center;
+  min-width: 22px;
+  height: 20px;
+  padding: 0 5px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  color: var(--cp-bg);
+  background: var(--cp-gold-bright);
+  border: 2px solid var(--cp-bg);
+  border-radius: 999px;
+}
+
+.headerIdentity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.header[data-compact="true"] .avatarMd {
+  width: 32px;
+  height: 32px;
+  margin-top: 0;
 }
 
 .avatarVisitor {

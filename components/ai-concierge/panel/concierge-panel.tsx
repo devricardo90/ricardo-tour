@@ -63,16 +63,69 @@ function renderText(text: string) {
   });
 }
 
-/** Concierge avatar: a gold hairline ring with a Rio skyline-and-arc monogram. Abstract on purpose: no face, no robot, no mascot. */
-function ConciergeAvatar({ decorative = false }: { decorative?: boolean }) {
-  // Inside the live conversation the visible "Concierge" label already names the speaker: the avatar is decorative there.
+/**
+ * Daniela's portrait: a flat, editorial vector illustration (not a photo, not a cartoon): a woman with long blonde hair and green
+ * eyes, fair warm skin, a dark tailored top with a gold edge, framed by the brand's gold hairline ring. It is an ILLUSTRATION of a
+ * persona, never a depiction of a real team member, and wherever it is large it carries an explicit "IA" badge (the AI is always
+ * named next to it: "Daniela · IA", "Assistente de IA"). Flat colours only, so it needs no image file or gradient ids.
+ */
+export const DANIELA_PORTRAIT = { hair: "#d6b05a", hairLight: "#f0dc9c", hairDark: "#b48c3e", eyes: "#3f9361", skin: "#f2d2b2" } as const;
+
+function DanielaPortrait() {
+  const c = DANIELA_PORTRAIT;
+  // The viewBox is cropped to head and shoulders so the face (and the green eyes) stay legible at small sizes.
   return (
-    <span className={styles.avatarConcierge} {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": copy.avatarConcierge })}>
-      <svg viewBox="0 0 32 32" width="20" height="20" fill="none" aria-hidden="true">
-        <path d="M5 22.5c3.2-1.2 5-4.6 7.6-4.6 2 0 2.9 1.6 4.6 1.6 2.6 0 3.7-5.2 9.8-8.4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-        <path d="M5 26h22" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
-        <circle cx="21.5" cy="8.5" r="2.2" stroke="currentColor" strokeWidth="1.2" />
-      </svg>
+    <svg viewBox="8 5 48 48" width="100%" height="100%" aria-hidden="true" focusable="false" data-portrait="daniela" preserveAspectRatio="xMidYMid slice">
+      <rect x="0" y="0" width="64" height="64" fill="#1b2025" />
+      <circle cx="32" cy="26" r="22" fill="#242c32" />
+      {/* long, softly waved hair behind the shoulders, in three tones */}
+      <path d="M18.4 29.5C18.2 16.6 24.2 8.4 32.4 8.4s14.2 8.2 14 21.1c-.1 7 1.4 12.4 4.6 17.2 1.3 1.9 1 3.6-1.4 4.3-3 .9-6.4-.4-8.2-2.6L26 50.6c-2 2-5.6 2.9-8.4 1.4-1.9-1-1.6-2.9-.4-4.5 2.4-3.2 1.3-9.6 1.2-18z" fill={c.hair} />
+      <path d="M21 34c.4 5-.4 9-2.4 12.4M44.2 33.4c-.1 5.2 1 9 3.4 12.2" fill="none" stroke={c.hairDark} strokeWidth="1" strokeLinecap="round" opacity="0.55" />
+      {/* shoulders: dark tailored top, soft V neckline with a gold edge */}
+      <path d="M6 64c1.2-10.6 9.6-15.6 19-16.6l6.9 5.6 6.9-5.6c9.4 1 17.8 6 19 16.6z" fill="#2b333a" />
+      <path d="M26.4 46.6 32 52.2l5.6-5.6" fill="none" stroke="#c8a86b" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+      {/* neck with a soft shadow under the chin */}
+      <path d="M27.6 40.5h8.8v7.4L32 52l-4.4-4.1z" fill="#e6bd98" />
+      <path d="M27.6 40.5h8.8v3.2c-2.9 1.9-5.9 1.9-8.8 0z" fill="#d4a37e" opacity="0.7" />
+      {/* face: slim oval with a gentle jaw */}
+      <path d="M22.6 27.6c0-7 4.1-11.6 9.4-11.6s9.4 4.6 9.4 11.6c0 6.6-3.2 13.8-9.4 13.8s-9.4-7.2-9.4-13.8z" fill={c.skin} />
+      <ellipse cx="25.7" cy="34" rx="2.3" ry="1.5" fill="#e79c8c" opacity="0.22" />
+      <ellipse cx="38.3" cy="34" rx="2.3" ry="1.5" fill="#e79c8c" opacity="0.22" />
+      {/* side-swept fringe falling to the left */}
+      <path d="M21.8 30c-1.1-9.8 4.4-16 10.7-16 6.6 0 10.2 4.6 9.8 12.4-.2 1.1-.6 1.8-1.2 1.1-1.5-4-5.6-7.6-10.4-7.6-4 0-7.2 3.3-8.6 8.8z" fill={c.hair} />
+      <path d="M24.6 23.2c2.6-3.6 7.6-5 12.2-2.8" fill="none" stroke={c.hairLight} strokeWidth="1" strokeLinecap="round" opacity="0.7" />
+      {/* refined brows */}
+      <path d="M25.4 27.2c1.4-.9 3-1.1 4.4-.6M34.2 26.6c1.4-.5 3-.3 4.4.6" fill="none" stroke="#a9834a" strokeWidth="0.75" strokeLinecap="round" />
+      {/* eyes: almond, green iris with a lighter ring, dark pupil, fine upper lash line */}
+      <path d="M25.2 30.4c1.1-1.5 3.1-1.9 5-.5-1.1 1.4-3.3 1.9-5 .5z" fill="#fbf7f1" />
+      <circle cx="27.8" cy="30.15" r="1.18" fill={c.eyes} />
+      <circle cx="27.8" cy="30.15" r="0.5" fill="#102319" />
+      <circle cx="27.4" cy="29.8" r="0.22" fill="#ffffff" />
+      <path d="M33.8 29.9c1.9-1.4 3.9-1 5 .5-1.7 1.4-3.9 1-5-.5z" fill="#fbf7f1" />
+      <circle cx="36.2" cy="30.15" r="1.18" fill={c.eyes} />
+      <circle cx="36.2" cy="30.15" r="0.5" fill="#102319" />
+      <circle cx="35.8" cy="29.8" r="0.22" fill="#ffffff" />
+      <path d="M24.9 30c1.4-1.4 3.4-1.6 5.3-.2M33.8 29.8c1.9-1.4 3.9-1.2 5.3.2" fill="none" stroke="#5e4630" strokeWidth="0.6" strokeLinecap="round" />
+      {/* nose (a soft shadow) and a gentle smile */}
+      <path d="M32.1 32.4c-.5 1.6-.7 2.6.4 3" fill="none" stroke="#d0a182" strokeWidth="0.7" strokeLinecap="round" />
+      <path d="M29.1 37.6c1.1.6 2.1.8 2.9.5.8.3 1.8.1 2.9-.5-.9 1.7-1.8 2.3-2.9 2.3s-2-.6-2.9-2.3z" fill="#c9786f" />
+      <circle cx="22.7" cy="33.6" r="0.75" fill="#e8c780" />
+      <circle cx="41.3" cy="33.6" r="0.75" fill="#e8c780" />
+    </svg>
+  );
+}
+
+/** Avatar sizes: sm in the conversation (decorative: the visible "Daniela · IA" label names the speaker), md in the header, lg with an IA badge in the welcome. */
+function ConciergeAvatar({ decorative = false, size = "sm" }: { decorative?: boolean; size?: "sm" | "md" | "lg" }) {
+  const sizeClass = size === "lg" ? styles.avatarLg : size === "md" ? styles.avatarMd : styles.avatarSm;
+  return (
+    <span className={`${styles.avatarConcierge} ${sizeClass}`} {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": copy.avatarConcierge })}>
+      <DanielaPortrait />
+      {size === "lg" ? (
+        <span className={styles.avatarBadge} aria-hidden="true">
+          {copy.aiBadge}
+        </span>
+      ) : null}
     </span>
   );
 }
@@ -277,7 +330,7 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
       {!open ? (
         <button ref={handleRef} type="button" className={styles.handle} aria-expanded={false} aria-controls={panelId} aria-label={copy.open} onClick={() => dispatch({ type: "open" })}>
           <span className={styles.handleOrnament} aria-hidden="true" />
-          <span className={styles.handleLabel}>{copy.title}</span>
+          <span className={styles.handleLabel}>{copy.entryLabel}</span>
           <span className={styles.handleTag} aria-hidden="true">IA</span>
         </button>
       ) : null}
@@ -295,11 +348,14 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
       >
         <header className={styles.header} data-compact={messages.length > 0}>
           <div className={styles.headerTop}>
-            <div>
-              <p className={styles.eyebrow}>{copy.eyebrow}</p>
-              <h2 id={titleId} className={styles.title}>
-                {copy.title}
-              </h2>
+            <div className={styles.headerIdentity}>
+              <ConciergeAvatar size="md" />
+              <div>
+                <p className={styles.eyebrow}>{copy.eyebrow}</p>
+                <h2 id={titleId} className={styles.title}>
+                  {copy.title}
+                </h2>
+              </div>
             </div>
             <button type="button" className={styles.closeButton} aria-label={copy.close} onClick={() => dispatch({ type: "close" })}>
               <X size={22} aria-hidden="true" />
@@ -324,7 +380,7 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
                 {copy.introTitle}
               </h3>
               <div className={styles.welcome}>
-                <ConciergeAvatar />
+                <ConciergeAvatar size="lg" />
                 <p className={styles.welcomeText}>{copy.welcome}</p>
               </div>
               <p className={styles.startersLabel}>{copy.starters}</p>

@@ -1,6 +1,6 @@
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { ConciergePanel } from "@/components/ai-concierge/panel/concierge-panel";
+import { ConciergePanel, DANIELA_PORTRAIT } from "@/components/ai-concierge/panel/concierge-panel";
 import { CONCIERGE_PRIVACY } from "@/lib/ai-concierge/runtime/privacy";
 import { buildHandoffOffer } from "@/lib/ai-concierge/runtime/handoff";
 import { replyFor } from "@/lib/ai-concierge/ui/fixtures";
@@ -19,7 +19,7 @@ describe("closed state: an editorial tab, not a chat bubble", () => {
   const html = render();
 
   it("shows one labelled entry button and hides the panel from assistive technology and keyboard focus", () => {
-    expect(html).toMatch(/<button[^>]*aria-expanded="false"[^>]*aria-label="Abrir o Concierge da Ricardo Tour"/);
+    expect(html).toMatch(/<button[^>]*aria-expanded="false"[^>]*aria-label="Abrir o Concierge da Ricardo Tour: Daniela, assistente de IA"/);
     expect(html).toMatch(/<aside[^>]*role="dialog"[^>]*aria-modal="false"[^>]*aria-hidden="true"/);
     expect(html).toContain("inert");
     expect(html).toContain('data-state="closed"');
@@ -29,7 +29,7 @@ describe("closed state: an editorial tab, not a chat bubble", () => {
     const labelledby = html.match(/aria-labelledby="([^"]+)"/)?.[1];
     expect(labelledby).toBeTruthy();
     expect(html).toContain(`id="${labelledby}"`);
-    expect(html).toContain("Concierge</h2>");
+    expect(html).toContain("Daniela</h2>");
   });
 });
 
@@ -128,6 +128,50 @@ describe("tour links inside answers", () => {
   });
 });
 
+describe("final round: Daniela, a named AI assistant (transparency stays explicit)", () => {
+  it("presents the Concierge as Daniela in the header, welcome, message labels and accessible names", () => {
+    const open = render({ open: true });
+    expect(open).toMatch(/<h2[^>]*>Daniela<\/h2>/);
+    expect(open).toContain("Concierge · Ricardo Tour");
+    expect(open).toMatch(/Eu sou a Daniela/);
+    const talking = render({ open: true, messages: [user("m1", "oi"), assistant("m2", "Olá!", "grounded")] });
+    expect(talking).toContain("Daniela · IA");
+    expect(talking).not.toMatch(/>Concierge<\/span><p>/); // no unnamed speaker label left in the conversation
+  });
+
+  it("keeps the AI nature explicit everywhere: tag, welcome sentence, full disclosure, compact strip, avatar label and IA badge", () => {
+    const open = render({ open: true });
+    expect(open).toContain("Assistente de IA"); // header tag
+    expect(open).toMatch(/uma inteligência artificial, não uma pessoa da equipe/); // in Daniela's own first words
+    expect(decoded(open)).toContain(CONCIERGE_PRIVACY.ai_disclosure); // full RT-70 disclosure
+    expect(open).toMatch(/aria-label="[^"]*assistente de IA[^"]*\(ilustração\)"/); // the portrait is announced as an AI illustration
+    expect(open).toMatch(/class="[^"]*avatarBadge[^"]*" aria-hidden="true">IA</); // visible IA badge on the large portrait
+    expect(render({ open: true, messages: [user("m1", "oi")] })).toContain("Assistente de IA: pode errar e não confirma preços, reservas ou pagamentos.");
+  });
+
+  it("never implies a live human: no claim of being a team member, of typing live or of 'online agora'", () => {
+    const html = render({ open: true, messages: [user("m1", "oi"), assistant("m2", "Olá!", "grounded")] });
+    expect(html).not.toMatch(/online agora|atendente|nossa equipe responde|digitando|estou aqui para te atender como/i);
+    expect(html).not.toMatch(/sou (?:uma )?(?:pessoa|humana|atendente|consultora da equipe)/i);
+  });
+
+  it("draws Daniela as an illustrated portrait: blonde hair, green eyes, no photo, no mascot", () => {
+    const html = render({ open: true });
+    expect(html).toMatch(/data-portrait="daniela"/);
+    expect(html).toContain(DANIELA_PORTRAIT.hair);
+    expect(html).toContain(DANIELA_PORTRAIT.eyes);
+    expect(html).not.toMatch(/<img[^>]*(?:daniela|avatar|portrait)/i); // an inline illustration, not a photograph
+    const hex = (c: string) => [1, 3, 5].map((i) => parseInt(c.slice(i, i + 2), 16));
+    const [r, g, b] = hex(DANIELA_PORTRAIT.hair);
+    expect(r).toBeGreaterThan(b + 60); // warm blonde, not grey or brown
+    expect(r).toBeGreaterThan(190);
+    const [er, eg, eb] = hex(DANIELA_PORTRAIT.eyes);
+    expect(eg).toBeGreaterThan(er + 40); // green iris
+    expect(eg).toBeGreaterThan(eb + 20);
+    expect(g).toBeGreaterThan(150);
+  });
+});
+
 describe("second refinement round: welcome, avatars, recommendation cards, hierarchy, composer", () => {
   const recommendation = replyFor("recommendation");
   const withCards = (extra: Partial<PanelMessage> = {}) =>
@@ -136,7 +180,7 @@ describe("second refinement round: welcome, avatars, recommendation cards, hiera
   it("opens with a warm welcome in the Concierge's voice that states it is an AI and invites discovery, not an agency pitch", () => {
     const html = render({ open: true });
     expect(html).toContain("Vamos descobrir o Rio?");
-    expect(html).toMatch(/Sou o Concierge da Ricardo Tour, um assistente de IA/);
+    expect(html).toMatch(/Eu sou a Daniela, a assistente de IA da Ricardo Tour: uma inteligência artificial, não uma pessoa da equipe/);
     expect(html).toMatch(/primeira vez no Rio/);
     expect(html).not.toMatch(/Posso explicar os passeios e serviços da Ricardo Tour|agência de turismo/);
     expect(html).toMatch(/data-ai-disclosure/); // the full RT-70 disclosure is still there
@@ -150,8 +194,9 @@ describe("second refinement round: welcome, avatars, recommendation cards, hiera
 
   it("uses a Concierge avatar (labelled image) and a decorative neutral visitor avatar", () => {
     const html = render({ open: true, messages: [user("m1", "oi"), assistant("m2", "Olá", "grounded")] });
-    expect(render({ open: true })).toMatch(/role="img"[^>]*aria-label="Concierge da Ricardo Tour"/); // welcome: named
-    expect(html).not.toMatch(/role="img"/); // inside the live log the visible "Concierge" label names the speaker
+    expect(render({ open: true })).toMatch(/role="img"[^>]*aria-label="Daniela, assistente de IA da Ricardo Tour \(ilustração\)"/); // welcome and header: named
+    const log = html.slice(html.indexOf('role="log"'));
+    expect(log).not.toMatch(/role="img"/); // inside the live log the visible "Daniela · IA" label names the speaker; the header portrait stays named
     expect(html).toMatch(/<span class="[^"]*avatarConcierge[^"]*" aria-hidden="true">/);
     expect(html).toMatch(/<span class="[^"]*avatarVisitor[^"]*" aria-hidden="true">/);
     expect(html).not.toMatch(/robot|bot-|🤖/i);
