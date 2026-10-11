@@ -20,7 +20,7 @@ type CardTrip = {
 // Public listing card (RT-53): image-led, light surface. Related to the Home Experiences cards but built for browsing:
 // image, title, optional place, concise summary, duration, price and one detail action. No favorites or account
 // affordances, no schema-default badges and no raw metadata. The whole card is the detail link (stretched link).
-export function PublicTourCard({ trip, locale, t }: { trip: CardTrip; locale: string; t: ToursCopy }) {
+export function PublicTourCard({ trip, locale, t, priority = false }: { trip: CardTrip; locale: string; t: ToursCopy; priority?: boolean }) {
   const title = getLocalizedField<string>(asLocalizedText(trip.title), locale).trim();
   const { summary, duration } = parseTripDescription(getLocalizedField<string>(asLocalizedText(trip.description), locale) ?? "");
   const place = displayLocation(trip.location, trip.city);
@@ -33,6 +33,7 @@ export function PublicTourCard({ trip, locale, t }: { trip: CardTrip; locale: st
           src={normalizeTripImage(trip.imageUrl)}
           alt={`${title} — ${place ?? trip.city}`}
           fill
+          priority={priority}
           sizes="(max-width: 767px) 92vw, (max-width: 1279px) 46vw, 23vw"
           className="object-cover transition-transform duration-500 group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:scale-100"
         />

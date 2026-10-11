@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { defaultSocialImages } from "@/lib/seo/social-image";
 import { Link, getLanguageAlternates } from "@/i18n/routing";
 import { PUBLIC_CONTACT, buildPublicWhatsAppUrl } from "@/lib/public-contact";
 import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
@@ -13,7 +14,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: t.metaTitle,
     description: t.metaDescription,
     alternates: { canonical: path, languages: getLanguageAlternates("/quem-somos") },
-    openGraph: { title: t.metaTitle, description: t.metaDescription, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Ricardo Tour" },
+    openGraph: { title: t.metaTitle, description: t.metaDescription, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Ricardo Tour", images: defaultSocialImages(locale) },
   };
 }
 

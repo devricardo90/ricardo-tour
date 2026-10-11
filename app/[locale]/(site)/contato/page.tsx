@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { defaultSocialImages } from "@/lib/seo/social-image";
 import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { Link, getLanguageAlternates } from "@/i18n/routing";
 import { PUBLIC_CONTACT } from "@/lib/public-contact";
@@ -14,7 +15,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: t.metaTitle,
     description: t.metaDescription,
     alternates: { canonical: path, languages: getLanguageAlternates("/contato") },
-    openGraph: { title: t.metaTitle, description: t.metaDescription, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Ricardo Tour" },
+    openGraph: { title: t.metaTitle, description: t.metaDescription, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Ricardo Tour", images: defaultSocialImages(locale) },
   };
 }
 

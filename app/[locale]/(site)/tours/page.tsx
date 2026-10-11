@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { defaultSocialImages } from "@/lib/seo/social-image";
 import { getLanguageAlternates } from "@/i18n/routing";
 import { filterPublicTrips, getPublicTrips } from "@/lib/catalog/public-trips";
 import { resolveToursCopy } from "@/components/site/tours/tours-copy";
@@ -53,6 +54,7 @@ export async function generateMetadata({
       title: copy.title,
       description: copy.description,
       url: path,
+      images: defaultSocialImages(locale),
     },
   };
 }
@@ -112,8 +114,9 @@ export default async function ToursPage({ params, searchParams }: ToursPageProps
             </p>
           ) : (
             <ul className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-4">
-              {trips.map((trip) => (
-                <PublicTourCard key={trip.id} trip={trip} locale={locale} t={t} />
+              {trips.map((trip, index) => (
+                // First row is above the fold: load eagerly so the LCP image is not lazy (Lighthouse lcp-lazy-loaded, RT-45).
+                <PublicTourCard key={trip.id} trip={trip} locale={locale} t={t} priority={index < 2} />
               ))}
             </ul>
           )}

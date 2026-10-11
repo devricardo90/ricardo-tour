@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { defaultSocialImages } from "@/lib/seo/social-image";
 import { notFound } from "next/navigation";
 import { Mail, MessageCircle } from "lucide-react";
 import { OnerWidget } from "@/components/site/oner/oner-widget";
@@ -21,7 +22,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: TITLE,
     description: DESCRIPTION,
     alternates: { canonical: TRAVEL_PLANNER_CANONICAL },
-    openGraph: { title: TITLE, description: DESCRIPTION, url: TRAVEL_PLANNER_CANONICAL, siteName: "Ricardo Tour" },
+    openGraph: { title: TITLE, description: DESCRIPTION, url: TRAVEL_PLANNER_CANONICAL, siteName: "Ricardo Tour", images: defaultSocialImages("pt") },
     robots: { index: true, follow: true },
   };
 }

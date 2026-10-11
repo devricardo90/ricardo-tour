@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { defaultSocialImages } from "@/lib/seo/social-image";
 import GlobeJourney from "@/components/home/hero/globe-journey";
 import { ExperiencesInRioSection } from "@/components/experiences-in-rio-section";
 import { WhyRickTravelSection } from "@/components/why-rick-travel-section";
@@ -7,6 +8,7 @@ import { AboutRickTravelSection } from "@/components/about-rick-travel-section";
 import { HomeHashScroll } from "@/components/home/home-hash-scroll";
 import { getLanguageAlternates } from "@/i18n/routing";
 import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
+import { buildOrganizationJsonLd, serializeJsonLd } from "@/lib/seo/structured-data";
 
 const HOME_META: Record<string, { title: string; description: string }> = {
   pt: {
@@ -31,8 +33,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
     title: t.title,
     description: t.description,
     alternates: { canonical: path, languages: getLanguageAlternates() },
-    openGraph: { title: t.title, description: t.description, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Ricardo Tour", type: "website" },
-    twitter: { card: "summary_large_image", title: t.title, description: t.description },
+    openGraph: { title: t.title, description: t.description, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Ricardo Tour", type: "website", images: defaultSocialImages(locale) },
+    twitter: { card: "summary_large_image", title: t.title, description: t.description, images: defaultSocialImages(locale).map((i) => i.url) },
   };
 }
 
@@ -42,8 +44,10 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 // Owner decision 2026-10-11: no dedicated AI Concierge section; Daniela lives in the side panel (menu item opens it). Nothing here depends on REBUILD_LAB_ENABLED.
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
+  const description = (HOME_META[locale] ?? HOME_META.pt).description;
   return (
     <div id="top-of-home" className="[&_section[id]]:scroll-mt-16">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(buildOrganizationJsonLd(PUBLIC_SITE_URL, description)) }} />
       <HomeHashScroll />
       <GlobeJourney locale={locale} />
       <ExperiencesInRioSection locale={locale} />
