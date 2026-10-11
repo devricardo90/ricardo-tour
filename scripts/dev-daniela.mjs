@@ -9,8 +9,9 @@
 import { spawn } from "node:child_process";
 
 const model = process.argv[2];
+const port = process.env.PORT || "3100";
 const env = { ...process.env, AI_CONCIERGE_ENABLED: "true", NODE_ENV: "development" };
 if (model) env.OPENAI_CONCIERGE_MODEL = model;
-console.log(`Daniela test mode: open http://localhost:3000/pt  (or /en, /es)${model ? `  [model override: ${model}]` : ""}\nCtrl+C to stop. Not published; local only.`);
-const child = spawn(process.platform === "win32" ? "npx.cmd" : "npx", ["next", "dev", "--webpack", "-p", "3000"], { env, stdio: "inherit", shell: process.platform === "win32" });
+console.log(`Daniela test mode: open http://localhost:${port}/pt  (or /en, /es)${model ? `  [model override: ${model}]` : ""}\nCtrl+C to stop. Not published; local only.`);
+const child = spawn(process.platform === "win32" ? "npx.cmd" : "npx", ["next", "dev", "--webpack", "-p", port], { env, stdio: "inherit", shell: process.platform === "win32" });
 child.on("exit", (code) => process.exit(code ?? 0));
