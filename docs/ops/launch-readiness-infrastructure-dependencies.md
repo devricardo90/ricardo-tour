@@ -33,7 +33,7 @@ Vercel Fair Use Guidelines (page updated 2026-09-14): "Hobby teams are restricte
 
 ## Facts still to be verified when the Owner is ready (none of these block development)
 
-- The actual Vercel plan and the Preview/Production environment variable configuration (needs the Owner's Vercel login or a statement of the plan).
+- **Vercel plan: Hobby — confirmed by the Owner (2026-10-10).** Still to verify with the Owner's Vercel login: the Preview/Production environment variable configuration and the Function Region setting (production observed in `iad1`).
 - Marketplace terms for the Upstash free plan; behaviour at real free-quota exhaustion; latency from the production region.
 - Cost of the chosen compliant hosting at expected traffic, including WAF rate-limit pricing if used.
 

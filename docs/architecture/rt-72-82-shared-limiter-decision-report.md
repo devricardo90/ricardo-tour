@@ -9,7 +9,7 @@
 | Item | Result | How verified |
 | --- | --- | --- |
 | Production Function region | **`iad1` (Washington, D.C.)** | Three read-only GETs of `https://www.ricardotour.com/api/health` returned `X-Vercel-Id: arn1::iad1::…` (edge `arn1` = where the probe entered; function region = `iad1`). Not inferred from Neon |
-| Vercel plan | **NOT verified** | Not exposed by headers; the Vercel CLI is not installed, the browser extension is not connected and the Vercel connector needs an interactive OAuth login (see §10 action A) |
+| Vercel plan | **Hobby (confirmed by the Owner, 2026-10-10)** | Owner statement; not exposed by headers and not independently checked by the agent. Hobby is not approved for commercial production; the final hosting decision is deferred to Launch Readiness (see `docs/ops/launch-readiness-infrastructure-dependencies.md`) |
 | Neon database region | `eu-west-2` (London) | hostname token. Functions in `iad1` therefore query Neon across the Atlantic on each request — a separate latency finding, out of scope here |
 | Client address trust | **Safe to use** | Vercel docs (request headers): `x-forwarded-for` is the client's public IP and Vercel *overwrites* the header and does not forward external IPs, to prevent spoofing. `clientKeyFromHeaders` (first entry) is therefore appropriate. Not re-proven empirically in a deployment |
 | Development / preview environment | Vercel project environment variables **not inspected or changed** (no access). Local development uses `.env.local` (Git-ignored) | — |
@@ -115,7 +115,7 @@ Redis stores only an opaque HMAC key, a counter and a TTL ≤ window + 5 s (the 
 
 ## 10. Deployment dependencies — Owner actions (nothing below was done)
 
-A. **Vercel access** for the plan and project settings: open the one-time Vercel authorization link issued by the connector in the working session and finish the login (or send the plan name and a screenshot of Settings → Functions → Function Regions). Needed to choose between Hobby/Pro WAF behaviour and to confirm Preview/Production environment configuration.
+A. **Vercel access** for project settings only (the plan is already confirmed as Hobby by the Owner): a Vercel login or a screenshot of Settings → Functions → Function Regions, to confirm the Function Region and the Preview/Production environment configuration. WAF behaviour to plan against is Hobby's until the Launch Readiness hosting decision.
 B. **Production database:** after A, create the production Upstash Free database (claimed in an Upstash account, no card) in **`us-east-1` (N. Virginia), co-located with `iad1`** — or in a different region if the verified Function setting differs — and re-run the live test and the latency measurement from `iad1`. The instant test database must not be used in production.
 C. Set Production/Preview variables (Sensitive): `UPSTASH_REDIS_REST_URL`, `UPSTASH_REDIS_REST_TOKEN`, `RATE_LIMIT_HMAC_SECRET` (≥ 32 random characters); later `AI_CONCIERGE_RATE_LIMITS` once quotas are approved. Production activation of the Concierge stays blocked by RT-75.
 D. Optional WAF rule per §7 (Owner authorization).

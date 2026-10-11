@@ -6,6 +6,7 @@
 // address, is used as Reply-To; otherwise replies go to the business inbox.
 import { TRANSACTIONAL_FROM, resolveReplyTo, toSingleLine } from "@/lib/email-identity";
 import { PUBLIC_CONTACT } from "@/lib/public-contact";
+import { reportServerError } from "@/lib/observability/report";
 
 export const NOTIFICATION_RECIPIENT = PUBLIC_CONTACT.email;
 export const NOTIFICATION_SENDER = TRANSACTIONAL_FROM;
@@ -41,12 +42,12 @@ export async function sendContactNotification(input: { submissionId: string; sub
       replyTo: resolveReplyTo(input.replyTo),
     });
     if (error) {
-      console.error(`[${tag}] notification failed`, error.message);
+      reportServerError({ source: "background", where: `${tag}:notification`, error: error.message });
       return "failed";
     }
     return "sent";
   } catch (error) {
-    console.error(`[${tag}] notification error`, error instanceof Error ? error.message : error);
+    reportServerError({ source: "background", where: `${tag}:notification`, error });
     return "failed";
   }
 }

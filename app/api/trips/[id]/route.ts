@@ -4,6 +4,7 @@ import { headers } from "next/headers";
 import { tripSchema } from "@/lib/schemas";
 import { updateTripRecord } from "@/lib/services/trip.service";
 import { z } from "zod";
+import { reportServerError } from "@/lib/observability/report";
 
 export async function PUT(
     req: Request,
@@ -33,7 +34,7 @@ export async function PUT(
             );
         }
 
-        console.error("Error updating trip:", error);
+        reportServerError({ source: "api_route", where: "api/trips/[id]:PUT", error });
         return NextResponse.json(
             { error: "Failed to update trip" },
             { status: 500 }

@@ -8,6 +8,7 @@ import { asLocalizedText } from "@/lib/types";
 import { sendTourRequestNotification } from "@/lib/services/tour-request-notification";
 import { isFormSubmissionLimited } from "@/lib/rate-limit/server";
 import { buildStoredRequestMessage, normalizeValues, validateTourRequest, type TourRequestErrors } from "@/lib/tour-request";
+import { reportServerError } from "@/lib/observability/report";
 
 // Guest tour request (RT-55): no account, no payment, no availability confirmation. It reuses the existing
 // ContactSubmission table (no schema change): the tour context travels in the structured message, and the
@@ -64,7 +65,7 @@ export async function submitTourRequest(formData: FormData): Promise<TourRequest
     });
     submissionId = created.id;
   } catch (error) {
-    console.error("[tour-request] could not store the request", error instanceof Error ? error.message : error);
+    reportServerError({ source: "form", where: "tour-request:store", error });
     return { ok: false, reason: "unavailable" };
   }
 

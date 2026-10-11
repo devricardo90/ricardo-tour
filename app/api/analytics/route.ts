@@ -8,6 +8,7 @@ import {
 import { auth } from "@/lib/auth";
 import { ANALYTICS_EVENT_TYPES } from "@/lib/analytics/events";
 import { trackAnalyticsEvent } from "@/lib/services/analytics.service";
+import { reportServerError } from "@/lib/observability/report";
 
 type AnalyticsEventType = NonNullable<Parameters<typeof prisma.analyticsEvent.create>[0]["data"]["type"]>;
 
@@ -57,7 +58,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error(error);
+    reportServerError({ source: "api_route", where: "api/analytics:POST", error });
     return NextResponse.json({ error: "Erro ao registrar analytics" }, { status: 500 });
   }
 }

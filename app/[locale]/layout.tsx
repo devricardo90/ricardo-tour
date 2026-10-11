@@ -8,6 +8,7 @@ import { notFound } from 'next/navigation';
 import { routing, isPublicLocale } from '@/i18n/routing';
 import { Toaster } from '@/components/ui/toaster';
 import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
+import { WebVitalsReporter } from "@/components/observability/web-vitals-reporter";
 
 const baseMetadata: Metadata = {
   metadataBase: new URL(PUBLIC_SITE_URL),
@@ -71,6 +72,7 @@ export default async function RootLayout({
             disableTransitionOnChange
           >
             <Toaster />
+            <WebVitalsReporter />
             {children}
           </ThemeProvider>
         </NextIntlClientProvider>

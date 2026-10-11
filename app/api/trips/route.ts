@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { getPublicTrips } from '@/lib/catalog/public-trips'
+import { reportServerError } from "@/lib/observability/report";
 
 // Revalidar a cada 60 segundos
 export const revalidate = 60
@@ -21,7 +22,7 @@ export async function GET() {
             }
         )
     } catch (error) {
-        console.error('Error fetching trips:', error)
+        reportServerError({ source: "api_route", where: "api/trips:GET", error })
         return NextResponse.json(
             { error: 'Failed to fetch trips' },
             { status: 500 }

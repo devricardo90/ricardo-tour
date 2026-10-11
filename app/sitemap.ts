@@ -3,6 +3,7 @@ import { getAbsoluteLanguageAlternates, publicLocaleCodes } from "@/i18n/routing
 import { getPublicTrips } from "@/lib/catalog/public-trips";
 import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
 import { TRAVEL_PLANNER_CANONICAL, TRAVEL_PLANNER_PUBLIC_ACTIVE } from "@/lib/travel-planner/config";
+import { reportServerError } from "@/lib/observability/report";
 
 // Public sitemap (RT-57): only the launched locales (pt/en/es) and only public routes. Login/register are not listed,
 // Swedish is not advertised, and trips come from the same catalog gate as /tours and the Home (RT-53), never from
@@ -28,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     trips = await getPublicTrips();
   } catch (error) {
-    console.error("Error fetching trips for sitemap:", error);
+    reportServerError({ source: "route_handler", where: "sitemap:trips", error });
   }
 
   const tripRoutes = publicLocaleCodes.flatMap((locale) =>

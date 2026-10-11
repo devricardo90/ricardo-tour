@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { requireSession } from "@/lib/authz";
 import { isDomainError } from "@/lib/errors/domain-error";
 import { createBookingForUser, listBookingsForUser } from "@/lib/services/booking.service";
+import { reportServerError } from "@/lib/observability/report";
 
 export async function GET() {
   try {
@@ -13,7 +14,7 @@ export async function GET() {
       return NextResponse.json({ error: error.message }, { status: error.status });
     }
 
-    console.error(error);
+    reportServerError({ source: "api_route", where: "api/bookings:GET", error });
     return NextResponse.json({ error: "Erro ao carregar bookings" }, { status: 500 });
   }
 }
@@ -29,7 +30,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: error.message }, { status: error.status });
     }
 
-    console.error(error);
+    reportServerError({ source: "api_route", where: "api/bookings:POST", error });
     return NextResponse.json({ error: "Erro ao criar booking" }, { status: 500 });
   }
 }

@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { sendContactNotification } from "@/lib/services/tour-request-notification";
 import { isFormSubmissionLimited } from "@/lib/rate-limit/server";
 import { buildStoredContactMessage, normalizeContactValues, validateContactMessage, type ContactMessageErrors } from "@/lib/contact-message";
+import { reportServerError } from "@/lib/observability/report";
 
 // General contact message (RT-56, /contato). Same pipeline as the RT-55 tour request: the message is stored in the
 // existing ContactSubmission table first (no schema change), then a notification goes to the approved recipient with the
@@ -51,7 +52,7 @@ export async function submitContactMessage(formData: FormData): Promise<ContactM
     const created = await prisma.contactSubmission.create({ data: { name: values.name, email: values.email, phone: values.phone || null, message } });
     submissionId = created.id;
   } catch (error) {
-    console.error("[contact-message] could not store the message", error instanceof Error ? error.message : error);
+    reportServerError({ source: "form", where: "contact-message:store", error });
     return { ok: false, reason: "unavailable" };
   }
 

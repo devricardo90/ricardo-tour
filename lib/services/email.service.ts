@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { getLocalizedField } from "@/lib/localized-field";
 import { resend } from "@/lib/resend";
 import { asLocalizedText } from "@/lib/types";
+import { reportServerError } from "@/lib/observability/report";
 
 type BookingEmailTemplate = "BOOKING_CONFIRMED" | "PAYMENT_CONFIRMED";
 
@@ -117,7 +118,7 @@ export async function sendBookingEmail(bookingId: string, template: BookingEmail
 
     return { delivered: true as const, template };
   } catch (error: unknown) {
-    console.error("Failed to send email:", error);
+    reportServerError({ source: "background", where: "email-service:send", error });
 
     await prisma.emailLog.update({
       where: { id: emailLog.id },
