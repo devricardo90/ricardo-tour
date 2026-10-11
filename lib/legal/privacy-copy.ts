@@ -1,0 +1,109 @@
+/**
+ * RT-80 privacy page copy: a MINIMAL, FACTUAL draft in Portuguese, English and Spanish, prepared from what the code actually does
+ * (see docs/legal/privacy-facts-verified.md for the evidence behind each statement). It is a DRAFT FOR THE OWNER'S APPROVAL:
+ * the in-depth legal review is explicitly PENDING and no lawyer has approved this text. It must not be published, linked from the
+ * footer or described as legally approved until the Owner approves it. Items the code cannot prove are written as such.
+ */
+export const PRIVACY_REVIEW_STATUS = {
+  owner_approval: "PENDING",
+  legal_review: "PENDING",
+  prepared_on: "2026-10-11",
+} as const;
+
+export type PrivacySection = { id: string; title: string; paragraphs: string[] };
+export type PrivacyCopy = { title: string; draftBanner: string; updated: string; sections: PrivacySection[] };
+
+const CONTACT = "contato@ricardotour.com";
+
+export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
+  pt: {
+    title: "Política de Privacidade (rascunho)",
+    draftBanner: "Rascunho para aprovação do Owner. A revisão jurídica aprofundada está PENDENTE: este texto ainda não foi aprovado por advogado e não deve ser publicado até a aprovação do Owner.",
+    updated: "Rascunho preparado em 11/10/2026.",
+    sections: [
+      { id: "who", title: "Quem somos", paragraphs: [`Esta política descreve como o site da Ricardo Tour trata dados pessoais. Razão social, CNPJ e endereço do responsável pelo tratamento: a serem informados pelo Owner antes da publicação. Contato para assuntos de privacidade: ${CONTACT}.`] },
+      { id: "data", title: "Quais dados tratamos e para quê", paragraphs: [
+        "Formulários de contato e de solicitação de passeio: nome, e-mail, telefone (opcional) e a mensagem que você escrever. Usamos para responder ao seu pedido. Ficam gravados em nosso banco de dados e uma cópia da mensagem é enviada por e-mail à equipe.",
+        "Conta e reservas: nome, e-mail e dados da sessão (endereço IP e navegador) quando você usa as áreas de conta ou reserva do site.",
+        "Estatísticas de uso: eventos como visualização de passeio e clique em reservar, com um identificador aleatório de sessão (guardado apenas enquanto a aba está aberta), o caminho da página e a origem da visita (parâmetros de campanha). Esse identificador não contém dados pessoais.",
+        "Registros técnicos: erros do site e medidas de desempenho (caminho da página, sem dados pessoais) ficam nos registros da plataforma de hospedagem.",
+      ] },
+      { id: "daniela", title: "Daniela, a assistente de inteligência artificial", paragraphs: [
+        "Daniela é uma assistente virtual de inteligência artificial, não uma pessoa da equipe. Ela pode errar e não confirma preços, disponibilidade, reservas ou pagamentos. Não envie dados pessoais ou sensíveis (documentos, cartão, senhas) na conversa.",
+        "O que você escreve é enviado à OpenAI, nossa fornecedora de IA, apenas para gerar a resposta. A Ricardo Tour não guarda as conversas: o histórico existe somente na sua tela durante a sessão e some ao recarregar a página. A OpenAI pode manter registros técnicos conforme os termos dela (na documentação que consultamos, por até 30 dias para segurança; esse prazo pode mudar e deve ser conferido antes da publicação).",
+        "Para limitar abusos, guardamos por poucos minutos ou horas contadores de uso associados a um código irreversível (hash) do seu endereço IP e de um identificador temporário e aleatório da sessão, sem nome nem conteúdo de mensagens.",
+        "Registramos, sem o conteúdo das conversas, eventos técnicos (por exemplo: abertura do painel, clique em WhatsApp, erros, limites atingidos e quantidade de tokens usada).",
+        "Quando você clica para falar com a equipe, abrimos o WhatsApp (+55 22 99846-1906) ou seu e-mail com uma mensagem sugerida que você pode editar; nada é enviado automaticamente e o histórico da conversa não é transmitido. A conversa no WhatsApp passa a seguir as regras do WhatsApp.",
+      ] },
+      { id: "providers", title: "Fornecedores envolvidos", paragraphs: ["Hospedagem do site (Vercel), banco de dados (Neon), e-mail transacional (Resend), controle de limites de uso (Upstash) e IA (OpenAI). Alguns deles podem tratar dados fora do Brasil; as condições de transferência internacional estão em revisão jurídica."] },
+      { id: "retention", title: "Por quanto tempo guardamos", paragraphs: [
+        "Conversas com a Daniela: não são guardadas por nós.",
+        "Contadores de limite de uso: segundos a horas (expiram sozinhos).",
+        "Mensagens de contato, contas, reservas e estatísticas: o sistema ainda não tem prazo de exclusão automática; o prazo será definido pelo Owner antes da publicação.",
+        "Registros da hospedagem: por período curto definido pela plataforma.",
+      ] },
+      { id: "storage", title: "Cookies e armazenamento no navegador", paragraphs: ["Usamos um cookie de atribuição de campanha (30 dias) com dados de origem da visita e um identificador de sessão guardado apenas na aba aberta. A Daniela não grava nada no seu navegador."] },
+      { id: "rights", title: "Seus direitos e como falar conosco", paragraphs: [`Você pode pedir acesso, correção ou exclusão dos seus dados e tirar dúvidas pelo e-mail ${CONTACT}.`] },
+    ],
+  },
+  en: {
+    title: "Privacy Policy (draft)",
+    draftBanner: "Draft for the Owner's approval. The in-depth legal review is PENDING: this text has not been approved by a lawyer and must not be published until the Owner approves it.",
+    updated: "Draft prepared on 11 Oct 2026.",
+    sections: [
+      { id: "who", title: "Who we are", paragraphs: [`This policy describes how the Ricardo Tour website handles personal data. Legal name, tax ID and address of the data controller: to be provided by the Owner before publication. Privacy contact: ${CONTACT}.`] },
+      { id: "data", title: "What data we handle and why", paragraphs: [
+        "Contact and tour-request forms: name, e-mail, phone (optional) and the message you write. We use them to answer your request. They are stored in our database and a copy of the message is e-mailed to the team.",
+        "Account and bookings: name, e-mail and session data (IP address and browser) when you use the account or booking areas.",
+        "Usage statistics: events such as viewing a tour or clicking reserve, with a random session identifier (kept only while the tab is open), the page path and the source of the visit (campaign parameters). This identifier contains no personal data.",
+        "Technical records: site errors and performance measurements (page path, no personal data) are kept in the hosting platform's logs.",
+      ] },
+      { id: "daniela", title: "Daniela, the artificial intelligence assistant", paragraphs: [
+        "Daniela is a virtual assistant powered by artificial intelligence, not a member of the team. She can make mistakes and does not confirm prices, availability, bookings or payments. Do not send personal or sensitive data (documents, cards, passwords) in the chat.",
+        "What you write is sent to OpenAI, our AI provider, only to generate the answer. Ricardo Tour does not store the conversations: the history exists only on your screen during the session and disappears when you reload the page. OpenAI may keep technical records under its own terms (in the documentation we consulted, up to 30 days for security; this period may change and must be checked before publication).",
+        "To limit abuse, we keep for minutes or hours usage counters linked to an irreversible code (hash) of your IP address and of a temporary random session identifier, with no name and no message content.",
+        "We log, without the content of conversations, technical events (for example: opening the panel, clicking WhatsApp, errors, limits reached and the number of tokens used).",
+        "When you choose to talk to the team, we open WhatsApp (+55 22 99846-1906) or your e-mail with a suggested message you can edit; nothing is sent automatically and the conversation history is not transmitted. The WhatsApp conversation then follows WhatsApp's own rules.",
+      ] },
+      { id: "providers", title: "Providers involved", paragraphs: ["Website hosting (Vercel), database (Neon), transactional e-mail (Resend), usage-limit control (Upstash) and AI (OpenAI). Some of them may process data outside Brazil; the international-transfer terms are under legal review."] },
+      { id: "retention", title: "How long we keep data", paragraphs: [
+        "Conversations with Daniela: not stored by us.",
+        "Usage-limit counters: seconds to hours (they expire by themselves).",
+        "Contact messages, accounts, bookings and statistics: the system has no automatic deletion period yet; the Owner will define it before publication.",
+        "Hosting logs: a short period set by the platform.",
+      ] },
+      { id: "storage", title: "Cookies and browser storage", paragraphs: ["We use a campaign-attribution cookie (30 days) with the source of the visit and a session identifier kept only in the open tab. Daniela does not write anything to your browser."] },
+      { id: "rights", title: "Your rights and how to contact us", paragraphs: [`You can ask for access, correction or deletion of your data, or ask questions, at ${CONTACT}.`] },
+    ],
+  },
+  es: {
+    title: "Política de Privacidad (borrador)",
+    draftBanner: "Borrador para aprobación del Owner. La revisión jurídica en profundidad está PENDIENTE: este texto no ha sido aprobado por un abogado y no debe publicarse hasta que el Owner lo apruebe.",
+    updated: "Borrador preparado el 11/10/2026.",
+    sections: [
+      { id: "who", title: "Quiénes somos", paragraphs: [`Esta política describe cómo el sitio de Ricardo Tour trata los datos personales. Razón social, identificación fiscal y dirección del responsable del tratamiento: serán indicadas por el Owner antes de la publicación. Contacto de privacidad: ${CONTACT}.`] },
+      { id: "data", title: "Qué datos tratamos y para qué", paragraphs: [
+        "Formularios de contacto y de solicitud de paseo: nombre, correo, teléfono (opcional) y el mensaje que escribas. Los usamos para responder a tu solicitud. Se guardan en nuestra base de datos y una copia del mensaje se envía por correo al equipo.",
+        "Cuenta y reservas: nombre, correo y datos de sesión (dirección IP y navegador) cuando usas las áreas de cuenta o reserva.",
+        "Estadísticas de uso: eventos como ver un paseo o hacer clic en reservar, con un identificador aleatorio de sesión (guardado solo mientras la pestaña está abierta), la ruta de la página y el origen de la visita (parámetros de campaña). Ese identificador no contiene datos personales.",
+        "Registros técnicos: errores del sitio y mediciones de rendimiento (ruta de la página, sin datos personales) quedan en los registros de la plataforma de alojamiento.",
+      ] },
+      { id: "daniela", title: "Daniela, la asistente de inteligencia artificial", paragraphs: [
+        "Daniela es una asistente virtual de inteligencia artificial, no una persona del equipo. Puede equivocarse y no confirma precios, disponibilidad, reservas ni pagos. No envíes datos personales ni sensibles (documentos, tarjeta, contraseñas) en el chat.",
+        "Lo que escribes se envía a OpenAI, nuestra proveedora de IA, solo para generar la respuesta. Ricardo Tour no guarda las conversaciones: el historial existe solo en tu pantalla durante la sesión y desaparece al recargar la página. OpenAI puede conservar registros técnicos según sus propios términos (en la documentación que consultamos, hasta 30 días por seguridad; ese plazo puede cambiar y debe verificarse antes de la publicación).",
+        "Para limitar abusos, guardamos durante minutos u horas contadores de uso asociados a un código irreversible (hash) de tu dirección IP y de un identificador temporal aleatorio de sesión, sin nombre ni contenido de mensajes.",
+        "Registramos, sin el contenido de las conversaciones, eventos técnicos (por ejemplo: apertura del panel, clic en WhatsApp, errores, límites alcanzados y cantidad de tokens usados).",
+        "Cuando eliges hablar con el equipo, abrimos WhatsApp (+55 22 99846-1906) o tu correo con un mensaje sugerido que puedes editar; no se envía nada automáticamente y el historial de la conversación no se transmite. La conversación en WhatsApp pasa a regirse por las reglas de WhatsApp.",
+      ] },
+      { id: "providers", title: "Proveedores involucrados", paragraphs: ["Alojamiento del sitio (Vercel), base de datos (Neon), correo transaccional (Resend), control de límites de uso (Upstash) e IA (OpenAI). Algunos pueden tratar datos fuera de Brasil; las condiciones de transferencia internacional están en revisión jurídica."] },
+      { id: "retention", title: "Cuánto tiempo guardamos los datos", paragraphs: [
+        "Conversaciones con Daniela: no las guardamos.",
+        "Contadores de límite de uso: de segundos a horas (caducan solos).",
+        "Mensajes de contacto, cuentas, reservas y estadísticas: el sistema aún no tiene un plazo de eliminación automática; el Owner lo definirá antes de la publicación.",
+        "Registros del alojamiento: un período corto fijado por la plataforma.",
+      ] },
+      { id: "storage", title: "Cookies y almacenamiento en el navegador", paragraphs: ["Usamos una cookie de atribución de campaña (30 días) con el origen de la visita y un identificador de sesión guardado solo en la pestaña abierta. Daniela no escribe nada en tu navegador."] },
+      { id: "rights", title: "Tus derechos y cómo contactarnos", paragraphs: [`Puedes pedir acceso, corrección o eliminación de tus datos, o hacer consultas, en ${CONTACT}.`] },
+    ],
+  },
+};

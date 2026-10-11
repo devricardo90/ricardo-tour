@@ -20,10 +20,20 @@ export type ClientContext = {
 const SESSION_ID = /^[A-Za-z0-9_-]{16,64}$/;
 const bounded = (value: unknown, min: number, max: number) => typeof value === "number" && Number.isInteger(value) && value >= min && value <= max;
 
-/** `AI_CONCIERGE_RATE_LIMITS` = {"burst":{"limit":N,"windowSeconds":S},"session":{…},"global":{…}} — all three required. */
+/**
+ * Owner-approved V1 limits (2026-10-11): 10 messages per minute per IP, 20 per (temporary, anonymous) session per hour, 300 per day
+ * globally. They apply when `AI_CONCIERGE_RATE_LIMITS` is not set; a set-but-invalid value fails closed (no model access).
+ */
+export const APPROVED_V1_LIMITS: ConciergeLimits = {
+  burst: { name: "burst", limit: 10, windowSeconds: 60 },
+  session: { name: "session", limit: 20, windowSeconds: 3_600 },
+  global: { name: "global", limit: 300, windowSeconds: 86_400 },
+};
+
+/** `AI_CONCIERGE_RATE_LIMITS` = {"burst":{"limit":N,"windowSeconds":S},"session":{…},"global":{…}} overrides the approved defaults — all three required. */
 export function readConciergeLimits(env: Record<string, string | undefined> = process.env): ConciergeLimits | null {
   const raw = env.AI_CONCIERGE_RATE_LIMITS;
-  if (!raw) return null;
+  if (!raw) return APPROVED_V1_LIMITS;
   let parsed: unknown;
   try {
     parsed = JSON.parse(raw);

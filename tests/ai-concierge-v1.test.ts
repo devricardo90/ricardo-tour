@@ -247,11 +247,11 @@ describe("V1 model-bound answers: simple questions from the sources, nothing inv
 
   it("no information available: the limitation is stated naturally in the visitor's language and the team is offered", async () => {
     const empty = { retrieve: vi.fn(async () => []), generate: vi.fn(async () => "x"), onEvent: () => undefined };
-    const en = await runConcierge({ message: "Do you offer paragliding?", locale: "en" }, empty, registry);
+    const en = await runConcierge({ message: "Is there wheelchair access on the tours?", locale: "en" }, empty, registry);
     expect(en.outcome).toBe("INSUFFICIENT_EVIDENCE");
     expect(en.answer).toMatch(/don't have enough confirmed information/);
     expect(en.handoff?.channels[0].display).toBe(PUBLIC_CONTACT.whatsappDisplay);
-    const es = await runConcierge({ message: "¿Tienen parapente?", locale: "es" }, empty, registry);
+    const es = await runConcierge({ message: "¿Hay acceso para sillas de ruedas?", locale: "es" }, empty, registry);
     expect(es.answer).toMatch(/No tengo información confirmada/);
     expect(empty.generate).not.toHaveBeenCalled();
   });

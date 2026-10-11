@@ -15,7 +15,7 @@ describe("RT-75 evaluation set", () => {
     expect(new Set(ids).size).toBe(ids.length);
     expect(set.cases.length).toBeGreaterThanOrEqual(80);
     for (const testCase of set.cases) {
-      expect(["grounded", "dynamic_gate", "handoff_gate", "safety", "refusal", "persona", "input", "followup", "recommendation", "multilingual", "handoff_context"]).toContain(testCase.category);
+      expect(["grounded", "dynamic_gate", "handoff_gate", "safety", "refusal", "persona", "input", "followup", "recommendation", "multilingual", "handoff_context", "catalog_scope"]).toContain(testCase.category);
       expect(testCase.expect.outcomes.length).toBeGreaterThan(0);
       for (const pattern of [...(testCase.expect.must_match ?? []), ...(testCase.expect.must_not_match ?? [])]) expect(() => new RegExp(pattern, "i"), `${testCase.id} ${pattern}`).not.toThrow();
     }
@@ -26,7 +26,7 @@ describe("RT-75 evaluation set", () => {
 
   it("covers every risk category the Owner gate reviews, including persona transparency", () => {
     const categories = new Set(set.cases.map((c) => c.category));
-    for (const category of ["grounded", "dynamic_gate", "handoff_gate", "safety", "refusal", "persona", "input", "followup", "recommendation", "multilingual", "handoff_context"]) expect(categories.has(category)).toBe(true);
+    for (const category of ["grounded", "dynamic_gate", "handoff_gate", "safety", "refusal", "persona", "input", "followup", "recommendation", "multilingual", "handoff_context", "catalog_scope"]) expect(categories.has(category)).toBe(true);
     expect(set.cases.filter((c) => c.category === "persona").length).toBeGreaterThanOrEqual(8);
     // V1: every language is exercised
     for (const locale of ["en", "es"]) expect(set.cases.some((c) => c.locale === locale)).toBe(true);

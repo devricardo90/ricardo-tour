@@ -1,3 +1,5 @@
+import cardsData from "@/knowledge/concierge/catalog/approved-tour-cards.json";
+
 /**
  * Closed allow-list of the tours the Concierge may present as recommendation cards and name in a WhatsApp message.
  * Every field is traceable to approved material: the id, title and public URL path come from the approved catalog snapshots
@@ -24,60 +26,11 @@ export type TourCardData = {
   keywords: readonly string[];
 };
 
-export const APPROVED_TOUR_CARDS: readonly TourCardData[] = [
-  {
-    id: "cmlhxkpy9000028zq27rhytew",
-    title: "Cristo Redentor + Pão de Açúcar",
-    summary: "Visite os dois pontos turísticos mais famosos do Rio em um único passeio",
-    summary_en: "Visit Rio's two most famous landmarks in a single tour",
-    summary_es: "Visita los dos puntos turísticos más famosos de Río en un solo paseo",
-    path: "/pt/tours/cmlhxkpy9000028zq27rhytew",
-    image: "/images/trips/imagem-pao-de-acucar.jpg",
-    imageAlt: "Visitante no mirante do Pão de Açúcar, com a Baía de Guanabara ao fundo",
-    imageAlt_en: "Visitor at the Sugarloaf viewpoint, with Guanabara Bay in the background",
-    imageAlt_es: "Visitante en el mirador del Pan de Azúcar, con la Bahía de Guanabara al fondo",
-    keywords: ["cristo", "christ", "redentor", "redeemer", "corcovado", "pao de acucar", "sugarloaf", "sugar loaf", "pan de azucar"],
-  },
-  {
-    id: "cmlibniq40000z4zqkbujnutt",
-    title: "Confeitaria Colombo + City Tour Rio",
-    summary: "passeio pelos pontos históricos do Rio de Janeiro",
-    summary_en: "A tour of Rio de Janeiro's historic landmarks",
-    summary_es: "Un paseo por los puntos históricos de Río de Janeiro",
-    path: "/pt/tours/cmlibniq40000z4zqkbujnutt",
-    image: "/images/trips/confeitaria-colombo-city-tour.jpeg",
-    imageAlt: "Confeitaria Colombo, no centro histórico do Rio de Janeiro",
-    imageAlt_en: "Confeitaria Colombo, in the historic center of Rio de Janeiro",
-    imageAlt_es: "Confeitaria Colombo, en el centro histórico de Río de Janeiro",
-    keywords: ["colombo", "confeitaria", "city tour", "citytour", "historico", "historicos", "historia", "history", "historic", "historical", "downtown", "cafe"],
-  },
-  {
-    id: "cmljo0s1u0000t0zqa0bpd23p",
-    title: "Tour Privado Premium Rio de Janeiro",
-    summary: "Experiência exclusiva e personalizada pelos principais pontos do Rio",
-    summary_en: "An exclusive, personalized experience through Rio's main sights",
-    summary_es: "Una experiencia exclusiva y personalizada por los principales puntos de Río",
-    path: "/pt/tours/cmljo0s1u0000t0zqa0bpd23p",
-    image: "/images/trips/imagem-igreja-centro-rio.jpg",
-    imageAlt: "Igreja histórica no centro do Rio de Janeiro",
-    imageAlt_en: "Historic church in downtown Rio de Janeiro",
-    imageAlt_es: "Iglesia histórica en el centro de Río de Janeiro",
-    keywords: ["privado", "private", "privativo", "premium", "exclusivo", "exclusiva", "exclusive", "personalizado", "personalized", "vip", "familia", "family", "casal", "couple", "pareja"],
-  },
-  {
-    id: "cmli1a6im000034zqqzc9sppb",
-    title: "Tour Favela Rocinha com Guia Local",
-    summary: "Conheça a cultura local da maior favela do Brasil com guia especializado",
-    summary_en: "Discover the local culture of Brazil's largest favela with a specialized guide",
-    summary_es: "Conoce la cultura local de la favela más grande de Brasil con un guía especializado",
-    path: "/pt/tours/cmli1a6im000034zqqzc9sppb",
-    image: "/images/trips/imagem-tour-favela-rocinha.jpg",
-    imageAlt: "Vista da Rocinha, no Rio de Janeiro",
-    imageAlt_en: "View of Rocinha, in Rio de Janeiro",
-    imageAlt_es: "Vista de la Rocinha, en Río de Janeiro",
-    keywords: ["rocinha", "favela", "comunidade", "community", "comunidad", "cultura local", "local culture"],
-  },
-] as const;
+/**
+ * The data lives in `knowledge/concierge/catalog/approved-tour-cards.json` (single place to update when a tour is published).
+ * Updating it never touches the AI architecture: add the entry, refresh the catalog snapshot, run the consistency test.
+ */
+export const APPROVED_TOUR_CARDS: readonly TourCardData[] = cardsData.tours.map((tour) => { const { specific, ...card } = tour; void specific; return card as TourCardData; });
 
 const BY_ID = new Map(APPROVED_TOUR_CARDS.map((tour) => [tour.id, tour]));
 export const MAX_TOUR_CARDS = 3;
@@ -118,12 +71,7 @@ const normalize = (text: string) => text.normalize("NFD").replace(/\p{M}+/gu, ""
 const hasWord = (text: string, keyword: string) => new RegExp(`(?:^|[^a-z0-9])${keyword.replace(/ /g, "\\s+")}(?:[^a-z0-9]|$)`).test(text);
 
 /** Strong, unambiguous mention of ONE specific tour (its name or place). Used to give the WhatsApp message a tour context. */
-const SPECIFIC: Record<string, readonly string[]> = {
-  cmlhxkpy9000028zq27rhytew: ["cristo", "christ", "redentor", "redeemer", "corcovado", "pao de acucar", "sugarloaf", "sugar loaf", "pan de azucar"],
-  cmlibniq40000z4zqkbujnutt: ["colombo", "confeitaria", "city tour", "citytour"],
-  cmljo0s1u0000t0zqa0bpd23p: ["tour privado", "private tour", "tour premium", "premium", "passeio privado", "paseo privado"],
-  cmli1a6im000034zqqzc9sppb: ["rocinha"],
-};
+const SPECIFIC: Record<string, readonly string[]> = Object.fromEntries(cardsData.tours.map((tour) => [tour.id, tour.specific ?? []]));
 
 /** Returns the single approved tour clearly named in the text, or null when none or several tours are named. */
 export function detectTourMention(text: string): string | null {
@@ -135,7 +83,7 @@ export function detectTourMention(text: string): string | null {
 }
 
 /** The default "classic" picks when nothing more specific is asked. Rocinha is only recommended when the visitor asks for it. */
-const DEFAULT_RECOMMENDATIONS = ["cmlhxkpy9000028zq27rhytew", "cmlibniq40000z4zqkbujnutt", "cmljo0s1u0000t0zqa0bpd23p"] as const;
+const DEFAULT_RECOMMENDATIONS: readonly string[] = cardsData.default_recommendations;
 
 /**
  * Deterministic selection of 1 to 3 approved tours for a recommendation request. Tours whose keywords appear in the request

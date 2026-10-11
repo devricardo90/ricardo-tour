@@ -28,7 +28,7 @@ const handoffReason = z.enum([
   "explicit_request", "unsupported_request", "complaint", "repeated_failure", "booking_status", "payment_status",
   "refund_decision", "operational_confirmation", "booking_request", "safety_sensitive", "out_of_scope_advice", "emergency",
   "insufficient_evidence", "upstream_error", "rate_limited", "price", "availability", "flight_inventory", "hotel_inventory",
-  "oner_inventory", "unsupported_locale", "commercial_terms",
+  "oner_inventory", "unsupported_locale", "commercial_terms", "not_in_catalog",
 ]);
 const latencyBucket = z.enum(["lt_500ms", "lt_1s", "lt_2s", "lt_5s", "gte_5s"]);
 const stage = z.enum(["retrieve", "generate", "validate", "config", "limiter"]);

@@ -12,7 +12,7 @@ import { CONCIERGE_PRIVACY } from "./runtime/privacy";
  *  - the OpenAI runtime configuration (key, hosted store, model) present and well-formed;
  *  - production only: the RT-75 Owner gate recorded (`AI_CONCIERGE_RT75_GATE_APPROVED`), the legal review of the notice texts
  *    APPROVED in code (`CONCIERGE_PRIVACY.legal_review`), the emergency wording APPROVED (`EMERGENCY_COPY_STATUS`), the shared
- *    rate limiter configured (Upstash + HMAC secret) and Owner-approved quotas configured (`AI_CONCIERGE_RATE_LIMITS`).
+ *    rate limiter configured (Upstash + HMAC secret); the Owner-approved quotas are built in (override: `AI_CONCIERGE_RATE_LIMITS`).
  * `blockers` lists, content-free, what is missing; it is what the Owner/operator reads before launch.
  */
 const TRUTHY = new Set(["1", "true", "yes", "on"]);
@@ -31,7 +31,7 @@ export function getConciergeLaunchStatus(env: Record<string, string | undefined>
     if (CONCIERGE_PRIVACY.legal_review !== "APPROVED") blockers.push("legal_review_pending");
     if (EMERGENCY_COPY_STATUS !== "APPROVED") blockers.push("emergency_wording_not_approved");
     if (!readLimiterConfig(env)) blockers.push("shared_rate_limiter_not_configured");
-    if (!readConciergeLimits(env)) blockers.push("rate_limit_quotas_not_configured");
+    if (!readConciergeLimits(env)) blockers.push("rate_limit_quotas_invalid"); // unset = the approved V1 defaults; a malformed override fails closed
   }
   return { enabled: blockers.length === 0, environment: production ? "production" : "non-production", blockers };
 }

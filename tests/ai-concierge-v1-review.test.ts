@@ -176,3 +176,67 @@ describe("8. ordinary questions no longer get the availability, price or recomme
     }
   });
 });
+
+describe("catalog scope: a destination or activity that is not published is stated as a limitation (no invention, no substitution)", () => {
+  const asked = [
+    ["Recomende um passeio em Búzios", "pt"],
+    ["Quero conhecer Paraty", "pt"],
+    ["Do you have a tour to Buzios?", "en"],
+    ["Recommend something in Petropolis", "en"],
+    ["¿Tienen paseos a Búzios?", "es"],
+    ["Quiero ir a Florianópolis", "es"],
+    ["Vocês fazem passeio de parapente?", "pt"],
+    ["Do you offer helicopter tours?", "en"],
+    ["Quero fazer mergulho", "pt"],
+    ["What about a trip to Bonito?", "en"],
+  ] as const;
+  it.each(asked)("%s", async (message, locale) => {
+    const d = noProvider();
+    const result = await runConcierge({ message, locale }, d, registry);
+    expect(result.outcome).toBe("HANDOFF");
+    expect(result.handoff_reason).toBe("not_in_catalog");
+    expect(result.tour_ids).toBeUndefined(); // no cards: nothing is substituted
+    expect(result.answer).toContain("+55 22 99846-1906");
+    expect(result.answer).not.toMatch(/b[úu]zios|paraty|parapente|helic|florian|bonito/i); // never echoes or describes the request
+    expect(d.retrieve).not.toHaveBeenCalled();
+    expect(d.generate).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    "Quero conhecer o Cristo",
+    "É minha primeira vez no Rio",
+    "Which tours do you recommend in Rio?",
+    "Quais passeios vocês têm para Ipanema?",
+    "Tell me about the Rocinha tour",
+    "¿Qué paseos recomiendan en Río de Janeiro?",
+  ])("does not trigger for catalog or Rio requests: %s", async (message) => {
+    const result = await runConcierge({ message, locale: "pt" }, noProvider(), registry);
+    expect(result.handoff_reason).not.toBe("not_in_catalog");
+  });
+});
+
+describe("plain-text answers (Luna writes markdown)", () => {
+  it("removes emphasis markers and headings but never words", async () => {
+    const { stripMarkdown } = await import("@/lib/ai-concierge/runtime/postcheck");
+    expect(stripMarkdown("**Tour Favela Rocinha com Guia Local** é uma experiência guiada.")).toBe("Tour Favela Rocinha com Guia Local é uma experiência guiada.");
+    expect(stripMarkdown("# Título\n- um\n- dois\n`código` e *ênfase*")).toBe("Título\n• um\n• dois\ncódigo e ênfase");
+    expect(stripMarkdown("2 * 3 = 6 e 5*4")).toBe("2 * 3 = 6 e 5*4");
+  });
+});
+
+describe("not-in-catalog handoff does not inherit an earlier tour", () => {
+  it("the WhatsApp message after a Búzios request is generic, even if the conversation was about the Cristo tour", async () => {
+    const history = [{ role: "user" as const, text: "Quero conhecer o Cristo" }, { role: "assistant" as const, text: "Com base no catálogo de passeios publicados da Ricardo Tour: Cristo Redentor + Pão de Açúcar." }];
+    const result = await runConcierge({ message: "E um passeio em Búzios?", locale: "pt", history }, noProvider(), registry);
+    expect(result.handoff_reason).toBe("not_in_catalog");
+    expect(result.handoff?.tour_id).toBeUndefined();
+    expect(result.handoff?.prefill).not.toContain("Cristo");
+  });
+
+  it.each(["Quanto custa o passeio para Paraty?", "Tem vaga para Búzios amanhã?", "Quero um passeio de helicóptero, quanto custa?"])("price/availability about an off-catalog place does not inherit the tour: %s", async (message) => {
+    const history = [{ role: "user" as const, text: "Quero conhecer o Cristo" }, { role: "assistant" as const, text: "Com base no catálogo de passeios publicados da Ricardo Tour: Cristo Redentor + Pão de Açúcar." }];
+    const result = await runConcierge({ message, locale: "pt", history }, noProvider(), registry);
+    expect(result.handoff_reason).toBe("not_in_catalog");
+    expect(result.handoff?.prefill ?? "").not.toContain("Cristo");
+  });
+});

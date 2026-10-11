@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { isConciergeEnabled } from "@/lib/ai-concierge/launch";
 import { handleConciergeMessage } from "@/lib/ai-concierge/runtime";
+import { getServerObservability } from "@/lib/ai-concierge/observability";
+import { getAlertNotifier } from "@/lib/ai-concierge/observability/notify";
 import { toConciergeReply } from "@/lib/ai-concierge/ui/reply";
 import { isSameOrigin } from "@/lib/security/same-origin";
 import { reportServerError } from "@/lib/observability/report";
@@ -36,7 +38,11 @@ export async function POST(request: Request) {
 
   try {
     const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
-    const result = await handleConciergeMessage(body, process.env, { ip: forwarded || request.headers.get("x-real-ip") || undefined });
+    // Temporary anonymous session id (memory-only in the browser, rotated hourly): enforced by the per-session limit, never stored.
+    const sessionId = request.headers.get("x-concierge-session") ?? undefined;
+    const result = await handleConciergeMessage(body, process.env, { ip: forwarded || request.headers.get("x-real-ip") || undefined, sessionId });
+    // Essential alerts (content-free; e-mail only to explicitly configured recipients; never affects the response).
+    await getAlertNotifier().check(getServerObservability().metrics.snapshot());
     const reply = toConciergeReply(result);
     const headers: Record<string, string> = { ...NO_STORE };
     if (result.outcome === "RATE_LIMITED" && typeof result.retry_after_seconds === "number") headers["Retry-After"] = String(Math.max(1, Math.ceil(result.retry_after_seconds)));

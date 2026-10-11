@@ -112,9 +112,9 @@ export const handoffMessage = (reason: HandoffReason, lang: Lang = "pt") => {
       );
     case "insufficient_evidence":
       return t(
-        `Não tenho informação confirmada suficiente para responder isso com segurança. Você pode ver os passeios publicados em ${toursUrl("pt")}. ${channels}`,
-        `I don't have enough confirmed information to answer that safely. You can see the published tours at ${toursUrl("en")}. ${channels}`,
-        `No tengo información confirmada suficiente para responder eso con seguridad. Puedes ver los paseos publicados en ${toursUrl("es")}. ${channels}`,
+        `Não tenho informação confirmada suficiente para responder isso com segurança. Passeios publicados: ${toursUrl("pt")}. ${channels}`,
+        `I don't have enough confirmed information to answer that safely. Published tours: ${toursUrl("en")}. ${channels}`,
+        `No tengo información confirmada suficiente para responder eso con seguridad. Paseos publicados: ${toursUrl("es")}. ${channels}`,
       );
     case "booking_request":
       return t(
@@ -139,6 +139,12 @@ export const handoffMessage = (reason: HandoffReason, lang: Lang = "pt") => {
         `O que está incluído, as formas de pagamento, taxas e a política de cancelamento são condições comerciais que só a equipe da Ricardo Tour pode confirmar com segurança. ${channels}`,
         `What is included, payment methods, fees and the cancellation policy are commercial terms that only the Ricardo Tour team can confirm safely. ${channels}`,
         `Lo que está incluido, las formas de pago, las tarifas y la política de cancelación son condiciones comerciales que solo el equipo de Ricardo Tour puede confirmar con seguridad. ${channels}`,
+      );
+    case "not_in_catalog":
+      return t(
+        `Esse destino ou atividade não está entre os passeios publicados da Ricardo Tour, e eu não vou sugerir outro no lugar. Passeios publicados: ${toursUrl("pt")}. Para saber se a equipe atende esse pedido, fale com ela. ${channels}`,
+        `That destination or activity isn't among Ricardo Tour's published tours, and I won't suggest a different one in its place. Published tours: ${toursUrl("en")}. To find out whether the team can help with that request, talk to them. ${channels}`,
+        `Ese destino o actividad no está entre los paseos publicados de Ricardo Tour, y no voy a sugerir otro en su lugar. Paseos publicados: ${toursUrl("es")}. Para saber si el equipo atiende esa solicitud, habla con ellos. ${channels}`,
       );
     case "emergency":
       return t(
@@ -208,7 +214,7 @@ export const refusalMessage = (reason: RefusalReason, lang: Lang = "pt") => {
 const ALL_HANDOFF_REASONS: HandoffReason[] = [
   "explicit_request", "unsupported_request", "complaint", "repeated_failure", "booking_status", "payment_status", "refund_decision",
   "operational_confirmation", "booking_request", "safety_sensitive", "out_of_scope_advice", "emergency", "insufficient_evidence",
-  "upstream_error", "rate_limited", "commercial_terms",
+  "upstream_error", "rate_limited", "commercial_terms", "not_in_catalog",
 ];
 const ALL_DYNAMIC_REASONS: DynamicReason[] = ["price", "availability", "flight_inventory", "hotel_inventory", "oner_inventory"];
 const ALL_REFUSAL_REASONS: RefusalReason[] = ["prompt_injection", "prompt_injection_history", "internal_information", "abusive_content", "third_party_comparison"];

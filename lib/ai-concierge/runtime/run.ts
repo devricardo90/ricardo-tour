@@ -15,6 +15,7 @@ import {
   HANDOFF_CODE_BY_REASON,
   buildHandoffOffer,
 } from "./handoff";
+import { detectOutOfCatalogRequest } from "./catalog-scope";
 import { validateRuntimeInput } from "./input";
 import { detectLanguage, langFromLocale, type Lang } from "./lang";
 import { detectTourMention, selectRecommendations } from "../ui/tours";
@@ -33,7 +34,7 @@ import {
 } from "./messages";
 import { UpstreamFailure, classifyProviderError } from "./openai";
 import { buildInput, buildInstructions } from "./policy";
-import { checkGeneratedAnswer } from "./postcheck";
+import { checkGeneratedAnswer, stripMarkdown } from "./postcheck";
 import { redactPersonalData } from "./privacy";
 import { filterHits, type Registry } from "./provenance";
 import type {
@@ -276,6 +277,13 @@ export async function runConcierge(
   // Persona transparency (Daniela): identity questions are answered by fixed text, never by retrieval or the model.
   if (detectIdentityQuestion(message)) return finish({ outcome: "ANSWER", answer: identityMessage(lang) });
 
+  // Owner: a destination or activity that is not in the approved catalog is stated as a limitation (WhatsApp offered), never answered
+  // from memory and never silently replaced by another tour.
+  if (detectOutOfCatalogRequest(message)) {
+    tourId = null; // the visitor asked about something else: never attach an earlier tour to this handoff
+    return handoff("not_in_catalog");
+  }
+
   const gate = runGates(message);
   if (gate.kind === "dynamic")
     return finish({
@@ -411,7 +419,7 @@ ${item.source_version}`)?.status === "ACTIVE");
     return upstream(error, "generation");
   }
 
-  const generatedText = typeof generated === "string" ? generated : generated.text;
+  const generatedText = stripMarkdown(typeof generated === "string" ? generated : generated.text);
   if (typeof generated !== "string" && generated.usage) stats.usage = generated.usage;
   const checked = checkGeneratedAnswer(generatedText, { lang });
   if (!checked.ok) return noAnswer(checked.reason);

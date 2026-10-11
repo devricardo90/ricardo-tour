@@ -72,7 +72,7 @@ describe("RT-67 runtime — factual answers (mocked provider)", () => {
 
   it("9. out-of-catalog: model reporting no evidence yields insufficient evidence with approved channels", async () => {
     const d = deps([hit("public-tour-catalog", "# Tour Histórico\n\nPasseio pelo Centro.\n")], "[[SEM_EVIDENCIA]]");
-    const result = await ask("Vocês fazem passeio de parapente?", d);
+    const result = await ask("Existe guia que fale alemão no Tour Histórico?", d);
     expect(result.outcome).toBe("INSUFFICIENT_EVIDENCE");
     expect(result.answer).toContain("+55 22 99846-1906");
     expect(result.answer).not.toContain("[[");
@@ -147,7 +147,7 @@ describe("RT-67 runtime — retrieval evidence and provenance", () => {
   it("11. empty or low-relevance retrieval returns insufficient evidence without generation", async () => {
     for (const hits of [[], [hit("approved-faq", "## 1. x\n\ny\n", {}, 0.05)]]) {
       const d = deps(hits);
-      const result = await ask("Fale sobre a história do carnaval carioca", d);
+      const result = await ask("Fale sobre a história da bossa nova carioca", d);
       expect(result.outcome).toBe("INSUFFICIENT_EVIDENCE");
       expect(d.generate).not.toHaveBeenCalled();
     }

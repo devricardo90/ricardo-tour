@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { ConciergePanel } from "@/components/ai-concierge/panel/concierge-panel";
 import type { ConciergeReply, ConciergeTransport, PanelEvent } from "@/lib/ai-concierge/ui/types";
 
@@ -27,13 +27,23 @@ function parseReply(data: unknown): ConciergeReply | null {
   };
 }
 
+const SESSION_TTL_MS = 60 * 60 * 1000;
+const newSessionId = () => (typeof crypto !== "undefined" && "randomUUID" in crypto ? crypto.randomUUID() : `s${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`.padEnd(16, "0"));
+
 export function ConciergeMount({ locale }: { locale: string }) {
+  // Temporary anonymous session: random, held in memory only (never stored), rotated after an hour; it exists solely for the
+  // per-session rate limit and carries no personal data.
+  const session = useRef<{ id: string; at: number } | null>(null);
+  const sessionId = () => {
+    if (!session.current || Date.now() - session.current.at > SESSION_TTL_MS) session.current = { id: newSessionId(), at: Date.now() };
+    return session.current.id;
+  };
   const transport = useMemo<ConciergeTransport>(
     () => ({
       async send({ message, history, locale: lang }) {
         const response = await fetch("/api/ai-concierge", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", "X-Concierge-Session": sessionId() },
           body: JSON.stringify({ message, history, locale: lang ?? locale }),
           credentials: "omit",
           cache: "no-store",

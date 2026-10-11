@@ -26,7 +26,7 @@ describe("launch guard", () => {
     const flagOnly = getConciergeLaunchStatus({ NODE_ENV: "production", AI_CONCIERGE_ENABLED: "true" });
     expect(flagOnly.enabled).toBe(false);
     expect(flagOnly.blockers).toEqual(
-      expect.arrayContaining(["openai_runtime_config_missing", "rt75_owner_gate_not_approved", "legal_review_pending", "emergency_wording_not_approved", "shared_rate_limiter_not_configured", "rate_limit_quotas_not_configured"]),
+      expect.arrayContaining(["openai_runtime_config_missing", "rt75_owner_gate_not_approved", "legal_review_pending", "emergency_wording_not_approved", "shared_rate_limiter_not_configured"]),
     );
     // Even with the flag, the Owner gate variable, the infrastructure and the quotas, the two approvals recorded in code keep it closed.
     const everythingElse = getConciergeLaunchStatus({ VERCEL_ENV: "production", AI_CONCIERGE_ENABLED: "true", AI_CONCIERGE_RT75_GATE_APPROVED: "true", ...RUNTIME_ENV, ...LIMITER_ENV, ...QUOTAS });

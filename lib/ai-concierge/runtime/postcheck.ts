@@ -89,6 +89,16 @@ const CHECKS: Array<[string, RegExp]> = [
 const ALLOWED_PHONE = PUBLIC_CONTACT.whatsappDisplay.replace(/\D/g, "");
 
 /** Fail closed on any unsupported factual or operational claim. The model cannot override deterministic gates. */
+/** The panel renders plain text: some models answer with markdown. Emphasis markers, code ticks and heading marks are removed (never the words). */
+export function stripMarkdown(text: string) {
+  return text
+    .replace(/\*\*|__/g, "")
+    .replace(/(?<![\w*])\*(?!\s)([^*\n]+?)\*(?![\w*])/g, "$1")
+    .replace(/`+/g, "")
+    .replace(/^\s{0,3}#{1,6}\s+/gm, "")
+    .replace(/^\s*[-*]\s+/gm, "• ");
+}
+
 export function checkGeneratedAnswer(raw: string, options: { lang?: Lang; checkLanguage?: boolean } = {}): PostCheck {
   const answer = raw.trim();
   if (!answer) return { ok: false, reason: "empty_answer" };

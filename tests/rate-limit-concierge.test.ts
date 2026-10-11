@@ -143,11 +143,19 @@ describe("RT-72 fail-closed behaviour (no path to the model without the limiter)
     },
   );
 
-  it("limits not configured: the model path is denied, never unlimited", async () => {
+  it("V1: limits not overridden means the Owner-approved defaults apply (10/min per IP, 20 per session, 300/day), never unlimited", async () => {
     const t = setup();
     const env = baseEnv();
     delete (env as Record<string, string | undefined>).AI_CONCIERGE_RATE_LIMITS;
+    expect(readConciergeLimits(env)).toMatchObject({ burst: { limit: 10, windowSeconds: 60 }, session: { limit: 20, windowSeconds: 3600 }, global: { limit: 300, windowSeconds: 86400 } });
     const result = await t.call("O que é a Ricardo Tour?", { ip: "203.0.113.9" }, env);
+    expect(result.outcome).not.toBe("UPSTREAM_ERROR");
+    expect(t.hits.length).toBeGreaterThan(0); // the shared limiter was consulted before any model call
+  });
+
+  it("a set-but-invalid override fails closed: the model path is denied", async () => {
+    const t = setup();
+    const result = await t.call("O que é a Ricardo Tour?", { ip: "203.0.113.9" }, baseEnv({ AI_CONCIERGE_RATE_LIMITS: "not json" }));
     expect(result).toMatchObject({ outcome: "UPSTREAM_ERROR", error_class: "limiter" });
     expect(t.provider.generate).not.toHaveBeenCalled();
   });
@@ -169,7 +177,7 @@ describe("RT-72 fail-closed behaviour (no path to the model without the limiter)
 
   it("limit configuration is strictly validated", () => {
     expect(readConciergeLimits({ AI_CONCIERGE_RATE_LIMITS: JSON.stringify(LIMITS) })).toMatchObject({ burst: { name: "burst", limit: 3 } });
-    for (const raw of [undefined, "", "not json", "[]", "null", JSON.stringify({ burst: LIMITS.burst }), JSON.stringify({ ...LIMITS, global: { limit: 0, windowSeconds: 60 } }),
+    for (const raw of ["not json", "[]", "null", JSON.stringify({ burst: LIMITS.burst }), JSON.stringify({ ...LIMITS, global: { limit: 0, windowSeconds: 60 } }),
       JSON.stringify({ ...LIMITS, burst: { limit: 1.5, windowSeconds: 60 } }), JSON.stringify({ ...LIMITS, session: { limit: 5, windowSeconds: 99999999 } }), JSON.stringify({ ...LIMITS, burst: { limit: "5", windowSeconds: 60 } })]) {
       expect(readConciergeLimits({ AI_CONCIERGE_RATE_LIMITS: raw })).toBeNull();
     }

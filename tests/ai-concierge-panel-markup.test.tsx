@@ -114,7 +114,7 @@ describe("tampered replies cannot change the human channels", () => {
         messages: [user("m1", "oi"), assistant("m2", "Veja https://www.ricardotour.com/pt/tours. Evite https://evil.example/x e https://ricardotour.com.evil.com/a", "handoff")],
       }),
     );
-    expect(html).toContain('<a href="https://www.ricardotour.com/pt/tours" target="_blank" rel="noopener noreferrer">passeios publicados</a>.');
+    expect(html).toContain('<a href="https://www.ricardotour.com/pt/tours" target="_blank" rel="noopener noreferrer">ver todos</a>.');
     expect(html).not.toMatch(/<a[^>]*href="https:\/\/evil\.example/);
     expect(html).not.toMatch(/<a[^>]*href="https:\/\/ricardotour\.com\.evil\.com/);
     expect(html).toContain("https://evil.example/x");

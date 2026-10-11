@@ -56,6 +56,7 @@ export const HANDOFF_CODE_BY_REASON: Record<HandoffReason, HandoffCode> = {
   safety_sensitive: "H10",
   repeated_failure: "H12",
   commercial_terms: "H9",
+  not_in_catalog: "H4",
 };
 
 export const HANDOFF_CODE_BY_DYNAMIC: Record<DynamicReason, HandoffCode> = {

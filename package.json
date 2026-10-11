@@ -22,6 +22,8 @@
     "check:concierge-sources": "node scripts/rt-69-registry.mjs validate && node --test tests/rt-69-registry.test.mjs",
     "snapshot:concierge-catalog": "tsx scripts/rt-69-catalog-snapshot.ts",
     "smoke:concierge-live": "tsx scripts/rt-67-live-smoke.ts",
+    "alert:test": "tsx scripts/alert-test.ts",
+    "dev:daniela": "node scripts/dev-daniela.mjs",
     "test:e2e": "playwright test",
     "optimize-images": "node scripts/optimize-images.js",
     "hero-media-pipeline": "node scripts/media-pipeline/run.mjs"

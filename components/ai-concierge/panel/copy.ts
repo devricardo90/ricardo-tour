@@ -48,7 +48,7 @@ const PT = {
   privacySummary: "Privacidade e uso de IA",
   privacyPending: "Texto provisório — aprovação jurídica pendente.",
   planner: "Planeje sua viagem",
-  tours: "passeios publicados",
+  tours: "ver todos",
   counter: (used: number, max: number) => `${used}/${max}`,
 } as const;
 
@@ -97,7 +97,7 @@ const EN: Copy = {
   privacySummary: "Privacy and AI use",
   privacyPending: "Provisional text — legal approval pending.",
   planner: "Plan your trip",
-  tours: "published tours",
+  tours: "see all",
   counter: (used: number, max: number) => `${used}/${max}`,
 };
 
@@ -144,7 +144,7 @@ const ES: Copy = {
   privacySummary: "Privacidad y uso de IA",
   privacyPending: "Texto provisional — aprobación jurídica pendiente.",
   planner: "Planea tu viaje",
-  tours: "paseos publicados",
+  tours: "ver todos",
   counter: (used: number, max: number) => `${used}/${max}`,
 };
 

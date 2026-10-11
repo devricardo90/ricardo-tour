@@ -36,7 +36,8 @@ export type HandoffReason =
   | "insufficient_evidence"
   | "upstream_error"
   | "rate_limited"
-  | "commercial_terms";
+  | "commercial_terms"
+  | "not_in_catalog";
 
 /** RT-74 §1 standard response shapes, so a future UI can render each kind without inspecting outcomes. */
 export type ResponseKind = "grounded" | "clarify" | "refusal" | "handoff" | "degraded";
