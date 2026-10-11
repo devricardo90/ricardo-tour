@@ -80,6 +80,22 @@ async function main() {
     console.log(JSON.stringify({ id: testCase.id, outcome: result.outcome, calls, pass: verdict.pass, failures: verdict.failures }));
   }
   const summary = summarize(verdicts);
+  // Cost: measured provider tokens x the per-1M prices passed explicitly (EVAL_PRICE_INPUT_PER_M / EVAL_PRICE_OUTPUT_PER_M).
+  // No prices are assumed: without them only the token counts are reported.
+  const tokens = (observability.metrics.snapshot().measured.llm_tokens ?? { input: 0, output: 0 }) as { input: number; output: number };
+  const priceIn = Number(process.env.EVAL_PRICE_INPUT_PER_M);
+  const priceOut = Number(process.env.EVAL_PRICE_OUTPUT_PER_M);
+  const modelBound = rows.filter((row) => (row as { provider_calls: number }).provider_calls > 0).length;
+  const cost = {
+    input_tokens: tokens.input,
+    output_tokens: tokens.output,
+    model_bound_cases: modelBound,
+    prices_per_1m_tokens: Number.isFinite(priceIn) && Number.isFinite(priceOut) ? { input: priceIn, output: priceOut } : null,
+    estimated_usd: Number.isFinite(priceIn) && Number.isFinite(priceOut) ? (tokens.input * priceIn + tokens.output * priceOut) / 1e6 : null,
+    estimated_usd_per_model_bound_answer: Number.isFinite(priceIn) && Number.isFinite(priceOut) && modelBound > 0 ? (tokens.input * priceIn + tokens.output * priceOut) / 1e6 / modelBound : null,
+  };
+  const wall = rows.map((row) => (row as { latency_ms: number }).latency_ms).filter((ms) => ms > 100).sort((a, b) => a - b);
+  const latency = { model_bound_cases: wall.length, p50_ms: wall[Math.floor(wall.length * 0.5)] ?? null, p95_ms: wall[Math.min(wall.length - 1, Math.floor(wall.length * 0.95))] ?? null, max_ms: wall.at(-1) ?? null };
   const metrics = observability.metrics.snapshot();
   const report = {
     evaluation_set_version: set.version,
@@ -89,11 +105,13 @@ async function main() {
     model,
     provider_calls: providerCalls,
     summary,
+    cost,
+    latency,
     metrics,
     cases: rows,
   };
   mkdirSync("docs/architecture/rt-75-evidence", { recursive: true });
-  const file = `docs/architecture/rt-75-evidence/rt-75-evaluation-results-${offline ? "offline" : "live"}.json`;
+  const file = `docs/architecture/rt-75-evidence/rt-75-evaluation-results-${offline ? "offline" : `live-${model.replace(/[^A-Za-z0-9._-]/g, "_")}`}.json`;
   writeFileSync(file, `${JSON.stringify(report, null, 2)}\n`, "utf8");
   console.log(JSON.stringify({ summary, provider_calls: providerCalls, file }));
   if (summary.passed !== summary.total) process.exitCode = 2;

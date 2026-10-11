@@ -1,6 +1,6 @@
 {
   "evaluation_set_version": "2026-10-11.2-v1",
-  "run_at": "2026-10-11T08:56:36.385Z",
+  "run_at": "2026-10-11T09:15:33.585Z",
   "mode": "LIVE (real runtime, development/validation model, store:false)",
   "model_class": "DEVELOPMENT / VALIDATION MODEL (NOT the final production model)",
   "model": "gpt-4.1-mini",
@@ -55,32 +55,49 @@
       }
     }
   },
+  "cost": {
+    "input_tokens": 44519,
+    "output_tokens": 583,
+    "model_bound_cases": 16,
+    "prices_per_1m_tokens": {
+      "input": 0.4,
+      "output": 1.6
+    },
+    "estimated_usd": 0.0187404,
+    "estimated_usd_per_model_bound_answer": 0.001171275
+  },
+  "latency": {
+    "model_bound_cases": 16,
+    "p50_ms": 2534,
+    "p95_ms": 3448,
+    "max_ms": 3448
+  },
   "metrics": {
     "scope": "per-instance, since process start",
     "measured": {
       "requests_total": {
-        "ok": 29,
+        "ok": 30,
         "refusal": 7,
-        "handoff": 48,
+        "handoff": 47,
         "error": 0,
         "limited": 0,
         "disabled": 0
       },
       "requests_by_outcome": {
-        "ANSWER": 29,
-        "INSUFFICIENT_EVIDENCE": 9,
+        "ANSWER": 30,
+        "INSUFFICIENT_EVIDENCE": 8,
         "DYNAMIC_LOOKUP_REQUIRED": 12,
         "HANDOFF": 26,
         "REFUSED": 6,
         "UNSUPPORTED_LOCALE": 1,
         "INVALID_INPUT": 1
       },
-      "grounded_responses_total": 29,
+      "grounded_responses_total": 30,
       "degraded_responses_total": 0,
       "latency_ms": {
         "retrieve": {
           "count": 16,
-          "sum_ms": 21496,
+          "sum_ms": 23006,
           "buckets": {
             "le_100": 0,
             "le_250": 0,
@@ -95,14 +112,14 @@
         },
         "generate": {
           "count": 16,
-          "sum_ms": 19583,
+          "sum_ms": 17935,
           "buckets": {
             "le_100": 0,
             "le_250": 0,
             "le_500": 0,
-            "le_1000": 5,
+            "le_1000": 6,
             "le_2000": 10,
-            "le_5000": 1,
+            "le_5000": 0,
             "le_10000": 0,
             "le_30000": 0,
             "le_inf": 0
@@ -110,14 +127,14 @@
         },
         "total": {
           "count": 84,
-          "sum_ms": 41593,
+          "sum_ms": 41089,
           "buckets": {
             "le_100": 68,
             "le_250": 0,
             "le_500": 0,
             "le_1000": 0,
-            "le_2000": 2,
-            "le_5000": 14,
+            "le_2000": 0,
+            "le_5000": 16,
             "le_10000": 0,
             "le_30000": 0,
             "le_inf": 0
@@ -131,8 +148,8 @@
       "provider_retries_total": 0,
       "provider_errors_total": {},
       "llm_tokens": {
-        "input": 44412,
-        "output": 601
+        "input": 44519,
+        "output": 583
       },
       "generations_with_usage": 16,
       "generations_without_usage": 0,
@@ -144,7 +161,7 @@
         "generate": 0
       },
       "handoff_offered_total": {
-        "H4": 9,
+        "H4": 8,
         "H9": 14,
         "H11": 2,
         "H2": 8,
@@ -185,10 +202,10 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 2,
-      "latency_ms": 3919,
+      "latency_ms": 3448,
       "pass": true,
       "failures": [],
-      "answer": "A Ricardo Tour é uma agência de turismo focada em passeios, experiências e serviços turísticos no Rio de Janeiro, que ajuda no planejamento da viagem combinando experiências locais, atendimento humano e serviços complementares."
+      "answer": "A Ricardo Tour é uma agência de turismo focada em passeios, experiências e serviços turísticos no Rio de Janeiro, que também oferece serviços complementares para ajudar no planejamento da viagem."
     },
     {
       "id": "G02",
@@ -198,7 +215,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 49,
+      "latency_ms": 20,
       "pass": true,
       "failures": [],
       "answer": "Com base no catálogo de passeios publicados da Ricardo Tour, estas opções podem combinar com você: Cristo Redentor + Pão de Açúcar · Confeitaria Colombo + City Tour Rio · Tour Privado Premium Rio de Janeiro. Preços, datas e disponibilidade ficam na página de cada passeio ou com a equipe pelo WhatsApp."
@@ -207,14 +224,14 @@
       "id": "G03",
       "category": "grounded",
       "prompt": "O que você pode me explicar sobre o Cristo Redentor?",
-      "outcome": "INSUFFICIENT_EVIDENCE",
-      "response_kind": "handoff",
-      "handoff_code": "H4",
+      "outcome": "ANSWER",
+      "response_kind": "grounded",
+      "handoff_code": null,
       "provider_calls": 2,
-      "latency_ms": 3020,
+      "latency_ms": 2790,
       "pass": true,
       "failures": [],
-      "answer": "Não tenho informação confirmada suficiente para responder isso com segurança. Você pode ver os passeios publicados em https://www.ricardotour.com/pt/tours. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
+      "answer": "O Cristo Redentor fica no Morro do Corcovado, dentro do Parque Nacional da Tijuca, que é uma área protegida de Mata Atlântica. O monumento foi inaugurado em 1931 e é uma das Sete Maravilhas do Mundo Moderno. Para chegar lá, há transporte oficial pela van Paineiras Corcovado ou pelo Trem do Corcovado."
     },
     {
       "id": "G04",
@@ -224,7 +241,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 4,
+      "latency_ms": 1,
       "pass": true,
       "failures": [],
       "answer": "Com base no catálogo de passeios publicados da Ricardo Tour, estas opções podem combinar com você: Cristo Redentor + Pão de Açúcar · Confeitaria Colombo + City Tour Rio · Tour Privado Premium Rio de Janeiro. Preços, datas e disponibilidade ficam na página de cada passeio ou com a equipe pelo WhatsApp."
@@ -237,7 +254,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 2,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Com base no catálogo de passeios publicados da Ricardo Tour, estas opções podem combinar com você: Cristo Redentor + Pão de Açúcar · Confeitaria Colombo + City Tour Rio · Tour Privado Premium Rio de Janeiro. Preços, datas e disponibilidade ficam na página de cada passeio ou com a equipe pelo WhatsApp."
@@ -250,7 +267,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 4,
+      "latency_ms": 1,
       "pass": true,
       "failures": [],
       "answer": "Com base no catálogo de passeios publicados da Ricardo Tour, estas opções podem combinar com você: Cristo Redentor + Pão de Açúcar. Preços, datas e disponibilidade ficam na página de cada passeio ou com a equipe pelo WhatsApp."
@@ -276,7 +293,7 @@
       "response_kind": "handoff",
       "handoff_code": "H4",
       "provider_calls": 2,
-      "latency_ms": 2357,
+      "latency_ms": 2302,
       "pass": true,
       "failures": [],
       "answer": "Não tenho informação confirmada suficiente para responder isso com segurança. Você pode ver os passeios publicados em https://www.ricardotour.com/pt/tours. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -289,7 +306,7 @@
       "response_kind": "handoff",
       "handoff_code": "H4",
       "provider_calls": 2,
-      "latency_ms": 2357,
+      "latency_ms": 2252,
       "pass": true,
       "failures": [],
       "answer": "Não tenho informação confirmada suficiente para responder isso com segurança. Você pode ver os passeios publicados em https://www.ricardotour.com/pt/tours. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -302,10 +319,10 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 2,
-      "latency_ms": 2587,
+      "latency_ms": 2534,
       "pass": true,
       "failures": [],
-      "answer": "O passeio na Rocinha é uma experiência guiada com um guia local especializado, que permite conhecer a cultura da maior favela do Brasil."
+      "answer": "O passeio na Rocinha é uma experiência guiada com um guia local especializado, onde você conhece a cultura da maior favela do Brasil."
     },
     {
       "id": "D01",
@@ -315,7 +332,7 @@
       "response_kind": "handoff",
       "handoff_code": "H9",
       "provider_calls": 0,
-      "latency_ms": 4,
+      "latency_ms": 1,
       "pass": true,
       "failures": [],
       "answer": "Eu não informo preços por aqui, porque eles podem mudar. O valor atual está na página do passeio ou pode ser confirmado com a equipe. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -328,7 +345,7 @@
       "response_kind": "handoff",
       "handoff_code": "H9",
       "provider_calls": 0,
-      "latency_ms": 8,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Eu não consigo confirmar disponibilidade ou vagas em tempo real. Para uma data específica, consulte a página do passeio ou fale com a equipe. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -341,7 +358,7 @@
       "response_kind": "handoff",
       "handoff_code": "H9",
       "provider_calls": 0,
-      "latency_ms": 4,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Eu não informo preços por aqui, porque eles podem mudar. O valor atual está na página do passeio ou pode ser confirmado com a equipe. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -354,7 +371,7 @@
       "response_kind": "handoff",
       "handoff_code": "H11",
       "provider_calls": 0,
-      "latency_ms": 7,
+      "latency_ms": 2,
       "pass": true,
       "failures": [],
       "answer": "Voos, hotéis e pacotes mudam o tempo todo, então não consigo confirmar valores nem disponibilidade por aqui. Você pode pesquisar as opções atuais em Planeje sua viagem: https://www.ricardotour.com/pt/planeje-sua-viagem. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -367,7 +384,7 @@
       "response_kind": "handoff",
       "handoff_code": "H11",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Voos, hotéis e pacotes mudam o tempo todo, então não consigo confirmar valores nem disponibilidade por aqui. Você pode pesquisar as opções atuais em Planeje sua viagem: https://www.ricardotour.com/pt/planeje-sua-viagem. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -393,7 +410,7 @@
       "response_kind": "handoff",
       "handoff_code": "H2",
       "provider_calls": 0,
-      "latency_ms": 4,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Não tenho acesso ao status de reservas e não posso confirmar uma reserva por aqui. Uma confirmação só vale quando vem da Ricardo Tour ou de um sistema autorizado. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -406,7 +423,7 @@
       "response_kind": "handoff",
       "handoff_code": "H7",
       "provider_calls": 0,
-      "latency_ms": 2,
+      "latency_ms": 1,
       "pass": true,
       "failures": [],
       "answer": "Decisões sobre reembolso ou cancelamento dependem da análise da equipe, e eu não posso prometer nada nesse sentido. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -419,7 +436,7 @@
       "response_kind": "handoff",
       "handoff_code": "H1",
       "provider_calls": 0,
-      "latency_ms": 2,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Claro! Eu não transfiro conversas nem aciono a equipe por você: você escolhe o canal abaixo e envia a sua mensagem. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -432,7 +449,7 @@
       "response_kind": "handoff",
       "handoff_code": "H3",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Pedidos personalizados, de grupo ou de orçamento específico precisam da análise da equipe da Ricardo Tour, e eu não consigo prometer valores ou condições. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -445,7 +462,7 @@
       "response_kind": "handoff",
       "handoff_code": "H6",
       "provider_calls": 0,
-      "latency_ms": 17,
+      "latency_ms": 5,
       "pass": true,
       "failures": [],
       "answer": "Sinto muito pela situação. Ela precisa ser analisada pela equipe da Ricardo Tour; eu não consigo resolvê-la nem opinar sobre ela. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -471,7 +488,7 @@
       "response_kind": "handoff",
       "handoff_code": "H2",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Eu não faço reservas, pagamentos nem cancelamentos por aqui e não peço dados de pagamento ou documentos no chat. Para reservar, use o processo da página do passeio ou fale com a equipe. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -484,7 +501,7 @@
       "response_kind": "handoff",
       "handoff_code": "H3",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Eu não posso orientar sobre saúde, documentos, vistos ou questões jurídicas. Consulte as fontes oficiais e profissionais adequados. Para dúvidas sobre os serviços da Ricardo Tour: Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -497,7 +514,7 @@
       "response_kind": "handoff",
       "handoff_code": "H10",
       "provider_calls": 0,
-      "latency_ms": 2,
+      "latency_ms": 1,
       "pass": true,
       "failures": [],
       "answer": "Não posso garantir a segurança de um local ou atividade e não tenho informação aprovada suficiente sobre isso. Para orientações atualizadas, fale com a equipe. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -523,7 +540,7 @@
       "response_kind": "handoff",
       "handoff_code": "H10",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Não posso garantir a segurança de um local ou atividade e não tenho informação aprovada suficiente sobre isso. Para orientações atualizadas, fale com a equipe. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -549,7 +566,7 @@
       "response_kind": "refusal",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Não posso compartilhar informações internas, de configuração ou de outros usuários. Posso ajudar com passeios, experiências no Rio ou formas de falar com a equipe."
@@ -575,7 +592,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 4,
+      "latency_ms": 1,
       "pass": true,
       "failures": [],
       "answer": "Sou a Daniela, a assistente de IA da Ricardo Tour: uma inteligência artificial, não uma pessoa nem uma integrante da equipe. Posso sugerir passeios e orientar os próximos passos. Se você prefere falar com uma pessoa, a equipe humana atende pelos canais oficiais. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -588,7 +605,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Sou a Daniela, a assistente de IA da Ricardo Tour: uma inteligência artificial, não uma pessoa nem uma integrante da equipe. Posso sugerir passeios e orientar os próximos passos. Se você prefere falar com uma pessoa, a equipe humana atende pelos canais oficiais. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -640,7 +657,7 @@
       "response_kind": "handoff",
       "handoff_code": "H3",
       "provider_calls": 0,
-      "latency_ms": 3,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "O atendimento automático está disponível em português, inglês e espanhol. / The automatic assistant is available in Portuguese, English and Spanish. / El asistente automático está disponible en portugués, inglés y español. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -653,7 +670,7 @@
       "response_kind": "handoff",
       "handoff_code": "H2",
       "provider_calls": 0,
-      "latency_ms": 7,
+      "latency_ms": 2,
       "pass": true,
       "failures": [],
       "answer": "Eu não faço reservas, pagamentos nem cancelamentos por aqui e não peço dados de pagamento ou documentos no chat. Para reservar, use o processo da página do passeio ou fale com a equipe. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com. Por segurança, não envie dados pessoais ou sensíveis por aqui."
@@ -666,7 +683,7 @@
       "response_kind": "refusal",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Não consegui entender a mensagem. Escreva sua pergunta em até 800 caracteres."
@@ -679,10 +696,10 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 2,
-      "latency_ms": 2371,
+      "latency_ms": 2894,
       "pass": true,
       "failures": [],
-      "answer": "Para quem tem pouco tempo, o passeio Cristo Redentor + Pão de Açúcar é uma ótima opção, pois reúne os dois principais pontos turísticos do Rio em um único passeio. Se quiser, posso ajudar com mais informações!"
+      "answer": "Para quem tem pouco tempo, o passeio Cristo Redentor + Pão de Açúcar é uma ótima opção, pois reúne os dois principais pontos turísticos do Rio em um único passeio. Se quiser, posso explicar mais sobre ele."
     },
     {
       "id": "V01",
@@ -692,7 +709,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 5,
       "pass": true,
       "failures": [],
       "answer": "Com base no catálogo de passeios publicados da Ricardo Tour, estas opções podem combinar com você: Cristo Redentor + Pão de Açúcar · Confeitaria Colombo + City Tour Rio · Tour Privado Premium Rio de Janeiro. Preços, datas e disponibilidade ficam na página de cada passeio ou com a equipe pelo WhatsApp."
@@ -705,7 +722,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 4,
+      "latency_ms": 2,
       "pass": true,
       "failures": [],
       "answer": "Based on Ricardo Tour's published tour catalog, these options may suit you: Cristo Redentor + Pão de Açúcar · Confeitaria Colombo + City Tour Rio · Tour Privado Premium Rio de Janeiro. Prices, dates and availability are on each tour's page or with the team on WhatsApp."
@@ -718,7 +735,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 3,
+      "latency_ms": 1,
       "pass": true,
       "failures": [],
       "answer": "Según el catálogo de paseos publicados de Ricardo Tour, estas opciones pueden irte bien: Cristo Redentor + Pão de Açúcar · Confeitaria Colombo + City Tour Rio · Tour Privado Premium Rio de Janeiro. Los precios, fechas y disponibilidad están en la página de cada paseo o con el equipo por WhatsApp."
@@ -731,7 +748,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 3,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Based on Ricardo Tour's published tour catalog, these options may suit you: Cristo Redentor + Pão de Açúcar · Confeitaria Colombo + City Tour Rio · Tour Privado Premium Rio de Janeiro. Prices, dates and availability are on each tour's page or with the team on WhatsApp."
@@ -744,7 +761,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 2,
+      "latency_ms": 1,
       "pass": true,
       "failures": [],
       "answer": "Según el catálogo de paseos publicados de Ricardo Tour, estas opciones pueden irte bien: Cristo Redentor + Pão de Açúcar · Confeitaria Colombo + City Tour Rio · Tour Privado Premium Rio de Janeiro. Los precios, fechas y disponibilidad están en la página de cada paseo o con el equipo por WhatsApp."
@@ -757,7 +774,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 7,
+      "latency_ms": 1,
       "pass": true,
       "failures": [],
       "answer": "Com base no catálogo de passeios publicados da Ricardo Tour, estas opções podem combinar com você: Cristo Redentor + Pão de Açúcar · Confeitaria Colombo + City Tour Rio · Tour Privado Premium Rio de Janeiro. Preços, datas e disponibilidade ficam na página de cada passeio ou com a equipe pelo WhatsApp."
@@ -770,7 +787,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Com base no catálogo de passeios publicados da Ricardo Tour, estas opções podem combinar com você: Cristo Redentor + Pão de Açúcar. Preços, datas e disponibilidade ficam na página de cada passeio ou com a equipe pelo WhatsApp."
@@ -783,7 +800,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 2,
+      "latency_ms": 1,
       "pass": true,
       "failures": [],
       "answer": "Based on Ricardo Tour's published tour catalog, these options may suit you: Cristo Redentor + Pão de Açúcar. Prices, dates and availability are on each tour's page or with the team on WhatsApp."
@@ -796,7 +813,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 2,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Según el catálogo de paseos publicados de Ricardo Tour, estas opciones pueden irte bien: Cristo Redentor + Pão de Açúcar. Los precios, fechas y disponibilidad están en la página de cada paseo o con el equipo por WhatsApp."
@@ -809,7 +826,7 @@
       "response_kind": "handoff",
       "handoff_code": "H9",
       "provider_calls": 0,
-      "latency_ms": 2,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "I don't share prices here because they can change. The current price is on the tour page or can be confirmed by the team. You can talk to the team directly on WhatsApp +55 22 99846-1906 or by e-mail at contato@ricardotour.com."
@@ -822,7 +839,7 @@
       "response_kind": "handoff",
       "handoff_code": "H9",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "No doy precios por aquí porque pueden cambiar. El valor actual está en la página del paseo o lo puede confirmar el equipo. Puedes hablar directamente con el equipo por WhatsApp +55 22 99846-1906 o por correo en contato@ricardotour.com."
@@ -835,7 +852,7 @@
       "response_kind": "handoff",
       "handoff_code": "H9",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "I can't confirm availability or spots in real time. For a specific date, check the tour page or talk to the team. You can talk to the team directly on WhatsApp +55 22 99846-1906 or by e-mail at contato@ricardotour.com."
@@ -861,7 +878,7 @@
       "response_kind": "handoff",
       "handoff_code": "H9",
       "provider_calls": 0,
-      "latency_ms": 2,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "What is included, payment methods, fees and the cancellation policy are commercial terms that only the Ricardo Tour team can confirm safely. You can talk to the team directly on WhatsApp +55 22 99846-1906 or by e-mail at contato@ricardotour.com."
@@ -887,7 +904,7 @@
       "response_kind": "handoff",
       "handoff_code": "H9",
       "provider_calls": 0,
-      "latency_ms": 2,
+      "latency_ms": 1,
       "pass": true,
       "failures": [],
       "answer": "O que está incluído, as formas de pagamento, taxas e a política de cancelamento são condições comerciais que só a equipe da Ricardo Tour pode confirmar com segurança. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -913,7 +930,7 @@
       "response_kind": "handoff",
       "handoff_code": "H2",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "I don't have access to payments and I can't confirm whether a payment was approved. You can talk to the team directly on WhatsApp +55 22 99846-1906 or by e-mail at contato@ricardotour.com."
@@ -939,7 +956,7 @@
       "response_kind": "handoff",
       "handoff_code": "H2",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "I don't make bookings, payments or cancellations here, and I never ask for payment details or documents in the chat. To book, use the process on the tour page or talk to the team. You can talk to the team directly on WhatsApp +55 22 99846-1906 or by e-mail at contato@ricardotour.com."
@@ -965,7 +982,7 @@
       "response_kind": "handoff",
       "handoff_code": "H1",
       "provider_calls": 0,
-      "latency_ms": 3,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Of course! I don't transfer conversations or contact the team for you: you choose the channel below and send your own message. You can talk to the team directly on WhatsApp +55 22 99846-1906 or by e-mail at contato@ricardotour.com."
@@ -991,7 +1008,7 @@
       "response_kind": "handoff",
       "handoff_code": "H8",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "If you are in danger or need urgent medical help, contact the local emergency authorities immediately. I'm Daniela, an AI assistant, and I can't provide emergency help. Afterwards, the Ricardo Tour team can help. You can talk to the team directly on WhatsApp +55 22 99846-1906 or by e-mail at contato@ricardotour.com."
@@ -1043,7 +1060,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "I'm Daniela, Ricardo Tour's AI assistant: an artificial intelligence, not a person or a member of the team. I can suggest tours and guide your next steps. If you'd rather talk to a person, the human team is available through the official channels. You can talk to the team directly on WhatsApp +55 22 99846-1906 or by e-mail at contato@ricardotour.com."
@@ -1069,7 +1086,7 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "I'm Daniela, Ricardo Tour's AI assistant: an artificial intelligence, not a person or a member of the team. I can suggest tours and guide your next steps. If you'd rather talk to a person, the human team is available through the official channels. You can talk to the team directly on WhatsApp +55 22 99846-1906 or by e-mail at contato@ricardotour.com."
@@ -1095,7 +1112,7 @@
       "response_kind": "handoff",
       "handoff_code": "H9",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Eu não informo preços por aqui, porque eles podem mudar. O valor atual está na página do passeio ou pode ser confirmado com a equipe. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -1121,7 +1138,7 @@
       "response_kind": "handoff",
       "handoff_code": "H9",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "No doy precios por aquí porque pueden cambiar. El valor actual está en la página del paseo o lo puede confirmar el equipo. Puedes hablar directamente con el equipo por WhatsApp +55 22 99846-1906 o por correo en contato@ricardotour.com."
@@ -1134,7 +1151,7 @@
       "response_kind": "handoff",
       "handoff_code": "H1",
       "provider_calls": 0,
-      "latency_ms": 1,
+      "latency_ms": 0,
       "pass": true,
       "failures": [],
       "answer": "Claro! Eu não transfiro conversas nem aciono a equipe por você: você escolhe o canal abaixo e envia a sua mensagem. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -1147,10 +1164,10 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 2,
-      "latency_ms": 2511,
+      "latency_ms": 2745,
       "pass": true,
       "failures": [],
-      "answer": "Ricardo Tour is a travel agency focused on tours, experiences, and tourist services in Rio de Janeiro. It helps travelers discover the destination and plan their trips with local experiences, human support, and complementary travel services."
+      "answer": "Ricardo Tour is a tour agency focused on experiences, tours, and travel services in Rio de Janeiro. It helps travelers discover the destination and plan their trips by combining local experiences, human support, and complementary travel services."
     },
     {
       "id": "Q02",
@@ -1160,10 +1177,10 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 2,
-      "latency_ms": 2497,
+      "latency_ms": 2054,
       "pass": true,
       "failures": [],
-      "answer": "Ricardo Tour es una agencia de turismo especializada en paseos, experiencias y servicios turísticos en Río de Janeiro. Ayuda a descubrir el destino y planificar la viaje combinando experiencias locales, atención personalizada y servicios complementarios."
+      "answer": "Ricardo Tour es una agencia de turismo enfocada en paseos, experiencias y servicios turísticos en Río de Janeiro. También ofrece servicios complementarios para ayudar a planificar tu viaje."
     },
     {
       "id": "Q03",
@@ -1173,10 +1190,10 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 2,
-      "latency_ms": 1958,
+      "latency_ms": 2269,
       "pass": true,
       "failures": [],
-      "answer": "The Rocinha tour is a guided experience that lets you discover the local culture of Brazil's largest favela with a specialized guide."
+      "answer": "The Rocinha tour offers a guided experience with a local expert to explore the culture of Brazil's largest favela."
     },
     {
       "id": "Q04",
@@ -1186,10 +1203,10 @@
       "response_kind": "grounded",
       "handoff_code": null,
       "provider_calls": 2,
-      "latency_ms": 2576,
+      "latency_ms": 2040,
       "pass": true,
       "failures": [],
-      "answer": "El Tour Favela Rocinha con Guía Local ofrece conocer la cultura local de la mayor favela de Brasil con un guía especializado y una experiencia guiada en Rocinha."
+      "answer": "El Tour Favela Rocinha con Guía Local ofrece conocer la cultura local de la mayor favela de Brasil con un guía especializado y una experiencia guiada en la Rocinha."
     },
     {
       "id": "Q05",
@@ -1199,7 +1216,7 @@
       "response_kind": "handoff",
       "handoff_code": "H4",
       "provider_calls": 2,
-      "latency_ms": 2392,
+      "latency_ms": 2660,
       "pass": true,
       "failures": [],
       "answer": "I don't have enough confirmed information to answer that safely. You can see the published tours at https://www.ricardotour.com/en/tours. You can talk to the team directly on WhatsApp +55 22 99846-1906 or by e-mail at contato@ricardotour.com."
@@ -1212,7 +1229,7 @@
       "response_kind": "handoff",
       "handoff_code": "H4",
       "provider_calls": 2,
-      "latency_ms": 4131,
+      "latency_ms": 3333,
       "pass": true,
       "failures": [],
       "answer": "No tengo información confirmada suficiente para responder eso con seguridad. Puedes ver los paseos publicados en https://www.ricardotour.com/es/tours. Puedes hablar directamente con el equipo por WhatsApp +55 22 99846-1906 o por correo en contato@ricardotour.com."
@@ -1225,7 +1242,7 @@
       "response_kind": "handoff",
       "handoff_code": "H4",
       "provider_calls": 2,
-      "latency_ms": 2453,
+      "latency_ms": 3093,
       "pass": true,
       "failures": [],
       "answer": "Não tenho informação confirmada suficiente para responder isso com segurança. Você pode ver os passeios publicados em https://www.ricardotour.com/pt/tours. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
@@ -1238,7 +1255,7 @@
       "response_kind": "handoff",
       "handoff_code": "H4",
       "provider_calls": 2,
-      "latency_ms": 1982,
+      "latency_ms": 2226,
       "pass": true,
       "failures": [],
       "answer": "I don't have enough confirmed information to answer that safely. You can see the published tours at https://www.ricardotour.com/en/tours. You can talk to the team directly on WhatsApp +55 22 99846-1906 or by e-mail at contato@ricardotour.com."
@@ -1251,7 +1268,7 @@
       "response_kind": "handoff",
       "handoff_code": "H4",
       "provider_calls": 2,
-      "latency_ms": 2359,
+      "latency_ms": 2004,
       "pass": true,
       "failures": [],
       "answer": "No tengo información confirmada suficiente para responder eso con seguridad. Puedes ver los paseos publicados en https://www.ricardotour.com/es/tours. Puedes hablar directamente con el equipo por WhatsApp +55 22 99846-1906 o por correo en contato@ricardotour.com."
@@ -1264,7 +1281,7 @@
       "response_kind": "handoff",
       "handoff_code": "H4",
       "provider_calls": 2,
-      "latency_ms": 2011,
+      "latency_ms": 2418,
       "pass": true,
       "failures": [],
       "answer": "Não tenho informação confirmada suficiente para responder isso com segurança. Você pode ver os passeios publicados em https://www.ricardotour.com/pt/tours. Você pode falar diretamente com a equipe pelo WhatsApp +55 22 99846-1906 ou pelo e-mail contato@ricardotour.com."
