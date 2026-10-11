@@ -1,5 +1,7 @@
 import { buildHandoffOffer } from "../runtime/handoff";
-import { degradedMessage, dynamicMessage, handoffMessage } from "../runtime/messages";
+import { langFromLocale, type Lang } from "../runtime/lang";
+import { degradedMessage, dynamicMessage, handoffMessage, recommendationMessage } from "../runtime/messages";
+import { resolveTourCards } from "./tours";
 import type { ConciergeReply, ConciergeTransport } from "./types";
 
 /**
@@ -20,40 +22,42 @@ export const SCENARIOS: Array<{ id: ScenarioId; label: string; description: stri
   { id: "slow", label: "Resposta lenta (3 s)", description: "Mostra o estado de carregamento" },
 ];
 
-const GROUNDED =
-  "Que bom que você vem! Para uma primeira vez no Rio, vale começar pelos clássicos da cidade. Se quiser, posso sugerir alguns passeios publicados para você começar.";
+const GROUNDED: Record<Lang, string> = {
+  pt: "Que bom que você vem! Para uma primeira vez no Rio, vale começar pelos clássicos da cidade. Se quiser, posso sugerir alguns passeios publicados para você começar.",
+  en: "How great that you're coming! For a first time in Rio, it's worth starting with the city's classics. If you like, I can suggest a few published tours to get you started.",
+  es: "¡Qué bueno que vienes! Para una primera vez en Río, vale la pena empezar por los clásicos de la ciudad. Si quieres, puedo sugerirte algunos paseos publicados para empezar.",
+};
 
-// Illustrative recommendation in the shape the approved recommendation policy allows: published tours only (shown as cards from the
-// closed allow-list), no price, no duration, no availability.
-const RECOMMENDATION =
-  "Para uma primeira viagem ao Rio, três passeios publicados costumam ser um bom começo: Cristo Redentor + Pão de Açúcar, Confeitaria Colombo + City Tour Rio e Tour Privado Premium Rio de Janeiro. Preços, datas e disponibilidade ficam na página de cada passeio ou com a nossa equipe.";
+const CRISTO = "cmlhxkpy9000028zq27rhytew";
+const RECOMMENDED = [CRISTO, "cmlibniq40000z4zqkbujnutt", "cmljo0s1u0000t0zqa0bpd23p"];
 
-export function replyFor(id: ScenarioId): ConciergeReply {
+/** Same texts and builders as the runtime (deterministic recommendation, fixed handoff texts, contextual WhatsApp message). */
+export function replyFor(id: ScenarioId, lang: Lang = "pt"): ConciergeReply {
   switch (id) {
     case "answer":
     case "slow":
-      return { outcome: "ANSWER", answer: GROUNDED, response_kind: "grounded" };
+      return { outcome: "ANSWER", answer: GROUNDED[lang], response_kind: "grounded" };
     case "recommendation":
-      return { outcome: "ANSWER", answer: RECOMMENDATION, response_kind: "grounded", tour_ids: ["cmlhxkpy9000028zq27rhytew", "cmlibniq40000z4zqkbujnutt", "cmljo0s1u0000t0zqa0bpd23p"] };
+      return { outcome: "ANSWER", answer: recommendationMessage(resolveTourCards(RECOMMENDED).map((tour) => tour.title), lang), response_kind: "grounded", tour_ids: RECOMMENDED };
     case "handoff_human":
-      return { outcome: "HANDOFF", answer: handoffMessage("explicit_request"), response_kind: "handoff", handoff: buildHandoffOffer("H1", "explicit_request") };
+      return { outcome: "HANDOFF", answer: handoffMessage("explicit_request", lang), response_kind: "handoff", handoff: buildHandoffOffer("H1", "explicit_request", { lang }) };
     case "price":
-      return { outcome: "DYNAMIC_LOOKUP_REQUIRED", answer: dynamicMessage("price"), response_kind: "handoff", handoff: buildHandoffOffer("H9", "price") };
+      return { outcome: "DYNAMIC_LOOKUP_REQUIRED", answer: dynamicMessage("price", lang), response_kind: "handoff", handoff: buildHandoffOffer("H9", "price", { lang, tourId: CRISTO }) };
     case "no_evidence":
-      return { outcome: "INSUFFICIENT_EVIDENCE", answer: handoffMessage("insufficient_evidence"), response_kind: "handoff", handoff: buildHandoffOffer("H4", "insufficient_evidence") };
+      return { outcome: "INSUFFICIENT_EVIDENCE", answer: handoffMessage("insufficient_evidence", lang), response_kind: "handoff", handoff: buildHandoffOffer("H4", "insufficient_evidence", { lang }) };
     case "degraded":
-      return { outcome: "UPSTREAM_ERROR", answer: degradedMessage("a1b2c3d4"), response_kind: "degraded", handoff: buildHandoffOffer("H5", "upstream_error"), reference_id: "a1b2c3d4" };
+      return { outcome: "UPSTREAM_ERROR", answer: degradedMessage("a1b2c3d4", lang), response_kind: "degraded", handoff: buildHandoffOffer("H5", "upstream_error", { lang }), reference_id: "a1b2c3d4" };
     case "rate_limited":
-      return { outcome: "RATE_LIMITED", answer: handoffMessage("rate_limited"), response_kind: "degraded", handoff: buildHandoffOffer("H5", "rate_limited"), retry_after_seconds: 20 };
+      return { outcome: "RATE_LIMITED", answer: handoffMessage("rate_limited", lang), response_kind: "degraded", handoff: buildHandoffOffer("H5", "rate_limited", { lang }), retry_after_seconds: 20 };
   }
 }
 
 export function createLabTransport(getScenario: () => ScenarioId): ConciergeTransport {
   return {
-    async send() {
+    async send({ locale }) {
       const id = getScenario();
       await new Promise((resolve) => setTimeout(resolve, id === "slow" ? 3_000 : 500));
-      return replyFor(id);
+      return replyFor(id, langFromLocale(locale) ?? "pt");
     },
   };
 }

@@ -13,9 +13,9 @@ describe("RT-75 evaluation set", () => {
   it("is well-formed: unique ids, known categories, valid regexes, synthetic prompts only", () => {
     const ids = set.cases.map((c) => c.id);
     expect(new Set(ids).size).toBe(ids.length);
-    expect(set.cases.length).toBeGreaterThanOrEqual(35);
+    expect(set.cases.length).toBeGreaterThanOrEqual(80);
     for (const testCase of set.cases) {
-      expect(["grounded", "dynamic_gate", "handoff_gate", "safety", "refusal", "persona", "input", "followup"]).toContain(testCase.category);
+      expect(["grounded", "dynamic_gate", "handoff_gate", "safety", "refusal", "persona", "input", "followup", "recommendation", "multilingual", "handoff_context"]).toContain(testCase.category);
       expect(testCase.expect.outcomes.length).toBeGreaterThan(0);
       for (const pattern of [...(testCase.expect.must_match ?? []), ...(testCase.expect.must_not_match ?? [])]) expect(() => new RegExp(pattern, "i"), `${testCase.id} ${pattern}`).not.toThrow();
     }
@@ -26,13 +26,15 @@ describe("RT-75 evaluation set", () => {
 
   it("covers every risk category the Owner gate reviews, including persona transparency", () => {
     const categories = new Set(set.cases.map((c) => c.category));
-    for (const category of ["grounded", "dynamic_gate", "handoff_gate", "safety", "refusal", "persona", "input", "followup"]) expect(categories.has(category)).toBe(true);
-    expect(set.cases.filter((c) => c.category === "persona").length).toBeGreaterThanOrEqual(4);
+    for (const category of ["grounded", "dynamic_gate", "handoff_gate", "safety", "refusal", "persona", "input", "followup", "recommendation", "multilingual", "handoff_context"]) expect(categories.has(category)).toBe(true);
+    expect(set.cases.filter((c) => c.category === "persona").length).toBeGreaterThanOrEqual(8);
+    // V1: every language is exercised
+    for (const locale of ["en", "es"]) expect(set.cases.some((c) => c.locale === locale)).toBe(true);
   });
 
   it("every deterministic-gate case passes with NO retrieval and NO model call (provider functions throw if touched)", async () => {
     const deterministic = set.cases.filter((c) => c.expect.no_model_call);
-    expect(deterministic.length).toBeGreaterThanOrEqual(20);
+    expect(deterministic.length).toBeGreaterThanOrEqual(55);
     const verdicts = [];
     for (const testCase of deterministic) {
       const retrieve = vi.fn(async () => {

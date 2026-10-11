@@ -2,11 +2,13 @@ import type { ReactNode } from "react";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
 import { resolveSiteChromeCopy } from "@/components/site/site-chrome-copy";
+import { ConciergeMount } from "@/components/ai-concierge/concierge-mount";
+import { isConciergeEnabled } from "@/lib/ai-concierge/launch";
 import { siteBody, siteDisplay } from "./fonts";
 import "./site-theme.css";
 
 // Public-site route group (RT-52): scoped public fonts and tokens, SiteHeader, the main slot and SiteFooter.
-// It deliberately does NOT mount the legacy/mock AI widget (the real AI Concierge is separate work), and it does not
+// The legacy/mock AI widget is never mounted here; Daniela (the real AI Concierge) is mounted only behind the launch guard. It does not
 // replace the (public) group yet: RT-53/54/56/57 move routes here one at a time.
 export default async function SiteLayout({
   children,
@@ -29,6 +31,8 @@ export default async function SiteLayout({
       <SiteHeader locale={locale} anchorMode="home" />
       <main id="main-content">{children}</main>
       <SiteFooter locale={locale} anchorMode="home" />
+      {/* Daniela V1 (AI Concierge): rendered only when the launch guard allows it; OFF by default and blocked in production until every mandatory criterion is met. */}
+      {isConciergeEnabled() ? <ConciergeMount locale={locale} /> : null}
     </div>
   );
 }

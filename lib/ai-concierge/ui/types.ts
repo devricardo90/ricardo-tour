@@ -23,7 +23,7 @@ export type HistoryTurn = { role: "user" | "assistant"; text: string };
 
 /** The transport is injected: the lab uses a deterministic fake; a future public integration will call the (gated) endpoint. */
 export interface ConciergeTransport {
-  send(input: { message: string; history: HistoryTurn[] }): Promise<ConciergeReply>;
+  send(input: { message: string; history: HistoryTurn[]; locale?: string }): Promise<ConciergeReply>;
 }
 
 /** Client-originated product events (RT-73 contract). The host validates and forwards them; the panel never sends them anywhere. */

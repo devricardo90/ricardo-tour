@@ -4,6 +4,7 @@ import {
   detectCompetitorComparison,
   detectEmergency,
   detectIdentityQuestion,
+  detectRecommendationIntent,
   detectInjection,
   detectInternalInfoRequest,
   isSafetySensitive,
@@ -14,12 +15,15 @@ import {
   HANDOFF_CODE_BY_REASON,
   buildHandoffOffer,
 } from "./handoff";
-import { isSupportedRuntimeLocale, validateRuntimeInput } from "./input";
+import { validateRuntimeInput } from "./input";
+import { detectLanguage, langFromLocale, type Lang } from "./lang";
+import { detectTourMention, selectRecommendations } from "../ui/tours";
 import {
-  INVALID_INPUT_MESSAGE,
-  PERSONAL_DATA_REMINDER,
-  REFUSAL_MESSAGE,
   UNSUPPORTED_LOCALE_MESSAGE,
+  invalidInputMessage,
+  isFixedRuntimeText,
+  personalDataReminder,
+  recommendationMessage,
   degradedMessage,
   dynamicMessage,
   handoffMessage,
@@ -122,6 +126,10 @@ export async function runConcierge(
   let personalDataShared = false;
   // RT-71 H12: the previous assistant turn was already a fixed "could not help" text.
   let previousMiss = false;
+  // V1 (pt/en/es): language of the visitor's message (page locale as fallback) and the approved tour they are asking about.
+  // Both come from closed sets, so a handoff message can never carry free text.
+  let lang: Lang = "pt";
+  let tourId: string | null = null;
 
   const finish = (draft: Draft): RuntimeResult => {
     const result: RuntimeResult = {
@@ -131,7 +139,7 @@ export async function runConcierge(
     };
     if (result.outcome === "UPSTREAM_ERROR") {
       result.reference_id = randomUUID().slice(0, 8);
-      result.answer = degradedMessage(result.reference_id);
+      result.answer = degradedMessage(result.reference_id, lang);
     }
     // RT-71: structured, user-initiated handoff built from static canonical data; it works with every backend down.
     if (HANDOFF_OUTCOMES.has(result.outcome)) {
@@ -142,7 +150,7 @@ export async function runConcierge(
           ? HANDOFF_CODE_BY_DYNAMIC[result.dynamic_reason]
           : "H3";
       const missed = result.outcome === "INSUFFICIENT_EVIDENCE" || result.outcome === "UPSTREAM_ERROR";
-      result.handoff = buildHandoffOffer(previousMiss && missed ? "H12" : base, reason);
+      result.handoff = buildHandoffOffer(previousMiss && missed ? "H12" : base, reason, { lang, tourId });
     }
     // The personal-data reminder is deterministic and never depends on the model.
     if (
@@ -150,7 +158,7 @@ export async function runConcierge(
       result.outcome !== "INVALID_INPUT" &&
       result.outcome !== "UNSUPPORTED_LOCALE"
     ) {
-      result.answer = `${result.answer} ${PERSONAL_DATA_REMINDER}`;
+      result.answer = `${result.answer} ${personalDataReminder(lang)}`;
     }
     // RT-74 §4: observability is best-effort and must never block or alter the answer.
     try {
@@ -187,9 +195,7 @@ export async function runConcierge(
   const refuse = (reason: RefusalReason) =>
     finish({
       outcome: "REFUSED",
-      answer: reason.startsWith("prompt_injection")
-        ? REFUSAL_MESSAGE
-        : refusalMessage(reason),
+      answer: refusalMessage(reason, lang),
       refusal_reason: reason,
     });
   const handoff = (
@@ -199,25 +205,35 @@ export async function runConcierge(
   ) =>
     finish({
       outcome,
-      answer: handoffMessage(reason),
+      answer: handoffMessage(reason, lang),
       handoff_reason: reason,
       invalid_reason,
     });
 
   const input = validateRuntimeInput(raw);
-  if (!input.ok)
+  if (!input.ok) {
+    const rawLocale = typeof raw === "object" && raw !== null ? (raw as { locale?: unknown }).locale : undefined;
+    lang = (typeof rawLocale === "string" ? langFromLocale(rawLocale) : null) ?? "pt";
     return finish({
       outcome: "INVALID_INPUT",
-      answer: INVALID_INPUT_MESSAGE,
+      answer: invalidInputMessage(lang),
       invalid_reason: input.reason,
     });
+  }
   const { message, locale, history } = input.value;
   stats.message_length_bucket = message.length <= 80 ? "short" : message.length <= 300 ? "medium" : "long";
-  if (!isSupportedRuntimeLocale(locale))
+  const pageLang = langFromLocale(locale);
+  if (!pageLang)
     return finish({
       outcome: "UNSUPPORTED_LOCALE",
       answer: UNSUPPORTED_LOCALE_MESSAGE,
     });
+  lang = detectLanguage(message, pageLang);
+  // The tour the visitor is interested in: the current message first, then their earlier turns, then our last answer.
+  tourId =
+    detectTourMention(message) ??
+    [...history].reverse().filter((turn) => turn.role === "user").map((turn) => detectTourMention(turn.text)).find(Boolean) ??
+    detectTourMention([...history].reverse().find((turn) => turn.role === "assistant")?.text ?? "");
 
   const lastAssistant = [...history].reverse().find((turn) => turn.role === "assistant");
   previousMiss = lastAssistant ? isFixedMissMessage(lastAssistant.text) : false;
@@ -242,12 +258,12 @@ export async function runConcierge(
   if (
     history.some(
       (turn) =>
-        turn.role === "assistant" && !checkGeneratedAnswer(turn.text).ok,
+        turn.role === "assistant" && !isFixedRuntimeText(turn.text) && !checkGeneratedAnswer(turn.text, { checkLanguage: false }).ok,
     )
   ) {
     return finish({
       outcome: "INVALID_INPUT",
-      answer: INVALID_INPUT_MESSAGE,
+      answer: invalidInputMessage(lang),
       invalid_reason: "history_unsafe_assistant_turn",
     });
   }
@@ -258,16 +274,27 @@ export async function runConcierge(
     return refuse("third_party_comparison");
 
   // Persona transparency (Daniela): identity questions are answered by fixed text, never by retrieval or the model.
-  if (detectIdentityQuestion(message)) return finish({ outcome: "ANSWER", answer: identityMessage() });
+  if (detectIdentityQuestion(message)) return finish({ outcome: "ANSWER", answer: identityMessage(lang) });
 
   const gate = runGates(message);
   if (gate.kind === "dynamic")
     return finish({
       outcome: "DYNAMIC_LOOKUP_REQUIRED",
-      answer: dynamicMessage(gate.reason),
+      answer: dynamicMessage(gate.reason, lang),
       dynamic_reason: gate.reason,
     });
   if (gate.kind === "handoff") return handoff(gate.reason);
+
+  // V1: recommendations come ONLY from the approved catalog, selected deterministically (1 to 3 tours). The model never
+  // chooses, invents or describes recommended experiences, so nothing outside the catalog can be offered.
+  if (detectRecommendationIntent(message)) {
+    const picks = selectRecommendations(message);
+    return finish({
+      outcome: "ANSWER",
+      answer: recommendationMessage(picks.map((tour) => tour.title), lang),
+      tour_ids: picks.map((tour) => tour.id),
+    });
+  }
 
   const safetySensitive = isSafetySensitive(message);
   // When a safety-sensitive question cannot be answered from approved evidence, the fixed no-guarantee handoff is used.
@@ -374,7 +401,7 @@ ${item.source_version}`)?.status === "ACTIVE");
       () =>
         timed("generate", () =>
           deps.generate({
-            instructions: buildInstructions(),
+            instructions: buildInstructions(lang),
             input: buildInput(safeMessage, evidence, safeHistory),
           }),
         ),
@@ -386,7 +413,7 @@ ${item.source_version}`)?.status === "ACTIVE");
 
   const generatedText = typeof generated === "string" ? generated : generated.text;
   if (typeof generated !== "string" && generated.usage) stats.usage = generated.usage;
-  const checked = checkGeneratedAnswer(generatedText);
+  const checked = checkGeneratedAnswer(generatedText, { lang });
   if (!checked.ok) return noAnswer(checked.reason);
 
   return finish({

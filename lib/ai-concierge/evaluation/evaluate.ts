@@ -1,3 +1,4 @@
+import { APPROVED_TOUR_CARDS } from "../ui/tours";
 import type { RuntimeOutcome, RuntimeResult } from "../runtime/types";
 
 /**
@@ -21,12 +22,20 @@ export type EvalCase = {
     must_not_match?: string[];
     /** The handoff code must be one of these (when a handoff is expected). */
     handoff_code_in?: string[];
+    /** V1: a catalog recommendation is required: 1 to 3 tour ids, all from the approved allow-list. */
+    recommendation?: boolean;
+    /** V1: no recommendation cards may be attached. */
+    no_tour_ids?: boolean;
+    /** V1: patterns the WhatsApp prefill must match (it is closed text: language + approved tour). */
+    prefill_must_match?: string[];
   };
 };
 
-export type EvalSet = { version: string; locale: "pt"; cases: EvalCase[]; global_must_not_match: string[] };
+export type EvalSet = { version: string; locale: "pt" | "multi"; cases: EvalCase[]; global_must_not_match: string[] };
 
 export type Verdict = { id: string; category: string; pass: boolean; failures: string[]; outcome: RuntimeOutcome; model_called: boolean };
+
+const CATALOG_IDS = new Set(APPROVED_TOUR_CARDS.map((tour) => tour.id));
 
 export function judge(testCase: EvalCase, result: RuntimeResult, modelCalls: number, globalMustNot: string[]): Verdict {
   const failures: string[] = [];
@@ -41,6 +50,15 @@ export function judge(testCase: EvalCase, result: RuntimeResult, modelCalls: num
   }
   if (expect.handoff_code_in && (!result.handoff || !expect.handoff_code_in.includes(result.handoff.code))) {
     failures.push(`handoff code ${result.handoff?.code ?? "none"} not in [${expect.handoff_code_in.join(", ")}]`);
+  }
+  if (expect.recommendation) {
+    const ids = result.tour_ids ?? [];
+    if (ids.length < 1 || ids.length > 3) failures.push(`expected 1 to 3 recommended tours, got ${ids.length}`);
+    for (const id of ids) if (!CATALOG_IDS.has(id)) failures.push(`recommended tour ${id} is not in the approved catalog`);
+  }
+  if (expect.no_tour_ids && (result.tour_ids?.length ?? 0) > 0) failures.push("recommendation cards were attached but none were expected");
+  for (const pattern of expect.prefill_must_match ?? []) {
+    if (!new RegExp(pattern, "i").test(result.handoff?.prefill ?? "")) failures.push(`WhatsApp prefill does not match /${pattern}/i`);
   }
   return { id: testCase.id, category: testCase.category, pass: failures.length === 0, failures, outcome: result.outcome, model_called: modelCalls > 0 };
 }

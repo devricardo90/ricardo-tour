@@ -1,14 +1,14 @@
 "use client";
 
-import { Fragment, useEffect, useId, useReducer, useRef, type FormEvent, type KeyboardEvent } from "react";
+import { Fragment, createContext, useContext, useEffect, useId, useReducer, useRef, type FormEvent, type KeyboardEvent } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
-import { CONCIERGE_PRIVACY } from "@/lib/ai-concierge/runtime/privacy";
+import { CONCIERGE_PRIVACY, CONCIERGE_PRIVACY_TEXTS } from "@/lib/ai-concierge/runtime/privacy";
+import { langFromLocale, type Lang } from "@/lib/ai-concierge/runtime/lang";
 import { buildHandoffPrefill, getHandoffChannels, type HandoffCode, type HandoffOffer } from "@/lib/ai-concierge/runtime/handoff";
 import { RUNTIME_MAX_MESSAGE_LENGTH } from "@/lib/ai-concierge/runtime/input";
-import { PLANNER_URL, TOURS_URL } from "@/lib/ai-concierge/runtime/messages";
+import { plannerUrl, toursUrl } from "@/lib/ai-concierge/runtime/messages";
 import {
-  STARTER_QUESTIONS,
   formatCountdown,
   historyFor,
   initialPanelState,
@@ -16,9 +16,9 @@ import {
   type PanelMessage,
   type PanelState,
 } from "@/lib/ai-concierge/ui/state";
-import { resolveTourCards, type TourCardData } from "@/lib/ai-concierge/ui/tours";
+import { altFor, resolveTourCards, summaryFor, type TourCardData } from "@/lib/ai-concierge/ui/tours";
 import type { ConciergeTransport, PanelEvent } from "@/lib/ai-concierge/ui/types";
-import { PANEL_COPY as copy } from "./copy";
+import { getPanelCopy, type PanelCopy } from "./copy";
 import styles from "./concierge-panel.module.css";
 
 /**
@@ -30,15 +30,20 @@ export type ConciergePanelProps = {
   transport: ConciergeTransport;
   onEvent?: (event: PanelEvent) => void;
   surface?: "public_site" | "tour_detail" | "contact";
+  /** Page locale (pt, en or es). The visitor may still write in another of the three languages; the runtime detects it. */
+  locale?: string;
   /** Test/lab seam to render a specific state. */
   initialState?: Partial<PanelState>;
 };
+
+/** Language and copy for the sub-components (one source, no prop drilling). */
+const PanelLangContext = createContext<{ lang: Lang; copy: PanelCopy }>({ lang: "pt", copy: getPanelCopy("pt") });
 
 const SAFE_HOSTS = new Set(["www.ricardotour.com"]);
 const HANDOFF_CODES = new Set<HandoffCode>(["H1", "H2", "H3", "H4", "H5", "H6", "H7", "H8", "H9", "H10", "H11", "H12"]);
 
 /** Linkifies only canonical Ricardo Tour URLs; everything else stays inert text. */
-function renderText(text: string) {
+function renderText(text: string, lang: Lang, copy: PanelCopy) {
   return text.split(/(https:\/\/[^\s)]+)/g).map((part, index) => {
     if (index % 2 === 0) return <Fragment key={index}>{part}</Fragment>;
     const tail = part.match(/[.,;:!?]+$/)?.[0] ?? "";
@@ -46,7 +51,7 @@ function renderText(text: string) {
     try {
       const url = new URL(core);
       if (url.protocol === "https:" && SAFE_HOSTS.has(url.hostname)) {
-        const label = core === PLANNER_URL ? "Planeje sua viagem" : core === TOURS_URL ? "passeios publicados" : /^\/pt\/tours\/[\w-]+\/?$/.test(url.pathname) ? "ver o passeio" : url.hostname + url.pathname;
+        const label = core === plannerUrl(lang) ? copy.planner : core === toursUrl(lang) ? copy.tours : /^\/(?:pt|en|es)\/tours\/[\w-]+\/?$/.test(url.pathname) ? copy.tourCta.toLowerCase() : url.hostname + url.pathname;
         return (
           <Fragment key={index}>
             <a href={url.href} target="_blank" rel="noopener noreferrer">
@@ -117,6 +122,7 @@ function DanielaPortrait() {
 
 /** Avatar sizes: sm in the conversation (decorative: the visible "Daniela · IA" label names the speaker), md in the header, lg with an IA badge in the welcome. */
 function ConciergeAvatar({ decorative = false, size = "sm" }: { decorative?: boolean; size?: "sm" | "md" | "lg" }) {
+  const { copy } = useContext(PanelLangContext);
   const sizeClass = size === "lg" ? styles.avatarLg : size === "md" ? styles.avatarMd : styles.avatarSm;
   return (
     <span className={`${styles.avatarConcierge} ${sizeClass}`} {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": copy.avatarConcierge })}>
@@ -143,19 +149,28 @@ function VisitorAvatar() {
 }
 
 /** Recommendation card: approved catalog data only (closed allow-list); no price, duration or availability. */
-function TourCard({ tour }: { tour: TourCardData }) {
+function TourCard({ tour, onWhatsApp }: { tour: TourCardData; onWhatsApp: () => void }) {
+  const { lang, copy } = useContext(PanelLangContext);
+  // The WhatsApp message names this approved tour and nothing else (no conversation, no personal data).
+  const [whatsapp] = getHandoffChannels(buildHandoffPrefill("H1", { lang, tourId: tour.id }), lang);
+  const href = tour.path.replace(/^\/pt\//, `/${lang}/`);
   return (
     <li className={styles.tourCard}>
       <div className={styles.tourPhoto}>
-        <Image src={tour.image} alt={tour.imageAlt} fill sizes="(max-width: 767px) 88px, 104px" className={styles.tourImage} />
+        <Image src={tour.image} alt={altFor(tour, lang)} fill sizes="(max-width: 767px) 88px, 104px" className={styles.tourImage} />
       </div>
       <div className={styles.tourBody}>
         <h4 className={styles.tourTitle}>{tour.title}</h4>
-        <p className={styles.tourSummary}>{tour.summary}</p>
-        <a className={styles.tourCta} href={tour.path} target="_blank" rel="noopener noreferrer" aria-label={`${copy.tourCta}: ${tour.title}`}>
-          {copy.tourCta}
-          <span aria-hidden="true"> →</span>
-        </a>
+        <p className={styles.tourSummary}>{summaryFor(tour, lang)}</p>
+        <div className={styles.tourActions}>
+          <a className={styles.tourCta} href={href} target="_blank" rel="noopener noreferrer" aria-label={`${copy.tourCta}: ${tour.title}`}>
+            {copy.tourCta}
+            <span aria-hidden="true"> →</span>
+          </a>
+          <a className={styles.tourCtaSecondary} href={whatsapp.url} target="_blank" rel="noopener noreferrer" aria-label={`${copy.tourWhatsAppLabel} ${tour.title}`} onClick={onWhatsApp}>
+            {copy.tourWhatsApp}
+          </a>
+        </div>
       </div>
     </li>
   );
@@ -163,9 +178,12 @@ function TourCard({ tour }: { tour: TourCardData }) {
 
 /** The offer is rebuilt from its closed code: a tampered reply can never change a phone number, address or message. */
 function HandoffCard({ offer, onClick }: { offer: HandoffOffer; onClick: (channel: "whatsapp" | "email", code: HandoffCode) => void }) {
+  const { lang: panelLang, copy } = useContext(PanelLangContext);
   const code = HANDOFF_CODES.has(offer.code) ? offer.code : "H4";
-  const prefill = buildHandoffPrefill(code);
-  const [whatsapp, email] = getHandoffChannels(prefill);
+  // Rebuilt from closed data only: the code, a language from {pt, en, es} and an allow-listed tour id (anything else is ignored).
+  const lang: Lang = offer.lang === "en" || offer.lang === "es" || offer.lang === "pt" ? offer.lang : panelLang;
+  const prefill = buildHandoffPrefill(code, { lang, tourId: typeof offer.tour_id === "string" ? offer.tour_id : null });
+  const [whatsapp, email] = getHandoffChannels(prefill, lang);
   return (
     <div className={styles.handoff} data-handoff-code={code}>
       <h3 className={styles.handoffTitle}>{copy.handoffTitle}</h3>
@@ -173,7 +191,7 @@ function HandoffCard({ offer, onClick }: { offer: HandoffOffer; onClick: (channe
       <p className={styles.handoffQuote}>“{prefill}”</p>
       <div className={styles.handoffActions}>
         <a className={styles.primaryLink} href={whatsapp.url} target="_blank" rel="noopener noreferrer" onClick={() => onClick("whatsapp", code)}>
-          {copy.handoffWhatsApp} · {whatsapp.display}
+          {copy.handoffWhatsApp} · <span className={styles.nowrap}>{whatsapp.display}</span>
         </a>
         <a className={styles.secondaryLink} href={email.url} onClick={() => onClick("email", code)}>
           {copy.handoffEmail}
@@ -185,6 +203,7 @@ function HandoffCard({ offer, onClick }: { offer: HandoffOffer; onClick: (channe
 }
 
 function Message({ message, onHandoff }: { message: PanelMessage; onHandoff: (channel: "whatsapp" | "email", code: HandoffCode) => void }) {
+  const { lang, copy } = useContext(PanelLangContext);
   if (message.role === "user") {
     return (
       <li className={styles.messageUser}>
@@ -203,7 +222,7 @@ function Message({ message, onHandoff }: { message: PanelMessage; onHandoff: (ch
     return (
       <li className={styles.messageSystem} data-kind="degraded">
         <span className={styles.systemLabel}>{copy.systemLabel}</span>
-        <p>{renderText(message.text)}</p>
+        <p>{renderText(message.text, lang, copy)}</p>
         {message.handoff ? <HandoffCard offer={message.handoff} onClick={onHandoff} /> : null}
       </li>
     );
@@ -213,7 +232,7 @@ function Message({ message, onHandoff }: { message: PanelMessage; onHandoff: (ch
       <ConciergeAvatar decorative />
       <div className={styles.assistantBody}>
         <span className={styles.who}>{copy.concierge}</span>
-        <p>{renderText(message.text)}</p>
+        <p>{renderText(message.text, lang, copy)}</p>
         {tours.length > 0 ? (
           <section className={styles.tours} aria-labelledby={`${message.id}-tours`}>
             <h3 id={`${message.id}-tours`} className={styles.toursLabel}>
@@ -221,7 +240,7 @@ function Message({ message, onHandoff }: { message: PanelMessage; onHandoff: (ch
             </h3>
             <ul className={styles.tourList}>
               {tours.map((tour) => (
-                <TourCard key={tour.id} tour={tour} />
+                <TourCard key={tour.id} tour={tour} onWhatsApp={() => onHandoff("whatsapp", "H1")} />
               ))}
             </ul>
             <p className={styles.toursNote}>{copy.recommendedNote}</p>
@@ -233,7 +252,10 @@ function Message({ message, onHandoff }: { message: PanelMessage; onHandoff: (ch
   );
 }
 
-export function ConciergePanel({ transport, onEvent, surface = "public_site", initialState }: ConciergePanelProps) {
+export function ConciergePanel({ transport, onEvent, surface = "public_site", locale, initialState }: ConciergePanelProps) {
+  const lang: Lang = langFromLocale(locale) ?? "pt";
+  const copy = getPanelCopy(lang);
+  const privacyTexts = CONCIERGE_PRIVACY_TEXTS[lang];
   const [state, dispatch] = useReducer(panelReducer, initialPanelState(initialState));
   const titleId = useId();
   const panelId = useId();
@@ -245,7 +267,7 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
   const handledMessageId = useRef<string | null>(null);
 
   const { open, messages, draft, status, retryAfter } = state;
-  const [team] = getHandoffChannels(buildHandoffPrefill("H1"));
+  const [team] = getHandoffChannels(buildHandoffPrefill("H1", { lang }), lang);
 
   useEffect(() => {
     if (open) {
@@ -298,9 +320,9 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
     const history = historyFor(messages);
     dispatch({ type: "send", text });
     try {
-      dispatch({ type: "reply", reply: await transport.send({ message: text.slice(0, RUNTIME_MAX_MESSAGE_LENGTH), history }) });
+      dispatch({ type: "reply", reply: await transport.send({ message: text.slice(0, RUNTIME_MAX_MESSAGE_LENGTH), history, locale: lang }) });
     } catch {
-      dispatch({ type: "failed" });
+      dispatch({ type: "failed", lang });
     }
   };
 
@@ -326,12 +348,13 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
   const showCounter = draft.length > RUNTIME_MAX_MESSAGE_LENGTH * 0.75;
 
   return (
-    <div className={styles.root} data-concierge-panel data-state={open ? "open" : "closed"}>
+    <PanelLangContext.Provider value={{ lang, copy }}>
+    <div className={styles.root} data-concierge-panel data-state={open ? "open" : "closed"} lang={lang}>
       {!open ? (
         <button ref={handleRef} type="button" className={styles.handle} aria-expanded={false} aria-controls={panelId} aria-label={copy.open} onClick={() => dispatch({ type: "open" })}>
           <span className={styles.handleOrnament} aria-hidden="true" />
           <span className={styles.handleLabel}>{copy.entryLabel}</span>
-          <span className={styles.handleTag} aria-hidden="true">IA</span>
+          <span className={styles.handleTag} aria-hidden="true">{copy.aiBadge}</span>
         </button>
       ) : null}
 
@@ -385,7 +408,7 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
               </div>
               <p className={styles.startersLabel}>{copy.starters}</p>
               <ul className={styles.starters}>
-                {STARTER_QUESTIONS.map((question) => (
+                {copy.starterQuestions.map((question) => (
                   <li key={question}>
                     <button type="button" className={styles.starterButton} disabled={composerDisabled} onClick={() => void submit(question)}>
                       {question}
@@ -394,7 +417,7 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
                 ))}
               </ul>
               <p className={styles.note} data-ai-disclosure>
-                {CONCIERGE_PRIVACY.ai_disclosure}
+                {privacyTexts.ai_disclosure}
               </p>
             </section>
           ) : (
@@ -453,11 +476,12 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
           {showCounter ? <p className={styles.counter}>{copy.counter(draft.length, RUNTIME_MAX_MESSAGE_LENGTH)}</p> : null}
           <details className={styles.privacy}>
             <summary>{copy.privacySummary}</summary>
-            <p>{CONCIERGE_PRIVACY.privacy_notice}</p>
+            <p>{privacyTexts.privacy_notice}</p>
             {CONCIERGE_PRIVACY.legal_review === "PENDING" ? <span className={styles.pending}>{copy.privacyPending}</span> : null}
           </details>
         </div>
       </aside>
     </div>
+    </PanelLangContext.Provider>
   );
 }

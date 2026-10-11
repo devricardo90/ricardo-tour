@@ -49,7 +49,7 @@ export type PanelAction =
   | { type: "draft"; text: string }
   | { type: "send"; text: string }
   | { type: "reply"; reply: ConciergeReply }
-  | { type: "failed" }
+  | { type: "failed"; lang?: "pt" | "en" | "es" }
   | { type: "tick" }
   | { type: "retry" }
   | { type: "reset" };
@@ -96,7 +96,7 @@ export function panelReducer(state: PanelState, action: PanelAction): PanelState
         ...state,
         status: "degraded",
         seq: state.seq + 1,
-        messages: [...state.messages, { id: nextId(state), role: "assistant", text: degradedMessage(reference), kind: "degraded", handoff: buildHandoffOffer("H5", "upstream_error") }],
+        messages: [...state.messages, { id: nextId(state), role: "assistant", text: degradedMessage(reference, action.lang ?? "pt"), kind: "degraded", handoff: buildHandoffOffer("H5", "upstream_error", { lang: action.lang ?? "pt" }) }],
       };
     }
     case "tick": {

@@ -94,7 +94,6 @@ describe("RT-74 matrix — deterministic gates, several phrasings per row (no re
   it("does not over-block ordinary visitor questions that merely share vocabulary", async () => {
     for (const q of [
       "De onde o Cristo Redentor pode ser visto?",
-      "Como faço para reservar um passeio?",
       "Como posso falar com a Ricardo Tour?",
       "Quais idiomas vocês atendem?",
       "Fale sobre o Pão de Açúcar",
@@ -102,6 +101,14 @@ describe("RT-74 matrix — deterministic gates, several phrasings per row (no re
       const d = deps();
       expect((await ask(q, d)).outcome, q).toBe("ANSWER");
     }
+  });
+
+  it("V1: 'how do I book?' gets the fixed booking text (tour page or team), never a model-invented booking process", async () => {
+    const d = deps();
+    const result = await ask("Como faço para reservar um passeio?", d);
+    expect(result.outcome).toBe("HANDOFF");
+    expect(result.answer).toContain("Para reservar, use o processo da página do passeio ou fale com a equipe");
+    expect(d.generate).not.toHaveBeenCalled();
   });
 });
 
@@ -139,11 +146,22 @@ describe("RT-74 safety-sensitive tourism (row 10) and unknown/low evidence (row 
       "Sem risco algum para você.",
       "Garanto que é seguro.",
     ]) {
+      // Daniela V1: a direct safety question never reaches the model (see below); the post-generation guard is exercised with a neutral question.
       const d = deps(unsafe);
-      const result = await ask("É seguro andar em Copacabana à noite?", d);
+      const result = await ask("Como é a experiência no passeio de Copacabana?", d);
       expect(result.outcome, unsafe).toBe("INSUFFICIENT_EVIDENCE");
-      expect(result.handoff_reason).toBe("safety_sensitive");
-      expect(result.answer).toContain("Não posso garantir a segurança");
+      expect(result.handoff?.channels[0].url.startsWith("https://wa.me/")).toBe(true);
+    }
+  });
+
+  it("V1: any direct safety question is answered by the fixed no-guarantee handoff, without retrieval or generation", async () => {
+    for (const question of ["É seguro andar em Copacabana à noite?", "Dicas de segurança para o passeio?", "Is it safe to go at night?", "¿Es peligroso ir de noche?"]) {
+      const d = deps("A região é segura.");
+      const result = await ask(question, d);
+      expect(result.outcome, question).toBe("HANDOFF");
+      expect(result.handoff_reason, question).toBe("safety_sensitive");
+      expect(d.generate, question).not.toHaveBeenCalled();
+      expect(d.retrieve, question).not.toHaveBeenCalled();
     }
   });
 
@@ -161,9 +179,10 @@ describe("RT-74 safety-sensitive tourism (row 10) and unknown/low evidence (row 
     expect(result.answer).toContain("+55 22 99846-1906");
   });
 
-  it("qualified safety content backed by approved evidence is allowed", async () => {
+  it("V1: even qualified safety advice is not generated: the team answers safety questions", async () => {
     const d = deps("Como em qualquer grande cidade, recomenda-se atenção aos pertences e seguir as orientações do guia.");
-    expect((await ask("Dicas de segurança para o passeio?", d)).outcome).toBe("ANSWER");
+    expect((await ask("Dicas de segurança para o passeio?", d)).outcome).toBe("HANDOFF");
+    expect(d.generate).not.toHaveBeenCalled();
   });
 });
 
@@ -277,9 +296,9 @@ describe("RT-74 provider failures, timeouts and bounded retry (rows 4, 5, 6)", (
 describe("RT-74 integrity, secrets and sensitive data", () => {
   it("every deterministic message exposes only canonical contacts and approved URLs", () => {
     const texts = [
-      ...(["price", "availability", "flight_inventory", "hotel_inventory", "oner_inventory"] as const).map(dynamicMessage),
-      ...(["booking_status", "payment_status", "refund_decision", "operational_confirmation", "booking_request", "safety_sensitive", "out_of_scope_advice", "emergency", "insufficient_evidence", "upstream_error"] as const).map(handoffMessage),
-      ...(["internal_information", "abusive_content", "third_party_comparison", "prompt_injection"] as const).map(refusalMessage),
+      ...(["price", "availability", "flight_inventory", "hotel_inventory", "oner_inventory"] as const).map((r) => dynamicMessage(r)),
+      ...(["booking_status", "payment_status", "refund_decision", "operational_confirmation", "booking_request", "safety_sensitive", "out_of_scope_advice", "emergency", "insufficient_evidence", "upstream_error"] as const).map((r) => handoffMessage(r)),
+      ...(["internal_information", "abusive_content", "third_party_comparison", "prompt_injection"] as const).map((r) => refusalMessage(r)),
       REFUSAL_MESSAGE, UNSUPPORTED_LOCALE_MESSAGE, INVALID_INPUT_MESSAGE, PERSONAL_DATA_REMINDER, degradedMessage("abcd1234"),
     ];
     for (const text of texts) {
@@ -302,7 +321,7 @@ describe("RT-74 integrity, secrets and sensitive data", () => {
   });
 
   it("unsupported locale and malformed input never reach any provider", async () => {
-    for (const locale of ["en", "es", "sv", ""]) {
+    for (const locale of ["fr", "de", "sv", ""]) {
       const d = deps();
       const result = await runConcierge({ message: "oi", locale }, d, registry);
       expect(["UNSUPPORTED_LOCALE", "INVALID_INPUT"]).toContain(result.outcome);

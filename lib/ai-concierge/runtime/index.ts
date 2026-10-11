@@ -55,8 +55,8 @@ function limited(decision: Extract<LimitDecision, { reason: "limited" | "kill_sw
 }
 
 /**
- * Server-only entrypoint. Intentionally NOT imported by app/api/ai-concierge: production stays disabled until the RT-75
- * Owner gate and the RT-70 privacy/subprocessor review. There is NO path to the model that skips the rate limiter:
+ * Server-only entrypoint, used by app/api/ai-concierge (Daniela V1) only behind the launch guard (lib/ai-concierge/launch.ts):
+ * production stays disabled until the RT-75 Owner gate, the RT-70 legal review and the other mandatory criteria are met. There is NO path to the model that skips the rate limiter:
  * missing configuration, an unconfigured/failed limiter store and an exhausted free-plan quota all fail closed.
  * `client.ip` must come from the platform (not from the request body).
  */

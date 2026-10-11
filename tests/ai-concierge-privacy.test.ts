@@ -92,8 +92,8 @@ describe("RT-70 session context (client-held, bounded, untrusted)", () => {
 
   it("the runtime's own assistant messages remain valid history", () => {
     const own = [
-      ...(["price", "availability", "flight_inventory", "hotel_inventory", "oner_inventory"] as const).map(dynamicMessage),
-      ...(["booking_status", "payment_status", "refund_decision", "operational_confirmation", "insufficient_evidence", "upstream_error"] as const).map(handoffMessage),
+      ...(["price", "availability", "flight_inventory", "hotel_inventory", "oner_inventory"] as const).map((r) => dynamicMessage(r)),
+      ...(["booking_status", "payment_status", "refund_decision", "operational_confirmation", "insufficient_evidence", "upstream_error"] as const).map((r) => handoffMessage(r)),
     ];
     for (const text of own) expect(checkGeneratedAnswer(text), text).toMatchObject({ ok: true });
     expect(PLANNER_URL).toContain("ricardotour.com");

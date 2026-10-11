@@ -21,10 +21,11 @@ export const metadata: Metadata = {
 };
 
 /** Rebuild-lab prototype (production-hidden by the lab layout). Uses a deterministic fake transport: no API, no model. */
-export default function ConciergePanelPage() {
+export default async function ConciergePanelPage({ params }: { params: Promise<{ locale: string }> }) {
+  const { locale } = await params;
   return (
     <div className={`${display.variable} ${body.variable}`}>
-      <ConciergePanelLab />
+      <ConciergePanelLab locale={locale} />
     </div>
   );
 }

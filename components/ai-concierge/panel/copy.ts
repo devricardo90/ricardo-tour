@@ -1,5 +1,10 @@
-/** PT V1 only (EN/ES are not active for the Concierge). Fixed UI strings; answers/handoff texts come from the runtime. */
-export const PANEL_COPY = {
+import type { Lang } from "@/lib/ai-concierge/runtime/lang";
+
+/**
+ * Daniela V1 panel strings in Portuguese, English and Spanish. Fixed UI strings; answers and handoff texts come from the runtime.
+ * Texts that touch the legal notice (AI disclosure, privacy) keep the "pending legal approval" flag in every language.
+ */
+const PT = {
   eyebrow: "Concierge · Ricardo Tour",
   title: "Daniela",
   entryLabel: "Concierge",
@@ -14,6 +19,7 @@ export const PANEL_COPY = {
   welcome:
     "Olá! Eu sou a Daniela, a assistente de IA da Ricardo Tour: uma inteligência artificial, não uma pessoa da equipe. Me conta: é a sua primeira vez no Rio ou você já sabe o que quer conhecer? Eu sugiro passeios para você começar.",
   starters: "Comece por aqui",
+  starterQuestions: ["É minha primeira vez no Rio", "Quero conhecer o Cristo", "Quais passeios vocês recomendam?"],
   compactDisclosure: "Assistente de IA: pode errar e não confirma preços, reservas ou pagamentos.",
   messagesLabel: "Conversa com o Concierge",
   composerLabel: "Sua mensagem",
@@ -23,6 +29,8 @@ export const PANEL_COPY = {
   recommendedLabel: "Passeios sugeridos",
   recommendedNote: "Preços, datas e vagas ficam na página do passeio ou com a equipe.",
   tourCta: "Ver passeio",
+  tourWhatsApp: "Perguntar no WhatsApp",
+  tourWhatsAppLabel: "Perguntar no WhatsApp sobre",
   systemLabel: "Aviso",
   avatarConcierge: "Daniela, assistente de IA da Ricardo Tour (ilustração)",
   aiBadge: "IA",
@@ -39,5 +47,112 @@ export const PANEL_COPY = {
   rateLimitedNotice: "Limite de mensagens atingido por agora. Você poderá escrever de novo em",
   privacySummary: "Privacidade e uso de IA",
   privacyPending: "Texto provisório — aprovação jurídica pendente.",
+  planner: "Planeje sua viagem",
+  tours: "passeios publicados",
   counter: (used: number, max: number) => `${used}/${max}`,
 } as const;
+
+type Copy = { [K in keyof typeof PT]: (typeof PT)[K] extends (...args: infer A) => infer R ? (...args: A) => R : (typeof PT)[K] extends readonly string[] ? readonly string[] : string };
+
+const EN: Copy = {
+  eyebrow: "Concierge · Ricardo Tour",
+  title: "Daniela",
+  entryLabel: "Concierge",
+  persona: "Daniela",
+  aiTag: "AI assistant",
+  open: "Open the Ricardo Tour Concierge: Daniela, AI assistant",
+  close: "Close the Concierge",
+  teamEntry: "Talk to the team",
+  teamEntryLabel: "Talk to the Ricardo Tour team on WhatsApp",
+  introTitle: "Shall we discover Rio?",
+  welcome:
+    "Hello! I'm Daniela, Ricardo Tour's AI assistant: an artificial intelligence, not a person on the team. Tell me: is this your first time in Rio, or do you already know what you'd like to see? I'll suggest tours to get you started.",
+  starters: "Start here",
+  starterQuestions: ["It's my first time in Rio", "I want to see Christ the Redeemer", "Which tours do you recommend?"],
+  compactDisclosure: "AI assistant: it can make mistakes and doesn't confirm prices, bookings or payments.",
+  messagesLabel: "Conversation with the Concierge",
+  composerLabel: "Your message",
+  composerPlaceholder: "Ask about Rio…",
+  send: "Send message",
+  sendVisible: "Send",
+  recommendedLabel: "Suggested tours",
+  recommendedNote: "Prices, dates and availability are on the tour page or with the team.",
+  tourCta: "View tour",
+  tourWhatsApp: "Ask on WhatsApp",
+  tourWhatsAppLabel: "Ask on WhatsApp about",
+  systemLabel: "Notice",
+  avatarConcierge: "Daniela, Ricardo Tour's AI assistant (illustration)",
+  aiBadge: "AI",
+  thinking: "Preparing the answer…",
+  you: "You",
+  concierge: "Daniela · AI",
+  handoffTitle: "Talk to the team",
+  handoffSuggested: "Suggested message — you can edit it before sending:",
+  handoffWhatsApp: "Open WhatsApp",
+  handoffEmail: "Send e-mail",
+  handoffNote: "Nothing is sent automatically: you choose the channel and send your own message.",
+  degradedNotice: "The assistant is unavailable right now. You can try again or talk to the team.",
+  retry: "Try again",
+  rateLimitedNotice: "Message limit reached for now. You'll be able to write again in",
+  privacySummary: "Privacy and AI use",
+  privacyPending: "Provisional text — legal approval pending.",
+  planner: "Plan your trip",
+  tours: "published tours",
+  counter: (used: number, max: number) => `${used}/${max}`,
+};
+
+const ES: Copy = {
+  eyebrow: "Concierge · Ricardo Tour",
+  title: "Daniela",
+  entryLabel: "Concierge",
+  persona: "Daniela",
+  aiTag: "Asistente de IA",
+  open: "Abrir el Concierge de Ricardo Tour: Daniela, asistente de IA",
+  close: "Cerrar el Concierge",
+  teamEntry: "Hablar con el equipo",
+  teamEntryLabel: "Hablar con el equipo de Ricardo Tour por WhatsApp",
+  introTitle: "¿Descubrimos Río?",
+  welcome:
+    "¡Hola! Soy Daniela, la asistente de IA de Ricardo Tour: una inteligencia artificial, no una persona del equipo. Cuéntame: ¿es tu primera vez en Río o ya sabes qué quieres conocer? Te sugiero paseos para empezar.",
+  starters: "Empieza por aquí",
+  starterQuestions: ["Es mi primera vez en Río", "Quiero conocer el Cristo", "¿Qué paseos recomiendan?"],
+  compactDisclosure: "Asistente de IA: puede equivocarse y no confirma precios, reservas ni pagos.",
+  messagesLabel: "Conversación con el Concierge",
+  composerLabel: "Tu mensaje",
+  composerPlaceholder: "Pregunta sobre Río…",
+  send: "Enviar mensaje",
+  sendVisible: "Enviar",
+  recommendedLabel: "Paseos sugeridos",
+  recommendedNote: "Los precios, fechas y cupos están en la página del paseo o con el equipo.",
+  tourCta: "Ver paseo",
+  tourWhatsApp: "Preguntar por WhatsApp",
+  tourWhatsAppLabel: "Preguntar por WhatsApp sobre",
+  systemLabel: "Aviso",
+  avatarConcierge: "Daniela, asistente de IA de Ricardo Tour (ilustración)",
+  aiBadge: "IA",
+  thinking: "Preparando la respuesta…",
+  you: "Tú",
+  concierge: "Daniela · IA",
+  handoffTitle: "Hablar con el equipo",
+  handoffSuggested: "Mensaje sugerido — puedes editarlo antes de enviar:",
+  handoffWhatsApp: "Abrir WhatsApp",
+  handoffEmail: "Enviar correo",
+  handoffNote: "No se envía nada automáticamente: tú eliges el canal y envías tu mensaje.",
+  degradedNotice: "El asistente no está disponible ahora. Puedes intentarlo de nuevo o hablar con el equipo.",
+  retry: "Intentar de nuevo",
+  rateLimitedNotice: "Límite de mensajes alcanzado por ahora. Podrás escribir de nuevo en",
+  privacySummary: "Privacidad y uso de IA",
+  privacyPending: "Texto provisional — aprobación jurídica pendiente.",
+  planner: "Planea tu viaje",
+  tours: "paseos publicados",
+  counter: (used: number, max: number) => `${used}/${max}`,
+};
+
+export type PanelCopy = Copy;
+const BY_LANG: Record<Lang, Copy> = { pt: PT as unknown as Copy, en: EN, es: ES };
+
+/** Copy for a visitor language; anything else falls back to Portuguese. */
+export const getPanelCopy = (lang: string | undefined): Copy => BY_LANG[(lang === "en" || lang === "es" ? lang : "pt") as Lang];
+
+/** Portuguese copy, kept under the original name for the lab and the existing tests. */
+export const PANEL_COPY = PT;

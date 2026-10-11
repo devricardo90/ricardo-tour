@@ -70,7 +70,7 @@ describe("RT-71 triggers H1–H12 (PT V1)", () => {
   });
 
   it("H3 also covers an unsupported locale", async () => {
-    for (const locale of ["en", "es"]) {
+    for (const locale of ["fr", "de"]) {
       const result = await ask("I need a quote", deps(), undefined, locale);
       expect(result.outcome).toBe("UNSUPPORTED_LOCALE");
       expect(result.handoff?.code).toBe("H3");

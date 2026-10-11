@@ -9,7 +9,7 @@ import type { PanelEvent } from "@/lib/ai-concierge/ui/types";
  * RT-71 / RT-74 lab harness. Everything here is local: scenarios come from deterministic fixtures built with the real
  * runtime texts, the transport never touches the network, and client events are only displayed (never sent anywhere).
  */
-export default function ConciergePanelLab() {
+export default function ConciergePanelLab({ locale = "pt" }: { locale?: string }) {
   const [scenario, setScenario] = useState<ScenarioId>("answer");
   const [events, setEvents] = useState<PanelEvent[]>([]);
   const [session, setSession] = useState(0);
@@ -70,7 +70,7 @@ export default function ConciergePanelLab() {
         </section>
       </div>
 
-      <ConciergePanel key={session} transport={transport} surface="public_site" onEvent={(event) => setEvents((list) => [...list, event])} />
+      <ConciergePanel locale={locale} key={session} transport={transport} surface="public_site" onEvent={(event) => setEvents((list) => [...list, event])} />
     </main>
   );
 }

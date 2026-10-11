@@ -20,6 +20,26 @@ export const CONCIERGE_PRIVACY = {
     "Suas mensagens são enviadas à OpenAI, nossa fornecedora de IA, apenas para gerar a resposta. A Ricardo Tour não guarda a conversa: ela existe somente nesta sessão, no seu navegador. A fornecedora pode manter registros técnicos de segurança por até 30 dias. Saiba mais na Política de Privacidade.",
 } as const;
 
+/**
+ * The same disclosure and notice in English and Spanish (V1). They are PROPOSED translations of the Portuguese texts and carry the
+ * same `legal_review` flag: public enablement requires the Owner/legal approval of all three languages.
+ */
+export const CONCIERGE_PRIVACY_TEXTS = {
+  pt: { ai_disclosure: CONCIERGE_PRIVACY.ai_disclosure, privacy_notice: CONCIERGE_PRIVACY.privacy_notice },
+  en: {
+    ai_disclosure:
+      "You are chatting with an artificial intelligence assistant from Ricardo Tour, not with a person. It can make mistakes and doesn't confirm prices, availability, bookings or payments. Don't send personal or sensitive data, such as documents, cards or passwords.",
+    privacy_notice:
+      "Your messages are sent to OpenAI, our AI provider, only to generate the answer. Ricardo Tour does not store the conversation: it exists only in this session, in your browser. The provider may keep technical security records for up to 30 days. Learn more in the Privacy Policy.",
+  },
+  es: {
+    ai_disclosure:
+      "Estás conversando con un asistente de inteligencia artificial de Ricardo Tour, no con una persona. Puede equivocarse y no confirma precios, disponibilidad, reservas ni pagos. No envíes datos personales ni sensibles, como documentos, tarjetas o contraseñas.",
+    privacy_notice:
+      "Tus mensajes se envían a OpenAI, nuestra proveedora de IA, solo para generar la respuesta. Ricardo Tour no guarda la conversación: existe únicamente en esta sesión, en tu navegador. La proveedora puede conservar registros técnicos de seguridad por hasta 30 días. Más información en la Política de Privacidad.",
+  },
+} as const;
+
 const REDACTION = "[dado removido]";
 
 function luhnValid(digits: string) {

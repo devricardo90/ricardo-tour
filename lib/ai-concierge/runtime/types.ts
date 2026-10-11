@@ -35,7 +35,8 @@ export type HandoffReason =
   | "emergency"
   | "insufficient_evidence"
   | "upstream_error"
-  | "rate_limited";
+  | "rate_limited"
+  | "commercial_terms";
 
 /** RT-74 §1 standard response shapes, so a future UI can render each kind without inspecting outcomes. */
 export type ResponseKind = "grounded" | "clarify" | "refusal" | "handoff" | "degraded";
@@ -83,6 +84,8 @@ export type RuntimeResult = {
   response_kind: ResponseKind;
   /** RT-71: structured, user-initiated handoff (links only). Present whenever the visitor should be offered the team. */
   handoff?: HandoffOffer;
+  /** Approved catalog tours recommended by the deterministic recommendation step (ids from the closed allow-list). */
+  tour_ids?: string[];
   /** Support reference for degraded responses only (random, carries no request data). */
   reference_id?: string;
   /** RT-72: only on RATE_LIMITED. Seconds until the window resets; the only limit detail ever exposed. */

@@ -124,7 +124,7 @@ describe("tampered replies cannot change the human channels", () => {
 describe("tour links inside answers", () => {
   it("shows a readable label for a single-tour link and keeps the canonical href", () => {
     const html = decoded(render({ open: true, messages: [user("m1", "oi"), assistant("m2", "Veja https://www.ricardotour.com/pt/tours/cmlhxkpy9000028zq27rhytew para saber mais.", "grounded")] }));
-    expect(html).toContain('<a href="https://www.ricardotour.com/pt/tours/cmlhxkpy9000028zq27rhytew" target="_blank" rel="noopener noreferrer">ver o passeio</a>');
+    expect(html).toContain('<a href="https://www.ricardotour.com/pt/tours/cmlhxkpy9000028zq27rhytew" target="_blank" rel="noopener noreferrer">ver passeio</a>');
   });
 });
 

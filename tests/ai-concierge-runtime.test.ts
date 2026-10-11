@@ -116,7 +116,7 @@ describe("RT-67 runtime — deterministic dynamic gates (no model call)", () => 
 
 describe("RT-67 runtime — input and locale", () => {
   it("10. unsupported locales fail safely and never call the provider", async () => {
-    for (const locale of ["en", "es", "fr"]) {
+    for (const locale of ["fr", "de", "ja"]) {
       const d = deps([]);
       const result = await ask("What is Ricardo Tour?", d, locale);
       expect(result.outcome).toBe("UNSUPPORTED_LOCALE");

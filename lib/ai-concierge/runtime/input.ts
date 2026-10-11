@@ -52,5 +52,5 @@ export function validateRuntimeInput(raw: unknown): InputResult {
 }
 
 export function isSupportedRuntimeLocale(locale: string) {
-  return /^pt(?:-br)?$/i.test(locale);
+  return /^(?:pt|en|es)(?:[-_][A-Za-z]+)?$/i.test(locale);
 }

@@ -65,6 +65,13 @@ export type Observability = ReturnType<typeof createObservability>;
 let serverObservability: Observability | undefined;
 /** Per-instance singleton used by the server entrypoint. Prices come only from operator-supplied environment values. */
 export function getServerObservability() {
-  serverObservability ??= createObservability({ pricing: readPricing() });
+  // V1 destination for validated product events: one content-free JSON line per event in the runtime logs (no vendor, no storage).
+  // A persistent sink is a Launch Readiness decision (see the RT-64 baseline).
+  const productSink: ProductEventSink = {
+    emit: (event) => {
+      if (process.env.NODE_ENV !== "test") console.info(JSON.stringify({ event: "ai_concierge_product_event", ...event }));
+    },
+  };
+  serverObservability ??= createObservability({ pricing: readPricing(), productSink });
   return serverObservability;
 }

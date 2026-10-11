@@ -1,15 +1,11 @@
 import { ReactNode } from "react";
 import { HeroHeader } from "@/components/header";
-import { AIConciergeWidget } from "@/components/ai-concierge/ai-concierge-widget";
-import { isAIConciergeEnabled } from "@/lib/ai-concierge/config";
 
 export default function PublicLayout({
     children,
 }: {
     children: ReactNode;
 }) {
-    const aiConciergeEnabled = isAIConciergeEnabled();
-
     return (
         <>
             <a
@@ -22,7 +18,6 @@ export default function PublicLayout({
             <main id="main-content" className="flex-1">
                 {children}
             </main>
-            {aiConciergeEnabled ? <AIConciergeWidget /> : null}
         </>
     );
 }

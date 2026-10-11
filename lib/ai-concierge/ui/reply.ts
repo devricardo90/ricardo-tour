@@ -18,12 +18,15 @@ export function toConciergeReply(result: RuntimeResult): ConciergeReply {
   // reach the browser are trip ids from the closed allow-list, never source ids, versions or chunk ids.
   // `source_ids` are ALL retrieved evidence, not the recommendation: a card is shown only when the answer itself names the tour.
   const answer = normalizeForMatch(result.answer);
-  const tourIds =
+  const direct = resolveTourCards(result.tour_ids).map((tour) => tour.id);
+  const derived =
     result.response_kind === "grounded"
       ? resolveTourCards(tourIdsFromSourceIds(result.source_ids))
           .filter((tour) => answer.includes(normalizeForMatch(tour.title)))
           .map((tour) => tour.id)
       : [];
+  // Recommended by the deterministic catalog step (direct) or named in a grounded model answer (derived); at most three, no duplicates.
+  const tourIds = resolveTourCards([...direct, ...derived]).map((tour) => tour.id);
   return {
     outcome: result.outcome,
     answer: result.answer,
