@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Link, usePathname } from "@/i18n/routing";
+import { OpenConciergeButton } from "@/components/ai-concierge/open-concierge-button";
 import { SiteAnchor } from "@/components/site/site-anchor";
 import type { AnchorMode } from "@/components/site/site-chrome-copy";
 
@@ -34,7 +35,7 @@ export function SiteLanguageNav({ locale, label, className = "", itemClassName =
   );
 }
 
-type Item = { label: string; hash: string };
+type Item = { label: string; hash: string; action?: "concierge" };
 
 export function SiteMobileMenu({
   items,
@@ -105,14 +106,23 @@ export function SiteMobileMenu({
           <ul>
             {items.map((item) => (
               <li key={item.hash} className="border-b border-white/8 last:border-b-0">
-                <SiteAnchor
-                  hash={item.hash}
-                  mode={anchorMode}
-                  onClick={() => setOpen(false)}
-                  className={`flex min-h-12 items-center text-[16px] text-[var(--site-on-dark,#F4F0E8)] ${focusRing} focus-visible:outline-offset-[-2px]`}
-                >
-                  {item.label}
-                </SiteAnchor>
+                {item.action ? (
+                  <OpenConciergeButton
+                    onClick={() => setOpen(false)}
+                    className={`flex min-h-12 w-full items-center text-left text-[16px] text-[var(--site-on-dark,#F4F0E8)] ${focusRing} focus-visible:outline-offset-[-2px]`}
+                  >
+                    {item.label}
+                  </OpenConciergeButton>
+                ) : (
+                  <SiteAnchor
+                    hash={item.hash}
+                    mode={anchorMode}
+                    onClick={() => setOpen(false)}
+                    className={`flex min-h-12 items-center text-[16px] text-[var(--site-on-dark,#F4F0E8)] ${focusRing} focus-visible:outline-offset-[-2px]`}
+                  >
+                    {item.label}
+                  </SiteAnchor>
+                )}
               </li>
             ))}
           </ul>

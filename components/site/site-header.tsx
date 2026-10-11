@@ -2,6 +2,8 @@ import { RicardoTourLogo } from "@/components/ricardo-tour-logo";
 import { SiteLanguageNav, SiteMobileMenu } from "@/components/site/site-header-controls";
 import { Link } from "@/i18n/routing";
 import { SiteAnchor, SiteHomeLink } from "@/components/site/site-anchor";
+import { OpenConciergeButton } from "@/components/ai-concierge/open-concierge-button";
+import { isConciergeEnabled } from "@/lib/ai-concierge/launch";
 import { navHashes, PLAN_HASH, resolveSiteChromeCopy, type AnchorMode } from "@/components/site/site-chrome-copy";
 
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--site-focus,#E8C780)]";
@@ -17,9 +19,9 @@ export function SiteHeader({ locale, anchorMode = "home", homeHref = "#top-of-ho
   const items = [
     { label: t.nav.experiences, hash: navHashes.experiences },
     { label: t.nav.rio, hash: navHashes.rio },
-    { label: t.nav.concierge, hash: navHashes.concierge },
+    ...(isConciergeEnabled() ? [{ label: t.nav.concierge, hash: "daniela", action: "concierge" as const }] : []),
     { label: t.nav.about, hash: navHashes.about },
-  ] as const;
+  ];
   const ctaClass = `inline-flex h-10 items-center whitespace-nowrap rounded-md border border-[var(--site-gold,#C8A86B)] px-3 text-[13px] font-medium text-[var(--site-gold-bright,#E8C780)] transition-colors hover:bg-[var(--site-gold,#C8A86B)]/10 ${focusRing} focus-visible:outline-offset-2 md:px-4 md:text-[14px]`;
   const logoClass = `flex shrink-0 items-center rounded ${focusRing} focus-visible:outline-offset-4`;
 
@@ -36,13 +38,19 @@ export function SiteHeader({ locale, anchorMode = "home", homeHref = "#top-of-ho
             <ul className="flex items-center gap-8 text-[14px]">
               {items.map((item) => (
                 <li key={item.hash}>
-                  <SiteAnchor
-                    hash={item.hash}
-                    mode={anchorMode}
-                    className={`rounded py-2 text-[var(--site-on-dark-muted,#CAC7BF)] transition-colors hover:text-[var(--site-on-dark,#F4F0E8)] ${focusRing} focus-visible:outline-offset-4`}
-                  >
-                    {item.label}
-                  </SiteAnchor>
+                  {"action" in item ? (
+                    <OpenConciergeButton className={`rounded py-2 text-[var(--site-on-dark-muted,#CAC7BF)] transition-colors hover:text-[var(--site-on-dark,#F4F0E8)] ${focusRing} focus-visible:outline-offset-4`}>
+                      {item.label}
+                    </OpenConciergeButton>
+                  ) : (
+                    <SiteAnchor
+                      hash={item.hash}
+                      mode={anchorMode}
+                      className={`rounded py-2 text-[var(--site-on-dark-muted,#CAC7BF)] transition-colors hover:text-[var(--site-on-dark,#F4F0E8)] ${focusRing} focus-visible:outline-offset-4`}
+                    >
+                      {item.label}
+                    </SiteAnchor>
+                  )}
                 </li>
               ))}
             </ul>

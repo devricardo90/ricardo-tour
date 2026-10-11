@@ -3,7 +3,6 @@ import GlobeJourney from "@/components/home/hero/globe-journey";
 import { ExperiencesInRioSection } from "@/components/experiences-in-rio-section";
 import { WhyRickTravelSection } from "@/components/why-rick-travel-section";
 import { RioStorySection } from "@/components/rio-story-section";
-import { AIConciergeSection } from "@/components/ai-concierge-section";
 import { AboutRickTravelSection } from "@/components/about-rick-travel-section";
 import { HomeHashScroll } from "@/components/home/home-hash-scroll";
 import { getLanguageAlternates } from "@/i18n/routing";
@@ -39,8 +38,8 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 
 // Public Home (RT-57): the rebuilt Home promoted from the Rebuild Lab. Header and footer come from the (site) layout
 // (exactly one SiteHeader/SiteFooter); this page only composes the sections in the approved order:
-// Hero -> Plan your trip (inside the Hero module) -> Experiences -> Why Ricardo Tour -> Rio Story -> AI Concierge
-// placeholder -> About. Nothing here depends on REBUILD_LAB_ENABLED.
+// Hero -> Plan your trip (inside the Hero module) -> Experiences -> Why Ricardo Tour -> Rio Story -> About.
+// Owner decision 2026-10-11: no dedicated AI Concierge section; Daniela lives in the side panel (menu item opens it). Nothing here depends on REBUILD_LAB_ENABLED.
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   return (
@@ -50,7 +49,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
       <ExperiencesInRioSection locale={locale} />
       <WhyRickTravelSection locale={locale} />
       <RioStorySection locale={locale} />
-      <AIConciergeSection locale={locale} />
       <AboutRickTravelSection locale={locale} />
     </div>
   );

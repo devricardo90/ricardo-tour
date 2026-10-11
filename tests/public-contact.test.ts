@@ -12,7 +12,6 @@ const NEW_SURFACES = [
   // RT-57: the rebuilt Home is the public Home, so its sections and Hero module are public surfaces too.
   "components/home",
   "components/about-rick-travel-section.tsx",
-  "components/ai-concierge-section.tsx",
   "components/experiences-in-rio-section.tsx",
   "components/rio-story-section.tsx",
   "components/why-rick-travel-section.tsx",

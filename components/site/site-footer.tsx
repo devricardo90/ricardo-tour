@@ -3,6 +3,8 @@ import { Instagram, Mail, MessageCircle } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { RicardoTourLogo } from "@/components/ricardo-tour-logo";
 import { SiteAnchor, SiteHomeLink } from "@/components/site/site-anchor";
+import { OpenConciergeButton } from "@/components/ai-concierge/open-concierge-button";
+import { isConciergeEnabled } from "@/lib/ai-concierge/launch";
 import { navHashes, resolveSiteChromeCopy, type AnchorMode } from "@/components/site/site-chrome-copy";
 import { PUBLIC_CONTACT } from "@/lib/public-contact";
 
@@ -17,10 +19,10 @@ const headingClass = "text-[12px] font-medium uppercase tracking-[0.16em] text-[
 export function SiteFooter({ locale, anchorMode = "home", homeHref = "#top-of-home" }: { locale: string; anchorMode?: AnchorMode; homeHref?: string }) {
   const t = resolveSiteChromeCopy(locale);
   const f = t.footer;
-  const links: { label: string; hash: string; href?: string | null }[] = [
+  const links: { label: string; hash: string; href?: string | null; action?: "concierge" }[] = [
     { label: t.nav.experiences, hash: navHashes.experiences },
     { label: f.plan, hash: navHashes.plan, href: t.planPath },
-    { label: t.nav.concierge, hash: navHashes.concierge },
+    ...(isConciergeEnabled() ? [{ label: t.nav.concierge, hash: "daniela", action: "concierge" as const }] : []),
     { label: t.nav.rio, hash: navHashes.rio },
     { label: t.nav.about, hash: navHashes.about },
   ];
@@ -42,7 +44,9 @@ export function SiteFooter({ locale, anchorMode = "home", homeHref = "#top-of-ho
             <ul className="mt-2 grid grid-cols-2 md:mt-3 md:flex md:flex-col">
               {links.map((link) => (
                 <li key={link.hash}>
-                  {link.href ? (
+                  {link.action ? (
+                    <OpenConciergeButton className={linkClass}>{link.label}</OpenConciergeButton>
+                  ) : link.href ? (
                     <Link href={link.href} className={linkClass}>{link.label}</Link>
                   ) : (
                     <SiteAnchor hash={link.hash} mode={anchorMode} className={linkClass}>{link.label}</SiteAnchor>

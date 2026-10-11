@@ -44,7 +44,7 @@ check(!exists("app/[locale]/(public)/page.tsx"), "legacy (public)/page.tsx still
 check(!exists("app/[locale]/rebuild-lab/cinematic-3d-poc/page.tsx"), "lab Home page still exists");
 const homeSrc = exists(homePage) ? code(homePage) : "";
 check(!/<(HomeHeader|HomeFooter|SiteHeader|SiteFooter)/.test(homeSrc), "Home page mounts its own header/footer (double mount)");
-const order = ["GlobeJourney", "ExperiencesInRioSection", "WhyRickTravelSection", "RioStorySection", "AIConciergeSection", "AboutRickTravelSection"];
+const order = ["GlobeJourney", "ExperiencesInRioSection", "WhyRickTravelSection", "RioStorySection", "AboutRickTravelSection"];
 const idx = order.map((n) => homeSrc.indexOf(`<${n} `));
 check(idx.every((i) => i > 0) && idx.every((v, i) => i === 0 || v > idx[i - 1]), `Home composition order wrong: ${idx.join(",")}`);
 

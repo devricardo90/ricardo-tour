@@ -7,7 +7,6 @@ export const PLAN_HASH = "globe-next";
 export const navHashes = {
   experiences: "experiences",
   plan: PLAN_HASH,
-  concierge: "ai-concierge",
   rio: "rio-story",
   about: "about-rick-travel",
 } as const;

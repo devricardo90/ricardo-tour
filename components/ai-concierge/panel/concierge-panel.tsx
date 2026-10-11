@@ -1,5 +1,6 @@
 "use client";
 
+import { OPEN_CONCIERGE_EVENT } from "@/lib/ai-concierge/ui/open-event";
 import { Fragment, createContext, useContext, useEffect, useId, useReducer, useRef, type FormEvent, type KeyboardEvent } from "react";
 import Image from "next/image";
 import { X } from "lucide-react";
@@ -281,6 +282,13 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", lo
     }
     wasOpen.current = open;
   }, [open, onEvent, surface]);
+
+  useEffect(() => {
+    // The site menu / footer entry opens the panel through a window event.
+    const openFromSite = () => dispatch({ type: "open" });
+    window.addEventListener(OPEN_CONCIERGE_EVENT, openFromSite);
+    return () => window.removeEventListener(OPEN_CONCIERGE_EVENT, openFromSite);
+  }, []);
 
   const lastMessageId = messages.length > 0 ? messages[messages.length - 1].id : null;
   useEffect(() => {
