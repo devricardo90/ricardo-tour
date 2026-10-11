@@ -42,6 +42,13 @@ const COMPETITOR = /\b(?:concorrent\w*|cvc|decolar|viajanet|123milhas|maxmilhas|
 export const detectEmergency = (message: string) => EMERGENCY.test(normalize(message));
 export const detectInternalInfoRequest = (message: string) => INTERNAL_INFO.test(normalize(message));
 export const detectAbuse = (message: string) => ABUSIVE.test(normalize(message));
+/**
+ * Questions about WHO is answering ("você é uma pessoa?", "qual é o seu nome?"). They get a fixed, honest answer (Daniela is an AI),
+ * never a model-generated one: the persona's transparency must not depend on retrieval or on the model.
+ */
+const IDENTITY =
+    /\b(?:voce|vc) (?:e|eh|era) (?:uma? )?(?:pessoa|humana|humano|robo|bot|ia|inteligencia artificial|real|de verdade|gente|maquina)\b|\b(?:estou|to|tou|estamos) falando com (?:um |uma )?(?:pessoa|humano|humana|robo|bot|ia|maquina|alguem de verdade|atendente|inteligencia artificial)\b|\bvoce (?:e|eh) (?:da|uma da|funcionaria da|integrante da) equipe\b|\bvoce trabalha (?:na|para a|pra) ricardo tour\b|\b(?:qual|como) (?:e )?(?:o )?seu nome\b|\bcomo (?:voce|vc|a voce) se chama\b|\bcomo (?:e )?que (?:voce|vc) se chama\b|\bquem (?:e|eh) (?:voce|vc)\b|\bcomo (?:posso )?te chamar\b|\b(?:tem|ha) alguem (?:ai|real|de verdade)\b|\b(?:isso|isto|aqui|ai) (?:e|eh) (?:um |uma )?(?:robo|bot)\b|\bsera que (?:e|eh) (?:um |uma )?(?:robo|bot)\b/;
+export const detectIdentityQuestion = (message: string) => IDENTITY.test(normalize(message));
 export const detectCompetitorComparison = (message: string) => COMPETITOR.test(normalize(message));
 /** Safety-sensitive tourism topics may be answered only with qualified, approved content; otherwise they become a handoff. */
 export const isSafetySensitive = (message: string) => SAFETY_SENSITIVE.test(normalize(message));

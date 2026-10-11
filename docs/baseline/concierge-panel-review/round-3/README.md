@@ -1,6 +1,6 @@
 # Concierge panel — final minor changes (ROUND 3, RT-71 / RT-74)
 
-**Status: provisional visual approval is ready to be recorded by the Owner; it is NOT recorded here and this is NOT a production activation.** The panel is still the isolated, production-hidden prototype (`/pt/rebuild-lab/concierge-panel`): no public mount, no endpoint, no model. Rounds 1 and 2 are kept in `../desktop`, `../mobile` and `../round-2`.
+**Status: PROVISIONALLY APPROVED by the Owner on 2026-10-11 for this isolated prototype only (see `docs/architecture/rt-71-74-concierge-panel-ui.md` §5). This is NOT a public activation, public mount, endpoint-integration approval or production readiness.** The panel is still the isolated, production-hidden prototype (`/pt/rebuild-lab/concierge-panel`): no public mount, no endpoint, no model. Rounds 1 and 2 are kept in `../desktop`, `../mobile` and `../round-2`.
 
 Captured 2026-10-11 from the local dev server, desktop 1280×800 and mobile 390×844. The black round "N" in the lower-left corner is the Next.js development overlay. Only the two requested changes were made.
 

@@ -34,6 +34,11 @@ const CHECKS: Array<[string, RegExp]> = [
     "schedule_claim",
     /\b(?:sai|saem|parte|partem|saida|comeca|comecam|inicia|iniciam|encontro|pickup)\b.{0,20}\b(?:as|a partir das|por volta das) \d{1,2}(?:h|:\d{2}|\s?horas)/,
   ],
+  // Persona (Daniela): she is an AI. She never claims to be a person, an attendant or a team member, or to be typing live.
+  [
+    "human_claim",
+    /(?<!\bnao )(?<!\bnunca )\bsou (?:uma |a )?(?:pessoa|humana|humano|atendente|consultora|consultor|vendedora|guia)\b|(?<!\bnao )\bsou (?:da|parte da|membro da|integrante da|funcionaria da|colaboradora da) (?:equipe|ricardo tour)\b|\b(?:estou|to) (?:digitando|online agora|ao vivo|te atendendo agora)\b|\bsou (?:uma )?(?:pessoa|humana) de verdade\b/,
+  ],
   [
     "fake_handoff",
     /\b(?:ja )?(?:chamei|acionei|contatei|avisei)\b.{0,25}\b(?:atendente|equipe|pessoa|time)\b|\bestou (?:te )?transferindo\b|\bum atendente (?:vai|ira|entrara)\b|\bvou (?:te )?transferir\b/,

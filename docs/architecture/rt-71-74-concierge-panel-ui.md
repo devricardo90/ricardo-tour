@@ -45,3 +45,17 @@
 2. Integration with the gated endpoint and the public mount point (after RT-75); EN/ES copy (V1 is PT only).
 3. `handoff_clicked` / `concierge_opened` forwarding to the RT-73 sink and the persistence decision (RT-73/RT-70).
 4. Owner-approved emergency wording, team availability wording and the legal approval of the notice texts.
+
+## 5. Owner decisions and approval record
+
+| Date | Decision |
+| --- | --- |
+| 2026-10-11 | Round 1 reviewed: direction promising, visual approval NOT granted; a second refinement round required. |
+| 2026-10-11 | Round 2 reviewed: substantially improved; two final changes requested (the Concierge is named **Daniela**; she gets a dedicated avatar: female, blonde, green eyes, elegant, not cartoonish) with the explicit requirement that she stays identified as an AI and never implies a live human. |
+| 2026-10-11 | Round 3 delivered and reviewed. **PROVISIONAL VISUAL APPROVAL GRANTED by the Owner for the isolated Concierge panel prototype.** |
+
+**Scope of the approval (Owner's words, applied literally):** it applies to the current isolated prototype only. It does **not** mean public activation, public mount, endpoint-integration approval, production readiness, or closure of unrelated open gates. Further refinements are deferred to a later polish phase.
+
+**Ticket impact:** RT-71 and RT-74 stay in **Revisar**. The visual criterion is provisionally satisfied; both tickets still have non-visual dependencies (RT-70 legal review, RT-72 production store, RT-73 sink, RT-75 gate, endpoint integration, emergency/availability wording). Evidence: `docs/baseline/concierge-panel-review/{round-2,round-3}/README.md`.
+
+**Standing requirement for RT-75 and any integration (Owner, 2026-10-11):** Daniela is always explicitly identified as an AI assistant; she never implies that she is a live human team member; the runtime persona stays aligned with the approved UI. Implemented and tested in the runtime on 2026-10-11: `lib/ai-concierge/runtime/persona.ts` (single source of the name and the rules), the model instructions, the deterministic `human_claim` post-generation check, and a deterministic identity gate (fixed answer, no retrieval, no model call). The panel copy and the runtime are pinned to the same name by a test. The legal notice text (`CONCIERGE_PRIVACY.ai_disclosure`) does not name Daniela yet: it is a RT-70 legal-review text and is left unchanged until the legal review.

@@ -3,6 +3,7 @@ import {
   detectAbuse,
   detectCompetitorComparison,
   detectEmergency,
+  detectIdentityQuestion,
   detectInjection,
   detectInternalInfoRequest,
   isSafetySensitive,
@@ -22,6 +23,7 @@ import {
   degradedMessage,
   dynamicMessage,
   handoffMessage,
+  identityMessage,
   isFixedMissMessage,
   refusalMessage,
 } from "./messages";
@@ -254,6 +256,9 @@ export async function runConcierge(
   if (detectAbuse(message)) return refuse("abusive_content");
   if (detectCompetitorComparison(message))
     return refuse("third_party_comparison");
+
+  // Persona transparency (Daniela): identity questions are answered by fixed text, never by retrieval or the model.
+  if (detectIdentityQuestion(message)) return finish({ outcome: "ANSWER", answer: identityMessage() });
 
   const gate = runGates(message);
   if (gate.kind === "dynamic")

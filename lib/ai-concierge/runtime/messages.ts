@@ -21,6 +21,10 @@ export const dynamicMessage = (reason: DynamicReason) => {
   }
 };
 
+/** Fixed answer to "who are you?": always explicit that Daniela is an AI, never a person or a team member. */
+export const identityMessage = () =>
+  `Sou a Daniela, a assistente de IA da Ricardo Tour: uma inteligência artificial, não uma pessoa nem uma integrante da equipe. Posso sugerir passeios e orientar os próximos passos. Se você prefere falar com uma pessoa, a equipe humana atende pelos canais oficiais. ${CHANNELS}`;
+
 export const handoffMessage = (reason: HandoffReason) => {
   switch (reason) {
     case "booking_status":
@@ -48,7 +52,7 @@ export const handoffMessage = (reason: HandoffReason) => {
     case "out_of_scope_advice":
       return `Eu não posso orientar sobre saúde, documentos, vistos ou questões jurídicas. Consulte as fontes oficiais e profissionais adequados. Para dúvidas sobre os serviços da Ricardo Tour: ${CHANNELS}`;
     case "emergency":
-      return `Se você está em perigo ou precisa de ajuda médica urgente, procure imediatamente as autoridades locais de emergência. Sou um assistente virtual e não consigo prestar socorro. Depois, a equipe da Ricardo Tour pode ajudar. ${CHANNELS}`;
+      return `Se você está em perigo ou precisa de ajuda médica urgente, procure imediatamente as autoridades locais de emergência. Sou a Daniela, uma assistente de IA, e não consigo prestar socorro. Depois, a equipe da Ricardo Tour pode ajudar. ${CHANNELS}`;
     case "rate_limited":
       // RT-72 §6: friendly, no counts and no window sizes (only Retry-After is exposed, by the caller).
       return `Você atingiu o limite de mensagens por agora. Tente novamente em alguns minutos ou fale com a equipe. ${CHANNELS}`;
