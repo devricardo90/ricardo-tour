@@ -58,16 +58,102 @@ test("unknown locale and unknown tour do not return 5xx", async ({ page }) => {
   expect(bad?.status()).toBeLessThan(500);
 });
 
-// Finding (RT-44): the About page (/quem-somos) has no link in the Home header; only tours and contact do.
-test("header navigation exposes tours and contact (pt)", async ({ page, isMobile }) => {
+const ABOUT_LABEL = { pt: "Quem somos", en: "About us", es: "Quiénes somos" } as const;
+
+// Header-scoped (the earlier page-wide check could be satisfied by links in the page body).
+for (const locale of LOCALES) {
+  test(`header "${ABOUT_LABEL[locale]}" opens the About page (${locale})`, async ({ page, isMobile }) => {
+    await page.goto(`/${locale}/tours`);
+    const header = page.getByRole("banner");
+    if (isMobile) {
+      await header.getByRole("button", { name: /menu|menú/i }).click();
+    }
+    const about = header.getByRole("link", { name: ABOUT_LABEL[locale], exact: true });
+    await expect(about).toBeVisible();
+    await about.click();
+    await expect(page).toHaveURL(new RegExp(`/${locale}/quem-somos$`));
+    await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
+  });
+}
+
+test("footer exposes contact channels and the institutional reference (pt)", async ({ page }) => {
   await page.goto("/pt");
-  if (isMobile) {
-    await page.getByRole("button", { name: /menu/i }).first().click();
+  const footer = page.getByRole("contentinfo");
+  await expect(footer.locator('a[href="/pt/contato"]')).toBeVisible();
+  await expect(footer.locator('a[href^="mailto:contato@ricardotour.com"]')).toBeVisible();
+  await expect(footer.locator('a[href^="https://wa.me/5522998461906"]')).toBeVisible();
+  await expect(footer.getByRole("img", { name: "Cadastur" })).toBeVisible();
+});
+
+test("tour detail shows the request form and blocks an empty submit (pt)", async ({ page }) => {
+  await page.goto("/pt/tours");
+  const href = await page.locator('a[href^="/pt/tours/"]').first().getAttribute("href");
+  await page.goto(href!);
+  const form = page.getByTestId("tour-request-form");
+  await expect(form).toBeVisible();
+  await form.locator('button[type="submit"]').click();
+  await expect(form.locator('[aria-invalid="true"]').first()).toBeVisible();
+  await expect(page.getByTestId("tour-request-success")).toHaveCount(0);
+});
+
+// Option C (RT-91): the live planner is PT only; EN/ES are not published and PT /voos is a permanent redirect.
+test("planner (pt) renders with its help channels; EN/ES are not published", async ({ page, request }) => {
+  const res = await page.goto("/pt/planeje-sua-viagem");
+  expect(res?.status()).toBe(200);
+  await expect(page.locator("#planner-heading")).toBeVisible();
+  await expect(page.locator('a[href^="https://wa.me/5522998461906"]').first()).toBeVisible();
+  for (const locale of ["en", "es"]) {
+    expect((await request.get(`/${locale}/planeje-sua-viagem`)).status()).toBe(404);
   }
-  for (const path of ["tours", "contato"]) {
-    const link = page.locator(`a[href="/pt/${path}"]:visible`).first();
-    await expect(link).toBeVisible();
+  const voos = await request.get("/pt/voos", { maxRedirects: 0 });
+  expect(voos.status()).toBe(308);
+  expect(voos.headers()["location"]).toMatch(/\/pt\/planeje-sua-viagem$/);
+});
+
+// The Oner widget only renders its search form on an origin the provider has authorized (www.ricardotour.com);
+// on localhost/previews its configuration call returns 500 and it shows "Não autorizado!" (RT-64 evidence).
+// Run read-only against the production host: E2E_PLANNER_AUTHORIZED=1 PLAYWRIGHT_BASE_URL=https://www.ricardotour.com
+test("planner booking engine renders its search form (authorized origin only)", async ({ page }) => {
+  test.skip(process.env.E2E_PLANNER_AUTHORIZED !== "1", "provider authorizes by domain; set E2E_PLANNER_AUTHORIZED=1 on an authorized origin");
+  await page.goto("/pt/planeje-sua-viagem");
+  await expect(page.locator('[data-oner-status="ready"]')).toBeVisible({ timeout: 20_000 });
+  const widget = page.locator("befly-widget");
+  await expect(widget).toContainText(/Voos/, { timeout: 20_000 });
+  await expect(widget).toContainText(/Hotéis/);
+  await expect(widget.locator("input").first()).toBeVisible();
+  await expect(widget.getByText("Buscar", { exact: true })).toBeVisible();
+  await expect(widget).not.toContainText(/Não autorizado/);
+});
+
+test.describe("reduced motion", () => {
+  // `reducedMotion` is a browser-context option, so it goes through contextOptions (a bare `use.reducedMotion` is ignored).
+  test.use({ contextOptions: { reducedMotion: "reduce" } });
+  test("home hero falls back to the static frame (RT-46)", async ({ page }) => {
+    await page.goto("/pt");
+    expect(await page.evaluate(() => matchMedia("(prefers-reduced-motion: reduce)").matches)).toBe(true);
+    await expect(page.getByTestId("globe-journey")).toHaveAttribute("data-mode", "static");
+    await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
+  });
+});
+
+test("keyboard: first Tab reveals the skip link, which moves to the main content (pt)", async ({ page, isMobile, browserName }) => {
+  test.skip(isMobile, "keyboard flow is a desktop check");
+  await page.goto("/pt/tours");
+  if (browserName === "webkit") {
+    // WebKit/Safari's default Tab order skips links (Option+Tab or the "Press Tab to highlight each item" setting
+    // includes them), and Playwright cannot emulate Option+Tab here. Verified: Tab lands on the first form field.
+    // So on WebKit the skip link's own behaviour is checked with programmatic focus; real Safari Tab is an RT-83 device check.
+    await page.locator('a[href="#main-content"]').focus();
+  } else {
+    await page.keyboard.press("Tab");
   }
+  const skip = page.locator(":focus");
+  await expect(skip).toHaveAttribute("href", "#main-content");
+  await expect(skip).toBeInViewport();
+  await page.keyboard.press("Enter");
+  await expect(page).toHaveURL(/#main-content$/);
+  await page.keyboard.press("Tab");
+  expect(await page.locator(":focus").evaluate((el) => Boolean(el.closest("main")))).toBe(true);
 });
 
 test("language switch keeps the user on the same page (tours)", async ({ page }) => {

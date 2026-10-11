@@ -35,7 +35,8 @@ export function SiteLanguageNav({ locale, label, className = "", itemClassName =
   );
 }
 
-type Item = { label: string; hash: string; action?: "concierge" };
+// `path` = a page of its own (e.g. /quem-somos); otherwise `hash` is a Home section.
+type Item = { label: string; hash: string; action?: "concierge"; path?: string };
 
 export function SiteMobileMenu({
   items,
@@ -55,6 +56,7 @@ export function SiteMobileMenu({
   languageLabel: string;
 }) {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
   const button = useRef<HTMLButtonElement>(null);
   const panel = useRef<HTMLDivElement>(null);
 
@@ -113,6 +115,15 @@ export function SiteMobileMenu({
                   >
                     {item.label}
                   </OpenConciergeButton>
+                ) : item.path ? (
+                  <Link
+                    href={item.path}
+                    onClick={() => setOpen(false)}
+                    aria-current={pathname === item.path ? "page" : undefined}
+                    className={`flex min-h-12 items-center text-[16px] text-[var(--site-on-dark,#F4F0E8)] ${focusRing} focus-visible:outline-offset-[-2px]`}
+                  >
+                    {item.label}
+                  </Link>
                 ) : (
                   <SiteAnchor
                     hash={item.hash}

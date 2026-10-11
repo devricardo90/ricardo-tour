@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
 }
 
 const focus = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--site-gold-deep)]";
-const linkClass = `inline-flex min-h-11 items-center gap-2 rounded text-[15px] text-[var(--site-ink)] underline decoration-[var(--site-gold-deep)] underline-offset-[6px] transition-colors hover:text-[var(--site-gold-deep)] ${focus}`;
+const linkClass = `inline-flex min-h-11 items-center gap-2 rounded text-[15px] text-[var(--site-ink)] underline decoration-[var(--site-gold-deep)] underline-offset-[6px] transition-colors hover:text-[var(--site-gold-text,#856629)] ${focus}`;
 
 // Public contact page (RT-56), rendered inside the (site) layout (SiteHeader/SiteFooter, public fonts and tokens).
 // URL unchanged: /{locale}/contato. Contact details come only from lib/public-contact.ts. No reply-time promise,
@@ -41,7 +41,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
             <p className="mt-4 max-w-md text-[15px] leading-[1.6] text-[var(--site-ink-muted)]">{t.intro}</p>
 
             <section aria-labelledby="contact-channels" className="mt-8">
-              <h2 id="contact-channels" className="text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold-deep)]">
+              <h2 id="contact-channels" className="text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold-text,#856629)]">
                 {t.channels}
               </h2>
               <ul className="mt-3 space-y-1">

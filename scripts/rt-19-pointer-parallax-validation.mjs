@@ -44,6 +44,8 @@ async function open(contextOptions, reducedMotion) {
   if (reducedMotion) await page.emulateMedia({ reducedMotion: "reduce" });
   await page.goto(`${origin}${ROUTE}`, { waitUntil: "domcontentloaded", timeout: 180000 });
   await page.waitForSelector("[data-mode='motion'], [data-mode='static']", { timeout: 120000 });
+  // RT-45: the globe textures load asynchronously (worker); wait for data-webgl (ready|unavailable) in motion mode.
+  await page.waitForFunction(() => { const h = document.querySelector("[data-testid='globe-journey']"); return h && (h.dataset.mode === "static" || h.dataset.webgl); }, null, { timeout: 60000 });
   await page.waitForFunction(() => {
     const runway = document.querySelector("[data-runway]");
     const stage = document.querySelector("[data-stage]");

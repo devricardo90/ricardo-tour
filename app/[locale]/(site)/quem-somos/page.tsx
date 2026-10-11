@@ -40,7 +40,7 @@ export default async function AboutPage({ params }: { params: Promise<{ locale: 
 
           <section aria-labelledby="about-story-heading" className="mt-12 grid items-center gap-8 md:grid-cols-12 md:gap-10 lg:mt-16 lg:gap-14">
             <div className="md:col-span-5">
-              <AboutPortrait src="/images/about/ricardo-guia-home.webp" alt={t.imageAlt} />
+              <AboutPortrait src="/images/about/ricardo-guia-home.webp" alt={t.imageAlt} eager />
             </div>
             <div className="md:col-span-7 lg:col-span-6 lg:col-start-7">
               <h2 id="about-story-heading" className="site-display text-balance text-[30px] font-medium leading-[1.1] md:text-[38px]">

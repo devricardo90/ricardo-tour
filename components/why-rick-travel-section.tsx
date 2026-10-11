@@ -68,7 +68,7 @@ export function WhyRickTravelSection({ locale }: { locale: string }) {
               key={pillar.title}
               className="grid grid-cols-[2rem_1fr] gap-x-3 py-3.5 [&:not(:last-child)]:border-b [&:not(:last-child)]:border-[#CFC7BA] md:py-4 md:pr-8 md:[&:not(:first-child)]:border-l md:[&:not(:first-child)]:pl-8 md:[&:not(:last-child)]:border-b-0"
             >
-              <span aria-hidden="true" className="pt-0.5 text-[13px] font-medium tabular-nums text-[#8A6A2B]">
+              <span aria-hidden="true" className="pt-0.5 text-[13px] font-medium tabular-nums text-[var(--site-gold-text,#856629)]">
                 0{i + 1}
               </span>
               <div>

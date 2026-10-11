@@ -224,7 +224,7 @@ function projectRegion(lon: number, lat: number, width: number, height: number) 
  * inventing geographic detail that is not in the data.
  */
 function tracePath(
-  context: CanvasRenderingContext2D,
+  context: Context2D,
   ring: Ring,
   width: number,
   height: number,
@@ -244,11 +244,16 @@ function tracePath(
   context.closePath();
 }
 
-function createCanvas(width: number, height: number) {
-  const canvas = document.createElement("canvas");
+/** A texture canvas: a DOM canvas on the main thread, an OffscreenCanvas inside the texture worker (RT-45). */
+export type TextureCanvas = HTMLCanvasElement | OffscreenCanvas;
+type Context2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
+
+function createCanvas(width: number, height: number): { canvas: TextureCanvas; context: Context2D } | null {
+  // Same 2D API, same drawing calls and same pixels either way; only where the rasterisation runs differs.
+  const canvas: TextureCanvas = typeof document === "undefined" ? new OffscreenCanvas(width, height) : document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
-  const context = canvas.getContext("2d");
+  const context = canvas.getContext("2d") as Context2D | null;
   if (!context) return null;
   return { canvas, context };
 }
@@ -259,7 +264,7 @@ function createCanvas(width: number, height: number) {
  * one texture under additive compositing.
  */
 function strokeFilament(
-  context: CanvasRenderingContext2D,
+  context: Context2D,
   colour: string,
   passes: ReadonlyArray<{ blur: number; width: number; alpha: number }>,
 ) {
@@ -282,7 +287,7 @@ function strokeFilament(
  * the continents comes from the glow texture, not from a bright fill, which is what
  * separates a premium night globe from a flat map.
  */
-export function drawEarthTexture(): HTMLCanvasElement | null {
+export function drawEarthTexture(): TextureCanvas | null {
   const made = createCanvas(TEXTURE_WIDTH, TEXTURE_HEIGHT);
   if (!made) return null;
   const { canvas, context } = made;
@@ -333,7 +338,7 @@ export function drawEarthTexture(): HTMLCanvasElement | null {
  * Global coastline glow, every continent except South America. Grayscale: the shader
  * reads the red channel and tints it with the RT-10 gold.
  */
-export function drawGlowTexture(): HTMLCanvasElement | null {
+export function drawGlowTexture(): TextureCanvas | null {
   const made = createCanvas(TEXTURE_WIDTH, TEXTURE_HEIGHT);
   if (!made) return null;
   const { canvas, context } = made;
@@ -362,7 +367,7 @@ export function drawGlowTexture(): HTMLCanvasElement | null {
  *   G — the Brazil highlight, mixed in across 28–44%.
  *   B — the destination bloom and its approach lines.
  */
-export function drawDetailTexture(): HTMLCanvasElement | null {
+export function drawDetailTexture(): TextureCanvas | null {
   const made = createCanvas(DETAIL_TEXTURE_WIDTH, DETAIL_TEXTURE_HEIGHT);
   if (!made) return null;
   const { canvas, context } = made;

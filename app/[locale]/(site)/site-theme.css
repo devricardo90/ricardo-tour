@@ -19,6 +19,10 @@
   --site-gold: #c8a86b;
   --site-gold-bright: #e8c780;
   --site-gold-deep: #8a6a2b;
+  /* Accessible text variant of --site-gold-deep (same hue/saturation, L 35.5% -> 34.2%), for SMALL gold TEXT on the
+     cream surface only, where the official value reaches 4.38:1 (< WCAG 1.4.3 AA 4.5:1). #856629 = 4.66:1 on #f3efe6,
+     5.04:1 on #fbf8f2, 5.34:1 on #fff. Do not use it for rules, borders, decoration or large text (RT-46, Sprint 8A). */
+  --site-gold-text: #856629;
   /* rules and focus */
   --site-rule-light: #cfc7ba;
   --site-rule-dark: rgb(255 255 255 / 0.1);

@@ -12,13 +12,8 @@
  * factory returns null and the caller falls back to the static SVG frame.
  */
 
-import {
-  RIO,
-  detailRegionUv,
-  drawDetailTexture,
-  drawEarthTexture,
-  drawGlowTexture,
-} from "./world-atlas";
+import { RIO, detailRegionUv } from "./world-atlas";
+import type { GlobeTextures, TextureSource } from "./globe-textures";
 
 export type GlobeState = {
   /** Camera distance in sphere radii. The surface is at 1. */
@@ -243,11 +238,16 @@ function link(gl: WebGL2RenderingContext, vertexSource: string, fragmentSource: 
   return program;
 }
 
-function uploadTexture(gl: WebGL2RenderingContext, source: HTMLCanvasElement, wrapS: number) {
+function uploadTexture(gl: WebGL2RenderingContext, source: TextureSource, wrapS: number) {
   const texture = gl.createTexture();
   if (!texture) return null;
   gl.bindTexture(gl.TEXTURE_2D, texture);
-  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+  if ("data" in source) {
+    // Raw texels from the texture worker: un-premultiplied RGBA, the same values a canvas upload produces (RT-45).
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, source.width, source.height, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array(source.data.buffer, source.data.byteOffset, source.data.byteLength));
+  } else {
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, source);
+  }
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, wrapS);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
   gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
@@ -256,28 +256,37 @@ function uploadTexture(gl: WebGL2RenderingContext, source: HTMLCanvasElement, wr
   return texture;
 }
 
-export function createGlobe(canvas: HTMLCanvasElement): Globe | null {
-  const gl = canvas.getContext("webgl2", {
-    alpha: true,
-    antialias: true,
-    depth: true,
-    premultipliedAlpha: true,
-    powerPreference: "default",
-  });
-  if (!gl) return null;
+const CONTEXT_ATTRIBUTES: WebGLContextAttributes = {
+  alpha: true,
+  antialias: true,
+  depth: true,
+  premultipliedAlpha: true,
+  powerPreference: "default",
+};
 
-  const earthCanvas = drawEarthTexture();
-  const glowCanvas = drawGlowTexture();
-  const detailCanvas = drawDetailTexture();
-  if (!earthCanvas || !glowCanvas || !detailCanvas) return null;
+/**
+ * Creates (and keeps) the canvas' WebGL2 context with the globe's attributes. Called before the textures are produced so
+ * a device without WebGL2 never pays for rasterising them (RT-45 review); createGlobe() then gets this same context.
+ */
+export function supportsGlobe(canvas: HTMLCanvasElement): boolean {
+  try {
+    return Boolean(canvas.getContext("webgl2", CONTEXT_ATTRIBUTES));
+  } catch {
+    return false;
+  }
+}
+
+export function createGlobe(canvas: HTMLCanvasElement, textures: GlobeTextures, onSizeChange?: () => void): Globe | null {
+  const gl = canvas.getContext("webgl2", CONTEXT_ATTRIBUTES);
+  if (!gl) return null;
 
   const globeProgram = link(gl, VERTEX_SHADER, GLOBE_FRAGMENT_SHADER);
   const atmosphereProgram = link(gl, VERTEX_SHADER, ATMOSPHERE_FRAGMENT_SHADER);
   if (!globeProgram || !atmosphereProgram) return null;
 
-  const earthTexture = uploadTexture(gl, earthCanvas, gl.REPEAT);
-  const glowTexture = uploadTexture(gl, glowCanvas, gl.REPEAT);
-  const detailTexture = uploadTexture(gl, detailCanvas, gl.CLAMP_TO_EDGE);
+  const earthTexture = uploadTexture(gl, textures.earth, gl.REPEAT);
+  const glowTexture = uploadTexture(gl, textures.glow, gl.REPEAT);
+  const detailTexture = uploadTexture(gl, textures.detail, gl.CLAMP_TO_EDGE);
   if (!earthTexture || !glowTexture || !detailTexture) return null;
 
   const sphere = buildSphere();
@@ -319,11 +328,30 @@ export function createGlobe(canvas: HTMLCanvasElement): Globe | null {
 
   let width = 0;
   let height = 0;
+  // CSS size of the canvas, cached. Reading clientWidth/clientHeight inside render() forced a synchronous layout on
+  // every frame, right after GSAP's style writes (Lighthouse forced-reflow; ~0.6 s of main-thread time on a 4x-throttled
+  // load, RT-45). The cache is refreshed by a ResizeObserver, whose callback runs after layout, so the values are
+  // identical to what the per-frame reads returned; the drawing, camera and marker maths are unchanged.
+  let cssWidth = canvas.clientWidth;
+  let cssHeight = canvas.clientHeight;
+  const sizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(() => {
+    if (canvas.clientWidth === cssWidth && canvas.clientHeight === cssHeight) return;
+    cssWidth = canvas.clientWidth;
+    cssHeight = canvas.clientHeight;
+    onSizeChange?.(); // the caller redraws on its next frame with the new size
+  });
+  sizeObserver?.observe(canvas);
 
   const resize = () => {
+    // Without a ResizeObserver, or while no size has been observed yet (the canvas is display:none until the caller
+    // marks the globe ready, so the first frame after that would otherwise use 0x0), read the layout size directly.
+    if (!sizeObserver || cssWidth === 0 || cssHeight === 0) {
+      cssWidth = canvas.clientWidth;
+      cssHeight = canvas.clientHeight;
+    }
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
-    const nextWidth = Math.max(1, Math.round(canvas.clientWidth * ratio));
-    const nextHeight = Math.max(1, Math.round(canvas.clientHeight * ratio));
+    const nextWidth = Math.max(1, Math.round(cssWidth * ratio));
+    const nextHeight = Math.max(1, Math.round(cssHeight * ratio));
     if (nextWidth === width && nextHeight === height) return;
     width = nextWidth;
     height = nextHeight;
@@ -406,13 +434,14 @@ export function createGlobe(canvas: HTMLCanvasElement): Globe | null {
     const ndcX = (projection[0] * viewX) / clipW;
     const ndcY = (projection[5] * viewY) / clipW;
     return {
-      x: (ndcX * 0.5 + 0.5) * canvas.clientWidth,
-      y: (0.5 - ndcY * 0.5) * canvas.clientHeight,
+      x: (ndcX * 0.5 + 0.5) * cssWidth,
+      y: (0.5 - ndcY * 0.5) * cssHeight,
       visible: facing > 0.06 && Math.abs(ndcX) < 1.2 && Math.abs(ndcY) < 1.2,
     };
   };
 
   const dispose = () => {
+    sizeObserver?.disconnect();
     gl.deleteBuffer(positionBuffer);
     gl.deleteBuffer(uvBuffer);
     gl.deleteBuffer(indexBuffer);

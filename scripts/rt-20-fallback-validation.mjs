@@ -67,6 +67,9 @@ async function open(contextOptions, opts = {}, attempt = 1) {
     if (saveData) await page.addInitScript(forceSaveData);
     await page.goto(`${origin}${ROUTE}`, { waitUntil: "domcontentloaded", timeout: 180000 });
     await page.waitForSelector("[data-mode='motion'], [data-mode='static']", { timeout: 60000 });
+    // RT-45: in motion mode the globe textures load asynchronously (worker); until then data-webgl is unset and the
+    // static frame shows. Wait for the outcome (ready | unavailable) before snapshotting.
+    await page.waitForFunction(() => { const h = document.querySelector("[data-testid='globe-journey']"); return h && (h.dataset.mode === "static" || h.dataset.webgl); }, null, { timeout: 60000 });
     await page.waitForTimeout(400);
     return { context, page, errors };
   } catch (error) {

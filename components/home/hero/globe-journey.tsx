@@ -4,7 +4,8 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Link } from "@/i18n/routing";
-import { createGlobe, type Globe, type GlobeState } from "./globe-3d";
+import { createGlobe, supportsGlobe, type Globe, type GlobeState } from "./globe-3d";
+import { loadGlobeTextures } from "./globe-textures";
 import { buildHeroScenes, type HeroLayer, type HeroScene } from "./hero-media";
 import styles from "./globe-journey.module.css";
 
@@ -130,14 +131,24 @@ export default function GlobeJourney({ locale }: { locale: string }) {
       const canvas = element.querySelector<HTMLCanvasElement>("[data-globe-canvas]")!;
       const marker = element.querySelector<HTMLElement>("[data-rio-marker]")!;
       let globe: Globe | null = null;
-      try {
-        globe = createGlobe(canvas);
-      } catch {
-        globe = null;
-      }
-      // A device without WebGL keeps the server-rendered static frame instead of an
-      // empty stage; the journey stays usable and the next section stays reachable.
-      element.dataset.webgl = globe ? "ready" : "unavailable";
+      let disposed = false;
+      let dirty = true;
+      // RT-45: the authored textures are rasterised in a worker when possible (same drawing code, same pixels), so the
+      // page stays responsive meanwhile. Until they arrive `data-webgl` is unset and the server-rendered static frame
+      // stays on stage — the same first frame visitors already see before hydration. A device without WebGL keeps that
+      // static frame for good ("unavailable"); the journey stays usable and the next section stays reachable.
+      // WebGL2 is probed first (as before RT-45): without it the textures are never produced.
+      const textures = supportsGlobe(canvas) ? loadGlobeTextures() : { promise: Promise.resolve(null), cancel: () => {} };
+      textures.promise.then(loaded => {
+        if (disposed) return;
+        try {
+          globe = loaded ? createGlobe(canvas, loaded, () => { dirty = true; }) : null;
+        } catch {
+          globe = null;
+        }
+        element.dataset.webgl = globe ? "ready" : "unavailable";
+        dirty = true;
+      });
       element.dataset.mode = "motion";
 
       const section = element.querySelector<HTMLElement>("[data-runway]")!;
@@ -204,7 +215,6 @@ export default function GlobeJourney({ locale }: { locale: string }) {
        * radii, so 1.34 is a genuine low orbit rather than a CSS scale factor.
        */
       const camera: GlobeState = { dist: 4.6, lat: 4, lon: -52, brazilMix: 0 };
-      let dirty = true;
 
       const timeline = gsap.timeline({ paused: true, defaults: { ease: "none" } });
       timeline
@@ -362,7 +372,10 @@ export default function GlobeJourney({ locale }: { locale: string }) {
         gsap.ticker.remove(draw);
         trigger.kill();
         timeline.kill();
+        disposed = true;
+        textures.cancel();
         globe?.dispose();
+        globe = null;
         delete element.dataset.mode;
         delete element.dataset.webgl;
       };

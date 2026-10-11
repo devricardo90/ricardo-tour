@@ -10,7 +10,7 @@ const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:o
 
 // Public-site header (RT-52, generalized from the RT-35 Home header): compact sticky charcoal bar, server-rendered;
 // only the mobile disclosure and the language links are client islands. Four primary destinations, the "Plan your
-// trip" CTA and PT/EN/ES links. No account entry, no Contato link, no SV control.
+// trip" CTA and PT/EN/ES links. No account entry, no Contato link, no SV control. "Quem somos" links to the About page.
 //  - anchorMode "page": always in-page hashes (logo goes to `homeHref`, default #top-of-home).
 //  - anchorMode "home": the default used by the (site) layout (RT-57): links resolve per route at render time, so on
 //    the Home they are in-page hashes and on any other route locale-aware links to `/{locale}#section`.
@@ -20,7 +20,8 @@ export function SiteHeader({ locale, anchorMode = "home", homeHref = "#top-of-ho
     { label: t.nav.experiences, hash: navHashes.experiences },
     { label: t.nav.rio, hash: navHashes.rio },
     ...(isConciergeEnabled() ? [{ label: t.nav.concierge, hash: "daniela", action: "concierge" as const }] : []),
-    { label: t.nav.about, hash: navHashes.about },
+    // "Quem somos" opens the About page (RT-56) in every locale, not the Home section anchor (Owner, Sprint 8A).
+    { label: t.nav.about, hash: navHashes.about, path: "/quem-somos" },
   ];
   const ctaClass = `inline-flex h-10 items-center whitespace-nowrap rounded-md border border-[var(--site-gold,#C8A86B)] px-3 text-[13px] font-medium text-[var(--site-gold-bright,#E8C780)] transition-colors hover:bg-[var(--site-gold,#C8A86B)]/10 ${focusRing} focus-visible:outline-offset-2 md:px-4 md:text-[14px]`;
   const logoClass = `flex shrink-0 items-center rounded ${focusRing} focus-visible:outline-offset-4`;
@@ -38,7 +39,11 @@ export function SiteHeader({ locale, anchorMode = "home", homeHref = "#top-of-ho
             <ul className="flex items-center gap-8 text-[14px]">
               {items.map((item) => (
                 <li key={item.hash}>
-                  {"action" in item ? (
+                  {"path" in item && item.path ? (
+                    <Link href={item.path} className={`rounded py-2 text-[var(--site-on-dark-muted,#CAC7BF)] transition-colors hover:text-[var(--site-on-dark,#F4F0E8)] ${focusRing} focus-visible:outline-offset-4`}>
+                      {item.label}
+                    </Link>
+                  ) : "action" in item ? (
                     <OpenConciergeButton className={`rounded py-2 text-[var(--site-on-dark-muted,#CAC7BF)] transition-colors hover:text-[var(--site-on-dark,#F4F0E8)] ${focusRing} focus-visible:outline-offset-4`}>
                       {item.label}
                     </OpenConciergeButton>

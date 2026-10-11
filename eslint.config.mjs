@@ -15,6 +15,7 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    ".next-prod/**", // isolated production build dir (NEXT_DIST_DIR, RT-44/RT-45 local audits)
     "out/**",
     "build/**",
     "next-env.d.ts",

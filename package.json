@@ -27,7 +27,8 @@
     "test:e2e": "playwright test",
     "optimize-images": "node scripts/optimize-images.js",
     "hero-media-pipeline": "node scripts/media-pipeline/run.mjs",
-    "test:e2e:public": "playwright test -c playwright.public.config.ts"
+    "test:e2e:public": "playwright test -c playwright.public.config.ts",
+    "test:e2e:crossbrowser": "playwright test -c playwright.crossbrowser.config.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

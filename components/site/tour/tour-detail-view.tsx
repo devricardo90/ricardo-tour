@@ -95,7 +95,7 @@ export function TourDetailView({ trip, locale }: { trip: DetailTrip; locale: str
 
               {facts.length > 0 ? (
                 <section aria-labelledby="tour-facts-heading" className="mt-6">
-                  <h2 id="tour-facts-heading" className="text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold-deep)]">
+                  <h2 id="tour-facts-heading" className="text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold-text,#856629)]">
                     {t.facts}
                   </h2>
                   <dl className="mt-3 grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-[15px]">
@@ -131,7 +131,7 @@ export function TourDetailView({ trip, locale }: { trip: DetailTrip; locale: str
 
               {highlights.length > 0 ? (
                 <section aria-labelledby="tour-highlights-heading">
-                  <h2 id="tour-highlights-heading" className="text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold-deep)]">
+                  <h2 id="tour-highlights-heading" className="text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold-text,#856629)]">
                     {t.highlights}
                   </h2>
                   <ul className="mt-3 grid gap-x-8 gap-y-2 text-[15px] sm:grid-cols-2">
@@ -149,7 +149,7 @@ export function TourDetailView({ trip, locale }: { trip: DetailTrip; locale: str
                 <div className="grid gap-8 sm:grid-cols-2">
                   {parsed.includes.length > 0 ? (
                     <section aria-labelledby="tour-included-heading">
-                      <h2 id="tour-included-heading" className="text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold-deep)]">
+                      <h2 id="tour-included-heading" className="text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold-text,#856629)]">
                         {t.included}
                       </h2>
                       <ul className="mt-3 space-y-2 text-[15px]">
@@ -181,7 +181,7 @@ export function TourDetailView({ trip, locale }: { trip: DetailTrip; locale: str
               ) : null}
 
               <section aria-labelledby="tour-schedule-heading">
-                <h2 id="tour-schedule-heading" className="text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold-deep)]">
+                <h2 id="tour-schedule-heading" className="text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold-text,#856629)]">
                   {t.schedule}
                 </h2>
                 {upcoming.length > 0 ? (

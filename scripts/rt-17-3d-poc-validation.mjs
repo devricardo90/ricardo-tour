@@ -99,6 +99,8 @@ try {
         const started = Date.now();
         await page.goto(url, { waitUntil: "domcontentloaded" });
         await page.waitForSelector("[data-mode='motion'], [data-mode='static']", { timeout: HYDRATION_TIMEOUT });
+        // RT-45: the globe textures load asynchronously (worker); wait for data-webgl (ready|unavailable) in motion mode.
+        await page.waitForFunction(() => { const h = document.querySelector("[data-testid='globe-journey']"); return h && (h.dataset.mode === "static" || h.dataset.webgl); }, null, { timeout: 60000 });
         await page.waitForTimeout(250);
         const navigationMs = Date.now() - started;
 
