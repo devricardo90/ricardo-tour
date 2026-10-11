@@ -121,12 +121,84 @@ describe("tampered replies cannot change the human channels", () => {
   });
 });
 
-describe("tour recommendation links", () => {
+describe("tour links inside answers", () => {
   it("shows a readable label for a single-tour link and keeps the canonical href", () => {
-    const reply = replyFor("recommendation");
-    const html = decoded(render({ open: true, messages: [user("m1", "oi"), assistant("m2", reply.answer, "grounded")] }));
+    const html = decoded(render({ open: true, messages: [user("m1", "oi"), assistant("m2", "Veja https://www.ricardotour.com/pt/tours/cmlhxkpy9000028zq27rhytew para saber mais.", "grounded")] }));
     expect(html).toContain('<a href="https://www.ricardotour.com/pt/tours/cmlhxkpy9000028zq27rhytew" target="_blank" rel="noopener noreferrer">ver o passeio</a>');
-    expect(html).not.toMatch(/R\$\s*\d/);
+  });
+});
+
+describe("second refinement round: welcome, avatars, recommendation cards, hierarchy, composer", () => {
+  const recommendation = replyFor("recommendation");
+  const withCards = (extra: Partial<PanelMessage> = {}) =>
+    render({ open: true, messages: [user("m1", "Primeira viagem ao Rio"), { ...assistant("m2", recommendation.answer, "grounded"), tours: recommendation.tour_ids, ...extra } as PanelMessage] });
+
+  it("opens with a warm welcome in the Concierge's voice that states it is an AI and invites discovery, not an agency pitch", () => {
+    const html = render({ open: true });
+    expect(html).toContain("Vamos descobrir o Rio?");
+    expect(html).toMatch(/Sou o Concierge da Ricardo Tour, um assistente de IA/);
+    expect(html).toMatch(/primeira vez no Rio/);
+    expect(html).not.toMatch(/Posso explicar os passeios e serviços da Ricardo Tour|agência de turismo/);
+    expect(html).toMatch(/data-ai-disclosure/); // the full RT-70 disclosure is still there
+  });
+
+  it("offers exactly the three requested quick-start prompts as discreet pill buttons", () => {
+    const html = render({ open: true });
+    const labels = [...html.matchAll(/<button[^>]*class="[^"]*starterButton[^"]*"[^>]*>([^<]*)<\/button>/g)].map((m) => m[1]);
+    expect(labels).toEqual(["É minha primeira vez no Rio", "Quero conhecer o Cristo", "Quais passeios vocês recomendam?"]);
+  });
+
+  it("uses a Concierge avatar (labelled image) and a decorative neutral visitor avatar", () => {
+    const html = render({ open: true, messages: [user("m1", "oi"), assistant("m2", "Olá", "grounded")] });
+    expect(render({ open: true })).toMatch(/role="img"[^>]*aria-label="Concierge da Ricardo Tour"/); // welcome: named
+    expect(html).not.toMatch(/role="img"/); // inside the live log the visible "Concierge" label names the speaker
+    expect(html).toMatch(/<span class="[^"]*avatarConcierge[^"]*" aria-hidden="true">/);
+    expect(html).toMatch(/<span class="[^"]*avatarVisitor[^"]*" aria-hidden="true">/);
+    expect(html).not.toMatch(/robot|bot-|🤖/i);
+  });
+
+  it("shows recommendation cards from the approved catalog: real photo, title, approved summary and a 'Ver passeio' CTA, with no price, duration or availability", () => {
+    const html = decoded(withCards());
+    expect((html.match(/class="[^"]*tourCard/g) ?? []).length).toBe(3);
+    expect(html).toContain("Passeios sugeridos");
+    expect(html).toContain("Cristo Redentor + Pão de Açúcar");
+    expect(html).toContain("Visite os dois pontos turísticos mais famosos do Rio em um único passeio");
+    expect(html).toMatch(/<a[^>]*href="\/pt\/tours\/cmlhxkpy9000028zq27rhytew"[^>]*target="_blank"[^>]*rel="noopener noreferrer"[^>]*aria-label="Ver passeio: Cristo Redentor \+ Pão de Açúcar"/);
+    expect(html).toMatch(/<img[^>]*alt="Visitante no mirante do Pão de Açúcar, com a Baía de Guanabara ao fundo"/);
+    expect(html).not.toMatch(/R\$\s*\d|\d+\s*(?:horas?|h|min)|vagas? (?:disponíve|restantes)|desconto/i);
+  });
+
+  it("ignores unknown or duplicated tour ids and never renders more than three cards", () => {
+    const html = withCards({ tours: ["unknown-id", "cmlhxkpy9000028zq27rhytew", "cmlhxkpy9000028zq27rhytew", "cmlibniq40000z4zqkbujnutt", "cmljo0s1u0000t0zqa0bpd23p", "cmli1a6im000034zqqzc9sppb"] } as Partial<PanelMessage>);
+    expect((html.match(/class="[^"]*tourCard/g) ?? []).length).toBe(3);
+    expect(html).not.toContain("unknown-id");
+  });
+
+  it("separates the four message registers: informational, recommendation, handoff and system notice", () => {
+    const offer = buildHandoffOffer("H1", "explicit_request");
+    const info = render({ open: true, messages: [user("m1", "oi"), assistant("m2", "Resposta informativa", "grounded")] });
+    expect(info).not.toMatch(/tourCard|class="[^"]*handoff"|messageSystem/);
+    expect(withCards()).toMatch(/<section[^>]*aria-labelledby="m2-tours"[\s\S]*<h3 id="m2-tours"[^>]*>Passeios sugeridos<\/h3>/);
+    const handoff = render({ open: true, messages: [user("m1", "oi"), assistant("m2", "Posso ajudar", "handoff", offer)] });
+    expect(handoff).toMatch(/data-handoff-code="H1"/);
+    const reply = replyFor("degraded");
+    const system = render({ open: true, status: "degraded", messages: [user("m1", "oi"), assistant("m2", reply.answer, "degraded", reply.handoff)] });
+    expect(system).toMatch(/class="[^"]*messageSystem[^"]*" data-kind="degraded"/);
+    expect(system).toContain(">Aviso<");
+    expect(system).not.toMatch(/Concierge da Ricardo Tour"/); // no Concierge avatar on system notices
+  });
+
+  it("compacts the header once the conversation starts, while the AI strip stays visible", () => {
+    expect(render({ open: true })).toMatch(/<header[^>]*data-compact="false"/);
+    const started = render({ open: true, messages: [user("m1", "oi")] });
+    expect(started).toMatch(/<header[^>]*data-compact="true"/);
+    expect(started).toContain("Assistente de IA: pode errar e não confirma preços, reservas ou pagamentos.");
+  });
+
+  it("has a short placeholder and a send button with a visible word plus an accessible name", () => {
+    const html = render({ open: true });
+    expect(html).toMatch(/<textarea[^>]*placeholder="Pergunte sobre o Rio…"/);
+    expect(html).toMatch(/<button[^>]*type="submit"[^>]*aria-label="Enviar mensagem"[^>]*>[\s\S]*Enviar/);
   });
 });
 

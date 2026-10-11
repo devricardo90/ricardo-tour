@@ -21,11 +21,12 @@ export const SCENARIOS: Array<{ id: ScenarioId; label: string; description: stri
 ];
 
 const GROUNDED =
-  "A Ricardo Tour é uma agência de turismo focada em passeios, experiências e serviços turísticos no Rio de Janeiro, e também ajuda a planejar a viagem. Se quiser, posso apresentar alguns passeios clássicos para você começar.";
+  "Que bom que você vem! Para uma primeira vez no Rio, vale começar pelos clássicos da cidade. Se quiser, posso sugerir alguns passeios publicados para você começar.";
 
-// Illustrative recommendation in the shape the approved recommendation policy allows: published tours only, official links, no price, no availability.
+// Illustrative recommendation in the shape the approved recommendation policy allows: published tours only (shown as cards from the
+// closed allow-list), no price, no duration, no availability.
 const RECOMMENDATION =
-  "Para uma primeira viagem ao Rio, dois passeios publicados no site costumam ajudar a começar: o Cristo Redentor + Pão de Açúcar (https://www.ricardotour.com/pt/tours/cmlhxkpy9000028zq27rhytew) reúne os dois cartões-postais da cidade, e o Confeitaria Colombo + City Tour Rio (https://www.ricardotour.com/pt/tours/cmlibniq40000z4zqkbujnutt) passa por pontos históricos. Preços, datas e disponibilidade ficam na página de cada passeio ou com a nossa equipe.";
+  "Para uma primeira viagem ao Rio, três passeios publicados costumam ser um bom começo: Cristo Redentor + Pão de Açúcar, Confeitaria Colombo + City Tour Rio e Tour Privado Premium Rio de Janeiro. Preços, datas e disponibilidade ficam na página de cada passeio ou com a nossa equipe.";
 
 export function replyFor(id: ScenarioId): ConciergeReply {
   switch (id) {
@@ -33,7 +34,7 @@ export function replyFor(id: ScenarioId): ConciergeReply {
     case "slow":
       return { outcome: "ANSWER", answer: GROUNDED, response_kind: "grounded" };
     case "recommendation":
-      return { outcome: "ANSWER", answer: RECOMMENDATION, response_kind: "grounded" };
+      return { outcome: "ANSWER", answer: RECOMMENDATION, response_kind: "grounded", tour_ids: ["cmlhxkpy9000028zq27rhytew", "cmlibniq40000z4zqkbujnutt", "cmljo0s1u0000t0zqa0bpd23p"] };
     case "handoff_human":
       return { outcome: "HANDOFF", answer: handoffMessage("explicit_request"), response_kind: "handoff", handoff: buildHandoffOffer("H1", "explicit_request") };
     case "price":

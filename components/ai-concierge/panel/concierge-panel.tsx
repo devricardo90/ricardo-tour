@@ -1,6 +1,7 @@
 "use client";
 
 import { Fragment, useEffect, useId, useReducer, useRef, type FormEvent, type KeyboardEvent } from "react";
+import Image from "next/image";
 import { X } from "lucide-react";
 import { CONCIERGE_PRIVACY } from "@/lib/ai-concierge/runtime/privacy";
 import { buildHandoffPrefill, getHandoffChannels, type HandoffCode, type HandoffOffer } from "@/lib/ai-concierge/runtime/handoff";
@@ -15,6 +16,7 @@ import {
   type PanelMessage,
   type PanelState,
 } from "@/lib/ai-concierge/ui/state";
+import { resolveTourCards, type TourCardData } from "@/lib/ai-concierge/ui/tours";
 import type { ConciergeTransport, PanelEvent } from "@/lib/ai-concierge/ui/types";
 import { PANEL_COPY as copy } from "./copy";
 import styles from "./concierge-panel.module.css";
@@ -61,6 +63,51 @@ function renderText(text: string) {
   });
 }
 
+/** Concierge avatar: a gold hairline ring with a Rio skyline-and-arc monogram. Abstract on purpose: no face, no robot, no mascot. */
+function ConciergeAvatar({ decorative = false }: { decorative?: boolean }) {
+  // Inside the live conversation the visible "Concierge" label already names the speaker: the avatar is decorative there.
+  return (
+    <span className={styles.avatarConcierge} {...(decorative ? { "aria-hidden": true } : { role: "img", "aria-label": copy.avatarConcierge })}>
+      <svg viewBox="0 0 32 32" width="20" height="20" fill="none" aria-hidden="true">
+        <path d="M5 22.5c3.2-1.2 5-4.6 7.6-4.6 2 0 2.9 1.6 4.6 1.6 2.6 0 3.7-5.2 9.8-8.4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+        <path d="M5 26h22" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+        <circle cx="21.5" cy="8.5" r="2.2" stroke="currentColor" strokeWidth="1.2" />
+      </svg>
+    </span>
+  );
+}
+
+/** Visitor avatar: neutral, monochrome head-and-shoulders line glyph. Decorative: the visible "Você" label carries the meaning. */
+function VisitorAvatar() {
+  return (
+    <span className={styles.avatarVisitor} aria-hidden="true">
+      <svg viewBox="0 0 32 32" width="18" height="18" fill="none">
+        <circle cx="16" cy="12" r="4.2" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M7.5 25.5c.7-4.6 4-7 8.5-7s7.8 2.4 8.5 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      </svg>
+    </span>
+  );
+}
+
+/** Recommendation card: approved catalog data only (closed allow-list); no price, duration or availability. */
+function TourCard({ tour }: { tour: TourCardData }) {
+  return (
+    <li className={styles.tourCard}>
+      <div className={styles.tourPhoto}>
+        <Image src={tour.image} alt={tour.imageAlt} fill sizes="(max-width: 767px) 88px, 104px" className={styles.tourImage} />
+      </div>
+      <div className={styles.tourBody}>
+        <h4 className={styles.tourTitle}>{tour.title}</h4>
+        <p className={styles.tourSummary}>{tour.summary}</p>
+        <a className={styles.tourCta} href={tour.path} target="_blank" rel="noopener noreferrer" aria-label={`${copy.tourCta}: ${tour.title}`}>
+          {copy.tourCta}
+          <span aria-hidden="true"> →</span>
+        </a>
+      </div>
+    </li>
+  );
+}
+
 /** The offer is rebuilt from its closed code: a tampered reply can never change a phone number, address or message. */
 function HandoffCard({ offer, onClick }: { offer: HandoffOffer; onClick: (channel: "whatsapp" | "email", code: HandoffCode) => void }) {
   const code = HANDOFF_CODES.has(offer.code) ? offer.code : "H4";
@@ -88,16 +135,47 @@ function Message({ message, onHandoff }: { message: PanelMessage; onHandoff: (ch
   if (message.role === "user") {
     return (
       <li className={styles.messageUser}>
-        <span className={styles.who}>{copy.you}</span>
-        {message.text}
+        <VisitorAvatar />
+        <div className={styles.userBubble}>
+          <span className={styles.who}>{copy.you}</span>
+          {message.text}
+        </div>
+      </li>
+    );
+  }
+  // Hierarchy: informational answer (gold rule) < recommended experiences (cards) < human handoff (framed action card);
+  // degraded / limit states are system notices (dashed amber frame, no Concierge avatar or name).
+  const tours = resolveTourCards(message.tours);
+  if (message.kind === "degraded") {
+    return (
+      <li className={styles.messageSystem} data-kind="degraded">
+        <span className={styles.systemLabel}>{copy.systemLabel}</span>
+        <p>{renderText(message.text)}</p>
+        {message.handoff ? <HandoffCard offer={message.handoff} onClick={onHandoff} /> : null}
       </li>
     );
   }
   return (
     <li className={styles.messageAssistant} data-kind={message.kind}>
-      <span className={styles.who}>{copy.concierge}</span>
-      <p>{renderText(message.text)}</p>
-      {message.handoff ? <HandoffCard offer={message.handoff} onClick={onHandoff} /> : null}
+      <ConciergeAvatar decorative />
+      <div className={styles.assistantBody}>
+        <span className={styles.who}>{copy.concierge}</span>
+        <p>{renderText(message.text)}</p>
+        {tours.length > 0 ? (
+          <section className={styles.tours} aria-labelledby={`${message.id}-tours`}>
+            <h3 id={`${message.id}-tours`} className={styles.toursLabel}>
+              {copy.recommendedLabel}
+            </h3>
+            <ul className={styles.tourList}>
+              {tours.map((tour) => (
+                <TourCard key={tour.id} tour={tour} />
+              ))}
+            </ul>
+            <p className={styles.toursNote}>{copy.recommendedNote}</p>
+          </section>
+        ) : null}
+        {message.handoff ? <HandoffCard offer={message.handoff} onClick={onHandoff} /> : null}
+      </div>
     </li>
   );
 }
@@ -111,6 +189,7 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
   const bodyRef = useRef<HTMLDivElement>(null);
   const wasOpen = useRef(state.open);
   const reported = useRef(false);
+  const handledMessageId = useRef<string | null>(null);
 
   const { open, messages, draft, status, retryAfter } = state;
   const [team] = getHandoffChannels(buildHandoffPrefill("H1"));
@@ -128,11 +207,31 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
     wasOpen.current = open;
   }, [open, onEvent, surface]);
 
+  const lastMessageId = messages.length > 0 ? messages[messages.length - 1].id : null;
   useEffect(() => {
     // Follow the conversation only once it exists; the empty state always starts at the top.
     const body = bodyRef.current;
-    if (body && messages.length > 0) body.scrollTop = body.scrollHeight;
-  }, [messages.length, status]);
+    if (!body || lastMessageId === null) return;
+    // A new Concierge answer is read from its first line (cards can be taller than the viewport); the visitor's own message
+    // follows the bottom of the conversation. Status changes alone (countdown end, retry) never move the scroll position.
+    if (lastMessageId === handledMessageId.current) return;
+    handledMessageId.current = lastMessageId;
+    const last = body.querySelector("ol > li:last-child");
+    if (last instanceof HTMLElement && last.hasAttribute("data-kind")) {
+      body.scrollTop = Math.max(0, last.offsetTop - body.offsetTop - 12);
+    } else {
+      body.scrollTop = body.scrollHeight;
+    }
+  }, [lastMessageId]);
+
+  useEffect(() => {
+    // Grow the composer with its content (capped by CSS max-height); one line when empty.
+    const field = textareaRef.current;
+    if (!field) return;
+    field.style.height = "auto";
+    // scrollHeight excludes the border: add it back (border-box) so 2-3 line drafts never show an inner scrollbar.
+    field.style.height = `${field.scrollHeight + field.offsetHeight - field.clientHeight}px`;
+  }, [draft, open]);
 
   useEffect(() => {
     if (status !== "rate_limited") return;
@@ -194,7 +293,7 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
         inert={!open}
         onKeyDown={onPanelKey}
       >
-        <header className={styles.header}>
+        <header className={styles.header} data-compact={messages.length > 0}>
           <div className={styles.headerTop}>
             <div>
               <p className={styles.eyebrow}>{copy.eyebrow}</p>
@@ -224,10 +323,10 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
               <h3 id={`${titleId}-intro`} className={styles.introTitle}>
                 {copy.introTitle}
               </h3>
-              <p className={styles.introBody}>{copy.introBody}</p>
-              <p className={styles.note} data-ai-disclosure>
-                {CONCIERGE_PRIVACY.ai_disclosure}
-              </p>
+              <div className={styles.welcome}>
+                <ConciergeAvatar />
+                <p className={styles.welcomeText}>{copy.welcome}</p>
+              </div>
               <p className={styles.startersLabel}>{copy.starters}</p>
               <ul className={styles.starters}>
                 {STARTER_QUESTIONS.map((question) => (
@@ -238,6 +337,9 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
                   </li>
                 ))}
               </ul>
+              <p className={styles.note} data-ai-disclosure>
+                {CONCIERGE_PRIVACY.ai_disclosure}
+              </p>
             </section>
           ) : (
             <ol className={styles.messages} role="log" aria-live="polite" aria-relevant="additions" aria-label={copy.messagesLabel}>
@@ -280,13 +382,14 @@ export function ConciergePanel({ transport, onEvent, surface = "public_site", in
               placeholder={copy.composerPlaceholder}
               value={draft}
               maxLength={RUNTIME_MAX_MESSAGE_LENGTH}
-              rows={2}
+              rows={1}
               disabled={composerDisabled}
               onChange={(event) => dispatch({ type: "draft", text: event.target.value })}
               onKeyDown={onTextareaKey}
             />
             <button type="submit" className={styles.sendButton} aria-label={copy.send} disabled={composerDisabled || !draft.trim()}>
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <span className={styles.sendText}>{copy.sendVisible}</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4 12h15m0 0-6-6m6 6-6 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>

@@ -15,6 +15,8 @@ export type ConciergeReply = {
   retry_after_seconds?: number;
   /** Support reference of a degraded response; already printed inside `answer`. */
   reference_id?: string;
+  /** Approved catalog trip ids to present as recommendation cards (resolved against a closed allow-list client-side). */
+  tour_ids?: string[];
 };
 
 export type HistoryTurn = { role: "user" | "assistant"; text: string };

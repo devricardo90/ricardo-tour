@@ -17,7 +17,7 @@ import type { ConciergeReply, HistoryTurn } from "./types";
  */
 export type PanelMessage =
   | { id: string; role: "user"; text: string }
-  | { id: string; role: "assistant"; text: string; kind: ResponseKind; handoff?: HandoffOffer };
+  | { id: string; role: "assistant"; text: string; kind: ResponseKind; handoff?: HandoffOffer; tours?: string[] };
 
 export type PanelStatus = "idle" | "sending" | "degraded" | "rate_limited";
 
@@ -85,7 +85,7 @@ export function panelReducer(state: PanelState, action: PanelAction): PanelState
         status,
         retryAfter: limited ? clampSeconds(reply.retry_after_seconds) : 0,
         seq: state.seq + 1,
-        messages: [...state.messages, { id: nextId(state), role: "assistant", text: reply.answer, kind: reply.response_kind, handoff: reply.handoff }],
+        messages: [...state.messages, { id: nextId(state), role: "assistant", text: reply.answer, kind: reply.response_kind, handoff: reply.handoff, ...(reply.tour_ids?.length ? { tours: reply.tour_ids } : {}) }],
       };
     }
     case "failed": {
@@ -141,7 +141,7 @@ export function historyFor(messages: PanelMessage[]): HistoryTurn[] {
 
 /** Starter questions: all inside the approved PT V1 scope and none triggers a dynamic-data gate. */
 export const STARTER_QUESTIONS = [
-  "O que é a Ricardo Tour?",
-  "Quais passeios clássicos vocês têm no Rio?",
-  "Como posso falar com a equipe?",
+  "É minha primeira vez no Rio",
+  "Quero conhecer o Cristo",
+  "Quais passeios vocês recomendam?",
 ] as const;
