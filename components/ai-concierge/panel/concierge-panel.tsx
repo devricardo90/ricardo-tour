@@ -44,7 +44,7 @@ function renderText(text: string) {
     try {
       const url = new URL(core);
       if (url.protocol === "https:" && SAFE_HOSTS.has(url.hostname)) {
-        const label = core === PLANNER_URL ? "Planeje sua viagem" : core === TOURS_URL ? "passeios publicados" : url.hostname + url.pathname;
+        const label = core === PLANNER_URL ? "Planeje sua viagem" : core === TOURS_URL ? "passeios publicados" : /^\/pt\/tours\/[\w-]+\/?$/.test(url.pathname) ? "ver o passeio" : url.hostname + url.pathname;
         return (
           <Fragment key={index}>
             <a href={url.href} target="_blank" rel="noopener noreferrer">

@@ -121,6 +121,15 @@ describe("tampered replies cannot change the human channels", () => {
   });
 });
 
+describe("tour recommendation links", () => {
+  it("shows a readable label for a single-tour link and keeps the canonical href", () => {
+    const reply = replyFor("recommendation");
+    const html = decoded(render({ open: true, messages: [user("m1", "oi"), assistant("m2", reply.answer, "grounded")] }));
+    expect(html).toContain('<a href="https://www.ricardotour.com/pt/tours/cmlhxkpy9000028zq27rhytew" target="_blank" rel="noopener noreferrer">ver o passeio</a>');
+    expect(html).not.toMatch(/R\$\s*\d/);
+  });
+});
+
 describe("degraded and rate-limited states", () => {
   it("degraded: composer disabled, status notice with a user-initiated retry, handoff visible", () => {
     const reply = replyFor("degraded");

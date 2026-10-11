@@ -7,10 +7,11 @@ import type { ConciergeReply, ConciergeTransport } from "./types";
  * builder from the runtime, so what a reviewer sees is what the runtime would produce. The lab transport never calls
  * the API, a model or any network.
  */
-export type ScenarioId = "answer" | "handoff_human" | "price" | "no_evidence" | "degraded" | "rate_limited" | "slow";
+export type ScenarioId = "answer" | "recommendation" | "handoff_human" | "price" | "no_evidence" | "degraded" | "rate_limited" | "slow";
 
 export const SCENARIOS: Array<{ id: ScenarioId; label: string; description: string }> = [
   { id: "answer", label: "Resposta fundamentada", description: "Resposta curta baseada em fontes aprovadas" },
+  { id: "recommendation", label: "Recomendação de passeios", description: "Sugestões do catálogo publicado, com links oficiais, sem preço nem disponibilidade" },
   { id: "handoff_human", label: "Pedido de atendimento humano (H1)", description: "Oferta de WhatsApp e e-mail, sem transferência" },
   { id: "price", label: "Preço (H9)", description: "Sem preço no chat; orienta a página do passeio ou a equipe" },
   { id: "no_evidence", label: "Sem informação confirmada (H4)", description: "Admite o limite e oferece a equipe" },
@@ -22,11 +23,17 @@ export const SCENARIOS: Array<{ id: ScenarioId; label: string; description: stri
 const GROUNDED =
   "A Ricardo Tour é uma agência de turismo focada em passeios, experiências e serviços turísticos no Rio de Janeiro, e também ajuda a planejar a viagem. Se quiser, posso apresentar alguns passeios clássicos para você começar.";
 
+// Illustrative recommendation in the shape the approved recommendation policy allows: published tours only, official links, no price, no availability.
+const RECOMMENDATION =
+  "Para uma primeira viagem ao Rio, dois passeios publicados no site costumam ajudar a começar: o Cristo Redentor + Pão de Açúcar (https://www.ricardotour.com/pt/tours/cmlhxkpy9000028zq27rhytew) reúne os dois cartões-postais da cidade, e o Confeitaria Colombo + City Tour Rio (https://www.ricardotour.com/pt/tours/cmlibniq40000z4zqkbujnutt) passa por pontos históricos. Preços, datas e disponibilidade ficam na página de cada passeio ou com a nossa equipe.";
+
 export function replyFor(id: ScenarioId): ConciergeReply {
   switch (id) {
     case "answer":
     case "slow":
       return { outcome: "ANSWER", answer: GROUNDED, response_kind: "grounded" };
+    case "recommendation":
+      return { outcome: "ANSWER", answer: RECOMMENDATION, response_kind: "grounded" };
     case "handoff_human":
       return { outcome: "HANDOFF", answer: handoffMessage("explicit_request"), response_kind: "handoff", handoff: buildHandoffOffer("H1", "explicit_request") };
     case "price":
