@@ -57,6 +57,7 @@ describe("POST /api/ai-concierge", () => {
     vi.resetModules();
     vi.doUnmock("@/lib/ai-concierge/runtime");
     vi.doUnmock("@/lib/ai-concierge/observability/notify");
+    vi.doUnmock("next/server");
   });
 
   const enable = () => {
@@ -146,6 +147,21 @@ describe("POST /api/ai-concierge", () => {
     expect((response as Response).status).toBe(200);
     expect(check).toHaveBeenCalledTimes(1);
     vi.doUnmock("@/lib/ai-concierge/observability/notify");
+  });
+
+  it("inside a request scope, registers the alert check with after() instead of running it before the reply", async () => {
+    enable();
+    mockRuntime({ outcome: "ANSWER", answer: "Olá!", response_kind: "grounded", source_ids: [], source_versions: [], chunk_ids: [] });
+    const check = mockHangingNotifier();
+    const deferred: Array<() => unknown> = [];
+    vi.doMock("next/server", async (importOriginal) => ({ ...(await importOriginal<typeof import("next/server")>()), after: (task: () => unknown) => { deferred.push(task); } }));
+    const response = await call({ message: "oi", locale: "pt" });
+    expect(response.status).toBe(200);
+    expect(deferred).toHaveLength(1);
+    expect(check).not.toHaveBeenCalled(); // nothing ran before the reply
+    void deferred[0]();
+    expect(check).toHaveBeenCalledTimes(1);
+    vi.doUnmock("next/server");
   });
 
   it("still evaluates alerts when the runtime fails (500 path)", async () => {

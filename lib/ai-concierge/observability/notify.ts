@@ -58,15 +58,22 @@ export function createAlertNotifier(options: { sender?: AlertSender; recipients?
   };
 }
 
-/** Real sender: the existing verified Resend identity. Returns false (never throws) when delivery fails. */
+/** Upper bound for one alert e-mail: it runs after the response, but a hanging send would keep the function alive (RT-96). */
+export const ALERT_SEND_TIMEOUT_MS = 5_000;
+
+/** Real sender: the existing verified Resend identity. Returns false (never throws) when delivery fails or times out. */
 export const resendAlertSender: AlertSender = async ({ to, subject, text }) => {
+  let timer: ReturnType<typeof setTimeout> | undefined;
   try {
     if (!process.env.RESEND_API_KEY) return false;
     const { resend } = await import("@/lib/resend");
-    const { error } = await resend.emails.send({ from: TRANSACTIONAL_FROM, to, subject: subject.replace(/[\r\n]+/g, " "), text });
-    return !error;
+    const send = resend.emails.send({ from: TRANSACTIONAL_FROM, to, subject: subject.replace(/[\r\n]+/g, " "), text }).then(({ error }) => !error);
+    const timeout = new Promise<false>((resolve) => { timer = setTimeout(() => resolve(false), ALERT_SEND_TIMEOUT_MS); });
+    return await Promise.race([send, timeout]);
   } catch {
     return false;
+  } finally {
+    if (timer) clearTimeout(timer);
   }
 };
 

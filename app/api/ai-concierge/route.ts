@@ -27,7 +27,8 @@ function checkAlertsAfterResponse() {
   try {
     after(task);
   } catch {
-    void task().catch(() => {});
+    // Promise.resolve().then(): even a synchronous throw inside the task becomes a handled rejection, never a broken response.
+    void Promise.resolve().then(task).catch(() => {});
   }
 }
 
@@ -63,7 +64,9 @@ export async function POST(request: Request) {
   } catch (cause) {
     // Never surface internals; the visitor still gets a degraded reply that offers the team.
     reportServerError({ source: "api_route", where: "api/ai-concierge:POST", error: cause });
-    checkAlertsAfterResponse(); // failures are exactly what the alerts watch, so they are evaluated on this path too
+    // Keeps alert evaluation on every path. This route-level exception itself is not a runtime metric (it goes to
+    // reportServerError), so this adds no new signal by itself; earlier failures already counted are still evaluated.
+    checkAlertsAfterResponse();
     return error("INTERNAL_ERROR", 500);
   }
 }
