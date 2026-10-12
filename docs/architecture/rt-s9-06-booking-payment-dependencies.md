@@ -16,7 +16,7 @@ Volume II, Sprint 13 says Payment Readiness reuses "RT-85 (order model and state
 | RT-89 | Passenger + checkout UX for **flights** | **No** as written; a tour checkout contract is a new, separate piece of work. |
 | RT-90 | Flight security architecture review (blocks RT-86/RT-87 production use) | **Partly**: its control list (webhook signature/replay, idempotency, PII, log redaction, secrets) must be extended to cover the tour payment path. |
 
-Consequence: Sprint 13 needs its own tour-payment tickets. This must be reflected in the Volume II Sprint 13 text by the Owner or in a later Volume II revision (the Volume II body could not be edited by this session). Nothing in Sprint 9 depends on it.
+Consequence: Sprint 13 needs its own tour-payment tickets. The Owner confirmed this correction on 2026-10-12, and it is recorded in the Jira goal of Sprint 13 (sprint id 175), which supersedes the reuse sentence in Volume II section 5 for planning purposes. Nothing in Sprint 9 depends on it.
 
 ## 2. What exists today for tours (RT-98, verified)
 

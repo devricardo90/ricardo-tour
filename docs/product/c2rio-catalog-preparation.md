@@ -27,6 +27,28 @@
 6. The document contains **links to external media folders** for each product. The rights to reuse that media are unknown (RT-79); the links must not be copied into public pages.
 7. The tariff includes products outside Rio city (day trips to other towns/coasts), transfers and tickets "upon request". Launch scope today is Rio de Janeiro only (`LAUNCH_CITY`, `lib/catalog/public-trips.ts:29`); which products are in scope is an Owner decision.
 
+### 1.1 Confirmation of the "NET / non-commissionable" statement (re-read 2026-10-12)
+
+The reference tariff was re-read from the Owner's Drive on 2026-10-12. The closing note of the document states, in Portuguese, English and Spanish, that the tariff **is NET and non-commissionable** ("O tarifário é NET e não comissionável"), that it is subject to change, and that existing bookings or bookings made within 7 days after a new tariff is received are honored at the previous rate. The note also says reservations go through the partner's sales department.
+
+**What this does and does not establish**
+- It establishes how the *document* describes itself. It does **not** establish what the *contract* between Ricardo Tour and C2Rio says (that agreement is not in the repository or the Drive search results).
+- **No authorization is presumed** for: applying a markup, treating any amount as a commission, deriving a public sale price from a tariff figure, or publishing any tariff-derived value. Each of these needs written confirmation from the Owner, and the commercial terms below need contractual confirmation.
+
+**Contractual conditions that must be confirmed in writing before any partner price is used** (record answer, date and source for each):
+1. Whether Ricardo Tour may resell at a price above the net rate (markup), and any limits on that (price parity, minimum/maximum sale price, public price publication rules).
+2. Whether any commission exists in addition to or instead of a markup (the tariff says non-commissionable).
+3. Which tariff version governs a sale, the tariff's validity window, and how changes are notified (the 7-day honoring rule).
+4. Payment flow and settlement: who collects from the customer, when and how Ricardo Tour pays the partner, payment deadlines, currency.
+5. Booking and confirmation process: channel, response time, what counts as confirmed, who communicates with the customer.
+6. Cancellation, no-show, change and refund conditions, and who bears them.
+7. Child/adult definitions and age-band rules, and how the partner wants them shown to customers.
+8. Permission to use the partner's descriptions, product names and photos, and whether the partner's brand may be named publicly (and with what wording).
+9. Exclusivity, non-circumvention and data-sharing terms (customer data passed to the partner; privacy implications, RT-80 gap G2).
+10. Liability, insurance and incident handling for partner-operated tours; who is the seller of record toward the customer.
+
+Until these are confirmed, partner records stay `UNCONFIRMED` (RT-99 `recordStatus`) and nothing derived from the tariff is published.
+
 ## 2. Ingestion template — one record per PARTNER tour
 
 Each field has an **origin** and a **confirmation status**. Nothing may be published while a required field is `UNCONFIRMED`.
