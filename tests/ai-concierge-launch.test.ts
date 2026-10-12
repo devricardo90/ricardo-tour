@@ -56,6 +56,7 @@ describe("POST /api/ai-concierge", () => {
     vi.unstubAllEnvs();
     vi.resetModules();
     vi.doUnmock("@/lib/ai-concierge/runtime");
+    vi.doUnmock("@/lib/ai-concierge/observability/notify");
   });
 
   const enable = () => {
@@ -124,6 +125,37 @@ describe("POST /api/ai-concierge", () => {
     const response = await call({ message: "oi", locale: "pt" });
     expect(response.status).toBe(500);
     expect(JSON.stringify(await response.json())).not.toMatch(/secret|sk-live|stack/);
+  });
+
+  // RT-96 (G3): a slow or hanging alert e-mail must never delay the visitor's answer, and failures are still evaluated.
+  const mockHangingNotifier = () => {
+    const check = vi.fn(() => new Promise<never>(() => {}));
+    vi.doMock("@/lib/ai-concierge/observability/notify", () => ({ getAlertNotifier: () => ({ check }) }));
+    return check;
+  };
+
+  it("answers without waiting for alert delivery", async () => {
+    enable();
+    mockRuntime({ outcome: "ANSWER", answer: "Olá!", response_kind: "grounded", source_ids: [], source_versions: [], chunk_ids: [] });
+    const check = mockHangingNotifier();
+    const response = await Promise.race([
+      call({ message: "oi", locale: "pt" }),
+      new Promise<"timeout">((resolve) => setTimeout(() => resolve("timeout"), 2_000)),
+    ]);
+    expect(response).not.toBe("timeout");
+    expect((response as Response).status).toBe(200);
+    expect(check).toHaveBeenCalledTimes(1);
+    vi.doUnmock("@/lib/ai-concierge/observability/notify");
+  });
+
+  it("still evaluates alerts when the runtime fails (500 path)", async () => {
+    enable();
+    vi.doMock("@/lib/ai-concierge/runtime", () => ({ handleConciergeMessage: vi.fn(async () => { throw new Error("boom"); }) }));
+    const check = mockHangingNotifier();
+    const response = await call({ message: "oi", locale: "pt" });
+    expect(response.status).toBe(500);
+    expect(check).toHaveBeenCalledTimes(1);
+    vi.doUnmock("@/lib/ai-concierge/observability/notify");
   });
 });
 

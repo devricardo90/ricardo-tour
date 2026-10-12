@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { isConciergeEnabled } from "@/lib/ai-concierge/launch";
 import { handleConciergeMessage } from "@/lib/ai-concierge/runtime";
 import { getServerObservability } from "@/lib/ai-concierge/observability";
@@ -17,6 +17,19 @@ export const dynamic = "force-dynamic";
  */
 const MAX_BODY_BYTES = 12_000;
 const NO_STORE = { "Cache-Control": "no-store" };
+
+/**
+ * RT-96 (G3): alert evaluation and e-mail delivery run AFTER the response is sent, so a slow mail provider never delays the
+ * visitor. `after()` needs a request scope; outside one (unit tests) the task still runs, fire-and-forget. The notifier never throws.
+ */
+function checkAlertsAfterResponse() {
+  const task = () => getAlertNotifier().check(getServerObservability().metrics.snapshot());
+  try {
+    after(task);
+  } catch {
+    void task().catch(() => {});
+  }
+}
 
 const error = (code: string, status: number, extra: Record<string, string> = {}) =>
   NextResponse.json({ status: "error", error: { code } }, { status, headers: { ...NO_STORE, ...extra } });
@@ -41,8 +54,8 @@ export async function POST(request: Request) {
     // Temporary anonymous session id (memory-only in the browser, rotated hourly): enforced by the per-session limit, never stored.
     const sessionId = request.headers.get("x-concierge-session") ?? undefined;
     const result = await handleConciergeMessage(body, process.env, { ip: forwarded || request.headers.get("x-real-ip") || undefined, sessionId });
-    // Essential alerts (content-free; e-mail only to explicitly configured recipients; never affects the response).
-    await getAlertNotifier().check(getServerObservability().metrics.snapshot());
+    // Essential alerts (content-free; e-mail only to explicitly configured recipients; never affects or delays the response).
+    checkAlertsAfterResponse();
     const reply = toConciergeReply(result);
     const headers: Record<string, string> = { ...NO_STORE };
     if (result.outcome === "RATE_LIMITED" && typeof result.retry_after_seconds === "number") headers["Retry-After"] = String(Math.max(1, Math.ceil(result.retry_after_seconds)));
@@ -50,6 +63,7 @@ export async function POST(request: Request) {
   } catch (cause) {
     // Never surface internals; the visitor still gets a degraded reply that offers the team.
     reportServerError({ source: "api_route", where: "api/ai-concierge:POST", error: cause });
+    checkAlertsAfterResponse(); // failures are exactly what the alerts watch, so they are evaluated on this path too
     return error("INTERNAL_ERROR", 500);
   }
 }
