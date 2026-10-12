@@ -2,7 +2,7 @@
 /**
  * RT-45: rasterises the globe's three authored textures off the main thread. The drawing code is the same
  * world-atlas.ts used on the main thread (it switches to OffscreenCanvas when there is no `document`), so the pixels
- * are the same; only the thread changes. Software-rendered 2D canvas (Lighthouse/SwiftShader, devices without
+ * are the same (verified in Chromium); only the thread changes. Software-rendered 2D canvas (Lighthouse/SwiftShader, devices without
  * canvas acceleration) spent ~4 s of blocking main-thread time here before this change.
  *
  * Replies with un-premultiplied RGBA (getImageData), which is exactly what texImage2D uploads from a canvas with the

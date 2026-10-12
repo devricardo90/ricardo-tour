@@ -1,5 +1,11 @@
 import { expect, test, type Page } from "@playwright/test";
 
+// Read-only guarantee for form tests: every non-GET request is aborted, so even a client-validation regression (or a
+// click before hydration) can never submit data — locally or against production.
+async function blockWrites(page: Page) {
+  await page.route("**/*", (route) => (route.request().method() === "GET" ? route.continue() : route.abort()));
+}
+
 const LOCALES = ["pt", "en", "es"] as const;
 
 // Console noise that is not a product defect (dev-server HMR, third-party widgets).
@@ -43,7 +49,8 @@ for (const locale of LOCALES) {
     });
 
     test("contact page renders the form and blocks an empty submit", async ({ page }) => {
-      await page.goto(`/${locale}/contato`);
+      await blockWrites(page);
+      await page.goto(`/${locale}/contato`, { waitUntil: "networkidle" }); // hydrated, so client validation is active
       const form = page.getByTestId("contact-form");
       await expect(form).toBeVisible();
       await form.locator('button[type="submit"]').click();
@@ -88,7 +95,8 @@ test("footer exposes contact channels and the institutional reference (pt)", asy
 test("tour detail shows the request form and blocks an empty submit (pt)", async ({ page }) => {
   await page.goto("/pt/tours");
   const href = await page.locator('a[href^="/pt/tours/"]').first().getAttribute("href");
-  await page.goto(href!);
+  await blockWrites(page);
+  await page.goto(href!, { waitUntil: "networkidle" }); // hydrated, so client validation is active
   const form = page.getByTestId("tour-request-form");
   await expect(form).toBeVisible();
   await form.locator('button[type="submit"]').click();

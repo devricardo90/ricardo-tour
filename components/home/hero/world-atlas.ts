@@ -249,7 +249,7 @@ export type TextureCanvas = HTMLCanvasElement | OffscreenCanvas;
 type Context2D = CanvasRenderingContext2D | OffscreenCanvasRenderingContext2D;
 
 function createCanvas(width: number, height: number): { canvas: TextureCanvas; context: Context2D } | null {
-  // Same 2D API, same drawing calls and same pixels either way; only where the rasterisation runs differs.
+  // Same 2D API and drawing calls either way; pixel parity verified in Chromium (rt-45-globe-texture-parity).
   const canvas: TextureCanvas = typeof document === "undefined" ? new OffscreenCanvas(width, height) : document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;

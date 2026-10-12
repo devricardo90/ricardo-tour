@@ -138,8 +138,9 @@ export default function GlobeJourney({ locale }: { locale: string }) {
       // stays on stage — the same first frame visitors already see before hydration. A device without WebGL keeps that
       // static frame for good ("unavailable"); the journey stays usable and the next section stays reachable.
       // WebGL2 is probed first (as before RT-45): without it the textures are never produced.
-      const textures = supportsGlobe(canvas) ? loadGlobeTextures() : { promise: Promise.resolve(null), cancel: () => {} };
-      textures.promise.then(loaded => {
+      // Only `cancel` is kept for the cleanup: holding the loader result would keep ~29 MB of texels alive after upload.
+      const { promise: texturesReady, cancel: cancelTextures } = supportsGlobe(canvas) ? loadGlobeTextures() : { promise: Promise.resolve(null), cancel: () => {} };
+      texturesReady.then(loaded => {
         if (disposed) return;
         try {
           globe = loaded ? createGlobe(canvas, loaded, () => { dirty = true; }) : null;
@@ -373,7 +374,7 @@ export default function GlobeJourney({ locale }: { locale: string }) {
         trigger.kill();
         timeline.kill();
         disposed = true;
-        textures.cancel();
+        cancelTextures();
         globe?.dispose();
         globe = null;
         delete element.dataset.mode;

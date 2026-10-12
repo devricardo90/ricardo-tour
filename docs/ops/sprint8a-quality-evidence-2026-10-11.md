@@ -144,3 +144,29 @@ A separate review agent read the full diff. Verdict: **APPROVE WITH FIXES**.
    - Mobile LCP is ~3.7–4.6 s on all pages in the lab. On mobile the dominant phase is render delay (main-thread / hydration under 4× CPU), not resources.
    - 4 render-blocking CSS files (~22 KB gzip): `inlineCss` is a trade-off (no caching) and was **not** applied without measurement.
 5. **RT-47:** production-host validation of OG and structured data after an authorized deployment.
+
+## 10. Second independent review (2026-10-12) of the final code `c7eb334`
+
+**Verdict:** APPROVE WITH FIXES, no blockers. It confirmed as correct: worker cancellation, the WebGL2 probe, the async handover, the TDZ/SSR safety, the header link, the contrast numbers (recomputed) and the A/B pairing logic.
+
+**Fixed in the follow-up commit:**
+1. **Memory regression.** The effect cleanup kept the loader result reachable, so about 29 MB of texels stayed alive on the Home after upload. Only `cancel` is retained now. The fix was verified by reading the code; heap usage was not measured.
+2. **Robustness regression.** On the no-worker path, a drawing failure could throw out of the GSAP matchMedia callback, which the pre-RT-45 try/catch had prevented. `drawOnMainThread` now resolves null.
+   - New test: `tests/globe-textures.test.ts`.
+   - The previous loader fails it with `ReferenceError: OffscreenCanvas is not defined`; the fixed one passes.
+3. **Comment accuracy.**
+   - The ResizeObserver cache can be one frame late after a resize (a one-frame stretch, then a redraw).
+   - Pixel parity is verified in **Chromium only**, not in Firefox or WebKit.
+4. **e2e form tests.** They now wait for hydration (`networkidle`) and abort every non-GET request. Even a client-validation regression, or a run against production, cannot submit data.
+5. **Evidence wording.** The commit message of `c7eb334` quotes the *draft* A/B for mobile Home (Perf 55 → 75, TBT 1886 → 447 ms). The **final code** was measured with only 3 pairs: Perf 55 → 67, LCP 4604 → 4166 ms, TBT 1847 → 718 ms (§3). The final-code numbers are the ones to cite.
+6. **Scripts.**
+   - `rt-46-image-bg-contrast.mjs` takes the audit file as an argument.
+   - The `rt-46-gold-contrast-audit.mjs` limits are documented: 1280 px only, rgb()/rgba() only, translucent backgrounds skipped, hover measured against the non-hover background.
+   - `rt-45-ab-runs.mjs` records null instead of ±Infinity when CPU load is unavailable.
+
+**Re-verified on a production build of the fix:**
+- behaviour suite, including first frames: ALL PASS
+- RT-20: PASS
+- public e2e: 47 passed / 3 skipped
+- Vitest: 715 passed / 6 skipped
+- `tsc`: 0; ESLint: 0

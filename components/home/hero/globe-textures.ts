@@ -6,10 +6,16 @@ export type TextureSource = TexImageSource | TexturePixels;
 export type GlobeTextures = { earth: TextureSource; glow: TextureSource; detail: TextureSource };
 
 function drawOnMainThread(): GlobeTextures | null {
-  const earth = drawEarthTexture();
-  const glow = drawGlowTexture();
-  const detail = drawDetailTexture();
-  return earth && glow && detail ? { earth, glow, detail } : null;
+  // Never throws: a drawing failure resolves to null (the caller marks the globe "unavailable" and keeps the static frame),
+  // exactly like the pre-RT-45 try/catch around createGlobe.
+  try {
+    const earth = drawEarthTexture();
+    const glow = drawGlowTexture();
+    const detail = drawDetailTexture();
+    return earth && glow && detail ? { earth, glow, detail } : null;
+  } catch {
+    return null;
+  }
 }
 
 function workerSupported() {
@@ -24,7 +30,8 @@ function workerSupported() {
 /**
  * RT-45: produce the globe textures without blocking the main thread when the browser can rasterise 2D canvas in a
  * worker (OffscreenCanvas). Otherwise — or if the worker fails — the textures are drawn on the main thread exactly as
- * before. Same drawing code, same pixels either way. Resolves null only when no 2D context exists at all.
+ * before. Same drawing code; pixel parity verified in Chromium (rt-45-globe-texture-parity), not yet in Firefox/WebKit.
+ * Resolves null when no 2D context exists or drawing fails (never rejects).
  */
 export function loadGlobeTextures(): { promise: Promise<GlobeTextures | null>; cancel: () => void } {
   if (!workerSupported()) return { promise: Promise.resolve(drawOnMainThread()), cancel: () => {} };

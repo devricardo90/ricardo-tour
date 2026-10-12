@@ -1,13 +1,13 @@
 // RT-46: contrast of gold text drawn over images/video (cases the computed-style audit cannot resolve). For each such
 // text element: scroll it into view, wait for media, hide only its glyphs (color: transparent), screenshot its box,
 // and compare the text colour with the background pixels actually behind it — worst case (brightest pixel) and median.
-// Usage: node scripts/rt-46-image-bg-contrast.mjs <baseUrl> [out.json]
+// Usage: node scripts/rt-46-image-bg-contrast.mjs <baseUrl> [out.json] [audit.json = output of rt-46-gold-contrast-audit.mjs]
 import fs from "node:fs";
 import sharp from "sharp";
 import { chromium } from "@playwright/test";
 
-const [base = "http://127.0.0.1:3200", out = ".tmp/rt-46-image-bg-contrast.json"] = process.argv.slice(2);
-const audit = JSON.parse(fs.readFileSync(".tmp/rt-46-gold-contrast-after.json", "utf8")).filter((x) => x.pass === null);
+const [base = "http://127.0.0.1:3200", out = ".tmp/rt-46-image-bg-contrast.json", auditFile = ".tmp/rt-46-gold-contrast.json"] = process.argv.slice(2);
+const audit = JSON.parse(fs.readFileSync(auditFile, "utf8")).filter((x) => x.pass === null);
 const lum = (r, g, b) => { const v = [r, g, b].map((c) => c / 255).map((c) => (c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4)); return 0.2126 * v[0] + 0.7152 * v[1] + 0.0722 * v[2]; };
 const hexLum = (h) => lum(...[1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16)));
 const browser = await chromium.launch({ args: ["--enable-gpu", "--ignore-gpu-blocklist", "--use-angle=d3d11"] });

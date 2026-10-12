@@ -330,8 +330,9 @@ export function createGlobe(canvas: HTMLCanvasElement, textures: GlobeTextures, 
   let height = 0;
   // CSS size of the canvas, cached. Reading clientWidth/clientHeight inside render() forced a synchronous layout on
   // every frame, right after GSAP's style writes (Lighthouse forced-reflow; ~0.6 s of main-thread time on a 4x-throttled
-  // load, RT-45). The cache is refreshed by a ResizeObserver, whose callback runs after layout, so the values are
-  // identical to what the per-frame reads returned; the drawing, camera and marker maths are unchanged.
+  // load, RT-45). The cache is refreshed by a ResizeObserver, whose callback runs after layout: after a resize the first
+  // frame may still use the previous size (one-frame stretch), then onSizeChange redraws at the new size. The drawing,
+  // camera and marker maths are unchanged.
   let cssWidth = canvas.clientWidth;
   let cssHeight = canvas.clientHeight;
   const sizeObserver = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(() => {

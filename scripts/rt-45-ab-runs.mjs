@@ -67,7 +67,7 @@ for (let i = 1; i <= rounds; i++) {
 }
 const summary = { urlA, urlB, rounds, started, finished: new Date().toISOString(), host: { cpu: os.cpus()[0].model, logical: os.cpus().length }, pages: {} };
 for (const [key, { A, B }] of Object.entries(results)) {
-  const agg = (arr) => Object.fromEntries(Object.keys(arr[0]).map((k) => { const v = arr.map((x) => x[k]).filter((x) => x != null); return [k, { median: median(v), min: Math.min(...v), max: Math.max(...v) }]; }));
+  const agg = (arr) => Object.fromEntries(Object.keys(arr[0]).map((k) => { const v = arr.map((x) => x[k]).filter((x) => x != null); return [k, v.length ? { median: median(v), min: Math.min(...v), max: Math.max(...v) } : null]; }));
   // Paired deltas: round i of B minus round i of A (same page, same minute).
   const paired = Object.fromEntries(["perf", "lcp", "tbt", "cls", "fcp"].map((k) => [k, A.map((a, i) => B[i][k] - a[k])]));
   summary.pages[key] = { A: agg(A), B: agg(B), paired: Object.fromEntries(Object.entries(paired).map(([k, d]) => [k, { median: median(d), min: Math.min(...d), max: Math.max(...d), allSameSign: d.every((x) => x < 0) || d.every((x) => x > 0) }])), raw: { A, B } };

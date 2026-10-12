@@ -1,6 +1,9 @@
 // RT-46: measure WCAG 1.4.3 contrast of every gold text node (incl. :hover colour classes) against its effective
 // background, on every public route and locale. Complements axe (Lighthouse), which skips hover states and pages
 // Lighthouse was not run on. Usage: node scripts/rt-46-gold-contrast-audit.mjs <baseUrl> [out.json]
+// Limits (second review): 1280px viewport only (mobile-menu text not audited); colours parsed as rgb()/rgba() only;
+// translucent backgrounds are skipped to the next opaque ancestor; hover is measured against the non-hover background;
+// image/video backgrounds are reported for rt-46-image-bg-contrast.mjs.
 import fs from "node:fs";
 import { chromium } from "@playwright/test";
 
