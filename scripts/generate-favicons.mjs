@@ -10,6 +10,10 @@ const CHARCOAL = { r: 11, g: 14, b: 17, alpha: 1 };
 // Monogram bounding box in the 2172x724 source (includes the Christ arc and wave).
 const CROP = { left: 70, top: 100, width: 620, height: 510 };
 
+const meta = await sharp(SRC).metadata();
+if (meta.width !== 2172 || meta.height !== 724) {
+  throw new Error(`Logo is ${meta.width}x${meta.height}; CROP was tuned for 2172x724 - re-tune CROP.`);
+}
 const mark = await sharp(SRC).extract(CROP).toBuffer();
 
 async function tile(size, { rounded }) {

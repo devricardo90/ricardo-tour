@@ -1,6 +1,7 @@
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import sharp from "sharp";
 import { describe, expect, it } from "vitest";
 
 // RT-RB-S9-01: the Vercel default favicon must be gone; Ricardo Tour icon set in place.
@@ -41,5 +42,20 @@ describe("favicon assets (RT-RB-S9-01)", () => {
   it("icon.png is 512x512 and apple-icon.png is 180x180", () => {
     expect(pngSize(readFileSync(join(APP, "icon.png")))).toEqual({ width: 512, height: 512 });
     expect(pngSize(readFileSync(join(APP, "apple-icon.png")))).toEqual({ width: 180, height: 180 });
+  });
+
+  it("icon.png carries the gold Ricardo Tour mark on a dark tile (not blank, not default)", async () => {
+    const { data, info } = await sharp(join(APP, "icon.png")).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    let gold = 0;
+    let dark = 0;
+    const total = info.width * info.height;
+    for (let i = 0; i < data.length; i += 4) {
+      const [r, g, b, a] = [data[i], data[i + 1], data[i + 2], data[i + 3]];
+      if (a < 200) continue; // rounded corners
+      if (r > 150 && g > 100 && b < 110 && r > b + 60) gold++;
+      if (r < 30 && g < 30 && b < 35) dark++;
+    }
+    expect(gold / total).toBeGreaterThan(0.05);
+    expect(dark / total).toBeGreaterThan(0.4);
   });
 });
