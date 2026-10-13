@@ -7,6 +7,10 @@
  *    existing draft with the same title to avoid semantic duplication.
  * 3. seed-001-cristo-dona-marta is despublished via updateMany (safe for legacy).
  *
+ * DEVELOPMENT ONLY (Owner decision 2026-10-13, RT-99/RT-100): this seed populates LOCAL databases. It refuses to run
+ * against a non-local DATABASE_URL (see lib/db/local-database.ts). The public catalog's source of truth is the hosted
+ * database, never this file; the seed ids below are NOT in the public allowlist (lib/catalog/public-trips.ts).
+ *
  * Rules:
  * - NO deleteMany on Trip, Booking, or any other table
  * - NO schema changes, NO migrations
@@ -16,6 +20,7 @@
 import { PrismaClient, PhysicalLevel } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import dotenv from 'dotenv'
+import { REMOTE_SEED_OVERRIDE, isLocalDatabaseUrl } from '../lib/db/local-database'
 
 dotenv.config()
 
@@ -67,6 +72,13 @@ async function main() {
   const connectionString = process.env.DATABASE_URL
   if (!connectionString) {
     console.error('[seed] ERROR: DATABASE_URL is not set. Aborting.')
+    process.exit(1)
+  }
+
+  // Owner decision 2026-10-13: the seed is development-only. Never print the connection string (it holds credentials).
+  if (!isLocalDatabaseUrl(connectionString) && process.env.ALLOW_REMOTE_SEED !== REMOTE_SEED_OVERRIDE) {
+    console.error('[seed] REFUSING to run: DATABASE_URL does not point to a local database.')
+    console.error('[seed] The seed is development-only (Owner decision 2026-10-13). Nothing was changed.')
     process.exit(1)
   }
 
@@ -442,6 +454,17 @@ async function main() {
       },
     })
     console.log(`[seed] Schedule for Helicóptero Cristo upserted: ${s7.id}`)
+
+    // -----------------------------------------------------------------------
+    // RT-100: partner structure for C2Rio. INACTIVE, no public label and NO tour: nothing is published and no tariff,
+    // commission or markup is registered. update: {} keeps any later manual change (e.g. activation) untouched.
+    // -----------------------------------------------------------------------
+    const c2rio = await prisma.partner.upsert({
+      where: { slug: 'c2rio' },
+      update: {},
+      create: { name: 'C2Rio', slug: 'c2rio', status: 'INACTIVE' },
+    })
+    console.log(`[seed] Partner structure upserted: ${c2rio.slug} (${c2rio.status}); no partner tour created.`)
 
     console.log('[seed] RT-FINAL-04C2 final catalog seed completed successfully.')
     console.log('[seed] Active catalog: 6 tours published, seed-001 despublished.')

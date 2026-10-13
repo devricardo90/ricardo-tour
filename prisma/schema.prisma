@@ -84,10 +84,74 @@ model Trip {
   childrenAllowed Boolean       @default(true)
   durationDays    Int           @default(1)
   physicalLevel   PhysicalLevel @default(LIGHT)
+  // RT-100 (Sprint 9): who operates the tour. Existing rows are UNCLASSIFIED until the Owner classifies them; UNCLASSIFIED
+  // is an internal state and is never shown to visitors. DB CHECK: operationType = PARTNER <=> partnerId IS NOT NULL.
+  operationType   OperationType @default(UNCLASSIFIED)
+  partnerId       String?
+  partner         Partner?      @relation(fields: [partnerId], references: [id], onDelete: Restrict)
+  commercial      TripCommercial?
   analyticsEvents  AnalyticsEvent[]
   bookings        Booking[]
   schedules       TripSchedule[]
   translationLogs TranslationJobLog[]
+
+  @@index([partnerId])
+}
+
+// RT-100: public-safe partner identity. No contact, contract or financial data on this table.
+model Partner {
+  id          String        @id @default(cuid())
+  name        String
+  slug        String        @unique
+  // Safe default: a partner stays INACTIVE (its tours are hidden by the public gate) until explicitly activated.
+  status      PartnerStatus @default(INACTIVE)
+  // Approved 'Operated by ...' wording per locale ({ pt, en, es }); null = no label is shown.
+  publicLabel Json?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  trips       Trip[]
+}
+
+// RT-100: PRIVATE commercial data for a trip. Never selected by any public reader, API or page.
+// Every business field is nullable; a row may be empty. No value is assumed (Owner decision 2026-10-13).
+model TripCommercial {
+  id                String                 @id @default(cuid())
+  tripId            String                 @unique
+  trip              Trip                   @relation(fields: [tripId], references: [id], onDelete: Restrict)
+  priceSource       PriceSource?
+  // Free text identifying the tariff document and version; implies no number.
+  tariffReference   String?
+  tariffConfirmedAt DateTime?
+  tariffConfirmedBy String?
+  // ISO 4217. Required (CHECK) whenever a rate amount is stored.
+  currency          String?
+  // No default and no value field on purpose: markup/commission is not presumed until the contract exists.
+  remunerationModel RemunerationModel?
+  recordStatus      CommercialRecordStatus @default(UNCONFIRMED)
+  notes             String?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+  rates             TripCommercialRate[]
+}
+
+// RT-100: PRIVATE rate rows, prepared for child rates, seasonality and price categories. Created empty.
+model TripCommercialRate {
+  id               String         @id @default(cuid())
+  tripCommercialId String
+  tripCommercial   TripCommercial @relation(fields: [tripCommercialId], references: [id], onDelete: Cascade)
+  // Price category code (e.g. adult / child / other); free text so categories can evolve without a migration.
+  category         String
+  ageMin           Int?
+  ageMax           Int?
+  seasonLabel      String?
+  validFrom        DateTime?
+  validTo          DateTime?
+  netAmountCents   Int?
+  currency         String?
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@index([tripCommercialId])
 }
 
 model TripSchedule {
@@ -212,6 +276,34 @@ model TranslationJobLog {
 
   @@index([tripId, createdAt])
   @@index([status, createdAt])
+}
+
+enum OperationType {
+  UNCLASSIFIED
+  OWN
+  PARTNER
+}
+
+enum PartnerStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum PriceSource {
+  OWNER_SET
+  PARTNER_TARIFF
+  CONTRACT
+}
+
+enum RemunerationModel {
+  MARKUP
+  COMMISSION
+}
+
+enum CommercialRecordStatus {
+  UNCONFIRMED
+  CONFIRMED
+  APPROVED_FOR_PUBLICATION
 }
 
 enum PhysicalLevel {

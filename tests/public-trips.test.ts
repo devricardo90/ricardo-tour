@@ -93,7 +93,11 @@ describe("public catalog gate (RT-53)", () => {
       [...database.filter((t) => where.id.in.includes(t.id) && t.isPublished === where.isPublished)].reverse()
     );
     const result = await getPublicTrips();
-    expect(findMany).toHaveBeenCalledWith({ where: { id: { in: [...LAUNCH_TRIP_IDS] }, isPublished: true } });
+    expect(findMany).toHaveBeenCalledWith({
+      where: { id: { in: [...LAUNCH_TRIP_IDS] }, isPublished: true },
+      // RT-100: only the partner status is joined (PARTNER_INACTIVE rule); no commercial relation is ever selected.
+      include: { partner: { select: { status: true } } },
+    });
     expect(result.map((t) => t.id)).toEqual([...LAUNCH_TRIP_IDS]);
 
     findMany.mockResolvedValueOnce([trip({ id: ROCINHA, priceCents: 0 }), trip({ id: CRISTO })]);

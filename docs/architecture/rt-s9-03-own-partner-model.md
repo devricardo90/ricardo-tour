@@ -20,7 +20,7 @@
 4. **Public facts and private facts are different tables.** What a visitor may see (who operates the tour) is on `Trip`/`Partner`; what only the business may see (cost, remuneration, tariff reference) is in `TripCommercial`.
 5. **No invented claims.** "Operated by …" wording is shown only where the Owner has approved it, and never implies an official partnership, certification or guarantee that is not documented.
 
-## 3. Proposed data model (conceptual — names may change in RT-100)
+## 3. Proposed data model (conceptual) — **partly superseded by section 10 (Owner decision, 2026-10-13)**
 
 ### 3.1 `Trip` — two additive, public-safe fields
 
@@ -161,3 +161,28 @@ No monetary value appears here; "open" means the Owner/contract decides.
 2. Every monetary field is marked as supplied by the Owner/contract — §3.3.
 3. Owner questions listed — §8.
 4. **Owner approval of the model (Owner Gate) is pending** and blocks RT-100.
+
+## 10. Owner decision and approved final model (2026-10-13)
+
+**Decision (Owner, recorded verbatim in Jira RT-99):** approves the commercial architecture with two kinds of tours — **OWN** (operated by Ricardo Tour) and **PARTNER** (operated by partners) — and authorizes the **structural** implementation (RT-100) under twelve conditions. The four existing public tours (Tour Privado Premium; Confeitaria Colombo + City Tour; Tour Favela Rocinha; Cristo + Pão de Açúcar) stay **unchanged** and **unclassified** until the Owner confirms; no public tour is added or removed; prices, texts, photographs, availability and the booking flow do not change; `prisma/seed.ts` is development-only; the C2Rio partner gets its own structure but **no new tour is published**; no commercial tariff is registered without an approved source and conditions; no commission or markup authorization is assumed; private financial data is never exposed by public APIs or pages; the hosted Neon database is not modified and migrations are validated only in an isolated database.
+
+### 10.1 How this decision changes the proposal in sections 3–8A
+
+| Topic | Proposal (§3) | **Approved / implemented in RT-100** | Reason |
+|---|---|---|---|
+| `Trip.operationType` | enum `OWN \| PARTNER`, nullable, `null` = unclassified | enum **`UNCLASSIFIED \| OWN \| PARTNER`**, `NOT NULL DEFAULT 'UNCLASSIFIED'` | Owner condition 2 (explicit temporary internal state). Existing rows become `UNCLASSIFIED` automatically; nothing is presumed OWN or PARTNER (conditions 1, 5). `UNCLASSIFIED` is never displayed (condition 4). |
+| PARTNER ⇔ partner link | CHECK or application-only | **Raw-SQL CHECK in the migration**: `(operationType = 'PARTNER') = (partnerId IS NOT NULL)`; plus a pure validator for application code | Preferred option in §3.1; all existing rows satisfy it |
+| C2Rio partner | `Partner` table | `Partner` table (own structure, condition 7); a **C2Rio row exists only in the development seed, `INACTIVE`**, no label, no tour | Structure without publishing anything |
+| Amounts | single `costCents` / `remunerationValue` placeholders | **Removed** from `TripCommercial`. Amounts live in a new child table **`TripCommercialRate`** (empty), keyed by price category, optional age range, optional season/validity window; every value nullable | Conditions 8–10: prepared for child rates, seasonality and price categories without registering any value |
+| `remunerationModel` | enum `MARKUP \| COMMISSION`, nullable, with a value field | nullable enum kept (**no default, no value field**) | Condition 9: no commission or markup authorization is assumed; the value field is deferred until the contract exists (Q3) |
+| Public gate | add `PARTNER_INACTIVE` | implemented; the four existing trips (UNCLASSIFIED, no partner) are unaffected | Condition 3 |
+| Isolation of private data | separate table + projection | `TripCommercial`/`TripCommercialRate` are separate tables; no public reader selects them; a test fails if any public reader, API or page references them | Condition 11 |
+
+### 10.2 Questions still open (do not block RT-100; needed before the first PARTNER tour is published)
+Q2 (partner display name and approved label PT/EN/ES), Q3 (contract form: markup vs commission), Q4 (currency), Q5 (who confirms a partner booking and how), and the presentation of child pricing (RT-101 Q4).
+
+### 10.3 RT-99 acceptance status
+1. Document exists and was independently reviewed — met.
+2. Every monetary field is marked as supplied by the Owner/contract; no value anywhere — met.
+3. Owner questions listed — met (Q2–Q5 remain open by design, tracked above).
+4. **Owner approval of the model — met (2026-10-13)**, with the changes in 10.1.

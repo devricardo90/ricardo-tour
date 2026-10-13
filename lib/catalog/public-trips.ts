@@ -33,6 +33,7 @@ export type ExclusionReason =
   | "ARTIFACT_RECORD"
   | "NON_RIO"
   | "UNPUBLISHED"
+  | "PARTNER_INACTIVE"
   | "PLACEHOLDER_MEDIA"
   | "INVALID_PRICE"
   | "INCOMPLETE_DATA"
@@ -43,6 +44,7 @@ const REASON_PRIORITY: ExclusionReason[] = [
   "ARTIFACT_RECORD",
   "NON_RIO",
   "UNPUBLISHED",
+  "PARTNER_INACTIVE",
   "PLACEHOLDER_MEDIA",
   "INVALID_PRICE",
   "INCOMPLETE_DATA",
@@ -59,6 +61,13 @@ export type GateTrip = {
   priceCents: number;
   imageUrl?: string | null;
   isPublished: boolean;
+  /**
+   * RT-100: who operates the tour. Only used to hide a PARTNER tour whose partner is not ACTIVE. It never changes how an
+   * UNCLASSIFIED or OWN trip is evaluated, and the value itself is never shown to visitors.
+   */
+  operationType?: string;
+  /** RT-100: status of the linked partner (selected by the queries below; never any other partner or commercial field). */
+  partner?: { status: string } | null;
 };
 
 export type GateResult = {
@@ -86,6 +95,8 @@ export function evaluatePublicTrip(trip: GateTrip): GateResult {
 
   if (!isLaunchApproved(trip.id)) reasons.add("NOT_APPROVED_FOR_LAUNCH");
   if (!trip.isPublished) reasons.add("UNPUBLISHED");
+  // RT-100: a PARTNER tour is public only while its partner is ACTIVE (a missing partner counts as inactive).
+  if (trip.operationType === "PARTNER" && trip.partner?.status !== "ACTIVE") reasons.add("PARTNER_INACTIVE");
   if (norm(trip.city) !== norm(LAUNCH_CITY)) reasons.add("NON_RIO");
 
   // Artifact: non-canonical city, stray whitespace in public strings, or an explicit test marker.
@@ -121,7 +132,12 @@ function byLaunchOrder<T extends { id: string }>(trips: T[]) {
  * integrity checks then run on the rows that come back, so a corrupted approved record is hidden rather than shown.
  */
 export async function getPublicTrips() {
-  const rows = await prisma.trip.findMany({ where: { id: { in: [...LAUNCH_TRIP_IDS] }, isPublished: true } });
+  // RT-100: only the partner's status is joined (to apply the PARTNER_INACTIVE rule). Private commercial data
+  // (TripCommercial / TripCommercialRate) is never selected by any public reader.
+  const rows = await prisma.trip.findMany({
+    where: { id: { in: [...LAUNCH_TRIP_IDS] }, isPublished: true },
+    include: { partner: { select: { status: true } } },
+  });
   return byLaunchOrder(rows.filter((row) => evaluatePublicTrip(row).included));
 }
 
@@ -131,7 +147,10 @@ export async function getPublicTripById(id: string) {
   const row = await prisma.trip.findFirst({
     where: { id, isPublished: true },
     // Only OPEN schedules that have not started yet (past dates are never shown), earliest first.
-    include: { schedules: { where: { status: "OPEN", startAt: { gte: new Date() } }, orderBy: { startAt: "asc" } } },
+    include: {
+      schedules: { where: { status: "OPEN", startAt: { gte: new Date() } }, orderBy: { startAt: "asc" } },
+      partner: { select: { status: true } },
+    },
   });
   return row && evaluatePublicTrip(row).included ? row : null;
 }
