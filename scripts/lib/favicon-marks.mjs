@@ -19,7 +19,7 @@ const REMOVE = [
   [330, 60, 740, 208], // ring arc above the R bowl
   [40, 443, 418, 740], // wave under the R (clips only the R leg tip)
   [40, 538, 740, 740], // wave under the T serif base
-  [506, 392, 740, 740], // wave + mountain tail right of the T stem
+  [521, 392, 740, 740], // wave + mountain tail right of the T stem
   [589, 300, 740, 740], // mountain tail touching the T crossbar end
 ];
 
