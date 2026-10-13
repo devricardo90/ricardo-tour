@@ -126,6 +126,35 @@ How partner availability is obtained (manual message, spreadsheet, system) is an
 5. **Confirmation:** who confirms a partner booking and through which channel?
 6. **Seed:** confirm it stays developer data only, with the hosted database as the single source of public truth.
 
+## 8A. Decision brief — OWN vs PARTNER at a glance (added 2026-10-13)
+
+No monetary value appears here; "open" means the Owner/contract decides.
+
+| Dimension | OWN (Ricardo Tour operates) | PARTNER (C2Rio operates, initially) |
+|---|---|---|
+| Who delivers the tour | Ricardo Tour (guide/team) | The partner |
+| Tour content (text, itinerary, photos) | Ricardo Tour writes it and owns the rights (to be evidenced, RT-79) | Partner-supplied or Ricardo Tour-written **with the partner's permission** to use names/photos (RT-101 §1.1 item 8) |
+| Where the **public price** comes from | Owner sets it | Owner sets it, **informed by** the partner's net tariff; the tariff itself is never shown or copied automatically |
+| Where the **cost** lives | Internal cost, if the Owner wants to track it (private `TripCommercial`) | Partner net rate, private `TripCommercial`, tied to a tariff version and a confirmation date |
+| Ricardo Tour's remuneration | Not applicable (sale revenue) | Markup over net **or** commission — **open (Q3)**; the tariff says "NET, non-commissionable" |
+| Availability authority | Ricardo Tour (`TripSchedule`) | The partner; the site must not promise capacity it does not control |
+| Booking confirmation | Existing manual flow by the admin | **Manual confirmation by the partner** before the booking is truly confirmed (Sprint 11 state) — channel and response time **open (Q5)** |
+| What the visitor sees | Today's experience | Today's experience **plus** an approved "Operated by …" label only if the Owner approves wording (Q2); otherwise nothing extra |
+| Cancellation / refund | Ricardo Tour's policy (to be decided, RT-81 T3) | Depends on the partner's conditions and the contract — **open**; Terms must match |
+| Customer data | Stays with Ricardo Tour | Likely shared with the partner to fulfil the booking → privacy policy impact (RT-80 gap G2) |
+| Payment / settlement | Future Sprint 13 | Future Sprint 13; who collects and who pays whom is **open** |
+| Risk if mislabelled | Claiming to operate a tour that a partner operates (liability, consumer-protection exposure) | Claiming a partnership or exclusivity that is not documented |
+
+**How each answer changes the build**
+- **Q1 (classification):** nothing changes publicly until answered; unclassified is the safe default (`operationType = null`).
+- **Q3 (contract form):** *Markup* → the system stores a net rate and the Owner sets the public price; *Commission* → the system stores a commission basis and the public price is the partner's retail price; *Other* → RT-100 waits. This is the only answer that changes the meaning of a stored field.
+- **Q5 (confirmation):** decides whether a partner booking shows "pending partner confirmation" and with what promised timeframe; with no answer the site promises no timeframe.
+- **Q2 and Q4:** wording and currency; neither blocks the structural work but both must be answered before any partner tour is published.
+
+**What the Owner needs to bring to decide**: the C2Rio agreement or written terms (or confirmation that none exists yet), the list of products to start with, and permission for descriptions/photos. The ten contractual conditions are in `docs/product/c2rio-catalog-preparation.md` §1.1.
+
+**Minimum to unlock RT-100 (structure only, no partner tour published):** Q1 (even "all unclassified"), Q6, and approval of the model. Q2–Q5 are needed before the first PARTNER tour is made public.
+
 ## 9. Acceptance (RT-99)
 
 1. This document exists and is reviewed independently against the schema (RT-98) — this file.
