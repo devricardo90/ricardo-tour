@@ -24,6 +24,15 @@ const read = (f: string) => readFileSync(f, "utf8");
 // Comments may explain the model; only executable code counts for the guards below.
 const code = (f: string) => read(f).replace(/\/\*[\s\S]*?\*\//g, "").replace(/(^|[^:])\/\/.*$/gm, "$1");
 
+const PRIVATE_PATTERNS: RegExp[] = [
+  // include/select keys or property/bracket access that reach the private relations, however they are spaced or quoted
+  /\bcommercial\s*:\s*(true|\{)/,
+  /\brates\s*:\s*(true|\{)/,
+  /\.\s*commercial\b/,
+  /\.\s*rates\b/,
+  /\[\s*["'`](trip[Cc]ommercial|commercial)["'`]\s*\]/,
+  /\bprisma\s*\.\s*trip[Cc]ommercial/,
+];
 const PRIVATE_TOKENS = /\b(tripCommercial|TripCommercial|TripCommercialRate|tripCommercialRate|netAmountCents|remunerationModel|tariffReference|tariffConfirmedAt|tariffConfirmedBy|priceSource)\b/;
 // Files allowed to mention the private commercial model (none yet: it is a schema-only structure in RT-100).
 const PRIVATE_ALLOWLIST: string[] = [];
@@ -38,7 +47,7 @@ describe("private commercial data never reaches public code (Owner condition 11)
   });
 
   it("no application source references TripCommercial, TripCommercialRate or their private fields", () => {
-    const offenders = files.map(rel).filter((f) => !PRIVATE_ALLOWLIST.includes(f) && PRIVATE_TOKENS.test(code(join(ROOT, f))));
+    const offenders = files.map(rel).filter((f) => !PRIVATE_ALLOWLIST.includes(f) && (PRIVATE_TOKENS.test(code(join(ROOT, f))) || PRIVATE_PATTERNS.some((p) => p.test(code(join(ROOT, f))))));
     expect(offenders).toEqual([]);
   });
 

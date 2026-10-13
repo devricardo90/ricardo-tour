@@ -9,6 +9,9 @@
 --   DROP TABLE "TripCommercialRate"; DROP TABLE "TripCommercial"; DROP TABLE "Partner";
 --   DROP TYPE "CommercialRecordStatus"; DROP TYPE "RemunerationModel"; DROP TYPE "PriceSource";
 --   DROP TYPE "PartnerStatus"; DROP TYPE "OperationType";
+--   (if it was applied with `prisma migrate deploy`, also remove its row from "_prisma_migrations".)
+-- DEPLOYMENT ORDER: apply this migration BEFORE deploying code that selects the new columns. Code from before RT-100 keeps
+-- working after this migration alone (it never selects the new columns/tables and the defaults satisfy the CHECK).
 
 -- CreateEnum
 CREATE TYPE "OperationType" AS ENUM ('UNCLASSIFIED', 'OWN', 'PARTNER');
@@ -136,7 +139,7 @@ CHECK (char_length(btrim("category")) > 0);
 
 ALTER TABLE "TripCommercialRate"
 ADD CONSTRAINT "TripCommercialRate_age_range_check"
-CHECK (("ageMin" IS NULL OR "ageMin" >= 0) AND ("ageMin" IS NULL OR "ageMax" IS NULL OR "ageMin" <= "ageMax"));
+CHECK (("ageMin" IS NULL OR "ageMin" >= 0) AND ("ageMax" IS NULL OR "ageMax" >= 0) AND ("ageMin" IS NULL OR "ageMax" IS NULL OR "ageMin" <= "ageMax"));
 
 ALTER TABLE "TripCommercialRate"
 ADD CONSTRAINT "TripCommercialRate_validity_range_check"

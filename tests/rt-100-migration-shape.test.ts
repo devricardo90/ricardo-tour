@@ -7,6 +7,7 @@ import { describe, expect, it } from "vitest";
 const dir = readdirSync(join(process.cwd(), "prisma", "migrations")).find((d) => d.includes("rt100_operation_type_partner_commercial"));
 const raw = dir ? readFileSync(join(process.cwd(), "prisma", "migrations", dir, "migration.sql"), "utf8") : "";
 const sql = raw.split("\n").filter((l) => !l.trim().startsWith("--")).join("\n");
+const flat = sql.replace(/\s+/g, " ");
 const withoutFkActions = sql.replace(/ON (DELETE|UPDATE) (RESTRICT|CASCADE|SET NULL|NO ACTION)/gi, "");
 
 describe("RT-100 migration shape", () => {
@@ -24,7 +25,7 @@ describe("RT-100 migration shape", () => {
   });
 
   it("existing trips become UNCLASSIFIED by the column default, never OWN or PARTNER", () => {
-    expect(sql).toContain(`ADD COLUMN     "operationType" "OperationType" NOT NULL DEFAULT 'UNCLASSIFIED'`);
+    expect(flat).toContain(`ADD COLUMN "operationType" "OperationType" NOT NULL DEFAULT 'UNCLASSIFIED'`);
     expect(sql).toContain(`"partnerId" TEXT`);
   });
 
@@ -44,6 +45,7 @@ describe("RT-100 migration shape", () => {
     for (const col of [`"category" TEXT NOT NULL`, `"ageMin" INTEGER`, `"ageMax" INTEGER`, `"seasonLabel" TEXT`, `"validFrom" TIMESTAMP(3)`, `"validTo" TIMESTAMP(3)`, `"netAmountCents" INTEGER`]) {
       expect(sql).toContain(col);
     }
-    expect(sql).toContain(`CHECK ("netAmountCents" IS NULL OR "currency" IS NOT NULL)`);
+    expect(flat).toContain(`CHECK ("netAmountCents" IS NULL OR "currency" IS NOT NULL)`);
+    expect(flat).toContain(`("ageMax" IS NULL OR "ageMax" >= 0)`);
   });
 });

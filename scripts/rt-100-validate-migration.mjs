@@ -27,6 +27,9 @@ if (!ADMIN_URL) throw new Error("Set RT100_ADMIN_URL to a LOCAL Postgres admin c
 
 function assertLocal(urlString) {
   const u = new URL(urlString);
+  if (["host", "hostaddr", "service"].some((p) => u.searchParams.has(p))) {
+    throw new Error("REFUSING to run: the connection string carries a host-overriding parameter.");
+  }
   const host = u.hostname.toLowerCase();
   if (!["localhost", "127.0.0.1", "::1", "[::1]"].includes(host) || /neon|vercel|supabase|amazonaws/.test(urlString.toLowerCase())) {
     throw new Error(`REFUSING to run: host "${host}" is not a local Postgres.`);
@@ -153,6 +156,7 @@ try {
   await expectFail(a, "a negative amount is rejected", rate(`category, "netAmountCents", currency`, `'adult', -1, 'BRL'`), ["23514"]);
   await expectFail(a, "age range with min > max is rejected", rate(`category, "ageMin", "ageMax"`, `'child', 10, 3`), ["23514"]);
   await expectFail(a, "negative minimum age is rejected", rate(`category, "ageMin"`, `'child', -1`), ["23514"]);
+  await expectFail(a, "negative maximum age is rejected even without a minimum", rate(`category, "ageMax"`, `'child', -5`), ["23514"]);
   await expectFail(a, "validity window with from > to is rejected", rate(`category, "validFrom", "validTo"`, `'adult', '2026-12-19', '2026-03-01'`), ["23514"]);
   await expectFail(a, "blank category is rejected", rate(`category`, `'   '`), ["23514"]);
   await expectFail(a, "lower-case currency on a rate is rejected", rate(`category, currency`, `'adult', 'brl'`), ["23514"]);

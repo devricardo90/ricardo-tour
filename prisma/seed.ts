@@ -20,7 +20,7 @@
 import { PrismaClient, PhysicalLevel } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import dotenv from 'dotenv'
-import { REMOTE_SEED_OVERRIDE, isLocalDatabaseUrl } from '../lib/db/local-database'
+import { isLocalDatabaseUrl } from '../lib/db/local-database'
 
 dotenv.config()
 
@@ -76,7 +76,7 @@ async function main() {
   }
 
   // Owner decision 2026-10-13: the seed is development-only. Never print the connection string (it holds credentials).
-  if (!isLocalDatabaseUrl(connectionString) && process.env.ALLOW_REMOTE_SEED !== REMOTE_SEED_OVERRIDE) {
+  if (!isLocalDatabaseUrl(connectionString)) {
     console.error('[seed] REFUSING to run: DATABASE_URL does not point to a local database.')
     console.error('[seed] The seed is development-only (Owner decision 2026-10-13). Nothing was changed.')
     process.exit(1)

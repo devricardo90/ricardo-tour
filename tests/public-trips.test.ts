@@ -109,6 +109,8 @@ describe("public catalog gate (RT-53)", () => {
     expect(findFirst).not.toHaveBeenCalled();
     findFirst.mockResolvedValueOnce(trip({ id: CRISTO }));
     expect((await getPublicTripById(CRISTO))?.id).toBe(CRISTO);
+    // RT-100: the detail query must join the partner status too (otherwise an inactive PARTNER trip could pass the gate)
+    expect(findFirst).toHaveBeenCalledWith(expect.objectContaining({ include: expect.objectContaining({ partner: { select: { status: true } } }) }));
     findFirst.mockResolvedValueOnce(trip({ id: CRISTO, imageUrl: null }));
     expect(await getPublicTripById(CRISTO)).toBeNull();
   });

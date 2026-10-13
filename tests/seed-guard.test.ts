@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { REMOTE_SEED_OVERRIDE, isLocalDatabaseUrl } from "@/lib/db/local-database";
+import { isLocalDatabaseUrl } from "@/lib/db/local-database";
 
 describe("seed guard (Owner decision 2026-10-13: the seed is development-only)", () => {
   it("accepts only local database hosts", () => {
@@ -20,6 +20,7 @@ describe("seed guard (Owner decision 2026-10-13: the seed is development-only)",
       "postgresql://u:p@db.example.com:5432/app",
       "postgresql://u:p@10.0.0.5:5432/app",
       "postgresql://u:p@localhost.evil.example.com/db",
+      "postgresql://localhost@evil.example.com/db", // 'localhost' is only the user name here
       "not a url",
       "",
     ]) {
@@ -27,7 +28,19 @@ describe("seed guard (Owner decision 2026-10-13: the seed is development-only)",
     }
   });
 
-  it("the override must be spelled out, never a plain truthy value", () => {
-    expect(REMOTE_SEED_OVERRIDE).toBe("I_HAVE_OWNER_AUTHORIZATION");
+  it("rejects a local-looking URL whose query string redirects the connection (verified pg behaviour: ?host= overrides the host)", () => {
+    for (const url of [
+      "postgresql://u:p@localhost/db?host=db.example.com",
+      "postgresql://u:p@localhost/db?hostaddr=203.0.113.9",
+      "postgresql://u:p@127.0.0.1/db?service=remote",
+      "postgresql://u:p@localhost/db?schema=public&host=ep-example.neon.tech",
+    ]) {
+      expect(isLocalDatabaseUrl(url), url).toBe(false);
+    }
+  });
+
+  it("has no remote override: the seed cannot be pointed at a hosted database by any environment variable", async () => {
+    const mod = await import("@/lib/db/local-database");
+    expect(Object.keys(mod)).toEqual(["isLocalDatabaseUrl"]);
   });
 });
