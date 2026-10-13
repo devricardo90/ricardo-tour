@@ -53,7 +53,8 @@ describe("private commercial data never reaches public code (Owner condition 11)
 
   it("the public catalog gate selects only the partner status, never a commercial relation", () => {
     const src = code(join(ROOT, "lib/catalog/public-trips.ts"));
-    expect(src).toMatch(/partner:\s*\{\s*select:\s*\{\s*status:\s*true\s*\}\s*\}/);
+    // only the partner's status and approved public label are selected (public-safe by definition); nothing commercial
+    expect(src).toMatch(/partner:\s*\{\s*select:\s*\{\s*status:\s*true,\s*publicLabel:\s*true\s*\}\s*\}/);
     expect(src).not.toMatch(/\bcommercial\??\s*:/);
     expect(src).not.toMatch(/\brates\s*:/);
   });

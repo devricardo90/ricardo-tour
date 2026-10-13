@@ -48,3 +48,13 @@ export function resolvePartnerPublicLabel(
   const text = (label as Record<string, unknown>)[locale];
   return typeof text === "string" && text.trim() !== "" ? text.trim() : null;
 }
+
+/**
+ * Owner decision (2026-10-13): a PARTNER tour needs the real operator identified in PT, EN and ES. A partner label is
+ * "complete" only when every public locale has a non-empty approved string. Nothing is translated or inferred.
+ */
+export function hasCompletePartnerLabel(publicLabel: unknown): boolean {
+  if (!publicLabel || typeof publicLabel !== "object" || Array.isArray(publicLabel)) return false;
+  const label = publicLabel as Record<string, unknown>;
+  return PUBLIC_LOCALES.every((locale) => typeof label[locale] === "string" && (label[locale] as string).trim() !== "");
+}

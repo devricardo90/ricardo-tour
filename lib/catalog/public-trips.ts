@@ -9,6 +9,7 @@ import { prisma } from "@/lib/prisma";
 import { normalizeTripImage } from "@/lib/image-utils";
 import { getLocalizedField } from "@/lib/localized-field";
 import { asLocalizedText } from "@/lib/types";
+import { hasCompletePartnerLabel } from "@/lib/catalog/operation-type";
 
 /**
  * Initial launch catalog (Owner decision, RT-53), in display order. Canonical database ids, verified against the database:
@@ -34,6 +35,7 @@ export type ExclusionReason =
   | "NON_RIO"
   | "UNPUBLISHED"
   | "PARTNER_INACTIVE"
+  | "PARTNER_OPERATOR_UNIDENTIFIED"
   | "PLACEHOLDER_MEDIA"
   | "INVALID_PRICE"
   | "INCOMPLETE_DATA"
@@ -45,6 +47,7 @@ const REASON_PRIORITY: ExclusionReason[] = [
   "NON_RIO",
   "UNPUBLISHED",
   "PARTNER_INACTIVE",
+  "PARTNER_OPERATOR_UNIDENTIFIED",
   "PLACEHOLDER_MEDIA",
   "INVALID_PRICE",
   "INCOMPLETE_DATA",
@@ -67,7 +70,7 @@ export type GateTrip = {
    */
   operationType?: string;
   /** RT-100: status of the linked partner (selected by the queries below; never any other partner or commercial field). */
-  partner?: { status: string } | null;
+  partner?: { status: string; publicLabel?: unknown } | null;
 };
 
 export type GateResult = {
@@ -97,6 +100,8 @@ export function evaluatePublicTrip(trip: GateTrip): GateResult {
   if (!trip.isPublished) reasons.add("UNPUBLISHED");
   // RT-100: a PARTNER tour is public only while its partner is ACTIVE (a missing partner counts as inactive).
   if (trip.operationType === "PARTNER" && trip.partner?.status !== "ACTIVE") reasons.add("PARTNER_INACTIVE");
+  // Owner decision 2026-10-13: a PARTNER tour is public only with the real operator identified in PT, EN and ES.
+  if (trip.operationType === "PARTNER" && !hasCompletePartnerLabel(trip.partner?.publicLabel)) reasons.add("PARTNER_OPERATOR_UNIDENTIFIED");
   if (norm(trip.city) !== norm(LAUNCH_CITY)) reasons.add("NON_RIO");
 
   // Artifact: non-canonical city, stray whitespace in public strings, or an explicit test marker.
@@ -132,11 +137,11 @@ function byLaunchOrder<T extends { id: string }>(trips: T[]) {
  * integrity checks then run on the rows that come back, so a corrupted approved record is hidden rather than shown.
  */
 export async function getPublicTrips() {
-  // RT-100: only the partner's status is joined (to apply the PARTNER_INACTIVE rule). Private commercial data
+  // RT-100: only the partner's status and approved public label are joined (to apply the PARTNER rules). Private commercial data
   // (TripCommercial / TripCommercialRate) is never selected by any public reader.
   const rows = await prisma.trip.findMany({
     where: { id: { in: [...LAUNCH_TRIP_IDS] }, isPublished: true },
-    include: { partner: { select: { status: true } } },
+    include: { partner: { select: { status: true, publicLabel: true } } },
   });
   return byLaunchOrder(rows.filter((row) => evaluatePublicTrip(row).included));
 }
@@ -149,7 +154,7 @@ export async function getPublicTripById(id: string) {
     // Only OPEN schedules that have not started yet (past dates are never shown), earliest first.
     include: {
       schedules: { where: { status: "OPEN", startAt: { gte: new Date() } }, orderBy: { startAt: "asc" } },
-      partner: { select: { status: true } },
+      partner: { select: { status: true, publicLabel: true } },
     },
   });
   return row && evaluatePublicTrip(row).included ? row : null;

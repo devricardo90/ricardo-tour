@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { resolvePartnerPublicLabel, validateOperationAssignment } from "@/lib/catalog/operation-type";
+import { hasCompletePartnerLabel, resolvePartnerPublicLabel, validateOperationAssignment } from "@/lib/catalog/operation-type";
 
 describe("validateOperationAssignment (RT-100; mirrors the database CHECK)", () => {
   it("UNCLASSIFIED and OWN are valid only without a partner", () => {
@@ -49,5 +49,18 @@ describe("resolvePartnerPublicLabel (Owner condition 4: UNCLASSIFIED is never sh
     expect(resolvePartnerPublicLabel({ operationType: "PARTNER", partner: { status: "ACTIVE", publicLabel: { pt: "Só PT" } } }, "en")).toBeNull();
     expect(resolvePartnerPublicLabel({ operationType: "PARTNER", partner: { status: "ACTIVE", publicLabel: ["x"] } }, "pt")).toBeNull();
     expect(resolvePartnerPublicLabel({ operationType: "PARTNER", partner: activePartner }, "sv")).toBeNull();
+  });
+});
+
+describe("hasCompletePartnerLabel (Owner decision: real operator identified in PT, EN and ES)", () => {
+  it("is true only when pt, en and es are all non-empty strings", () => {
+    expect(hasCompletePartnerLabel({ pt: "a", en: "b", es: "c" })).toBe(true);
+    expect(hasCompletePartnerLabel({ pt: "a", en: "b", es: "c", sv: "ignored extra locale" })).toBe(true);
+  });
+
+  it("is false for anything incomplete or malformed", () => {
+    for (const label of [null, undefined, "", "text", 1, [], ["a", "b", "c"], {}, { pt: "a" }, { pt: "a", en: "b" }, { pt: "a", en: "b", es: "" }, { pt: "a", en: " ", es: "c" }, { pt: "a", en: "b", es: null }]) {
+      expect(hasCompletePartnerLabel(label), JSON.stringify(label)).toBe(false);
+    }
   });
 });

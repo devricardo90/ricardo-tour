@@ -96,7 +96,7 @@ describe("public catalog gate (RT-53)", () => {
     expect(findMany).toHaveBeenCalledWith({
       where: { id: { in: [...LAUNCH_TRIP_IDS] }, isPublished: true },
       // RT-100: only the partner status is joined (PARTNER_INACTIVE rule); no commercial relation is ever selected.
-      include: { partner: { select: { status: true } } },
+      include: { partner: { select: { status: true, publicLabel: true } } },
     });
     expect(result.map((t) => t.id)).toEqual([...LAUNCH_TRIP_IDS]);
 
@@ -110,7 +110,7 @@ describe("public catalog gate (RT-53)", () => {
     findFirst.mockResolvedValueOnce(trip({ id: CRISTO }));
     expect((await getPublicTripById(CRISTO))?.id).toBe(CRISTO);
     // RT-100: the detail query must join the partner status too (otherwise an inactive PARTNER trip could pass the gate)
-    expect(findFirst).toHaveBeenCalledWith(expect.objectContaining({ include: expect.objectContaining({ partner: { select: { status: true } } }) }));
+    expect(findFirst).toHaveBeenCalledWith(expect.objectContaining({ include: expect.objectContaining({ partner: { select: { status: true, publicLabel: true } } }) }));
     findFirst.mockResolvedValueOnce(trip({ id: CRISTO, imageUrl: null }));
     expect(await getPublicTripById(CRISTO)).toBeNull();
   });
