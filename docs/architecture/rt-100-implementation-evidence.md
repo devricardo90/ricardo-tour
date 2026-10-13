@@ -10,7 +10,7 @@
 |---|---|
 | Schema (`prisma/schema.prisma`, +92 lines, 0 deleted) | `Trip.operationType` (`UNCLASSIFIED` default) and `Trip.partnerId`; new `Partner` (INACTIVE by default), `TripCommercial` (private) and `TripCommercialRate` (private, empty); enums `OperationType`, `PartnerStatus`, `PriceSource`, `RemunerationModel`, `CommercialRecordStatus` |
 | Migration `20261013120000_rt100_operation_type_partner_commercial` | Additive only (no DROP/RENAME/UPDATE/DELETE/INSERT). Database CHECK: `operationType = PARTNER ⇔ partnerId IS NOT NULL`. Rate checks: amount needs currency, no negative amount/age, age and validity ranges coherent, non-blank category, ISO-style currency, URL-safe partner slug. FKs: `Trip→Partner` and `TripCommercial→Trip` are **Restrict**; rates cascade with their `TripCommercial` |
-| Public gate (`lib/catalog/public-trips.ts`, +21/−2) | Joins **only** the partner status; new exclusion reason `PARTNER_INACTIVE` (a PARTNER tour is public only while its partner is ACTIVE; the launch allowlist and integrity checks still apply). UNCLASSIFIED/OWN trips are evaluated exactly as before |
+| Public gate (`lib/catalog/public-trips.ts`) | Joins **only** the partner status and approved public label. A PARTNER tour is public only with an **ACTIVE partner** (`PARTNER_INACTIVE` otherwise) **and the real operator identified in PT, EN and ES** (`PARTNER_OPERATOR_UNIDENTIFIED` otherwise; Owner decision of the RT-100 review, 2026-10-13). UNCLASSIFIED/OWN trips are evaluated exactly as before |
 | Helpers (`lib/catalog/operation-type.ts`) | `validateOperationAssignment` (mirrors the DB CHECK) and `resolvePartnerPublicLabel` (returns the approved label only for an ACTIVE PARTNER in exactly the visitor's locale; null for everything else, so `UNCLASSIFIED` can never be returned). Not wired into any page (visitor-facing label is a Sprint 10 decision) |
 | Seed (`prisma/seed.ts`, +23) | **Development-only guard**: refuses a non-local `DATABASE_URL` (`lib/db/local-database.ts`), with no override. Adds the C2Rio partner structure: INACTIVE, no label, **no tour** |
 
@@ -59,7 +59,7 @@ Verdict: no blockers to the 12 conditions; CHANGES REQUESTED for the following, 
 | `ageMax` could be negative | CHECK extended; validator +1 check |
 | Rollback note omitted `_prisma_migrations` | Added |
 | Fail-open of the gate if a future caller omits the partner join | Covered by tests that assert both queries join the partner status |
-| Partner could be ACTIVE without an approved three-locale label | **Deferred (Owner decision, see §7)** |
+| Partner could be ACTIVE without an approved three-locale label | **Fixed at commit 044c4e5** after the Owner decision: the gate now requires non-empty `pt`, `en` and `es` text (rule `PARTNER_OPERATOR_UNIDENTIFIED`; tests, plus the real gate through Prisma on a migrated scratch database) |
 | No cross-table currency check; no uniqueness/overlap protection on rate rows | Deferred: add with the first real rate (needs the child-pricing decision) |
 
 ## 6. Deployment order (important)
@@ -72,7 +72,7 @@ The new code selects the new column and relation. **Apply the migration to a dat
 
 ## 7. Open items and decisions (none blocks RT-100; needed before the first PARTNER tour is public)
 
-1. **Disclosure label (new, from the review):** the gate only requires the partner to be ACTIVE. Decide whether a PARTNER tour may be public **without** an approved "Operated by …" label in all three locales; recommended: require it (a rule in the gate and/or at the ACTIVE transition). Related to Q2.
+1. ~~Disclosure label~~ **Resolved (2026-10-13, Owner):** a PARTNER tour needs the real operator identified in PT, EN and ES; enforced by the gate at 044c4e5. **Still process-only (not enforced by code):** approved commercial tariffs, confirmed operating conditions, reviewed public information, verified image rights and a booking flow compatible with the operator — see `docs/architecture/rt-100-independent-audit.md` §6.
 2. Q2 (partner display name and approved label PT/EN/ES), Q3 (contract form: markup vs commission), Q4 (currency), Q5 (who confirms a partner booking and how), and how to present child pricing (RT-101 Q4).
 3. Deleting a trip that has a `TripCommercial` row now fails by design (Restrict): such trips must be unpublished, not deleted (`trip.service.ts` delete and `scripts/cleanup-trips.ts` will raise an FK error).
 
@@ -83,3 +83,9 @@ No admin UI, no public "Operated by" label, no classification of any tour, no pa
 ## 9. Rollback
 
 See the header of the migration file. The objects are new and nothing existing depends on them; dropping them restores the previous schema exactly.
+
+## 10. Update after the final review (commit 044c4e5)
+
+- The gate rule above, the audit scripts (`scripts/rt-100-audit-checks.mjs`, `scripts/rt-100-gate-integration.ts`) and the recovery plan (`docs/ops/rt-100-deployment-backup-recovery-plan.md`) were added after the first evidence round.
+- Additional evidence (local, throw-away databases): the **documented rollback was executed** and restores the exact previous SQL schema (267 schema lines identical to a database built from the pre-RT-100 migrations) with the legacy rows byte-identical; the **real public gate through the real Prisma client** passed 16 scenarios (inactive partner, incomplete operator label, full label, server-side filters, private data never in the gate output); the **old code on the migrated database** serves the same 26 pages as the old code on the unmigrated one (19 byte-identical + 7 canonically identical).
+- Independent audit and ranked risks: `docs/architecture/rt-100-independent-audit.md`.
