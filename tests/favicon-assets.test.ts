@@ -44,6 +44,30 @@ describe("favicon assets (RT-RB-S9-01)", () => {
     expect(pngSize(readFileSync(join(APP, "apple-icon.png")))).toEqual({ width: 180, height: 180 });
   });
 
+  it("the 16px ICO entry is the simplified letters-only variant (flat gold on dark, few tones)", async () => {
+    const ico = readFileSync(join(APP, "favicon.ico"));
+    expect(ico[6]).toBe(16); // first directory entry is the 16px one
+    const length = ico.readUInt32LE(6 + 8);
+    const offset = ico.readUInt32LE(6 + 12);
+    const { data } = await sharp(ico.subarray(offset, offset + length)).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
+    let opaque = 0;
+    let gold = 0;
+    let dark = 0;
+    const tones = new Set<string>();
+    for (let i = 0; i < data.length; i += 4) {
+      const [r, g, b, a] = [data[i], data[i + 1], data[i + 2], data[i + 3]];
+      if (a < 200) continue;
+      opaque++;
+      if (r > 150 && g > 100 && b < 110 && r > b + 60) gold++;
+      if (r < 30 && g < 30 && b < 35) dark++;
+      tones.add(`${r >> 5}${g >> 5}${b >> 5}`);
+    }
+    expect(gold / opaque).toBeGreaterThan(0.12);
+    expect(dark / opaque).toBeGreaterThan(0.5);
+    // the full multi-tone monogram at 16px used ~30 tone buckets; the flat letters variant uses far fewer
+    expect(tones.size).toBeLessThanOrEqual(24);
+  });
+
   it("icon.png carries the gold Ricardo Tour mark on a dark tile (not blank, not default)", async () => {
     const { data, info } = await sharp(join(APP, "icon.png")).ensureAlpha().raw().toBuffer({ resolveWithObject: true });
     let gold = 0;
