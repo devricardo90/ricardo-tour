@@ -124,3 +124,26 @@ Then the Owner writes or approves Ricardo Tour's own rule per topic (Q7–Q10). 
 
 ### 6.4 Status
 RT-80 and RT-81 remain **Em andamento**, waiting for Q1–Q12. The implementation plan in §4 is unchanged; G10 is added to its step 1 (routes).
+
+## 7. Q1–Q12 pre-filled from evidence — 2026-10-15
+
+Sources read first: Volume I, Volume II, Jira RT-79/80/81/98–103, `origin/main` code, and the four public tour pages on www.ricardotour.com (read-only). Legend: **PROVEN** = evidence exists, no question needed; **CONFIRM** = follows from a recorded Owner decision, a "yes" is enough; **OPEN** = commercial or legal decision only the Owner/legal can make. No policy was invented.
+
+| # | Topic | Status | What is already established (evidence) | What is still missing |
+|---|---|---|---|---|
+| Q1 | Company identity | **OPEN** (partly proven) | Privacy contact e-mail `contato@ricardotour.com` (canonical identity, RT-61; `lib/public-contact.ts`). Legal name, CNPJ, address and Cadastur number appear nowhere: `docs/product/ai-concierge-approved-public-business-evidence-values.md` records them as `NO_APPROVED_VALUE_RECORDED`. | Legal name, CNPJ, address; whether to show the Cadastur number (and which). |
+| Q2 | Accounts and `/reservas` | **PROVEN** | `/login` and `/register` are reachable by direct URL with open e-mail sign-up (`lib/auth.ts:22`, `app/[locale]/register/page.tsx:23`); not linked from header/footer and not in the sitemap (`app/[locale]/(public)/layout.tsx:8`); `/reservas` and `/admin` require a session (`proxy.ts`). Because the feature is reachable, the policy must disclose the login **session cookie** regardless. | Nothing for the policy. (Separate, optional product decision: close public sign-up. Not needed for RT-80.) |
+| Q3 | Retention | **OPEN** | No automatic deletion exists in the code (`docs/legal/privacy-facts-verified.md`). | Retention period for tour requests, contact messages and accounts (Owner/legal). |
+| Q4 | Daniela section | **CONFIRM** | Owner directives: "não habilitar Daniela" (12/10) and "Daniela sem prioridade" (14/10, Volume II §11); the assistant is off by flag. | "Yes": publish the policy without the AI section, and re-add it as a condition of Daniela's activation (RT-75). |
+| Q5 | Oner widget | **OPEN (Owner action)** | The widget loads script/stylesheet from `static.onertravel.com` on `/pt/planeje-sua-viagem`; Oner never stated what data/cookies it processes (RT-39 record has no such answer). | The Owner asks Oner (data, cookies, who is controller). Until then the policy names Oner as a third party whose own policy applies. |
+| Q6 | Who operates the 4 tours | **OPEN** | RT-99 Owner decision (13/10): the four public tours remain `UNCLASSIFIED` "until confirmation by the Owner"; do not presume OWN or PARTNER. | OWN or PARTNER for each of the 4 tours (determines the contracting party in the Terms). |
+| Q7 | Confirmation | **OPEN** (partly proven) | Today: request by form or WhatsApp; success text "Nossa equipe vai analisar e entrar em contato para combinar os detalhes" (`components/site/tour/tour-request-copy.ts`); no time promised; no automatic confirmation; no availability check. | What counts as a confirmed booking, through which channel, and whether to promise a response time. |
+| Q8 | Cancellation / change / no-show / refund | **OPEN** | Tour pages deliberately show no policy (`tour-detail-view.tsx:29`). The Owner is collecting other agencies' references (input only, §6.3). | The Ricardo Tour rule per topic. |
+| Q9 | Payment today | **OPEN** (currency proven) | No online payment exists (RT-65 §2). The public pages show "Preço por pessoa" in **R$** (BRL) for all four tours. | When and how the customer pays (deposit, Pix, card, on the day) and to whom. |
+| Q10 | Tour rules | **OPEN** | The model has `childrenAllowed`; the four public pages state duration and inclusions/exclusions but **no** age, children, physical-level or weather rule. | Weather/rain rule, minimum age and children, physical requirements. |
+| Q11 | Legal review, law, venue | **OPEN** | Legal review recorded as pending (Owner decision 11/10, `privacy-facts-verified.md`). | Who reviews (or Owner approval without external review); governing law, venue, complaint channel. |
+| Q12 | Page addresses | **CONFIRM** | Convention of the public site: Portuguese slugs in every locale (`/en/quem-somos`). | "Yes" to `/privacidade` and `/termos` in pt/en/es (and `sv` handled per G10). |
+
+**Result:** of 12 questions, 1 is answered by evidence (Q2), 2 need only a "yes" (Q4, Q12), and 9 remain for the Owner. Grouped as the Owner will see them:
+- **Company and legal (4):** Q1 identity, Q3 retention, Q11 review/law/venue, Q5 ask Oner.
+- **Commercial policies (5):** Q6 operator of the 4 tours, Q7 confirmation, Q8 cancellation/refund (after the agency research), Q9 payment, Q10 tour rules.

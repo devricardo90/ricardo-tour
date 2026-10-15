@@ -73,3 +73,20 @@ Note for legal review (not a legal opinion): under Brazilian law the commercial 
 - B1 answer 1 or 2 (with evidence) → status `RIGHTS_VERIFIED` recorded in `hero-media-status.ts` and the manifest (code change in a separate commit, with the Owner's approval). Answer 3 or 4 → a replacement task.
 - B2 and B3 answers recorded in Jira and in this document.
 - Not blocking RT-79: the Tour Privativo Premium photo (`PENDING OWNER REPLACEMENT PHOTO`), the hidden people photos and the legacy videos (housekeeping), and RT-109 (SuperTur).
+
+## Owner decisions — 2026-10-15 (recorded; supersede the open questions above)
+
+| Item | Owner decision | Resulting status |
+|---|---|---|
+| B1 Hero | The three images come from an image bank; the Owner does not remember which. Investigation **deferred**; do not ask about the origin again for now. Intention recorded: replace them with the Owner's own photographs in the future. | **Commercial license NOT VERIFIED.** Not considered approved. `hero-media-status.ts` stays `PROTOTYPE_ONLY` / `RIGHTS_NOT_VERIFIED` / `replaceBeforeProduction: true` (unchanged, deliberately). |
+| B2 People in tour photos | The Owner confirms the people shown authorized the use (owner attestation). | Resolved by declaration. |
+| B3 Quem Somos | The Owner's own photo, authorized to stay. | Resolved by declaration. Replacement remains planned (Volume II §3, Sprint 10), not blocking. |
+
+### Residual risk of the current Hero use (registered, not accepted as approved)
+- The three images are **publicly displayed on a commercial site** without any evidence of a commercial license. If a stock license does not exist or does not cover this use, the rights holder can demand removal and compensation (copyright, Lei 9.610/1998); image banks commonly identify their images automatically.
+- This conflicts with two recorded rules: Volume I (RT-16, 19/09/2026) "publication depends on authentic and authorized media", and the code's own `replaceBeforeProduction: true`.
+- Mitigations available without new investigation (none executed; each needs Owner authorization): (1) locate the purchase or license in the Owner's image-bank account or e-mail receipts when convenient; (2) replace with the Owner's own photographs (the stated intention); (3) the Launch Final Gate (RT-51) already lists "media rights" as a mandatory check, so the item cannot pass that gate silently.
+- Everything else in RT-79 is resolved (marks, 4 tour photos, people, Quem Somos, logo, Rio Story, fonts). Non-blocking follow-ups: Tour Privativo Premium photo replacement, hidden people photos/legacy videos housekeeping, RT-109.
+
+### Formal treatment against the Sprint 9 gate (RT-103 criterion 2)
+RT-103 accepts RT-79 either "Concluído" or "explicitly reassigned by the Owner with justification". RT-79 **cannot** be closed: its acceptance criterion ("every public media asset has recorded rights or is replaced") is not met for the Hero. Proposed treatment (needs the Owner's explicit "yes"): **reassign RT-79 to Sprint 8 — Launch Readiness** (its original sprint, label `sprint-8`, code RT-RB-L-04) with the residual scope "Hero: license evidence or replacement with own photographs before the Final Gate RT-51", keeping the status Em andamento. Justification: the only open item depends on the Owner's archive or new photography, not on Sprint 9 work, and RT-51 already gates media rights before launch.
