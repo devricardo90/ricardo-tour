@@ -75,3 +75,34 @@
 4. Owner gate decision recorded in RT-103 and Volume II §11; Sprint 9 closed in Jira with the Owner's confirmation (closing is one-way).
 5. Sprint 10 (Jira id 177, "Sprint 10 — Tours & Content") holds **no tickets yet**; its Volume II scope (tour content, RT-78, photos with rights, Quem Somos replacement) needs the Owner's approval of the ticket list before it starts. Q6–Q10 answers feed both RT-81 and Sprint 10 tour content.
 6. Push authorization for the local branches (this drafts branch is local only).
+
+## 6. Update — 15/10/2026, after the Owner directive "Continuidade e preparação do gate"
+
+### 6.1 RT-100 out-of-scope items: tracking in Jira (verified)
+- **P2 (unpublished tour reachable by URL):** already **fixed in `main`** (`getPublicTripById` + `notFound()`; `docs/ops/backlog.md` marks RT-FINAL-HARDENING-01 "SUPERSEDED — corrigido em RT-FINAL-04D"; production probe 15/10: non-allowlisted id → 404). It has no Jira ticket and **needs none**; it is recorded in RT-98 (F2) and RT-100. Stale mentions to correct at the gate record: Volume II §4 ("Pendência P2 registrada") and §5 Sprint 11 scope ("correção da pendência P2"), which should read "verified fixed".
+- **"Operado por…" public label:** tracked only in RT-100 comments and `docs/architecture/rt-s9-03-own-partner-model.md`; **no Jira ticket**. RT-101's scope does not include it. It only matters for the first PARTNER tour, which is blocked (RT-101). Proposal without duplication: add it as an explicit pre-publication condition on RT-101 (comment), together with the audit's other PARTNER prerequisites (booking must respect the public gate; approval gate for PARTNER publication). A separate ticket only when RT-101 is unblocked.
+
+### 6.2 Consolidated local test run (RT-103 "Testes obrigatórios") — PASS
+- Integration: local branch `sprint9/gate-integration-local` = `sprint9/rt-100-catalog-structure` (9fff054) + `sprint9/rt-80-81-legal-drafts` (which contains `sprint9/commercial-foundation` ccf6874), merge `cdf6b2e`, **no conflicts**, not pushed. Worktree without any `.env` file.
+- Database: throw-away `rt100_gate`, a clone of the local dev database on Docker `localhost:5433`; **`DATABASE_URL` checked before use: host `localhost:5433`, db `rt100_gate`, no `neon` in the URL**. RT-100 migration applied only there (`prisma migrate deploy`). Database dropped after the run; the local `ricktravel` database was not modified.
+- Results: lint 0 errors (2 pre-existing warnings in `scripts/rt-35-chrome-validation.mjs`); typecheck 0 errors; unit tests **761 passed / 6 skipped**; production build OK (dummy local secrets, dummy Resend key; no e-mail sent); public Playwright (desktop + Pixel 7) on `next start` against the migrated local DB: **44 passed / 0 failed** (including "concierge API closed" with `E2E_EXPECT_CONCIERGE_OFF=1`). Extra checks on the production build: `/pt/rebuild-lab/{terms,privacy}-draft` → 404 (hidden); tour page and `/api/trips` contain no `UNCLASSIFIED`/`operationType`/`TripCommercial`/`remuneration`.
+- Not done (by restriction): no Preview/remote run, no push, no Neon or Vercel change.
+
+### 6.3 RT-103 final checklist
+| # | Item | State |
+|---|---|---|
+| 1 | RT-97, RT-99 Concluído | ✔ |
+| 2 | RT-98 accepted by the Owner → Concluído | ☐ awaiting the Owner's explicit acceptance |
+| 3 | RT-100 accepted (with reduced scope) → Concluído | ☐ awaiting the Owner's explicit acceptance |
+| 4 | RT-102 accepted → Concluído | ☐ awaiting the Owner's explicit acceptance |
+| 5 | RT-101 block accepted | ✔ Owner, 15/10 |
+| 6 | RT-79 → Backlog with justification, link to RT-51 kept, Hero license NOT regularized | ☐ prepared; executed at sprint close with the Owner's word |
+| 7 | RT-80/81 → Concluído (approved text + pages) or Backlog with justification (both already block RT-51) | ☐ drafts + v0.3 reconciliation ready; Owner decisions pending |
+| 8 | OWN/PARTNER model approved | ✔ |
+| 9 | Nothing invented (price, margin, commission, availability) | ✔ re-checked in the consolidated run |
+| 10 | Evidence and independent reviews in each ticket | ✔ |
+| 11 | Nothing published without authorization | ✔ (only RT-97) |
+| 12 | Consolidated tests | ✔ local (6.2) |
+| 13 | Gate decision recorded in Jira and Volume II | ☐ after items 2–7 |
+| 14 | Sprint 9 closed in Jira with the Owner's confirmation | ☐ |
+| 15 | Push of the local branches | ☐ needs specific authorization |
