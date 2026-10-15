@@ -106,3 +106,10 @@
 | 13 | Gate decision recorded in Jira and Volume II | ☐ after items 2–7 |
 | 14 | Sprint 9 closed in Jira with the Owner's confirmation | ☐ |
 | 15 | Push of the local branches | ☐ needs specific authorization |
+
+## 7. P2 verdict — 15/10/2026 (Owner request; corrects §6.1)
+- **Original P2** (`docs/ops/backlog.md`): the tour **detail page** used `findUnique` without `isPublished`, so an unpublished tour answered HTTP 200. Fixed by RT-FINAL-04D; today `getPublicTripById` + `notFound()` (`app/[locale]/(site)/tours/[id]/page.tsx:47-50`). "SUPERSEDED" is justified **for the page only**.
+- **Booking API — NOT protected (confirmed):** `POST /api/bookings` (`app/api/bookings/route.ts`) requires only a session and calls `createBookingForUser` (`lib/services/booking.service.ts:171`), which loads the trip with `findUnique({ where: { id } })`: no `isPublished`, no `LAUNCH_TRIP_IDS`, no public gate. Sign-up is open (`/register`). No existing test covers it (`tests/booking.service.test.ts`).
+- **Local reproduction** (temporary script, not committed; throw-away DB `rt100_p2` on localhost:5433, URL checked, dropped afterwards; nothing in production): a PENDING booking was **created** for an unpublished trip (`isPublished=false`) and for a published-but-hidden trip, while both public pages return 404. Control (public tour) also created. The current public flow (guest tour request, `app/actions/tour-request.ts`) is protected (`getPublicTripById`).
+- **Tracking without duplication:** new ticket **RT-110** (backlog, `not-authorized`, `security`), Blocks RT-51, relates to RT-100; RT-101's earlier note now points to it. Not caused or worsened by any Sprint 9 branch. Proposed fix (not authorized): resolve the trip through the public gate in `createBookingForUser` + unit and local integration tests (Volume II Sprint 11 scope).
+- §6.1's statement "P2 needs no ticket" is correct for the page and is **superseded for the API by this section**.
