@@ -98,3 +98,18 @@ S10-01 → S10-02 (Owner) → in parallel: S10-03 (design), RT-78 (copy), S10-05
 2. Approve the storage approach for structured facts and gallery (S10-03) or prefer text-only content without a migration.
 3. Confirm that RT-78 moves from Sprint 8 to Sprint 10.
 4. Authorize the start of Sprint 10 in Jira when ready.
+
+## Created in Jira — 2026-10-15 (Owner approval "Fechamento Sprint 9"; Sprint 10 = id 177, NOT started)
+| Jira | Code | Ticket |
+|---|---|---|
+| RT-111 | RT-RB-S10-01 | Content gap matrix |
+| RT-112 | RT-RB-S10-02 | Owner content intake |
+| RT-113 | RT-RB-S10-03 | Structured data model + gallery (additive, local validation only) — Owner prefers structured data |
+| RT-114 | RT-RB-S10-04 | Tour page: operational info + gallery |
+| RT-115 | RT-RB-S10-05 | Commercial content PT/EN/ES (authoring/translation). **RT-78 was NOT moved**: its scope is the site-wide final copy review (Sprint 8); verified 15/10 that EN/ES tour content is shown in Portuguese |
+| RT-116 | RT-RB-S10-06 | Photos and galleries with rights (incl. Tour Privativo Premium) |
+| RT-117 | RT-RB-S10-07 | Quem Somos photo |
+| RT-118 | RT-RB-S10-08 | Per-tour conditions (blocked by RT-81) |
+| RT-119 | RT-RB-S10-09 | Controlled content update in the hosted DB (`not-authorized`) |
+| RT-120 | RT-RB-S10-GATE | Owner Content Gate |
+Also in Sprint 10: RT-80, RT-81 (parallel, priority). RT-110 (High) stays in the backlog and must be fixed before any publication touching the booking flow.
