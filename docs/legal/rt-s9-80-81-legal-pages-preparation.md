@@ -79,3 +79,48 @@ No text is proposed. The list below is **what the product does today and what re
 | Approving or writing any legal wording | **Owner/legal only** |
 
 RT-80 and RT-81 acceptance criteria (pages in PT/EN/ES with footer link, Owner/legal copy) therefore remain **open**.
+
+## 6. Continuation — 2026-10-15 (documentation only)
+
+Jira RT-80/RT-81 (comments of 14/10/2026) and Volume II §5/§11 were read before this update. Still **no legal text written, no route, link or page created, nothing published**.
+
+### 6.1 Re-verification against `origin/main`
+- Since this pack was written, `origin/main` received only the RT-97 favicon (`app/favicon.ico`, `app/icon.png`, `app/apple-icon.png`, favicon scripts and tests). None of G1–G9 or the RT-81 facts changed.
+- Re-checked on `origin/main`: footer still states "No legal links (no real Privacy/Terms routes yet)" (`components/site/site-footer.tsx:14`); `PRIVACY_REVIEW_STATUS` is still `owner_approval: "PENDING"`, `legal_review: "PENDING"` (`lib/legal/privacy-copy.ts:7-9`); the only legal route is the hidden `app/[locale]/rebuild-lab/privacy-draft`.
+- **New technical point (G10, implementation only):** the site has a fourth, technical locale `sv` that is routable but not public (noindex, outside hreflang/sitemap: `i18n/locales.ts`, `publicLocaleCodes = pt, en, es`). The legal copy is typed for `pt | en | es` only. When the pages are built, `/sv/privacidade` and `/sv/termos` need a defined behavior (recommended: the same handling the other public pages give `sv`, never an empty or untranslated legal page). No Owner decision is needed unless Swedish is ever made public.
+
+### 6.2 One consolidated questionnaire (replaces asking RT-80 and RT-81 separately)
+The questions already posted in Jira overlap (company identity is RT-80 Q1 and RT-81 Q1). Single list, each with what it unlocks:
+
+| # | Question to the Owner | Answers ticket items | Unlocks |
+|---|---|---|---|
+| Q1 | Company identity: legal name, CNPJ, address, privacy/LGPD contact e-mail; show the Cadastur number? (number and wording) | RT-80 G7 "who"; RT-81 T11 | Privacy "controller" section; Terms "who we are" |
+| Q2 | Are login and `/reservas` offered to the public today? | RT-80 G4 | Privacy cookies section (session cookie) |
+| Q3 | Retention: how long are tour requests and contact messages kept? | RT-80 G7 "retention" | Privacy retention section; a later deletion job (separate ticket) |
+| Q4 | Daniela section left out of the policy until Daniela is enabled? | RT-80 G9; RT-81 T9 | Removes or keeps the AI section in both pages |
+| Q5 | May the Owner ask Oner what data/cookies the flight widget processes and who the controller is? | RT-80 G1; RT-81 T10 | Third-party section in both pages |
+| Q6 | Who operates the 4 current tours (Ricardo Tour for all four?) | RT-81 T1 | Terms "contracting party / operator" |
+| Q7 | How and how fast is a request confirmed; what counts as a "confirmed booking"? | RT-81 T2 | Terms booking section; must match `app/actions/tour-request.ts` (no automatic confirmation) |
+| Q8 | Cancellation, change, no-show, refund (after the Owner's research of other agencies) | RT-81 T3 | Terms cancellation section; the omitted policy line on tour pages (`tour-detail-view.tsx:29`) |
+| Q9 | Payment today, without online payment: when, how (deposit, Pix, on the day), currency | RT-81 T4/T5 | Terms prices/payment section |
+| Q10 | Tour rules: weather, minimum age and children, physical condition | RT-81 T6; RT-80 G6 (children's data, legal opinion) | Terms rules section |
+| Q11 | Who does the legal review (or Owner approves without external review); governing law, venue, complaint channel | RT-80 review; RT-81 T7/T8 | Both pages' approval gate |
+| Q12 | Page addresses `/privacidade` and `/termos` in every locale (same convention as `/quem-somos`)? | Both | Routes, footer links, sitemap |
+
+Legal opinion, not the Owner: cookie-consent banner (G5), children's data (G6), international-transfer basis (G7).
+
+### 6.3 Checklist for the Owner's research of other agencies (topics only)
+The references are input only and never become Ricardo Tour policy automatically (Owner decision of 14/10/2026). For each reference, note how it handles:
+1. When a booking counts as confirmed and through which channel.
+2. Cancellation by the customer: deadlines and the refund for each deadline.
+3. Changes of date or participants.
+4. No-show.
+5. Cancellation by the agency (weather, safety, minimum group size) and what the customer receives.
+6. Deposit or prepayment, and whether it is refundable.
+7. Children: minimum age, child prices, documentation.
+8. Delays at the meeting point.
+9. Partner-operated tours: who answers to the customer.
+Then the Owner writes or approves Ricardo Tour's own rule per topic (Q7–Q10). Do not copy another agency's text verbatim; their wording is their copyright.
+
+### 6.4 Status
+RT-80 and RT-81 remain **Em andamento**, waiting for Q1–Q12. The implementation plan in §4 is unchanged; G10 is added to its step 1 (routes).
