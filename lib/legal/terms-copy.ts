@@ -1,4 +1,5 @@
 import { PUBLIC_CONTACT } from "@/lib/public-contact";
+import { COMPANY_CNPJ } from "@/lib/legal/privacy-copy";
 
 /**
  * RT-81 terms page copy: a FACTUAL SKELETON in Portuguese, English and Spanish. It states only what the site does today
@@ -29,8 +30,8 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
     updated: "Rascunho preparado em 15/10/2026.",
     sections: [
       { id: "who", title: "Quem somos", paragraphs: [
-        `Este site (www.ricardotour.com) é da Ricardo Tour. Contato: ${CONTACT} ou WhatsApp ${WHATSAPP}.`,
-        "PENDENTE (Q1): razão social, CNPJ e endereço da empresa; exibir ou não o número do Cadastur.",
+        `Este site (www.ricardotour.com) é da Ricardo Tour, CNPJ ${COMPANY_CNPJ}. Contato: ${CONTACT} ou WhatsApp ${WHATSAPP}.`,
+        "PENDENTE (Q1): razão social, endereço cadastral e número do Cadastur.",
       ] },
       { id: "service", title: "O que o site oferece", paragraphs: [
         "O site apresenta passeios no Rio de Janeiro, recebe solicitações de passeio e mensagens de contato e oferece atendimento pelo WhatsApp.",
@@ -72,8 +73,8 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
     updated: "Draft prepared on 15 Oct 2026.",
     sections: [
       { id: "who", title: "Who we are", paragraphs: [
-        `This website (www.ricardotour.com) belongs to Ricardo Tour. Contact: ${CONTACT} or WhatsApp ${WHATSAPP}.`,
-        "PENDING (Q1): the company's legal name, tax ID and address; whether to show the Cadastur number.",
+        `This website (www.ricardotour.com) belongs to Ricardo Tour, CNPJ (Brazilian company number) ${COMPANY_CNPJ}. Contact: ${CONTACT} or WhatsApp ${WHATSAPP}.`,
+        "PENDING (Q1): registered legal name, registered address and Cadastur number.",
       ] },
       { id: "service", title: "What the website offers", paragraphs: [
         "The website presents tours in Rio de Janeiro, receives tour requests and contact messages, and offers support over WhatsApp.",
@@ -115,8 +116,8 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
     updated: "Borrador preparado el 15/10/2026.",
     sections: [
       { id: "who", title: "Quiénes somos", paragraphs: [
-        `Este sitio (www.ricardotour.com) pertenece a Ricardo Tour. Contacto: ${CONTACT} o WhatsApp ${WHATSAPP}.`,
-        "PENDIENTE (Q1): razón social, identificación fiscal y dirección de la empresa; mostrar o no el número de Cadastur.",
+        `Este sitio (www.ricardotour.com) pertenece a Ricardo Tour, CNPJ (registro de empresa en Brasil) ${COMPANY_CNPJ}. Contacto: ${CONTACT} o WhatsApp ${WHATSAPP}.`,
+        "PENDIENTE (Q1): razón social, dirección registrada y número de Cadastur.",
       ] },
       { id: "service", title: "Qué ofrece el sitio", paragraphs: [
         "El sitio presenta paseos en Río de Janeiro, recibe solicitudes de paseo y mensajes de contacto, y ofrece atención por WhatsApp.",

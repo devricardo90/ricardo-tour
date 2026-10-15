@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { PRIVACY_COPY, PRIVACY_REVIEW_STATUS } from "@/lib/legal/privacy-copy";
+import { COMPANY_CNPJ, PRIVACY_COPY, PRIVACY_REVIEW_STATUS } from "@/lib/legal/privacy-copy";
 
 describe("RT-80 privacy draft", () => {
   it("is a draft: Owner approval and legal review are PENDING and no lawyer approval is claimed", () => {
@@ -40,5 +40,16 @@ describe("RT-80 privacy draft", () => {
       expect(JSON.stringify(copy.sections.find((s) => s.id === "providers"))).toMatch(/Oner/);
       expect(copy.pending.map((p) => p.slice(0, p.indexOf(":")))).toEqual(["Q1", "Q3", "Q4", "Q5", "Q11"]);
     }
+  });
+
+  it("names the CNPJ confirmed by the Owner (2026-10-15) and the language cookie verified in production", () => {
+    expect(COMPANY_CNPJ).toBe("49.142.341/0001-90");
+    for (const copy of Object.values(PRIVACY_COPY)) {
+      expect(JSON.stringify(copy.sections.find((s) => s.id === "who"))).toContain(COMPANY_CNPJ);
+      expect(JSON.stringify(copy)).not.toMatch(/49\.14\.341/); // the malformed 13-digit value from the institutional document
+    }
+    expect(JSON.stringify(PRIVACY_COPY.pt)).toMatch(/cookie de idioma/);
+    expect(JSON.stringify(PRIVACY_COPY.en)).toMatch(/language cookie/);
+    expect(JSON.stringify(PRIVACY_COPY.es)).toMatch(/cookie de idioma/);
   });
 });
