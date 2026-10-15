@@ -30,4 +30,15 @@ describe("RT-80 privacy draft", () => {
       expect(all).toMatch(/30/); // the provider's retention is stated with its hedge
     }
   });
+
+  it("discloses the facts verified on 2026-10-15 (login session cookie, Oner widget) and lists the open decisions", () => {
+    const storage = (lang: "pt" | "en" | "es") => JSON.stringify(PRIVACY_COPY[lang].sections.find((s) => s.id === "storage"));
+    expect(storage("pt")).toMatch(/cookie de sessão de login/);
+    expect(storage("en")).toMatch(/login session cookie/);
+    expect(storage("es")).toMatch(/cookie de sesión/);
+    for (const copy of Object.values(PRIVACY_COPY)) {
+      expect(JSON.stringify(copy.sections.find((s) => s.id === "providers"))).toMatch(/Oner/);
+      expect(copy.pending.map((p) => p.slice(0, p.indexOf(":")))).toEqual(["Q1", "Q3", "Q4", "Q5", "Q11"]);
+    }
+  });
 });

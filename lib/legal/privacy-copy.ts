@@ -1,25 +1,31 @@
+import { PUBLIC_CONTACT } from "@/lib/public-contact";
+
 /**
  * RT-80 privacy page copy: a MINIMAL, FACTUAL draft in Portuguese, English and Spanish, prepared from what the code actually does
  * (see docs/legal/privacy-facts-verified.md for the evidence behind each statement). It is a DRAFT FOR THE OWNER'S APPROVAL:
  * the in-depth legal review is explicitly PENDING and no lawyer has approved this text. It must not be published, linked from the
  * footer or described as legally approved until the Owner approves it. Items the code cannot prove are written as such.
+ * 2026-10-15: contact values come from PUBLIC_CONTACT (G8); the login session cookie (G4/Q2) and the Oner flight widget (G1)
+ * are disclosed as facts; `pending` lists the Owner/legal decisions still open (Q1–Q12, docs/legal/rt-s9-80-81-legal-pages-preparation.md §7).
  */
 export const PRIVACY_REVIEW_STATUS = {
   owner_approval: "PENDING",
   legal_review: "PENDING",
   prepared_on: "2026-10-11",
+  updated_on: "2026-10-15",
 } as const;
 
 export type PrivacySection = { id: string; title: string; paragraphs: string[] };
-export type PrivacyCopy = { title: string; draftBanner: string; updated: string; sections: PrivacySection[] };
+export type PrivacyCopy = { title: string; draftBanner: string; updated: string; sections: PrivacySection[]; pendingTitle: string; pending: string[] };
 
-const CONTACT = "contato@ricardotour.com";
+const CONTACT = PUBLIC_CONTACT.email;
+const WHATSAPP = PUBLIC_CONTACT.whatsappDisplay;
 
 export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
   pt: {
     title: "Política de Privacidade (rascunho)",
     draftBanner: "Rascunho para aprovação do Owner. A revisão jurídica aprofundada está PENDENTE: este texto ainda não foi aprovado por advogado e não deve ser publicado até a aprovação do Owner.",
-    updated: "Rascunho preparado em 11/10/2026.",
+    updated: "Rascunho preparado em 11/10/2026 e atualizado em 15/10/2026.",
     sections: [
       { id: "who", title: "Quem somos", paragraphs: [`Esta política descreve como o site da Ricardo Tour trata dados pessoais. Razão social, CNPJ e endereço do responsável pelo tratamento: a serem informados pelo Owner antes da publicação. Contato para assuntos de privacidade: ${CONTACT}.`] },
       { id: "data", title: "Quais dados tratamos e para quê", paragraphs: [
@@ -33,23 +39,37 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
         "O que você escreve é enviado à OpenAI, nossa fornecedora de IA, apenas para gerar a resposta. A Ricardo Tour não guarda as conversas: o histórico existe somente na sua tela durante a sessão e some ao recarregar a página. A OpenAI pode manter registros técnicos conforme os termos dela (na documentação que consultamos, por até 30 dias para segurança; esse prazo pode mudar e deve ser conferido antes da publicação).",
         "Para limitar abusos, guardamos por poucos minutos ou horas contadores de uso associados a um código irreversível (hash) do seu endereço IP e de um identificador temporário e aleatório da sessão, sem nome nem conteúdo de mensagens.",
         "Registramos, sem o conteúdo das conversas, eventos técnicos (por exemplo: abertura do painel, clique em WhatsApp, erros, limites atingidos e quantidade de tokens usada).",
-        "Quando você clica para falar com a equipe, abrimos o WhatsApp (+55 22 99846-1906) ou seu e-mail com uma mensagem sugerida que você pode editar; nada é enviado automaticamente e o histórico da conversa não é transmitido. A conversa no WhatsApp passa a seguir as regras do WhatsApp.",
+        `Quando você clica para falar com a equipe, abrimos o WhatsApp (${WHATSAPP}) ou seu e-mail com uma mensagem sugerida que você pode editar; nada é enviado automaticamente e o histórico da conversa não é transmitido. A conversa no WhatsApp passa a seguir as regras do WhatsApp.`,
       ] },
-      { id: "providers", title: "Fornecedores envolvidos", paragraphs: ["Hospedagem do site (Vercel), banco de dados (Neon), e-mail transacional (Resend), controle de limites de uso (Upstash) e IA (OpenAI). Alguns deles podem tratar dados fora do Brasil; as condições de transferência internacional estão em revisão jurídica."] },
+      { id: "providers", title: "Fornecedores envolvidos", paragraphs: [
+        "Hospedagem do site (Vercel), banco de dados (Neon), e-mail transacional (Resend), controle de limites de uso (Upstash) e IA (OpenAI). Alguns deles podem tratar dados fora do Brasil; as condições de transferência internacional estão em revisão jurídica.",
+        "A busca de voos da página “Planeje sua viagem” (em português) é um serviço da Oner, carregado diretamente dos servidores da Oner no seu navegador. Os dados e cookies que esse serviço usa ainda estão sendo confirmados com a Oner.",
+      ] },
       { id: "retention", title: "Por quanto tempo guardamos", paragraphs: [
         "Conversas com a Daniela: não são guardadas por nós.",
         "Contadores de limite de uso: segundos a horas (expiram sozinhos).",
         "Mensagens de contato, contas, reservas e estatísticas: o sistema ainda não tem prazo de exclusão automática; o prazo será definido pelo Owner antes da publicação.",
         "Registros da hospedagem: por período curto definido pela plataforma.",
       ] },
-      { id: "storage", title: "Cookies e armazenamento no navegador", paragraphs: ["Usamos um cookie de atribuição de campanha (30 dias) com dados de origem da visita e um identificador de sessão guardado apenas na aba aberta. A Daniela não grava nada no seu navegador."] },
+      { id: "storage", title: "Cookies e armazenamento no navegador", paragraphs: [
+        "Usamos um cookie de atribuição de campanha (30 dias) com dados de origem da visita e um identificador de sessão guardado apenas na aba aberta. A Daniela não grava nada no seu navegador.",
+        "Se você entrar em uma conta do site, um cookie de sessão de login mantém você conectado; ele é necessário para as áreas de conta e reserva funcionarem.",
+      ] },
       { id: "rights", title: "Seus direitos e como falar conosco", paragraphs: [`Você pode pedir acesso, correção ou exclusão dos seus dados e tirar dúvidas pelo e-mail ${CONTACT}.`] },
+    ],
+    pendingTitle: "Decisões pendentes antes da publicação",
+    pending: [
+      "Q1: razão social, CNPJ e endereço do responsável; exibir ou não o número do Cadastur.",
+      "Q3: prazo de guarda de mensagens, pedidos, contas e estatísticas.",
+      "Q4: publicar sem a seção da Daniela enquanto ela estiver desativada.",
+      "Q5: dados e cookies do widget de voos, a confirmar com a Oner.",
+      "Q11: revisão jurídica, transferência internacional e necessidade de aviso de cookies.",
     ],
   },
   en: {
     title: "Privacy Policy (draft)",
     draftBanner: "Draft for the Owner's approval. The in-depth legal review is PENDING: this text has not been approved by a lawyer and must not be published until the Owner approves it.",
-    updated: "Draft prepared on 11 Oct 2026.",
+    updated: "Draft prepared on 11 Oct 2026 and updated on 15 Oct 2026.",
     sections: [
       { id: "who", title: "Who we are", paragraphs: [`This policy describes how the Ricardo Tour website handles personal data. Legal name, tax ID and address of the data controller: to be provided by the Owner before publication. Privacy contact: ${CONTACT}.`] },
       { id: "data", title: "What data we handle and why", paragraphs: [
@@ -63,23 +83,37 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
         "What you write is sent to OpenAI, our AI provider, only to generate the answer. Ricardo Tour does not store the conversations: the history exists only on your screen during the session and disappears when you reload the page. OpenAI may keep technical records under its own terms (in the documentation we consulted, up to 30 days for security; this period may change and must be checked before publication).",
         "To limit abuse, we keep for minutes or hours usage counters linked to an irreversible code (hash) of your IP address and of a temporary random session identifier, with no name and no message content.",
         "We log, without the content of conversations, technical events (for example: opening the panel, clicking WhatsApp, errors, limits reached and the number of tokens used).",
-        "When you choose to talk to the team, we open WhatsApp (+55 22 99846-1906) or your e-mail with a suggested message you can edit; nothing is sent automatically and the conversation history is not transmitted. The WhatsApp conversation then follows WhatsApp's own rules.",
+        `When you choose to talk to the team, we open WhatsApp (${WHATSAPP}) or your e-mail with a suggested message you can edit; nothing is sent automatically and the conversation history is not transmitted. The WhatsApp conversation then follows WhatsApp's own rules.`,
       ] },
-      { id: "providers", title: "Providers involved", paragraphs: ["Website hosting (Vercel), database (Neon), transactional e-mail (Resend), usage-limit control (Upstash) and AI (OpenAI). Some of them may process data outside Brazil; the international-transfer terms are under legal review."] },
+      { id: "providers", title: "Providers involved", paragraphs: [
+        "Website hosting (Vercel), database (Neon), transactional e-mail (Resend), usage-limit control (Upstash) and AI (OpenAI). Some of them may process data outside Brazil; the international-transfer terms are under legal review.",
+        "The flight search on the “Planeje sua viagem” page (in Portuguese) is a service by Oner, loaded directly from Oner's servers into your browser. The data and cookies this service uses are still being confirmed with Oner.",
+      ] },
       { id: "retention", title: "How long we keep data", paragraphs: [
         "Conversations with Daniela: not stored by us.",
         "Usage-limit counters: seconds to hours (they expire by themselves).",
         "Contact messages, accounts, bookings and statistics: the system has no automatic deletion period yet; the Owner will define it before publication.",
         "Hosting logs: a short period set by the platform.",
       ] },
-      { id: "storage", title: "Cookies and browser storage", paragraphs: ["We use a campaign-attribution cookie (30 days) with the source of the visit and a session identifier kept only in the open tab. Daniela does not write anything to your browser."] },
+      { id: "storage", title: "Cookies and browser storage", paragraphs: [
+        "We use a campaign-attribution cookie (30 days) with the source of the visit and a session identifier kept only in the open tab. Daniela does not write anything to your browser.",
+        "If you sign in to an account on the site, a login session cookie keeps you signed in; it is needed for the account and booking areas to work.",
+      ] },
       { id: "rights", title: "Your rights and how to contact us", paragraphs: [`You can ask for access, correction or deletion of your data, or ask questions, at ${CONTACT}.`] },
+    ],
+    pendingTitle: "Decisions pending before publication",
+    pending: [
+      "Q1: legal name, tax ID and address of the controller; whether to show the Cadastur number.",
+      "Q3: retention period for messages, requests, accounts and statistics.",
+      "Q4: publish without the Daniela section while she is disabled.",
+      "Q5: data and cookies of the flight widget, to be confirmed with Oner.",
+      "Q11: legal review, international transfer and whether a cookie notice is needed.",
     ],
   },
   es: {
     title: "Política de Privacidad (borrador)",
     draftBanner: "Borrador para aprobación del Owner. La revisión jurídica en profundidad está PENDIENTE: este texto no ha sido aprobado por un abogado y no debe publicarse hasta que el Owner lo apruebe.",
-    updated: "Borrador preparado el 11/10/2026.",
+    updated: "Borrador preparado el 11/10/2026 y actualizado el 15/10/2026.",
     sections: [
       { id: "who", title: "Quiénes somos", paragraphs: [`Esta política describe cómo el sitio de Ricardo Tour trata los datos personales. Razón social, identificación fiscal y dirección del responsable del tratamiento: serán indicadas por el Owner antes de la publicación. Contacto de privacidad: ${CONTACT}.`] },
       { id: "data", title: "Qué datos tratamos y para qué", paragraphs: [
@@ -93,17 +127,31 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
         "Lo que escribes se envía a OpenAI, nuestra proveedora de IA, solo para generar la respuesta. Ricardo Tour no guarda las conversaciones: el historial existe solo en tu pantalla durante la sesión y desaparece al recargar la página. OpenAI puede conservar registros técnicos según sus propios términos (en la documentación que consultamos, hasta 30 días por seguridad; ese plazo puede cambiar y debe verificarse antes de la publicación).",
         "Para limitar abusos, guardamos durante minutos u horas contadores de uso asociados a un código irreversible (hash) de tu dirección IP y de un identificador temporal aleatorio de sesión, sin nombre ni contenido de mensajes.",
         "Registramos, sin el contenido de las conversaciones, eventos técnicos (por ejemplo: apertura del panel, clic en WhatsApp, errores, límites alcanzados y cantidad de tokens usados).",
-        "Cuando eliges hablar con el equipo, abrimos WhatsApp (+55 22 99846-1906) o tu correo con un mensaje sugerido que puedes editar; no se envía nada automáticamente y el historial de la conversación no se transmite. La conversación en WhatsApp pasa a regirse por las reglas de WhatsApp.",
+        `Cuando eliges hablar con el equipo, abrimos WhatsApp (${WHATSAPP}) o tu correo con un mensaje sugerido que puedes editar; no se envía nada automáticamente y el historial de la conversación no se transmite. La conversación en WhatsApp pasa a regirse por las reglas de WhatsApp.`,
       ] },
-      { id: "providers", title: "Proveedores involucrados", paragraphs: ["Alojamiento del sitio (Vercel), base de datos (Neon), correo transaccional (Resend), control de límites de uso (Upstash) e IA (OpenAI). Algunos pueden tratar datos fuera de Brasil; las condiciones de transferencia internacional están en revisión jurídica."] },
+      { id: "providers", title: "Proveedores involucrados", paragraphs: [
+        "Alojamiento del sitio (Vercel), base de datos (Neon), correo transaccional (Resend), control de límites de uso (Upstash) e IA (OpenAI). Algunos pueden tratar datos fuera de Brasil; las condiciones de transferencia internacional están en revisión jurídica.",
+        "La búsqueda de vuelos de la página “Planeje sua viagem” (en portugués) es un servicio de Oner, cargado directamente desde los servidores de Oner en tu navegador. Los datos y cookies que usa ese servicio aún se están confirmando con Oner.",
+      ] },
       { id: "retention", title: "Cuánto tiempo guardamos los datos", paragraphs: [
         "Conversaciones con Daniela: no las guardamos.",
         "Contadores de límite de uso: de segundos a horas (caducan solos).",
         "Mensajes de contacto, cuentas, reservas y estadísticas: el sistema aún no tiene un plazo de eliminación automática; el Owner lo definirá antes de la publicación.",
         "Registros del alojamiento: un período corto fijado por la plataforma.",
       ] },
-      { id: "storage", title: "Cookies y almacenamiento en el navegador", paragraphs: ["Usamos una cookie de atribución de campaña (30 días) con el origen de la visita y un identificador de sesión guardado solo en la pestaña abierta. Daniela no escribe nada en tu navegador."] },
+      { id: "storage", title: "Cookies y almacenamiento en el navegador", paragraphs: [
+        "Usamos una cookie de atribución de campaña (30 días) con el origen de la visita y un identificador de sesión guardado solo en la pestaña abierta. Daniela no escribe nada en tu navegador.",
+        "Si inicias sesión en una cuenta del sitio, una cookie de sesión mantiene tu sesión abierta; es necesaria para que funcionen las áreas de cuenta y reservas.",
+      ] },
       { id: "rights", title: "Tus derechos y cómo contactarnos", paragraphs: [`Puedes pedir acceso, corrección o eliminación de tus datos, o hacer consultas, en ${CONTACT}.`] },
+    ],
+    pendingTitle: "Decisiones pendientes antes de la publicación",
+    pending: [
+      "Q1: razón social, identificación fiscal y dirección del responsable; mostrar o no el número de Cadastur.",
+      "Q3: plazo de conservación de mensajes, solicitudes, cuentas y estadísticas.",
+      "Q4: publicar sin la sección de Daniela mientras esté desactivada.",
+      "Q5: datos y cookies del widget de vuelos, a confirmar con Oner.",
+      "Q11: revisión jurídica, transferencia internacional y necesidad de aviso de cookies.",
     ],
   },
 };

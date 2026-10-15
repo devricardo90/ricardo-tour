@@ -23,6 +23,12 @@ export default async function PrivacyDraftPage({ params }: { params: Promise<{ l
             ))}
           </section>
         ))}
+        <aside aria-labelledby="privacy-pending" style={{ marginTop: 40, padding: "16px 20px", border: "1px dashed #c9a227", borderRadius: 10 }}>
+          <h2 id="privacy-pending" style={{ fontSize: 18, margin: "0 0 8px" }}>{copy.pendingTitle}</h2>
+          <ul style={{ margin: 0, paddingLeft: 20, fontSize: 15 }}>
+            {copy.pending.map((item) => <li key={item.slice(0, 3)}>{item}</li>)}
+          </ul>
+        </aside>
       </article>
     </main>
   );
