@@ -94,6 +94,10 @@ model Trip {
   bookings        Booking[]
   schedules       TripSchedule[]
   translationLogs TranslationJobLog[]
+  // RT-113: structured tour content (Sprint 10). All optional/additive; public output gated by status/rights.
+  content         TripContent?
+  itinerary       TripItineraryStop[]
+  images          TripImage[]
 
   @@index([partnerId])
 }
@@ -368,4 +372,74 @@ enum TranslationJobStatus {
 enum EmailTemplate {
   BOOKING_CONFIRMED
   PAYMENT_CONFIRMED
+}
+
+// RT-113 (RT-RB-S10-03): structured content for a tour, additive. One row per Trip. Localized fields are JSON objects
+// keyed by locale ({ "pt": ..., "en": ..., "es": ... }). Nothing here is shown publicly unless status = OWNER_APPROVED
+// (lib/catalog/tour-content.ts). No price lives here: prices stay on Trip and change only by Owner decision.
+model TripContent {
+  tripId          String            @id
+  trip            Trip              @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  status          TripContentStatus @default(DRAFT)
+  /// Free text: where every fact came from (Owner intake reference, date). "MOCK" for fictitious development data.
+  source          String?
+  summary         Json?
+  description     Json?
+  durationLabel   Json?
+  meetingPoint    Json?
+  startTimeNote   Json?
+  /// ISO 639-1 codes of the languages the tour is offered in, e.g. ["pt","en","es"].
+  languages       String[]          @default([])
+  inclusions      Json?
+  exclusions      Json?
+  requirements    Json?
+  accessibility   Json?
+  weatherPolicy   Json?
+  approvedAt      DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+}
+
+// RT-113: ordered itinerary stops of a tour.
+model TripItineraryStop {
+  id              String   @id @default(cuid())
+  tripId          String
+  trip            Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  position        Int
+  title           Json
+  description     Json?
+  durationMinutes Int?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([tripId, position])
+}
+
+// RT-113: ordered gallery images of a tour. Only images with recorded rights are shown publicly.
+model TripImage {
+  id           String              @id @default(cuid())
+  tripId       String
+  trip         Trip                @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  position     Int
+  src          String
+  alt          Json
+  isCover      Boolean             @default(false)
+  rightsStatus TripImageRightsStatus @default(UNVERIFIED)
+  /// Author, consent of identifiable people, licence reference (RT-79 / RT-116 rights register).
+  rightsNote   String?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  @@unique([tripId, position])
+}
+
+enum TripContentStatus {
+  DRAFT
+  OWNER_APPROVED
+}
+
+enum TripImageRightsStatus {
+  UNVERIFIED
+  OWNER_ATTESTED
+  LICENSED
 }

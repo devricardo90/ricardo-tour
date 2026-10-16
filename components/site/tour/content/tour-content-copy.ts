@@ -1,0 +1,73 @@
+// RT-113/RT-114: interface copy (labels only) for the structured tour sections, PT / EN / ES. Tour CONTENT (meeting
+// point, itinerary, rules) comes from TripContent and is never written here.
+export const tourContentCopy = {
+  pt: {
+    practical: "Informações práticas",
+    duration: "Duração",
+    meetingPoint: "Ponto de encontro",
+    startTime: "Horário",
+    languages: "Idiomas",
+    itinerary: "Roteiro",
+    stop: (n: number) => `Parada ${n}`,
+    minutes: (m: number) => (m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? ` ${m % 60} min` : ""}` : `${m} min`),
+    requirements: "Requisitos",
+    accessibility: "Acessibilidade",
+    weather: "Clima",
+    gallery: "Galeria de fotos",
+    galleryPrev: "Foto anterior",
+    galleryNext: "Próxima foto",
+    galleryThumb: "Mostrar foto {n} de {total}",
+    galleryPosition: "Foto {n} de {total}",
+    mockBanner: "PROTÓTIPO COM DADOS FICTÍCIOS (MOCK). Nada nesta página é informação comercial real, exceto os dados já publicados indicados como tal.",
+    published: "Publicado hoje",
+    language: { pt: "Português", en: "Inglês", es: "Espanhol", fr: "Francês", de: "Alemão", it: "Italiano", sv: "Sueco" } as Record<string, string>,
+  },
+  en: {
+    practical: "Practical information",
+    duration: "Duration",
+    meetingPoint: "Meeting point",
+    startTime: "Start time",
+    languages: "Languages",
+    itinerary: "Itinerary",
+    stop: (n: number) => `Stop ${n}`,
+    minutes: (m: number) => (m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? ` ${m % 60} min` : ""}` : `${m} min`),
+    requirements: "Requirements",
+    accessibility: "Accessibility",
+    weather: "Weather",
+    gallery: "Photo gallery",
+    galleryPrev: "Previous photo",
+    galleryNext: "Next photo",
+    galleryThumb: "Show photo {n} of {total}",
+    galleryPosition: "Photo {n} of {total}",
+    mockBanner: "PROTOTYPE WITH FICTITIOUS (MOCK) DATA. Nothing on this page is real commercial information, except the already published facts marked as such.",
+    published: "Published today",
+    language: { pt: "Portuguese", en: "English", es: "Spanish", fr: "French", de: "German", it: "Italian", sv: "Swedish" } as Record<string, string>,
+  },
+  es: {
+    practical: "Información práctica",
+    duration: "Duración",
+    meetingPoint: "Punto de encuentro",
+    startTime: "Horario",
+    languages: "Idiomas",
+    itinerary: "Itinerario",
+    stop: (n: number) => `Parada ${n}`,
+    minutes: (m: number) => (m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? ` ${m % 60} min` : ""}` : `${m} min`),
+    requirements: "Requisitos",
+    accessibility: "Accesibilidad",
+    weather: "Clima",
+    gallery: "Galería de fotos",
+    galleryPrev: "Foto anterior",
+    galleryNext: "Foto siguiente",
+    galleryThumb: "Mostrar foto {n} de {total}",
+    galleryPosition: "Foto {n} de {total}",
+    mockBanner: "PROTOTIPO CON DATOS FICTICIOS (MOCK). Nada en esta página es información comercial real, salvo los datos ya publicados indicados como tales.",
+    published: "Publicado hoy",
+    language: { pt: "Portugués", en: "Inglés", es: "Español", fr: "Francés", de: "Alemán", it: "Italiano", sv: "Sueco" } as Record<string, string>,
+  },
+} as const;
+
+export type TourContentCopy = (typeof tourContentCopy)[keyof typeof tourContentCopy];
+
+export function resolveTourContentCopy(locale: string): TourContentCopy {
+  return tourContentCopy[locale as keyof typeof tourContentCopy] ?? tourContentCopy.pt;
+}
