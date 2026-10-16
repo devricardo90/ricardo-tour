@@ -1,0 +1,70 @@
+PASS  /api/trips returns exactly 4 tours (got 4)
+PASS  cmlhxkpy9000028zq27rhytew pt page 200
+PASS  cmlhxkpy9000028zq27rhytew title "Cristo Redentor + Pão de Açúcar"
+PASS  cmlhxkpy9000028zq27rhytew JSON-LD price 385.00 BRL
+PASS  cmlhxkpy9000028zq27rhytew image imagem-pao-de-acucar.jpg
+PASS  cmlhxkpy9000028zq27rhytew contains "5–6 horas"
+PASS  cmlhxkpy9000028zq27rhytew contains "Passeio Clássico"
+PASS  cmlhxkpy9000028zq27rhytew contains "Cristo Redentor"
+PASS  cmlhxkpy9000028zq27rhytew contains "Bondinho do Pão de Açúcar"
+PASS  cmlhxkpy9000028zq27rhytew contains "Vista da Baía de Guanabara"
+PASS  cmlhxkpy9000028zq27rhytew contains "Transporte em van"
+PASS  cmlhxkpy9000028zq27rhytew contains "Guia turístico"
+PASS  cmlhxkpy9000028zq27rhytew contains "Ingresso Cristo Redentor"
+PASS  cmlhxkpy9000028zq27rhytew contains "Ingresso Pão de Açúcar"
+PASS  cmlhxkpy9000028zq27rhytew contains "Alimentação"
+PASS  cmlhxkpy9000028zq27rhytew en page shows the PORTUGUESE description
+PASS  cmlhxkpy9000028zq27rhytew es page shows the PORTUGUESE description
+PASS  cmlhxkpy9000028zq27rhytew /api/trips description identical in pt/en/es/sv
+PASS  cmli1a6im000034zqqzc9sppb pt page 200
+PASS  cmli1a6im000034zqqzc9sppb title "Tour Favela Rocinha com Guia Local"
+PASS  cmli1a6im000034zqqzc9sppb JSON-LD price 120.00 BRL
+PASS  cmli1a6im000034zqqzc9sppb image imagem-tour-favela-rocinha.jpg
+PASS  cmli1a6im000034zqqzc9sppb contains "3–4 horas"
+PASS  cmli1a6im000034zqqzc9sppb contains "Experiência Cultural"
+PASS  cmli1a6im000034zqqzc9sppb contains "Vista panorâmica da Rocinha"
+PASS  cmli1a6im000034zqqzc9sppb contains "Interação com comunidade local"
+PASS  cmli1a6im000034zqqzc9sppb contains "Cultura e história"
+PASS  cmli1a6im000034zqqzc9sppb contains "Guia local"
+PASS  cmli1a6im000034zqqzc9sppb contains "Transporte"
+PASS  cmli1a6im000034zqqzc9sppb contains "Passeio guiado"
+PASS  cmli1a6im000034zqqzc9sppb contains "maior favela do Brasil"
+PASS  cmli1a6im000034zqqzc9sppb en page shows the PORTUGUESE description
+PASS  cmli1a6im000034zqqzc9sppb es page shows the PORTUGUESE description
+PASS  cmli1a6im000034zqqzc9sppb /api/trips description identical in pt/en/es/sv
+PASS  cmlibniq40000z4zqkbujnutt pt page 200
+PASS  cmlibniq40000z4zqkbujnutt title "Confeitaria Colombo + City Tour Rio"
+PASS  cmlibniq40000z4zqkbujnutt JSON-LD price 245.00 BRL
+PASS  cmlibniq40000z4zqkbujnutt image confeitaria-colombo-city-tour.jpeg
+PASS  cmlibniq40000z4zqkbujnutt contains "5 horas"
+PASS  cmlibniq40000z4zqkbujnutt contains "City Tour"
+PASS  cmlibniq40000z4zqkbujnutt contains "Cristo Redentor"
+PASS  cmlibniq40000z4zqkbujnutt contains "Vista panorâmica da cidade"
+PASS  cmlibniq40000z4zqkbujnutt contains "Centro histórico"
+PASS  cmlibniq40000z4zqkbujnutt contains "Guia bilíngue"
+PASS  cmlibniq40000z4zqkbujnutt contains "Transporte ida e volta"
+PASS  cmlibniq40000z4zqkbujnutt contains "Paradas para fotos"
+PASS  cmlibniq40000z4zqkbujnutt contains "Ingresso opcional trem ou van"
+PASS  cmlibniq40000z4zqkbujnutt contains "principal cartão-postal do Brasil"
+PASS  cmlibniq40000z4zqkbujnutt contains "colombo r "
+PASS  cmlibniq40000z4zqkbujnutt en page shows the PORTUGUESE description
+PASS  cmlibniq40000z4zqkbujnutt es page shows the PORTUGUESE description
+PASS  cmlibniq40000z4zqkbujnutt /api/trips description identical in pt/en/es/sv
+PASS  cmljo0s1u0000t0zqa0bpd23p pt page 200
+PASS  cmljo0s1u0000t0zqa0bpd23p title "Tour Privado Premium Rio de Janeiro"
+PASS  cmljo0s1u0000t0zqa0bpd23p JSON-LD price 900.00 BRL
+PASS  cmljo0s1u0000t0zqa0bpd23p image imagem-igreja-centro-rio.jpg
+PASS  cmljo0s1u0000t0zqa0bpd23p contains "8 horas"
+PASS  cmljo0s1u0000t0zqa0bpd23p contains "Premium"
+PASS  cmljo0s1u0000t0zqa0bpd23p contains "Roteiro personalizado"
+PASS  cmljo0s1u0000t0zqa0bpd23p contains "Santa Teresa"
+PASS  cmljo0s1u0000t0zqa0bpd23p contains "Escadaria Selarón"
+PASS  cmljo0s1u0000t0zqa0bpd23p contains "Guia privado"
+PASS  cmljo0s1u0000t0zqa0bpd23p contains "Transporte executivo"
+PASS  cmljo0s1u0000t0zqa0bpd23p contains "Flexibilidade total de roteiro"
+PASS  cmljo0s1u0000t0zqa0bpd23p contains "Ingressos"
+PASS  cmljo0s1u0000t0zqa0bpd23p en page shows the PORTUGUESE description
+PASS  cmljo0s1u0000t0zqa0bpd23p es page shows the PORTUGUESE description
+PASS  cmljo0s1u0000t0zqa0bpd23p /api/trips description identical in pt/en/es/sv
+
+ALL CHECKS PASSED
