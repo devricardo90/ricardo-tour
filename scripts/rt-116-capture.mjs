@@ -35,7 +35,7 @@ for (const [device, viewport] of [["desktop", { width: 1440, height: 900 }], ["m
       window.__lcp = 0;
       new PerformanceObserver((list) => { for (const e of list.getEntries()) window.__lcp = e.startTime; }).observe({ type: "largest-contentful-paint", buffered: true });
     });
-    const url = `${BASE}/${locale}/rebuild-lab/tour-content-preview/${ID}`;
+    const url = `${BASE}/${locale}/rebuild-lab/tour-content-preview/${ID}${process.env.RT116_QUERY ?? ""}`;
     // Warm-up load (dev server compiles on first hit), then a measured load.
     await page.goto(url, { waitUntil: "load" });
     responses.length = 0;

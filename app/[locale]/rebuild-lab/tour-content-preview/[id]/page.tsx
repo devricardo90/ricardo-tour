@@ -11,8 +11,10 @@ export const metadata: Metadata = { title: "RT-114 · Tour page PROTOTYPE (mock)
 /** RT-114 visual prototype, round 1 (rebuild lab: 404 in production unless REBUILD_LAB_ENABLED, noindex, not linked).
  *  Uses MOCK structured content + the prototype offer (statuses per fact); never reads or writes any database and never
  *  shows old catalog prices/durations/routes. */
-export default async function TourContentPreviewPage({ params }: { params: Promise<{ locale: string; id: string }> }) {
+/** `?precos=ocultos` renders the visual-review version for the Owner: internal provisional prices are not rendered. */
+export default async function TourContentPreviewPage({ params, searchParams }: { params: Promise<{ locale: string; id: string }>; searchParams: Promise<{ precos?: string }> }) {
   const { locale, id } = await params;
+  const { precos } = await searchParams;
   const offer = PROTOTYPE_OFFER[id];
   const record = MOCK_TOUR_CONTENT[id];
   if (!offer || !record) notFound();
@@ -20,7 +22,7 @@ export default async function TourContentPreviewPage({ params }: { params: Promi
   if (!content) notFound();
   return (
     <div className={`site-theme ${siteDisplay.variable} ${siteBody.variable}`} data-testid="tour-content-preview">
-      <TourDetailPrototype offer={offer} content={content} locale={locale} reviewMode />
+      <TourDetailPrototype offer={offer} content={content} locale={locale} reviewMode showProvisionalPrices={precos !== "ocultos"} />
     </div>
   );
 }

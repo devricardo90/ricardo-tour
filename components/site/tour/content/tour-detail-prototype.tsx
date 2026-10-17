@@ -59,7 +59,8 @@ const raisedCard = "rounded-xl border border-white/10 bg-[var(--site-charcoal-ra
  * Review mode shows a status chip on every fact. Old catalog prices/durations/routes are not shown. Booking unchanged:
  * the CTA points to the existing request form; no automatic confirmation.
  */
-export function TourDetailPrototype({ offer, content, locale, reviewMode }: { offer: PrototypeOfferView; content: TourContentView; locale: string; reviewMode: boolean }) {
+/** `showProvisionalPrices=false` produces the visual-review version (no internal prices; only "Valores em validação"). */
+export function TourDetailPrototype({ offer, content, locale, reviewMode, showProvisionalPrices = true }: { offer: PrototypeOfferView; content: TourContentView; locale: string; reviewMode: boolean; showProvisionalPrices?: boolean }) {
   const td = resolveTourDetailCopy(locale);
   const t = resolveTourContentCopy(locale);
   const s = (status: ReviewStatus) => (reviewMode ? status : undefined);
@@ -78,7 +79,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode }: { of
     content.meetingPoint && !content.isMock
       ? { key: "meeting", icon: essentialIcons.MapPin, label: t.meetingPoint, value: content.meetingPoint, status: s(offer.pickup.status) }
       : { key: "pickup", icon: essentialIcons.Car, label: t.pickup, value: pickL(offer.pickup.value, locale), status: s(offer.pickup.status) },
-    { key: "duration", icon: essentialIcons.Clock, label: t.duration, value: offer.duration.value ? pickL(offer.duration.value, locale) : t.pricePending, status: s(offer.duration.status) },
+    { key: "duration", icon: essentialIcons.Clock, label: t.duration, value: offer.duration.value ? pickL(offer.duration.value, locale) : t.pendingValue, status: s(offer.duration.status) },
     ...(offer.groupSize ? [{ key: "group", icon: essentialIcons.Users, label: t.participants, value: pickL(offer.groupSize.value, locale), status: s(offer.groupSize.status) }] : []),
     ...(offer.minAge ? [{ key: "age", icon: essentialIcons.UserCheck, label: t.minimumAge, value: pickL(offer.minAge.value, locale), status: s(offer.minAge.status) }] : []),
     ...(content.startTimeNote ? [{ key: "time", icon: essentialIcons.Timer, label: t.startTime, value: content.startTimeNote, status: s(contentStatus) }] : []),
@@ -138,7 +139,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode }: { of
                     {t.ctaWhatsapp}
                   </a>
                   <p className="mt-3 text-[14px] leading-[1.5] text-[var(--site-on-dark-muted,#CAC7BF)]">{t.ctaNote}</p>
-                  {reviewMode && offer.provisionalPricing ? (
+                  {reviewMode && showProvisionalPrices && offer.provisionalPricing ? (
                     <div className="mt-4 rounded-lg border border-[#e0a63c] bg-[#2e2108] p-3 text-[#f3cf86]" data-testid="tour-provisional-prices" role="note">
                       <p className="text-[12px] font-bold tracking-[0.08em]">{t.provisionalPricesTitle}</p>
                       <table className="mt-2 w-full text-[14px]">

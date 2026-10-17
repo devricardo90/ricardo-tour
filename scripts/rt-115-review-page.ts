@@ -1,7 +1,8 @@
 /**
  * RT-115: builds the Owner review page (single HTML, images inlined) for the Rocinha commercial closing, from the same
  * draft data the preview uses. Internal costs are never included; provisional prices appear labelled "NÃO PUBLICAR".
- * Usage: npx tsx scripts/rt-115-review-page.ts <captures dir> <out.html>
+ * Usage: npx tsx scripts/rt-115-review-page.ts <captures dir> <out.html> [--sem-precos]
+ * --sem-precos: visual-review version (no provisional prices anywhere; "Valores em validação"). Use captures taken with ?precos=ocultos.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -17,6 +18,7 @@ import {
 } from "../lib/catalog/drafts/rocinha.draft";
 
 const [capDir, outFile] = process.argv.slice(2);
+const noPrices = process.argv.includes("--sem-precos");
 const img = (f: string) => `data:image/jpeg;base64,${fs.readFileSync(path.join(capDir, f)).toString("base64")}`;
 const esc = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const c = ROCINHA_CONTENT;
@@ -46,7 +48,7 @@ const pane = (l: L) => {
 </div>`;
 };
 const brl = (cents: number) => `R$ ${(cents / 100).toFixed(0)}`;
-const html = `<title>Rocinha comercial RT-115</title>
+const html = `<title>${noPrices ? "Rocinha revisão visual" : "Rocinha revisão interna"}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Inter:wght@400;500;600&display=swap">
@@ -81,12 +83,12 @@ footer{font-size:13px;color:var(--subtle)}
 <main>
 <header style="display:grid;gap:10px">
   <p class="eyebrow">Ricardo Tour · Sprint 10 · RT-112 / RT-115 · Favela Rocinha</p>
-  <h1>Conteúdo comercial da Rocinha para sua aprovação</h1>
-  <p class="lede">Ficha comercial consolidada, textos em português, inglês e espanhol, e a página local com conteúdo e mídias. Nada publicado; nenhum preço alterado no site.</p>
+  <h1>${noPrices ? "Revisão visual da Rocinha" : "Revisão interna da Rocinha"}</h1>
+  <p class="lede">${noPrices ? "Design aprovado, textos em português, inglês e espanhol, fotos e vídeo. Sem preços: aparecem como Valores em validação." : "Uso interno: inclui preços provisórios. Não compartilhar nem publicar."} Nada publicado; nenhum preço alterado no site.</p>
 </header>
 <section class="status" aria-label="Estado">
   <div class="st ok"><b>VISUAL APPROVED</b><span>Layout RT-114 v2, fotos e vídeo</span></div>
-  <div class="st wait"><b>CONTENT READY FOR OWNER REVIEW</b><span>Textos PT/EN/ES nesta página</span></div>
+  <div class="st wait"><b>CONTENT REVIEW REQUIRED</b><span>Textos PT/EN/ES aguardando seu parecer</span></div>
   <div class="st pend"><b>OPERATIONAL VALIDATION PENDING</b><span>Checklist de segurança, custos e tributos, requisitos físicos, horários</span></div>
   <div class="st stop"><b>PRODUCTION NOT AUTHORIZED</b><span>Sem push, merge, deploy ou migration</span></div>
 </section>
@@ -99,18 +101,20 @@ footer{font-size:13px;color:var(--subtle)}
     <tr><td>Reserva e pagamento</td><td>Solicitação → verificação humana → proposta → sinal de 30% → confirmação → saldo de 70% antes do início · PIX, cartão de crédito, dinheiro · sem pagamento automático</td></tr>
     <tr><td>Cancelamento</td><td>Política escalonada aprovada como princípio; prazos e percentuais dependem do RT-81</td></tr>
   </tbody></table></div>
-  <div class="warn" role="note"><b>PREÇOS PROVISÓRIOS — NÃO PUBLICAR.</b> Preço fechado por reserva: ${ROCINHA_PROVISIONAL_PRICING.map((r) => `${r.participants} ${r.participants === 1 ? "pessoa" : "pessoas"} ${brl(r.totalCents)}`).join(" · ")}. Dependem da validação de custos, tributos e operação. Custos internos estão só no Manual Mestre (seção confidencial).</div>
+  ${noPrices
+    ? `<div class="warn" role="note"><b>Preço: Valores em validação.</b> Os valores não fazem parte desta versão de revisão visual.</div>`
+    : `<div class="warn" role="note"><b>VERSÃO INTERNA — PREÇOS PROVISÓRIOS — NÃO PUBLICAR.</b> Preço fechado por reserva: ${ROCINHA_PROVISIONAL_PRICING.map((r) => `${r.participants} ${r.participants === 1 ? "pessoa" : "pessoas"} ${brl(r.totalCents)}`).join(" · ")}. Dependem da validação de custos, tributos e operação. Custos internos estão só no Manual Mestre (seção confidencial).</div>`}
 </section>
 <section aria-labelledby="texts-h">
   <h2 id="texts-h">Textos para revisão</h2>
-  <p class="lede">Os nomes em inglês e espanhol são propostas. São os mesmos textos da página local.</p>
+  <p class="lede">São os mesmos textos da página local, sem reescrita. Nomes em inglês e espanhol: proposta atual nas abas; sua preferência inicial (ainda não aplicada) é “Rocinha Favela — Private Cultural Tour” e “Tour Privado por la Favela de Rocinha”.</p>
   <div class="tabs" role="tablist" aria-label="Idioma"><button role="tab" id="tab-pt" aria-controls="pane-pt" aria-selected="true">Português</button><button role="tab" id="tab-en" aria-controls="pane-en" aria-selected="false" tabindex="-1">English</button><button role="tab" id="tab-es" aria-controls="pane-es" aria-selected="false" tabindex="-1">Español</button></div>
   <div class="card">${pane("pt")}${pane("en")}${pane("es")}</div>
 </section>
 <section aria-labelledby="shots-h">
   <h2 id="shots-h">Página local</h2>
   <div class="shots">
-    <figure><img src="${img("desktop-top.jpg")}" alt="Topo da página no computador com título, capa e botão Solicitar disponibilidade" loading="lazy"><figcaption>Computador: abertura (botão visível sem rolar; tabela provisória só no modo revisão, abaixo dos botões)</figcaption></figure>
+    <figure><img src="${img("desktop-top.jpg")}" alt="Topo da página no computador com título, capa e botão Solicitar disponibilidade" loading="lazy"><figcaption>${noPrices ? "Computador: abertura, preço como Valores em validação" : "Computador: abertura (tabela provisória só no modo revisão, abaixo dos botões)"}</figcaption></figure>
     <figure><img src="${img("full-1.jpg")}" alt="Seções Sobre a experiência, informações essenciais, benefícios e roteiro" loading="lazy"><figcaption>Sobre a experiência, informações essenciais, roteiro</figcaption></figure>
     <figure><img src="${img("full-2.jpg")}" alt="Seções incluído, não incluído, serviços opcionais, condições e perguntas frequentes" loading="lazy"><figcaption>Inclusões, serviços opcionais, condições, perguntas frequentes</figcaption></figure>
     <figure><img src="${img("mobile-top.jpg")}" alt="Topo da página no celular com a barra fixa" loading="lazy"><figcaption>Celular: abertura com barra fixa</figcaption></figure>
