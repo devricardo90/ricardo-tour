@@ -37,7 +37,7 @@ export type TourContentRecord = {
   weatherPolicy?: LocalizedText | null;
   approvedAt?: Date | string | null;
   itinerary: Array<{ position: number; title: LocalizedText; description?: LocalizedText | null; durationMinutes?: number | null }>;
-  images: Array<{ position: number; src: string; alt: LocalizedText; isCover: boolean; rightsStatus: TourImageRightsStatus; rightsNote?: string | null }>;
+  images: Array<{ position: number; src: string; alt: LocalizedText; isCover: boolean; rightsStatus: TourImageRightsStatus; rightsNote?: string | null; focalX?: number | null; focalY?: number | null }>;
 };
 
 export type TourContentView = {
@@ -58,12 +58,19 @@ export type TourContentView = {
   accessibility: string | null;
   weatherPolicy: string | null;
   itinerary: Array<{ position: number; title: string; description: string | null; durationMinutes: number | null }>;
-  gallery: Array<{ src: string; alt: string; isCover: boolean; rightsStatus: TourImageRightsStatus }>;
+  /** `objectPosition` is the CSS focal point ("50% 30%") used where a frame must crop; the main view never crops. */
+  gallery: Array<{ src: string; alt: string; isCover: boolean; rightsStatus: TourImageRightsStatus; objectPosition: string }>;
 };
 
 const MOCK_MARKER = /\bMOCK\b/;
 const ISO_LANGUAGE = /^[a-z]{2}$/;
 const PRICE_PATTERN = /R\$\s*\d|\bUS?\$\s*\d|€\s*\d|\d+[.,]?\d*\s*(?:reais|dólares|dolares|euros)\b/i;
+
+/** Focal point (0–1) to a CSS object-position; defaults to the centre. Out-of-range values are clamped. */
+export function focalToPosition(x: number | null | undefined, y: number | null | undefined) {
+  const pct = (v: number | null | undefined) => `${Math.round(Math.min(1, Math.max(0, v ?? 0.5)) * 100)}%`;
+  return `${pct(x)} ${pct(y)}`;
+}
 
 export function isMockRecord(record: Pick<TourContentRecord, "source">) {
   return Boolean(record.source && MOCK_MARKER.test(record.source));
@@ -127,7 +134,7 @@ export function toTourContentView(record: TourContentRecord | null | undefined, 
     gallery: [...record.images]
       .filter((img) => audience === "preview" || img.rightsStatus !== "UNVERIFIED")
       .sort((a, b) => Number(b.isCover) - Number(a.isCover) || a.position - b.position)
-      .map((img, i) => ({ src: img.src, alt: text(img.alt, `images[${i}].alt`) ?? "", isCover: img.isCover, rightsStatus: img.rightsStatus })),
+      .map((img, i) => ({ src: img.src, alt: text(img.alt, `images[${i}].alt`) ?? "", isCover: img.isCover, rightsStatus: img.rightsStatus, objectPosition: focalToPosition(img.focalX, img.focalY) })),
   };
 }
 
@@ -169,6 +176,9 @@ export function validateTourContent(record: TourContentRecord): ContentIssue[] {
   record.images.forEach((img, i) => {
     checkText(`images[${i}].alt`, img.alt);
     if (!img.src.trim()) issues.push({ field: `images[${i}].src`, problem: "empty" });
+    for (const [axis, v] of [["focalX", img.focalX], ["focalY", img.focalY]] as const) {
+      if (v !== null && v !== undefined && (v < 0 || v > 1)) issues.push({ field: `images[${i}].${axis}`, problem: "focal point must be between 0 and 1" });
+    }
   });
   if (record.status === "OWNER_APPROVED") {
     if (isMockRecord(record)) issues.push({ field: "source", problem: "MOCK content can never be approved" });
@@ -187,7 +197,7 @@ export async function getTourContent(tripId: string, locale: string, audience: T
       trip: {
         select: {
           itinerary: { select: { position: true, title: true, description: true, durationMinutes: true } },
-          images: { select: { position: true, src: true, alt: true, isCover: true, rightsStatus: true, rightsNote: true } },
+          images: { select: { position: true, src: true, alt: true, isCover: true, rightsStatus: true, rightsNote: true, focalX: true, focalY: true } },
         },
       },
     },

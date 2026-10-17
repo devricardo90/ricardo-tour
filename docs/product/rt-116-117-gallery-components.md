@@ -22,3 +22,10 @@ Unit tests (rights filter, cover ordering, label serializability, mock photos li
 ## 4. Pending (Owner)
 - RT-116: cover + gallery photos for each of the four tours, with rights; **replacement photo for the Tour Privativo Premium**; the Colombo master (6002×8002, 4.8 MB) needs optimized derivatives.
 - RT-117: the new Quem Somos photo, with author and consent.
+
+## Update — round 1 (17/10/2026): adaptive gallery for the Owner's real photographs
+- Owner decision: real photographs supplied by the Owner first, later complemented by photos taken during operations; no AI images for real tours; third-party images only with verified commercial rights.
+- Works with any quantity (tested 1, 3, 5, 8 on desktop and mobile): 1 image → plain figure; more → thumbnails, buttons, arrow keys; never empty slots.
+- Quality: the main view shows the whole photo (no crop, no distortion) over a blurred copy; responsive `sizes`; Next image optimization (web formats, resized per viewport).
+- Framing: optional focal point per image (`TripImage.focalX/focalY`, 0–1, DB CHECK) used for thumbnails/cover crops.
+- `next/image` used directly (the existing `OptimizedImage` can stay blurred when an image loads before hydration — risk recorded for the public components that use it).

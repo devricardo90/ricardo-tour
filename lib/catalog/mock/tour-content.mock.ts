@@ -3,7 +3,8 @@ import type { LocalizedText, TourContentRecord } from "@/lib/catalog/tour-conten
 /**
  * RT-114 prototype data — FOR THE REBUILD LAB ONLY (production-hidden). Two clearly separated parts:
  *  1. PUBLISHED_SNAPSHOT: facts already published on www.ricardotour.com, copied verbatim on 2026-10-16 and verified by
- *     scripts/rt-111-verify-matrix.mjs (RT-111). Prices are the published ones and are NOT changed here.
+ *     scripts/rt-111-verify-matrix.mjs (RT-111). REFERENCE ONLY since round 1 (Owner review 16/10): old prices, durations
+ *     and itineraries are not approved for the new private-experience catalog and are NOT displayed by the prototype.
  *  2. MOCK_TOUR_CONTENT: FICTITIOUS placeholders for the fields that do not exist yet (meeting point, itinerary, rules).
  *     Every record has source "MOCK …" and status DRAFT, so the publication gate can never show it (validateTourContent
  *     rejects approving a MOCK record). The texts say "exemplo fictício" so nobody can mistake them for real information.
@@ -79,6 +80,11 @@ export const PUBLISHED_SNAPSHOT: Record<string, PublishedSnapshot> = {
 };
 
 const mock = (pt: string, en: string, es: string): LocalizedText => ({ pt: `${pt} (exemplo fictício)`, en: `${en} (fictitious example)`, es: `${es} (ejemplo ficticio)` });
+const mockList = (items: Array<[string, string, string]>) => ({
+  pt: items.map(([pt]) => `${pt} (exemplo fictício)`),
+  en: items.map(([, en]) => `${en} (fictitious example)`),
+  es: items.map(([, , es]) => `${es} (ejemplo ficticio)`),
+});
 
 function mockRecord(id: string): TourContentRecord {
   const snap = PUBLISHED_SNAPSHOT[id];
@@ -86,21 +92,31 @@ function mockRecord(id: string): TourContentRecord {
     tripId: id,
     status: "DRAFT",
     source: MOCK_SOURCE,
-    meetingPoint: mock("Ponto de encontro a definir pelo Owner", "Meeting point to be defined by the Owner", "Punto de encuentro a definir por el Owner"),
+    meetingPoint: mock("Busca no hotel, a confirmar pelo Owner", "Hotel pickup, to be confirmed by the Owner", "Recogida en el hotel, a confirmar por el Owner"),
     startTimeNote: mock("Horário a definir pelo Owner", "Start time to be defined by the Owner", "Horario a definir por el Owner"),
     languages: ["pt", "en", "es"],
+    // Round 1 (Owner review 16/10): old catalog items (van transport, old duration, old price) are NOT carried over.
+    inclusions: mockList([
+      ["Guia dedicado ao seu grupo", "Guide dedicated to your group", "Guía dedicado a tu grupo"],
+      ["Transporte privativo", "Private transport", "Transporte privado"],
+      ["Itens incluídos a definir no RT-112", "Included items to be defined in RT-112", "Elementos incluidos a definir en RT-112"],
+    ]),
+    exclusions: mockList([
+      ["Itens não incluídos a definir no RT-112", "Excluded items to be defined in RT-112", "Elementos no incluidos a definir en RT-112"],
+    ]),
     requirements: mock("Requisitos de participação a definir", "Participation requirements to be defined", "Requisitos de participación a definir"),
     accessibility: mock("Informações de acessibilidade a confirmar", "Accessibility information to be confirmed", "Información de accesibilidad a confirmar"),
     weatherPolicy: mock("Regra de clima a definir no RT-81", "Weather rule to be defined in RT-81", "Regla de clima a definir en RT-81"),
     itinerary: [
-      { position: 0, title: mock("Parada de exemplo A", "Example stop A", "Parada de ejemplo A"), description: mock("Texto de layout para validar o roteiro", "Layout text to validate the itinerary", "Texto de maqueta para validar el itinerario"), durationMinutes: 60 },
-      { position: 1, title: mock("Parada de exemplo B", "Example stop B", "Parada de ejemplo B"), description: null, durationMinutes: 90 },
-      { position: 2, title: mock("Parada de exemplo C", "Example stop C", "Parada de ejemplo C"), description: mock("Texto de layout", "Layout text", "Texto de maqueta"), durationMinutes: null },
+      { position: 0, title: mock("Busca no hotel", "Hotel pickup", "Recogida en el hotel"), description: mock("Texto de layout para validar o roteiro", "Layout text to validate the itinerary", "Texto de maqueta para validar el itinerario"), durationMinutes: null },
+      { position: 1, title: mock("Parada de exemplo A", "Example stop A", "Parada de ejemplo A"), description: mock("Texto de layout", "Layout text", "Texto de maqueta"), durationMinutes: 90 },
+      { position: 2, title: mock("Parada de exemplo B", "Example stop B", "Parada de ejemplo B"), description: null, durationMinutes: 60 },
+      { position: 3, title: mock("Retorno ao hotel", "Return to the hotel", "Regreso al hotel"), description: null, durationMinutes: null },
     ],
     // Gallery arrangement for layout only, using ONLY photos whose rights are already recorded: the tour's own published
     // photo (authorship declared by the Owner, RT-79) and the Rio Story photos (RT-32 "OWNER ORIGINAL").
     images: [
-      { position: 0, src: snap.cover, alt: mock(`Foto publicada do passeio ${snap.title}`, `Published photo of ${snap.title}`, `Foto publicada de ${snap.title}`), isCover: true, rightsStatus: "OWNER_ATTESTED", rightsNote: "Owner attestation, RT-79 (14/10/2026)" },
+      { position: 0, src: snap.cover, alt: mock(`Foto atual do passeio ${snap.title}`, `Current photo of ${snap.title}`, `Foto actual de ${snap.title}`), isCover: true, rightsStatus: "OWNER_ATTESTED", rightsNote: "Owner attestation, RT-79 (14/10/2026)" },
       { position: 1, src: "/media/rio-story/rio-story-sunset.jpg", alt: mock("Pôr do sol no Rio", "Sunset in Rio", "Atardecer en Río"), isCover: false, rightsStatus: "OWNER_ATTESTED", rightsNote: "RT-32 OWNER ORIGINAL" },
       { position: 2, src: "/media/rio-story/rio-story-church.jpg", alt: mock("Interior de igreja histórica", "Historic church interior", "Interior de iglesia histórica"), isCover: false, rightsStatus: "OWNER_ATTESTED", rightsNote: "RT-32 OWNER ORIGINAL" },
     ],
@@ -110,3 +126,70 @@ function mockRecord(id: string): TourContentRecord {
 export const MOCK_TOUR_CONTENT: Record<string, TourContentRecord> = Object.fromEntries(
   Object.keys(PUBLISHED_SNAPSHOT).map((id) => [id, mockRecord(id)]),
 );
+
+/** Review status of each fact shown in the prototype (round 1): what is decided, provisional, pending or fictitious. */
+export type FactStatus = "CONFIRMED" | "PROVISIONAL" | "PENDING" | "MOCK";
+
+export type PrototypeOffer = {
+  id: string;
+  /** Current product name; official naming is RT-112 decision A7. */
+  title: string;
+  titleStatus: FactStatus;
+  /** Editorial proposal for the hero line — NOT approved copy (RT-115). */
+  pitch: LocalizedText;
+  modality: { value: LocalizedText; status: FactStatus; source: string };
+  pickup: { value: LocalizedText; status: FactStatus };
+  /** null = pending pricing. Old catalog prices are deliberately NOT carried over (Owner, 16/10). */
+  priceCents: number | null;
+  duration: { value: LocalizedText | null; status: FactStatus };
+  benefits: { pt: string[]; en: string[]; es: string[] };
+  /** The current cover is provisional until RT-116 supplies a rights-cleared photo that shows the attraction. */
+  coverStatus: FactStatus;
+};
+
+const PRIVATE: LocalizedText = { pt: "Experiência privativa", en: "Private experience", es: "Experiencia privada" };
+const PICKUP: LocalizedText = { pt: "Busca no hotel", en: "Hotel pickup", es: "Recogida en el hotel" };
+const BENEFITS = mockList([
+  ["Só o seu grupo, no seu ritmo", "Only your group, at your own pace", "Solo tu grupo, a tu ritmo"],
+  ["Guia dedicado do início ao fim", "A dedicated guide from start to finish", "Guía dedicado de principio a fin"],
+  ["Roteiro ajustado ao seu interesse", "Route adjusted to your interests", "Itinerario ajustado a tus intereses"],
+]);
+
+function offer(id: string, pitch: LocalizedText): PrototypeOffer {
+  return {
+    id,
+    title: PUBLISHED_SNAPSHOT[id].title,
+    titleStatus: "PROVISIONAL",
+    pitch,
+    modality: { value: PRIVATE, status: "CONFIRMED", source: "Owner, 16/10/2026: os quatro produtos próprios serão experiências privativas nesta fase" },
+    pickup: { value: PICKUP, status: "PROVISIONAL" },
+    priceCents: null,
+    duration: { value: null, status: "PENDING" },
+    benefits: BENEFITS as { pt: string[]; en: string[]; es: string[] },
+    coverStatus: "PROVISIONAL",
+  };
+}
+
+/** Prototype offers for the four existing tours (round 1). Pitches are editorial PROPOSALS marked as fictitious. */
+export const PROTOTYPE_OFFER: Record<string, PrototypeOffer> = {
+  cmlhxkpy9000028zq27rhytew: offer("cmlhxkpy9000028zq27rhytew", mock(
+    "Conheça os cartões-postais mais famosos do Rio em uma experiência privativa, com guia dedicado",
+    "Discover Rio's most famous landmarks on a private experience with a dedicated guide",
+    "Conoce las postales más famosas de Río en una experiencia privada con guía dedicado",
+  )),
+  cmli1a6im000034zqqzc9sppb: offer("cmli1a6im000034zqqzc9sppb", mock(
+    "Uma visita privativa à Rocinha, guiada por quem conhece a comunidade",
+    "A private visit to Rocinha, guided by people who know the community",
+    "Una visita privada a la Rocinha, guiada por quien conoce la comunidad",
+  )),
+  cmlibniq40000z4zqkbujnutt: offer("cmlibniq40000z4zqkbujnutt", mock(
+    "O centro histórico do Rio e a Confeitaria Colombo em uma experiência privativa",
+    "Rio's historic centre and Confeitaria Colombo on a private experience",
+    "El centro histórico de Río y la Confeitaria Colombo en una experiencia privada",
+  )),
+  cmljo0s1u0000t0zqa0bpd23p: offer("cmljo0s1u0000t0zqa0bpd23p", mock(
+    "Um dia inteiro no Rio, com roteiro desenhado para o seu grupo",
+    "A full day in Rio with a route designed for your group",
+    "Un día completo en Río con un itinerario diseñado para tu grupo",
+  )),
+};

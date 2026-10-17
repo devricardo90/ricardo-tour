@@ -2,10 +2,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
-import { MOCK_SOURCE, MOCK_TOUR_CONTENT, PUBLISHED_SNAPSHOT } from "@/lib/catalog/mock/tour-content.mock";
+import { focalToPosition, toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
+import { MOCK_SOURCE, MOCK_TOUR_CONTENT, PROTOTYPE_OFFER, PUBLISHED_SNAPSHOT } from "@/lib/catalog/mock/tour-content.mock";
 import { tourContentCopy } from "@/components/site/tour/content/tour-content-copy";
 import { TourDetailPrototype } from "@/components/site/tour/content/tour-detail-prototype";
+import { ImageGallery } from "@/components/site/media/image-gallery";
 
 const tri = (pt: string, en: string, es: string) => ({ pt, en, es });
 
@@ -155,7 +156,13 @@ describe("RT-114 mock data integrity", () => {
   });
 });
 
-describe("RT-114 copy and prototype rendering", () => {
+describe("RT-114 copy and prototype rendering (round 1 + Owner addendum)", () => {
+  const galleryLabels = { gallery: "Galeria", prev: "Anterior", next: "Próxima", thumb: "Mostrar foto {n} de {total}", position: "Foto {n} de {total}" };
+  const render = (id: string, locale: string) => {
+    const view = toTourContentView(MOCK_TOUR_CONTENT[id], locale, "preview")!;
+    return renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={view} locale={locale} reviewMode />);
+  };
+
   it("has the same label keys in PT, EN and ES", () => {
     const keys = Object.keys(tourContentCopy.pt).sort();
     expect(Object.keys(tourContentCopy.en).sort()).toEqual(keys);
@@ -170,15 +177,53 @@ describe("RT-114 copy and prototype rendering", () => {
     }
   });
 
-  it("renders the prototype with the mock banner, the published price unchanged and every structured section", () => {
-    const id = "cmlhxkpy9000028zq27rhytew";
-    for (const locale of ["pt", "en", "es"]) {
-      const view = toTourContentView(MOCK_TOUR_CONTENT[id], locale, "preview")!;
-      const html = renderToStaticMarkup(<TourDetailPrototype facts={PUBLISHED_SNAPSHOT[id]} content={view} locale={locale} showMockBanner={view.isMock} />);
-      expect(html).toContain('data-testid="mock-banner"');
-      expect(html).toContain("R$ 385,00");
-      for (const section of ["tour-practical", "tour-itinerary", "tour-notes", "image-gallery"]) expect(html).toContain(`data-testid="${section}"`);
-      expect((html.match(/<li class="relative flex gap-4/g) ?? []).length).toBe(3);
+  it("renders the primary CTA 'Solicitar disponibilidade' (PT/EN/ES), the sticky aside and the mobile bar", () => {
+    const cta = { pt: "Solicitar disponibilidade", en: "Request availability", es: "Solicitar disponibilidad" } as const;
+    for (const locale of ["pt", "en", "es"] as const) {
+      const html = render("cmlhxkpy9000028zq27rhytew", locale);
+      expect(html).toContain(cta[locale]);
+      for (const id of ["tour-cta", "tour-cta-aside", "tour-cta-mobile", "tour-mobile-cta", "tour-request", "mock-banner"]) expect(html).toContain(`data-testid="${id}"`);
+      for (const section of ["tour-practical", "tour-benefits", "tour-itinerary", "tour-includes", "tour-notes", "image-gallery"]) expect(html).toContain(`data-testid="${section}"`);
     }
+  });
+
+  it("never carries old catalog prices, durations or routes into the prototype; price shows as pending", () => {
+    for (const id of Object.keys(PROTOTYPE_OFFER)) {
+      expect(PROTOTYPE_OFFER[id].priceCents).toBeNull();
+      expect(PROTOTYPE_OFFER[id].modality.status).toBe("CONFIRMED");
+      const html = render(id, "pt");
+      for (const old of ["R$ 385,00", "R$ 120,00", "R$ 245,00", "R$ 900,00", "5–6 horas", "5 a 6 horas", "Transporte em van", "8 horas", "3 a 4 horas"]) {
+        expect(html, `${id} must not show ${old}`).not.toContain(old);
+      }
+      expect(html).toContain("Em definição");
+      expect(html).toContain('data-status="PENDING"');
+    }
+  });
+
+  it("uses the Design System dark surface (Home 'Experiences' tokens), not a dominant beige", () => {
+    const html = render("cmljo0s1u0000t0zqa0bpd23p", "pt");
+    expect(html).toContain('data-testid="tour-page-surface"');
+    expect(html).toMatch(/bg-\[var\(--site-charcoal,#0B0E11\)\]/);
+    expect(html).not.toMatch(/bg-\[var\(--site-cream/);
+    expect(html).toContain("bg-[var(--site-gold,#C8A86B)]"); // DS primary CTA (solid matte gold)
+  });
+
+  it("adapts the gallery to the number of images: 1 image has no controls or empty slots; 8 images get 8 thumbnails", () => {
+    const one = renderToStaticMarkup(<ImageGallery images={[{ src: "/a.jpg", alt: "a" }]} labels={galleryLabels} />);
+    expect(one).toContain('data-count="1"');
+    expect(one).not.toContain('data-testid="gallery-thumbs"');
+    expect(one).not.toContain("Próxima");
+    const eight = renderToStaticMarkup(<ImageGallery images={Array.from({ length: 8 }, (_, i) => ({ src: `/p${i}.jpg`, alt: `p${i}` }))} labels={galleryLabels} />);
+    expect(eight).toContain('data-count="8"');
+    expect((eight.match(/Mostrar foto \d de 8/g) ?? []).length).toBe(8);
+    expect(eight).toContain("object-contain"); // the main photo is never cropped
+  });
+
+  it("converts and validates the framing focal point", () => {
+    expect(focalToPosition(undefined, null)).toBe("50% 50%");
+    expect(focalToPosition(0.3, 0.75)).toBe("30% 75%");
+    expect(focalToPosition(2, -1)).toBe("100% 0%");
+    const record = approvedRecord({ images: [{ position: 0, src: "/a.jpg", alt: tri("a", "a", "a"), isCover: true, rightsStatus: "OWNER_ATTESTED", focalX: 1.4 }] });
+    expect(validateTourContent(record).map((i) => i.problem)).toContain("focal point must be between 0 and 1");
   });
 });

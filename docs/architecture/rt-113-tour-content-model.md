@@ -40,3 +40,6 @@ Database rules (CHECK, in the migration): position ≥ 0; duration > 0 when pres
 
 ## 6. Not done (by authorization)
 Migration on Neon, data entry for the real tours (waits for RT-112 answers and RT-115 approval), public wiring (RT-114 after visual approval), admin editing (Sprint 11).
+
+## Update — 17/10/2026 (RT-114 round 1)
+`TripImage` gained optional `focalX`/`focalY` (DOUBLE PRECISION, CHECK 0–1) for framing. The migration had never left local throw-away databases, so it was amended in place. Re-validation on a fresh clone: **16/16 PASS** (adds the focal-range rule), drift 0, rollback → schema identical (0 diff lines). Validation and gate expose `objectPosition`; out-of-range focal values are rejected by `validateTourContent` and by the database.

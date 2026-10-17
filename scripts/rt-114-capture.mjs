@@ -17,6 +17,7 @@ const browser = await chromium.launch();
 const results = [];
 for (const [device, viewport] of [["desktop", { width: 1440, height: 900 }], ["mobile", { width: 390, height: 844 }]]) {
   const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
+  context.setDefaultTimeout(120_000); // cold dev-server compiles can exceed Playwright's 30s default
   for (const locale of ["pt", "en", "es"]) {
     for (const id of TOURS) {
       const page = await context.newPage();
@@ -24,10 +25,13 @@ for (const [device, viewport] of [["desktop", { width: 1440, height: 900 }], ["m
       page.on("pageerror", (e) => errors.push(String(e)));
       page.on("console", (m) => m.type() === "error" && errors.push(m.text()));
       const url = `${BASE}/${locale}/rebuild-lab/tour-content-preview/${id}`;
-      const res = await page.goto(url, { waitUntil: "domcontentloaded" });
+      const res = await page.goto(url, { waitUntil: "load" }); // wait for full load so React has hydrated before clicking
       await page.waitForSelector('[data-testid="image-gallery"]');
-      await page.waitForTimeout(1200);
+      await page.waitForTimeout(2500);
       const r = { device, locale, id, status: res?.status(), mockBanner: await page.locator('[data-testid="mock-banner"]').count() };
+      // Round 1: the primary CTA must be visible without scrolling (desktop: hero card; mobile: sticky bottom bar).
+      const ctaSel = device === "mobile" ? '[data-testid="tour-cta-mobile"]' : '[data-testid="tour-cta"]';
+      r.ctaAboveFold = await page.locator(ctaSel).evaluate((el) => { const b = el.getBoundingClientRect(); const st = getComputedStyle(el); return st.display !== "none" && b.height > 0 && b.top >= 0 && b.bottom <= window.innerHeight; });
       // Gallery: next button and keyboard.
       const position = page.locator('[data-testid="image-gallery"] [aria-live="polite"]');
       const before = await position.textContent();
@@ -60,9 +64,32 @@ for (const [device, viewport] of [["desktop", { width: 1440, height: 900 }], ["m
   }
   await context.close();
 }
+// Gallery quantity scenarios (RT-116 lab): 1, 3, 5 and 8 images, desktop and mobile.
+const galleryResults = [];
+for (const [device, viewport] of [["desktop", { width: 1440, height: 900 }], ["mobile", { width: 390, height: 844 }]]) {
+  const page = await browser.newPage({ viewport });
+  for (const n of [1, 3, 5, 8]) {
+    const res = await page.goto(`${BASE}/pt/rebuild-lab/gallery-lab/${n}`, { waitUntil: "domcontentloaded" });
+    await page.waitForSelector('[data-testid="image-gallery"]');
+    await page.waitForTimeout(1500);
+    const g = await page.evaluate(() => ({
+      count: Number(document.querySelector('[data-testid="image-gallery"]')?.getAttribute("data-count")),
+      thumbs: document.querySelectorAll('[data-testid="gallery-thumbs"] button').length,
+      controls: document.querySelectorAll('[data-testid="image-gallery"] button[aria-label]').length,
+      mainFit: getComputedStyle(document.querySelector('[data-testid="gallery-main-image"]')).objectFit,
+      overflow: document.documentElement.scrollWidth > window.innerWidth + 1,
+    }));
+    galleryResults.push({ device, n, status: res?.status(), ...g });
+    await page.screenshot({ path: path.join(OUT, `gallery-${n}-${device}.png`) });
+  }
+  await page.close();
+}
 await browser.close();
+results.push(...galleryResults.map((g) => ({ gallery: true, ...g })));
 fs.writeFileSync(path.join(OUT, "results.json"), JSON.stringify(results, null, 2));
-const bad = results.filter((r) => r.status !== 200 || r.mockBanner !== 1 || r.horizontalOverflow || r.consoleErrors.length || r.galleryBefore === r.galleryAfterClick || r.galleryAfterClick === r.galleryAfterArrow);
+const bad = results.filter((r) => r.gallery
+  ? r.status !== 200 || r.count !== r.n || r.thumbs !== (r.n > 1 ? r.n : 0) || r.mainFit !== "contain" || r.overflow
+  : r.status !== 200 || r.mockBanner !== 1 || !r.ctaAboveFold || r.horizontalOverflow || r.consoleErrors.length || r.galleryBefore === r.galleryAfterClick || r.galleryAfterClick === r.galleryAfterArrow);
 console.log(`${results.length} page loads, ${bad.length} with problems`);
 for (const b of bad) console.log(JSON.stringify(b));
 process.exit(bad.length ? 1 : 0);

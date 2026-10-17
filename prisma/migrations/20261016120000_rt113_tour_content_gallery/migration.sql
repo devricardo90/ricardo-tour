@@ -52,6 +52,8 @@ CREATE TABLE "TripImage" (
     "src" TEXT NOT NULL,
     "alt" JSONB NOT NULL,
     "isCover" BOOLEAN NOT NULL DEFAULT false,
+    "focalX" DOUBLE PRECISION,
+    "focalY" DOUBLE PRECISION,
     "rightsStatus" "TripImageRightsStatus" NOT NULL DEFAULT 'UNVERIFIED',
     "rightsNote" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -81,5 +83,6 @@ ALTER TABLE "TripItineraryStop" ADD CONSTRAINT "TripItineraryStop_position_check
 ALTER TABLE "TripItineraryStop" ADD CONSTRAINT "TripItineraryStop_duration_check" CHECK ("durationMinutes" IS NULL OR "durationMinutes" > 0);
 ALTER TABLE "TripImage" ADD CONSTRAINT "TripImage_position_check" CHECK ("position" >= 0);
 ALTER TABLE "TripImage" ADD CONSTRAINT "TripImage_src_check" CHECK (length(btrim("src")) > 0);
+ALTER TABLE "TripImage" ADD CONSTRAINT "TripImage_focal_check" CHECK (("focalX" IS NULL OR ("focalX" >= 0 AND "focalX" <= 1)) AND ("focalY" IS NULL OR ("focalY" >= 0 AND "focalY" <= 1)));
 -- An OWNER_APPROVED content row must record when it was approved; a DRAFT row must not claim an approval date.
 ALTER TABLE "TripContent" ADD CONSTRAINT "TripContent_approval_check" CHECK ((("status" = 'OWNER_APPROVED') = ("approvedAt" IS NOT NULL)));

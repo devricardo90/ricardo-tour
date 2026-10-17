@@ -43,3 +43,20 @@ Static captures: `docs/baseline/rt-114-prototype/` (desktop 1440 px and mobile 3
 
 ## Decisions for the Owner (visual)
 Layout order (gallery first, facts at the top right, itinerary after "Sobre o passeio"), card style of practical facts, timeline style, thumbnail strip, mobile stacking. After approval, RT-114 wires these sections into the public `/tours/[id]` page (still reading only approved content), in a separate authorized change.
+
+## Round 1 — Owner review "Changes requested" + Design System addendum (16–17/10/2026)
+Status: **still awaiting the Owner's visual approval** (RT-114 stays in Revisar).
+
+| Owner request | What changed |
+|---|---|
+| Strong CTA "Solicitar disponibilidade" | Solid matte-gold primary button (Design System CTA: `#C8A86B`, charcoal text, radius 6px) in the hero booking card, repeated in a sticky desktop aside and in a **mobile sticky bottom bar** (safe-area aware); all point to the request section that stands for the existing request form. No booking or confirmation logic changed |
+| Hero must communicate the tour; only rights-cleared photos | Hero = gallery + commercial summary (title, pitch, modality chips, price, CTA). The cover is flagged **"Foto provisória · capa definitiva no RT-116"**: no rights-cleared photo that clearly shows Christ/Sugarloaf exists yet, so no image was swapped |
+| Old prices/routes must not be carried over | Price shows **"Em definição"** (Pendente); duration Pendente; old items (R$ 385, 5–6 h, van, etc.) removed from the prototype (a test forbids them). Review chips on every fact: **Confirmado** (private experience — Owner 16/10), **Provisório** (name, hotel pickup, cover), **Pendente** (price, duration), **Fictício** (everything else) |
+| Legibility | Labels 13px, body 16–17px, values 17px semibold; contrast measured on the final surface (gold 8.54:1, muted text 11.46:1, CTA 8.54:1) |
+| Less "technical sheet", more commercial | Order: hero → essentials → benefits of a private experience → itinerary → inclusions/exclusions → practical conditions → final request |
+| Addendum: no dominant beige; use the existing Design System | Page now uses the surface the Home uses for tours (**"Experiences": charcoal, raised cards, gold**). Audit and gaps: `docs/architecture/rt-114-design-system-audit.md`. The extra token tried earlier was reverted — no new tokens |
+| Addendum: adaptive gallery (1/3/5/8), no aggressive crops, framing | Main photo never cropped or distorted (shown whole over a blurred copy of itself); thumbnails use a per-image focal point (`TripImage.focalX/Y`, RT-113); 1 image = no controls/empty slots; 3/5/8 = scrollable thumbnails. Lab: `/{locale}/rebuild-lab/gallery-lab/{1|3|5|8}` |
+
+Evidence (round 1, `docs/baseline/rt-114-prototype/round-1/`): capture 32/32 (24 tour pages: HTTP 200, mock banner, **CTA visible without scrolling on all 24**, gallery by click and arrow key on the first try, no overflow, no console errors; 8 gallery scenarios: count = thumbnails, main image `object-fit: contain`, no overflow); accessibility 12/12; references of the current Home "Experiences" and production tour page for comparison; viewport-only mobile captures showing the sticky bar at the bottom (full-page captures draw fixed bars mid-page — a capture artifact).
+
+Defects found and fixed this round: (1) photos stuck blurred/grey — `OptimizedImage` only clears its loading blur on `onLoad`, which is lost if the image loads before hydration; the gallery now uses `next/image` directly. **Risk recorded:** the same component is used by public pages (Home cards, current tour page, tour cards); not changed (out of scope, production). (2) Mobile bar price wrapped to two lines — tightened.

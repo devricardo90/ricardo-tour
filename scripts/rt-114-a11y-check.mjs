@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * RT-114: basic accessibility checks of the tour page prototype (rebuild lab, mock data), local server only.
- * Checks per page: one h1; every <img> has an alt attribute (empty only inside a labelled button = decorative thumb);
+ * Checks per page: one h1; every <img> has an alt attribute (empty only when decorative: inside a labelled button or aria-hidden);
  * every button has an accessible name; exactly one current thumbnail; keyboard focus on a gallery button is visible
  * (outline); <html lang> matches the locale. Not a substitute for a full audit (no axe-core in the project).
  * Usage: node scripts/rt-114-a11y-check.mjs http://127.0.0.1:3233 > docs/baseline/rt-114-prototype/a11y.json
@@ -20,7 +20,8 @@ for (const locale of ["pt", "en", "es"]) {
     await page.waitForTimeout(1000);
     const r = await page.evaluate(() => {
       const imgs = [...document.querySelectorAll("main img")];
-      const badImgs = imgs.filter((img) => !img.hasAttribute("alt") || (img.getAttribute("alt") === "" && !img.closest("button[aria-label]")));
+      const decorative = (img) => img.getAttribute("aria-hidden") === "true" || Boolean(img.closest("button[aria-label]"));
+      const badImgs = imgs.filter((img) => !img.hasAttribute("alt") || (img.getAttribute("alt") === "" && !decorative(img)));
       const buttons = [...document.querySelectorAll("main button")];
       const unnamed = buttons.filter((b) => !(b.getAttribute("aria-label") || b.textContent?.trim()));
       return {

@@ -424,6 +424,9 @@ model TripImage {
   src          String
   alt          Json
   isCover      Boolean             @default(false)
+  /// Optional focal point (0–1) used when a frame must crop (cover/thumbnail); the main view never crops (RT-114).
+  focalX       Float?
+  focalY       Float?
   rightsStatus TripImageRightsStatus @default(UNVERIFIED)
   /// Author, consent of identifiable people, licence reference (RT-79 / RT-116 rights register).
   rightsNote   String?

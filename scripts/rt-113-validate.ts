@@ -44,6 +44,7 @@ async function main() {
   await rejects(`insert into "TripItineraryStop"("id","tripId","position","title","durationMinutes","updatedAt") values ('x2','${TRIP}',0,'{}',0,now())`, "zero duration is rejected");
   await rejects(`insert into "TripImage"("id","tripId","position","src","alt","updatedAt") values ('x3','${TRIP}',0,'  ','{}',now())`, "blank image src is rejected");
   await rejects(`insert into "TripContent"("tripId","updatedAt") values ('no-such-trip',now())`, "content for a non-existent trip is rejected (FK)");
+  await rejects(`insert into "TripImage"("id","tripId","position","src","alt","focalX","updatedAt") values ('x6','${TRIP}',0,'/a.jpg','{}',1.5,now())`, "focal point outside 0–1 is rejected");
   await prisma.$executeRawUnsafe(`insert into "TripItineraryStop"("id","tripId","position","title","updatedAt") values ('x4','${TRIP}',0,'{}',now())`);
   await rejects(`insert into "TripItineraryStop"("id","tripId","position","title","updatedAt") values ('x5','${TRIP}',0,'{}',now())`, "duplicate itinerary position is rejected");
   await prisma.$executeRawUnsafe(`delete from "TripItineraryStop" where id='x4'`);
@@ -67,7 +68,10 @@ async function main() {
   for (const img of mock.images) await prisma.tripImage.create({ data: { tripId: TRIP, position: img.position, src: img.src, alt: img.alt, isCover: img.isCover, rightsStatus: img.rightsStatus } });
   check((await getTourContent(TRIP, "pt", "public")) === null, "DRAFT/MOCK content is hidden from the public audience");
   const preview = await getTourContent(TRIP, "en", "preview");
-  check(preview?.isMock === true && preview.itinerary.length === 3 && preview.gallery.length === 3, "preview audience sees the mock content (3 stops, 3 images)");
+  check(
+    preview?.isMock === true && preview.itinerary.length === mock.itinerary.length && preview.gallery.length === mock.images.length,
+    `preview audience sees the mock content (${mock.itinerary.length} stops, ${mock.images.length} images)`,
+  );
 
   // Simulate a real approval (non-mock source, all locales) and one image without recorded rights.
   await prisma.tripContent.update({ where: { tripId: TRIP }, data: { status: "OWNER_APPROVED", approvedAt: new Date(), source: "validation probe (not mock)" } });
