@@ -129,5 +129,5 @@ Local server without CDN latency: real numbers will be higher. The 1500×2000 JP
 - **Approved:** RT-114 v2 layout; main photo (IMG_1243); the five photos; gallery order; short video without audio; desktop and mobile presentation; visual identity and proportions.
 - Rule: no new aesthetic changes without a proven defect or an Owner request.
 - Evidence: commit `dc58359`; `docs/baseline/rt-116-rocinha/` (captures, `results.json`, `perf-4g.json`); review page shared with the Owner in the conversation (private).
-- Jira: RT-114 comment recorded (17/10). The first RT-116 comment attempt (integration report, with the review-page link) was blocked by the agent's permission check; it was not bypassed, and this document is the canonical record.
+- Jira: RT-114 (comment 13467) and RT-116 (comment 13468) recorded on 17/10. An earlier RT-116 comment attempt that included the private review-page link was blocked by the agent's permission check and was not bypassed; the report was re-posted without the link.
 - Still pending: credit spelling (@wark rocinha); written consent on file (recommended); slow-4G video stalls (lighter mobile rendition, Owner OK needed); data model for video/credit; everything in the readiness analysis before any publication.
