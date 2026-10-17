@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { focalToPosition, toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
+import { focalToPosition, isMockRecord, toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
 import { MOCK_SOURCE, MOCK_TOUR_CONTENT, PROTOTYPE_OFFER, PUBLISHED_SNAPSHOT } from "@/lib/catalog/mock/tour-content.mock";
 import { tourContentCopy } from "@/components/site/tour/content/tour-content-copy";
 import { TourDetailPrototype } from "@/components/site/tour/content/tour-detail-prototype";
@@ -120,7 +120,8 @@ describe("RT-114 mock data integrity", () => {
   });
 
   it("marks every mock record as MOCK and DRAFT, and every mock text as fictitious in its language", () => {
-    for (const record of Object.values(MOCK_TOUR_CONTENT)) {
+    // Rocinha carries REAL draft content since 17/10 (RT-115); the other three tours stay fictitious.
+    for (const record of Object.values(MOCK_TOUR_CONTENT).filter((r) => r.tripId !== "cmli1a6im000034zqqzc9sppb")) {
       expect(record.source).toMatch(/^MOCK/);
       expect(record.status).toBe("DRAFT");
       const texts = [record.meetingPoint, record.startTimeNote, record.requirements, record.accessibility, record.weatherPolicy, ...record.itinerary.map((s) => s.title)];
@@ -153,7 +154,7 @@ describe("RT-114 mock data integrity", () => {
       const abs = path.join(process.cwd(), p);
       if (!fs.existsSync(abs)) return;
       if (fs.statSync(abs).isDirectory()) for (const entry of fs.readdirSync(abs)) walk(path.join(p, entry));
-      else if (/\.(tsx?|mjs)$/.test(p) && fs.readFileSync(abs, "utf8").includes("tour-content.mock")) offenders.push(p);
+      else if (/\.(tsx?|mjs)$/.test(p) && /tour-content\.mock|catalog\/drafts\//.test(fs.readFileSync(abs, "utf8"))) offenders.push(p);
     };
     roots.forEach(walk);
     expect(offenders).toEqual([]);
@@ -365,6 +366,85 @@ describe("RT-116 lighter mobile clips and Cristo + Pão de Açúcar + Selarón p
       expect(meta.exif, src).toBeUndefined();
       expect(meta.xmp, src).toBeUndefined();
       expect(meta.icc, src).toBeUndefined();
+    }
+  });
+});
+
+describe("RT-115 / RT-112 Rocinha real content (Owner commercial closing 17/10/2026)", () => {
+  const ROC = "cmli1a6im000034zqqzc9sppb";
+  const record = MOCK_TOUR_CONTENT[ROC];
+  const renderRoc = (locale: string, reviewMode: boolean) =>
+    renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[ROC]} content={toTourContentView(record, locale, "preview")!} locale={locale} reviewMode={reviewMode} />);
+  const allText = JSON.stringify({ record: { ...record, images: undefined }, offer: { ...PROTOTYPE_OFFER[ROC], provisionalPricing: undefined } });
+
+  it("is real draft content: not MOCK, DRAFT, valid in PT/EN/ES, and never public", () => {
+    expect(isMockRecord(record)).toBe(false);
+    expect(record.status).toBe("DRAFT");
+    expect(validateTourContent(record)).toEqual([]);
+    expect(toTourContentView(record, "pt", "public")).toBeNull();
+    for (const locale of ["pt", "en", "es"]) {
+      const view = toTourContentView(record, locale, "preview")!;
+      expect(view.missingLocale).toEqual([]);
+      expect(view.paragraphs.length).toBe(3);
+      expect(view.itinerary.length).toBe(8);
+      expect(view.inclusions.length).toBe(9);
+      expect(view.exclusions.length).toBe(8);
+      expect(view.faq.length).toBe(7);
+      expect(view.operationalConditions && view.optionalServicesNote && view.accessibility && view.requirements && view.meetingPoint).toBeTruthy();
+    }
+  });
+
+  it("avoids unsourced or forbidden claims and never exposes internal costs", () => {
+    for (const banned of [/maior favela/i, /largest favela/i, /favela más grande/i, /livre de riscos|100% segur|segurança garantida|completely safe|totally safe|risk-free|sin riesgos/i, /taxa (de entrada|obrigat)|entrance fee|tasa de entrada/i, /proibid|prohibited|prohibid/i, /custo|remunera|margem|lucro|cost(s)? |margin|profit/i, /R\$/]) {
+      expect(allText, String(banned)).not.toMatch(banned);
+    }
+    // Conditional wording for things that depend on the day or on RT-81.
+    expect(record.operationalConditions?.pt).toMatch(/pode mudar, ser encurtado ou suspenso/);
+    expect(record.faq?.at(-1)?.answer.pt).toMatch(/constam na proposta/);
+  });
+
+  it("shows the provisional prices only in the lab review mode, clearly labelled, with consistent totals", () => {
+    for (const row of PROTOTYPE_OFFER[ROC].provisionalPricing!) expect(row.totalCents).toBe(row.perPersonCents * row.participants);
+    const review = renderRoc("pt", true);
+    expect(review).toContain("PREÇOS PROVISÓRIOS — NÃO PUBLICAR");
+    for (const v of ["R$ 450,00", "R$ 290,00", "R$ 580,00", "R$ 250,00", "R$ 750,00", "R$ 220,00", "R$ 880,00"]) expect(review.replace(/\u00a0/g, " ")).toContain(v);
+    const reader = renderRoc("pt", false);
+    expect(reader).not.toContain("NÃO PUBLICAR");
+    expect(reader).not.toContain("data-testid=\"tour-provisional-prices\"");
+    expect(reader.replace(/\u00a0/g, " ")).not.toMatch(/R\$ (450|290|580|250|750|220|880),00/);
+    expect(reader).toContain("Em definição");
+  });
+
+  it("uses the canonical WhatsApp number with a prefilled message in each language", () => {
+    const expected = { pt: "Tour%20Favela%20Rocinha", en: "Rocinha%20Favela", es: "Tour%20Favela%20Rocinha" } as const;
+    for (const locale of ["pt", "en", "es"] as const) {
+      const html = renderRoc(locale, false);
+      expect(html).toContain("https://wa.me/5522998461906?text=");
+      expect(html).toContain(expected[locale]);
+      expect(html).toContain('target="_blank"');
+      expect(html).not.toMatch(/5521966819928|5521971168114|travelrick/);
+    }
+  });
+
+  it("renders the new sections, the localized title and the confirmed essentials", () => {
+    const titles = { pt: "Tour Favela Rocinha — Experiência Cultural Privativa", en: "Rocinha Favela — Private Cultural Experience", es: "Tour Favela Rocinha — Experiencia Cultural Privada" } as const;
+    for (const locale of ["pt", "en", "es"] as const) {
+      const html = renderRoc(locale, true);
+      expect(html).toContain(titles[locale]);
+      for (const id of ["tour-about", "tour-faq", "tour-optional", "tour-notes", "tour-itinerary", "tour-includes", "tour-video", "image-gallery"]) expect(html, id).toContain(`data-testid="${id}"`);
+      expect(html).not.toContain("exemplo fictício");
+      expect(html).not.toContain("fictitious example");
+    }
+    const pt = renderRoc("pt", true);
+    for (const v of ["1 a 4 pessoas", "18 anos ou mais", "Aproximadamente 3 horas", "estação de metrô São Conrado"]) expect(pt).toContain(v);
+    expect(pt).not.toContain("Busca no hotel");
+  });
+
+  it("leaves the other three tours on their fictitious placeholders", () => {
+    for (const id of ["cmlhxkpy9000028zq27rhytew", "cmlibniq40000z4zqkbujnutt", "cmljo0s1u0000t0zqa0bpd23p"]) {
+      expect(isMockRecord(MOCK_TOUR_CONTENT[id])).toBe(true);
+      expect(PROTOTYPE_OFFER[id].provisionalPricing).toBeUndefined();
+      expect(PROTOTYPE_OFFER[id].whatsappMessage).toBeUndefined();
     }
   });
 });

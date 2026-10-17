@@ -35,6 +35,10 @@ export type TourContentRecord = {
   requirements?: LocalizedText | null;
   accessibility?: LocalizedText | null;
   weatherPolicy?: LocalizedText | null;
+  /** RT-115 (TypeScript-only until the Sprint 11 schema): operational conditions, optional third-party services, FAQ. */
+  operationalConditions?: LocalizedText | null;
+  optionalServicesNote?: LocalizedText | null;
+  faq?: Array<{ question: LocalizedText; answer: LocalizedText }> | null;
   approvedAt?: Date | string | null;
   itinerary: Array<{ position: number; title: LocalizedText; description?: LocalizedText | null; durationMinutes?: number | null }>;
   images: Array<{ position: number; src: string; alt: LocalizedText; isCover: boolean; rightsStatus: TourImageRightsStatus; rightsNote?: string | null; focalX?: number | null; focalY?: number | null; /** Public credit (e.g. mural artist). Not a DB column yet (RT-116 gap, Sprint 11). */ credit?: LocalizedText | null }>;
@@ -57,6 +61,9 @@ export type TourContentView = {
   requirements: string | null;
   accessibility: string | null;
   weatherPolicy: string | null;
+  operationalConditions: string | null;
+  optionalServicesNote: string | null;
+  faq: Array<{ question: string; answer: string }>;
   itinerary: Array<{ position: number; title: string; description: string | null; durationMinutes: number | null }>;
   /** `objectPosition` is the CSS focal point ("50% 30%") used where a frame must crop; the main view never crops. */
   gallery: Array<{ src: string; alt: string; isCover: boolean; rightsStatus: TourImageRightsStatus; objectPosition: string; credit: string | null }>;
@@ -122,6 +129,11 @@ export function toTourContentView(record: TourContentRecord | null | undefined, 
     requirements: text(record.requirements, "requirements"),
     accessibility: text(record.accessibility, "accessibility"),
     weatherPolicy: text(record.weatherPolicy, "weatherPolicy"),
+    operationalConditions: text(record.operationalConditions, "operationalConditions"),
+    optionalServicesNote: text(record.optionalServicesNote, "optionalServicesNote"),
+    faq: (record.faq ?? [])
+      .map((item, i) => ({ question: text(item.question, `faq[${i}].question`) ?? "", answer: text(item.answer, `faq[${i}].answer`) ?? "" }))
+      .filter((item) => item.question && item.answer),
     itinerary: [...record.itinerary]
       .sort((a, b) => a.position - b.position)
       .map((stop, i) => ({
@@ -140,7 +152,7 @@ export function toTourContentView(record: TourContentRecord | null | undefined, 
 
 export type ContentIssue = { field: string; problem: string };
 
-const LOCALIZED_TEXT_FIELDS = ["summary", "description", "durationLabel", "meetingPoint", "startTimeNote", "requirements", "accessibility", "weatherPolicy"] as const;
+const LOCALIZED_TEXT_FIELDS = ["summary", "description", "durationLabel", "meetingPoint", "startTimeNote", "requirements", "accessibility", "weatherPolicy", "operationalConditions", "optionalServicesNote"] as const;
 const LOCALIZED_LIST_FIELDS = ["inclusions", "exclusions"] as const;
 
 /**
@@ -172,6 +184,10 @@ export function validateTourContent(record: TourContentRecord): ContentIssue[] {
   if (new Set(positions).size !== positions.length) issues.push({ field: "itinerary", problem: "duplicate positions" });
   record.itinerary.forEach((s, i) => checkText(`itinerary[${i}].title`, s.title));
   record.itinerary.forEach((s, i) => checkText(`itinerary[${i}].description`, s.description));
+  (record.faq ?? []).forEach((item, i) => {
+    checkText(`faq[${i}].question`, item.question);
+    checkText(`faq[${i}].answer`, item.answer);
+  });
   if (record.images.filter((img) => img.isCover).length > 1) issues.push({ field: "images", problem: "more than one cover image" });
   record.images.forEach((img, i) => {
     checkText(`images[${i}].alt`, img.alt);

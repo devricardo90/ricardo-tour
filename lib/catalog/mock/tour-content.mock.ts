@@ -1,4 +1,17 @@
 import type { LocalizedText, TourContentRecord } from "@/lib/catalog/tour-content";
+import {
+  ROCINHA_BENEFITS,
+  ROCINHA_CONTENT,
+  ROCINHA_DRAFT_SOURCE,
+  ROCINHA_GROUP_SIZE,
+  ROCINHA_ID,
+  ROCINHA_MEETING_SHORT,
+  ROCINHA_MIN_AGE,
+  ROCINHA_PROVISIONAL_PRICING,
+  ROCINHA_SUBTITLE,
+  ROCINHA_TITLE,
+  ROCINHA_WHATSAPP_MESSAGE,
+} from "@/lib/catalog/drafts/rocinha.draft";
 
 /**
  * RT-114 prototype data — FOR THE REBUILD LAB ONLY (production-hidden). Two clearly separated parts:
@@ -308,8 +321,17 @@ function mockRecord(id: string): TourContentRecord {
   };
 }
 
+/**
+ * RT-115: tours whose REAL draft content exists replace the mock texts (still DRAFT: never public). Rocinha since
+ * 17/10/2026 (Owner commercial closing). The other three keep the fictitious placeholders.
+ */
+function draftRecord(id: string): TourContentRecord | null {
+  if (id !== ROCINHA_ID) return null;
+  return { tripId: id, status: "DRAFT", source: ROCINHA_DRAFT_SOURCE, ...ROCINHA_CONTENT, images: OWNER_GALLERY[id] ?? [] };
+}
+
 export const MOCK_TOUR_CONTENT: Record<string, TourContentRecord> = Object.fromEntries(
-  Object.keys(PUBLISHED_SNAPSHOT).map((id) => [id, mockRecord(id)]),
+  Object.keys(PUBLISHED_SNAPSHOT).map((id) => [id, draftRecord(id) ?? mockRecord(id)]),
 );
 
 /** Review status of each fact shown in the prototype (round 1): what is decided, provisional, pending or fictitious. */
@@ -332,6 +354,15 @@ export type PrototypeOffer = {
   coverStatus: FactStatus;
   /** RT-116 short clip (prototype-only: the RT-113 model has no video yet — documented gap for Sprint 11). */
   video: PrototypeVideo | null;
+  /** RT-115 (real content): localized commercial name, statuses of hero texts, extra essentials, WhatsApp prefill. */
+  titleByLocale?: LocalizedText;
+  pitchStatus: FactStatus;
+  benefitsStatus: FactStatus;
+  groupSize?: { value: LocalizedText; status: FactStatus };
+  minAge?: { value: LocalizedText; status: FactStatus };
+  whatsappMessage?: LocalizedText;
+  /** INTERNAL provisional prices: shown only in the lab review mode as "NÃO PUBLICAR"; never on the public page. */
+  provisionalPricing?: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }>;
 };
 
 export type PrototypeVideo = {
@@ -414,6 +445,28 @@ function offer(id: string, pitch: LocalizedText): PrototypeOffer {
     // RT-116: the Owner confirmed the Rocinha cover and gallery (17/10/2026); the other tours still wait for their photos.
     coverStatus: OWNER_CONFIRMED_COVER.has(id) ? "CONFIRMED" : "PROVISIONAL",
     video: PROTOTYPE_VIDEO[id] ?? null,
+    pitchStatus: "MOCK",
+    benefitsStatus: "MOCK",
+  };
+}
+
+/** RT-112/RT-115 — Rocinha offer from the Owner's commercial decisions (17/10/2026); content ready for Owner review. */
+function rocinhaOffer(base: PrototypeOffer): PrototypeOffer {
+  return {
+    ...base,
+    title: ROCINHA_TITLE.pt,
+    titleByLocale: ROCINHA_TITLE,
+    titleStatus: "PROVISIONAL", // PT decided; EN/ES names are editorial proposals (final review pending)
+    pitch: ROCINHA_SUBTITLE,
+    pitchStatus: "PROVISIONAL",
+    pickup: { value: ROCINHA_MEETING_SHORT, status: "CONFIRMED" },
+    duration: { value: ROCINHA_CONTENT.durationLabel ?? null, status: "CONFIRMED" },
+    benefits: ROCINHA_BENEFITS,
+    benefitsStatus: "PROVISIONAL",
+    groupSize: { value: ROCINHA_GROUP_SIZE, status: "CONFIRMED" },
+    minAge: { value: ROCINHA_MIN_AGE, status: "CONFIRMED" },
+    whatsappMessage: ROCINHA_WHATSAPP_MESSAGE,
+    provisionalPricing: ROCINHA_PROVISIONAL_PRICING,
   };
 }
 
@@ -424,11 +477,11 @@ export const PROTOTYPE_OFFER: Record<string, PrototypeOffer> = {
     "Discover Rio's most famous landmarks on a private experience with a dedicated guide",
     "Conoce las postales más famosas de Río en una experiencia privada con guía dedicado",
   )),
-  cmli1a6im000034zqqzc9sppb: offer("cmli1a6im000034zqqzc9sppb", mock(
+  cmli1a6im000034zqqzc9sppb: rocinhaOffer(offer("cmli1a6im000034zqqzc9sppb", mock(
     "Uma visita privativa à Rocinha, guiada por quem conhece a comunidade",
     "A private visit to Rocinha, guided by people who know the community",
     "Una visita privada a la Rocinha, guiada por quien conoce la comunidad",
-  )),
+  ))),
   cmlibniq40000z4zqkbujnutt: offer("cmlibniq40000z4zqkbujnutt", mock(
     "O centro histórico do Rio e a Confeitaria Colombo em uma experiência privativa",
     "Rio's historic centre and Confeitaria Colombo on a private experience",

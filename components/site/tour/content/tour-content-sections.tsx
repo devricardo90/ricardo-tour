@@ -1,4 +1,4 @@
-import { CalendarCheck, Car, Check, Clock, Languages, MapPin, Minus, Timer, Users, VolumeX, type LucideIcon } from "lucide-react";
+import { CalendarCheck, Car, Check, ChevronDown, Clock, Languages, MapPin, Minus, Timer, UserCheck, Users, VolumeX, type LucideIcon } from "lucide-react";
 import type { TourContentView } from "@/lib/catalog/tour-content";
 import { ImageGallery } from "@/components/site/media/image-gallery";
 import { resolveTourContentCopy } from "@/components/site/tour/content/tour-content-copy";
@@ -68,7 +68,7 @@ export function TourPracticalFacts({ content, locale }: { content: TourContentVi
   return <TourEssentials items={items} locale={locale} title={t.practical} />;
 }
 
-export const essentialIcons = { Clock, MapPin, Timer, Languages, Users, Car, CalendarCheck };
+export const essentialIcons = { Clock, MapPin, Timer, Languages, Users, Car, CalendarCheck, UserCheck };
 
 /** RT-114: benefits list (e.g. why a private experience). */
 export function TourBenefits({ items, locale, status }: { items: string[]; locale: string; status?: ReviewStatus }) {
@@ -174,6 +174,7 @@ export function TourConditionsNotes({ content, locale, status }: { content: Tour
     content.requirements ? { key: "requirements", label: t.requirements, value: content.requirements } : null,
     content.accessibility ? { key: "accessibility", label: t.accessibility, value: content.accessibility } : null,
     content.weatherPolicy ? { key: "weather", label: t.weather, value: content.weatherPolicy } : null,
+    content.operationalConditions ? { key: "operational", label: t.operational, value: content.operationalConditions } : null,
   ].filter((n): n is NonNullable<typeof n> => n !== null);
   if (notes.length === 0) return null;
   return (
@@ -182,7 +183,7 @@ export function TourConditionsNotes({ content, locale, status }: { content: Tour
         {t.conditions}
         {status ? <StatusBadge status={status} locale={locale} /> : null}
       </h2>
-      <div className="mt-4 grid gap-5 sm:grid-cols-3">
+      <div className={`mt-4 grid gap-5 ${notes.length > 3 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
         {notes.map((note) => (
           <div key={note.key}>
             <h3 className={sectionLabel}>{note.label}</h3>
@@ -204,6 +205,65 @@ export function TourGallery({ content, locale, priority = false }: { content: To
       labels={{ gallery: t.gallery, prev: t.galleryPrev, next: t.galleryNext, thumb: t.galleryThumb, position: t.galleryPosition }}
       priority={priority}
     />
+  );
+}
+
+/** RT-115: full description of the experience (paragraphs from TripContent.description). */
+export function TourAbout({ content, locale, status }: { content: TourContentView; locale: string; status?: ReviewStatus }) {
+  const t = resolveTourContentCopy(locale);
+  if (content.paragraphs.length === 0) return null;
+  return (
+    <section aria-labelledby="tour-about-heading" data-testid="tour-about">
+      <h2 id="tour-about-heading" className="site-display flex flex-wrap items-center gap-3 text-[30px] font-medium leading-[1.1] text-[var(--site-on-dark,#F4F0E8)] md:text-[34px]">
+        {t.about}
+        {status ? <StatusBadge status={status} locale={locale} /> : null}
+      </h2>
+      <div className="mt-4 max-w-[68ch] space-y-4 text-[17px] leading-[1.65] text-[var(--site-on-dark-muted,#CAC7BF)]">
+        {content.paragraphs.map((p) => (
+          <p key={p}>{p}</p>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/** RT-115: optional services offered by third parties (never part of the price, never guaranteed). */
+export function TourOptionalServices({ content, locale, status }: { content: TourContentView; locale: string; status?: ReviewStatus }) {
+  const t = resolveTourContentCopy(locale);
+  if (!content.optionalServicesNote) return null;
+  return (
+    <section aria-labelledby="tour-optional-heading" data-testid="tour-optional" className="rounded-xl border border-dashed border-white/15 p-5">
+      <h2 id="tour-optional-heading" className="flex flex-wrap items-center gap-2 text-[13px] font-semibold uppercase tracking-[0.16em] text-[var(--site-on-dark-subtle,#9DA3A5)]">
+        {t.optionalServices}
+        {status ? <StatusBadge status={status} locale={locale} /> : null}
+      </h2>
+      <p className="mt-2 text-[16px] leading-[1.6] text-[var(--site-on-dark-muted,#CAC7BF)]">{content.optionalServicesNote}</p>
+    </section>
+  );
+}
+
+/** RT-115: FAQ as native disclosure widgets (keyboard and screen-reader friendly, no script). */
+export function TourFaq({ content, locale, status }: { content: TourContentView; locale: string; status?: ReviewStatus }) {
+  const t = resolveTourContentCopy(locale);
+  if (content.faq.length === 0) return null;
+  return (
+    <section aria-labelledby="tour-faq-heading" data-testid="tour-faq">
+      <h2 id="tour-faq-heading" className="site-display flex flex-wrap items-center gap-3 text-[30px] font-medium leading-[1.1] text-[var(--site-on-dark,#F4F0E8)] md:text-[34px]">
+        {t.faq}
+        {status ? <StatusBadge status={status} locale={locale} /> : null}
+      </h2>
+      <div className="mt-4 divide-y divide-white/10 rounded-xl border border-white/10">
+        {content.faq.map((item) => (
+          <details key={item.question} className="group px-5 py-4">
+            <summary className={`flex cursor-pointer list-none items-center justify-between gap-4 text-[17px] font-semibold text-[var(--site-on-dark,#F4F0E8)] ${focusRing}`}>
+              {item.question}
+              <ChevronDown className="h-5 w-5 shrink-0 text-[var(--site-gold,#C8A86B)] transition-transform group-open:rotate-180" aria-hidden="true" />
+            </summary>
+            <p className="mt-3 text-[16px] leading-[1.6] text-[var(--site-on-dark-muted,#CAC7BF)]">{item.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
   );
 }
 
