@@ -24,34 +24,31 @@ const tri = (get: (l: (typeof L)[number]) => string | string[]) => {
 };
 
 lines.push(
-  "# RT-115 — Favela Rocinha: textos para revisão do Owner (PT / EN / ES)",
+  "# RT-115 — Favela Rocinha: textos finais PT / EN / ES (correções editoriais aprovadas)",
   "",
-  "- Estado: **CONTENT REVIEW REQUIRED** — aguardando o parecer do Owner. Nada aprovado, nada publicado. RT-115 em Revisar.",
-  "- Gerado de `lib/catalog/drafts/rocinha.draft.ts` (a mesma fonte da página local) por `scripts/rt-115-owner-review-md.ts`. **Os textos não foram reescritos** nesta etapa.",
+  "- Estado: **EDITORIAL IMPLEMENTED AND VERIFIED** — o Owner aprovou a aplicação dos ajustes editoriais PT/EN/ES da Favela Rocinha em 17/10/2026. Nada publicado: preços públicos, produção e reservas comerciais NÃO autorizados (gates RT-81, RT-110, RT-118, RT-119, RT-120).",
+  "- Gerado de `lib/catalog/drafts/rocinha.draft.ts` (a mesma fonte da página local) por `scripts/rt-115-owner-review-md.ts`.",
+  "- A pergunta frequente 7 é uma redação editorial provisória: será reconciliada com os termos aprovados no RT-81.",
   "- Sem preços: na página de revisão visual o preço aparece como **\"Valores em validação\"**. Os preços provisórios ficam só na versão interna local e no Manual Mestre.",
   "",
-  "## Como revisar",
+  "## Correções aplicadas (aprovadas pelo Owner)",
   "",
-  "Marque cada critério e anote ajustes ao lado do item. A próxima rodada de redação só começa depois do seu parecer.",
-  "",
-  "- [ ] Os textos parecem de uma empresa de turismo profissional.",
-  "- [ ] O inglês e o espanhol soam naturais.",
-  "- [ ] A descrição vende uma experiência privativa.",
-  "- [ ] O roteiro representa o que o Owner explicou.",
-  "- [ ] Inclusões e exclusões estão corretas.",
-  "- [ ] A informação sobre mototáxi está clara.",
-  "- [ ] As perguntas frequentes não prometem serviços que não oferecemos.",
-  "- [ ] Os botões incentivam a solicitar disponibilidade.",
+  "- Nomes EN/ES aprovados aplicados no título, na mensagem do WhatsApp e na prévia.",
+  "- Subtítulos, descrições curtas e completas com os textos aprovados; menos linguagem operacional.",
+  "- Roteiro mantido em 8 etapas (explicações na caminhada; fotos na parada panorâmica).",
+  "- Inclusões centradas no que o cliente recebe; a tarifa do operador local saiu da lista pública (custo interno).",
+  "- Exclusões separadas das atividades culturais eventuais, sem afirmar que toda apresentação é paga e sem datas.",
+  "- Mototáxi de subida e descida explícito nas inclusões, na descrição e na pergunta 6.",
+  "- Inglês e espanhol revisados (espanhol internacional: anticipo, actividades de pago, terraza).",
+  "- Cancelamento: nenhuma condição inventada antes do RT-81.",
   "",
   "## 1. Título do passeio",
   "",
-  "| Idioma | Proposta atual (na página) | Preferência inicial do Owner (17/10, não aplicada — decisão após revisar o texto completo) |",
-  "|---|---|---|",
-  `| PT | ${ROCINHA_TITLE.pt} | (mantido — adequado) |`,
-  `| EN | ${ROCINHA_TITLE.en} | Rocinha Favela — Private Cultural Tour |`,
-  `| ES | ${ROCINHA_TITLE.es} | Tour Privado por la Favela de Rocinha |`,
-  "",
-  "Decisão: [ ] proposta atual · [ ] preferência do Owner · [ ] outra: ________",
+  "| Idioma | Nome aprovado (17/10/2026) |",
+  "|---|---|",
+  `| PT | ${ROCINHA_TITLE.pt} |`,
+  `| EN | ${ROCINHA_TITLE.en} |`,
+  `| ES | ${ROCINHA_TITLE.es} |`,
   "",
   "## 2. Subtítulo",
   "",
@@ -75,29 +72,26 @@ tri((l) => [
   `**${tourContentCopy[l].meetingPoint}:** ${c.meetingPoint?.[l] ?? ""}`,
   `**${tourContentCopy[l].duration}:** ${c.durationLabel?.[l] ?? ""}`,
 ]);
-lines.push("## 9. Perguntas frequentes (7) — conferir uma a uma", "");
+lines.push("## 9. Perguntas frequentes (7)", "");
 (c.faq ?? []).forEach((f, i) => {
   lines.push(`### Pergunta ${i + 1}`, "");
   for (const l of L) lines.push(`**${FLAG[l]}** — **${f.question[l]}** ${f.answer[l]}`, "");
-  lines.push("Parecer: [ ] aprovada · [ ] ajustar · [ ] remover — Promete algo que não oferecemos? [ ] não · [ ] sim: ________", "");
+  if (i === 6) lines.push("*Redação editorial provisória: reconciliar com os termos aprovados no RT-81 antes da publicação.*", "");
 });
 lines.push("## 10. CTA e mensagem do WhatsApp", "");
 for (const l of L) {
   const t = tourContentCopy[l];
-  lines.push(`**${FLAG[l]}** — Botão principal: **${t.cta}** · Botão secundário: **${t.ctaWhatsapp}** · Nota: ${t.ctaNote} · Preço na revisão visual: **${t.pricePending}**`, "", "```", ROCINHA_WHATSAPP_MESSAGE[l], "```", "");
+  lines.push(`**${FLAG[l]}** — Botão principal: **${t.cta}** · Botão secundário: **${t.ctaWhatsapp}** · Nota: ${t.ctaNote} · Preço na revisão visual: **${t.pricePending}**`, "", "```", ...ROCINHA_WHATSAPP_MESSAGE[l].split("\n").map((line) => line.trimEnd()), "```", "");
 }
 lines.push(
-  "## Pendências de conteúdo",
+  "## Pendências que permanecem (fora da etapa editorial)",
   "",
-  "1. Parecer do Owner sobre a qualidade da copy, naturalidade de EN/ES e as 7 perguntas frequentes.",
-  "2. Nomes comerciais EN/ES: escolher entre a proposta atual e a preferência inicial do Owner.",
-  "3. Roteiro: confirmar se o agrupamento 10 → 8 etapas na página está correto.",
-  "4. Horários e dias de operação: não definidos (o texto não menciona horários).",
-  "5. Condições de cancelamento: o texto só remete à proposta; prazos e percentuais dependem do RT-81.",
-  "6. Requisitos físicos objetivos: o texto fala em ladeiras e escadas, sem números (validação operacional).",
-  "7. Pagamento: o texto diz \"meios previstos\" (PIX, cartão, dinheiro) — confirmar se podem ser apresentados como definitivos.",
-  "8. Crédito do mural: a página mostra só a inscrição visível \"@WARK ROCINHA...\"; identidade do artista não verificada.",
-  "9. Preços: a página de revisão mostra \"Valores em validação\"; publicação depende da validação de custos, tributos e operação.",
+  "1. Pergunta 7 e condições: reconciliar com os termos do RT-81 (prazos e percentuais não definidos; nada inventado).",
+  "2. Horários e dias de operação: não definidos (o texto não menciona horários).",
+  "3. Requisitos físicos objetivos: validação operacional (checklist do Manual Mestre §11.23).",
+  "4. Crédito do mural: só a inscrição visível \"@WARK ROCINHA...\"; identidade do artista não verificada.",
+  "5. Preços: \"Valores em validação\" na revisão; publicação depende da validação de custos, tributos e operação.",
+  "6. Aplicação no site: RT-119 (carga controlada) e RT-114 (página pública), após os gates RT-81, RT-110, RT-118 e RT-120.",
   "",
 );
 fs.writeFileSync(out, lines.join("\n"));

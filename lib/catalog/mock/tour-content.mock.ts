@@ -361,6 +361,9 @@ export type PrototypeOffer = {
   groupSize?: { value: LocalizedText; status: FactStatus };
   minAge?: { value: LocalizedText; status: FactStatus };
   whatsappMessage?: LocalizedText;
+  /** Review chips for real content (record stays DRAFT): editorial status of the texts and of the FAQ/conditions. */
+  contentStatus?: FactStatus;
+  conditionsStatus?: FactStatus;
   /** INTERNAL provisional prices: shown only in the lab review mode as "NÃO PUBLICAR"; never on the public page. */
   provisionalPricing?: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }>;
 };
@@ -456,13 +459,16 @@ function rocinhaOffer(base: PrototypeOffer): PrototypeOffer {
     ...base,
     title: ROCINHA_TITLE.pt,
     titleByLocale: ROCINHA_TITLE,
-    titleStatus: "PROVISIONAL", // PT decided; EN/ES names are editorial proposals (final review pending)
+    titleStatus: "CONFIRMED", // PT/EN/ES names approved by the Owner (17/10/2026)
     pitch: ROCINHA_SUBTITLE,
-    pitchStatus: "PROVISIONAL",
+    pitchStatus: "CONFIRMED",
     pickup: { value: ROCINHA_MEETING_SHORT, status: "CONFIRMED" },
     duration: { value: ROCINHA_CONTENT.durationLabel ?? null, status: "CONFIRMED" },
     benefits: ROCINHA_BENEFITS,
-    benefitsStatus: "PROVISIONAL",
+    benefitsStatus: "PROVISIONAL", // benefit lines were not part of the Owner-approved list
+    // Editorial corrections approved (17/10/2026); conditions and FAQ wording still depend on the RT-81 terms.
+    contentStatus: "CONFIRMED",
+    conditionsStatus: "PROVISIONAL",
     groupSize: { value: ROCINHA_GROUP_SIZE, status: "CONFIRMED" },
     minAge: { value: ROCINHA_MIN_AGE, status: "CONFIRMED" },
     whatsappMessage: ROCINHA_WHATSAPP_MESSAGE,

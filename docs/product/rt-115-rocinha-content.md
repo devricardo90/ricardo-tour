@@ -1,256 +1,250 @@
 # RT-115 — Tour Favela Rocinha: textos comerciais PT / EN / ES
 
-- Status: **CONTENT READY FOR OWNER REVIEW** (não aprovado, não publicado). Fonte: decisões do Owner de 17/10/2026 (RT-112). Gerado por `scripts/rt-115-export-rocinha.ts` a partir de `lib/catalog/drafts/rocinha.draft.ts` (a mesma fonte do preview).
-- Os nomes em EN/ES são propostas editoriais. Preços não aparecem nos textos (tabela interna provisória no Manual Mestre). Condições de cancelamento dependem do RT-81 e não são descritas além do que o Owner aprovou.
+- Status: **EDITORIAL IMPLEMENTED AND VERIFIED** — correções editoriais aprovadas pelo Owner em 17/10/2026 e aplicadas. Não publicado (gates RT-81, RT-110, RT-118, RT-119, RT-120). Gerado por `scripts/rt-115-export-rocinha.ts` a partir de `lib/catalog/drafts/rocinha.draft.ts` (a mesma fonte do preview).
+- Nomes PT/EN/ES aprovados. Preços não aparecem nos textos (tabela interna provisória no Manual Mestre). Condições de cancelamento dependem do RT-81 e não são descritas além do que o Owner aprovou.
 
 ## Português
 
 **1. Nome:** Tour Favela Rocinha — Experiência Cultural Privativa
 
-**2. Subtítulo:** Conheça a história, a cultura e o dia a dia da Rocinha em uma visita privativa, acompanhada do início ao fim.
+**2. Subtítulo:** Conheça a história, a cultura e o cotidiano da Rocinha em uma experiência privativa, acompanhada por um guia durante a visita.
 
-**3. Descrição curta:** Uma visita cultural privativa à Rocinha, com guia Ricardo Tour, mototáxi de subida e descida e parada em um mirante para ver a comunidade do alto.
+**3. Descrição curta:** Explore a Rocinha em uma visita cultural privativa com guia Ricardo Tour, mototáxi de subida e descida incluído e parada panorâmica prevista no roteiro.
 
 **4. Sobre a experiência**
 
-A Rocinha é uma comunidade com história, cultura e vida própria, construída ao longo de décadas por seus moradores. Nesta experiência privativa, você caminha pela comunidade acompanhado pelo guia Ricardo Tour, com apoio local conforme a operação, e conhece um pouco dessa história e do dia a dia de quem vive ali.
+A Rocinha tem uma história construída por seus moradores e uma vida cultural própria. Nesta experiência privativa, você conhece aspectos da formação da comunidade e de seu cotidiano em uma visita acompanhada por um guia Ricardo Tour, com respeito às pessoas e aos espaços visitados.
 
-O encontro é na região da estação de metrô São Conrado. De lá, o grupo sobe de mototáxi, faz uma caminhada cultural com explicações sobre a formação da comunidade e a vida cotidiana, visita pontos culturais conforme a operação do dia e para em um mirante ou rooftop disponível, com tempo para fotografias autorizadas. A descida também é feita de mototáxi, e a experiência termina na região do ponto de encontro.
+O encontro acontece nas proximidades da estação de metrô São Conrado, em um ponto combinado por WhatsApp. Após as orientações iniciais, o grupo sobe de mototáxi e segue por uma caminhada cultural, com paradas que variam conforme o acesso e as condições do dia. Há uma parada panorâmica planejada em um mirante ou rooftop disponível. A descida também é feita de mototáxi, e o passeio termina próximo ao ponto de encontro.
 
-O passeio é exclusivamente privativo, para grupos de 1 a 4 adultos, e dura aproximadamente 3 horas. O roteiro pode ser ajustado conforme as condições de segurança, o clima, o acesso aos locais e a operação local do dia.
+O tour é exclusivo para seu grupo de 1 a 4 adultos e tem duração estimada de 3 horas. Os trajetos de mototáxi, o acompanhamento do guia e os serviços necessários ao roteiro contratado estão incluídos no preço. Alimentação, compras e serviços opcionais de terceiros ficam a seu critério.
+
+O percurso pode ser alterado por motivos de segurança, clima ou acesso.
 
 **5. Por que uma experiência privativa**
 
-- Experiência só para o seu grupo, de 1 a 4 pessoas
-- Mototáxi de subida e de descida já incluído
-- Guia Ricardo Tour com você durante toda a visita
+- Experiência exclusiva para o seu grupo, de 1 a 4 adultos
+- Mototáxi de subida e descida incluído
+- Guia Ricardo Tour durante toda a visita
 
 **6. Duração:** Aproximadamente 3 horas
 
 **7. Modalidade:** Experiência privativa
 
-**8. Participantes:** 1 a 4 pessoas · Idade mínima: 18 anos ou mais · Idiomas: Português, Inglês, Espanhol
+**8. Participantes:** 1 a 4 adultos · Idade mínima: 18 anos ou mais · Idiomas: Português, Inglês, Espanhol
 
-**9. Ponto de encontro:** Região da estação de metrô São Conrado, no Rio de Janeiro. O local exato é enviado por WhatsApp antes do passeio.
+**9. Ponto de encontro:** Proximidades da estação de metrô São Conrado, Rio de Janeiro. O ponto exato é combinado por WhatsApp antes do passeio.
 
 **10. Roteiro**
 
-1. **Encontro na região da estação São Conrado** — O local exato é enviado por WhatsApp antes do passeio.
-2. **Orientações iniciais** — O guia explica como será a visita e as regras de convivência e de fotografia.
-3. **Subida de mototáxi**
-4. **Caminhada cultural acompanhada** — Explicações sobre a história da comunidade e a vida cotidiana.
-5. **Pontos culturais conforme a operação** — Os locais visitados dependem das condições e da operação do dia.
-6. **Mirante ou rooftop disponível** — Vista da comunidade do alto e tempo para fotografias autorizadas.
-7. **Descida de mototáxi**
-8. **Encerramento no ponto de encontro** — A experiência termina na região do ponto de encontro combinado.
+1. **Encontro próximo à estação São Conrado** — O ponto exato é combinado por WhatsApp antes do passeio.
+2. **Orientações iniciais** — O guia apresenta o roteiro e as recomendações para a visita.
+3. **Subida de mototáxi** — Trajeto incluído no passeio.
+4. **Caminhada cultural acompanhada** — O guia apresenta a história da comunidade e o cotidiano dos moradores.
+5. **Paradas culturais conforme acesso** — As paradas variam conforme o acesso e as condições do dia.
+6. **Mirante ou rooftop e fotografias** — Parada panorâmica planejada, com tempo para fotos.
+7. **Descida de mototáxi** — Trajeto incluído no passeio.
+8. **Encerramento próximo ao ponto de encontro**
 
 **11. Incluído**
 
-- Acompanhamento do guia Ricardo Tour
-- Apoio local conforme a operação
-- Experiência cultural acompanhada
-- Mototáxi de subida
-- Mototáxi de descida
-- Tarifa do operador local
-- Visita aos pontos previstos no roteiro
-- Parada em mirante ou rooftop disponível
-- Ajuda informal com fotografias
+- Guia Ricardo Tour durante a visita
+- Caminhada cultural acompanhada
+- Mototáxi de subida e descida
+- Serviços locais necessários ao roteiro
+- Parada panorâmica planejada
+- Ajuda do guia com fotos de celular
 
 **12. Não incluído**
 
 - Transporte entre o hotel e São Conrado
-- Alimentação
-- Bebidas
+- Alimentação e bebidas
 - Compras pessoais
-- Fotografias profissionais de terceiros
-- Filmagens ou fotografias com drone
+- Fotografia profissional de terceiros
+- Serviços de drone
 - Atividades pagas opcionais
-- Outros serviços contratados por conta própria
+- Outros serviços contratados voluntariamente
 
-*Serviços opcionais de terceiros:* Alguns espaços comunitários podem oferecer capoeira, música, dança, produtos locais, fotografias ou vídeos com drone. Esses serviços são prestados por terceiros, não são garantidos pela Ricardo Tour e não são obrigatórios: você contrata apenas se quiser.
+*Serviços opcionais de terceiros:* Alguns espaços comunitários podem oferecer apresentações de capoeira, música, dança, produtos locais, fotografias profissionais ou filmagens com drone. Essas atividades dependem de terceiros, não têm data garantida e algumas podem ser pagas. Nenhuma compra ou atividade opcional é obrigatória.
 
-**13. Informações práticas:** Passeio para maiores de 18 anos. A experiência inclui trajetos de mototáxi e caminhada, com possíveis ladeiras e escadas: use calçado fechado e confortável. O atendimento em português, inglês ou espanhol depende da disponibilidade do guia e é confirmado na reserva.
+**13. Informações práticas:** Para adultos a partir de 18 anos. O roteiro inclui dois trajetos de mototáxi e caminhada, com possíveis ladeiras e escadas: use calçado fechado e confortável. O atendimento pode ser em português, inglês ou espanhol, conforme a disponibilidade do guia, confirmada na reserva.
 
-*Acessibilidade:* Não é uma experiência acessível para todas as pessoas: há mototáxi, caminhada, ladeiras e escadas. Se você tem mobilidade reduzida ou alguma limitação física, conte para nós antes de solicitar, para avaliarmos juntos se a visita é viável.
+*Acessibilidade:* A experiência não é adequada para todas as pessoas: inclui mototáxi, caminhada, ladeiras e escadas. Se você tem mobilidade reduzida ou alguma limitação física, fale com a equipe antes de reservar para avaliarmos juntos a viabilidade da visita.
 
-**14. Condições operacionais:** A reserva depende de confirmação humana. O roteiro pode mudar, ser encurtado ou suspenso conforme as condições de segurança, o clima, o acesso aos locais e a disponibilidade da operação local no dia. Não prometemos ruas, estabelecimentos, apresentações ou pontos específicos.
+**14. Condições operacionais:** Cada reserva é confirmada pela nossa equipe após a verificação de disponibilidade. O percurso pode mudar por segurança, clima ou acesso, e não há ruas, estabelecimentos ou apresentações garantidos.
 
 **15. Perguntas frequentes**
 
-- **O passeio é privativo?** Sim. A experiência é exclusiva para o seu grupo, de 1 a 4 pessoas.
-- **Quem pode participar?** Adultos a partir de 18 anos. Como há mototáxi, caminhada, ladeiras e escadas, avise antes se houver alguma limitação física.
-- **O transporte do hotel está incluído?** Não. O encontro é na região da estação de metrô São Conrado, e o passeio termina na região do ponto de encontro.
-- **Como funciona a reserva?** Você solicita a disponibilidade, nossa equipe verifica a operação e envia a proposta com as condições. A reserva é confirmada com o pagamento de um sinal de 30%, e o restante é pago antes do início do passeio. O site não faz pagamento automático.
-- **Quais formas de pagamento são aceitas?** Os meios previstos são PIX, cartão de crédito e dinheiro. As opções disponíveis para a sua reserva constam na proposta.
-- **Preciso contratar atividades extras na comunidade?** Não. Atividades como capoeira, música ou fotos com drone podem ser oferecidas por terceiros, mas são opcionais e não fazem parte do preço.
-- **E se o passeio precisar ser alterado?** O roteiro pode ser ajustado, encurtado ou suspenso por segurança, clima ou operação local. As condições de cancelamento e remarcação constam na proposta enviada antes do pagamento.
+- **O passeio é privativo?** Sim. O passeio é reservado exclusivamente para seu grupo, de 1 a 4 adultos.
+- **Quem pode participar?** Pessoas a partir de 18 anos. O roteiro inclui dois trajetos de mototáxi e caminhada, com possíveis ladeiras e escadas. Informe à equipe qualquer necessidade de mobilidade antes de reservar.
+- **O transporte do hotel está incluído?** Não nesta modalidade. O encontro e o encerramento acontecem nas proximidades da estação São Conrado. Enviaremos o ponto exato por WhatsApp.
+- **Como funciona a reserva?** Solicite disponibilidade. Após confirmar a operação, nossa equipe enviará a proposta e as condições. A reserva é confirmada com sinal de 30%, e o restante é pago antes do início. O site não processa pagamentos.
+- **Quais formas de pagamento são aceitas?** A equipe informará na proposta quais meios de pagamento estão disponíveis para sua reserva. PIX, cartão ou dinheiro poderão ser oferecidos, conforme a operação confirmada.
+- **Vou ter outras despesas durante o passeio?** Não por serviços obrigatórios do passeio. Guia, mototáxi de subida e descida e serviços locais previstos estão incluídos. Compras, comida, drone ou outras atividades de terceiros são opcionais.
+- **E se o roteiro precisar ser alterado?** O percurso pode mudar por segurança, clima ou restrições de acesso. Nossa equipe explicará as opções disponíveis e as condições aplicáveis antes da confirmação da reserva.
 
-**16. CTA:** Solicitar disponibilidade · WhatsApp: "Olá! Gostaria de solicitar disponibilidade para o Tour Favela Rocinha — Experiência Cultural Privativa. / Data desejada:  / Número de participantes (1 a 4):  / Idioma preferido (português, inglês ou espanhol): "
+**16. CTA:** Solicitar disponibilidade · WhatsApp: "Olá! Quero consultar a disponibilidade do Tour Favela Rocinha — Experiência Cultural Privativa. / Data desejada:  / Participantes (1 a 4 adultos):  / Idioma preferido: "
 
 ## English
 
-**1. Name:** Rocinha Favela — Private Cultural Experience
+**1. Name:** Rocinha Favela — Private Cultural Tour
 
-**2. Subtitle:** Discover Rocinha's history, culture and everyday life on a private visit, accompanied from start to finish.
+**2. Subtitle:** Discover Rocinha's history, culture and everyday life on a private, guided visit.
 
-**3. Short description:** A private cultural visit to Rocinha with a Ricardo Tour guide, motorcycle taxi up and down, and a stop at a viewpoint to see the community from above.
+**3. Short description:** Explore Rocinha on a private cultural tour with a Ricardo Tour guide, motorcycle-taxi rides in both directions included, and a planned panoramic stop.
 
 **4. About the experience**
 
-Rocinha is a community with its own history, culture and life, built over decades by its residents. On this private experience you walk through the community with your Ricardo Tour guide, with local support depending on the day's operation, and learn about that history and the everyday life of the people who live there.
+Rocinha has a history shaped by the people who live there and a cultural life of its own. This private guided visit introduces you to the community's history and everyday life, with respect for the people and places along the route.
 
-You meet near São Conrado metro station. From there, the group rides up by motorcycle taxi, takes a cultural walk with explanations about how the community was formed and about daily life, visits cultural spots depending on the day's operation, and stops at an available viewpoint or rooftop, with time for permitted photos. The way down is also by motorcycle taxi, and the experience ends near the meeting point.
+Meet near São Conrado metro station at a spot arranged via WhatsApp. After a short briefing, ride uphill by motorcycle taxi and explore part of the community on foot, with cultural stops that depend on access and conditions that day. A panoramic stop at an available viewpoint or rooftop is planned. The ride back down is also by motorcycle taxi, and the tour finishes near the meeting point.
 
-The tour is private only, for groups of 1 to 4 adults, and lasts about 3 hours. The route may be adjusted according to safety conditions, the weather, access to places and the local operation on the day.
+This private tour is for your group of one to four adults and takes approximately three hours. Both motorcycle-taxi rides, your guide and the services required for the booked itinerary are included in the price. Food, shopping and optional third-party services are your choice.
+
+The route may change because of safety, weather or access conditions.
 
 **5. Why a private experience**
 
-- Only your group, from 1 to 4 people
-- Motorcycle taxi up and down already included
-- A Ricardo Tour guide with you throughout the visit
+- A private tour for your group of one to four adults
+- Both motorcycle-taxi rides included
+- A Ricardo Tour guide throughout the visit
 
-**6. Duration:** About 3 hours
+**6. Duration:** Approximately 3 hours
 
 **7. Format:** Private experience
 
-**8. Participants:** 1 to 4 people · Minimum age: 18 and over · Languages: Portuguese, English, Spanish
+**8. Participants:** 1 to 4 adults · Minimum age: 18 and over · Languages: Portuguese, English, Spanish
 
-**9. Meeting point:** Near São Conrado metro station, Rio de Janeiro. The exact spot is sent by WhatsApp before the tour.
+**9. Meeting point:** Near São Conrado metro station, Rio de Janeiro. The exact spot is arranged via WhatsApp before the tour.
 
 **10. Itinerary**
 
-1. **Meeting near São Conrado station** — The exact spot is sent by WhatsApp before the tour.
-2. **Briefing** — The guide explains how the visit works and the etiquette for being in the community and taking photos.
-3. **Motorcycle taxi up**
-4. **Guided cultural walk** — Explanations about the community's history and everyday life.
-5. **Cultural spots depending on the operation** — The places visited depend on the day's conditions and operation.
-6. **Available viewpoint or rooftop** — A view of the community from above and time for permitted photos.
-7. **Motorcycle taxi down**
-8. **End at the meeting point** — The experience ends near the agreed meeting point.
+1. **Meeting near São Conrado station** — The exact spot is arranged via WhatsApp before the tour.
+2. **Short briefing** — Your guide introduces the route and a few tips for the visit.
+3. **Motorcycle-taxi ride up** — Included in the tour.
+4. **Guided cultural walk** — Your guide shares the community's history and everyday life.
+5. **Cultural stops, depending on access** — Stops vary with access and conditions that day.
+6. **Viewpoint or rooftop and photos** — A planned panoramic stop with time for photos.
+7. **Motorcycle-taxi ride down** — Included in the tour.
+8. **Finish near the meeting point**
 
 **11. Included**
 
 - Ricardo Tour guide throughout the visit
-- Local support depending on the operation
-- Guided cultural experience
-- Motorcycle taxi up
-- Motorcycle taxi down
-- Local operator fee
-- Visit to the stops planned in the itinerary
-- Stop at an available viewpoint or rooftop
-- Informal help with photos
+- Guided cultural walk
+- Motorcycle-taxi rides up and down
+- Local services required for the itinerary
+- Planned panoramic stop
+- Help from your guide with phone photos
 
 **12. Not included**
 
 - Transport between your hotel and São Conrado
-- Food
-- Drinks
-- Personal purchases
-- Professional photos by third parties
-- Drone videos or photos
+- Food and drinks
+- Personal shopping
+- Professional photography by third parties
+- Drone services
 - Optional paid activities
-- Any other service you choose to hire
+- Any other services you choose to book
 
-*Optional third-party services:* Some community spaces may offer capoeira, music, dance, local products, photos or drone videos. These services are provided by third parties, are not guaranteed by Ricardo Tour and are never mandatory: you only pay for them if you want to.
+*Optional third-party services:* Some community spaces may offer capoeira performances, music, dance, local products, professional photography or drone filming. These depend on third parties, cannot be guaranteed on any given date, and some may be paid. No purchase or optional activity is required.
 
-**13. Practical information:** For adults aged 18 and over. The experience includes motorcycle-taxi rides and walking, possibly on steep streets and stairs: wear closed, comfortable shoes. Service in Portuguese, English or Spanish depends on guide availability and is confirmed when you book.
+**13. Practical information:** For adults aged 18 and over. The itinerary includes two motorcycle-taxi rides and walking, possibly on steep streets or stairs, so wear closed, comfortable shoes. The tour can be guided in Portuguese, English or Spanish, subject to guide availability confirmed when you book.
 
-*Accessibility:* This experience is not accessible to everyone: it involves motorcycle taxis, walking, steep streets and stairs. If you have reduced mobility or a physical limitation, tell us before requesting so we can assess together whether the visit is feasible.
+*Accessibility:* This experience is not suitable for everyone: it involves motorcycle taxis, walking, steep streets and stairs. If you have reduced mobility or a physical limitation, please talk to our team before booking so we can assess together whether the visit is right for you.
 
-**14. Operating conditions:** Bookings are confirmed by a person on our team. The route may change, be shortened or be suspended depending on safety conditions, the weather, access to places and the local operation's availability on the day. We do not promise specific streets, venues, performances or stops.
+**14. Operating conditions:** Our team confirms each booking after checking availability. The route may change because of safety, weather or access, and no specific streets, venues or performances are guaranteed.
 
 **15. Frequently asked questions**
 
-- **Is the tour private?** Yes. The experience is only for your group, from 1 to 4 people.
-- **Who can take part?** Adults aged 18 and over. Because there are motorcycle taxis, walking, steep streets and stairs, let us know beforehand about any physical limitation.
-- **Is transport from my hotel included?** No. You meet near São Conrado metro station, and the tour ends near the meeting point.
-- **How does booking work?** You request availability, our team checks the operation and sends you a proposal with the conditions. The booking is confirmed with a 30% deposit, and the rest is paid before the tour starts. The website does not take automatic payments.
-- **Which payment methods are accepted?** The planned methods are PIX, credit card and cash. The options available for your booking are stated in the proposal.
-- **Do I have to pay for extra activities in the community?** No. Activities such as capoeira, music or drone photos may be offered by third parties, but they are optional and not part of the price.
-- **What if the tour has to change?** The route may be adjusted, shortened or suspended for safety, weather or local operational reasons. Cancellation and rescheduling conditions are stated in the proposal sent before payment.
+- **Is the tour private?** Yes. The tour is private for your group of one to four adults.
+- **Who can join?** Adults aged 18 and over. The itinerary includes two motorcycle-taxi rides and walking, possibly on steep streets or stairs. Please tell our team about any mobility needs before booking.
+- **Is hotel transport included?** Not with this option. The tour starts and ends near São Conrado metro station. We'll send the exact meeting spot via WhatsApp.
+- **How does booking work?** Request availability first. Once our team confirms the tour can go ahead, we'll send you a quote and the terms. A 30% deposit confirms the booking, and the balance is due before the tour starts. Payments are not processed on this website.
+- **Which payment methods are available?** Our team will confirm the payment methods available for your booking in the quote. Depending on the arrangements, options may include PIX, card or cash.
+- **Will I have to pay for anything else during the tour?** Not for the services included in your tour. Your guide, both motorcycle-taxi rides and required local services are covered. Shopping, food, drone photos and other third-party activities are optional.
+- **What if the route has to change?** The route may change because of safety, weather or access restrictions. Our team will explain the available options and applicable terms before the booking is confirmed.
 
-**16. CTA:** Request availability · WhatsApp: "Hello! I would like to request availability for the Rocinha Favela — Private Cultural Experience. / Preferred date:  / Number of participants (1 to 4):  / Preferred language (Portuguese, English or Spanish): "
+**16. CTA:** Request availability · WhatsApp: "Hello! I'd like to check availability for Rocinha Favela — Private Cultural Tour. / Preferred date:  / Guests (1–4 adults):  / Preferred language: "
 
 ## Español
 
-**1. Nombre:** Tour Favela Rocinha — Experiencia Cultural Privada
+**1. Nombre:** Tour Privado por la Favela de Rocinha
 
-**2. Subtítulo:** Conoce la historia, la cultura y el día a día de la Rocinha en una visita privada, acompañada de principio a fin.
+**2. Subtítulo:** Descubre la historia, la cultura y la vida cotidiana de Rocinha en una visita privada con guía.
 
-**3. Descripción corta:** Una visita cultural privada a la Rocinha con guía de Ricardo Tour, mototaxi de subida y de bajada, y una parada en un mirador para ver la comunidad desde lo alto.
+**3. Descripción corta:** Recorre Rocinha en un tour cultural privado con guía de Ricardo Tour, subida y bajada en mototaxi incluidas y una parada panorámica prevista.
 
 **4. Sobre la experiencia**
 
-La Rocinha es una comunidad con historia, cultura y vida propias, construida a lo largo de décadas por sus habitantes. En esta experiencia privada recorres la comunidad acompañado por el guía de Ricardo Tour, con apoyo local según la operación, y conoces parte de esa historia y del día a día de quienes viven allí.
+Rocinha tiene una historia construida por sus habitantes y una vida cultural propia. Esta visita privada te acerca a la historia y a la vida cotidiana de la comunidad, con respeto por las personas y los espacios que se recorren.
 
-El encuentro es en la zona de la estación de metro São Conrado. Desde allí, el grupo sube en mototaxi, hace una caminata cultural con explicaciones sobre la formación de la comunidad y la vida cotidiana, visita puntos culturales según la operación del día y se detiene en un mirador o azotea disponible, con tiempo para fotografías autorizadas. La bajada también se hace en mototaxi y la experiencia termina en la zona del punto de encuentro.
+Nos encontramos cerca de la estación de metro São Conrado, en un punto acordado por WhatsApp. Tras una breve orientación, subimos en mototaxi y recorremos parte de la comunidad a pie, con paradas culturales que pueden variar según el acceso y las condiciones del día. Está prevista una parada panorámica en un mirador o terraza disponible. La bajada también se hace en mototaxi y el recorrido termina cerca del punto de encuentro.
 
-El paseo es exclusivamente privado, para grupos de 1 a 4 adultos, y dura aproximadamente 3 horas. El itinerario puede ajustarse según las condiciones de seguridad, el clima, el acceso a los lugares y la operación local del día.
+El tour es exclusivo para tu grupo de uno a cuatro adultos y dura aproximadamente tres horas. Ambos trayectos en mototaxi, el acompañamiento del guía y los servicios necesarios para el itinerario contratado están incluidos en el precio. La comida, las compras y los servicios opcionales de terceros quedan a tu elección.
+
+El recorrido puede cambiar por motivos de seguridad, clima o acceso.
 
 **5. Por qué una experiencia privada**
 
-- Solo tu grupo, de 1 a 4 personas
-- Mototaxi de subida y de bajada ya incluido
-- Guía de Ricardo Tour contigo durante toda la visita
+- Tour exclusivo para tu grupo de uno a cuatro adultos
+- Ambos trayectos en mototaxi incluidos
+- Guía de Ricardo Tour durante toda la visita
 
 **6. Duración:** Aproximadamente 3 horas
 
 **7. Modalidad:** Experiencia privada
 
-**8. Participantes:** 1 a 4 personas · Edad mínima: 18 años o más · Idiomas: Portugués, Inglés, Español
+**8. Participantes:** 1 a 4 adultos · Edad mínima: 18 años o más · Idiomas: Portugués, Inglés, Español
 
-**9. Punto de encuentro:** Zona de la estación de metro São Conrado, en Río de Janeiro. El lugar exacto se envía por WhatsApp antes del paseo.
+**9. Punto de encuentro:** Cerca de la estación de metro São Conrado, Río de Janeiro. El punto exacto se acuerda por WhatsApp antes del tour.
 
 **10. Itinerario**
 
-1. **Encuentro en la zona de la estación São Conrado** — El lugar exacto se envía por WhatsApp antes del paseo.
-2. **Orientaciones iniciales** — El guía explica cómo será la visita y las normas de convivencia y de fotografía.
-3. **Subida en mototaxi**
-4. **Caminata cultural acompañada** — Explicaciones sobre la historia de la comunidad y la vida cotidiana.
-5. **Puntos culturales según la operación** — Los lugares visitados dependen de las condiciones y de la operación del día.
-6. **Mirador o azotea disponible** — Vista de la comunidad desde lo alto y tiempo para fotografías autorizadas.
-7. **Bajada en mototaxi**
-8. **Cierre en el punto de encuentro** — La experiencia termina en la zona del punto de encuentro acordado.
+1. **Encuentro cerca de la estación São Conrado** — El punto exacto se acuerda por WhatsApp antes del tour.
+2. **Breve orientación** — El guía presenta el recorrido y algunas recomendaciones para la visita.
+3. **Subida en mototaxi** — Incluida en el tour.
+4. **Caminata cultural guiada** — El guía comparte la historia de la comunidad y su vida cotidiana.
+5. **Paradas culturales según el acceso** — Las paradas varían según el acceso y las condiciones del día.
+6. **Mirador o terraza panorámica y fotos** — Una parada panorámica prevista, con tiempo para fotos.
+7. **Bajada en mototaxi** — Incluida en el tour.
+8. **Cierre cerca del punto de encuentro**
 
 **11. Incluido**
 
-- Acompañamiento del guía de Ricardo Tour
-- Apoyo local según la operación
-- Experiencia cultural acompañada
-- Mototaxi de subida
-- Mototaxi de bajada
-- Tarifa del operador local
-- Visita a los puntos previstos en el itinerario
-- Parada en un mirador o azotea disponible
-- Ayuda informal con las fotografías
+- Guía de Ricardo Tour durante la visita
+- Caminata cultural guiada
+- Mototaxi de subida y bajada
+- Servicios locales necesarios para el itinerario
+- Parada panorámica prevista
+- Ayuda del guía con fotos con tu teléfono
 
 **12. No incluido**
 
 - Transporte entre el hotel y São Conrado
-- Comidas
-- Bebidas
+- Comida y bebidas
 - Compras personales
-- Fotografías profesionales de terceros
-- Videos o fotografías con dron
-- Actividades pagas opcionales
+- Fotografía profesional de terceros
+- Servicios de dron
+- Actividades de pago opcionales
 - Otros servicios contratados por cuenta propia
 
-*Servicios opcionales de terceros:* Algunos espacios comunitarios pueden ofrecer capoeira, música, danza, productos locales, fotografías o videos con dron. Estos servicios los prestan terceros, no están garantizados por Ricardo Tour y no son obligatorios: solo los contratas si quieres.
+*Servicios opcionales de terceros:* Algunos espacios comunitarios pueden ofrecer presentaciones de capoeira, música, danza, productos locales, fotografía profesional o filmaciones con dron. Dependen de terceros, no tienen fechas garantizadas y algunas pueden ser de pago. Ninguna compra ni actividad opcional es obligatoria.
 
-**13. Información práctica:** Paseo para mayores de 18 años. La experiencia incluye trayectos en mototaxi y caminata, con posibles cuestas y escaleras: usa calzado cerrado y cómodo. La atención en portugués, inglés o español depende de la disponibilidad del guía y se confirma en la reserva.
+**13. Información práctica:** Para personas a partir de 18 años. El recorrido incluye dos trayectos en mototaxi y caminatas, con posibles cuestas y escaleras: usa calzado cerrado y cómodo. El tour puede realizarse en portugués, inglés o español, según la disponibilidad del guía, que se confirma al reservar.
 
-*Accesibilidad:* No es una experiencia accesible para todas las personas: incluye mototaxi, caminata, cuestas y escaleras. Si tienes movilidad reducida o alguna limitación física, cuéntanos antes de solicitar para evaluar juntos si la visita es viable.
+*Accesibilidad:* Esta experiencia no es adecuada para todas las personas: incluye mototaxi, caminatas, cuestas y escaleras. Si tienes movilidad reducida o alguna limitación física, habla con nuestro equipo antes de reservar para evaluar juntos si la visita es viable.
 
-**14. Condiciones operativas:** La reserva depende de una confirmación humana. El itinerario puede cambiar, acortarse o suspenderse según las condiciones de seguridad, el clima, el acceso a los lugares y la disponibilidad de la operación local del día. No prometemos calles, establecimientos, presentaciones ni puntos específicos.
+**14. Condiciones operativas:** Nuestro equipo confirma cada reserva tras verificar la disponibilidad. El recorrido puede cambiar por seguridad, clima o acceso, y no se garantizan calles, establecimientos ni presentaciones específicos.
 
 **15. Preguntas frecuentes**
 
-- **¿El paseo es privado?** Sí. La experiencia es exclusiva para tu grupo, de 1 a 4 personas.
-- **¿Quién puede participar?** Adultos a partir de 18 años. Como hay mototaxi, caminata, cuestas y escaleras, avísanos antes si tienes alguna limitación física.
-- **¿Está incluido el transporte desde el hotel?** No. El encuentro es en la zona de la estación de metro São Conrado y el paseo termina en la zona del punto de encuentro.
-- **¿Cómo funciona la reserva?** Solicitas la disponibilidad, nuestro equipo verifica la operación y te envía la propuesta con las condiciones. La reserva se confirma con el pago de una seña del 30% y el resto se paga antes del inicio del paseo. El sitio no realiza pagos automáticos.
-- **¿Qué formas de pago se aceptan?** Los medios previstos son PIX, tarjeta de crédito y efectivo. Las opciones disponibles para tu reserva figuran en la propuesta.
-- **¿Tengo que contratar actividades extra en la comunidad?** No. Actividades como capoeira, música o fotos con dron pueden ofrecerlas terceros, pero son opcionales y no forman parte del precio.
-- **¿Y si el paseo tiene que cambiar?** El itinerario puede ajustarse, acortarse o suspenderse por seguridad, clima u operación local. Las condiciones de cancelación y reprogramación figuran en la propuesta enviada antes del pago.
+- **¿El tour es privado?** Sí. El tour es privado y exclusivo para tu grupo de uno a cuatro adultos.
+- **¿Quién puede participar?** Personas a partir de 18 años. El recorrido incluye dos trayectos en mototaxi y caminatas, con posibles cuestas y escaleras. Informa a nuestro equipo de cualquier necesidad de movilidad antes de reservar.
+- **¿Incluye el traslado desde el hotel?** No en esta modalidad. El tour comienza y termina cerca de la estación São Conrado. Enviaremos el punto exacto por WhatsApp.
+- **¿Cómo funciona la reserva?** Primero solicita disponibilidad. Cuando nuestro equipo confirme la operación, te enviaremos la propuesta y las condiciones. La reserva se confirma con un anticipo del 30% y el resto se paga antes de comenzar. Los pagos no se procesan en este sitio web.
+- **¿Qué medios de pago están disponibles?** Nuestro equipo confirmará en la propuesta los medios de pago disponibles para tu reserva. Según la operación, pueden incluir PIX, tarjeta o efectivo.
+- **¿Tendré otros gastos durante el tour?** No por los servicios incluidos en el tour. El guía, ambos trayectos en mototaxi y los servicios locales necesarios están cubiertos. Las compras, la comida, las fotos con dron y otras actividades de terceros son opcionales.
+- **¿Qué pasa si el recorrido tiene que cambiar?** El recorrido puede cambiar por seguridad, clima o restricciones de acceso. Nuestro equipo explicará las opciones disponibles y las condiciones aplicables antes de confirmar la reserva.
 
-**16. CTA:** Solicitar disponibilidad · WhatsApp: "¡Hola! Me gustaría solicitar disponibilidad para el Tour Favela Rocinha — Experiencia Cultural Privada. / Fecha deseada:  / Número de participantes (1 a 4):  / Idioma preferido (portugués, inglés o español): "
+**16. CTA:** Solicitar disponibilidad · WhatsApp: "¡Hola! Quisiera consultar la disponibilidad del Tour Privado por la Favela de Rocinha. / Fecha deseada:  / Participantes (1 a 4 adultos):  / Idioma preferido: "

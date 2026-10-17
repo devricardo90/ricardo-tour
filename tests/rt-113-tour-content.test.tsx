@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 import { focalToPosition, isMockRecord, toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
 import { MOCK_SOURCE, MOCK_TOUR_CONTENT, PROTOTYPE_OFFER, PUBLISHED_SNAPSHOT } from "@/lib/catalog/mock/tour-content.mock";
 import { tourContentCopy } from "@/components/site/tour/content/tour-content-copy";
-import { TourDetailPrototype } from "@/components/site/tour/content/tour-detail-prototype";
+import { TourDetailPrototype, offerForReview } from "@/components/site/tour/content/tour-detail-prototype";
 import { ImageGallery } from "@/components/site/media/image-gallery";
 
 const tri = (pt: string, en: string, es: string) => ({ pt, en, es });
@@ -385,22 +385,24 @@ describe("RT-115 / RT-112 Rocinha real content (Owner commercial closing 17/10/2
     for (const locale of ["pt", "en", "es"]) {
       const view = toTourContentView(record, locale, "preview")!;
       expect(view.missingLocale).toEqual([]);
-      expect(view.paragraphs.length).toBe(3);
+      expect(view.paragraphs.length).toBe(4);
       expect(view.itinerary.length).toBe(8);
-      expect(view.inclusions.length).toBe(9);
-      expect(view.exclusions.length).toBe(8);
+      expect(view.inclusions.length).toBe(6);
+      expect(view.exclusions.length).toBe(7);
       expect(view.faq.length).toBe(7);
       expect(view.operationalConditions && view.optionalServicesNote && view.accessibility && view.requirements && view.meetingPoint).toBeTruthy();
     }
   });
 
   it("avoids unsourced or forbidden claims and never exposes internal costs", () => {
-    for (const banned of [/maior favela/i, /largest favela/i, /favela más grande/i, /livre de riscos|100% segur|segurança garantida|completely safe|totally safe|risk-free|sin riesgos/i, /taxa (de entrada|obrigat)|entrance fee|tasa de entrada/i, /proibid|prohibited|prohibid/i, /custo|remunera|margem|lucro|cost(s)? |margin|profit/i, /R\$/]) {
+    for (const banned of [/maior favela/i, /largest favela/i, /favela más grande/i, /livre de riscos|100% segur|segurança garantida|completely safe|totally safe|risk-free|sin riesgos/i, /taxa (de entrada|obrigat)|entrance fee|tasa de entrada/i, /proibid|prohibited|prohibid/i, /custo|remunera|margem|lucro|\bcosts?\b|margin|profit/i, /R\$/, /tarifa do operador|operator fee|tarifa del operador/i, /conforme a operação do dia/i]) {
       expect(allText, String(banned)).not.toMatch(banned);
     }
     // Conditional wording for things that depend on the day or on RT-81.
-    expect(record.operationalConditions?.pt).toMatch(/pode mudar, ser encurtado ou suspenso/);
-    expect(record.faq?.at(-1)?.answer.pt).toMatch(/constam na proposta/);
+    expect(record.operationalConditions?.pt).toMatch(/O percurso pode mudar por segurança, clima ou acesso/);
+    expect(record.faq?.at(-1)?.answer.pt).toMatch(/condições aplicáveis antes da confirmação da reserva/);
+    // No cancellation penalties, deadlines or refund percentages before RT-81 (only the 30% deposit of the booking model).
+    expect(allText).not.toMatch(/multa|penalt|reembols|refund|penalidad|devoluci/i);
   });
 
   it("shows the provisional prices only in the lab review mode, clearly labelled, with consistent totals", () => {
@@ -416,7 +418,11 @@ describe("RT-115 / RT-112 Rocinha real content (Owner commercial closing 17/10/2
   });
 
   it("uses the canonical WhatsApp number with a prefilled message in each language", () => {
-    const expected = { pt: "Tour%20Favela%20Rocinha", en: "Rocinha%20Favela", es: "Tour%20Favela%20Rocinha" } as const;
+    const expected = {
+      pt: encodeURIComponent("Tour Favela Rocinha — Experiência Cultural Privativa"),
+      en: encodeURIComponent("Rocinha Favela — Private Cultural Tour"),
+      es: encodeURIComponent("Tour Privado por la Favela de Rocinha"),
+    } as const;
     for (const locale of ["pt", "en", "es"] as const) {
       const html = renderRoc(locale, false);
       expect(html).toContain("https://wa.me/5522998461906?text=");
@@ -427,7 +433,7 @@ describe("RT-115 / RT-112 Rocinha real content (Owner commercial closing 17/10/2
   });
 
   it("renders the new sections, the localized title and the confirmed essentials", () => {
-    const titles = { pt: "Tour Favela Rocinha — Experiência Cultural Privativa", en: "Rocinha Favela — Private Cultural Experience", es: "Tour Favela Rocinha — Experiencia Cultural Privada" } as const;
+    const titles = { pt: "Tour Favela Rocinha — Experiência Cultural Privativa", en: "Rocinha Favela — Private Cultural Tour", es: "Tour Privado por la Favela de Rocinha" } as const;
     for (const locale of ["pt", "en", "es"] as const) {
       const html = renderRoc(locale, true);
       expect(html).toContain(titles[locale]);
@@ -436,7 +442,7 @@ describe("RT-115 / RT-112 Rocinha real content (Owner commercial closing 17/10/2
       expect(html).not.toContain("fictitious example");
     }
     const pt = renderRoc("pt", true);
-    for (const v of ["1 a 4 pessoas", "18 anos ou mais", "Aproximadamente 3 horas", "estação de metrô São Conrado"]) expect(pt).toContain(v);
+    for (const v of ["1 a 4 adultos", "18 anos ou mais", "Aproximadamente 3 horas", "estação de metrô São Conrado"]) expect(pt).toContain(v);
     expect(pt).not.toContain("Busca no hotel");
   });
 
@@ -468,5 +474,178 @@ describe("RT-115 Owner review versions (17/10/2026)", () => {
     const id = "cmlibniq40000z4zqkbujnutt";
     const html = renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={toTourContentView(MOCK_TOUR_CONTENT[id], "pt", "preview")!} locale="pt" reviewMode />);
     expect(html).toContain("Em definição");
+  });
+});
+
+describe("RT-115 Owner-approved editorial corrections (17/10/2026)", () => {
+  const ROC = "cmli1a6im000034zqqzc9sppb";
+  const record = MOCK_TOUR_CONTENT[ROC];
+  const offer = PROTOTYPE_OFFER[ROC];
+  const render = (locale: string, showProvisionalPrices = true) =>
+    renderToStaticMarkup(<TourDetailPrototype offer={offer} content={toTourContentView(record, locale, "preview")!} locale={locale} reviewMode showProvisionalPrices={showProvisionalPrices} />);
+
+  it("applies exactly the approved names, subtitles and short descriptions", () => {
+    expect(offer.titleByLocale).toEqual({ pt: "Tour Favela Rocinha — Experiência Cultural Privativa", en: "Rocinha Favela — Private Cultural Tour", es: "Tour Privado por la Favela de Rocinha" });
+    expect(offer.pitch.en).toBe("Discover Rocinha's history, culture and everyday life on a private, guided visit.");
+    expect(offer.pitch.es).toBe("Descubre la historia, la cultura y la vida cotidiana de Rocinha en una visita privada con guía.");
+    expect(record.summary?.en).toBe("Explore Rocinha on a private cultural tour with a Ricardo Tour guide, motorcycle-taxi rides in both directions included, and a planned panoramic stop.");
+    expect(offer.titleStatus).toBe("CONFIRMED");
+  });
+
+  it("states that both motorcycle-taxi rides are included and that no extra mandatory charge exists (PT/EN/ES)", () => {
+    const both = { pt: /Mototáxi de subida e descida/, en: /Motorcycle-taxi rides up and down/, es: /Mototaxi de subida y bajada/ } as const;
+    const none = { pt: /Nenhuma compra ou atividade opcional é obrigatória/, en: /No purchase or optional activity is required/, es: /Ninguna compra ni actividad opcional es obligatoria/ } as const;
+    for (const l of ["pt", "en", "es"] as const) {
+      expect(record.inclusions?.[l]?.join(" | ")).toMatch(both[l]);
+      expect(record.optionalServicesNote?.[l]).toMatch(none[l]);
+      expect(record.faq?.[5].answer[l]).toMatch(/subida e descida|both motorcycle-taxi rides|ambos trayectos en mototaxi/);
+    }
+    // The optional note does not claim that every cultural activity is paid, nor promises dates.
+    expect(record.optionalServicesNote?.pt).toMatch(/algumas podem ser pagas/);
+    expect(record.optionalServicesNote?.pt).toMatch(/não têm data garantida/);
+  });
+
+  it("uses international Spanish (anticipo, de pago, terraza) and the 8-step route", () => {
+    const es = JSON.stringify(record).toLowerCase();
+    expect(es).toContain("anticipo");
+    expect(es).toContain("de pago");
+    expect(es).toContain("terraza");
+    expect(es).not.toContain("seña");
+    expect(record.itinerary.map((s) => s.title.pt)).toEqual([
+      "Encontro próximo à estação São Conrado",
+      "Orientações iniciais",
+      "Subida de mototáxi",
+      "Caminhada cultural acompanhada",
+      "Paradas culturais conforme acesso",
+      "Mirante ou rooftop e fotografias",
+      "Descida de mototáxi",
+      "Encerramento próximo ao ponto de encontro",
+    ]);
+  });
+
+  it("prefills the approved WhatsApp messages", () => {
+    expect(offer.whatsappMessage?.pt).toMatch(/^Olá! Quero consultar a disponibilidade do Tour Favela Rocinha — Experiência Cultural Privativa\./);
+    expect(offer.whatsappMessage?.en).toMatch(/^Hello! I'd like to check availability for Rocinha Favela — Private Cultural Tour\.\nPreferred date: \nGuests \(1–4 adults\): \nPreferred language: $/);
+    expect(offer.whatsappMessage?.es).toMatch(/^¡Hola! Quisiera consultar la disponibilidad del Tour Privado por la Favela de Rocinha\./);
+  });
+
+  it("visual-review banner carries no price wording; conditions and FAQ stay provisional (RT-81)", () => {
+    for (const locale of ["pt", "en", "es"] as const) {
+      const html = render(locale, false);
+      expect(html).not.toMatch(/preços provisórios|provisional prices|precios provisionales/i);
+      expect(html).toMatch(/Prévia de revisão · conteúdo não publicado\.|Review preview · content not published\.|Vista previa de revisión · contenido no publicado\./);
+    }
+    const html = render("pt");
+    expect(html).toMatch(/tour-conditions-heading[\s\S]*?data-status="PROVISIONAL"/);
+    expect(html).toMatch(/tour-faq-heading[\s\S]*?data-status="PROVISIONAL"/);
+    expect(html).toMatch(/tour-about-heading[\s\S]*?data-status="CONFIRMED"/);
+  });
+});
+
+describe("RT-115 final verification: approved texts as specification (17/10/2026)", () => {
+  const ROC = "cmli1a6im000034zqqzc9sppb";
+  const record = MOCK_TOUR_CONTENT[ROC];
+  const offer = PROTOTYPE_OFFER[ROC];
+  const FAQ: Array<[string, string, string]> = [
+    ["Sim. O passeio é reservado exclusivamente para seu grupo, de 1 a 4 adultos.", "Yes. The tour is private for your group of one to four adults.", "Sí. El tour es privado y exclusivo para tu grupo de uno a cuatro adultos."],
+    ["Pessoas a partir de 18 anos. O roteiro inclui dois trajetos de mototáxi e caminhada, com possíveis ladeiras e escadas. Informe à equipe qualquer necessidade de mobilidade antes de reservar.", "Adults aged 18 and over. The itinerary includes two motorcycle-taxi rides and walking, possibly on steep streets or stairs. Please tell our team about any mobility needs before booking.", "Personas a partir de 18 años. El recorrido incluye dos trayectos en mototaxi y caminatas, con posibles cuestas y escaleras. Informa a nuestro equipo de cualquier necesidad de movilidad antes de reservar."],
+    ["Não nesta modalidade. O encontro e o encerramento acontecem nas proximidades da estação São Conrado. Enviaremos o ponto exato por WhatsApp.", "Not with this option. The tour starts and ends near São Conrado metro station. We'll send the exact meeting spot via WhatsApp.", "No en esta modalidad. El tour comienza y termina cerca de la estación São Conrado. Enviaremos el punto exacto por WhatsApp."],
+    ["Solicite disponibilidade. Após confirmar a operação, nossa equipe enviará a proposta e as condições. A reserva é confirmada com sinal de 30%, e o restante é pago antes do início. O site não processa pagamentos.", "Request availability first. Once our team confirms the tour can go ahead, we'll send you a quote and the terms. A 30% deposit confirms the booking, and the balance is due before the tour starts. Payments are not processed on this website.", "Primero solicita disponibilidad. Cuando nuestro equipo confirme la operación, te enviaremos la propuesta y las condiciones. La reserva se confirma con un anticipo del 30% y el resto se paga antes de comenzar. Los pagos no se procesan en este sitio web."],
+    ["A equipe informará na proposta quais meios de pagamento estão disponíveis para sua reserva. PIX, cartão ou dinheiro poderão ser oferecidos, conforme a operação confirmada.", "Our team will confirm the payment methods available for your booking in the quote. Depending on the arrangements, options may include PIX, card or cash.", "Nuestro equipo confirmará en la propuesta los medios de pago disponibles para tu reserva. Según la operación, pueden incluir PIX, tarjeta o efectivo."],
+    ["Não por serviços obrigatórios do passeio. Guia, mototáxi de subida e descida e serviços locais previstos estão incluídos. Compras, comida, drone ou outras atividades de terceiros são opcionais.", "Not for the services included in your tour. Your guide, both motorcycle-taxi rides and required local services are covered. Shopping, food, drone photos and other third-party activities are optional.", "No por los servicios incluidos en el tour. El guía, ambos trayectos en mototaxi y los servicios locales necesarios están cubiertos. Las compras, la comida, las fotos con dron y otras actividades de terceros son opcionales."],
+    ["O percurso pode mudar por segurança, clima ou restrições de acesso. Nossa equipe explicará as opções disponíveis e as condições aplicáveis antes da confirmação da reserva.", "The route may change because of safety, weather or access restrictions. Our team will explain the available options and applicable terms before the booking is confirmed.", "El recorrido puede cambiar por seguridad, clima o restricciones de acceso. Nuestro equipo explicará las opciones disponibles y las condiciones aplicables antes de confirmar la reserva."],
+  ];
+  const WHATSAPP = {
+    pt: "Olá! Quero consultar a disponibilidade do Tour Favela Rocinha — Experiência Cultural Privativa.\nData desejada: \nParticipantes (1 a 4 adultos): \nIdioma preferido: ",
+    en: "Hello! I'd like to check availability for Rocinha Favela — Private Cultural Tour.\nPreferred date: \nGuests (1–4 adults): \nPreferred language: ",
+    es: "¡Hola! Quisiera consultar la disponibilidad del Tour Privado por la Favela de Rocinha.\nFecha deseada: \nParticipantes (1 a 4 adultos): \nIdioma preferido: ",
+  } as const;
+  const render = (o: typeof offer, locale: string, showProvisionalPrices: boolean) =>
+    renderToStaticMarkup(<TourDetailPrototype offer={o} content={toTourContentView(record, locale, "preview")!} locale={locale} reviewMode showProvisionalPrices={showProvisionalPrices} />);
+
+  it("keeps the 7 approved FAQ answers verbatim in PT/EN/ES", () => {
+    expect(record.faq).toHaveLength(7);
+    record.faq!.forEach((item, i) => {
+      expect(item.answer.pt).toBe(FAQ[i][0]);
+      expect(item.answer.en).toBe(FAQ[i][1]);
+      expect(item.answer.es).toBe(FAQ[i][2]);
+    });
+  });
+
+  it("keeps the approved subtitle (PT) and short descriptions (PT/ES)", () => {
+    expect(offer.pitch.pt).toBe("Conheça a história, a cultura e o cotidiano da Rocinha em uma experiência privativa, acompanhada por um guia durante a visita.");
+    expect(record.summary?.pt).toBe("Explore a Rocinha em uma visita cultural privativa com guia Ricardo Tour, mototáxi de subida e descida incluído e parada panorâmica prevista no roteiro.");
+    expect(record.summary?.es).toBe("Recorre Rocinha en un tour cultural privado con guía de Ricardo Tour, subida y bajada en mototaxi incluidas y una parada panorámica prevista.");
+  });
+
+  it("sends the exact approved WhatsApp messages to the canonical number", () => {
+    for (const l of ["pt", "en", "es"] as const) {
+      expect(offer.whatsappMessage?.[l]).toBe(WHATSAPP[l]);
+      const html = render(offer, l, false);
+      expect(html).toContain(`https://wa.me/5522998461906?text=${encodeURIComponent(WHATSAPP[l].trim())}`.replace(/'/g, "&#x27;"));
+    }
+  });
+
+  it("keeps the approved PT inclusion and exclusion lists and the EN/ES route titles", () => {
+    expect(record.inclusions?.pt).toEqual([
+      "Guia Ricardo Tour durante a visita",
+      "Caminhada cultural acompanhada",
+      "Mototáxi de subida e descida",
+      "Serviços locais necessários ao roteiro",
+      "Parada panorâmica planejada",
+      "Ajuda do guia com fotos de celular",
+    ]);
+    expect(record.exclusions?.pt).toEqual([
+      "Transporte entre o hotel e São Conrado",
+      "Alimentação e bebidas",
+      "Compras pessoais",
+      "Fotografia profissional de terceiros",
+      "Serviços de drone",
+      "Atividades pagas opcionais",
+      "Outros serviços contratados voluntariamente",
+    ]);
+    for (const l of ["en", "es"] as const) {
+      expect(record.inclusions?.[l]).toHaveLength(6);
+      expect(record.exclusions?.[l]).toHaveLength(7);
+      expect(record.itinerary.map((st) => st.title[l]).every(Boolean)).toBe(true);
+    }
+    expect(record.itinerary.map((st) => st.title.en)).toEqual([
+      "Meeting near São Conrado station", "Short briefing", "Motorcycle-taxi ride up", "Guided cultural walk",
+      "Cultural stops, depending on access", "Viewpoint or rooftop and photos", "Motorcycle-taxi ride down", "Finish near the meeting point",
+    ]);
+  });
+
+  it("keeps the CTA labels unchanged", () => {
+    expect([tourContentCopy.pt.cta, tourContentCopy.pt.ctaWhatsapp]).toEqual(["Solicitar disponibilidade", "Conversar no WhatsApp"]);
+    expect([tourContentCopy.en.cta, tourContentCopy.en.ctaWhatsapp]).toEqual(["Request availability", "Chat on WhatsApp"]);
+    expect([tourContentCopy.es.cta, tourContentCopy.es.ctaWhatsapp]).toEqual(["Solicitar disponibilidad", "Hablar por WhatsApp"]);
+  });
+
+  it("strips the internal prices from the offer before rendering in the no-price mode (defence in depth)", () => {
+    const stripped = offerForReview(offer, false);
+    expect("provisionalPricing" in stripped).toBe(false);
+    expect(offerForReview(offer, true).provisionalPricing).toEqual(offer.provisionalPricing);
+    // Even if the flag were wrong, a stripped offer cannot render prices.
+    const html = render(stripped, "pt", true).replace(/\u00a0/g, " ");
+    expect(html).not.toMatch(/R\$ ?\d/);
+    expect(html).not.toContain("tour-provisional-prices");
+    // Internal prices unchanged.
+    expect(offer.provisionalPricing?.map((r) => r.totalCents)).toEqual([45000, 58000, 75000, 88000]);
+  });
+
+  it("leaves the other three tours exactly as before (titles, mock pitches, no real-content fields)", () => {
+    const expectedPitch: Record<string, string> = {
+      cmlhxkpy9000028zq27rhytew: "Conheça os cartões-postais mais famosos do Rio em uma experiência privativa, com guia dedicado (exemplo fictício)",
+      cmlibniq40000z4zqkbujnutt: "O centro histórico do Rio e a Confeitaria Colombo em uma experiência privativa (exemplo fictício)",
+      cmljo0s1u0000t0zqa0bpd23p: "Um dia inteiro no Rio, com roteiro desenhado para o seu grupo (exemplo fictício)",
+    };
+    for (const [id, pitch] of Object.entries(expectedPitch)) {
+      const o = PROTOTYPE_OFFER[id];
+      expect(o.title).toBe(PUBLISHED_SNAPSHOT[id].title);
+      expect(o.pitch.pt).toBe(pitch);
+      expect(o.titleByLocale).toBeUndefined();
+      expect(o.contentStatus).toBeUndefined();
+      expect(o.pitchStatus).toBe("MOCK");
+    }
   });
 });

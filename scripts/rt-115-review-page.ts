@@ -88,17 +88,17 @@ footer{font-size:13px;color:var(--subtle)}
 </header>
 <section class="status" aria-label="Estado">
   <div class="st ok"><b>VISUAL APPROVED</b><span>Layout RT-114 v2, fotos e vídeo</span></div>
-  <div class="st wait"><b>CONTENT REVIEW REQUIRED</b><span>Textos PT/EN/ES aguardando seu parecer</span></div>
+  <div class="st ok"><b>EDITORIAL IMPLEMENTED AND VERIFIED</b><span>Correções PT/EN/ES aprovadas e aplicadas</span></div>
   <div class="st pend"><b>OPERATIONAL VALIDATION PENDING</b><span>Checklist de segurança, custos e tributos, requisitos físicos, horários</span></div>
   <div class="st stop"><b>PRODUCTION NOT AUTHORIZED</b><span>Sem push, merge, deploy ou migration</span></div>
 </section>
 <section class="card" aria-labelledby="sheet-h">
   <h2 id="sheet-h">Ficha comercial</h2>
   <div class="wrap"><table><tbody>
-    <tr><td>Modelo</td><td>Exclusivamente privativo · 1 a 4 pessoas · adultos 18+ · PT/EN/ES conforme disponibilidade do guia · reserva com confirmação humana</td></tr>
-    <tr><td>Duração</td><td>Aproximadamente 3 horas</td></tr>
-    <tr><td>Encontro</td><td>Região da estação de metrô São Conrado; local exato por WhatsApp; transporte do hotel não incluído</td></tr>
-    <tr><td>Reserva e pagamento</td><td>Solicitação → verificação humana → proposta → sinal de 30% → confirmação → saldo de 70% antes do início · PIX, cartão de crédito, dinheiro · sem pagamento automático</td></tr>
+    <tr><td>Modelo</td><td>Exclusivamente privativo · ${esc(ROCINHA_GROUP_SIZE.pt)} · ${esc(ROCINHA_MIN_AGE.pt)} · PT/EN/ES conforme disponibilidade do guia · reserva confirmada pela equipe</td></tr>
+    <tr><td>Duração</td><td>${esc(c.durationLabel?.pt ?? "")}</td></tr>
+    <tr><td>Encontro</td><td>${esc(c.meetingPoint?.pt ?? "")} Transporte do hotel não incluído.</td></tr>
+    <tr><td>Reserva e pagamento</td><td>${esc(c.faq?.[3]?.answer.pt ?? "")} ${esc(c.faq?.[4]?.answer.pt ?? "")}</td></tr>
     <tr><td>Cancelamento</td><td>Política escalonada aprovada como princípio; prazos e percentuais dependem do RT-81</td></tr>
   </tbody></table></div>
   ${noPrices
@@ -106,8 +106,8 @@ footer{font-size:13px;color:var(--subtle)}
     : `<div class="warn" role="note"><b>VERSÃO INTERNA — PREÇOS PROVISÓRIOS — NÃO PUBLICAR.</b> Preço fechado por reserva: ${ROCINHA_PROVISIONAL_PRICING.map((r) => `${r.participants} ${r.participants === 1 ? "pessoa" : "pessoas"} ${brl(r.totalCents)}`).join(" · ")}. Dependem da validação de custos, tributos e operação. Custos internos estão só no Manual Mestre (seção confidencial).</div>`}
 </section>
 <section aria-labelledby="texts-h">
-  <h2 id="texts-h">Textos para revisão</h2>
-  <p class="lede">São os mesmos textos da página local, sem reescrita. Nomes em inglês e espanhol: proposta atual nas abas; sua preferência inicial (ainda não aplicada) é “Rocinha Favela — Private Cultural Tour” e “Tour Privado por la Favela de Rocinha”.</p>
+  <h2 id="texts-h">Textos finais</h2>
+  <p class="lede">Textos finais com as correções editoriais aprovadas pelo Owner em 17/10/2026, os mesmos da página local. Nomes aprovados: PT, EN e ES nas abas.</p>
   <div class="tabs" role="tablist" aria-label="Idioma"><button role="tab" id="tab-pt" aria-controls="pane-pt" aria-selected="true">Português</button><button role="tab" id="tab-en" aria-controls="pane-en" aria-selected="false" tabindex="-1">English</button><button role="tab" id="tab-es" aria-controls="pane-es" aria-selected="false" tabindex="-1">Español</button></div>
   <div class="card">${pane("pt")}${pane("en")}${pane("es")}</div>
 </section>

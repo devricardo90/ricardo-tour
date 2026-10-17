@@ -28,8 +28,8 @@ const c = ROCINHA_CONTENT;
 const lines: string[] = [
   "# RT-115 — Tour Favela Rocinha: textos comerciais PT / EN / ES",
   "",
-  "- Status: **CONTENT READY FOR OWNER REVIEW** (não aprovado, não publicado). Fonte: decisões do Owner de 17/10/2026 (RT-112). Gerado por `scripts/rt-115-export-rocinha.ts` a partir de `lib/catalog/drafts/rocinha.draft.ts` (a mesma fonte do preview).",
-  "- Os nomes em EN/ES são propostas editoriais. Preços não aparecem nos textos (tabela interna provisória no Manual Mestre). Condições de cancelamento dependem do RT-81 e não são descritas além do que o Owner aprovou.",
+  "- Status: **EDITORIAL IMPLEMENTED AND VERIFIED** — correções editoriais aprovadas pelo Owner em 17/10/2026 e aplicadas. Não publicado (gates RT-81, RT-110, RT-118, RT-119, RT-120). Gerado por `scripts/rt-115-export-rocinha.ts` a partir de `lib/catalog/drafts/rocinha.draft.ts` (a mesma fonte do preview).",
+  "- Nomes PT/EN/ES aprovados. Preços não aparecem nos textos (tabela interna provisória no Manual Mestre). Condições de cancelamento dependem do RT-81 e não são descritas além do que o Owner aprovou.",
   "",
 ];
 for (const [l, name] of LOCALES) {

@@ -1,160 +1,184 @@
 import type { LocalizedText, TourContentRecord } from "@/lib/catalog/tour-content";
 
 /**
- * RT-115 / RT-112 — Tour Favela Rocinha: REAL commercial content written from the Owner's decisions of 17/10/2026
- * ("Fechamento comercial e editorial"). Status: CONTENT READY FOR OWNER REVIEW — not approved, not publishable.
+ * RT-115 / RT-112 — Tour Favela Rocinha: REAL commercial content. Owner decisions of 17/10/2026 ("Fechamento comercial
+ * e editorial") and the editorial corrections APPROVED by the Owner on 17/10/2026 (names, subtitles, descriptions,
+ * 8-step route, inclusions/exclusions, 7 FAQs, WhatsApp messages). Status: EDITORIAL IMPLEMENTED — still DRAFT.
  * - Status DRAFT and a non-MOCK source: the public gate still hides it (only OWNER_APPROVED content is public).
+ *   Publication stays blocked by RT-81, RT-110, RT-118, RT-119 and RT-120.
  * - No price inside the content (prices live on Trip; the provisional table below is lab-only, never public).
- * - No internal costs anywhere in the code (they live only in the Manual Mestre's confidential section).
- * - Nothing pending is stated as fact: cancellation terms (RT-81), exact meeting spot, places visited on the day,
- *   optional third-party activities and safety checks are worded as conditional.
+ * - No internal costs or internal suppliers anywhere in the code (they live only in the Manual Mestre's confidential
+ *   section). The local operator fee is an internal cost and is NOT listed publicly.
+ * - Cancellation terms are not stated (RT-81): the FAQ only says the team explains the applicable terms before booking.
  * Lab only: a test forbids importing lib/catalog/drafts/* from public routes, APIs or public components.
  */
 
 export const ROCINHA_ID = "cmli1a6im000034zqqzc9sppb";
 export const ROCINHA_DRAFT_SOURCE =
-  "Owner decisions 17/10/2026 (RT-112 Rocinha commercial closing; RT-115 texts by the agent). CONTENT READY FOR OWNER REVIEW — not approved, not published.";
+  "Owner decisions 17/10/2026 (RT-112 Rocinha commercial closing) + Owner-approved editorial corrections 17/10/2026 (RT-115). Still DRAFT: publication blocked by RT-81, RT-110, RT-118, RT-119, RT-120.";
 
 type Tri = { pt: string; en: string; es: string };
 const list = (items: Array<[string, string, string]>) => ({ pt: items.map((i) => i[0]), en: items.map((i) => i[1]), es: items.map((i) => i[2]) });
 
+/** Commercial names approved by the Owner (17/10/2026). */
 export const ROCINHA_TITLE: Tri = {
   pt: "Tour Favela Rocinha — Experiência Cultural Privativa",
-  en: "Rocinha Favela — Private Cultural Experience",
-  es: "Tour Favela Rocinha — Experiencia Cultural Privada",
+  en: "Rocinha Favela — Private Cultural Tour",
+  es: "Tour Privado por la Favela de Rocinha",
 };
 
-/** Commercial subtitle (hero line). */
+/** Commercial subtitle (hero line) — approved text. */
 export const ROCINHA_SUBTITLE: Tri = {
-  pt: "Conheça a história, a cultura e o dia a dia da Rocinha em uma visita privativa, acompanhada do início ao fim.",
-  en: "Discover Rocinha's history, culture and everyday life on a private visit, accompanied from start to finish.",
-  es: "Conoce la historia, la cultura y el día a día de la Rocinha en una visita privada, acompañada de principio a fin.",
+  pt: "Conheça a história, a cultura e o cotidiano da Rocinha em uma experiência privativa, acompanhada por um guia durante a visita.",
+  en: "Discover Rocinha's history, culture and everyday life on a private, guided visit.",
+  es: "Descubre la historia, la cultura y la vida cotidiana de Rocinha en una visita privada con guía.",
 };
 
 export const ROCINHA_BENEFITS = list([
-  ["Experiência só para o seu grupo, de 1 a 4 pessoas", "Only your group, from 1 to 4 people", "Solo tu grupo, de 1 a 4 personas"],
-  ["Mototáxi de subida e de descida já incluído", "Motorcycle taxi up and down already included", "Mototaxi de subida y de bajada ya incluido"],
-  ["Guia Ricardo Tour com você durante toda a visita", "A Ricardo Tour guide with you throughout the visit", "Guía de Ricardo Tour contigo durante toda la visita"],
+  ["Experiência exclusiva para o seu grupo, de 1 a 4 adultos", "A private tour for your group of one to four adults", "Tour exclusivo para tu grupo de uno a cuatro adultos"],
+  ["Mototáxi de subida e descida incluído", "Both motorcycle-taxi rides included", "Ambos trayectos en mototaxi incluidos"],
+  ["Guia Ricardo Tour durante toda a visita", "A Ricardo Tour guide throughout the visit", "Guía de Ricardo Tour durante toda la visita"],
 ]);
 
 export const ROCINHA_CONTENT: Omit<TourContentRecord, "tripId" | "status" | "source" | "images"> = {
+  // Approved short descriptions.
   summary: {
-    pt: "Uma visita cultural privativa à Rocinha, com guia Ricardo Tour, mototáxi de subida e descida e parada em um mirante para ver a comunidade do alto.",
-    en: "A private cultural visit to Rocinha with a Ricardo Tour guide, motorcycle taxi up and down, and a stop at a viewpoint to see the community from above.",
-    es: "Una visita cultural privada a la Rocinha con guía de Ricardo Tour, mototaxi de subida y de bajada, y una parada en un mirador para ver la comunidad desde lo alto.",
+    pt: "Explore a Rocinha em uma visita cultural privativa com guia Ricardo Tour, mototáxi de subida e descida incluído e parada panorâmica prevista no roteiro.",
+    en: "Explore Rocinha on a private cultural tour with a Ricardo Tour guide, motorcycle-taxi rides in both directions included, and a planned panoramic stop.",
+    es: "Recorre Rocinha en un tour cultural privado con guía de Ricardo Tour, subida y bajada en mototaxi incluidas y una parada panorámica prevista.",
   },
+  // Approved full descriptions (paragraph grouping adapted to the page structure; wording unchanged).
   description: {
-    pt: "A Rocinha é uma comunidade com história, cultura e vida própria, construída ao longo de décadas por seus moradores. Nesta experiência privativa, você caminha pela comunidade acompanhado pelo guia Ricardo Tour, com apoio local conforme a operação, e conhece um pouco dessa história e do dia a dia de quem vive ali.\n\nO encontro é na região da estação de metrô São Conrado. De lá, o grupo sobe de mototáxi, faz uma caminhada cultural com explicações sobre a formação da comunidade e a vida cotidiana, visita pontos culturais conforme a operação do dia e para em um mirante ou rooftop disponível, com tempo para fotografias autorizadas. A descida também é feita de mototáxi, e a experiência termina na região do ponto de encontro.\n\nO passeio é exclusivamente privativo, para grupos de 1 a 4 adultos, e dura aproximadamente 3 horas. O roteiro pode ser ajustado conforme as condições de segurança, o clima, o acesso aos locais e a operação local do dia.",
-    en: "Rocinha is a community with its own history, culture and life, built over decades by its residents. On this private experience you walk through the community with your Ricardo Tour guide, with local support depending on the day's operation, and learn about that history and the everyday life of the people who live there.\n\nYou meet near São Conrado metro station. From there, the group rides up by motorcycle taxi, takes a cultural walk with explanations about how the community was formed and about daily life, visits cultural spots depending on the day's operation, and stops at an available viewpoint or rooftop, with time for permitted photos. The way down is also by motorcycle taxi, and the experience ends near the meeting point.\n\nThe tour is private only, for groups of 1 to 4 adults, and lasts about 3 hours. The route may be adjusted according to safety conditions, the weather, access to places and the local operation on the day.",
-    es: "La Rocinha es una comunidad con historia, cultura y vida propias, construida a lo largo de décadas por sus habitantes. En esta experiencia privada recorres la comunidad acompañado por el guía de Ricardo Tour, con apoyo local según la operación, y conoces parte de esa historia y del día a día de quienes viven allí.\n\nEl encuentro es en la zona de la estación de metro São Conrado. Desde allí, el grupo sube en mototaxi, hace una caminata cultural con explicaciones sobre la formación de la comunidad y la vida cotidiana, visita puntos culturales según la operación del día y se detiene en un mirador o azotea disponible, con tiempo para fotografías autorizadas. La bajada también se hace en mototaxi y la experiencia termina en la zona del punto de encuentro.\n\nEl paseo es exclusivamente privado, para grupos de 1 a 4 adultos, y dura aproximadamente 3 horas. El itinerario puede ajustarse según las condiciones de seguridad, el clima, el acceso a los lugares y la operación local del día.",
+    pt: "A Rocinha tem uma história construída por seus moradores e uma vida cultural própria. Nesta experiência privativa, você conhece aspectos da formação da comunidade e de seu cotidiano em uma visita acompanhada por um guia Ricardo Tour, com respeito às pessoas e aos espaços visitados.\n\nO encontro acontece nas proximidades da estação de metrô São Conrado, em um ponto combinado por WhatsApp. Após as orientações iniciais, o grupo sobe de mototáxi e segue por uma caminhada cultural, com paradas que variam conforme o acesso e as condições do dia. Há uma parada panorâmica planejada em um mirante ou rooftop disponível. A descida também é feita de mototáxi, e o passeio termina próximo ao ponto de encontro.\n\nO tour é exclusivo para seu grupo de 1 a 4 adultos e tem duração estimada de 3 horas. Os trajetos de mototáxi, o acompanhamento do guia e os serviços necessários ao roteiro contratado estão incluídos no preço. Alimentação, compras e serviços opcionais de terceiros ficam a seu critério.\n\nO percurso pode ser alterado por motivos de segurança, clima ou acesso.",
+    en: "Rocinha has a history shaped by the people who live there and a cultural life of its own. This private guided visit introduces you to the community's history and everyday life, with respect for the people and places along the route.\n\nMeet near São Conrado metro station at a spot arranged via WhatsApp. After a short briefing, ride uphill by motorcycle taxi and explore part of the community on foot, with cultural stops that depend on access and conditions that day. A panoramic stop at an available viewpoint or rooftop is planned. The ride back down is also by motorcycle taxi, and the tour finishes near the meeting point.\n\nThis private tour is for your group of one to four adults and takes approximately three hours. Both motorcycle-taxi rides, your guide and the services required for the booked itinerary are included in the price. Food, shopping and optional third-party services are your choice.\n\nThe route may change because of safety, weather or access conditions.",
+    es: "Rocinha tiene una historia construida por sus habitantes y una vida cultural propia. Esta visita privada te acerca a la historia y a la vida cotidiana de la comunidad, con respeto por las personas y los espacios que se recorren.\n\nNos encontramos cerca de la estación de metro São Conrado, en un punto acordado por WhatsApp. Tras una breve orientación, subimos en mototaxi y recorremos parte de la comunidad a pie, con paradas culturales que pueden variar según el acceso y las condiciones del día. Está prevista una parada panorámica en un mirador o terraza disponible. La bajada también se hace en mototaxi y el recorrido termina cerca del punto de encuentro.\n\nEl tour es exclusivo para tu grupo de uno a cuatro adultos y dura aproximadamente tres horas. Ambos trayectos en mototaxi, el acompañamiento del guía y los servicios necesarios para el itinerario contratado están incluidos en el precio. La comida, las compras y los servicios opcionales de terceros quedan a tu elección.\n\nEl recorrido puede cambiar por motivos de seguridad, clima o acceso.",
   },
-  durationLabel: { pt: "Aproximadamente 3 horas", en: "About 3 hours", es: "Aproximadamente 3 horas" },
+  durationLabel: { pt: "Aproximadamente 3 horas", en: "Approximately 3 hours", es: "Aproximadamente 3 horas" },
   meetingPoint: {
-    pt: "Região da estação de metrô São Conrado, no Rio de Janeiro. O local exato é enviado por WhatsApp antes do passeio.",
-    en: "Near São Conrado metro station, Rio de Janeiro. The exact spot is sent by WhatsApp before the tour.",
-    es: "Zona de la estación de metro São Conrado, en Río de Janeiro. El lugar exacto se envía por WhatsApp antes del paseo.",
+    pt: "Proximidades da estação de metrô São Conrado, Rio de Janeiro. O ponto exato é combinado por WhatsApp antes do passeio.",
+    en: "Near São Conrado metro station, Rio de Janeiro. The exact spot is arranged via WhatsApp before the tour.",
+    es: "Cerca de la estación de metro São Conrado, Río de Janeiro. El punto exacto se acuerda por WhatsApp antes del tour.",
   },
   startTimeNote: null,
   languages: ["pt", "en", "es"],
+  // Approved public list: what the guest receives (the local operator fee is an internal cost, not listed).
   inclusions: list([
-    ["Acompanhamento do guia Ricardo Tour", "Ricardo Tour guide throughout the visit", "Acompañamiento del guía de Ricardo Tour"],
-    ["Apoio local conforme a operação", "Local support depending on the operation", "Apoyo local según la operación"],
-    ["Experiência cultural acompanhada", "Guided cultural experience", "Experiencia cultural acompañada"],
-    ["Mototáxi de subida", "Motorcycle taxi up", "Mototaxi de subida"],
-    ["Mototáxi de descida", "Motorcycle taxi down", "Mototaxi de bajada"],
-    ["Tarifa do operador local", "Local operator fee", "Tarifa del operador local"],
-    ["Visita aos pontos previstos no roteiro", "Visit to the stops planned in the itinerary", "Visita a los puntos previstos en el itinerario"],
-    ["Parada em mirante ou rooftop disponível", "Stop at an available viewpoint or rooftop", "Parada en un mirador o azotea disponible"],
-    ["Ajuda informal com fotografias", "Informal help with photos", "Ayuda informal con las fotografías"],
+    ["Guia Ricardo Tour durante a visita", "Ricardo Tour guide throughout the visit", "Guía de Ricardo Tour durante la visita"],
+    ["Caminhada cultural acompanhada", "Guided cultural walk", "Caminata cultural guiada"],
+    ["Mototáxi de subida e descida", "Motorcycle-taxi rides up and down", "Mototaxi de subida y bajada"],
+    ["Serviços locais necessários ao roteiro", "Local services required for the itinerary", "Servicios locales necesarios para el itinerario"],
+    ["Parada panorâmica planejada", "Planned panoramic stop", "Parada panorámica prevista"],
+    ["Ajuda do guia com fotos de celular", "Help from your guide with phone photos", "Ayuda del guía con fotos con tu teléfono"],
   ]),
   exclusions: list([
     ["Transporte entre o hotel e São Conrado", "Transport between your hotel and São Conrado", "Transporte entre el hotel y São Conrado"],
-    ["Alimentação", "Food", "Comidas"],
-    ["Bebidas", "Drinks", "Bebidas"],
-    ["Compras pessoais", "Personal purchases", "Compras personales"],
-    ["Fotografias profissionais de terceiros", "Professional photos by third parties", "Fotografías profesionales de terceros"],
-    ["Filmagens ou fotografias com drone", "Drone videos or photos", "Videos o fotografías con dron"],
-    ["Atividades pagas opcionais", "Optional paid activities", "Actividades pagas opcionales"],
-    ["Outros serviços contratados por conta própria", "Any other service you choose to hire", "Otros servicios contratados por cuenta propia"],
+    ["Alimentação e bebidas", "Food and drinks", "Comida y bebidas"],
+    ["Compras pessoais", "Personal shopping", "Compras personales"],
+    ["Fotografia profissional de terceiros", "Professional photography by third parties", "Fotografía profesional de terceros"],
+    ["Serviços de drone", "Drone services", "Servicios de dron"],
+    ["Atividades pagas opcionais", "Optional paid activities", "Actividades de pago opcionales"],
+    ["Outros serviços contratados voluntariamente", "Any other services you choose to book", "Otros servicios contratados por cuenta propia"],
   ]),
   optionalServicesNote: {
-    pt: "Alguns espaços comunitários podem oferecer capoeira, música, dança, produtos locais, fotografias ou vídeos com drone. Esses serviços são prestados por terceiros, não são garantidos pela Ricardo Tour e não são obrigatórios: você contrata apenas se quiser.",
-    en: "Some community spaces may offer capoeira, music, dance, local products, photos or drone videos. These services are provided by third parties, are not guaranteed by Ricardo Tour and are never mandatory: you only pay for them if you want to.",
-    es: "Algunos espacios comunitarios pueden ofrecer capoeira, música, danza, productos locales, fotografías o videos con dron. Estos servicios los prestan terceros, no están garantizados por Ricardo Tour y no son obligatorios: solo los contratas si quieres.",
+    pt: "Alguns espaços comunitários podem oferecer apresentações de capoeira, música, dança, produtos locais, fotografias profissionais ou filmagens com drone. Essas atividades dependem de terceiros, não têm data garantida e algumas podem ser pagas. Nenhuma compra ou atividade opcional é obrigatória.",
+    en: "Some community spaces may offer capoeira performances, music, dance, local products, professional photography or drone filming. These depend on third parties, cannot be guaranteed on any given date, and some may be paid. No purchase or optional activity is required.",
+    es: "Algunos espacios comunitarios pueden ofrecer presentaciones de capoeira, música, danza, productos locales, fotografía profesional o filmaciones con dron. Dependen de terceros, no tienen fechas garantizadas y algunas pueden ser de pago. Ninguna compra ni actividad opcional es obligatoria.",
   },
   requirements: {
-    pt: "Passeio para maiores de 18 anos. A experiência inclui trajetos de mototáxi e caminhada, com possíveis ladeiras e escadas: use calçado fechado e confortável. O atendimento em português, inglês ou espanhol depende da disponibilidade do guia e é confirmado na reserva.",
-    en: "For adults aged 18 and over. The experience includes motorcycle-taxi rides and walking, possibly on steep streets and stairs: wear closed, comfortable shoes. Service in Portuguese, English or Spanish depends on guide availability and is confirmed when you book.",
-    es: "Paseo para mayores de 18 años. La experiencia incluye trayectos en mototaxi y caminata, con posibles cuestas y escaleras: usa calzado cerrado y cómodo. La atención en portugués, inglés o español depende de la disponibilidad del guía y se confirma en la reserva.",
+    pt: "Para adultos a partir de 18 anos. O roteiro inclui dois trajetos de mototáxi e caminhada, com possíveis ladeiras e escadas: use calçado fechado e confortável. O atendimento pode ser em português, inglês ou espanhol, conforme a disponibilidade do guia, confirmada na reserva.",
+    en: "For adults aged 18 and over. The itinerary includes two motorcycle-taxi rides and walking, possibly on steep streets or stairs, so wear closed, comfortable shoes. The tour can be guided in Portuguese, English or Spanish, subject to guide availability confirmed when you book.",
+    es: "Para personas a partir de 18 años. El recorrido incluye dos trayectos en mototaxi y caminatas, con posibles cuestas y escaleras: usa calzado cerrado y cómodo. El tour puede realizarse en portugués, inglés o español, según la disponibilidad del guía, que se confirma al reservar.",
   },
   accessibility: {
-    pt: "Não é uma experiência acessível para todas as pessoas: há mototáxi, caminhada, ladeiras e escadas. Se você tem mobilidade reduzida ou alguma limitação física, conte para nós antes de solicitar, para avaliarmos juntos se a visita é viável.",
-    en: "This experience is not accessible to everyone: it involves motorcycle taxis, walking, steep streets and stairs. If you have reduced mobility or a physical limitation, tell us before requesting so we can assess together whether the visit is feasible.",
-    es: "No es una experiencia accesible para todas las personas: incluye mototaxi, caminata, cuestas y escaleras. Si tienes movilidad reducida o alguna limitación física, cuéntanos antes de solicitar para evaluar juntos si la visita es viable.",
+    pt: "A experiência não é adequada para todas as pessoas: inclui mototáxi, caminhada, ladeiras e escadas. Se você tem mobilidade reduzida ou alguma limitação física, fale com a equipe antes de reservar para avaliarmos juntos a viabilidade da visita.",
+    en: "This experience is not suitable for everyone: it involves motorcycle taxis, walking, steep streets and stairs. If you have reduced mobility or a physical limitation, please talk to our team before booking so we can assess together whether the visit is right for you.",
+    es: "Esta experiencia no es adecuada para todas las personas: incluye mototaxi, caminatas, cuestas y escaleras. Si tienes movilidad reducida o alguna limitación física, habla con nuestro equipo antes de reservar para evaluar juntos si la visita es viable.",
   },
   operationalConditions: {
-    pt: "A reserva depende de confirmação humana. O roteiro pode mudar, ser encurtado ou suspenso conforme as condições de segurança, o clima, o acesso aos locais e a disponibilidade da operação local no dia. Não prometemos ruas, estabelecimentos, apresentações ou pontos específicos.",
-    en: "Bookings are confirmed by a person on our team. The route may change, be shortened or be suspended depending on safety conditions, the weather, access to places and the local operation's availability on the day. We do not promise specific streets, venues, performances or stops.",
-    es: "La reserva depende de una confirmación humana. El itinerario puede cambiar, acortarse o suspenderse según las condiciones de seguridad, el clima, el acceso a los lugares y la disponibilidad de la operación local del día. No prometemos calles, establecimientos, presentaciones ni puntos específicos.",
+    pt: "Cada reserva é confirmada pela nossa equipe após a verificação de disponibilidade. O percurso pode mudar por segurança, clima ou acesso, e não há ruas, estabelecimentos ou apresentações garantidos.",
+    en: "Our team confirms each booking after checking availability. The route may change because of safety, weather or access, and no specific streets, venues or performances are guaranteed.",
+    es: "Nuestro equipo confirma cada reserva tras verificar la disponibilidad. El recorrido puede cambiar por seguridad, clima o acceso, y no se garantizan calles, establecimientos ni presentaciones específicos.",
   },
   weatherPolicy: null,
+  // Approved 8-step route (history explained during the walk; photos at the panoramic stop).
   itinerary: [
-    { position: 0, title: { pt: "Encontro na região da estação São Conrado", en: "Meeting near São Conrado station", es: "Encuentro en la zona de la estación São Conrado" }, description: { pt: "O local exato é enviado por WhatsApp antes do passeio.", en: "The exact spot is sent by WhatsApp before the tour.", es: "El lugar exacto se envía por WhatsApp antes del paseo." }, durationMinutes: null },
-    { position: 1, title: { pt: "Orientações iniciais", en: "Briefing", es: "Orientaciones iniciales" }, description: { pt: "O guia explica como será a visita e as regras de convivência e de fotografia.", en: "The guide explains how the visit works and the etiquette for being in the community and taking photos.", es: "El guía explica cómo será la visita y las normas de convivencia y de fotografía." }, durationMinutes: null },
-    { position: 2, title: { pt: "Subida de mototáxi", en: "Motorcycle taxi up", es: "Subida en mototaxi" }, description: null, durationMinutes: null },
-    { position: 3, title: { pt: "Caminhada cultural acompanhada", en: "Guided cultural walk", es: "Caminata cultural acompañada" }, description: { pt: "Explicações sobre a história da comunidade e a vida cotidiana.", en: "Explanations about the community's history and everyday life.", es: "Explicaciones sobre la historia de la comunidad y la vida cotidiana." }, durationMinutes: null },
-    { position: 4, title: { pt: "Pontos culturais conforme a operação", en: "Cultural spots depending on the operation", es: "Puntos culturales según la operación" }, description: { pt: "Os locais visitados dependem das condições e da operação do dia.", en: "The places visited depend on the day's conditions and operation.", es: "Los lugares visitados dependen de las condiciones y de la operación del día." }, durationMinutes: null },
-    { position: 5, title: { pt: "Mirante ou rooftop disponível", en: "Available viewpoint or rooftop", es: "Mirador o azotea disponible" }, description: { pt: "Vista da comunidade do alto e tempo para fotografias autorizadas.", en: "A view of the community from above and time for permitted photos.", es: "Vista de la comunidad desde lo alto y tiempo para fotografías autorizadas." }, durationMinutes: null },
-    { position: 6, title: { pt: "Descida de mototáxi", en: "Motorcycle taxi down", es: "Bajada en mototaxi" }, description: null, durationMinutes: null },
-    { position: 7, title: { pt: "Encerramento no ponto de encontro", en: "End at the meeting point", es: "Cierre en el punto de encuentro" }, description: { pt: "A experiência termina na região do ponto de encontro combinado.", en: "The experience ends near the agreed meeting point.", es: "La experiencia termina en la zona del punto de encuentro acordado." }, durationMinutes: null },
+    { position: 0, title: { pt: "Encontro próximo à estação São Conrado", en: "Meeting near São Conrado station", es: "Encuentro cerca de la estación São Conrado" }, description: { pt: "O ponto exato é combinado por WhatsApp antes do passeio.", en: "The exact spot is arranged via WhatsApp before the tour.", es: "El punto exacto se acuerda por WhatsApp antes del tour." }, durationMinutes: null },
+    { position: 1, title: { pt: "Orientações iniciais", en: "Short briefing", es: "Breve orientación" }, description: { pt: "O guia apresenta o roteiro e as recomendações para a visita.", en: "Your guide introduces the route and a few tips for the visit.", es: "El guía presenta el recorrido y algunas recomendaciones para la visita." }, durationMinutes: null },
+    { position: 2, title: { pt: "Subida de mototáxi", en: "Motorcycle-taxi ride up", es: "Subida en mototaxi" }, description: { pt: "Trajeto incluído no passeio.", en: "Included in the tour.", es: "Incluida en el tour." }, durationMinutes: null },
+    { position: 3, title: { pt: "Caminhada cultural acompanhada", en: "Guided cultural walk", es: "Caminata cultural guiada" }, description: { pt: "O guia apresenta a história da comunidade e o cotidiano dos moradores.", en: "Your guide shares the community's history and everyday life.", es: "El guía comparte la historia de la comunidad y su vida cotidiana." }, durationMinutes: null },
+    { position: 4, title: { pt: "Paradas culturais conforme acesso", en: "Cultural stops, depending on access", es: "Paradas culturales según el acceso" }, description: { pt: "As paradas variam conforme o acesso e as condições do dia.", en: "Stops vary with access and conditions that day.", es: "Las paradas varían según el acceso y las condiciones del día." }, durationMinutes: null },
+    { position: 5, title: { pt: "Mirante ou rooftop e fotografias", en: "Viewpoint or rooftop and photos", es: "Mirador o terraza panorámica y fotos" }, description: { pt: "Parada panorâmica planejada, com tempo para fotos.", en: "A planned panoramic stop with time for photos.", es: "Una parada panorámica prevista, con tiempo para fotos." }, durationMinutes: null },
+    { position: 6, title: { pt: "Descida de mototáxi", en: "Motorcycle-taxi ride down", es: "Bajada en mototaxi" }, description: { pt: "Trajeto incluído no passeio.", en: "Included in the tour.", es: "Incluida en el tour." }, durationMinutes: null },
+    { position: 7, title: { pt: "Encerramento próximo ao ponto de encontro", en: "Finish near the meeting point", es: "Cierre cerca del punto de encuentro" }, description: null, durationMinutes: null },
   ],
+  // Approved FAQ answers (FAQ 7 is provisional editorial wording, to be reconciled with the RT-81 terms).
   faq: [
     {
-      question: { pt: "O passeio é privativo?", en: "Is the tour private?", es: "¿El paseo es privado?" },
-      answer: { pt: "Sim. A experiência é exclusiva para o seu grupo, de 1 a 4 pessoas.", en: "Yes. The experience is only for your group, from 1 to 4 people.", es: "Sí. La experiencia es exclusiva para tu grupo, de 1 a 4 personas." },
+      question: { pt: "O passeio é privativo?", en: "Is the tour private?", es: "¿El tour es privado?" },
+      answer: { pt: "Sim. O passeio é reservado exclusivamente para seu grupo, de 1 a 4 adultos.", en: "Yes. The tour is private for your group of one to four adults.", es: "Sí. El tour es privado y exclusivo para tu grupo de uno a cuatro adultos." },
     },
     {
-      question: { pt: "Quem pode participar?", en: "Who can take part?", es: "¿Quién puede participar?" },
-      answer: { pt: "Adultos a partir de 18 anos. Como há mototáxi, caminhada, ladeiras e escadas, avise antes se houver alguma limitação física.", en: "Adults aged 18 and over. Because there are motorcycle taxis, walking, steep streets and stairs, let us know beforehand about any physical limitation.", es: "Adultos a partir de 18 años. Como hay mototaxi, caminata, cuestas y escaleras, avísanos antes si tienes alguna limitación física." },
+      question: { pt: "Quem pode participar?", en: "Who can join?", es: "¿Quién puede participar?" },
+      answer: {
+        pt: "Pessoas a partir de 18 anos. O roteiro inclui dois trajetos de mototáxi e caminhada, com possíveis ladeiras e escadas. Informe à equipe qualquer necessidade de mobilidade antes de reservar.",
+        en: "Adults aged 18 and over. The itinerary includes two motorcycle-taxi rides and walking, possibly on steep streets or stairs. Please tell our team about any mobility needs before booking.",
+        es: "Personas a partir de 18 años. El recorrido incluye dos trayectos en mototaxi y caminatas, con posibles cuestas y escaleras. Informa a nuestro equipo de cualquier necesidad de movilidad antes de reservar.",
+      },
     },
     {
-      question: { pt: "O transporte do hotel está incluído?", en: "Is transport from my hotel included?", es: "¿Está incluido el transporte desde el hotel?" },
-      answer: { pt: "Não. O encontro é na região da estação de metrô São Conrado, e o passeio termina na região do ponto de encontro.", en: "No. You meet near São Conrado metro station, and the tour ends near the meeting point.", es: "No. El encuentro es en la zona de la estación de metro São Conrado y el paseo termina en la zona del punto de encuentro." },
+      question: { pt: "O transporte do hotel está incluído?", en: "Is hotel transport included?", es: "¿Incluye el traslado desde el hotel?" },
+      answer: {
+        pt: "Não nesta modalidade. O encontro e o encerramento acontecem nas proximidades da estação São Conrado. Enviaremos o ponto exato por WhatsApp.",
+        en: "Not with this option. The tour starts and ends near São Conrado metro station. We'll send the exact meeting spot via WhatsApp.",
+        es: "No en esta modalidad. El tour comienza y termina cerca de la estación São Conrado. Enviaremos el punto exacto por WhatsApp.",
+      },
     },
     {
       question: { pt: "Como funciona a reserva?", en: "How does booking work?", es: "¿Cómo funciona la reserva?" },
       answer: {
-        pt: "Você solicita a disponibilidade, nossa equipe verifica a operação e envia a proposta com as condições. A reserva é confirmada com o pagamento de um sinal de 30%, e o restante é pago antes do início do passeio. O site não faz pagamento automático.",
-        en: "You request availability, our team checks the operation and sends you a proposal with the conditions. The booking is confirmed with a 30% deposit, and the rest is paid before the tour starts. The website does not take automatic payments.",
-        es: "Solicitas la disponibilidad, nuestro equipo verifica la operación y te envía la propuesta con las condiciones. La reserva se confirma con el pago de una seña del 30% y el resto se paga antes del inicio del paseo. El sitio no realiza pagos automáticos.",
+        pt: "Solicite disponibilidade. Após confirmar a operação, nossa equipe enviará a proposta e as condições. A reserva é confirmada com sinal de 30%, e o restante é pago antes do início. O site não processa pagamentos.",
+        en: "Request availability first. Once our team confirms the tour can go ahead, we'll send you a quote and the terms. A 30% deposit confirms the booking, and the balance is due before the tour starts. Payments are not processed on this website.",
+        es: "Primero solicita disponibilidad. Cuando nuestro equipo confirme la operación, te enviaremos la propuesta y las condiciones. La reserva se confirma con un anticipo del 30% y el resto se paga antes de comenzar. Los pagos no se procesan en este sitio web.",
       },
     },
     {
-      question: { pt: "Quais formas de pagamento são aceitas?", en: "Which payment methods are accepted?", es: "¿Qué formas de pago se aceptan?" },
-      answer: { pt: "Os meios previstos são PIX, cartão de crédito e dinheiro. As opções disponíveis para a sua reserva constam na proposta.", en: "The planned methods are PIX, credit card and cash. The options available for your booking are stated in the proposal.", es: "Los medios previstos son PIX, tarjeta de crédito y efectivo. Las opciones disponibles para tu reserva figuran en la propuesta." },
+      question: { pt: "Quais formas de pagamento são aceitas?", en: "Which payment methods are available?", es: "¿Qué medios de pago están disponibles?" },
+      answer: {
+        pt: "A equipe informará na proposta quais meios de pagamento estão disponíveis para sua reserva. PIX, cartão ou dinheiro poderão ser oferecidos, conforme a operação confirmada.",
+        en: "Our team will confirm the payment methods available for your booking in the quote. Depending on the arrangements, options may include PIX, card or cash.",
+        es: "Nuestro equipo confirmará en la propuesta los medios de pago disponibles para tu reserva. Según la operación, pueden incluir PIX, tarjeta o efectivo.",
+      },
     },
     {
-      question: { pt: "Preciso contratar atividades extras na comunidade?", en: "Do I have to pay for extra activities in the community?", es: "¿Tengo que contratar actividades extra en la comunidad?" },
-      answer: { pt: "Não. Atividades como capoeira, música ou fotos com drone podem ser oferecidas por terceiros, mas são opcionais e não fazem parte do preço.", en: "No. Activities such as capoeira, music or drone photos may be offered by third parties, but they are optional and not part of the price.", es: "No. Actividades como capoeira, música o fotos con dron pueden ofrecerlas terceros, pero son opcionales y no forman parte del precio." },
+      question: { pt: "Vou ter outras despesas durante o passeio?", en: "Will I have to pay for anything else during the tour?", es: "¿Tendré otros gastos durante el tour?" },
+      answer: {
+        pt: "Não por serviços obrigatórios do passeio. Guia, mototáxi de subida e descida e serviços locais previstos estão incluídos. Compras, comida, drone ou outras atividades de terceiros são opcionais.",
+        en: "Not for the services included in your tour. Your guide, both motorcycle-taxi rides and required local services are covered. Shopping, food, drone photos and other third-party activities are optional.",
+        es: "No por los servicios incluidos en el tour. El guía, ambos trayectos en mototaxi y los servicios locales necesarios están cubiertos. Las compras, la comida, las fotos con dron y otras actividades de terceros son opcionales.",
+      },
     },
     {
-      question: { pt: "E se o passeio precisar ser alterado?", en: "What if the tour has to change?", es: "¿Y si el paseo tiene que cambiar?" },
-      answer: { pt: "O roteiro pode ser ajustado, encurtado ou suspenso por segurança, clima ou operação local. As condições de cancelamento e remarcação constam na proposta enviada antes do pagamento.", en: "The route may be adjusted, shortened or suspended for safety, weather or local operational reasons. Cancellation and rescheduling conditions are stated in the proposal sent before payment.", es: "El itinerario puede ajustarse, acortarse o suspenderse por seguridad, clima u operación local. Las condiciones de cancelación y reprogramación figuran en la propuesta enviada antes del pago." },
+      question: { pt: "E se o roteiro precisar ser alterado?", en: "What if the route has to change?", es: "¿Qué pasa si el recorrido tiene que cambiar?" },
+      answer: {
+        pt: "O percurso pode mudar por segurança, clima ou restrições de acesso. Nossa equipe explicará as opções disponíveis e as condições aplicáveis antes da confirmação da reserva.",
+        en: "The route may change because of safety, weather or access restrictions. Our team will explain the available options and applicable terms before the booking is confirmed.",
+        es: "El recorrido puede cambiar por seguridad, clima o restricciones de acceso. Nuestro equipo explicará las opciones disponibles y las condiciones aplicables antes de confirmar la reserva.",
+      },
     },
   ],
 };
 
-/** Prefilled WhatsApp message (sent through the canonical public number, lib/public-contact.ts). */
+/** Prefilled WhatsApp message — approved text, sent through the canonical public number (lib/public-contact.ts). */
 export const ROCINHA_WHATSAPP_MESSAGE: Tri = {
-  pt: "Olá! Gostaria de solicitar disponibilidade para o Tour Favela Rocinha — Experiência Cultural Privativa.\nData desejada: \nNúmero de participantes (1 a 4): \nIdioma preferido (português, inglês ou espanhol): ",
-  en: "Hello! I would like to request availability for the Rocinha Favela — Private Cultural Experience.\nPreferred date: \nNumber of participants (1 to 4): \nPreferred language (Portuguese, English or Spanish): ",
-  es: "¡Hola! Me gustaría solicitar disponibilidad para el Tour Favela Rocinha — Experiencia Cultural Privada.\nFecha deseada: \nNúmero de participantes (1 a 4): \nIdioma preferido (portugués, inglés o español): ",
+  pt: "Olá! Quero consultar a disponibilidade do Tour Favela Rocinha — Experiência Cultural Privativa.\nData desejada: \nParticipantes (1 a 4 adultos): \nIdioma preferido: ",
+  en: "Hello! I'd like to check availability for Rocinha Favela — Private Cultural Tour.\nPreferred date: \nGuests (1–4 adults): \nPreferred language: ",
+  es: "¡Hola! Quisiera consultar la disponibilidad del Tour Privado por la Favela de Rocinha.\nFecha deseada: \nParticipantes (1 a 4 adultos): \nIdioma preferido: ",
 };
 
 /**
- * INTERNAL provisional target prices (Owner, 17/10/2026): closed price per booking by group size.
+ * INTERNAL provisional target prices (Owner, 17/10/2026): closed price per booking by group size. UNCHANGED.
  * NOT FOR PUBLICATION — still subject to full costs, taxes and operation validation. Rendered only in the lab review
- * mode, labelled "PREÇOS PROVISÓRIOS — NÃO PUBLICAR". Never stored on Trip (production prices untouched).
+ * mode, labelled "PREÇOS PROVISÓRIOS — NÃO PUBLICAR", and never in the ?precos=ocultos version. Never stored on Trip.
  */
 export const ROCINHA_PROVISIONAL_PRICING = [
   { participants: 1, perPersonCents: 45000, totalCents: 45000 },
@@ -163,7 +187,7 @@ export const ROCINHA_PROVISIONAL_PRICING = [
   { participants: 4, perPersonCents: 22000, totalCents: 88000 },
 ] as const;
 
-export const ROCINHA_GROUP_SIZE: Tri = { pt: "1 a 4 pessoas", en: "1 to 4 people", es: "1 a 4 personas" };
+export const ROCINHA_GROUP_SIZE: Tri = { pt: "1 a 4 adultos", en: "1 to 4 adults", es: "1 a 4 adultos" };
 export const ROCINHA_MIN_AGE: Tri = { pt: "18 anos ou mais", en: "18 and over", es: "18 años o más" };
 export const ROCINHA_MEETING_SHORT: Tri = { pt: "Encontro em São Conrado", en: "Meeting in São Conrado", es: "Encuentro en São Conrado" };
 

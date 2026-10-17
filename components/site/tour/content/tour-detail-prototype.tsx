@@ -44,9 +44,22 @@ export type PrototypeOfferView = {
   minAge?: { value: Localized; status: ReviewStatus };
   whatsappMessage?: Localized;
   provisionalPricing?: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }>;
+  contentStatus?: ReviewStatus;
+  conditionsStatus?: ReviewStatus;
 };
 
 const CTA_TARGET = "#solicitar";
+
+/**
+ * Visual-review hardening: returns the offer WITHOUT the internal provisional prices, so they cannot reach the browser in
+ * the no-price mode even if this component ever became a client component (props are serialized to the client).
+ */
+export function offerForReview<T extends { provisionalPricing?: unknown }>(offer: T, showProvisionalPrices: boolean): T {
+  if (showProvisionalPrices) return offer;
+  const { provisionalPricing: _omitted, ...rest } = offer;
+  void _omitted;
+  return rest as T;
+}
 const pickL = (v: Localized | null | undefined, locale: string) => (v ? (v[locale as keyof Localized] ?? v.pt ?? "") : "");
 const raisedCard = "rounded-xl border border-white/10 bg-[var(--site-charcoal-raised,#15191D)]";
 
@@ -67,8 +80,11 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
   const priceValue = offer.priceCents === null ? t.pricePending : formatPriceBRL(offer.priceCents);
   const priceStatus: ReviewStatus = offer.priceCents === null ? "PENDING" : "CONFIRMED";
   const languages = content.languages.map((code) => t.language[code] ?? code.toUpperCase()).join(" · ");
-  // Real content is PROVISIONAL until the Owner approves it (status OWNER_APPROVED); mock stays MOCK.
-  const contentStatus: ReviewStatus = content.isMock ? "MOCK" : content.status === "OWNER_APPROVED" ? "CONFIRMED" : "PROVISIONAL";
+  // Review chips only (lab): mock stays MOCK; real content uses the offer's editorial status (Owner-approved texts can
+  // show CONFIRMED while the record is still DRAFT). Publication is decided by the gate in lib/catalog/tour-content.ts
+  // (status OWNER_APPROVED), never by these chips.
+  const contentStatus: ReviewStatus = content.isMock ? "MOCK" : content.status === "OWNER_APPROVED" ? "CONFIRMED" : (offer.contentStatus ?? "PROVISIONAL");
+  const conditionsStatus: ReviewStatus = content.isMock ? "MOCK" : (offer.conditionsStatus ?? contentStatus);
   const title = pickL(offer.titleByLocale, locale) || offer.title;
   const whatsappHref = offer.whatsappMessage ? buildPublicWhatsAppUrl(pickL(offer.whatsappMessage, locale)) : CTA_TARGET;
   const whatsappExternal = whatsappHref !== CTA_TARGET;
@@ -90,7 +106,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
     <div className="bg-[var(--site-charcoal,#0B0E11)] pb-28 text-[var(--site-on-dark,#F4F0E8)] lg:pb-0" data-testid="tour-page-surface">
       {reviewMode ? (
         <div role="note" data-testid="mock-banner" className="border-b border-[var(--site-gold,#C8A86B)]/40 bg-[#3a2f12] px-5 py-3 text-[14px] text-[#f3d58a]">
-          <p className="mx-auto max-w-[1280px] font-medium">{content.isMock ? t.mockBanner : t.reviewBanner}</p>
+          <p className="mx-auto max-w-[1280px] font-medium">{content.isMock ? t.mockBanner : showProvisionalPrices ? t.reviewBanner : t.reviewBannerNoPrices}</p>
           <p className="mx-auto mt-1.5 flex max-w-[1280px] flex-wrap items-center gap-2 text-[13px]">
             <span className="font-semibold">{t.reviewLegend}:</span>
             {(["CONFIRMED", "PROVISIONAL", "PENDING", "MOCK"] as const).map((st) => (
@@ -182,8 +198,8 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                 <TourItinerary content={content} locale={locale} status={s(contentStatus)} />
                 <TourIncludes content={content} locale={locale} labels={{ included: td.included, notIncluded: td.notIncluded }} status={s(contentStatus)} />
                 <TourOptionalServices content={content} locale={locale} status={s(contentStatus)} />
-                <TourConditionsNotes content={content} locale={locale} status={s(contentStatus)} />
-                <TourFaq content={content} locale={locale} status={s(contentStatus)} />
+                <TourConditionsNotes content={content} locale={locale} status={s(conditionsStatus)} />
+                <TourFaq content={content} locale={locale} status={s(conditionsStatus)} />
               </div>
 
               <aside className="hidden lg:col-span-4 lg:block">
