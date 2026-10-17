@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import { prisma } from "@/lib/prisma";
 
 /**
@@ -41,6 +42,9 @@ export type TourContentRecord = {
   optionalServicesNote?: LocalizedText | null;
   faq?: Array<{ question: LocalizedText; answer: LocalizedText }> | null;
   approvedAt?: Date | string | null;
+  /** RT-119 approval fingerprint: SHA-256 of the public content at approval time (contentFingerprint). Any later edit of
+   *  texts, itinerary, FAQ or media changes the fingerprint, so the public gate refuses the record until a new review. */
+  approvedContentHash?: string | null;
   itinerary: Array<{ position: number; title: LocalizedText; description?: LocalizedText | null; durationMinutes?: number | null }>;
   /** Media of the tour (TripImage): images and, since the RT-113 complement, videos (mediaType VIDEO: poster, optional
    *  mobile rendition, duration). `credit` is public text only and never implies rights — rightsStatus decides. */
@@ -65,6 +69,8 @@ export type TourContentView = {
   tripId: string;
   status: TourContentStatus;
   isMock: boolean;
+  /** True only for OWNER_APPROVED content whose approval fingerprint matches the current content. */
+  approvalValid: boolean;
   /** Fields that fell back to Portuguese because the requested locale is missing (preview only; public never falls back). */
   missingLocale: string[];
   summary: string | null;
@@ -121,9 +127,77 @@ function pick<T>(value: Partial<Record<ContentLocale, T>> | null | undefined, lo
   return null;
 }
 
+/** Canonical, key-sorted JSON (undefined → null) so the fingerprint does not depend on property order. */
+function canonical(value: unknown): unknown {
+  if (value === undefined || value === null) return null;
+  if (Array.isArray(value)) return value.map(canonical);
+  if (value instanceof Date) return value.toISOString();
+  if (typeof value === "object") {
+    // Absent and undefined keys are equivalent (jsonb drops undefined); explicit null is kept.
+    return Object.fromEntries(
+      Object.keys(value as Record<string, unknown>)
+        .filter((k) => (value as Record<string, unknown>)[k] !== undefined)
+        .sort()
+        .map((k) => [k, canonical((value as Record<string, unknown>)[k])]),
+    );
+  }
+  return value;
+}
+
+/**
+ * RT-119 — fingerprint of everything the public page would show: localized texts, languages, itinerary, FAQ (in order)
+ * and media (src, alt, cover, framing, credit, video fields). Excluded on purpose: status/approval fields, `source`, and
+ * media rights (rightsStatus/rightsNote are enforced separately by the rights gate, item by item).
+ */
+export function contentFingerprint(record: TourContentRecord): string {
+  const payload = {
+    tripId: record.tripId,
+    summary: record.summary,
+    description: record.description,
+    durationLabel: record.durationLabel,
+    meetingPoint: record.meetingPoint,
+    startTimeNote: record.startTimeNote,
+    languages: [...record.languages],
+    inclusions: record.inclusions,
+    exclusions: record.exclusions,
+    requirements: record.requirements,
+    accessibility: record.accessibility,
+    weatherPolicy: record.weatherPolicy,
+    operationalConditions: record.operationalConditions,
+    optionalServicesNote: record.optionalServicesNote,
+    itinerary: [...record.itinerary].sort((a, b) => a.position - b.position).map((st) => ({ position: st.position, title: st.title, description: st.description, durationMinutes: st.durationMinutes })),
+    faq: (record.faq ?? []).map((f) => ({ question: f.question, answer: f.answer })),
+    media: [...record.images]
+      .sort((a, b) => a.position - b.position)
+      .map((m) => ({ position: m.position, src: m.src, alt: m.alt, isCover: m.isCover, focalX: m.focalX, focalY: m.focalY, credit: m.credit, mediaType: m.mediaType ?? "IMAGE", posterSrc: m.posterSrc, mobileSrc: m.mobileSrc, durationSeconds: m.durationSeconds })),
+  };
+  return createHash("sha256").update(JSON.stringify(canonical(payload))).digest("hex");
+}
+
+/** Key-order-independent JSON (PostgreSQL jsonb does not preserve key order), used to compare stored and new content. */
+export function canonicalJson(value: unknown): string {
+  return JSON.stringify(canonical(value));
+}
+
+/** True only when the record carries an approval fingerprint equal to its current content (fail-closed). */
+export function approvalMatches(record: TourContentRecord): boolean {
+  return Boolean(record.approvedContentHash) && record.approvedContentHash === contentFingerprint(record);
+}
+
+/**
+ * Fields that make a record approved. The approval is an explicit Owner act; nothing calls this automatically.
+ * Refuses mock content and content that does not validate (missing locale, price-like text, invalid media…).
+ */
+export function approvalFor(record: TourContentRecord, approvedAt: Date = new Date()) {
+  if (isMockRecord(record)) throw new Error("approvalFor: MOCK content can never be approved");
+  const issues = validateTourContent({ ...record, status: "DRAFT", approvedAt: null, approvedContentHash: null });
+  if (issues.length) throw new Error(`approvalFor: content does not validate (${issues.map((i) => `${i.field}: ${i.problem}`).join("; ")})`);
+  return { status: "OWNER_APPROVED" as const, approvedAt, approvedContentHash: contentFingerprint(record) };
+}
+
 export function toTourContentView(record: TourContentRecord | null | undefined, locale: string, audience: TourContentAudience): TourContentView | null {
   if (!record) return null;
-  if (audience === "public" && (record.status !== "OWNER_APPROVED" || isMockRecord(record))) return null;
+  if (audience === "public" && (record.status !== "OWNER_APPROVED" || isMockRecord(record) || !approvalMatches(record))) return null;
   const l = resolveLocale(locale);
   const missing: string[] = [];
   const text = (v: LocalizedText | null | undefined, f: string) => {
@@ -136,6 +210,7 @@ export function toTourContentView(record: TourContentRecord | null | undefined, 
     tripId: record.tripId,
     status: record.status,
     isMock: isMockRecord(record),
+    approvalValid: record.status === "OWNER_APPROVED" && approvalMatches(record),
     missingLocale: missing,
     summary: text(record.summary, "summary"),
     paragraphs: description ? description.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean) : [],
@@ -246,6 +321,7 @@ export function validateTourContent(record: TourContentRecord): ContentIssue[] {
     if (isMockRecord(record)) issues.push({ field: "source", problem: "MOCK content can never be approved" });
     if (!record.approvedAt) issues.push({ field: "approvedAt", problem: "approved content needs an approval date" });
     if (!record.source?.trim()) issues.push({ field: "source", problem: "approved content needs a recorded source" });
+    if (!approvalMatches(record)) issues.push({ field: "approvedContentHash", problem: "approval does not match the current content — new review required" });
   }
   return issues;
 }
@@ -253,7 +329,13 @@ export function validateTourContent(record: TourContentRecord): ContentIssue[] {
 /** Loads the structured content of one tour through the publication gate. Callers must already have resolved the trip
  *  through the public catalog gate (getPublicTripById) for the public audience. */
 export async function getTourContent(tripId: string, locale: string, audience: TourContentAudience): Promise<TourContentView | null> {
-  const row = await prisma.tripContent.findUnique({
+  const record = await loadTourContentRecord(tripId);
+  return toTourContentView(record, locale, audience);
+}
+
+/** Reads one tour's structured content from the database as a TourContentRecord (no gate applied). */
+export async function loadTourContentRecord(tripId: string, client: Pick<typeof prisma, "tripContent"> = prisma): Promise<TourContentRecord | null> {
+  const row = await client.tripContent.findUnique({
     where: { tripId },
     include: {
       trip: {
@@ -287,8 +369,9 @@ export async function getTourContent(tripId: string, locale: string, audience: T
     optionalServicesNote: row.optionalServicesNote as LocalizedText | null,
     faq: row.trip.faq.map((item) => ({ question: item.question as LocalizedText, answer: item.answer as LocalizedText })),
     approvedAt: row.approvedAt,
+    approvedContentHash: row.approvedContentHash,
     itinerary: row.trip.itinerary.map((s) => ({ ...s, title: s.title as LocalizedText, description: s.description as LocalizedText | null })),
     images: row.trip.images.map((img) => ({ ...img, alt: img.alt as LocalizedText, credit: img.credit as LocalizedText | null })),
   };
-  return toTourContentView(record, locale, audience);
+  return record;
 }

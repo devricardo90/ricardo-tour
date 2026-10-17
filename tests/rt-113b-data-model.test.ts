@@ -2,13 +2,13 @@ import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
+import { contentFingerprint, toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
 
 // RT-113 complement (17/10/2026): FAQ, operating conditions, optional services, media credit and video support.
 const tri = (pt: string, en: string, es: string) => ({ pt, en, es });
 
 function record(overrides: Partial<TourContentRecord> = {}): TourContentRecord {
-  return {
+  const r: TourContentRecord = {
     tripId: "fixture",
     status: "OWNER_APPROVED",
     source: "fixture",
@@ -29,6 +29,7 @@ function record(overrides: Partial<TourContentRecord> = {}): TourContentRecord {
     ],
     ...overrides,
   };
+  return r.status === "OWNER_APPROVED" && !("approvedContentHash" in overrides) ? { ...r, approvedContentHash: contentFingerprint(r) } : r;
 }
 
 describe("RT-113 complement — public projection (fail-closed)", () => {

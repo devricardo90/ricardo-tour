@@ -7,7 +7,7 @@
  */
 import fs from "node:fs";
 import { prisma } from "@/lib/prisma";
-import { getTourContent } from "@/lib/catalog/tour-content";
+import { approvalFor, getTourContent, loadTourContentRecord } from "@/lib/catalog/tour-content";
 
 const url = new URL(process.env.DATABASE_URL ?? "");
 if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "5433" || !url.pathname.startsWith("/rt113b_") || url.searchParams.has("host") || url.searchParams.has("hostaddr") || /neon|aws|vercel|supabase/i.test(url.href)) {
@@ -73,6 +73,10 @@ async function main() {
   });
   await prisma.tripImage.update({ where: { id: "fixture_img_2" }, data: { credit: JSON.parse(tri("Foto de terceiros", "Third-party photo", "Foto de terceros")) } });
 
+  // RT-119: approvals are bound to the content fingerprint. The fixture row was approved before the fingerprint
+  // existed (status only) → never public; re-approve explicitly after loading the new content.
+  check((await getTourContent(A, "en", "public")) === null, "status-only approval (no fingerprint) is never public");
+  await prisma.tripContent.update({ where: { tripId: A }, data: approvalFor((await loadTourContentRecord(A))!, new Date("2026-10-17T00:00:00Z")) });
   const pub = await getTourContent(A, "en", "public");
   check(pub?.faq.map((f) => f.question).join(",") === "Q1?,Q2?", "public FAQ read back in position order, in the requested locale");
   check(pub?.operationalConditions === "Route may change." && pub?.optionalServicesNote === "Optional.", "public operating conditions and optional services read back (EN)");

@@ -101,7 +101,7 @@ const mockList = (items: Array<[string, string, string]>) => ({
 
 const ROCINHA_DIR = "/media/tours/favela-rocinha";
 const ROCINHA_RIGHTS = (file: string) =>
-  `Owner, 17/10/2026: own photo; consent/authorisation of the people shown declared by the Owner. Original: Drive MIDIAS/02_FAVELA_ROCINHA/ORIGINAIS/${file} (SHA-256 in docs/product/rt-116-rocinha-originals.sha256). Web copy: sRGB, metadata (incl. GPS) removed.`;
+  `Owner, 17/10/2026: own media (photo/video); consent/authorisation of the people shown declared by the Owner. Original: Drive MIDIAS/02_FAVELA_ROCINHA/ORIGINAIS/${file} (SHA-256 in docs/product/rt-116-rocinha-originals.sha256). Web copy: sRGB, metadata (incl. GPS) removed.`;
 
 /**
  * RT-116 — REAL photographs selected and ordered by the Owner (17/10/2026), per tour. Rights: OWNER_ATTESTED.

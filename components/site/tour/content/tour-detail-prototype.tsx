@@ -83,7 +83,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
   // Review chips only (lab): mock stays MOCK; real content uses the offer's editorial status (Owner-approved texts can
   // show CONFIRMED while the record is still DRAFT). Publication is decided by the gate in lib/catalog/tour-content.ts
   // (status OWNER_APPROVED), never by these chips.
-  const contentStatus: ReviewStatus = content.isMock ? "MOCK" : content.status === "OWNER_APPROVED" ? "CONFIRMED" : (offer.contentStatus ?? "PROVISIONAL");
+  const contentStatus: ReviewStatus = content.isMock ? "MOCK" : content.approvalValid ? "CONFIRMED" : (offer.contentStatus ?? "PROVISIONAL");
   const conditionsStatus: ReviewStatus = content.isMock ? "MOCK" : (offer.conditionsStatus ?? contentStatus);
   const title = pickL(offer.titleByLocale, locale) || offer.title;
   const whatsappHref = offer.whatsappMessage ? buildPublicWhatsAppUrl(pickL(offer.whatsappMessage, locale)) : CTA_TARGET;

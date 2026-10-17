@@ -401,6 +401,9 @@ model TripContent {
   operationalConditions Json?
   optionalServicesNote  Json?
   approvedAt      DateTime?
+  /// RT-119 approval fingerprint (SHA-256 of the public content when the Owner approved it). The public gate publishes
+  /// only when it equals the fingerprint of the current content, so any later edit requires a new review. NULL on DRAFT.
+  approvedContentHash String?
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 }

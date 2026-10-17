@@ -2,7 +2,7 @@
 /**
  * RT-113 complement — helper for LOCAL THROW-AWAY databases only (Docker container ricktravel-db, localhost:5433).
  * Reads the local admin URL from a temp JSON file (never printed), refuses anything that is not localhost:5433 or a
- * database not named rt113b_*. Commands:
+ * database not named rt113b_* or rt119_*. Commands:
  *   url <db>              → prints the connection URL of <db> (for an inline DATABASE_URL; do not log it)
  *   create <db> | drop <db>
  *   dump <db> <file>      → schema-only dump (pg_dump inside the container) to <file>
@@ -19,7 +19,7 @@ const admin = new URL(JSON.parse(fs.readFileSync(adminFile, "utf8")).admin);
 if (!["localhost", "127.0.0.1"].includes(admin.hostname) || admin.port !== "5433" || /neon|aws|vercel|supabase/i.test(admin.href)) {
   throw new Error("Refusing: admin URL is not the local Docker Postgres localhost:5433");
 }
-if (!db || !/^rt113b_[a-z0-9_]+$/.test(db)) throw new Error("Refusing: database name must match rt113b_*");
+if (!db || !/^(rt113b|rt119)_[a-z0-9_]+$/.test(db)) throw new Error("Refusing: database name must match rt113b_* or rt119_*");
 
 const user = decodeURIComponent(admin.username);
 const pass = decodeURIComponent(admin.password);

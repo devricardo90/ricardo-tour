@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { focalToPosition, isMockRecord, toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
+import { approvalFor, contentFingerprint, focalToPosition, isMockRecord, toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
 import { MOCK_SOURCE, MOCK_TOUR_CONTENT, PROTOTYPE_OFFER, PUBLISHED_SNAPSHOT } from "@/lib/catalog/mock/tour-content.mock";
 import { tourContentCopy } from "@/components/site/tour/content/tour-content-copy";
 import { TourDetailPrototype, offerForReview } from "@/components/site/tour/content/tour-detail-prototype";
@@ -11,7 +11,7 @@ import { ImageGallery } from "@/components/site/media/image-gallery";
 const tri = (pt: string, en: string, es: string) => ({ pt, en, es });
 
 function approvedRecord(overrides: Partial<TourContentRecord> = {}): TourContentRecord {
-  return {
+  const r: TourContentRecord = {
     tripId: "trip-test",
     status: "OWNER_APPROVED",
     source: "Owner intake RT-112, 2026-10-20",
@@ -30,6 +30,8 @@ function approvedRecord(overrides: Partial<TourContentRecord> = {}): TourContent
     ],
     ...overrides,
   };
+  // RT-119: an approval is bound to the content fingerprint (computed after the overrides, unless a test sets it).
+  return r.status === "OWNER_APPROVED" && !("approvedContentHash" in overrides) ? { ...r, approvedContentHash: contentFingerprint(r) } : r;
 }
 
 describe("RT-113 publication gate (toTourContentView)", () => {
@@ -154,7 +156,7 @@ describe("RT-114 mock data integrity", () => {
       const abs = path.join(process.cwd(), p);
       if (!fs.existsSync(abs)) return;
       if (fs.statSync(abs).isDirectory()) for (const entry of fs.readdirSync(abs)) walk(path.join(p, entry));
-      else if (/\.(tsx?|mjs)$/.test(p) && /tour-content\.mock|catalog\/drafts\//.test(fs.readFileSync(abs, "utf8"))) offenders.push(p);
+      else if (/\.(tsx?|mjs)$/.test(p) && /tour-content\.mock|catalog\/drafts\/|catalog\/content-load/.test(fs.readFileSync(abs, "utf8"))) offenders.push(p);
     };
     roots.forEach(walk);
     expect(offenders).toEqual([]);
@@ -354,7 +356,8 @@ describe("RT-116 lighter mobile clips and Cristo + Pão de Açúcar + Selarón p
     }
     // The cover/order is a proposal, and the third-party photos would be hidden publicly even if the record were approved.
     expect(PROTOTYPE_OFFER[CRISTO].coverStatus).toBe("PROVISIONAL");
-    const approved = { ...record, status: "OWNER_APPROVED" as const, source: "Owner test", approvedAt: "2026-10-17" };
+    const nonMock = { ...record, source: "Owner test" }; // approvalFor refuses MOCK records (RT-119 guard)
+    const approved = { ...nonMock, ...approvalFor(nonMock, new Date("2026-10-17")) };
     expect(toTourContentView(approved, "pt", "public")!.gallery.map((g) => path.basename(g.src))).not.toContain("terceiros-cristo-redentor.jpg");
     expect(toTourContentView(approved, "pt", "public")!.gallery).toHaveLength(4);
   });
