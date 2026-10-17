@@ -51,3 +51,26 @@ Desktop LCP 1.34 s / 584 KB; mobile 0.18 s / 620 KB; cover served as WebP 89–1
 2. **Main-thread cost (P9) and LCP (P7):** profile the public version, not the lab: review-mode chips, the lab banner and the gallery client bundle inflate the prototype; check the blurred backdrop image (second image request per photo) and hydration of `ImageGallery`. Measure again with Lighthouse on an isolated Preview before publication.
 3. **Caching:** `public/` files are served with `Cache-Control: public, max-age=0` by `next start`; on Vercel static assets get CDN caching, but immutable names (hash in the file name) or Blob storage would allow long caching for media.
 4. Re-run `scripts/rt-116-video-perf.mjs` against the isolated Preview once RT-104…108 exist; field data (Web Vitals) after publication.
+
+## 5. Update — lighter mobile rendition (Owner authorisation 17/10/2026, local only)
+Same clip, same window (6.5–22 s), same framing and tone mapping; only the bitrate changes. Built from a near-lossless SDR reference of the original; quality measured with VMAF/SSIM against that reference (720×1280).
+
+| Candidate | Size | Avg bitrate | VMAF | SSIM | Chosen |
+|---|---|---|---|---|---|
+| Current full clip (desktop) | 3.73 MB | 1.93 Mbps | 94.2 | 0.917 | stays for screens ≥ 768 px (unchanged) |
+| 720×1280, cap 1.0 Mbps | 1.99 MB | 1.03 Mbps | 82.8 | 0.858 | **yes** (`rocinha-praca-movimento-mobile.mp4`) |
+| 540×960, cap 0.9 Mbps | 1.79 MB | 0.92 Mbps | 79.6 | 0.832 | no (lower quality for 10 % less weight) |
+| 540×960, cap 0.7 Mbps | 1.39 MB | 0.72 Mbps | 74.3 | 0.810 | no (visible degradation in the busy scene) |
+
+Served with `<source media="(max-width: 767px)">` before the full source; desktop is unchanged (verified: wide screens play `rocinha-praca-movimento.mp4`, phones `rocinha-praca-movimento-mobile.mp4`).
+
+Slow 4G (1.6 Mbps, 150 ms, mobile, 4× CPU), same session, 3 runs each (`perf-4g-slow-mobile-clip.json`, `perf-4g-slow-full-clip.json`):
+| Clip | Start | Stalls | Stalled time | Wall time for 15.5 s | Transferred |
+|---|---|---|---|---|---|
+| Full clip (what phones received before) | 1.14–1.15 s | 8–9 | 1.88–1.92 s | 18.5 s | 3,646 KB |
+| **Mobile rendition** | **0.70–0.74 s** | **0** | **0** | **16.2 s** | **1,946 KB** |
+Fast 4G with the mobile rendition (`perf-4g-fast-mobile-clip.json`): start 0.23–0.25 s, 0 stalls.
+
+Criteria update: **P5 now met** on mobile (0 stalls). Quality: VMAF 82.8 ("good" range) vs 94.2 for the full clip; the difference is mainly fine detail in the moving motorbikes and wires. **Visual quality to be judged by the Owner** (the variant is not an approval of final quality).
+
+Note on the main-thread figures: in this session the long-task time was 1.0–1.4 s on mobile (vs 3.4–6.5 s in the first session), confirming that those numbers depend heavily on the local machine load. LCP on slow 4G mobile: 2.76–2.79 s (target 2.5 s). Both still need Lighthouse on an **isolated Preview**, which does not exist yet (RT-106 backlog): not available, not replaced by a production deploy.

@@ -11,7 +11,7 @@ import { chromium } from "@playwright/test";
 
 const BASE = process.argv[2] ?? "http://127.0.0.1:3233";
 const OUT = process.argv[3] ?? "docs/baseline/rt-116-rocinha";
-const ID = "cmli1a6im000034zqqzc9sppb";
+const ID = process.env.RT116_ID ?? "cmli1a6im000034zqqzc9sppb";
 fs.mkdirSync(OUT, { recursive: true });
 
 const browser = await chromium.launch();
@@ -62,9 +62,10 @@ for (const [device, viewport] of [["desktop", { width: 1440, height: 900 }], ["m
       const position = page.locator('[data-testid="image-gallery"] [aria-live="polite"]');
       const next = page.locator('[data-testid="image-gallery"] button').nth(1);
       r.gallery = [];
-      for (let i = 0; i < 5; i += 1) {
+      const count = Number(await page.locator('[data-testid="image-gallery"]').getAttribute("data-count"));
+      for (let i = 0; i < count; i += 1) {
         const src = decodeURIComponent((await main.getAttribute("src")) ?? "");
-        const file = (src.match(/favela-rocinha%2F|favela-rocinha\/([^&]+)/) ?? [])[1] ?? src;
+        const file = (src.match(/url=([^&]+)/) ?? [])[1] ?? src;
         r.gallery.push({ position: await position.textContent(), file: path.basename(file.split("&")[0]), alt: await main.getAttribute("alt"), credit: (await page.locator('[data-testid="gallery-credit"]').count()) ? await page.locator('[data-testid="gallery-credit"]').textContent() : null });
         await page.locator('[data-testid="image-gallery"]').scrollIntoViewIfNeeded();
         await page.waitForTimeout(700);
@@ -86,6 +87,7 @@ for (const [device, viewport] of [["desktop", { width: 1440, height: 900 }], ["m
       Object.assign(r, await video.evaluate((v) => ({ videoDuration: Math.round(v.duration * 10) / 10, videoPlaying: !v.paused && v.currentTime > 0, videoWidth: v.videoWidth, videoHeight: v.videoHeight, videoMuted: v.muted })));
       await page.locator('[data-testid="tour-video"]').screenshot({ path: path.join(OUT, `${device}-video-playing.jpg`), type: "jpeg", quality: 82 });
       r.videoBytesAfterPlay = responses.filter((x) => x.url.includes(".mp4")).length > 0;
+      r.videoFile = await video.evaluate((v) => v.currentSrc.split("/").pop());
     }
     r.consoleErrors = errors.filter((e) => !/Download the React DevTools/.test(e));
     results.push(r);

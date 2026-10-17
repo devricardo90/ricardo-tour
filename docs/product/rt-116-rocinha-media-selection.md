@@ -131,3 +131,8 @@ Local server without CDN latency: real numbers will be higher. The 1500×2000 JP
 - Evidence: commit `dc58359`; `docs/baseline/rt-116-rocinha/` (captures, `results.json`, `perf-4g.json`); review page shared with the Owner in the conversation (private).
 - Jira: RT-114 (comment 13467) and RT-116 (comment 13468) recorded on 17/10. An earlier RT-116 comment attempt that included the private review-page link was blocked by the agent's permission check and was not bypassed; the report was re-posted without the link.
 - Still pending: credit spelling (@wark rocinha); written consent on file (recommended); slow-4G video stalls (lighter mobile rendition, Owner OK needed); data model for video/credit; everything in the readiness analysis before any publication.
+
+## 9. Update — mural credit and mobile video (17/10/2026)
+- **Mural inscription (from the original IMG_1252, full-resolution crop `docs/baseline/rt-116-rocinha/mural-assinatura-IMG_1252-crop.png`):** hand-lettered in white on grey, two lines: "@WARK" and "ROCINHA..." (stylised R with a flourish underline; a vertical wire crosses the "HA"). Whether the handle is "@wark" (with "Rocinha" as a place) or another form **cannot be told from the photo**. The preview caption now transcribes what is visible — "Mural com a inscrição “@WARK ROCINHA...”" — and does not claim an identity. Pending (documentary): verify the artist's identity and the preferred credit with independent evidence before publication.
+- Mobile video rendition added (see `rt-116-rocinha-performance.md` §5). The approved content, window and framing are unchanged; desktop unchanged.
+

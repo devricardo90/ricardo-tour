@@ -95,7 +95,106 @@ const ROCINHA_RIGHTS = (file: string) =>
  * Alt texts describe what each photo shows (no fictitious marker: they are real descriptions, still to be reviewed with
  * RT-115). The record that holds them stays MOCK/DRAFT, so the public gate never shows it.
  */
+const CRISTO_DIR = "/media/tours/cristo-pao-selaron";
+const CRISTO_RIGHTS = (driveFile: string, camera: string, people: boolean) =>
+  `Owner, 17/10/2026: own photo ${camera} (editorially approved), identified by content (correlation 0.99+ against the Owner's visual index). File: Drive MIDIAS/01_CRISTO_PAO_DE_ACUCAR_SELARON/ORIGINAIS/${driveFile} (WebP 952×1269, no metadata; HEIC original not in the Drive).${people ? " Identifiable visitors: authorisation DECLARED by the Owner; written proof pending." : ""}`;
+const THIRD_PARTY = (driveFile: string, photographer: string, url: string, work: string) =>
+  `UNVERIFIED third-party photo. Owner candidate, photographer informed: ${photographer} (${url}). The Drive file ${driveFile} is a DIFFERENT photograph from the cited Pexels image (17/10/2026 comparison): real source unknown. Rights over ${work} need legal validation. No legal clearance.`;
+
 const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
+  // RT-116 — Cristo Redentor + Pão de Açúcar + Escadaria Selarón (Owner editorial definition, 17/10/2026).
+  // Own photos: 4 of the 5 approved (IMG_1162/1171/1163/1181), identified BY CONTENT against the Owner's visual index
+  // (the Drive's 5th WebP is IMG_1180, not the approved IMG_1179: Owner decision pending, so it is not shown).
+  // Third-party candidates (Cristo, Selarón): the Drive files do NOT match the cited Pexels photos -> UNVERIFIED, so the
+  // public gate would hide them. ORDER AND COVER ARE A PROPOSAL for the Owner (coverStatus PROVISIONAL).
+  cmlhxkpy9000028zq27rhytew: [
+    {
+      position: 0,
+      src: `${CRISTO_DIR}/pao-01-IMG_1162-mirante.webp`,
+      alt: {
+        pt: "Dois visitantes no mirante com o Pão de Açúcar ao fundo, sob céu azul com nuvens",
+        en: "Two visitors at a viewpoint with Sugarloaf Mountain behind them, under a blue sky with clouds",
+        es: "Dos visitantes en el mirador con el Pan de Azúcar al fondo, bajo un cielo azul con nubes",
+      },
+      isCover: true,
+      rightsStatus: "OWNER_ATTESTED",
+      rightsNote: CRISTO_RIGHTS("img1-pao-de-acucar.webp", "IMG_1162", true),
+      focalX: 0.45,
+      focalY: 0.45,
+    },
+    {
+      position: 1,
+      src: `${CRISTO_DIR}/terceiros-cristo-redentor.jpg`,
+      alt: {
+        pt: "Estátua do Cristo Redentor de braços abertos, vista de baixo contra o céu azul",
+        en: "The Christ the Redeemer statue with open arms, seen from below against a blue sky",
+        es: "La estatua del Cristo Redentor con los brazos abiertos, vista desde abajo contra el cielo azul",
+      },
+      isCover: false,
+      rightsStatus: "UNVERIFIED",
+      rightsNote: THIRD_PARTY("img-cristo-redentor1.jpg", "Maxi Franzoi", "https://www.pexels.com/photo/christ-the-redeemer-in-rio-de-janeiro-9977483/", "the statue"),
+      credit: { pt: "Foto de terceiros · origem em verificação", en: "Third-party photo · source being verified", es: "Foto de terceros · origen en verificación" },
+      focalX: 0.5,
+      focalY: 0.3,
+    },
+    {
+      position: 2,
+      src: `${CRISTO_DIR}/pao-02-IMG_1171-bondinho-cume.webp`,
+      alt: {
+        pt: "Cabos do bondinho chegando ao cume do Pão de Açúcar, com o mar ao fundo",
+        en: "Cable car wires reaching the summit of Sugarloaf Mountain, with the sea behind",
+        es: "Cables del teleférico llegando a la cima del Pan de Azúcar, con el mar al fondo",
+      },
+      isCover: false,
+      rightsStatus: "OWNER_ATTESTED",
+      rightsNote: CRISTO_RIGHTS("img2-pao-de-acucar.webp", "IMG_1171", false),
+      focalX: 0.5,
+      focalY: 0.4,
+    },
+    {
+      position: 3,
+      src: `${CRISTO_DIR}/pao-03-IMG_1163-mirante-baia.webp`,
+      alt: {
+        pt: "Visitante apoiado no guarda-corpo do mirante, com a baía e os barcos ao fundo",
+        en: "A visitor leaning on the viewpoint railing, with the bay and boats behind",
+        es: "Visitante apoyado en la baranda del mirador, con la bahía y los barcos al fondo",
+      },
+      isCover: false,
+      rightsStatus: "OWNER_ATTESTED",
+      rightsNote: CRISTO_RIGHTS("img3-pao-de-acucar.webp", "IMG_1163", true),
+      focalX: 0.4,
+      focalY: 0.55,
+    },
+    {
+      position: 4,
+      src: `${CRISTO_DIR}/pao-04-IMG_1181-visitante-deck.webp`,
+      alt: {
+        pt: "Visitante no deck do mirante, com montanhas e a cidade ao fundo",
+        en: "A visitor on the viewpoint deck, with mountains and the city behind",
+        es: "Visitante en la terraza del mirador, con montañas y la ciudad al fondo",
+      },
+      isCover: false,
+      rightsStatus: "OWNER_ATTESTED",
+      rightsNote: CRISTO_RIGHTS("img4-pao-de-acucar.webp", "IMG_1181", true),
+      focalX: 0.3,
+      focalY: 0.5,
+    },
+    {
+      position: 5,
+      src: `${CRISTO_DIR}/terceiros-escadaria-selaron.jpg`,
+      alt: {
+        pt: "Escadaria Selarón com degraus de azulejos coloridos e um mural com a bandeira do Brasil no alto",
+        en: "The Selarón Steps with colourful tiled steps and a Brazilian flag mural at the top",
+        es: "La Escalera Selarón con escalones de azulejos de colores y un mural con la bandera de Brasil arriba",
+      },
+      isCover: false,
+      rightsStatus: "UNVERIFIED",
+      rightsNote: THIRD_PARTY("img-escadaria-selarao1.jpg", "Bruno Scramgnon", "https://www.pexels.com/photo/the-selaron-steps-in-rio-de-janeiro-brazil-13185516/", "the tiles (Jorge Selarón)"),
+      credit: { pt: "Foto de terceiros · origem em verificação", en: "Third-party photo · source being verified", es: "Foto de terceros · origen en verificación" },
+      focalX: 0.5,
+      focalY: 0.55,
+    },
+  ],
   cmli1a6im000034zqqzc9sppb: [
     {
       position: 0,
@@ -136,7 +235,8 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
       isCover: false,
       rightsStatus: "OWNER_ATTESTED",
       rightsNote: ROCINHA_RIGHTS("IMG_1252.HEIC"),
-      credit: { pt: "Mural de @wark rocinha", en: "Mural by @wark rocinha", es: "Mural de @wark rocinha" },
+      // Transcription of the inscription visible on the mural (17/10, crop of the original); artist identity NOT verified.
+      credit: { pt: "Mural com a inscrição “@WARK ROCINHA...”", en: "Mural with the inscription “@WARK ROCINHA...”", es: "Mural con la inscripción “@WARK ROCINHA...”" },
       focalX: 0.55,
       focalY: 0.45,
     },
@@ -235,7 +335,10 @@ export type PrototypeOffer = {
 };
 
 export type PrototypeVideo = {
+  title: LocalizedText;
   src: string;
+  /** Lighter rendition for small screens (≈1 Mbps): served through <source media> (RT-116 slow-4G finding). */
+  mobileSrc?: string;
   poster: string;
   durationSeconds: number;
   caption: LocalizedText;
@@ -246,7 +349,9 @@ export type PrototypeVideo = {
 
 /** RT-116: Rocinha clip — IMG_1256.MOV 6.5–22 s (15.5 s), HDR→SDR, audio and metadata (incl. GPS) removed. */
 const ROCINHA_VIDEO: PrototypeVideo = {
+  title: { pt: "A Rocinha em movimento", en: "Rocinha in motion", es: "La Rocinha en movimiento" },
   src: `${ROCINHA_DIR}/rocinha-praca-movimento.mp4`,
+  mobileSrc: `${ROCINHA_DIR}/rocinha-praca-movimento-mobile.mp4`,
   poster: `${ROCINHA_DIR}/rocinha-praca-movimento-poster.jpg`,
   durationSeconds: 15.5,
   caption: {
@@ -256,6 +361,35 @@ const ROCINHA_VIDEO: PrototypeVideo = {
   },
   status: "PROVISIONAL",
   rightsNote: ROCINHA_RIGHTS("IMG_1256.MOV"),
+};
+
+/**
+ * RT-116: Pão de Açúcar clip — web version of the Owner's version A window (IMG_1157.MOV 41–58 s, 17 s), poster = 51 s
+ * frame. The edited file "versão A" is NOT in the Drive (only version B is): this is the web rendition made from the
+ * original with the Rocinha pipeline (HDR→SDR, no audio, metadata incl. GPS removed). Not approved until the Owner
+ * reviews playback.
+ */
+const PAO_VIDEO: PrototypeVideo = {
+  title: { pt: "O Rio visto do Pão de Açúcar", en: "Rio seen from Sugarloaf Mountain", es: "Río visto desde el Pan de Azúcar" },
+  src: `${CRISTO_DIR}/pao-bondinho-41-58.mp4`,
+  mobileSrc: `${CRISTO_DIR}/pao-bondinho-41-58-mobile.mp4`,
+  poster: `${CRISTO_DIR}/pao-bondinho-41-58-poster.jpg`,
+  durationSeconds: 17,
+  caption: {
+    pt: "Do alto do Pão de Açúcar: a Baía de Botafogo, a cidade e o Cristo Redentor ao longe.",
+    en: "From the top of Sugarloaf Mountain: Botafogo Bay, the city and Christ the Redeemer in the distance.",
+    es: "Desde lo alto del Pan de Azúcar: la Bahía de Botafogo, la ciudad y el Cristo Redentor a lo lejos.",
+  },
+  status: "PROVISIONAL",
+  rightsNote: "Owner, 17/10/2026: own video IMG_1157.MOV (Drive MIDIAS/01_CRISTO_PAO_DE_ACUCAR_SELARON/ORIGINAIS), window 41–58 s selected by the Owner; no people in the window; original audio not used.",
+};
+
+/** Tours whose cover/order the Owner confirmed (Rocinha, 17/10). Cristo + Pão + Selarón: order and cover are a proposal. */
+const OWNER_CONFIRMED_COVER = new Set(["cmli1a6im000034zqqzc9sppb"]);
+
+const PROTOTYPE_VIDEO: Record<string, PrototypeVideo> = {
+  cmli1a6im000034zqqzc9sppb: ROCINHA_VIDEO,
+  cmlhxkpy9000028zq27rhytew: PAO_VIDEO,
 };
 
 const PRIVATE: LocalizedText = { pt: "Experiência privativa", en: "Private experience", es: "Experiencia privada" };
@@ -278,8 +412,8 @@ function offer(id: string, pitch: LocalizedText): PrototypeOffer {
     duration: { value: null, status: "PENDING" },
     benefits: BENEFITS as { pt: string[]; en: string[]; es: string[] },
     // RT-116: the Owner confirmed the Rocinha cover and gallery (17/10/2026); the other tours still wait for their photos.
-    coverStatus: OWNER_GALLERY[id] ? "CONFIRMED" : "PROVISIONAL",
-    video: id === "cmli1a6im000034zqqzc9sppb" ? ROCINHA_VIDEO : null,
+    coverStatus: OWNER_CONFIRMED_COVER.has(id) ? "CONFIRMED" : "PROVISIONAL",
+    video: PROTOTYPE_VIDEO[id] ?? null,
   };
 }
 

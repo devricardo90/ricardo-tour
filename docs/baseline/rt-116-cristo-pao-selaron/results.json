@@ -1,0 +1,150 @@
+[
+  {
+    "device": "desktop",
+    "locale": "pt",
+    "status": 200,
+    "lcpMs": 1096,
+    "videoBytesBeforePlay": 0,
+    "imageRequestsOnLoad": 8,
+    "imageBytesOnLoad": 147903,
+    "totalBytesOnLoad": 171142,
+    "galleryCount": "6",
+    "horizontalOverflow": false,
+    "ctaAboveFold": true,
+    "gallery": [
+      {
+        "position": "Foto 1 de 6",
+        "file": "pao-01-IMG_1162-mirante.webp",
+        "alt": "Dois visitantes no mirante com o Pão de Açúcar ao fundo, sob céu azul com nuvens",
+        "credit": null
+      },
+      {
+        "position": "Foto 2 de 6",
+        "file": "terceiros-cristo-redentor.jpg",
+        "alt": "Estátua do Cristo Redentor de braços abertos, vista de baixo contra o céu azul",
+        "credit": "Foto de terceiros · origem em verificação"
+      },
+      {
+        "position": "Foto 3 de 6",
+        "file": "pao-02-IMG_1171-bondinho-cume.webp",
+        "alt": "Cabos do bondinho chegando ao cume do Pão de Açúcar, com o mar ao fundo",
+        "credit": null
+      },
+      {
+        "position": "Foto 4 de 6",
+        "file": "pao-03-IMG_1163-mirante-baia.webp",
+        "alt": "Visitante apoiado no guarda-corpo do mirante, com a baía e os barcos ao fundo",
+        "credit": null
+      },
+      {
+        "position": "Foto 5 de 6",
+        "file": "pao-04-IMG_1181-visitante-deck.webp",
+        "alt": "Visitante no deck do mirante, com montanhas e a cidade ao fundo",
+        "credit": null
+      },
+      {
+        "position": "Foto 6 de 6",
+        "file": "terceiros-escadaria-selaron.jpg",
+        "alt": "Escadaria Selarón com degraus de azulejos coloridos e um mural com a bandeira do Brasil no alto",
+        "credit": "Foto de terceiros · origem em verificação"
+      }
+    ],
+    "videoAutoplay": false,
+    "videoDuration": 17,
+    "videoPlaying": true,
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "videoMuted": true,
+    "videoBytesAfterPlay": true,
+    "videoFile": "pao-bondinho-41-58.mp4",
+    "consoleErrors": []
+  },
+  {
+    "device": "desktop",
+    "locale": "en",
+    "status": 200,
+    "lcpMs": 120,
+    "videoBytesBeforePlay": 0,
+    "imageRequestsOnLoad": 7,
+    "imageBytesOnLoad": -2378,
+    "totalBytesOnLoad": 21409,
+    "galleryCount": "6",
+    "horizontalOverflow": false,
+    "ctaAboveFold": true,
+    "consoleErrors": []
+  },
+  {
+    "device": "desktop",
+    "locale": "es",
+    "status": 200,
+    "lcpMs": 84,
+    "videoBytesBeforePlay": 0,
+    "imageRequestsOnLoad": 7,
+    "imageBytesOnLoad": -2378,
+    "totalBytesOnLoad": 20673,
+    "galleryCount": "6",
+    "horizontalOverflow": false,
+    "ctaAboveFold": true,
+    "consoleErrors": []
+  },
+  {
+    "device": "mobile",
+    "locale": "pt",
+    "status": 200,
+    "lcpMs": 72,
+    "videoBytesBeforePlay": 0,
+    "imageRequestsOnLoad": 7,
+    "imageBytesOnLoad": -2659,
+    "totalBytesOnLoad": 20580,
+    "galleryCount": "6",
+    "horizontalOverflow": false,
+    "ctaAboveFold": true,
+    "gallery": [
+      {
+        "position": "Foto 1 de 6",
+        "file": "pao-01-IMG_1162-mirante.webp",
+        "alt": "Dois visitantes no mirante com o Pão de Açúcar ao fundo, sob céu azul com nuvens",
+        "credit": null
+      },
+      {
+        "position": "Foto 2 de 6",
+        "file": "terceiros-cristo-redentor.jpg",
+        "alt": "Estátua do Cristo Redentor de braços abertos, vista de baixo contra o céu azul",
+        "credit": "Foto de terceiros · origem em verificação"
+      },
+      {
+        "position": "Foto 3 de 6",
+        "file": "pao-02-IMG_1171-bondinho-cume.webp",
+        "alt": "Cabos do bondinho chegando ao cume do Pão de Açúcar, com o mar ao fundo",
+        "credit": null
+      },
+      {
+        "position": "Foto 4 de 6",
+        "file": "pao-03-IMG_1163-mirante-baia.webp",
+        "alt": "Visitante apoiado no guarda-corpo do mirante, com a baía e os barcos ao fundo",
+        "credit": null
+      },
+      {
+        "position": "Foto 5 de 6",
+        "file": "pao-04-IMG_1181-visitante-deck.webp",
+        "alt": "Visitante no deck do mirante, com montanhas e a cidade ao fundo",
+        "credit": null
+      },
+      {
+        "position": "Foto 6 de 6",
+        "file": "terceiros-escadaria-selaron.jpg",
+        "alt": "Escadaria Selarón com degraus de azulejos coloridos e um mural com a bandeira do Brasil no alto",
+        "credit": "Foto de terceiros · origem em verificação"
+      }
+    ],
+    "videoAutoplay": false,
+    "videoDuration": 17,
+    "videoPlaying": true,
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "videoMuted": true,
+    "videoBytesAfterPlay": true,
+    "videoFile": "pao-bondinho-41-58-mobile.mp4",
+    "consoleErrors": []
+  }
+]

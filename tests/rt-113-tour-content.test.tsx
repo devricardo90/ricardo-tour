@@ -138,7 +138,9 @@ describe("RT-114 mock data integrity", () => {
       for (const img of record.images) {
         // RT-116: Owner-approved real photographs live under /media/tours/<tour>/ and must carry an Owner attestation.
         const ownerApproved = img.src.startsWith("/media/tours/") && img.rightsStatus === "OWNER_ATTESTED" && /^Owner, \d{2}\/\d{2}\/\d{4}/.test(img.rightsNote ?? "");
-        expect(allowed.has(img.src) || ownerApproved, img.src).toBe(true);
+        // Third-party candidates may appear in the lab only as UNVERIFIED (the public gate hides them).
+        const thirdPartyCandidate = img.src.startsWith("/media/tours/") && img.rightsStatus === "UNVERIFIED" && /^UNVERIFIED third-party photo/.test(img.rightsNote ?? "");
+        expect(allowed.has(img.src) || ownerApproved || thirdPartyCandidate, img.src).toBe(true);
         expect(fs.existsSync(path.join(process.cwd(), "public", img.src))).toBe(true);
       }
     }
@@ -247,7 +249,7 @@ describe("RT-116 Favela Rocinha media (Owner decision 17/10/2026)", () => {
     }
     const view = toTourContentView(record, "pt", "preview")!;
     expect(view.gallery.map((g) => path.basename(g.src))).toEqual(ORDER);
-    expect(view.gallery[2].credit).toBe("Mural de @wark rocinha");
+    expect(view.gallery[2].credit).toBe("Mural com a inscrição “@WARK ROCINHA...”"); // transcription; identity not verified
     expect(PROTOTYPE_OFFER[ROCINHA].coverStatus).toBe("CONFIRMED");
     // The record stays MOCK/DRAFT: the public gate never shows it.
     expect(toTourContentView(record, "pt", "public")).toBeNull();
@@ -275,7 +277,7 @@ describe("RT-116 Favela Rocinha media (Owner decision 17/10/2026)", () => {
     expect(buf.length).toBeLessThan(5 * 1024 * 1024);
     expect(buf.includes(Buffer.from("soun"))).toBe(false); // no audio track handler
     for (const atom of ["©xyz", "com.apple.quicktime.location", "com.apple.quicktime.model"]) expect(buf.includes(Buffer.from(atom, "latin1")), atom).toBe(false);
-    for (const other of Object.keys(PROTOTYPE_OFFER).filter((id) => id !== ROCINHA)) expect(PROTOTYPE_OFFER[other].video).toBeNull();
+    for (const other of ["cmlibniq40000z4zqkbujnutt", "cmljo0s1u0000t0zqa0bpd23p"]) expect(PROTOTYPE_OFFER[other].video).toBeNull();
   });
 
   it("lets the thumbnail strip scroll inside narrow columns (5 photos overflowed a 390 px phone before the fix)", () => {
@@ -299,6 +301,70 @@ describe("RT-116 Favela Rocinha media (Owner decision 17/10/2026)", () => {
       expect(html).not.toMatch(/autoplay/i);
       expect(html).toContain('data-count="5"');
       expect(html).not.toContain("RT-116"); // the provisional-cover note is gone for the confirmed cover
+    }
+  });
+});
+
+describe("RT-116 lighter mobile clips and Cristo + Pão de Açúcar + Selarón preview (17/10/2026)", () => {
+  const CRISTO = "cmlhxkpy9000028zq27rhytew";
+  const ROCINHA = "cmli1a6im000034zqqzc9sppb";
+  const file = (src: string) => fs.readFileSync(path.join(process.cwd(), "public", src));
+
+  it("serves a lighter rendition to small screens, smaller than the full clip, without audio or location atoms", () => {
+    for (const id of [ROCINHA, CRISTO]) {
+      const video = PROTOTYPE_OFFER[id].video!;
+      expect(video.mobileSrc, id).toBeTruthy();
+      expect(video.durationSeconds).toBeLessThanOrEqual(18);
+      const full = file(video.src);
+      const mobile = file(video.mobileSrc!);
+      expect(mobile.length).toBeLessThan(full.length);
+      expect(mobile.length).toBeLessThan(2.2 * 1024 * 1024);
+      for (const buf of [full, mobile]) {
+        expect(buf.includes(Buffer.from("soun"))).toBe(false);
+        for (const atom of ["com.apple.quicktime.location", "com.apple.quicktime.model"]) expect(buf.includes(Buffer.from(atom, "latin1"))).toBe(false);
+      }
+      const view = toTourContentView(MOCK_TOUR_CONTENT[id], "pt", "preview")!;
+      const html = renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={view} locale="pt" reviewMode />);
+      expect(html).toContain(`<source src="${video.mobileSrc}" type="video/mp4" media="(max-width: 767px)"/>`);
+      expect(html.indexOf(video.mobileSrc!)).toBeLessThan(html.indexOf(`<source src="${video.src}"`)); // mobile source listed first
+      expect(html).toContain(video.title.pt!);
+    }
+  });
+
+  it("shows the 4 identified own photos and the 2 third-party candidates; never the unapproved IMG_1180", () => {
+    const record = MOCK_TOUR_CONTENT[CRISTO];
+    expect(record.images.map((img) => path.basename(img.src))).toEqual([
+      "pao-01-IMG_1162-mirante.webp",
+      "terceiros-cristo-redentor.jpg",
+      "pao-02-IMG_1171-bondinho-cume.webp",
+      "pao-03-IMG_1163-mirante-baia.webp",
+      "pao-04-IMG_1181-visitante-deck.webp",
+      "terceiros-escadaria-selaron.jpg",
+    ]);
+    expect(record.images.some((img) => /1179|1180|img5/.test(img.src))).toBe(false);
+    for (const img of record.images) {
+      expect(fs.existsSync(path.join(process.cwd(), "public", img.src))).toBe(true);
+      if (img.src.includes("terceiros-")) {
+        expect(img.rightsStatus).toBe("UNVERIFIED");
+        expect(img.rightsNote).toMatch(/DIFFERENT photograph/);
+      } else {
+        expect(img.rightsStatus).toBe("OWNER_ATTESTED");
+      }
+    }
+    // The cover/order is a proposal, and the third-party photos would be hidden publicly even if the record were approved.
+    expect(PROTOTYPE_OFFER[CRISTO].coverStatus).toBe("PROVISIONAL");
+    const approved = { ...record, status: "OWNER_APPROVED" as const, source: "Owner test", approvedAt: "2026-10-17" };
+    expect(toTourContentView(approved, "pt", "public")!.gallery.map((g) => path.basename(g.src))).not.toContain("terceiros-cristo-redentor.jpg");
+    expect(toTourContentView(approved, "pt", "public")!.gallery).toHaveLength(4);
+  });
+
+  it("ships the third-party web copies and the poster without EXIF, XMP or ICC", async () => {
+    const sharp = (await import("sharp")).default;
+    for (const src of [...MOCK_TOUR_CONTENT[CRISTO].images.map((img) => img.src), PROTOTYPE_OFFER[CRISTO].video!.poster]) {
+      const meta = await sharp(path.join(process.cwd(), "public", src)).metadata();
+      expect(meta.exif, src).toBeUndefined();
+      expect(meta.xmp, src).toBeUndefined();
+      expect(meta.icc, src).toBeUndefined();
     }
   });
 });

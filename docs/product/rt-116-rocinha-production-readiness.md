@@ -23,7 +23,7 @@
 | T3 | Rocinha content is a MOCK/DRAFT record in code; the public gate never shows it | Real content must be entered as `OWNER_APPROVED`, non-MOCK, validated (`validateTourContent`) through the RT-119 procedure | RT-119 |
 | T4 | **Video and photo credit are not in the data model** (prototype-only fields) | Either add `TripVideo` + `TripImage.credit` (migration) or publish the first version without video/credit | RT-113 follow-up (Sprint 11) |
 | T5 | **Media in `public/media/tours/favela-rocinha/`** | Anything in `public/` becomes reachable by direct URL as soon as it is in a deploy, even with the page hidden. `main` auto-deploys production: these files must not reach `main` before publication is authorised. Alternative: Vercel Blob/CDN with controlled release | RT-116, RT-107 |
-| T6 | Performance: slow-4G stalls (8–9, 2.4 s); extra main-thread work; LCP inconclusive locally | Lighter video rendition for mobile; Lighthouse on isolated Preview (RT-114 criterion 5) | RT-114 |
+| T6 | Performance: slow-4G stalls solved locally with the mobile rendition (0 stalls, perf doc §5); LCP 2.8 s on slow 4G and main-thread cost still to measure | Owner judgement of the mobile quality; Lighthouse on isolated Preview (RT-114 criterion 5) | RT-114 |
 | T7 | Booking API does not enforce the public gate | Blocks any publication tied to booking (the CTA leads to the request flow) | RT-110 |
 | T8 | Preview shares production resources; no deny-by-default guard; main not protected | Needed to validate safely before production | RT-104…108 |
 | T9 | `OptimizedImage` can stay blurred when an image loads before hydration | Public components that still use it must be checked when wiring | RT-114 |
@@ -50,7 +50,7 @@
 | L2 | Per-tour conditions summary with link to the Terms | Blocked by RT-81 | RT-118 |
 | L3 | Privacy policy (incl. request form data) | In progress | RT-80 |
 | L4 | Image rights of the people shown | Owner declared consent/authorisation (17/10). **Recommendation:** keep written authorisations on file (the Cristo register already lists "attach proof" as pending — same practice here). No legal opinion given | RT-116 / RT-79 |
-| L5 | Mural (IMG_1252) | Credit authorised; confirm exact handle. Works permanently in public places may be represented (Lei 9.610/98 art. 48) — to be confirmed by legal review | RT-116 |
+| L5 | Mural (IMG_1252) | Caption transcribes the visible inscription "@WARK ROCINHA..."; artist identity not verified (documentary pending). Works permanently in public places may be represented (Lei 9.610/98 art. 48) — to be confirmed by legal review | RT-116 |
 | L6 | Location privacy | GPS removed from every web file (tested) | — |
 | L7 | Institutional data on the page (CNPJ, razão social, Cadastur) | CNPJ confirmed (49.142.341/0001-90); razão social and Cadastur to confirm | RT-80/81 |
 

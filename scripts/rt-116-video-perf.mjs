@@ -20,11 +20,13 @@ const PROFILES = [
   { name: "4G lento (1,6 Mbps, 150 ms)", down: mbps(1.6), up: mbps(0.75), latency: 150, cpu: 4 },
 ];
 
+const WIDTH = Number(process.env.RT116_WIDTH ?? 390); // ≥ 768 makes the browser pick the full (desktop) clip
+const ONLY = process.env.RT116_PROFILE; // "fast" | "slow" to run one profile
 const browser = await chromium.launch();
 const rows = [];
-for (const profile of PROFILES) {
+for (const profile of PROFILES.filter((p) => !ONLY || p.name.includes(ONLY === "slow" ? "lento" : "rápido"))) {
   for (let run = 1; run <= RUNS; run += 1) {
-    const context = await browser.newContext({ viewport: { width: 390, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
+    const context = await browser.newContext({ viewport: { width: WIDTH, height: 844 }, deviceScaleFactor: 2, isMobile: true, hasTouch: true });
     const page = await context.newPage();
     const cdp = await context.newCDPSession(page);
     await cdp.send("Network.enable");
@@ -62,7 +64,7 @@ for (const profile of PROFILES) {
     const hasVideo = (await player.count()) > 0;
     if (hasVideo) await player.scrollIntoViewIfNeeded();
     const video = !hasVideo ? { startMs: null, stalls: null, stalledMs: null, ended: null, totalMs: null, error: "no video on page" } : await player.evaluate(async (v) => {
-      const r = { startMs: null, stalls: 0, stalledMs: 0, ended: false, error: null };
+      const r = { startMs: null, stalls: 0, stalledMs: 0, ended: false, error: null, src: null };
       let waitingAt = null;
       let started = false;
       const t0 = performance.now();
@@ -80,6 +82,7 @@ for (const profile of PROFILES) {
       });
       if (waitingAt !== null) r.stalledMs += performance.now() - waitingAt;
       r.ended = v.ended;
+      r.src = v.currentSrc.split("/").pop();
       r.stalledMs = Math.round(r.stalledMs);
       r.totalMs = Math.round(performance.now() - t0);
       return r;
@@ -102,6 +105,8 @@ for (const profile of PROFILES) {
       videoKB: Math.round((bytes.video - videoBeforePlay) / 1024),
       videoRequests: bytes.videoRequests,
       error: video.error,
+      width: WIDTH,
+      file: video.src,
     });
     await context.close();
   }
@@ -109,4 +114,4 @@ for (const profile of PROFILES) {
 await browser.close();
 const out = process.argv[4];
 if (out) fs.writeFileSync(out, JSON.stringify(rows, null, 2));
-console.table(rows.map(({ error, ...r }) => r));
+console.table(rows.map((row) => Object.fromEntries(Object.entries(row).filter(([key]) => key !== "error"))));

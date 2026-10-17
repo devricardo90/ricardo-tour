@@ -1,7 +1,8 @@
 # RT-116 — next tour: Cristo Redentor + Pão de Açúcar (preparation only)
 
 - Date: 2026-10-17. Tour: `cmlhxkpy9000028zq27rhytew`. Strategy: one tour at a time (Rocinha approved visually on 17/10).
-- **No media selection or analysis started.** This note records only what already exists in the Drive (names and the Owner's register) and what is needed from the Owner before starting.
+- **Superseded on 17/10/2026 by `rt-116-cristo-pao-selaron-media.md`** (Owner released the media and decisions). Original note kept below.
+- **No media selection or analysis started (at the time of this note).** This note records only what already exists in the Drive (names and the Owner's register) and what is needed from the Owner before starting.
 
 ## 1. What exists today (read-only check, 17/10/2026)
 Drive `MIDIAS / 01_CRISTO_PAO_DE_ACUCAR_SELARON` (id `1TbXlicV-xvk--Qy_eOE9bz1GGtbXkweW`):

@@ -32,7 +32,7 @@ export type PrototypeOfferView = {
   duration: { value: Localized | null; status: ReviewStatus };
   benefits: { pt: string[]; en: string[]; es: string[] };
   coverStatus: ReviewStatus;
-  video?: { src: string; poster: string; durationSeconds: number; caption: Localized; status: ReviewStatus } | null;
+  video?: { title: Localized; src: string; mobileSrc?: string; poster: string; durationSeconds: number; caption: Localized; status: ReviewStatus } | null;
 };
 
 const CTA_TARGET = "#solicitar";
@@ -126,7 +126,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode }: { of
               <div className="space-y-12 lg:col-span-8">
                 {offer.video ? (
                   <TourVideo
-                    video={{ src: offer.video.src, poster: offer.video.poster, durationSeconds: offer.video.durationSeconds, caption: pickL(offer.video.caption, locale) }}
+                    video={{ title: pickL(offer.video.title, locale), src: offer.video.src, mobileSrc: offer.video.mobileSrc, poster: offer.video.poster, durationSeconds: offer.video.durationSeconds, caption: pickL(offer.video.caption, locale) }}
                     locale={locale}
                     status={s(offer.video.status)}
                   />

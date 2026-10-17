@@ -3,10 +3,11 @@
     "device": "desktop",
     "locale": "pt",
     "status": 200,
-    "lcpMs": 1500,
+    "lcpMs": 488,
     "videoBytesBeforePlay": 0,
     "imageRequestsOnLoad": 6,
-    "imageBytesOnLoad": 0,
+    "imageBytesOnLoad": 11789,
+    "totalBytesOnLoad": 72088,
     "galleryCount": "5",
     "horizontalOverflow": false,
     "ctaAboveFold": true,
@@ -27,7 +28,7 @@
         "position": "Foto 3 de 5",
         "file": "rocinha-03-mural.jpg",
         "alt": "Visitantes descem uma escadaria ao lado de um mural colorido de flores na Rocinha",
-        "credit": "Mural de @wark rocinha"
+        "credit": "Mural com a inscrição “@WARK ROCINHA...”"
       },
       {
         "position": "Foto 4 de 5",
@@ -49,16 +50,18 @@
     "videoHeight": 1280,
     "videoMuted": true,
     "videoBytesAfterPlay": true,
+    "videoFile": "rocinha-praca-movimento.mp4",
     "consoleErrors": []
   },
   {
     "device": "desktop",
     "locale": "en",
     "status": 200,
-    "lcpMs": 1300,
+    "lcpMs": 80,
     "videoBytesBeforePlay": 0,
     "imageRequestsOnLoad": 6,
-    "imageBytesOnLoad": 0,
+    "imageBytesOnLoad": -1943,
+    "totalBytesOnLoad": 21266,
     "galleryCount": "5",
     "horizontalOverflow": false,
     "ctaAboveFold": true,
@@ -68,10 +71,11 @@
     "device": "desktop",
     "locale": "es",
     "status": 200,
-    "lcpMs": 1004,
+    "lcpMs": 92,
     "videoBytesBeforePlay": 0,
     "imageRequestsOnLoad": 6,
-    "imageBytesOnLoad": 0,
+    "imageBytesOnLoad": -1943,
+    "totalBytesOnLoad": 21041,
     "galleryCount": "5",
     "horizontalOverflow": false,
     "ctaAboveFold": true,
@@ -81,10 +85,11 @@
     "device": "mobile",
     "locale": "pt",
     "status": 200,
-    "lcpMs": 1296,
+    "lcpMs": 64,
     "videoBytesBeforePlay": 0,
     "imageRequestsOnLoad": 6,
-    "imageBytesOnLoad": 0,
+    "imageBytesOnLoad": -2181,
+    "totalBytesOnLoad": 20478,
     "galleryCount": "5",
     "horizontalOverflow": false,
     "ctaAboveFold": true,
@@ -105,7 +110,7 @@
         "position": "Foto 3 de 5",
         "file": "rocinha-03-mural.jpg",
         "alt": "Visitantes descem uma escadaria ao lado de um mural colorido de flores na Rocinha",
-        "credit": "Mural de @wark rocinha"
+        "credit": "Mural com a inscrição “@WARK ROCINHA...”"
       },
       {
         "position": "Foto 4 de 5",
@@ -127,6 +132,7 @@
     "videoHeight": 1280,
     "videoMuted": true,
     "videoBytesAfterPlay": true,
+    "videoFile": "rocinha-praca-movimento-mobile.mp4",
     "consoleErrors": []
   }
 ]

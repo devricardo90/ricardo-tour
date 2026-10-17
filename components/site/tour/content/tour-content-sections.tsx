@@ -207,7 +207,7 @@ export function TourGallery({ content, locale, priority = false }: { content: To
   );
 }
 
-export type TourVideoData = { src: string; poster: string; durationSeconds: number; caption: string };
+export type TourVideoData = { title: string; src: string; mobileSrc?: string; poster: string; durationSeconds: number; caption: string };
 
 /**
  * RT-116: short clip of the tour, in its own block (Owner decision 17/10/2026: up to 18 s, no audio, with poster).
@@ -229,12 +229,14 @@ export function TourVideo({ video, locale, status }: { video: TourVideoData; loc
         className="mx-auto aspect-[9/16] max-h-[70vh] w-full rounded-lg bg-black object-cover sm:max-h-none"
         data-testid="tour-video-player"
       >
+        {/* Small screens get the lighter rendition (≈1 Mbps) first; others fall through to the full clip. */}
+        {video.mobileSrc ? <source src={video.mobileSrc} type="video/mp4" media="(max-width: 767px)" /> : null}
         <source src={video.src} type="video/mp4" />
         {t.videoFallback}
       </video>
       <div>
         <h2 id="tour-video-heading" className="site-display flex flex-wrap items-center gap-3 text-[28px] font-medium leading-[1.15] text-[var(--site-on-dark,#F4F0E8)] md:text-[32px]">
-          {t.videoTitle}
+          {video.title}
           {status ? <StatusBadge status={status} locale={locale} /> : null}
         </h2>
         <p id="tour-video-caption" className="mt-3 text-[16px] leading-[1.6] text-[var(--site-on-dark-muted,#CAC7BF)]">{video.caption}</p>
