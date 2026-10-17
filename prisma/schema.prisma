@@ -98,6 +98,7 @@ model Trip {
   content         TripContent?
   itinerary       TripItineraryStop[]
   images          TripImage[]
+  faq             TripFaqItem[]
 
   @@index([partnerId])
 }
@@ -395,6 +396,10 @@ model TripContent {
   requirements    Json?
   accessibility   Json?
   weatherPolicy   Json?
+  /// RT-113 complement (17/10/2026): public operating conditions (route changes, confirmation) and optional
+  /// third-party services note, localized {pt,en,es}. Public only through the content gate (status OWNER_APPROVED).
+  operationalConditions Json?
+  optionalServicesNote  Json?
   approvedAt      DateTime?
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
@@ -415,6 +420,20 @@ model TripItineraryStop {
   @@unique([tripId, position])
 }
 
+/// RT-113 complement: ordered FAQ of a tour, localized question/answer {pt,en,es}. Public only through the content gate.
+model TripFaqItem {
+  id        String   @id @default(cuid())
+  tripId    String
+  trip      Trip     @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  position  Int
+  question  Json
+  answer    Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([tripId, position])
+}
+
 // RT-113: ordered gallery images of a tour. Only images with recorded rights are shown publicly.
 model TripImage {
   id           String              @id @default(cuid())
@@ -430,6 +449,15 @@ model TripImage {
   rightsStatus TripImageRightsStatus @default(UNVERIFIED)
   /// Author, consent of identifiable people, licence reference (RT-79 / RT-116 rights register).
   rightsNote   String?
+  /// RT-113 complement: the same table holds videos (no parallel gallery). VIDEO requires posterSrc and is never the
+  /// cover; IMAGE rows carry no video fields (DB CHECKs). Rights are decided by rightsStatus only, never by credit.
+  mediaType       TripMediaType @default(IMAGE)
+  posterSrc       String?
+  /// Lighter rendition for small screens (videos only).
+  mobileSrc       String?
+  durationSeconds Float?
+  /// Public credit, localized {pt,en,es} (e.g. a visible mural inscription). Not a rights approval.
+  credit          Json?
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
 
@@ -439,6 +467,11 @@ model TripImage {
 enum TripContentStatus {
   DRAFT
   OWNER_APPROVED
+}
+
+enum TripMediaType {
+  IMAGE
+  VIDEO
 }
 
 enum TripImageRightsStatus {

@@ -18,6 +18,7 @@ export type TourContentAudience = "public" | "preview";
 
 export type TourContentStatus = "DRAFT" | "OWNER_APPROVED";
 export type TourImageRightsStatus = "UNVERIFIED" | "OWNER_ATTESTED" | "LICENSED";
+export type TourMediaType = "IMAGE" | "VIDEO";
 
 /** Shape stored in the database (and used by mock data), independent of Prisma types so it is easy to test. */
 export type TourContentRecord = {
@@ -35,13 +36,29 @@ export type TourContentRecord = {
   requirements?: LocalizedText | null;
   accessibility?: LocalizedText | null;
   weatherPolicy?: LocalizedText | null;
-  /** RT-115 (TypeScript-only until the Sprint 11 schema): operational conditions, optional third-party services, FAQ. */
+  /** RT-113 complement (DB-backed since 17/10/2026): operational conditions, optional third-party services, FAQ (TripFaqItem). */
   operationalConditions?: LocalizedText | null;
   optionalServicesNote?: LocalizedText | null;
   faq?: Array<{ question: LocalizedText; answer: LocalizedText }> | null;
   approvedAt?: Date | string | null;
   itinerary: Array<{ position: number; title: LocalizedText; description?: LocalizedText | null; durationMinutes?: number | null }>;
-  images: Array<{ position: number; src: string; alt: LocalizedText; isCover: boolean; rightsStatus: TourImageRightsStatus; rightsNote?: string | null; focalX?: number | null; focalY?: number | null; /** Public credit (e.g. mural artist). Not a DB column yet (RT-116 gap, Sprint 11). */ credit?: LocalizedText | null }>;
+  /** Media of the tour (TripImage): images and, since the RT-113 complement, videos (mediaType VIDEO: poster, optional
+   *  mobile rendition, duration). `credit` is public text only and never implies rights — rightsStatus decides. */
+  images: Array<{
+    position: number;
+    src: string;
+    alt: LocalizedText;
+    isCover: boolean;
+    rightsStatus: TourImageRightsStatus;
+    rightsNote?: string | null;
+    focalX?: number | null;
+    focalY?: number | null;
+    credit?: LocalizedText | null;
+    mediaType?: TourMediaType;
+    posterSrc?: string | null;
+    mobileSrc?: string | null;
+    durationSeconds?: number | null;
+  }>;
 };
 
 export type TourContentView = {
@@ -67,6 +84,8 @@ export type TourContentView = {
   itinerary: Array<{ position: number; title: string; description: string | null; durationMinutes: number | null }>;
   /** `objectPosition` is the CSS focal point ("50% 30%") used where a frame must crop; the main view never crops. */
   gallery: Array<{ src: string; alt: string; isCover: boolean; rightsStatus: TourImageRightsStatus; objectPosition: string; credit: string | null }>;
+  /** Videos (same rights gate as the gallery: UNVERIFIED is never public). `description` is the localized alt text. */
+  videos: Array<{ src: string; mobileSrc: string | null; poster: string; durationSeconds: number | null; description: string; credit: string | null; rightsStatus: TourImageRightsStatus }>;
 };
 
 const MOCK_MARKER = /\bMOCK\b/;
@@ -144,9 +163,23 @@ export function toTourContentView(record: TourContentRecord | null | undefined, 
       }))
       .filter((stop) => stop.title),
     gallery: [...record.images]
+      .filter((img) => (img.mediaType ?? "IMAGE") === "IMAGE")
       .filter((img) => audience === "preview" || img.rightsStatus !== "UNVERIFIED")
       .sort((a, b) => Number(b.isCover) - Number(a.isCover) || a.position - b.position)
       .map((img, i) => ({ src: img.src, alt: text(img.alt, `images[${i}].alt`) ?? "", isCover: img.isCover, rightsStatus: img.rightsStatus, objectPosition: focalToPosition(img.focalX, img.focalY), credit: text(img.credit, `images[${i}].credit`) })),
+    videos: [...record.images]
+      .filter((media) => media.mediaType === "VIDEO" && Boolean(media.posterSrc))
+      .filter((media) => audience === "preview" || media.rightsStatus !== "UNVERIFIED")
+      .sort((a, b) => a.position - b.position)
+      .map((media, i) => ({
+        src: media.src,
+        mobileSrc: media.mobileSrc ?? null,
+        poster: media.posterSrc as string,
+        durationSeconds: media.durationSeconds && media.durationSeconds > 0 ? media.durationSeconds : null,
+        description: text(media.alt, `videos[${i}].alt`) ?? "",
+        credit: text(media.credit, `videos[${i}].credit`),
+        rightsStatus: media.rightsStatus,
+      })),
   };
 }
 
@@ -189,10 +222,22 @@ export function validateTourContent(record: TourContentRecord): ContentIssue[] {
     checkText(`faq[${i}].answer`, item.answer);
   });
   if (record.images.filter((img) => img.isCover).length > 1) issues.push({ field: "images", problem: "more than one cover image" });
+  const mediaPositions = record.images.map((img) => img.position);
+  if (new Set(mediaPositions).size !== mediaPositions.length) issues.push({ field: "images", problem: "duplicate positions" });
   record.images.forEach((img, i) => {
     checkText(`images[${i}].alt`, img.alt);
     checkText(`images[${i}].credit`, img.credit);
     if (!img.src.trim()) issues.push({ field: `images[${i}].src`, problem: "empty" });
+    // Same rules as the DB CHECKs of the RT-113 complement migration.
+    const has = (v: unknown) => v !== null && v !== undefined;
+    if ((img.mediaType ?? "IMAGE") === "VIDEO") {
+      if (!img.posterSrc?.trim()) issues.push({ field: `images[${i}].posterSrc`, problem: "a video needs a poster" });
+      if (has(img.mobileSrc) && !img.mobileSrc?.trim()) issues.push({ field: `images[${i}].mobileSrc`, problem: "blank mobile rendition" });
+      if (img.isCover) issues.push({ field: `images[${i}].isCover`, problem: "a video cannot be the cover" });
+      if (img.durationSeconds !== null && img.durationSeconds !== undefined && img.durationSeconds <= 0) issues.push({ field: `images[${i}].durationSeconds`, problem: "duration must be positive" });
+    } else if (has(img.posterSrc) || has(img.mobileSrc) || has(img.durationSeconds)) {
+      issues.push({ field: `images[${i}]`, problem: "video-only fields on an image" });
+    }
     for (const [axis, v] of [["focalX", img.focalX], ["focalY", img.focalY]] as const) {
       if (v !== null && v !== undefined && (v < 0 || v > 1)) issues.push({ field: `images[${i}].${axis}`, problem: "focal point must be between 0 and 1" });
     }
@@ -214,7 +259,10 @@ export async function getTourContent(tripId: string, locale: string, audience: T
       trip: {
         select: {
           itinerary: { select: { position: true, title: true, description: true, durationMinutes: true } },
-          images: { select: { position: true, src: true, alt: true, isCover: true, rightsStatus: true, rightsNote: true, focalX: true, focalY: true } },
+          images: {
+            select: { position: true, src: true, alt: true, isCover: true, rightsStatus: true, rightsNote: true, focalX: true, focalY: true, credit: true, mediaType: true, posterSrc: true, mobileSrc: true, durationSeconds: true },
+          },
+          faq: { select: { position: true, question: true, answer: true }, orderBy: { position: "asc" } },
         },
       },
     },
@@ -235,9 +283,12 @@ export async function getTourContent(tripId: string, locale: string, audience: T
     requirements: row.requirements as LocalizedText | null,
     accessibility: row.accessibility as LocalizedText | null,
     weatherPolicy: row.weatherPolicy as LocalizedText | null,
+    operationalConditions: row.operationalConditions as LocalizedText | null,
+    optionalServicesNote: row.optionalServicesNote as LocalizedText | null,
+    faq: row.trip.faq.map((item) => ({ question: item.question as LocalizedText, answer: item.answer as LocalizedText })),
     approvedAt: row.approvedAt,
     itinerary: row.trip.itinerary.map((s) => ({ ...s, title: s.title as LocalizedText, description: s.description as LocalizedText | null })),
-    images: row.trip.images.map((img) => ({ ...img, alt: img.alt as LocalizedText })),
+    images: row.trip.images.map((img) => ({ ...img, alt: img.alt as LocalizedText, credit: img.credit as LocalizedText | null })),
   };
   return toTourContentView(record, locale, audience);
 }
