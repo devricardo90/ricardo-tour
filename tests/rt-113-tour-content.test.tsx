@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { approvalFor, contentFingerprint, focalToPosition, isMockRecord, toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
+import { approveRecord, contentFingerprint, focalToPosition, isMockRecord, toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
 import { MOCK_SOURCE, MOCK_TOUR_CONTENT, PROTOTYPE_OFFER, PUBLISHED_SNAPSHOT } from "@/lib/catalog/mock/tour-content.mock";
 import { tourContentCopy } from "@/components/site/tour/content/tour-content-copy";
 import { TourDetailPrototype, offerForReview } from "@/components/site/tour/content/tour-detail-prototype";
@@ -31,7 +31,13 @@ function approvedRecord(overrides: Partial<TourContentRecord> = {}): TourContent
     ...overrides,
   };
   // RT-119: an approval is bound to the content fingerprint (computed after the overrides, unless a test sets it).
-  return r.status === "OWNER_APPROVED" && !("approvedContentHash" in overrides) ? { ...r, approvedContentHash: contentFingerprint(r) } : r;
+  return r.status === "OWNER_APPROVED" && !("approvedContentHash" in overrides) ? stamp(r) : r;
+}
+
+/** Test-only approval stamp WITHOUT the approvalFor guard, so invalid/mock "approved" fixtures can prove that validation
+ *  and the public gate still reject them. Real approvals go through approveRecord/approveTourContent (guarded). */
+function stamp(r: TourContentRecord): TourContentRecord {
+  return { ...r, approvedContentHash: contentFingerprint(r), images: r.images.map((m) => ({ ...m, publicationApprovedAt: m.rightsStatus !== "UNVERIFIED" ? r.approvedAt : null })) };
 }
 
 describe("RT-113 publication gate (toTourContentView)", () => {
@@ -143,7 +149,9 @@ describe("RT-114 mock data integrity", () => {
         const ownerApproved = img.src.startsWith("/media/tours/") && img.rightsStatus === "OWNER_ATTESTED" && /^Owner, \d{2}\/\d{2}\/\d{4}/.test(img.rightsNote ?? "");
         // Third-party candidates may appear in the lab only as UNVERIFIED (the public gate hides them).
         const thirdPartyCandidate = img.src.startsWith("/media/tours/") && img.rightsStatus === "UNVERIFIED" && /^UNVERIFIED third-party photo/.test(img.rightsNote ?? "");
-        expect(allowed.has(img.src) || ownerApproved || thirdPartyCandidate, img.src).toBe(true);
+        // Owner-declared media whose rights are still pending documentary verification (Owner decision 17/10/2026).
+        const pendingRights = img.src.startsWith("/media/tours/") && img.rightsStatus === "UNVERIFIED" && /^PENDING rights verification/.test(img.rightsNote ?? "");
+        expect(allowed.has(img.src) || ownerApproved || thirdPartyCandidate || pendingRights, img.src).toBe(true);
         expect(fs.existsSync(path.join(process.cwd(), "public", img.src))).toBe(true);
       }
     }
@@ -156,7 +164,7 @@ describe("RT-114 mock data integrity", () => {
       const abs = path.join(process.cwd(), p);
       if (!fs.existsSync(abs)) return;
       if (fs.statSync(abs).isDirectory()) for (const entry of fs.readdirSync(abs)) walk(path.join(p, entry));
-      else if (/\.(tsx?|mjs)$/.test(p) && /tour-content\.mock|catalog\/drafts\/|catalog\/content-load/.test(fs.readFileSync(abs, "utf8"))) offenders.push(p);
+      else if (/\.(tsx?|mjs)$/.test(p) && /tour-content\.mock|catalog\/drafts\/|catalog\/content-load|catalog\/content-approval/.test(fs.readFileSync(abs, "utf8"))) offenders.push(p);
     };
     roots.forEach(walk);
     expect(offenders).toEqual([]);
@@ -239,12 +247,12 @@ describe("RT-116 Favela Rocinha media (Owner decision 17/10/2026)", () => {
   const ROCINHA = "cmli1a6im000034zqqzc9sppb";
   const ORDER = ["rocinha-01-panorama-bandeira.jpg", "rocinha-02-beco.jpg", "rocinha-03-mural.jpg", "rocinha-04-mirante-deck.jpg", "rocinha-05-panorama.jpg"];
 
-  it("keeps the Owner's 5 photos in the approved order, cover first, all Owner-attested with PT/EN/ES alt text", () => {
+  it("keeps the Owner's 5 photos in the approved order, cover first, rights pending (UNVERIFIED), with PT/EN/ES alt text", () => {
     const record = MOCK_TOUR_CONTENT[ROCINHA];
     expect(record.images.map((img) => path.basename(img.src))).toEqual(ORDER);
     expect(record.images.filter((img) => img.isCover).map((img) => path.basename(img.src))).toEqual([ORDER[0]]);
     for (const img of record.images) {
-      expect(img.rightsStatus).toBe("OWNER_ATTESTED");
+      expect(img.rightsStatus).toBe("UNVERIFIED"); // Owner decision 17/10/2026: declaration ≠ proof of rights
       for (const l of ["pt", "en", "es"] as const) {
         expect(img.alt[l]?.trim()).toBeTruthy();
         expect(img.alt[l]).not.toMatch(/fictício|fictitious|ficticio/);
@@ -357,7 +365,7 @@ describe("RT-116 lighter mobile clips and Cristo + Pão de Açúcar + Selarón p
     // The cover/order is a proposal, and the third-party photos would be hidden publicly even if the record were approved.
     expect(PROTOTYPE_OFFER[CRISTO].coverStatus).toBe("PROVISIONAL");
     const nonMock = { ...record, source: "Owner test" }; // approvalFor refuses MOCK records (RT-119 guard)
-    const approved = { ...nonMock, ...approvalFor(nonMock, new Date("2026-10-17")) };
+    const approved = approveRecord(nonMock, new Date("2026-10-17"));
     expect(toTourContentView(approved, "pt", "public")!.gallery.map((g) => path.basename(g.src))).not.toContain("terceiros-cristo-redentor.jpg");
     expect(toTourContentView(approved, "pt", "public")!.gallery).toHaveLength(4);
   });

@@ -21,7 +21,11 @@ export type LoadPlan = { tripId: string; action: LoadAction; reasons: string[]; 
 
 const REQUIRED_TEXT = ["summary", "description", "durationLabel", "meetingPoint", "requirements", "accessibility", "operationalConditions"] as const;
 
-/** Rocinha record to load: real draft content + Owner-approved media (5 photos) and the approved clip as VIDEO media. */
+/**
+ * Rocinha record to load: real draft content + the 5 photos and the clip (VIDEO) visually approved by the Owner. All six
+ * keep their rights PENDING (UNVERIFIED): they are stored but never public until rights are verified AND a new approval
+ * act authorizes them.
+ */
 export function rocinhaLoadRecord(): TourContentRecord {
   const base = MOCK_TOUR_CONTENT[ROCINHA_ID];
   if (!base || isMockRecord(base)) throw new Error("Rocinha content is missing or still mock");
@@ -33,8 +37,9 @@ export function rocinhaLoadRecord(): TourContentRecord {
       src: video.src,
       alt: video.caption,
       isCover: false,
-      rightsStatus: "OWNER_ATTESTED",
-      rightsNote: video.rightsNote,
+      // Rights PENDING (Owner decision 17/10/2026): visual approval of the clip is not proof of rights → UNVERIFIED.
+      rightsStatus: "UNVERIFIED",
+      rightsNote: `PENDING rights verification (Owner decision 17/10/2026): visual approval and the Owner's declaration are not documentary proof. ${video.rightsNote}`,
       mediaType: "VIDEO",
       posterSrc: video.poster,
       mobileSrc: video.mobileSrc ?? null,
@@ -54,7 +59,7 @@ export function loadProblems(record: TourContentRecord): string[] {
   if (record.itinerary.length === 0) problems.push("itinerary: at least one stop required");
   if ((record.faq ?? []).length === 0) problems.push("faq: at least one item required");
   if (!record.images.some((m) => m.isCover && (m.mediaType ?? "IMAGE") === "IMAGE")) problems.push("images: a cover image is required");
-  // Media references: site-relative paths that exist under public/, rights recorded, nothing unverified.
+  // Media references: site-relative paths that exist under public/, rights status documented in the note.
   const publicDir = path.join(process.cwd(), "public");
   for (const [i, m] of record.images.entries()) {
     for (const [key, value] of [["src", m.src], ["posterSrc", m.posterSrc], ["mobileSrc", m.mobileSrc]] as const) {
@@ -62,8 +67,8 @@ export function loadProblems(record: TourContentRecord): string[] {
       if (!value.startsWith("/") || value.includes("..")) problems.push(`images[${i}].${key}: must be a site-relative path`);
       else if (!fs.existsSync(path.join(publicDir, value))) problems.push(`images[${i}].${key}: file not found under public/`);
     }
-    if (m.rightsStatus === "UNVERIFIED") problems.push(`images[${i}]: media without recorded rights cannot be loaded`);
-    else if (!m.rightsNote?.trim()) problems.push(`images[${i}].rightsNote: required for ${m.rightsStatus}`);
+    // UNVERIFIED media may be stored (it is never public); the note must say what is verified or still pending.
+    if (!m.rightsNote?.trim()) problems.push(`images[${i}].rightsNote: required (rights status or what is pending)`);
   }
   return problems;
 }
@@ -146,11 +151,14 @@ export async function applyLoad(prisma: PrismaClient, next: TourContentRecord, p
   };
   await prisma.$transaction(async (tx: Tx) => {
     const trip = await tx.trip.findUnique({ where: { id: tripId }, select: { id: true } });
-    const fresh = planLoad(await loadTourContentRecord(tripId, tx), next, { tripExists: Boolean(trip), allowReplaceApproved: opts.allowReplaceApproved });
+    const current = await loadTourContentRecord(tripId, tx);
+    const fresh = planLoad(current, next, { tripExists: Boolean(trip), allowReplaceApproved: opts.allowReplaceApproved });
     if (fresh.action !== plan.action || canonicalJson(fresh.changes) !== canonicalJson(plan.changes)) {
       throw new Error(`stored content changed since the dry run (planned ${plan.action}, now ${fresh.action}); re-run the dry run`);
     }
-    await tx.tripContent.upsert({ where: { tripId }, create: { tripId, ...fields }, update: fields });
+    // Replacing approved content (--allow-replace-approved) records the invalidation (audit), like the DB triggers do.
+    const invalidation = current?.status === "OWNER_APPROVED" ? { approvalInvalidatedAt: new Date(), approvalInvalidationReason: "Replaced by a content load (--allow-replace-approved)" } : {};
+    await tx.tripContent.upsert({ where: { tripId }, create: { tripId, ...fields }, update: { ...fields, ...invalidation } });
 
     const stops = next.itinerary.map((s) => s.position);
     await tx.tripItineraryStop.deleteMany({ where: { tripId, position: { notIn: stops } } });

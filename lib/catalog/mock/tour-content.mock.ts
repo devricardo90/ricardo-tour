@@ -100,11 +100,14 @@ const mockList = (items: Array<[string, string, string]>) => ({
 });
 
 const ROCINHA_DIR = "/media/tours/favela-rocinha";
-const ROCINHA_RIGHTS = (file: string) =>
-  `Owner, 17/10/2026: own media (photo/video); consent/authorisation of the people shown declared by the Owner. Original: Drive MIDIAS/02_FAVELA_ROCINHA/ORIGINAIS/${file} (SHA-256 in docs/product/rt-116-rocinha-originals.sha256). Web copy: sRGB, metadata (incl. GPS) removed.`;
+// Rights PENDING (Owner decision 17/10/2026): a verbal declaration, a visual approval or a credit is not proof of rights,
+// so these items stay UNVERIFIED (never public) until the documentary verification is recorded.
+const ROCINHA_RIGHTS = (file: string, extra = "") =>
+  `PENDING rights verification (Owner decision 17/10/2026). Declared by the Owner (17/10/2026): own media (photo/video) and consent/authorisation of the people shown — a declaration is not documentary proof; authorship and consent documents still to be recorded.${extra} Original: Drive MIDIAS/02_FAVELA_ROCINHA/ORIGINAIS/${file} (SHA-256 in docs/product/rt-116-rocinha-originals.sha256). Web copy: sRGB, metadata (incl. GPS) removed.`;
 
 /**
- * RT-116 — REAL photographs selected and ordered by the Owner (17/10/2026), per tour. Rights: OWNER_ATTESTED.
+ * RT-116 — REAL photographs selected and ordered by the Owner (17/10/2026), per tour. Rights: Cristo/Pão OWNER_ATTESTED;
+ * Rocinha UNVERIFIED (pending documentary verification, Owner decision 17/10/2026).
  * Alt texts describe what each photo shows (no fictitious marker: they are real descriptions, still to be reviewed with
  * RT-115). The record that holds them stays MOCK/DRAFT, so the public gate never shows it.
  */
@@ -218,7 +221,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Vista desde lo alto de la Rocinha hasta São Conrado y el mar, con la bandera de Brasil en primer plano",
       },
       isCover: true,
-      rightsStatus: "OWNER_ATTESTED",
+      rightsStatus: "UNVERIFIED",
       rightsNote: ROCINHA_RIGHTS("IMG_1243.HEIC"),
       focalX: 0.5,
       focalY: 0.62,
@@ -232,7 +235,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Visitantes bajan por un callejón estrecho de la Rocinha entre casas coloridas",
       },
       isCover: false,
-      rightsStatus: "OWNER_ATTESTED",
+      rightsStatus: "UNVERIFIED",
       rightsNote: ROCINHA_RIGHTS("IMG_1253.HEIC"),
       focalX: 0.5,
       focalY: 0.55,
@@ -246,8 +249,8 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Visitantes bajan una escalera junto a un mural colorido de flores en la Rocinha",
       },
       isCover: false,
-      rightsStatus: "OWNER_ATTESTED",
-      rightsNote: ROCINHA_RIGHTS("IMG_1252.HEIC"),
+      rightsStatus: "UNVERIFIED",
+      rightsNote: ROCINHA_RIGHTS("IMG_1252.HEIC", " The mural artwork shown: artist authorship and rights NOT verified."),
       // Transcription of the inscription visible on the mural (17/10, crop of the original); artist identity NOT verified.
       credit: { pt: "Mural com a inscrição “@WARK ROCINHA...”", en: "Mural with the inscription “@WARK ROCINHA...”", es: "Mural con la inscripción “@WARK ROCINHA...”" },
       focalX: 0.55,
@@ -262,7 +265,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Vista desde una terraza de madera sobre la Rocinha, con montañas y el mar al fondo",
       },
       isCover: false,
-      rightsStatus: "OWNER_ATTESTED",
+      rightsStatus: "UNVERIFIED",
       rightsNote: ROCINHA_RIGHTS("img-favela-deck.HEIC"),
       focalX: 0.5,
       focalY: 0.45,
@@ -276,7 +279,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Panorama de la Rocinha bajando hasta el mar bajo un cielo nublado",
       },
       isCover: false,
-      rightsStatus: "OWNER_ATTESTED",
+      rightsStatus: "UNVERIFIED",
       rightsNote: ROCINHA_RIGHTS("IMG_1247.HEIC"),
       focalX: 0.5,
       focalY: 0.65,

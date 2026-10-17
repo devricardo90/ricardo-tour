@@ -1,13 +1,15 @@
 import fs from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { approvalFor, approvalMatches, contentFingerprint, toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
+import { approvalFor, approvalMatches, approveRecord, contentFingerprint, toTourContentView, validateTourContent, type TourContentRecord } from "@/lib/catalog/tour-content";
 import { diffRecords, loadProblems, planLoad, rocinhaLoadRecord } from "@/lib/catalog/content-load";
 
 // RT-119 local preparation (17/10/2026): controlled load + approval invalidated by any later edit.
 const ROC = "cmli1a6im000034zqqzc9sppb";
 const next = () => rocinhaLoadRecord();
-const approved = (r: TourContentRecord) => ({ ...r, ...approvalFor(r, new Date("2026-10-17T12:00:00Z")) });
+const approved = (r: TourContentRecord) => approveRecord(r, new Date("2026-10-17T12:00:00Z"));
+// Test-only: SIMULATES a future documentary rights verification (the real Rocinha media stays UNVERIFIED / pending).
+const verified = (r: TourContentRecord): TourContentRecord => ({ ...r, images: r.images.map((m) => ({ ...m, rightsStatus: "LICENSED" as const, rightsNote: "SIMULATED verification (test)" })) });
 
 describe("RT-119 — Rocinha load record", () => {
   it("is complete, valid in PT/EN/ES, DRAFT, and carries no approval", () => {
@@ -21,7 +23,9 @@ describe("RT-119 — Rocinha load record", () => {
     for (const l of ["pt", "en", "es"] as const) for (const f of r.faq!) expect(f.question[l] && f.answer[l]).toBeTruthy();
     expect(r.images.filter((m) => (m.mediaType ?? "IMAGE") === "IMAGE")).toHaveLength(5);
     expect(r.images.filter((m) => m.mediaType === "VIDEO")).toHaveLength(1);
-    expect(r.images.every((m) => m.rightsStatus === "OWNER_ATTESTED")).toBe(true);
+    // Owner decision 17/10/2026: declaration/visual approval/credit ≠ proof of rights → all six stay pending.
+    expect(r.images.every((m) => m.rightsStatus === "UNVERIFIED" && /^PENDING rights verification/.test(m.rightsNote ?? ""))).toBe(true);
+    expect(r.images[2].rightsNote).toMatch(/mural artwork shown: artist authorship and rights NOT verified/);
   });
 
   it("never carries prices, internal costs or the operator fee", () => {
@@ -68,13 +72,13 @@ describe("RT-119 — load planning (dry run) refuses unsafe loads", () => {
   });
 
   it("reports media rights changes in the diff (a rights change is never invisible)", () => {
-    const changed = { ...next(), images: next().images.map((m, i) => (i === 4 ? { ...m, rightsStatus: "UNVERIFIED" as const } : m)) };
+    const changed = { ...next(), images: next().images.map((m, i) => (i === 4 ? { ...m, rightsStatus: "LICENSED" as const } : m)) };
     expect(diffRecords(next(), changed)).toContain("media[4] changed");
   });
 });
 
 describe("RT-119 — approval invalidated by any later content edit (fail-closed)", () => {
-  const base = approved(next());
+  const base = approved(verified(next()));
 
   it("an approved, unchanged record is public", () => {
     expect(approvalMatches(base)).toBe(true);
@@ -129,8 +133,9 @@ describe("RT-119 — review follow-ups (independent review, 17/10/2026)", () => 
     const b = base();
     const withMedia = (i: number, patch: Partial<TourContentRecord["images"][number]>) => ({ ...b, images: b.images.map((m, k) => (k === i ? { ...m, ...patch } : m)) });
     const reasons = (r: TourContentRecord) => planLoad(null, r, { tripExists: true }).reasons;
-    expect(reasons(withMedia(1, { rightsStatus: "UNVERIFIED" }))).toContain("images[1]: media without recorded rights cannot be loaded");
-    expect(reasons(withMedia(1, { rightsNote: null }))).toContain("images[1].rightsNote: required for OWNER_ATTESTED");
+    // Pending (UNVERIFIED) media can be stored — it is never public — but its note must say what is pending.
+    expect(reasons(b)).toEqual([]);
+    expect(reasons(withMedia(1, { rightsNote: null }))).toContain("images[1].rightsNote: required (rights status or what is pending)");
     expect(reasons(withMedia(1, { src: "/media/does-not-exist.jpg" }))).toContain("images[1].src: file not found under public/");
     expect(reasons(withMedia(5, { posterSrc: "../secret.jpg" }))).toContain("images[5].posterSrc: must be a site-relative path");
     expect(reasons(withMedia(5, { mobileSrc: "/media/missing-mobile.mp4" }))).toContain("images[5].mobileSrc: file not found under public/");
@@ -166,5 +171,59 @@ describe("RT-119 — review follow-ups (independent review, 17/10/2026)", () => 
   ])("editing the %s after approval also invalidates it", (_name, edit) => {
     const appr = approved(base());
     expect(toTourContentView(edit(appr), "pt", "public")).toBeNull();
+  });
+});
+
+describe("RT-119 — media: editorial approval, rights and publication are separate (Owner decision 17/10/2026)", () => {
+  const at = new Date("2026-10-17T12:00:00Z");
+  const appr = () => approveRecord(verified(rocinhaLoadRecord()), at);
+  const photos = (r: TourContentRecord) => toTourContentView(r, "pt", "public")!.gallery.length;
+
+  it("REAL state: an approval act never authorizes the Rocinha media while rights are pending", () => {
+    const real = approveRecord(rocinhaLoadRecord(), at);
+    expect(real.images.every((m) => m.publicationApprovedAt === null)).toBe(true);
+    const view = toTourContentView(real, "pt", "public")!;
+    expect(view.gallery).toHaveLength(0);
+    expect(view.videos).toHaveLength(0);
+  });
+
+  it("approved content without edits stays public with all verified media", () => {
+    expect(photos(appr())).toBe(5);
+    expect(toTourContentView(appr(), "pt", "public")!.videos).toHaveLength(1);
+  });
+
+  it("media without verified rights never appears publicly (and is not authorized by the approval)", () => {
+    const r = verified(rocinhaLoadRecord());
+    const withUnverified = approveRecord({ ...r, images: r.images.map((m, i) => (i === 4 ? { ...m, rightsStatus: "UNVERIFIED" as const } : m)) }, at);
+    expect(withUnverified.images[4].publicationApprovedAt).toBeNull();
+    expect(photos(withUnverified)).toBe(4);
+  });
+
+  it("a later rights clearance does NOT publish automatically; a new explicit approval does", () => {
+    const r = verified(rocinhaLoadRecord());
+    const before = approveRecord({ ...r, images: r.images.map((m, i) => (i === 4 ? { ...m, rightsStatus: "UNVERIFIED" as const } : m)) }, at);
+    // rights cleared later (the DB trigger keeps publicationApprovedAt NULL on a rights change)
+    const cleared = { ...before, images: before.images.map((m, i) => (i === 4 ? { ...m, rightsStatus: "OWNER_ATTESTED" as const, publicationApprovedAt: null } : m)) };
+    expect(photos(cleared)).toBe(4);
+    expect(photos(approveRecord(cleared, new Date("2026-10-18T09:00:00Z")))).toBe(5);
+  });
+
+  it("a revocation hides the media immediately without unpublishing the rest", () => {
+    const revoked = { ...appr(), images: appr().images.map((m, i) => (i === 1 ? { ...m, rightsStatus: "UNVERIFIED" as const } : m)) };
+    expect(photos(revoked)).toBe(4);
+    expect(toTourContentView(revoked, "pt", "public")!.faq).toHaveLength(7);
+  });
+
+  it("an authorization from an earlier approval act does not count for the current one", () => {
+    const a = appr();
+    const stale = { ...a, images: a.images.map((m, i) => (i === 0 ? { ...m, publicationApprovedAt: new Date("2026-10-01T00:00:00Z") } : m)) };
+    expect(photos(stale)).toBe(4);
+  });
+
+  it("credit or visual approval alone never authorizes media (only verified rights + the approval act)", () => {
+    const r = rocinhaLoadRecord();
+    const draftWithCredits = { ...r, images: r.images.map((m) => ({ ...m, credit: { pt: "Crédito", en: "Credit", es: "Crédito" } })) };
+    expect(toTourContentView(draftWithCredits, "pt", "public")).toBeNull();
+    expect(draftWithCredits.images.every((m) => !m.publicationApprovedAt)).toBe(true);
   });
 });

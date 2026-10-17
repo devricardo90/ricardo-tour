@@ -45,6 +45,9 @@ export type TourContentRecord = {
   /** RT-119 approval fingerprint: SHA-256 of the public content at approval time (contentFingerprint). Any later edit of
    *  texts, itinerary, FAQ or media changes the fingerprint, so the public gate refuses the record until a new review. */
   approvedContentHash?: string | null;
+  /** Durable invalidation recorded by the database triggers (informational; status is already DRAFT). */
+  approvalInvalidatedAt?: Date | string | null;
+  approvalInvalidationReason?: string | null;
   itinerary: Array<{ position: number; title: LocalizedText; description?: LocalizedText | null; durationMinutes?: number | null }>;
   /** Media of the tour (TripImage): images and, since the RT-113 complement, videos (mediaType VIDEO: poster, optional
    *  mobile rendition, duration). `credit` is public text only and never implies rights — rightsStatus decides. */
@@ -62,6 +65,8 @@ export type TourContentRecord = {
     posterSrc?: string | null;
     mobileSrc?: string | null;
     durationSeconds?: number | null;
+    /** Media publication authorization (set only by the approval act, for verified rights; cleared by DB triggers). */
+    publicationApprovedAt?: Date | string | null;
   }>;
 };
 
@@ -179,6 +184,18 @@ export function canonicalJson(value: unknown): string {
   return JSON.stringify(canonical(value));
 }
 
+const sameInstant = (a: Date | string | null | undefined, b: Date | string | null | undefined) =>
+  a !== null && a !== undefined && b !== null && b !== undefined && new Date(a).getTime() === new Date(b).getTime();
+
+/**
+ * RT-119 media rule (Owner decision 17/10/2026): editorial approval, rights and publication are separate. A media item is
+ * public only when the content approval is valid AND its rights are verified now AND it was authorized by the CURRENT
+ * approval act (publicationApprovedAt equals the content's approvedAt). A later rights clearance never publishes it.
+ */
+export function mediaPublishable(record: TourContentRecord, media: TourContentRecord["images"][number]): boolean {
+  return media.rightsStatus !== "UNVERIFIED" && sameInstant(media.publicationApprovedAt, record.approvedAt);
+}
+
 /** True only when the record carries an approval fingerprint equal to its current content (fail-closed). */
 export function approvalMatches(record: TourContentRecord): boolean {
   return Boolean(record.approvedContentHash) && record.approvedContentHash === contentFingerprint(record);
@@ -193,6 +210,21 @@ export function approvalFor(record: TourContentRecord, approvedAt: Date = new Da
   const issues = validateTourContent({ ...record, status: "DRAFT", approvedAt: null, approvedContentHash: null });
   if (issues.length) throw new Error(`approvalFor: content does not validate (${issues.map((i) => `${i.field}: ${i.problem}`).join("; ")})`);
   return { status: "OWNER_APPROVED" as const, approvedAt, approvedContentHash: contentFingerprint(record) };
+}
+
+/**
+ * In-memory equivalent of the approval act (tests, lab): content approval + publication authorization for the media
+ * whose rights are verified at this moment. The database version is approveTourContent (lib/catalog/content-approval.ts).
+ */
+export function approveRecord(record: TourContentRecord, approvedAt: Date = new Date()): TourContentRecord {
+  const approval = approvalFor(record, approvedAt);
+  return {
+    ...record,
+    ...approval,
+    approvalInvalidatedAt: null,
+    approvalInvalidationReason: null,
+    images: record.images.map((m) => ({ ...m, publicationApprovedAt: m.rightsStatus !== "UNVERIFIED" ? approvedAt : null })),
+  };
 }
 
 export function toTourContentView(record: TourContentRecord | null | undefined, locale: string, audience: TourContentAudience): TourContentView | null {
@@ -239,12 +271,12 @@ export function toTourContentView(record: TourContentRecord | null | undefined, 
       .filter((stop) => stop.title),
     gallery: [...record.images]
       .filter((img) => (img.mediaType ?? "IMAGE") === "IMAGE")
-      .filter((img) => audience === "preview" || img.rightsStatus !== "UNVERIFIED")
+      .filter((img) => audience === "preview" || mediaPublishable(record, img))
       .sort((a, b) => Number(b.isCover) - Number(a.isCover) || a.position - b.position)
       .map((img, i) => ({ src: img.src, alt: text(img.alt, `images[${i}].alt`) ?? "", isCover: img.isCover, rightsStatus: img.rightsStatus, objectPosition: focalToPosition(img.focalX, img.focalY), credit: text(img.credit, `images[${i}].credit`) })),
     videos: [...record.images]
       .filter((media) => media.mediaType === "VIDEO" && Boolean(media.posterSrc))
-      .filter((media) => audience === "preview" || media.rightsStatus !== "UNVERIFIED")
+      .filter((media) => audience === "preview" || mediaPublishable(record, media))
       .sort((a, b) => a.position - b.position)
       .map((media, i) => ({
         src: media.src,
@@ -342,7 +374,7 @@ export async function loadTourContentRecord(tripId: string, client: Pick<typeof 
         select: {
           itinerary: { select: { position: true, title: true, description: true, durationMinutes: true } },
           images: {
-            select: { position: true, src: true, alt: true, isCover: true, rightsStatus: true, rightsNote: true, focalX: true, focalY: true, credit: true, mediaType: true, posterSrc: true, mobileSrc: true, durationSeconds: true },
+            select: { position: true, src: true, alt: true, isCover: true, rightsStatus: true, rightsNote: true, focalX: true, focalY: true, credit: true, mediaType: true, posterSrc: true, mobileSrc: true, durationSeconds: true, publicationApprovedAt: true },
           },
           faq: { select: { position: true, question: true, answer: true }, orderBy: { position: "asc" } },
         },
@@ -370,6 +402,8 @@ export async function loadTourContentRecord(tripId: string, client: Pick<typeof 
     faq: row.trip.faq.map((item) => ({ question: item.question as LocalizedText, answer: item.answer as LocalizedText })),
     approvedAt: row.approvedAt,
     approvedContentHash: row.approvedContentHash,
+    approvalInvalidatedAt: row.approvalInvalidatedAt,
+    approvalInvalidationReason: row.approvalInvalidationReason,
     itinerary: row.trip.itinerary.map((s) => ({ ...s, title: s.title as LocalizedText, description: s.description as LocalizedText | null })),
     images: row.trip.images.map((img) => ({ ...img, alt: img.alt as LocalizedText, credit: img.credit as LocalizedText | null })),
   };

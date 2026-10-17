@@ -79,3 +79,11 @@ DB rules (CHECK): a video always has a poster and an image never has one; video-
 
 ## Approval fingerprint — 17/10/2026 (prepared for RT-119)
 `TripContent.approvedContentHash` (migration `20261017200000_rt113_approval_fingerprint`, additive, + rollback): SHA-256 of the public content at approval time. The public gate requires it to equal the fingerprint of the current content, so any later edit of texts, itinerary, FAQ or media blocks publication until a new review (fail-closed; an approval without fingerprint is never public). CHECK: a fingerprint exists only on approved content and is 64-char hex. Validated locally (drift 0, rollback identical, re-apply OK). Details and evidence: `docs/product/rt-119-local-load-preparation.md`.
+
+## Durable approval invalidation + media publication — 17–18/10/2026 (Owner decisions, for RT-119)
+Migration `20261017220000_rt113_durable_approval_media_publication` (additive, + rollback):
+- `TripContent.approvalInvalidatedAt` / `approvalInvalidationReason`, plus triggers that **demote approved content to DRAFT** on any change to its public fields, its itinerary, FAQ or media, or the public `Trip` fields (and on TRUNCATE). Restoring values never restores the approval; only the explicit approval act (`approveTourContent`) does.
+- `TripImage.publicationApprovedAt`: the publication authorization, granted only by the approval act for media whose rights are verified at that moment. Public media = valid approval ∧ verified rights ∧ authorization equal to the current `approvedAt`. A rights change clears it (revocation hides at once; clearance never publishes). Enforced by a CHECK plus a trigger that rejects authorizations granted outside the approval act.
+- The fingerprint stays as an integrity check.
+
+The Rocinha media are stored with rights PENDING (`UNVERIFIED`). Validated only on local throw-away databases. Details and evidence: `docs/product/rt-119-local-load-preparation.md` §6. This supersedes note (1) of the 17/10 review above (approval per row without reset on edit).

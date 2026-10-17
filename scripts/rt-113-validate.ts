@@ -4,7 +4,8 @@
  * Usage: DATABASE_URL=postgresql://…@localhost:5433/rt113_check npx tsx scripts/rt-113-validate.ts
  */
 import { prisma } from "@/lib/prisma";
-import { approvalFor, getTourContent, loadTourContentRecord } from "@/lib/catalog/tour-content";
+import { getTourContent } from "@/lib/catalog/tour-content";
+import { approveTourContent } from "@/lib/catalog/content-approval";
 import { MOCK_TOUR_CONTENT } from "@/lib/catalog/mock/tour-content.mock";
 
 const url = new URL(process.env.DATABASE_URL ?? "");
@@ -76,7 +77,7 @@ async function main() {
   // Simulate a real approval (non-mock source, all locales) and one image without recorded rights.
   await prisma.tripContent.update({ where: { tripId: TRIP }, data: { source: "validation probe (not mock)" } });
   // RT-119: an approval is bound to the content fingerprint (explicit approval act).
-  await prisma.tripContent.update({ where: { tripId: TRIP }, data: approvalFor((await loadTourContentRecord(TRIP))!) });
+  await approveTourContent(prisma, TRIP);
   await prisma.tripImage.update({ where: { tripId_position: { tripId: TRIP, position: 2 } }, data: { rightsStatus: "UNVERIFIED" } });
   const pub = await getTourContent(TRIP, "es", "public");
   check(pub !== null && pub.gallery.length === 2 && pub.gallery.every((g) => g.rightsStatus !== "UNVERIFIED"), "approved content is public, and an image without recorded rights is hidden");

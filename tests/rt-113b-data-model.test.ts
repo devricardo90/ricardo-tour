@@ -29,7 +29,13 @@ function record(overrides: Partial<TourContentRecord> = {}): TourContentRecord {
     ],
     ...overrides,
   };
-  return r.status === "OWNER_APPROVED" && !("approvedContentHash" in overrides) ? { ...r, approvedContentHash: contentFingerprint(r) } : r;
+  return r.status === "OWNER_APPROVED" && !("approvedContentHash" in overrides) ? stamp(r) : r;
+}
+
+/** Test-only approval stamp WITHOUT the approvalFor guard, so invalid/mock "approved" fixtures can prove that validation
+ *  and the public gate still reject them. Real approvals go through approveRecord/approveTourContent (guarded). */
+function stamp(r: TourContentRecord): TourContentRecord {
+  return { ...r, approvedContentHash: contentFingerprint(r), images: r.images.map((m) => ({ ...m, publicationApprovedAt: m.rightsStatus !== "UNVERIFIED" ? r.approvedAt : null })) };
 }
 
 describe("RT-113 complement — public projection (fail-closed)", () => {

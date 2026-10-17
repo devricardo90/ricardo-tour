@@ -404,6 +404,10 @@ model TripContent {
   /// RT-119 approval fingerprint (SHA-256 of the public content when the Owner approved it). The public gate publishes
   /// only when it equals the fingerprint of the current content, so any later edit requires a new review. NULL on DRAFT.
   approvedContentHash String?
+  /// RT-119 durable invalidation (DB triggers): when approved content or its itinerary/FAQ/media change, the database
+  /// sets status back to DRAFT and records when/why. Restoring old values never restores the approval.
+  approvalInvalidatedAt      DateTime?
+  approvalInvalidationReason String?
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
 }
@@ -461,6 +465,10 @@ model TripImage {
   durationSeconds Float?
   /// Public credit, localized {pt,en,es} (e.g. a visible mural inscription). Not a rights approval.
   credit          Json?
+  /// RT-119 media publication authorization: set ONLY by the explicit approval act, for items whose rights are verified
+  /// at that moment; cleared by DB triggers on any rights or media change. Public only when it matches the content's
+  /// approvedAt AND rights are verified now (editorial approval, rights and publication kept separate).
+  publicationApprovedAt DateTime?
   createdAt    DateTime            @default(now())
   updatedAt    DateTime            @updatedAt
 
