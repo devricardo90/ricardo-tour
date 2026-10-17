@@ -12,6 +12,7 @@ import {
   TourIncludes,
   TourItinerary,
   TourMobileCtaBar,
+  TourVideo,
   essentialIcons,
   secondaryButtonClass,
   sectionLabel,
@@ -31,6 +32,7 @@ export type PrototypeOfferView = {
   duration: { value: Localized | null; status: ReviewStatus };
   benefits: { pt: string[]; en: string[]; es: string[] };
   coverStatus: ReviewStatus;
+  video?: { src: string; poster: string; durationSeconds: number; caption: Localized; status: ReviewStatus } | null;
 };
 
 const CTA_TARGET = "#solicitar";
@@ -81,9 +83,9 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode }: { of
         <div className="mx-auto max-w-[1280px]">
           <article>
             <div className="grid gap-8 lg:grid-cols-12 lg:gap-12">
-              <div className="relative lg:col-span-7">
+              <div className="relative min-w-0 lg:col-span-7">
                 <TourGallery content={content} locale={locale} priority />
-                {reviewMode ? (
+                {reviewMode && offer.coverStatus !== "CONFIRMED" ? (
                   <p className="absolute left-3 top-3 flex items-center gap-2 rounded-md bg-[var(--site-charcoal,#0B0E11)]/85 px-2.5 py-1.5 text-[12px] font-medium text-[var(--site-on-dark,#F4F0E8)] backdrop-blur">
                     <StatusBadge status={offer.coverStatus} locale={locale} />
                     {t.coverProvisional}
@@ -122,6 +124,13 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode }: { of
 
             <div className="mt-14 grid gap-10 border-t border-white/10 pt-12 lg:mt-16 lg:grid-cols-12 lg:gap-12">
               <div className="space-y-12 lg:col-span-8">
+                {offer.video ? (
+                  <TourVideo
+                    video={{ src: offer.video.src, poster: offer.video.poster, durationSeconds: offer.video.durationSeconds, caption: pickL(offer.video.caption, locale) }}
+                    locale={locale}
+                    status={s(offer.video.status)}
+                  />
+                ) : null}
                 <TourEssentials items={essentials} locale={locale} />
                 <TourBenefits items={offer.benefits[(locale === "en" || locale === "es" ? locale : "pt") as "pt" | "en" | "es"]} locale={locale} status={s("MOCK")} />
                 <TourItinerary content={content} locale={locale} status={s(contentStatus)} />

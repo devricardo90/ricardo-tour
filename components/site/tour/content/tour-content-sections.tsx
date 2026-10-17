@@ -1,4 +1,4 @@
-import { CalendarCheck, Car, Check, Clock, Languages, MapPin, Minus, Timer, Users, type LucideIcon } from "lucide-react";
+import { CalendarCheck, Car, Check, Clock, Languages, MapPin, Minus, Timer, Users, VolumeX, type LucideIcon } from "lucide-react";
 import type { TourContentView } from "@/lib/catalog/tour-content";
 import { ImageGallery } from "@/components/site/media/image-gallery";
 import { resolveTourContentCopy } from "@/components/site/tour/content/tour-content-copy";
@@ -200,10 +200,50 @@ export function TourGallery({ content, locale, priority = false }: { content: To
   if (content.gallery.length === 0) return null;
   return (
     <ImageGallery
-      images={content.gallery.map((img) => ({ src: img.src, alt: img.alt, objectPosition: img.objectPosition }))}
+      images={content.gallery.map((img) => ({ src: img.src, alt: img.alt, objectPosition: img.objectPosition, credit: img.credit }))}
       labels={{ gallery: t.gallery, prev: t.galleryPrev, next: t.galleryNext, thumb: t.galleryThumb, position: t.galleryPosition }}
       priority={priority}
     />
+  );
+}
+
+export type TourVideoData = { src: string; poster: string; durationSeconds: number; caption: string };
+
+/**
+ * RT-116: short clip of the tour, in its own block (Owner decision 17/10/2026: up to 18 s, no audio, with poster).
+ * Plays only when the visitor asks (no autoplay, preload none: no video bytes on page load), native accessible controls,
+ * playsInline on phones. Portrait clip: next to its caption on desktop; full width (max ~70% of the screen) on mobile.
+ */
+export function TourVideo({ video, locale, status }: { video: TourVideoData; locale: string; status?: ReviewStatus }) {
+  const t = resolveTourContentCopy(locale);
+  const seconds = String(Math.round(video.durationSeconds));
+  return (
+    <section aria-labelledby="tour-video-heading" data-testid="tour-video" className={`${raisedCard} grid gap-5 p-4 sm:grid-cols-[minmax(0,300px)_1fr] sm:items-center sm:p-5`}>
+      <video
+        controls
+        muted
+        playsInline
+        preload="none"
+        poster={video.poster}
+        aria-describedby="tour-video-caption"
+        className="mx-auto aspect-[9/16] max-h-[70vh] w-full rounded-lg bg-black object-cover sm:max-h-none"
+        data-testid="tour-video-player"
+      >
+        <source src={video.src} type="video/mp4" />
+        {t.videoFallback}
+      </video>
+      <div>
+        <h2 id="tour-video-heading" className="site-display flex flex-wrap items-center gap-3 text-[28px] font-medium leading-[1.15] text-[var(--site-on-dark,#F4F0E8)] md:text-[32px]">
+          {t.videoTitle}
+          {status ? <StatusBadge status={status} locale={locale} /> : null}
+        </h2>
+        <p id="tour-video-caption" className="mt-3 text-[16px] leading-[1.6] text-[var(--site-on-dark-muted,#CAC7BF)]">{video.caption}</p>
+        <p className="mt-3 inline-flex items-center gap-2 text-[14px] text-[var(--site-on-dark-subtle,#9DA3A5)]">
+          <VolumeX className="h-4 w-4" aria-hidden="true" />
+          {t.videoNote.replace("{s}", seconds)}
+        </p>
+      </div>
+    </section>
   );
 }
 

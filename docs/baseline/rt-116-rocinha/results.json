@@ -1,0 +1,132 @@
+[
+  {
+    "device": "desktop",
+    "locale": "pt",
+    "status": 200,
+    "lcpMs": 1500,
+    "videoBytesBeforePlay": 0,
+    "imageRequestsOnLoad": 6,
+    "imageBytesOnLoad": 0,
+    "galleryCount": "5",
+    "horizontalOverflow": false,
+    "ctaAboveFold": true,
+    "gallery": [
+      {
+        "position": "Foto 1 de 5",
+        "file": "rocinha-01-panorama-bandeira.jpg",
+        "alt": "Vista do alto da Rocinha até São Conrado e o mar, com a bandeira do Brasil em primeiro plano",
+        "credit": null
+      },
+      {
+        "position": "Foto 2 de 5",
+        "file": "rocinha-02-beco.jpg",
+        "alt": "Visitantes descem um beco estreito da Rocinha entre casas coloridas",
+        "credit": null
+      },
+      {
+        "position": "Foto 3 de 5",
+        "file": "rocinha-03-mural.jpg",
+        "alt": "Visitantes descem uma escadaria ao lado de um mural colorido de flores na Rocinha",
+        "credit": "Mural de @wark rocinha"
+      },
+      {
+        "position": "Foto 4 de 5",
+        "file": "rocinha-04-mirante-deck.jpg",
+        "alt": "Vista de um terraço de madeira sobre a Rocinha, com montanhas e o mar ao fundo",
+        "credit": null
+      },
+      {
+        "position": "Foto 5 de 5",
+        "file": "rocinha-05-panorama.jpg",
+        "alt": "Panorama da Rocinha descendo até o mar sob céu nublado",
+        "credit": null
+      }
+    ],
+    "videoAutoplay": false,
+    "videoDuration": 15.5,
+    "videoPlaying": true,
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "videoMuted": true,
+    "videoBytesAfterPlay": true,
+    "consoleErrors": []
+  },
+  {
+    "device": "desktop",
+    "locale": "en",
+    "status": 200,
+    "lcpMs": 1300,
+    "videoBytesBeforePlay": 0,
+    "imageRequestsOnLoad": 6,
+    "imageBytesOnLoad": 0,
+    "galleryCount": "5",
+    "horizontalOverflow": false,
+    "ctaAboveFold": true,
+    "consoleErrors": []
+  },
+  {
+    "device": "desktop",
+    "locale": "es",
+    "status": 200,
+    "lcpMs": 1004,
+    "videoBytesBeforePlay": 0,
+    "imageRequestsOnLoad": 6,
+    "imageBytesOnLoad": 0,
+    "galleryCount": "5",
+    "horizontalOverflow": false,
+    "ctaAboveFold": true,
+    "consoleErrors": []
+  },
+  {
+    "device": "mobile",
+    "locale": "pt",
+    "status": 200,
+    "lcpMs": 1296,
+    "videoBytesBeforePlay": 0,
+    "imageRequestsOnLoad": 6,
+    "imageBytesOnLoad": 0,
+    "galleryCount": "5",
+    "horizontalOverflow": false,
+    "ctaAboveFold": true,
+    "gallery": [
+      {
+        "position": "Foto 1 de 5",
+        "file": "rocinha-01-panorama-bandeira.jpg",
+        "alt": "Vista do alto da Rocinha até São Conrado e o mar, com a bandeira do Brasil em primeiro plano",
+        "credit": null
+      },
+      {
+        "position": "Foto 2 de 5",
+        "file": "rocinha-02-beco.jpg",
+        "alt": "Visitantes descem um beco estreito da Rocinha entre casas coloridas",
+        "credit": null
+      },
+      {
+        "position": "Foto 3 de 5",
+        "file": "rocinha-03-mural.jpg",
+        "alt": "Visitantes descem uma escadaria ao lado de um mural colorido de flores na Rocinha",
+        "credit": "Mural de @wark rocinha"
+      },
+      {
+        "position": "Foto 4 de 5",
+        "file": "rocinha-04-mirante-deck.jpg",
+        "alt": "Vista de um terraço de madeira sobre a Rocinha, com montanhas e o mar ao fundo",
+        "credit": null
+      },
+      {
+        "position": "Foto 5 de 5",
+        "file": "rocinha-05-panorama.jpg",
+        "alt": "Panorama da Rocinha descendo até o mar sob céu nublado",
+        "credit": null
+      }
+    ],
+    "videoAutoplay": false,
+    "videoDuration": 15.5,
+    "videoPlaying": true,
+    "videoWidth": 720,
+    "videoHeight": 1280,
+    "videoMuted": true,
+    "videoBytesAfterPlay": true,
+    "consoleErrors": []
+  }
+]

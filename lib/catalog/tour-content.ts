@@ -37,7 +37,7 @@ export type TourContentRecord = {
   weatherPolicy?: LocalizedText | null;
   approvedAt?: Date | string | null;
   itinerary: Array<{ position: number; title: LocalizedText; description?: LocalizedText | null; durationMinutes?: number | null }>;
-  images: Array<{ position: number; src: string; alt: LocalizedText; isCover: boolean; rightsStatus: TourImageRightsStatus; rightsNote?: string | null; focalX?: number | null; focalY?: number | null }>;
+  images: Array<{ position: number; src: string; alt: LocalizedText; isCover: boolean; rightsStatus: TourImageRightsStatus; rightsNote?: string | null; focalX?: number | null; focalY?: number | null; /** Public credit (e.g. mural artist). Not a DB column yet (RT-116 gap, Sprint 11). */ credit?: LocalizedText | null }>;
 };
 
 export type TourContentView = {
@@ -59,7 +59,7 @@ export type TourContentView = {
   weatherPolicy: string | null;
   itinerary: Array<{ position: number; title: string; description: string | null; durationMinutes: number | null }>;
   /** `objectPosition` is the CSS focal point ("50% 30%") used where a frame must crop; the main view never crops. */
-  gallery: Array<{ src: string; alt: string; isCover: boolean; rightsStatus: TourImageRightsStatus; objectPosition: string }>;
+  gallery: Array<{ src: string; alt: string; isCover: boolean; rightsStatus: TourImageRightsStatus; objectPosition: string; credit: string | null }>;
 };
 
 const MOCK_MARKER = /\bMOCK\b/;
@@ -134,7 +134,7 @@ export function toTourContentView(record: TourContentRecord | null | undefined, 
     gallery: [...record.images]
       .filter((img) => audience === "preview" || img.rightsStatus !== "UNVERIFIED")
       .sort((a, b) => Number(b.isCover) - Number(a.isCover) || a.position - b.position)
-      .map((img, i) => ({ src: img.src, alt: text(img.alt, `images[${i}].alt`) ?? "", isCover: img.isCover, rightsStatus: img.rightsStatus, objectPosition: focalToPosition(img.focalX, img.focalY) })),
+      .map((img, i) => ({ src: img.src, alt: text(img.alt, `images[${i}].alt`) ?? "", isCover: img.isCover, rightsStatus: img.rightsStatus, objectPosition: focalToPosition(img.focalX, img.focalY), credit: text(img.credit, `images[${i}].credit`) })),
   };
 }
 
@@ -175,6 +175,7 @@ export function validateTourContent(record: TourContentRecord): ContentIssue[] {
   if (record.images.filter((img) => img.isCover).length > 1) issues.push({ field: "images", problem: "more than one cover image" });
   record.images.forEach((img, i) => {
     checkText(`images[${i}].alt`, img.alt);
+    checkText(`images[${i}].credit`, img.credit);
     if (!img.src.trim()) issues.push({ field: `images[${i}].src`, problem: "empty" });
     for (const [axis, v] of [["focalX", img.focalX], ["focalY", img.focalY]] as const) {
       if (v !== null && v !== undefined && (v < 0 || v > 1)) issues.push({ field: `images[${i}].${axis}`, problem: "focal point must be between 0 and 1" });

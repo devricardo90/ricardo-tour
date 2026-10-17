@@ -86,6 +86,91 @@ const mockList = (items: Array<[string, string, string]>) => ({
   es: items.map(([, , es]) => `${es} (ejemplo ficticio)`),
 });
 
+const ROCINHA_DIR = "/media/tours/favela-rocinha";
+const ROCINHA_RIGHTS = (file: string) =>
+  `Owner, 17/10/2026: own photo; consent/authorisation of the people shown declared by the Owner. Original: Drive MIDIAS/02_FAVELA_ROCINHA/ORIGINAIS/${file} (SHA-256 in docs/product/rt-116-rocinha-originals.sha256). Web copy: sRGB, metadata (incl. GPS) removed.`;
+
+/**
+ * RT-116 — REAL photographs selected and ordered by the Owner (17/10/2026), per tour. Rights: OWNER_ATTESTED.
+ * Alt texts describe what each photo shows (no fictitious marker: they are real descriptions, still to be reviewed with
+ * RT-115). The record that holds them stays MOCK/DRAFT, so the public gate never shows it.
+ */
+const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
+  cmli1a6im000034zqqzc9sppb: [
+    {
+      position: 0,
+      src: `${ROCINHA_DIR}/rocinha-01-panorama-bandeira.jpg`,
+      alt: {
+        pt: "Vista do alto da Rocinha até São Conrado e o mar, com a bandeira do Brasil em primeiro plano",
+        en: "View from the top of Rocinha down to São Conrado and the sea, with the Brazilian flag in the foreground",
+        es: "Vista desde lo alto de la Rocinha hasta São Conrado y el mar, con la bandera de Brasil en primer plano",
+      },
+      isCover: true,
+      rightsStatus: "OWNER_ATTESTED",
+      rightsNote: ROCINHA_RIGHTS("IMG_1243.HEIC"),
+      focalX: 0.5,
+      focalY: 0.62,
+    },
+    {
+      position: 1,
+      src: `${ROCINHA_DIR}/rocinha-02-beco.jpg`,
+      alt: {
+        pt: "Visitantes descem um beco estreito da Rocinha entre casas coloridas",
+        en: "Visitors walk down a narrow Rocinha alley between colourful houses",
+        es: "Visitantes bajan por un callejón estrecho de la Rocinha entre casas coloridas",
+      },
+      isCover: false,
+      rightsStatus: "OWNER_ATTESTED",
+      rightsNote: ROCINHA_RIGHTS("IMG_1253.HEIC"),
+      focalX: 0.5,
+      focalY: 0.55,
+    },
+    {
+      position: 2,
+      src: `${ROCINHA_DIR}/rocinha-03-mural.jpg`,
+      alt: {
+        pt: "Visitantes descem uma escadaria ao lado de um mural colorido de flores na Rocinha",
+        en: "Visitors go down a staircase beside a colourful flower mural in Rocinha",
+        es: "Visitantes bajan una escalera junto a un mural colorido de flores en la Rocinha",
+      },
+      isCover: false,
+      rightsStatus: "OWNER_ATTESTED",
+      rightsNote: ROCINHA_RIGHTS("IMG_1252.HEIC"),
+      credit: { pt: "Mural de @wark rocinha", en: "Mural by @wark rocinha", es: "Mural de @wark rocinha" },
+      focalX: 0.55,
+      focalY: 0.45,
+    },
+    {
+      position: 3,
+      src: `${ROCINHA_DIR}/rocinha-04-mirante-deck.jpg`,
+      alt: {
+        pt: "Vista de um terraço de madeira sobre a Rocinha, com montanhas e o mar ao fundo",
+        en: "View from a wooden terrace over Rocinha, with mountains and the sea behind",
+        es: "Vista desde una terraza de madera sobre la Rocinha, con montañas y el mar al fondo",
+      },
+      isCover: false,
+      rightsStatus: "OWNER_ATTESTED",
+      rightsNote: ROCINHA_RIGHTS("img-favela-deck.HEIC"),
+      focalX: 0.5,
+      focalY: 0.45,
+    },
+    {
+      position: 4,
+      src: `${ROCINHA_DIR}/rocinha-05-panorama.jpg`,
+      alt: {
+        pt: "Panorama da Rocinha descendo até o mar sob céu nublado",
+        en: "Panorama of Rocinha sloping down to the sea under a cloudy sky",
+        es: "Panorama de la Rocinha bajando hasta el mar bajo un cielo nublado",
+      },
+      isCover: false,
+      rightsStatus: "OWNER_ATTESTED",
+      rightsNote: ROCINHA_RIGHTS("IMG_1247.HEIC"),
+      focalX: 0.5,
+      focalY: 0.65,
+    },
+  ],
+};
+
 function mockRecord(id: string): TourContentRecord {
   const snap = PUBLISHED_SNAPSHOT[id];
   return {
@@ -113,9 +198,9 @@ function mockRecord(id: string): TourContentRecord {
       { position: 2, title: mock("Parada de exemplo B", "Example stop B", "Parada de ejemplo B"), description: null, durationMinutes: 60 },
       { position: 3, title: mock("Retorno ao hotel", "Return to the hotel", "Regreso al hotel"), description: null, durationMinutes: null },
     ],
-    // Gallery arrangement for layout only, using ONLY photos whose rights are already recorded: the tour's own published
-    // photo (authorship declared by the Owner, RT-79) and the Rio Story photos (RT-32 "OWNER ORIGINAL").
-    images: [
+    // Gallery: the tour's REAL Owner-approved set when it exists (RT-116); otherwise a layout-only arrangement using ONLY
+    // photos whose rights are already recorded: the tour's published photo (RT-79) and the Rio Story photos (RT-32).
+    images: OWNER_GALLERY[id] ?? [
       { position: 0, src: snap.cover, alt: mock(`Foto atual do passeio ${snap.title}`, `Current photo of ${snap.title}`, `Foto actual de ${snap.title}`), isCover: true, rightsStatus: "OWNER_ATTESTED", rightsNote: "Owner attestation, RT-79 (14/10/2026)" },
       { position: 1, src: "/media/rio-story/rio-story-sunset.jpg", alt: mock("Pôr do sol no Rio", "Sunset in Rio", "Atardecer en Río"), isCover: false, rightsStatus: "OWNER_ATTESTED", rightsNote: "RT-32 OWNER ORIGINAL" },
       { position: 2, src: "/media/rio-story/rio-story-church.jpg", alt: mock("Interior de igreja histórica", "Historic church interior", "Interior de iglesia histórica"), isCover: false, rightsStatus: "OWNER_ATTESTED", rightsNote: "RT-32 OWNER ORIGINAL" },
@@ -145,6 +230,32 @@ export type PrototypeOffer = {
   benefits: { pt: string[]; en: string[]; es: string[] };
   /** The current cover is provisional until RT-116 supplies a rights-cleared photo that shows the attraction. */
   coverStatus: FactStatus;
+  /** RT-116 short clip (prototype-only: the RT-113 model has no video yet — documented gap for Sprint 11). */
+  video: PrototypeVideo | null;
+};
+
+export type PrototypeVideo = {
+  src: string;
+  poster: string;
+  durationSeconds: number;
+  caption: LocalizedText;
+  /** PROVISIONAL until the Owner approves the clip (Owner, 17/10: the video is reviewed before final approval). */
+  status: FactStatus;
+  rightsNote: string;
+};
+
+/** RT-116: Rocinha clip — IMG_1256.MOV 6.5–22 s (15.5 s), HDR→SDR, audio and metadata (incl. GPS) removed. */
+const ROCINHA_VIDEO: PrototypeVideo = {
+  src: `${ROCINHA_DIR}/rocinha-praca-movimento.mp4`,
+  poster: `${ROCINHA_DIR}/rocinha-praca-movimento-poster.jpg`,
+  durationSeconds: 15.5,
+  caption: {
+    pt: "A praça principal da Rocinha vista do alto: mototáxis, comércio e o movimento do dia a dia.",
+    en: "Rocinha's main square from above: motorcycle taxis, shops and everyday life.",
+    es: "La plaza principal de la Rocinha desde lo alto: mototaxis, comercios y el movimiento del día a día.",
+  },
+  status: "PROVISIONAL",
+  rightsNote: ROCINHA_RIGHTS("IMG_1256.MOV"),
 };
 
 const PRIVATE: LocalizedText = { pt: "Experiência privativa", en: "Private experience", es: "Experiencia privada" };
@@ -166,7 +277,9 @@ function offer(id: string, pitch: LocalizedText): PrototypeOffer {
     priceCents: null,
     duration: { value: null, status: "PENDING" },
     benefits: BENEFITS as { pt: string[]; en: string[]; es: string[] },
-    coverStatus: "PROVISIONAL",
+    // RT-116: the Owner confirmed the Rocinha cover and gallery (17/10/2026); the other tours still wait for their photos.
+    coverStatus: OWNER_GALLERY[id] ? "CONFIRMED" : "PROVISIONAL",
+    video: id === "cmli1a6im000034zqqzc9sppb" ? ROCINHA_VIDEO : null,
   };
 }
 

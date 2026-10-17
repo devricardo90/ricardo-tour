@@ -43,3 +43,6 @@ Migration on Neon, data entry for the real tours (waits for RT-112 answers and R
 
 ## Update — 17/10/2026 (RT-114 round 1)
 `TripImage` gained optional `focalX`/`focalY` (DOUBLE PRECISION, CHECK 0–1) for framing. The migration had never left local throw-away databases, so it was amended in place. Re-validation on a fresh clone: **16/16 PASS** (adds the focal-range rule), drift 0, rollback → schema identical (0 diff lines). Validation and gate expose `objectPosition`; out-of-range focal values are rejected by `validateTourContent` and by the database.
+
+## Update — 17/10/2026 (RT-116 Favela Rocinha)
+Two gaps found while integrating the Owner's real media, **documented, not implemented in the schema** (Owner: not blocking now): (1) a public, localized `credit` per image (used for the mural artist; today a TypeScript-only optional field on `TourContentRecord.images`, passed through the gate and validated for PT/EN/ES); (2) video support: no model holds a clip yet; the prototype keeps it as `PrototypeOffer.video` (src, poster, duration, caption, status, rights note). Proposal for Sprint 11: `TripImage.credit Json?` and a `TripVideo` table (tripId, position, src, poster, durationSeconds, caption Json, rightsStatus, rightsNote) behind the same gate (no UNVERIFIED in public). Any migration stays local until authorised.

@@ -1,0 +1,73 @@
+[
+  {
+    "original": "IMG_1243.HEIC",
+    "originalSha256": "87393b5bb863caf3258403fc6c0cf1811a3796d1ba7e133265e818590153700c",
+    "derivative": "/media/tours/favela-rocinha/rocinha-01-panorama-bandeira.jpg",
+    "width": 1500,
+    "height": 2000,
+    "bytes": 398703,
+    "exif": false,
+    "icc": false,
+    "xmp": false
+  },
+  {
+    "original": "IMG_1253.HEIC",
+    "originalSha256": "f477868b0523942bccfebb4b1ccd1b1292689911bcc84c5e9ff8a03c0268e891",
+    "derivative": "/media/tours/favela-rocinha/rocinha-02-beco.jpg",
+    "width": 1500,
+    "height": 2000,
+    "bytes": 588266,
+    "exif": false,
+    "icc": false,
+    "xmp": false
+  },
+  {
+    "original": "IMG_1252.HEIC",
+    "originalSha256": "91c6b716d500858a024b759612a99bd62c94a9b5326e5541e00f844e6a0e60eb",
+    "derivative": "/media/tours/favela-rocinha/rocinha-03-mural.jpg",
+    "width": 1500,
+    "height": 2000,
+    "bytes": 502812,
+    "exif": false,
+    "icc": false,
+    "xmp": false
+  },
+  {
+    "original": "img-favela-deck.HEIC",
+    "originalSha256": "f5eb83af27e4f45921c78816e396037b42f8ddc1b7654cf9ec06362432f003fd",
+    "derivative": "/media/tours/favela-rocinha/rocinha-04-mirante-deck.jpg",
+    "width": 1500,
+    "height": 2000,
+    "bytes": 490155,
+    "exif": false,
+    "icc": false,
+    "xmp": false
+  },
+  {
+    "original": "IMG_1247.HEIC",
+    "originalSha256": "0cef20d40f1f32735e32ed029ffaf4a7ad6c4bfd65a43ee7ef4bd688b2878fb0",
+    "derivative": "/media/tours/favela-rocinha/rocinha-05-panorama.jpg",
+    "width": 1500,
+    "height": 2000,
+    "bytes": 402333,
+    "exif": false,
+    "icc": false,
+    "xmp": false
+  },
+  {
+    "original": "IMG_1256.MOV",
+    "derivative": "/media/tours/favela-rocinha/rocinha-praca-movimento-poster.jpg",
+    "width": 720,
+    "height": 1280,
+    "bytes": 175300,
+    "exif": false,
+    "icc": false,
+    "xmp": false
+  },
+  {
+    "original": "IMG_1256.MOV",
+    "derivative": "/media/tours/favela-rocinha/rocinha-praca-movimento.mp4",
+    "bytes": 3732867,
+    "sha256": "17258adc3539c80f5d9c8e3cd086f3da7d43f12c05c0e39768cdda94479c7f96"
+  }
+]

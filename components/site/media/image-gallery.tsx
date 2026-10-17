@@ -4,7 +4,14 @@ import { useCallback, useId, useState, type KeyboardEvent } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 
-export type GalleryImage = { src: string; alt: string; /** CSS object-position for cropped frames (thumbnails). */ objectPosition?: string };
+export type GalleryImage = {
+  src: string;
+  alt: string;
+  /** CSS object-position for cropped frames (thumbnails). */
+  objectPosition?: string;
+  /** Visible credit for the current photo (e.g. the artist of a mural), shown under the frame. */
+  credit?: string | null;
+};
 export type GalleryLabels = {
   gallery: string;
   prev: string;
@@ -25,6 +32,8 @@ const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:o
  * - The main view NEVER crops or distorts: the photo is shown whole (object-contain) over a blurred copy of itself, so
  *   portrait and landscape photos both fill the frame without aggressive cuts or empty bars.
  * - Thumbnails crop with each image's focal point (TripImage.focalX/Y → objectPosition).
+ * - min-w-0: inside grid/flex parents the thumbnail strip scrolls instead of widening the column (5+ photos on
+ *   mobile overflowed the 390 px viewport, found in RT-116).
  * - 1 image renders a plain figure (no controls, no empty slots); 2+ add previous/next, a scrollable thumbnail strip
  *   (works for 3, 5, 8…) and Left/Right arrow keys; the position is announced politely.
  * Uses next/image directly: OptimizedImage starts blurred and only clears on onLoad, which is lost when an image
@@ -64,7 +73,7 @@ export function ImageGallery({
   };
 
   return (
-    <section aria-labelledby={headingId} onKeyDown={onKeyDown} data-testid="image-gallery" data-count={total}>
+    <section aria-labelledby={headingId} onKeyDown={onKeyDown} data-testid="image-gallery" data-count={total} className="min-w-0">
       <h2 id={headingId} className="sr-only">{labels.gallery}</h2>
       <div className={`relative overflow-hidden rounded-xl border border-white/10 bg-[var(--site-charcoal-raised,#15191D)] ${aspectClassName}`}>
         {/* Blurred backdrop of the same photo (decorative) so the uncropped photo never leaves empty bars. */}
@@ -94,6 +103,11 @@ export function ImageGallery({
           </>
         ) : null}
       </div>
+      {current.credit ? (
+        <p className="mt-2 text-[13px] text-[var(--site-on-dark-subtle,#9DA3A5)]" data-testid="gallery-credit">
+          {current.credit}
+        </p>
+      ) : null}
       {total > 1 ? (
         <ul className="mt-3 flex gap-2 overflow-x-auto pb-1" aria-label={labels.gallery} data-testid="gallery-thumbs">
           {images.map((image, i) => (

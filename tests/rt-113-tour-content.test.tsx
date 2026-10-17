@@ -136,7 +136,9 @@ describe("RT-114 mock data integrity", () => {
     const allowed = new Set([...Object.values(PUBLISHED_SNAPSHOT).map((s) => s.cover), "/media/rio-story/rio-story-sunset.jpg", "/media/rio-story/rio-story-church.jpg"]);
     for (const record of Object.values(MOCK_TOUR_CONTENT)) {
       for (const img of record.images) {
-        expect(allowed.has(img.src)).toBe(true);
+        // RT-116: Owner-approved real photographs live under /media/tours/<tour>/ and must carry an Owner attestation.
+        const ownerApproved = img.src.startsWith("/media/tours/") && img.rightsStatus === "OWNER_ATTESTED" && /^Owner, \d{2}\/\d{2}\/\d{4}/.test(img.rightsNote ?? "");
+        expect(allowed.has(img.src) || ownerApproved, img.src).toBe(true);
         expect(fs.existsSync(path.join(process.cwd(), "public", img.src))).toBe(true);
       }
     }
@@ -225,5 +227,78 @@ describe("RT-114 copy and prototype rendering (round 1 + Owner addendum)", () =>
     expect(focalToPosition(2, -1)).toBe("100% 0%");
     const record = approvedRecord({ images: [{ position: 0, src: "/a.jpg", alt: tri("a", "a", "a"), isCover: true, rightsStatus: "OWNER_ATTESTED", focalX: 1.4 }] });
     expect(validateTourContent(record).map((i) => i.problem)).toContain("focal point must be between 0 and 1");
+  });
+});
+
+describe("RT-116 Favela Rocinha media (Owner decision 17/10/2026)", () => {
+  const ROCINHA = "cmli1a6im000034zqqzc9sppb";
+  const ORDER = ["rocinha-01-panorama-bandeira.jpg", "rocinha-02-beco.jpg", "rocinha-03-mural.jpg", "rocinha-04-mirante-deck.jpg", "rocinha-05-panorama.jpg"];
+
+  it("keeps the Owner's 5 photos in the approved order, cover first, all Owner-attested with PT/EN/ES alt text", () => {
+    const record = MOCK_TOUR_CONTENT[ROCINHA];
+    expect(record.images.map((img) => path.basename(img.src))).toEqual(ORDER);
+    expect(record.images.filter((img) => img.isCover).map((img) => path.basename(img.src))).toEqual([ORDER[0]]);
+    for (const img of record.images) {
+      expect(img.rightsStatus).toBe("OWNER_ATTESTED");
+      for (const l of ["pt", "en", "es"] as const) {
+        expect(img.alt[l]?.trim()).toBeTruthy();
+        expect(img.alt[l]).not.toMatch(/fictício|fictitious|ficticio/);
+      }
+    }
+    const view = toTourContentView(record, "pt", "preview")!;
+    expect(view.gallery.map((g) => path.basename(g.src))).toEqual(ORDER);
+    expect(view.gallery[2].credit).toBe("Mural de @wark rocinha");
+    expect(PROTOTYPE_OFFER[ROCINHA].coverStatus).toBe("CONFIRMED");
+    // The record stays MOCK/DRAFT: the public gate never shows it.
+    expect(toTourContentView(record, "pt", "public")).toBeNull();
+  });
+
+  it("ships web copies without EXIF/GPS, XMP or ICC metadata, at most 2000 px and 700 KB", async () => {
+    const sharp = (await import("sharp")).default;
+    const files = [...MOCK_TOUR_CONTENT[ROCINHA].images.map((img) => img.src), PROTOTYPE_OFFER[ROCINHA].video!.poster];
+    for (const src of files) {
+      const file = path.join(process.cwd(), "public", src);
+      const meta = await sharp(file).metadata();
+      expect(meta.exif, src).toBeUndefined();
+      expect(meta.xmp, src).toBeUndefined();
+      expect(meta.icc, src).toBeUndefined();
+      expect(Math.max(meta.width ?? 0, meta.height ?? 0)).toBeLessThanOrEqual(2000);
+      expect(fs.statSync(file).size).toBeLessThan(700 * 1024);
+    }
+  });
+
+  it("uses a clip of at most 18 s, without audio, location or other metadata (MP4 atoms)", () => {
+    const video = PROTOTYPE_OFFER[ROCINHA].video!;
+    expect(video.durationSeconds).toBeLessThanOrEqual(18);
+    expect(video.status).toBe("PROVISIONAL"); // the Owner reviews the clip before final approval
+    const buf = fs.readFileSync(path.join(process.cwd(), "public", video.src));
+    expect(buf.length).toBeLessThan(5 * 1024 * 1024);
+    expect(buf.includes(Buffer.from("soun"))).toBe(false); // no audio track handler
+    for (const atom of ["©xyz", "com.apple.quicktime.location", "com.apple.quicktime.model"]) expect(buf.includes(Buffer.from(atom, "latin1")), atom).toBe(false);
+    for (const other of Object.keys(PROTOTYPE_OFFER).filter((id) => id !== ROCINHA)) expect(PROTOTYPE_OFFER[other].video).toBeNull();
+  });
+
+  it("lets the thumbnail strip scroll inside narrow columns (5 photos overflowed a 390 px phone before the fix)", () => {
+    const view = toTourContentView(MOCK_TOUR_CONTENT[ROCINHA], "pt", "preview")!;
+    const html = renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[ROCINHA]} content={view} locale="pt" reviewMode />);
+    expect(html).toMatch(/data-testid="image-gallery" data-count="5" class="min-w-0"/);
+    expect(html).toContain('class="relative min-w-0 lg:col-span-7"');
+  });
+
+  it("renders the video block on request only (no autoplay, preload none, poster, inline) in PT/EN/ES", () => {
+    const titles = { pt: "A Rocinha em movimento", en: "Rocinha in motion", es: "La Rocinha en movimiento" } as const;
+    for (const locale of ["pt", "en", "es"] as const) {
+      const view = toTourContentView(MOCK_TOUR_CONTENT[ROCINHA], locale, "preview")!;
+      const html = renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[ROCINHA]} content={view} locale={locale} reviewMode />);
+      expect(html).toContain('data-testid="tour-video"');
+      expect(html).toContain(titles[locale]);
+      expect(html).toContain('preload="none"');
+      expect(html).toContain('poster="/media/tours/favela-rocinha/rocinha-praca-movimento-poster.jpg"');
+      // `muted` is a DOM property React does not serialize on the server; the clip has no audio track at all (test above).
+      expect(html).toMatch(/<video[^>]*playsInline|<video[^>]*playsinline/);
+      expect(html).not.toMatch(/autoplay/i);
+      expect(html).toContain('data-count="5"');
+      expect(html).not.toContain("RT-116"); // the provisional-cover note is gone for the confirmed cover
+    }
   });
 });
