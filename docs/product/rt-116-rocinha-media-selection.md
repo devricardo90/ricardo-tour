@@ -1,7 +1,7 @@
 # RT-116 — Favela Rocinha: media recovery, integrity and proposed use
 
 - Date: 2026-10-17. Tour: `cmli1a6im000034zqqzc9sppb` (Tour Favela Rocinha com Guia Local). Sprint 10.
-- Status (17/10/2026, update §7): **selection CONFIRMED by the Owner; web versions generated and integrated in the LOCAL Rocinha preview (rebuild lab, production-hidden); awaiting the Owner's final review (video included).** Nothing published, no push/merge/deploy, no database touched.
+- Status (17/10/2026, §8): **visual integration APPROVED by the Owner** (layout RT-114 v2, main photo, 5 photos and order, short silent video, desktop and mobile). Local only; **not a publication authorisation**. Readiness: `rt-116-rocinha-production-readiness.md`; performance: `rt-116-rocinha-performance.md`.
 - Context: RT-114 v2 visually approved by the Owner on 17/10 (layout accepted, identity aligned); photos are handled here, separately.
 
 ## 1. Source of truth
@@ -124,3 +124,10 @@ Local server without CDN latency: real numbers will be higher. The 1500×2000 JP
 3. Files in `public/` are reachable by URL once a branch is deployed, even if the page is hidden: keep them out of `main` until publication is authorised.
 4. Data model (not blocking): localized `TripImage.credit` and video support (`TripVideo`) for the Sprint 11 admin; any migration local only until authorised.
 5. Public wiring of the RT-114 sections and the other three tours' photos (RT-116 continues tour by tour).
+
+## 8. Owner visual approval (17/10/2026)
+- **Approved:** RT-114 v2 layout; main photo (IMG_1243); the five photos; gallery order; short video without audio; desktop and mobile presentation; visual identity and proportions.
+- Rule: no new aesthetic changes without a proven defect or an Owner request.
+- Evidence: commit `dc58359`; `docs/baseline/rt-116-rocinha/` (captures, `results.json`, `perf-4g.json`); review page shared with the Owner in the conversation (private).
+- Jira: RT-114 comment recorded (17/10). The first RT-116 comment attempt (integration report, with the review-page link) was blocked by the agent's permission check; it was not bypassed, and this document is the canonical record.
+- Still pending: credit spelling (@wark rocinha); written consent on file (recommended); slow-4G video stalls (lighter mobile rendition, Owner OK needed); data model for video/credit; everything in the readiness analysis before any publication.

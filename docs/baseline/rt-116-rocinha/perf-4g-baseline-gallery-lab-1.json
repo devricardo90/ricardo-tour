@@ -1,0 +1,40 @@
+[
+  {
+    "profile": "4G rápido (9 Mbps, 60 ms)",
+    "run": 1,
+    "ttfbMs": 82,
+    "fcpMs": 3500,
+    "lcpMs": 3500,
+    "cls": 0,
+    "longTaskMs": 2369,
+    "pageKB": 299,
+    "videoKBBeforePlay": 0,
+    "videoStartMs": null,
+    "stalls": null,
+    "stalledMs": null,
+    "playedToEnd": null,
+    "playbackWallMs": null,
+    "videoKB": 0,
+    "videoRequests": 0,
+    "error": "no video on page"
+  },
+  {
+    "profile": "4G lento (1,6 Mbps, 150 ms)",
+    "run": 1,
+    "ttfbMs": 55,
+    "fcpMs": 1868,
+    "lcpMs": 1900,
+    "cls": 0,
+    "longTaskMs": 2121,
+    "pageKB": 299,
+    "videoKBBeforePlay": 0,
+    "videoStartMs": null,
+    "stalls": null,
+    "stalledMs": null,
+    "playedToEnd": null,
+    "playbackWallMs": null,
+    "videoKB": 0,
+    "videoRequests": 0,
+    "error": "no video on page"
+  }
+]
