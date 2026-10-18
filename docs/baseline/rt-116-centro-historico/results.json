@@ -1,0 +1,148 @@
+[
+  {
+    "device": "desktop",
+    "http": 200,
+    "count": 7,
+    "thumbs": 7,
+    "title": "Centro Histórico e Cultural do Rio",
+    "h1Count": 1,
+    "unnamedButtons": 0,
+    "initialImageTransferBytes": 134734,
+    "ctaHref": "#solicitar",
+    "ctaAboveFold": true,
+    "overflow": false,
+    "keyboardMoved": true,
+    "images": [
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1337.webp&w=828&q=75",
+        "alt": "Fachada do Real Gabinete Português de Leitura, com o nome da instituição acima da entrada",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1337",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1802.webp&w=828&q=75",
+        "alt": "Fachada da Igreja da Candelária no centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1802",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1328.webp&w=828&q=75",
+        "alt": "Fachada de uma igreja histórica no centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1328",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1321.webp&w=828&q=75",
+        "alt": "Fachada do Palácio Tiradentes",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1321",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1332.webp&w=828&q=75",
+        "alt": "Comércio de rua na região do SAARA, no centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1332",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1136.webp&w=828&q=75",
+        "alt": "Interior de uma igreja histórica, com bancos e altar",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1136",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp&w=828&q=75",
+        "alt": "Edifício do Museu do Amanhã junto à área portuária do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "museu-do-amanha",
+        "matches": true
+      }
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "http": 200,
+    "count": 7,
+    "thumbs": 7,
+    "title": "Centro Histórico e Cultural do Rio",
+    "h1Count": 1,
+    "unnamedButtons": 0,
+    "initialImageTransferBytes": 50450,
+    "ctaHref": "#solicitar",
+    "ctaAboveFold": true,
+    "overflow": false,
+    "keyboardMoved": true,
+    "images": [
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1337.webp&w=384&q=75",
+        "alt": "Fachada do Real Gabinete Português de Leitura, com o nome da instituição acima da entrada",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1337",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1802.webp&w=384&q=75",
+        "alt": "Fachada da Igreja da Candelária no centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1802",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1328.webp&w=384&q=75",
+        "alt": "Fachada de uma igreja histórica no centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1328",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1321.webp&w=384&q=75",
+        "alt": "Fachada do Palácio Tiradentes",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1321",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1332.webp&w=384&q=75",
+        "alt": "Comércio de rua na região do SAARA, no centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1332",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1136.webp&w=384&q=75",
+        "alt": "Interior de uma igreja histórica, com bancos e altar",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "img-1136",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3247/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp&w=384&q=75",
+        "alt": "Edifício do Museu do Amanhã junto à área portuária do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "expected": "museu-do-amanha",
+        "matches": true
+      }
+    ],
+    "errors": []
+  }
+]

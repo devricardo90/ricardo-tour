@@ -1,4 +1,5 @@
 import type { LocalizedText, TourContentRecord } from "@/lib/catalog/tour-content";
+import { CENTRO_ID, CENTRO_MEDIA_PREVIEW, CENTRO_TITLE } from "@/lib/catalog/drafts/centro-historico-media";
 import {
   ROCINHA_BENEFITS,
   ROCINHA_CONTENT,
@@ -325,10 +326,11 @@ function mockRecord(id: string): TourContentRecord {
 }
 
 /**
- * RT-115: tours whose REAL draft content exists replace the mock texts (still DRAFT: never public). Rocinha since
- * 17/10/2026 (Owner commercial closing). The other three keep the fictitious placeholders.
+ * RT-115/RT-116: real draft content replaces mock texts (still DRAFT: never public). Rocinha has Owner-reviewed copy;
+ * Centro has only the selected photographs and commercial name. The remaining two keep the fictitious placeholders.
  */
 function draftRecord(id: string): TourContentRecord | null {
+  if (id === CENTRO_ID) return CENTRO_MEDIA_PREVIEW;
   if (id !== ROCINHA_ID) return null;
   return { tripId: id, status: "DRAFT", source: ROCINHA_DRAFT_SOURCE, ...ROCINHA_CONTENT, images: OWNER_GALLERY[id] ?? [] };
 }
@@ -479,6 +481,21 @@ function rocinhaOffer(base: PrototypeOffer): PrototypeOffer {
   };
 }
 
+function centroOffer(base: PrototypeOffer): PrototypeOffer {
+  return {
+    ...base,
+    title: CENTRO_TITLE.pt ?? base.title,
+    titleByLocale: CENTRO_TITLE,
+    titleStatus: "PROVISIONAL", // PT name approved; EN/ES translations still need RT-115 review.
+    pitch: {},
+    modality: { value: {}, status: "PENDING", source: "Formato do passeio pendente de confirmação pelo Owner" },
+    pickup: { value: {}, status: "PENDING" },
+    benefits: { pt: [], en: [], es: [] },
+    coverStatus: "CONFIRMED",
+    contentStatus: "PENDING",
+  };
+}
+
 /** Prototype offers for the four existing tours (round 1). Pitches are editorial PROPOSALS marked as fictitious. */
 export const PROTOTYPE_OFFER: Record<string, PrototypeOffer> = {
   cmlhxkpy9000028zq27rhytew: offer("cmlhxkpy9000028zq27rhytew", mock(
@@ -491,11 +508,7 @@ export const PROTOTYPE_OFFER: Record<string, PrototypeOffer> = {
     "A private visit to Rocinha, guided by people who know the community",
     "Una visita privada a la Rocinha, guiada por quien conoce la comunidad",
   ))),
-  cmlibniq40000z4zqkbujnutt: offer("cmlibniq40000z4zqkbujnutt", mock(
-    "O centro histórico do Rio e a Confeitaria Colombo em uma experiência privativa",
-    "Rio's historic centre and Confeitaria Colombo on a private experience",
-    "El centro histórico de Río y la Confeitaria Colombo en una experiencia privada",
-  )),
+  cmlibniq40000z4zqkbujnutt: centroOffer(offer("cmlibniq40000z4zqkbujnutt", {})),
   cmljo0s1u0000t0zqa0bpd23p: offer("cmljo0s1u0000t0zqa0bpd23p", mock(
     "Um dia inteiro no Rio, com roteiro desenhado para o seu grupo",
     "A full day in Rio with a route designed for your group",

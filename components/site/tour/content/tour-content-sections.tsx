@@ -203,6 +203,7 @@ export function TourGallery({ content, locale, priority = false }: { content: To
     <ImageGallery
       images={content.gallery.map((img) => ({ src: img.src, alt: img.alt, objectPosition: img.objectPosition, credit: img.credit }))}
       labels={{ gallery: t.gallery, prev: t.galleryPrev, next: t.galleryNext, thumb: t.galleryThumb, position: t.galleryPosition }}
+      aspectClassName={content.tripId === "cmlibniq40000z4zqkbujnutt" ? "aspect-[3/4]" : undefined}
       priority={priority}
     />
   );
