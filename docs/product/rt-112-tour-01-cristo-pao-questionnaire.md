@@ -1,5 +1,35 @@
 # RT-112 — TOUR-01 Cristo Redentor + Pão de Açúcar: questionário comercial do Owner
 
+> **SUPERADO (18/10/2026) pela "Ficha Comercial v1.0"** (Google Docs, id `1KcT1TI0Nbgtn7zI8esmAqSaNsW_WQScKJkLsGlJSYKw`, decisões CR-01 a CR-18 do Owner), já incorporada ao **Manual Mestre v0.5 §10** (registro canônico). **Não reapresentar este questionário ao Owner.** O conteúdo original abaixo é mantido apenas como evidência histórica. Custos, tarifas usadas no cálculo, simulações e proposta de preço estão **somente** no Manual §14.6 (INTERNO), nunca neste repositório.
+>
+> **Reconciliação pergunta a pergunta**
+>
+> | Pergunta | Resultado | Onde está |
+> |---|---|---|
+> | Q1 Formato do grupo | Respondida: preço fechado por grupo, faixas de 1 a 4 (CR-12) | Manual §10.12 |
+> | Q2 Operador e guia | Respondida: Ricardo ou substituto qualificado; operação Ricardo Tour. **Verificação:** categoria do cadastro de guia no Cadastur (o Bondinho exige guia regional em passeio local) | §10.2 |
+> | Q3 Selarón | Respondida: Selarón no roteiro-base; Mirante Dona Marta como alternativa (CR-15). A sobreposição com o Premium fica para o §13 | §10.3 |
+> | Q4 Ordem | Respondida: Cristo → Selarón → Pão de Açúcar, ajustável | §10.3 |
+> | Q5 Nome PT | Respondida: nome de trabalho. EN/ES no RT-115 | §10.0 |
+> | Q6 Horários | Respondida: início combinado (7h, 8h ou 9h); Cristo pela manhã (CR-07). Horários das atrações pesquisados em fonte oficial | §10.5 |
+> | Q7 Duração | Respondida: cerca de 8h como referência. **Validação de campo:** ensaio cronometrado (V-07) | §10.4 |
+> | Q8 Acesso ao Cristo | Respondida: escolha do cliente entre trem e van (CR-04). Tarifas pesquisadas | §10.7 |
+> | Q9 Transporte | Respondida: carro alugado dirigido por Ricardo (CR-01). **Bloqueio legal documentado** (Lei 13.785/2018, CTB arts. 135 e 231-VIII, contrato da locadora): **decisão nova do Owner** sobre o modelo de transporte | §10.6 |
+> | Q10 Encontro | Respondida: busca e retorno em 6 bairros; sem Recreio e Resende; Barra e Niterói fora do padrão (CR-08, CR-16, CR-17) | §10.6 |
+> | Q11–Q12 Ingressos | Respondida: incluídos e pagos antecipadamente (CR-06). Tarifas oficiais pesquisadas; gratuidade do guia verificada só no Bondinho | §10.7 |
+> | Q13 Meia-entrada e gratuidades | Respondida para o preço (CR-13, CR-14). As faixas etárias das atrações foram pesquisadas e divergem entre si (V-05) | §10.12, §10.15 |
+> | Q14 Inclusões e exclusões | Respondida (CR-11 e ficha §12) | §10.10–§10.11 |
+> | Q15 Capacidade | Respondida: 1 a 4 turistas; crianças contam | §10.9 |
+> | Q16 Idiomas | Respondida: PT/EN/ES, confirmados na reserva | §10.8 |
+> | Q17 Custos | Respondida pela ficha §15 e pesquisa (V-03, V-04, V-06) | Somente §14.6 (interno) |
+> | Q18 Preço e margem | Modelo aprovado. **Proposta de tabela aguardando aprovação do Owner**, condicionada ao transporte | §10.12; §14.6 |
+> | Q19 Crianças | Respondida (CR-09, CR-13, CR-14). Retenção infantil no veículo pendente | §10.15 |
+> | Q20 Esforço e acessibilidade | Pendente de validação de campo | §10.13–§10.14 |
+> | Q21 Clima | Pendente (RT-81, RT-118) | §10.16 |
+> | Q22 Pagamento | Respondida: na reserva, ingressos + 30% dos serviços; antes do passeio, 70% dos serviços (CR-18) | §10.19 |
+> | Q23 Cancelamento | Pendente (RT-81, RT-118). As regras de cada fornecedor foram pesquisadas em parte | §10.19 |
+> | Q24–Q28 Fotos e vídeo | Ações já conhecidas do Owner (V-09): IMG_1179 ou IMG_1180, origem das fotos de terceiros, vídeo A, originais HEIC e autorizações, capa | §10.17 |
+
 - Data: 18/10/2026. Ticket: RT-112 (existente, Em andamento). Autorização do Owner: 18/10/2026 ("preparação do questionário comercial do TOUR-01").
 - Passeio: `cmlhxkpy9000028zq27rhytew`. Destino das respostas: **Manual Mestre §10** (Google Drive, id `1mtSYIISghr0jGQ3HSkZVxar0CgFkO2-IjW7iMTpJIe0`). Custos e margem vão **somente** para o §14 (INTERNO — CONFIDENCIAL), nunca para este repositório, o Jira ou o site.
 - Fontes consultadas: Manual Mestre v0.4 (§2–§10, §11 como referência de formato, §14, §15); Volume II (§5 Sprint 10 e §11 histórico até 18/10/2026); Jira RT-111, RT-112 (comentários 13456, 13470, 13471), RT-114, RT-116, RT-120; `docs/product/rt-s10-01-content-gap-matrix.md` §3.1; `docs/product/rt-s10-02-owner-intake.md` §B1; `docs/product/rt-116-cristo-pao-next-step.md`; `docs/product/rt-116-cristo-pao-selaron-media.md`.
