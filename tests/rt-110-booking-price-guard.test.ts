@@ -14,7 +14,8 @@ import { isBookingBlockedForUnapprovedPrice } from "@/lib/catalog/price-on-reque
 import { createBookingForUser } from "@/lib/services/booking.service";
 
 const CRISTO = "cmlhxkpy9000028zq27rhytew";
-const ROCINHA = "cmli1a6im000034zqqzc9sppb";
+const CATALOG = ["cmlhxkpy9000028zq27rhytew", "cmli1a6im000034zqqzc9sppb", "cmlibniq40000z4zqkbujnutt", "cmljo0s1u0000t0zqa0bpd23p"];
+const OTHER = "trip-not-in-the-own-catalog";
 
 describe("RT-110 (local, Owner 18/10/2026): no new booking for a tour without an approved commercial price", () => {
   beforeEach(() => vi.clearAllMocks());
@@ -34,12 +35,20 @@ describe("RT-110 (local, Owner 18/10/2026): no new booking for a tour without an
     expect(prismaMock.booking.create).not.toHaveBeenCalled();
   });
 
-  it("leaves other tours on the existing flow", async () => {
-    expect(isBookingBlockedForUnapprovedPrice(ROCINHA)).toBe(false);
-    prismaMock.trip.findUnique.mockResolvedValue({ id: ROCINHA, priceCents: 12000, maxGuests: null, schedules: [] });
+  it("blocks all four own-catalog tours (none has an approved price stored)", async () => {
+    for (const id of CATALOG) {
+      expect(isBookingBlockedForUnapprovedPrice(id), id).toBe(true);
+      await expect(createBookingForUser("user-1", { tripId: id })).rejects.toMatchObject({ code: "PRICE_NOT_APPROVED" });
+    }
+    expect(prismaMock.booking.create).not.toHaveBeenCalled();
+  });
+
+  it("leaves any other trip on the existing flow", async () => {
+    expect(isBookingBlockedForUnapprovedPrice(OTHER)).toBe(false);
+    prismaMock.trip.findUnique.mockResolvedValue({ id: OTHER, priceCents: 12000, maxGuests: null, schedules: [] });
     prismaMock.booking.findFirst.mockResolvedValue(null);
     prismaMock.booking.create.mockResolvedValue({ id: "b1" });
-    await createBookingForUser("user-1", { tripId: ROCINHA, guestCount: 2 });
+    await createBookingForUser("user-1", { tripId: OTHER, guestCount: 2 });
     expect(prismaMock.booking.create).toHaveBeenCalledTimes(1);
     expect(prismaMock.booking.create.mock.calls[0][0].data.totalPriceCents).toBe(24000);
   });
