@@ -739,3 +739,33 @@ describe("RT-112 / RT-115 TOUR-01 Cristo Redentor + Pão de Açúcar (Ficha Come
     expect(answer.es).toContain("30% de los servicios");
   });
 });
+
+describe("RT-112/RT-114 TOUR-01 gallery backdrop (Owner visual correction, 18/10/2026)", () => {
+  const view = (id: string) => toTourContentView(MOCK_TOUR_CONTENT[id], "pt", "preview")!;
+  const html = (id: string) => renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={view(id)} locale="pt" reviewMode />);
+
+  it("uses the immersive blurred backdrop for TOUR-01 only, keeping the main photo whole (object-contain)", () => {
+    const page = html("cmlhxkpy9000028zq27rhytew");
+    expect(page).toContain('data-backdrop="immersive"');
+    expect(page).toMatch(/data-testid="gallery-main-image"/);
+    const mainImg = page.match(/<img[^>]*data-testid="gallery-main-image"[^>]*>/)?.[0] ?? "";
+    expect(mainImg).toContain("object-contain"); // whole photo, never cropped
+    expect(page).not.toContain("opacity-45 blur-2xl"); // the faint grey-looking backdrop is gone on TOUR-01
+  });
+
+  it("leaves the approved galleries of the other tours unchanged (soft backdrop)", () => {
+    for (const id of ["cmli1a6im000034zqqzc9sppb", "cmlibniq40000z4zqkbujnutt"]) {
+      const page = html(id);
+      expect(page, id).not.toContain('data-backdrop="immersive"');
+      expect(page, id).toContain("opacity-45 blur-2xl");
+    }
+  });
+
+  it("keeps the backdrop decorative (hidden from assistive technology) and the thumbnails/navigation", () => {
+    const page = html("cmlhxkpy9000028zq27rhytew");
+    expect(page).toMatch(/aria-hidden="true" class="absolute inset-0" data-testid="gallery-backdrop"/);
+    expect(page).toContain('data-testid="gallery-thumbs"');
+    const thumbLabel = (n: number) => tourContentCopy.pt.galleryThumb.replace("{n}", String(n)).replace("{total}", "4");
+    for (let n = 1; n <= 4; n += 1) expect(page).toContain(`aria-label="${thumbLabel(n)}"`);
+  });
+});

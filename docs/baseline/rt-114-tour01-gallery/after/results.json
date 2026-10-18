@@ -1,0 +1,599 @@
+{
+  "date": "2026-10-18T11:41:46.762Z",
+  "results": [
+    {
+      "device": "desktop",
+      "variant": "photos",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        806,
+        1075
+      ],
+      "frame": [
+        725,
+        452
+      ],
+      "shown": [
+        339,
+        452
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.532,
+      "bandMeanRGB": [
+        127,
+        143,
+        146
+      ],
+      "bandStd": 55.7,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/desktop-photos-1.png"
+    },
+    {
+      "device": "desktop",
+      "variant": "photos",
+      "photo": 2,
+      "fit": "contain",
+      "natural": [
+        806,
+        1075
+      ],
+      "frame": [
+        725,
+        452
+      ],
+      "shown": [
+        339,
+        452
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.532,
+      "bandMeanRGB": [
+        90,
+        100,
+        93
+      ],
+      "bandStd": 53.9,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/desktop-photos-2.png"
+    },
+    {
+      "device": "desktop",
+      "variant": "photos",
+      "photo": 3,
+      "fit": "contain",
+      "natural": [
+        806,
+        1075
+      ],
+      "frame": [
+        725,
+        452
+      ],
+      "shown": [
+        339,
+        452
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.532,
+      "bandMeanRGB": [
+        118,
+        127,
+        127
+      ],
+      "bandStd": 54,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/desktop-photos-3.png"
+    },
+    {
+      "device": "desktop",
+      "variant": "photos",
+      "photo": 4,
+      "fit": "contain",
+      "natural": [
+        806,
+        1075
+      ],
+      "frame": [
+        725,
+        452
+      ],
+      "shown": [
+        339,
+        452
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.532,
+      "bandMeanRGB": [
+        95,
+        95,
+        86
+      ],
+      "bandStd": 54.7,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/desktop-photos-4.png"
+    },
+    {
+      "device": "desktop",
+      "variant": "landscape-16x9",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        1558,
+        876
+      ],
+      "frame": [
+        725,
+        452
+      ],
+      "shown": [
+        725,
+        407
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0,
+      "bandStd": null,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/desktop-landscape-16x9.png"
+    },
+    {
+      "device": "desktop",
+      "variant": "square-1x1",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        1168,
+        1168
+      ],
+      "frame": [
+        725,
+        452
+      ],
+      "shown": [
+        452,
+        452
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.376,
+      "bandMeanRGB": [
+        117,
+        118,
+        101
+      ],
+      "bandStd": 46.3,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/desktop-square-1x1.png"
+    },
+    {
+      "device": "desktop",
+      "variant": "tall-9x16",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        876,
+        1558
+      ],
+      "frame": [
+        725,
+        452
+      ],
+      "shown": [
+        254,
+        452
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.649,
+      "bandMeanRGB": [
+        105,
+        110,
+        93
+      ],
+      "bandStd": 38.7,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/desktop-tall-9x16.png"
+    },
+    {
+      "device": "tablet",
+      "variant": "photos",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        754,
+        1005
+      ],
+      "frame": [
+        738,
+        461
+      ],
+      "shown": [
+        345,
+        461
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.532,
+      "bandMeanRGB": [
+        127,
+        143,
+        146
+      ],
+      "bandStd": 55.5,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/tablet-photos-1.png"
+    },
+    {
+      "device": "tablet",
+      "variant": "photos",
+      "photo": 2,
+      "fit": "contain",
+      "natural": [
+        754,
+        1005
+      ],
+      "frame": [
+        738,
+        461
+      ],
+      "shown": [
+        345,
+        461
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.532,
+      "bandMeanRGB": [
+        90,
+        100,
+        93
+      ],
+      "bandStd": 53.9,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/tablet-photos-2.png"
+    },
+    {
+      "device": "tablet",
+      "variant": "photos",
+      "photo": 3,
+      "fit": "contain",
+      "natural": [
+        754,
+        1005
+      ],
+      "frame": [
+        738,
+        461
+      ],
+      "shown": [
+        345,
+        461
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.532,
+      "bandMeanRGB": [
+        118,
+        127,
+        127
+      ],
+      "bandStd": 54,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/tablet-photos-3.png"
+    },
+    {
+      "device": "tablet",
+      "variant": "photos",
+      "photo": 4,
+      "fit": "contain",
+      "natural": [
+        754,
+        1005
+      ],
+      "frame": [
+        738,
+        461
+      ],
+      "shown": [
+        345,
+        461
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.532,
+      "bandMeanRGB": [
+        95,
+        95,
+        86
+      ],
+      "bandStd": 54.8,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/tablet-photos-4.png"
+    },
+    {
+      "device": "tablet",
+      "variant": "landscape-16x9",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        1457,
+        820
+      ],
+      "frame": [
+        738,
+        461
+      ],
+      "shown": [
+        738,
+        415
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0,
+      "bandStd": null,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/tablet-landscape-16x9.png"
+    },
+    {
+      "device": "tablet",
+      "variant": "square-1x1",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        1093,
+        1093
+      ],
+      "frame": [
+        738,
+        461
+      ],
+      "shown": [
+        461,
+        461
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.376,
+      "bandMeanRGB": [
+        118,
+        118,
+        102
+      ],
+      "bandStd": 46.2,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/tablet-square-1x1.png"
+    },
+    {
+      "device": "tablet",
+      "variant": "tall-9x16",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        820,
+        1457
+      ],
+      "frame": [
+        738,
+        461
+      ],
+      "shown": [
+        259,
+        461
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.649,
+      "bandMeanRGB": [
+        105,
+        110,
+        94
+      ],
+      "bandStd": 38.7,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/tablet-tall-9x16.png"
+    },
+    {
+      "device": "mobile",
+      "variant": "photos",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        358,
+        478
+      ],
+      "frame": [
+        348,
+        261
+      ],
+      "shown": [
+        195,
+        261
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.439,
+      "bandMeanRGB": [
+        111,
+        123,
+        123
+      ],
+      "bandStd": 67,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/mobile-photos-1.png"
+    },
+    {
+      "device": "mobile",
+      "variant": "photos",
+      "photo": 2,
+      "fit": "contain",
+      "natural": [
+        358,
+        478
+      ],
+      "frame": [
+        348,
+        261
+      ],
+      "shown": [
+        195,
+        261
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.439,
+      "bandMeanRGB": [
+        77,
+        82,
+        76
+      ],
+      "bandStd": 57.7,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/mobile-photos-2.png"
+    },
+    {
+      "device": "mobile",
+      "variant": "photos",
+      "photo": 3,
+      "fit": "contain",
+      "natural": [
+        358,
+        478
+      ],
+      "frame": [
+        348,
+        261
+      ],
+      "shown": [
+        195,
+        261
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.439,
+      "bandMeanRGB": [
+        107,
+        114,
+        113
+      ],
+      "bandStd": 64.7,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/mobile-photos-3.png"
+    },
+    {
+      "device": "mobile",
+      "variant": "photos",
+      "photo": 4,
+      "fit": "contain",
+      "natural": [
+        358,
+        478
+      ],
+      "frame": [
+        348,
+        261
+      ],
+      "shown": [
+        195,
+        261
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.439,
+      "bandMeanRGB": [
+        84,
+        83,
+        75
+      ],
+      "bandStd": 56,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/mobile-photos-4.png"
+    },
+    {
+      "device": "mobile",
+      "variant": "landscape-16x9",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        1494,
+        840
+      ],
+      "frame": [
+        348,
+        261
+      ],
+      "shown": [
+        348,
+        196
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0,
+      "bandStd": null,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/mobile-landscape-16x9.png"
+    },
+    {
+      "device": "mobile",
+      "variant": "square-1x1",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        1121,
+        1121
+      ],
+      "frame": [
+        348,
+        261
+      ],
+      "shown": [
+        261,
+        261
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.251,
+      "bandMeanRGB": [
+        110,
+        106,
+        90
+      ],
+      "bandStd": 55.7,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/mobile-square-1x1.png"
+    },
+    {
+      "device": "mobile",
+      "variant": "tall-9x16",
+      "photo": 1,
+      "fit": "contain",
+      "natural": [
+        840,
+        1494
+      ],
+      "frame": [
+        348,
+        261
+      ],
+      "shown": [
+        146,
+        261
+      ],
+      "cropped": false,
+      "distorted": false,
+      "sideBandRatio": 0.579,
+      "bandMeanRGB": [
+        96,
+        97,
+        83
+      ],
+      "bandStd": 49.1,
+      "errors": 0,
+      "file": "docs/baseline/rt-114-tour01-gallery/after/mobile-tall-9x16.png"
+    }
+  ]
+}

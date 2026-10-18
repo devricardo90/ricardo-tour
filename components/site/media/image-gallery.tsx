@@ -46,12 +46,17 @@ export function ImageGallery({
   sizes = "(max-width: 1023px) 92vw, 56vw",
   aspectClassName = "aspect-[4/3] md:aspect-[16/10]",
   priority = false,
+  backdrop = "soft",
 }: {
   images: GalleryImage[];
   labels: GalleryLabels;
   sizes?: string;
   aspectClassName?: string;
   priority?: boolean;
+  /** "soft" (default, approved for Rocinha/Centro): faint blurred copy. "immersive" (TOUR-01, Owner 18/10/2026): the
+   *  photo's own blurred copy fills the frame at full strength with a discreet vignette, so portrait photos leave no
+   *  grey side bands; the main photo stays whole (object-contain), undistorted and slightly lifted by a shadow. */
+  backdrop?: "soft" | "immersive";
 }) {
   const [index, setIndex] = useState(0);
   const headingId = useId();
@@ -77,8 +82,15 @@ export function ImageGallery({
       <h2 id={headingId} className="sr-only">{labels.gallery}</h2>
       <div className={`relative overflow-hidden rounded-xl border border-white/10 bg-[var(--site-charcoal-raised,#15191D)] ${aspectClassName}`}>
         {/* Blurred backdrop of the same photo (decorative) so the uncropped photo never leaves empty bars. */}
-        <Image key={`bg-${current.src}`} src={current.src} alt="" aria-hidden="true" fill sizes="10vw" className="scale-110 object-cover opacity-45 blur-2xl" />
-        <Image key={current.src} src={current.src} alt={current.alt} fill priority={priority && index === 0} sizes={sizes} className="object-contain" data-testid="gallery-main-image" />
+        {backdrop === "immersive" ? (
+          <div aria-hidden="true" className="absolute inset-0" data-testid="gallery-backdrop" data-backdrop="immersive">
+            <Image key={`bg-${current.src}`} src={current.src} alt="" fill sizes="10vw" className="scale-[1.15] object-cover blur-[22px] brightness-[0.8] saturate-[1.3]" />
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(11,14,17,0)_50%,rgba(11,14,17,0.45)_100%)]" />
+          </div>
+        ) : (
+          <Image key={`bg-${current.src}`} src={current.src} alt="" aria-hidden="true" fill sizes="10vw" className="scale-110 object-cover opacity-45 blur-2xl" />
+        )}
+        <Image key={current.src} src={current.src} alt={current.alt} fill priority={priority && index === 0} sizes={sizes} className={backdrop === "immersive" ? "object-contain drop-shadow-[0_8px_32px_rgba(0,0,0,0.55)]" : "object-contain"} data-testid="gallery-main-image" />
         {total > 1 ? (
           <>
             <button

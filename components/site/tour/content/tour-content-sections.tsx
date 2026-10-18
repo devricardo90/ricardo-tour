@@ -204,6 +204,8 @@ export function TourGallery({ content, locale, priority = false }: { content: To
       images={content.gallery.map((img) => ({ src: img.src, alt: img.alt, objectPosition: img.objectPosition, credit: img.credit }))}
       labels={{ gallery: t.gallery, prev: t.galleryPrev, next: t.galleryNext, thumb: t.galleryThumb, position: t.galleryPosition }}
       aspectClassName={content.tripId === "cmlibniq40000z4zqkbujnutt" ? "aspect-[3/4]" : undefined}
+      // TOUR-01 (Owner, 18/10/2026): portrait photos must not leave grey side bands -> immersive blurred backdrop.
+      backdrop={content.tripId === "cmlhxkpy9000028zq27rhytew" ? "immersive" : "soft"}
       priority={priority}
     />
   );
