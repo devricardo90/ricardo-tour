@@ -1,6 +1,19 @@
 import type { LocalizedText, TourContentRecord } from "@/lib/catalog/tour-content";
 import { CENTRO_ID, CENTRO_MEDIA_PREVIEW, CENTRO_TITLE } from "@/lib/catalog/drafts/centro-historico-media";
 import {
+  CRISTO_BENEFITS,
+  CRISTO_CHILDREN,
+  CRISTO_CONTENT,
+  CRISTO_DRAFT_SOURCE,
+  CRISTO_GROUP_SIZE,
+  CRISTO_ID,
+  CRISTO_PICKUP_SHORT,
+  CRISTO_PRICE_LABEL,
+  CRISTO_SUBTITLE,
+  CRISTO_TITLE,
+  CRISTO_WHATSAPP_MESSAGE,
+} from "@/lib/catalog/drafts/cristo-pao.draft";
+import {
   ROCINHA_BENEFITS,
   ROCINHA_CONTENT,
   ROCINHA_DRAFT_SOURCE,
@@ -107,23 +120,23 @@ const ROCINHA_RIGHTS = (file: string, extra = "") =>
   `PENDING rights verification (Owner decision 17/10/2026). Declared by the Owner (17/10/2026): own media (photo/video) and consent/authorisation of the people shown — a declaration is not documentary proof; authorship and consent documents still to be recorded.${extra} Original: Drive MIDIAS/02_FAVELA_ROCINHA/ORIGINAIS/${file} (SHA-256 in docs/product/rt-116-rocinha-originals.sha256). Web copy: sRGB, metadata (incl. GPS) removed.`;
 
 /**
- * RT-116 — REAL photographs selected and ordered by the Owner (17/10/2026), per tour. Rights: Cristo/Pão OWNER_ATTESTED;
- * Rocinha UNVERIFIED (pending documentary verification, Owner decision 17/10/2026).
+ * RT-116 — REAL photographs selected and ordered by the Owner (17/10/2026), per tour. Rights: UNVERIFIED for Cristo/Pão
+ * and Rocinha (pending documentary verification, Owner rule 17/10/2026; Cristo/Pão aligned on 18/10/2026).
  * Alt texts describe what each photo shows (no fictitious marker: they are real descriptions, still to be reviewed with
  * RT-115). The record that holds them stays MOCK/DRAFT, so the public gate never shows it.
  */
 const CRISTO_DIR = "/media/tours/cristo-pao-selaron";
+// Rights PENDING (Owner rule 17/10/2026, Manual Mestre §10.17): a declaration or an editorial approval is not proof of
+// rights, so the own photos stay UNVERIFIED (never public) until the documentary verification is recorded.
 const CRISTO_RIGHTS = (driveFile: string, camera: string, people: boolean) =>
-  `Owner, 17/10/2026: own photo ${camera} (editorially approved), identified by content (correlation 0.99+ against the Owner's visual index). File: Drive MIDIAS/01_CRISTO_PAO_DE_ACUCAR_SELARON/ORIGINAIS/${driveFile} (WebP 952×1269, no metadata; HEIC original not in the Drive).${people ? " Identifiable visitors: authorisation DECLARED by the Owner; written proof pending." : ""}`;
-const THIRD_PARTY = (driveFile: string, photographer: string, url: string, work: string) =>
-  `UNVERIFIED third-party photo. Owner candidate, photographer informed: ${photographer} (${url}). The Drive file ${driveFile} is a DIFFERENT photograph from the cited Pexels image (17/10/2026 comparison): real source unknown. Rights over ${work} need legal validation. No legal clearance.`;
+  `PENDING rights verification (Owner rule 17/10/2026). Own photo ${camera}, editorially approved by the Owner (17/10/2026), identified by content (correlation 0.99+ against the Owner's visual index). File: Drive MIDIAS/01_CRISTO_PAO_DE_ACUCAR_SELARON/ORIGINAIS/${driveFile} (WebP 952×1269, no metadata; HEIC original not in the Drive).${people ? " Identifiable visitors: authorisation DECLARED by the Owner; written proof pending." : ""}`;
 
 const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
   // RT-116 — Cristo Redentor + Pão de Açúcar + Escadaria Selarón (Owner editorial definition, 17/10/2026).
   // Own photos: 4 of the 5 approved (IMG_1162/1171/1163/1181), identified BY CONTENT against the Owner's visual index
-  // (the Drive's 5th WebP is IMG_1180, not the approved IMG_1179: Owner decision pending, so it is not shown).
-  // Third-party candidates (Cristo, Selarón): the Drive files do NOT match the cited Pexels photos -> UNVERIFIED, so the
-  // public gate would hide them. ORDER AND COVER ARE A PROPOSAL for the Owner (coverStatus PROVISIONAL).
+  // (the Drive's 5th WebP is IMG_1180, not the approved IMG_1179: pending, so it is not shown). Rights PENDING (UNVERIFIED).
+  // The two third-party candidates (Cristo, Selarón) were REMOVED on 18/10/2026: their real source is unknown (the Drive
+  // files are not the cited Pexels photos) and Manual Mestre §10.17 says "não usar". ORDER AND COVER ARE A PROPOSAL.
   cmlhxkpy9000028zq27rhytew: [
     {
       position: 0,
@@ -134,28 +147,13 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Dos visitantes en el mirador con el Pan de Azúcar al fondo, bajo un cielo azul con nubes",
       },
       isCover: true,
-      rightsStatus: "OWNER_ATTESTED",
+      rightsStatus: "UNVERIFIED",
       rightsNote: CRISTO_RIGHTS("img1-pao-de-acucar.webp", "IMG_1162", true),
       focalX: 0.45,
       focalY: 0.45,
     },
     {
       position: 1,
-      src: `${CRISTO_DIR}/terceiros-cristo-redentor.jpg`,
-      alt: {
-        pt: "Estátua do Cristo Redentor de braços abertos, vista de baixo contra o céu azul",
-        en: "The Christ the Redeemer statue with open arms, seen from below against a blue sky",
-        es: "La estatua del Cristo Redentor con los brazos abiertos, vista desde abajo contra el cielo azul",
-      },
-      isCover: false,
-      rightsStatus: "UNVERIFIED",
-      rightsNote: THIRD_PARTY("img-cristo-redentor1.jpg", "Maxi Franzoi", "https://www.pexels.com/photo/christ-the-redeemer-in-rio-de-janeiro-9977483/", "the statue"),
-      credit: { pt: "Foto de terceiros · origem em verificação", en: "Third-party photo · source being verified", es: "Foto de terceros · origen en verificación" },
-      focalX: 0.5,
-      focalY: 0.3,
-    },
-    {
-      position: 2,
       src: `${CRISTO_DIR}/pao-02-IMG_1171-bondinho-cume.webp`,
       alt: {
         pt: "Cabos do bondinho chegando ao cume do Pão de Açúcar, com o mar ao fundo",
@@ -163,13 +161,13 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Cables del teleférico llegando a la cima del Pan de Azúcar, con el mar al fondo",
       },
       isCover: false,
-      rightsStatus: "OWNER_ATTESTED",
+      rightsStatus: "UNVERIFIED",
       rightsNote: CRISTO_RIGHTS("img2-pao-de-acucar.webp", "IMG_1171", false),
       focalX: 0.5,
       focalY: 0.4,
     },
     {
-      position: 3,
+      position: 2,
       src: `${CRISTO_DIR}/pao-03-IMG_1163-mirante-baia.webp`,
       alt: {
         pt: "Visitante apoiado no guarda-corpo do mirante, com a baía e os barcos ao fundo",
@@ -177,13 +175,13 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Visitante apoyado en la baranda del mirador, con la bahía y los barcos al fondo",
       },
       isCover: false,
-      rightsStatus: "OWNER_ATTESTED",
+      rightsStatus: "UNVERIFIED",
       rightsNote: CRISTO_RIGHTS("img3-pao-de-acucar.webp", "IMG_1163", true),
       focalX: 0.4,
       focalY: 0.55,
     },
     {
-      position: 4,
+      position: 3,
       src: `${CRISTO_DIR}/pao-04-IMG_1181-visitante-deck.webp`,
       alt: {
         pt: "Visitante no deck do mirante, com montanhas e a cidade ao fundo",
@@ -191,25 +189,10 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Visitante en la terraza del mirador, con montañas y la ciudad al fondo",
       },
       isCover: false,
-      rightsStatus: "OWNER_ATTESTED",
+      rightsStatus: "UNVERIFIED",
       rightsNote: CRISTO_RIGHTS("img4-pao-de-acucar.webp", "IMG_1181", true),
       focalX: 0.3,
       focalY: 0.5,
-    },
-    {
-      position: 5,
-      src: `${CRISTO_DIR}/terceiros-escadaria-selaron.jpg`,
-      alt: {
-        pt: "Escadaria Selarón com degraus de azulejos coloridos e um mural com a bandeira do Brasil no alto",
-        en: "The Selarón Steps with colourful tiled steps and a Brazilian flag mural at the top",
-        es: "La Escalera Selarón con escalones de azulejos de colores y un mural con la bandera de Brasil arriba",
-      },
-      isCover: false,
-      rightsStatus: "UNVERIFIED",
-      rightsNote: THIRD_PARTY("img-escadaria-selarao1.jpg", "Bruno Scramgnon", "https://www.pexels.com/photo/the-selaron-steps-in-rio-de-janeiro-brazil-13185516/", "the tiles (Jorge Selarón)"),
-      credit: { pt: "Foto de terceiros · origem em verificação", en: "Third-party photo · source being verified", es: "Foto de terceros · origen en verificación" },
-      focalX: 0.5,
-      focalY: 0.55,
     },
   ],
   cmli1a6im000034zqqzc9sppb: [
@@ -327,10 +310,12 @@ function mockRecord(id: string): TourContentRecord {
 
 /**
  * RT-115/RT-116: real draft content replaces mock texts (still DRAFT: never public). Rocinha has Owner-reviewed copy;
- * Centro has only the selected photographs and commercial name. The remaining two keep the fictitious placeholders.
+ * Cristo + Pão de Açúcar has copy written from the Owner's Ficha Comercial v1.0 (pending Owner review); Centro has only
+ * the selected photographs and commercial name. Premium keeps the fictitious placeholders.
  */
 function draftRecord(id: string): TourContentRecord | null {
   if (id === CENTRO_ID) return CENTRO_MEDIA_PREVIEW;
+  if (id === CRISTO_ID) return { tripId: id, status: "DRAFT", source: CRISTO_DRAFT_SOURCE, ...CRISTO_CONTENT, images: OWNER_GALLERY[id] ?? [] };
   if (id !== ROCINHA_ID) return null;
   return { tripId: id, status: "DRAFT", source: ROCINHA_DRAFT_SOURCE, ...ROCINHA_CONTENT, images: OWNER_GALLERY[id] ?? [] };
 }
@@ -371,6 +356,12 @@ export type PrototypeOffer = {
   conditionsStatus?: FactStatus;
   /** INTERNAL provisional prices: shown only in the lab review mode as "NÃO PUBLICAR"; never on the public page. */
   provisionalPricing?: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }>;
+  /** Shown instead of "Valores em validação" while no price is approved (TOUR-01: "Orçamento sob consulta"). */
+  priceLabel?: LocalizedText;
+  hotelPickup?: boolean;
+  children?: { value: LocalizedText; status: FactStatus };
+  transport?: { value: LocalizedText; status: FactStatus };
+  requestViaWhatsapp?: boolean;
 };
 
 export type PrototypeVideo = {
@@ -481,6 +472,39 @@ function rocinhaOffer(base: PrototypeOffer): PrototypeOffer {
   };
 }
 
+/**
+ * RT-112/RT-115 — TOUR-01 offer from the Owner's Ficha Comercial v1.0 and the T1 transport decision (18/10/2026).
+ * Facts are Owner decisions; the texts are agent drafts pending Owner review (PROVISIONAL). No price is approved, so none
+ * is shown (not even internal values: the price proposal lives only in the Manual Mestre's confidential §14.6.12).
+ */
+function cristoOffer(base: PrototypeOffer): PrototypeOffer {
+  return {
+    ...base,
+    title: CRISTO_TITLE.pt,
+    titleByLocale: CRISTO_TITLE,
+    titleStatus: "PROVISIONAL", // PT working name approved (Ficha §2.1); EN/ES names pending RT-115
+    pitch: CRISTO_SUBTITLE,
+    pitchStatus: "PROVISIONAL",
+    pickup: { value: CRISTO_PICKUP_SHORT, status: "CONFIRMED" }, // CR-08/CR-16
+    hotelPickup: true,
+    duration: { value: CRISTO_CONTENT.durationLabel ?? null, status: "CONFIRMED" }, // ~8 h reference (Ficha §4.1)
+    benefits: CRISTO_BENEFITS,
+    benefitsStatus: "PROVISIONAL",
+    contentStatus: "PROVISIONAL",
+    conditionsStatus: "PROVISIONAL", // cancellation/weather depend on RT-81/RT-118
+    groupSize: { value: CRISTO_GROUP_SIZE, status: "CONFIRMED" },
+    children: { value: CRISTO_CHILDREN, status: "CONFIRMED" }, // CR-09/CR-13/CR-14
+    // T1 (Owner, 18/10/2026): own vehicle driven by the guide; documentary regularization pending (Manual §10.6.1).
+    transport: {
+      value: { pt: "Veículo próprio, conduzido pelo guia", en: "Private vehicle driven by your guide", es: "Vehículo propio conducido por el guía" },
+      status: "PENDING",
+    },
+    whatsappMessage: CRISTO_WHATSAPP_MESSAGE,
+    priceLabel: CRISTO_PRICE_LABEL,
+    requestViaWhatsapp: true,
+  };
+}
+
 function centroOffer(base: PrototypeOffer): PrototypeOffer {
   return {
     ...base,
@@ -498,11 +522,7 @@ function centroOffer(base: PrototypeOffer): PrototypeOffer {
 
 /** Prototype offers for the four existing tours (round 1). Pitches are editorial PROPOSALS marked as fictitious. */
 export const PROTOTYPE_OFFER: Record<string, PrototypeOffer> = {
-  cmlhxkpy9000028zq27rhytew: offer("cmlhxkpy9000028zq27rhytew", mock(
-    "Conheça os cartões-postais mais famosos do Rio em uma experiência privativa, com guia dedicado",
-    "Discover Rio's most famous landmarks on a private experience with a dedicated guide",
-    "Conoce las postales más famosas de Río en una experiencia privada con guía dedicado",
-  )),
+  cmlhxkpy9000028zq27rhytew: cristoOffer(offer("cmlhxkpy9000028zq27rhytew", {})),
   cmli1a6im000034zqqzc9sppb: rocinhaOffer(offer("cmli1a6im000034zqqzc9sppb", mock(
     "Uma visita privativa à Rocinha, guiada por quem conhece a comunidade",
     "A private visit to Rocinha, guided by people who know the community",

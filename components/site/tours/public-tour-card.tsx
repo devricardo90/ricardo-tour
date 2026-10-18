@@ -5,6 +5,7 @@ import { normalizeTripImage } from "@/lib/image-utils";
 import { getLocalizedField } from "@/lib/localized-field";
 import { asLocalizedText } from "@/lib/types";
 import { displayLocation, formatPriceBRL, formatTripDuration, parseTripDescription } from "@/lib/catalog/trip-presentation";
+import { priceOnRequest } from "@/lib/catalog/price-on-request";
 import type { ToursCopy } from "@/components/site/tours/tours-copy";
 
 type CardTrip = {
@@ -22,6 +23,7 @@ type CardTrip = {
 // affordances, no schema-default badges and no raw metadata. The whole card is the detail link (stretched link).
 export function PublicTourCard({ trip, locale, t, priority = false }: { trip: CardTrip; locale: string; t: ToursCopy; priority?: boolean }) {
   const title = getLocalizedField<string>(asLocalizedText(trip.title), locale).trim();
+  const onRequest = priceOnRequest(trip.id, locale);
   const { summary, duration } = parseTripDescription(getLocalizedField<string>(asLocalizedText(trip.description), locale) ?? "");
   const place = displayLocation(trip.location, trip.city);
   const durationLabel = formatTripDuration(duration, locale);
@@ -61,8 +63,8 @@ export function PublicTourCard({ trip, locale, t, priority = false }: { trip: Ca
 
         <div className="mt-auto flex items-end justify-between gap-3 border-t border-[var(--site-rule-light)] pt-4">
           <div>
-            <p className="text-[12px] text-[var(--site-ink-muted)]">{t.pricePerPerson}</p>
-            <p className="mt-0.5 text-[20px] font-semibold leading-[1.1] text-[var(--site-ink)]">{formatPriceBRL(trip.priceCents)}</p>
+            <p className="text-[12px] text-[var(--site-ink-muted)]">{onRequest ? onRequest.label : t.pricePerPerson}</p>
+            <p className="mt-0.5 text-[20px] font-semibold leading-[1.1] text-[var(--site-ink)]">{onRequest ? onRequest.value : formatPriceBRL(trip.priceCents)}</p>
           </div>
           <Link
             href={`/tours/${trip.id}`}

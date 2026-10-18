@@ -128,8 +128,8 @@ describe("RT-114 mock data integrity", () => {
   });
 
   it("marks every mock record as MOCK and DRAFT, and every mock text as fictitious in its language", () => {
-    // Rocinha has real draft copy; Centro has only Owner-selected media. The remaining two records stay fictitious.
-    for (const record of Object.values(MOCK_TOUR_CONTENT).filter((r) => !["cmli1a6im000034zqqzc9sppb", "cmlibniq40000z4zqkbujnutt"].includes(r.tripId))) {
+    // Rocinha and Cristo + Pão have real draft copy; Centro has only Owner-selected media. Premium stays fictitious.
+    for (const record of Object.values(MOCK_TOUR_CONTENT).filter((r) => !["cmli1a6im000034zqqzc9sppb", "cmlibniq40000z4zqkbujnutt", "cmlhxkpy9000028zq27rhytew"].includes(r.tripId))) {
       expect(record.source).toMatch(/^MOCK/);
       expect(record.status).toBe("DRAFT");
       const texts = [record.meetingPoint, record.startTimeNote, record.requirements, record.accessibility, record.weatherPolicy, ...record.itinerary.map((s) => s.title)];
@@ -233,10 +233,12 @@ describe("RT-114 copy and prototype rendering (round 1 + Owner addendum)", () =>
       expect(PROTOTYPE_OFFER[id].priceCents).toBeNull();
       expect(PROTOTYPE_OFFER[id].modality.status).toBe(id === "cmlibniq40000z4zqkbujnutt" ? "PENDING" : "CONFIRMED");
       const html = render(id, "pt");
-      for (const old of ["R$ 385,00", "R$ 120,00", "R$ 245,00", "R$ 900,00", "5–6 horas", "5 a 6 horas", "Transporte em van", "8 horas", "3 a 4 horas"]) {
+      // TOUR-01: "Aproximadamente 8 horas" is the Owner-approved duration (Ficha v1.0 §4.1), not the old Premium value.
+      const exempt = id === "cmlhxkpy9000028zq27rhytew" ? ["8 horas"] : [];
+      for (const old of ["R$ 385,00", "R$ 120,00", "R$ 245,00", "R$ 900,00", "5–6 horas", "5 a 6 horas", "Transporte em van", "8 horas", "3 a 4 horas"].filter((o) => !exempt.includes(o))) {
         expect(html, `${id} must not show ${old}`).not.toContain(old);
       }
-      expect(html).toContain("Valores em validação");
+      expect(html).toContain(id === "cmlhxkpy9000028zq27rhytew" ? "Orçamento sob consulta" : "Valores em validação");
       expect(html).toContain('data-status="PENDING"');
     }
   });
@@ -368,35 +370,31 @@ describe("RT-116 lighter mobile clips and Cristo + Pão de Açúcar + Selarón p
     }
   });
 
-  it("shows the 4 identified own photos and the 2 third-party candidates; never the unapproved IMG_1180", () => {
+  it("shows only the 4 identified own photos (third-party candidates removed 18/10); never the unapproved IMG_1180", () => {
     const record = MOCK_TOUR_CONTENT[CRISTO];
     expect(record.images.map((img) => path.basename(img.src))).toEqual([
       "pao-01-IMG_1162-mirante.webp",
-      "terceiros-cristo-redentor.jpg",
       "pao-02-IMG_1171-bondinho-cume.webp",
       "pao-03-IMG_1163-mirante-baia.webp",
       "pao-04-IMG_1181-visitante-deck.webp",
-      "terceiros-escadaria-selaron.jpg",
     ]);
     expect(record.images.some((img) => /1179|1180|img5/.test(img.src))).toBe(false);
     for (const img of record.images) {
       expect(fs.existsSync(path.join(process.cwd(), "public", img.src))).toBe(true);
-      if (img.src.includes("terceiros-")) {
-        expect(img.rightsStatus).toBe("UNVERIFIED");
-        expect(img.rightsNote).toMatch(/DIFFERENT photograph/);
-      } else {
-        expect(img.rightsStatus).toBe("OWNER_ATTESTED");
-      }
+      // Owner rule 17/10/2026 (Manual §10.17): a declaration is not proof of rights -> PENDING, never public.
+      expect(img.rightsStatus).toBe("UNVERIFIED");
+      expect(img.rightsNote).toMatch(/^PENDING rights verification/);
+      expect(img.src).not.toContain("terceiros-");
     }
     // The cover/order is a proposal, and the third-party photos would be hidden publicly even if the record were approved.
     expect(PROTOTYPE_OFFER[CRISTO].coverStatus).toBe("PROVISIONAL");
     const nonMock = { ...record, source: "Owner test" }; // approvalFor refuses MOCK records (RT-119 guard)
     const approved = approveRecord(nonMock, new Date("2026-10-17"));
-    expect(toTourContentView(approved, "pt", "public")!.gallery.map((g) => path.basename(g.src))).not.toContain("terceiros-cristo-redentor.jpg");
-    expect(toTourContentView(approved, "pt", "public")!.gallery).toHaveLength(4);
+    // Even an approved record would publish none of these photos until their rights are verified.
+    expect(toTourContentView(approved, "pt", "public")!.gallery).toHaveLength(0);
   });
 
-  it("ships the third-party web copies and the poster without EXIF, XMP or ICC", async () => {
+  it("ships the photo web copies and the poster without EXIF, XMP or ICC", async () => {
     const sharp = (await import("sharp")).default;
     for (const src of [...MOCK_TOUR_CONTENT[CRISTO].images.map((img) => img.src), PROTOTYPE_OFFER[CRISTO].video!.poster]) {
       const meta = await sharp(path.join(process.cwd(), "public", src)).metadata();
@@ -483,8 +481,8 @@ describe("RT-115 / RT-112 Rocinha real content (Owner commercial closing 17/10/2
     expect(pt).not.toContain("Busca no hotel");
   });
 
-  it("leaves the two other tours on their fictitious placeholders", () => {
-    for (const id of ["cmlhxkpy9000028zq27rhytew", "cmljo0s1u0000t0zqa0bpd23p"]) {
+  it("leaves the Premium tour on its fictitious placeholders", () => {
+    for (const id of ["cmljo0s1u0000t0zqa0bpd23p"]) {
       expect(isMockRecord(MOCK_TOUR_CONTENT[id])).toBe(true);
       expect(PROTOTYPE_OFFER[id].provisionalPricing).toBeUndefined();
       expect(PROTOTYPE_OFFER[id].whatsappMessage).toBeUndefined();
@@ -670,9 +668,8 @@ describe("RT-115 final verification: approved texts as specification (17/10/2026
     expect(offer.provisionalPricing?.map((r) => r.totalCents)).toEqual([45000, 58000, 75000, 88000]);
   });
 
-  it("leaves the two other tours exactly as before (titles, mock pitches, no real-content fields)", () => {
+  it("leaves the Premium tour exactly as before (title, mock pitch, no real-content fields)", () => {
     const expectedPitch: Record<string, string> = {
-      cmlhxkpy9000028zq27rhytew: "Conheça os cartões-postais mais famosos do Rio em uma experiência privativa, com guia dedicado (exemplo fictício)",
       cmljo0s1u0000t0zqa0bpd23p: "Um dia inteiro no Rio, com roteiro desenhado para o seu grupo (exemplo fictício)",
     };
     for (const [id, pitch] of Object.entries(expectedPitch)) {
@@ -683,5 +680,62 @@ describe("RT-115 final verification: approved texts as specification (17/10/2026
       expect(o.contentStatus).toBeUndefined();
       expect(o.pitchStatus).toBe("MOCK");
     }
+  });
+});
+
+describe("RT-112 / RT-115 TOUR-01 Cristo Redentor + Pão de Açúcar (Ficha Comercial v1.0 + T1, 18/10/2026)", () => {
+  const ID = "cmlhxkpy9000028zq27rhytew";
+  const html = (locale: string) =>
+    renderToStaticMarkup(<TourDetailPrototype offer={offerForReview(PROTOTYPE_OFFER[ID], false)} content={toTourContentView(MOCK_TOUR_CONTENT[ID], locale, "preview")!} locale={locale} reviewMode showProvisionalPrices={false} />).replace(/\u00a0/g, " ");
+
+  it("is real DRAFT content (not mock), never public, with full PT/EN/ES parity", () => {
+    const record = MOCK_TOUR_CONTENT[ID];
+    expect(isMockRecord(record)).toBe(false);
+    expect(record.status).toBe("DRAFT");
+    expect(toTourContentView(record, "pt", "public")).toBeNull();
+    const texts = [record.summary, record.description, record.durationLabel, record.meetingPoint, record.startTimeNote, record.requirements, record.accessibility, record.operationalConditions];
+    for (const t of texts) for (const l of ["pt", "en", "es"] as const) expect(t?.[l]?.length, l).toBeGreaterThan(5);
+    for (const l of ["pt", "en", "es"] as const) {
+      expect(record.inclusions?.[l]).toHaveLength(10); // CR-11 / Ficha §11
+      expect(record.exclusions?.[l]).toHaveLength(9); // Ficha §12
+    }
+    expect(record.itinerary).toHaveLength(6);
+    expect(record.faq).toHaveLength(8);
+    for (const item of [...record.itinerary.map((i) => i.title), ...record.faq!.flatMap((f) => [f.question, f.answer])]) for (const l of ["pt", "en", "es"] as const) expect(item[l]).toBeTruthy();
+  });
+
+  it("states the approved facts and never a price (PT/EN/ES)", () => {
+    const facts = {
+      pt: ["Cristo Redentor + Pão de Açúcar — Tour Privativo", "Aproximadamente 8 horas", "Escadaria Selarón", "Mirante Dona Marta", "Trem do Corcovado", "van oficial", "Copacabana, Ipanema, Leblon, Botafogo, Flamengo e Centro", "0 a 2 anos", "1 a 4 turistas", "Orçamento sob consulta", "Solicitar pelo WhatsApp"],
+      en: ["Christ the Redeemer + Sugarloaf Mountain — Private Tour", "Approximately 8 hours", "Selarón Steps", "Dona Marta viewpoint", "Corcovado Train", "official van", "Copacabana, Ipanema, Leblon, Botafogo, Flamengo and Centro", "0 to 2", "1 to 4 guests", "Quote on request", "Request on WhatsApp"],
+      es: ["Cristo Redentor + Pan de Azúcar — Tour Privado", "Aproximadamente 8 horas", "Escalera Selarón", "Mirador Dona Marta", "Tren del Corcovado", "van oficial", "Copacabana, Ipanema, Leblon, Botafogo, Flamengo y Centro", "0 a 2 años", "1 a 4 personas", "Presupuesto a consultar", "Solicitar por WhatsApp"],
+    } as const;
+    for (const locale of ["pt", "en", "es"] as const) {
+      const page = html(locale);
+      for (const f of facts[locale]) expect(page, `${locale}: ${f}`).toContain(f);
+      expect(page).not.toMatch(/R\$ ?\d/); // no price at all (old R$ 385 or any proposal)
+      expect(page).not.toContain("terceiros-");
+      expect(page).toContain('data-testid="tour-request-whatsapp"');
+      expect(page).toContain("https://wa.me/");
+    }
+  });
+
+  it("marks transport (own vehicle, regularization pending) as PENDING and keeps internal data out", () => {
+    const offer = PROTOTYPE_OFFER[ID];
+    expect(offer.transport?.status).toBe("PENDING");
+    expect(offer.provisionalPricing).toBeUndefined();
+    expect(offer.priceCents).toBeNull();
+    const all = JSON.stringify({ offer, record: MOCK_TOUR_CONTENT[ID] });
+    // Internal data (vehicle, costs, margins, price proposals) lives only in the Manual Mestre's confidential section.
+    for (const internal of ["Mégane", "Megane", "margem", "margin", "custo", " cost", " fee", "cachê", "diária", "combustível", "aluguel", "gasolina", "rental"]) expect(all, internal).not.toContain(internal);
+    expect(all).not.toMatch(/R\$/);
+  });
+
+  it("explains the CR-18 payment rule without amounts", () => {
+    const answer = MOCK_TOUR_CONTENT[ID].faq!.find((f) => f.question.pt?.includes("pagamento"))!.answer;
+    expect(answer.pt).toContain("30% dos serviços");
+    expect(answer.pt).toContain("70% restantes");
+    expect(answer.en).toContain("30% of the services");
+    expect(answer.es).toContain("30% de los servicios");
   });
 });

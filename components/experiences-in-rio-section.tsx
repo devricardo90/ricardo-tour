@@ -1,4 +1,5 @@
 import { getPublicTrips } from "@/lib/catalog/public-trips";
+import { priceOnRequest } from "@/lib/catalog/price-on-request";
 import { isCityOnly, parseDescription } from "@/lib/catalog/trip-presentation";
 import { Link } from "@/i18n/routing";
 import { OptimizedImage } from "@/components/ui/optimized-image";
@@ -91,6 +92,7 @@ export async function ExperiencesInRioSection({ locale }: ExperiencesInRioSectio
                 getLocalizedField<string>(asLocalizedText(trip.description), locale) ?? "",
               );
               const price = (trip.priceCents / 100).toFixed(2).replace(".", ",");
+              const onRequest = priceOnRequest(trip.id, locale);
 
               return (
                 <li key={trip.id} className="w-[82%] shrink-0 snap-start md:w-auto md:shrink">
@@ -139,8 +141,8 @@ export async function ExperiencesInRioSection({ locale }: ExperiencesInRioSectio
 
                         <div className="flex items-center justify-between gap-3 border-t border-white/8 pt-4">
                           <div>
-                            <p className="text-[11px] text-[#9DA3A5]">{t.pricePerPerson}</p>
-                            <p className="mt-0.5 text-lg font-semibold text-[#F4F0E8]">R$ {price}</p>
+                            <p className="text-[11px] text-[#9DA3A5]">{onRequest ? onRequest.label : t.pricePerPerson}</p>
+                            <p className="mt-0.5 text-lg font-semibold text-[#F4F0E8]">{onRequest ? onRequest.value : `R$ ${price}`}</p>
                           </div>
                           <Link
                             href={`/tours/${trip.id}`}

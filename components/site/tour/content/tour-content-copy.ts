@@ -2,6 +2,10 @@
 // point, itinerary, rules) comes from TripContent and is never written here.
 export const tourContentCopy = {
   pt: {
+    children: "Crianças",
+    transport: "Transporte",
+    hotelPickup: "Busca e retorno",
+    requestWhatsapp: "Solicitar pelo WhatsApp",
     practical: "Informações práticas",
     duration: "Duração",
     meetingPoint: "Ponto de encontro",
@@ -54,6 +58,10 @@ export const tourContentCopy = {
     language: { pt: "Português", en: "Inglês", es: "Espanhol", fr: "Francês", de: "Alemão", it: "Italiano", sv: "Sueco" } as Record<string, string>,
   },
   en: {
+    children: "Children",
+    transport: "Transport",
+    hotelPickup: "Pickup and drop-off",
+    requestWhatsapp: "Request on WhatsApp",
     practical: "Practical information",
     duration: "Duration",
     meetingPoint: "Meeting point",
@@ -106,6 +114,10 @@ export const tourContentCopy = {
     language: { pt: "Portuguese", en: "English", es: "Spanish", fr: "French", de: "German", it: "Italian", sv: "Swedish" } as Record<string, string>,
   },
   es: {
+    children: "Niños",
+    transport: "Transporte",
+    hotelPickup: "Recogida y regreso",
+    requestWhatsapp: "Solicitar por WhatsApp",
     practical: "Información práctica",
     duration: "Duración",
     meetingPoint: "Punto de encuentro",

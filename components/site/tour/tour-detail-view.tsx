@@ -5,6 +5,7 @@ import { normalizeTripImage } from "@/lib/image-utils";
 import { getLocalizedField } from "@/lib/localized-field";
 import { asLocalizedList, asLocalizedText } from "@/lib/types";
 import { displayLocation, formatPriceBRL, formatTripDuration, parseTripDescription } from "@/lib/catalog/trip-presentation";
+import { priceOnRequest } from "@/lib/catalog/price-on-request";
 import { TourConversionSlot } from "@/components/site/tour/tour-conversion-slot";
 import { TourViewTracker } from "@/components/site/tour/tour-view-tracker";
 import { formatScheduleWindow, resolveTourDetailCopy } from "@/components/site/tour/tour-detail-copy";
@@ -30,6 +31,8 @@ const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:o
 // primary action. The conversion area is the RT-55 slot.
 export function TourDetailView({ trip, locale }: { trip: DetailTrip; locale: string }) {
   const t = resolveTourDetailCopy(locale);
+  // Obsolete published price (Owner, 18/10/2026): show a quote-on-request label instead of any amount.
+  const onRequest = priceOnRequest(trip.id, locale);
   const title = getLocalizedField<string>(asLocalizedText(trip.title), locale).trim();
   const parsed = parseTripDescription(getLocalizedField<string>(asLocalizedText(trip.description), locale) ?? "");
   const extraPlace = displayLocation(trip.location, trip.city);
@@ -82,8 +85,8 @@ export function TourDetailView({ trip, locale }: { trip: DetailTrip; locale: str
 
               <div className="mt-6 flex items-end justify-between gap-4 border-y border-[var(--site-rule-light)] py-5">
                 <div>
-                  <p className="text-[12px] text-[var(--site-ink-muted)]">{t.pricePerPerson}</p>
-                  <p className="mt-1 text-[30px] font-semibold leading-[1.05]">{formatPriceBRL(trip.priceCents)}</p>
+                  <p className="text-[12px] text-[var(--site-ink-muted)]">{onRequest ? onRequest.label : t.pricePerPerson}</p>
+                  <p className="mt-1 text-[30px] font-semibold leading-[1.05]" data-testid="tour-detail-price">{onRequest ? onRequest.value : formatPriceBRL(trip.priceCents)}</p>
                 </div>
                 <a
                   href="#tour-contact"

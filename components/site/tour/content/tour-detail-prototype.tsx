@@ -46,6 +46,14 @@ export type PrototypeOfferView = {
   provisionalPricing?: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }>;
   contentStatus?: ReviewStatus;
   conditionsStatus?: ReviewStatus;
+  /** Shown instead of "Valores em validação" while no price is approved (e.g. "Orçamento sob consulta"). */
+  priceLabel?: Localized;
+  /** The meeting text is a hotel pickup rule, not a fixed meeting point. */
+  hotelPickup?: boolean;
+  children?: { value: Localized; status: ReviewStatus };
+  transport?: { value: Localized; status: ReviewStatus };
+  /** Sprint 10 channel: the final request section also offers the prefilled WhatsApp message. */
+  requestViaWhatsapp?: boolean;
 };
 
 const CTA_TARGET = "#solicitar";
@@ -77,7 +85,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
   const td = resolveTourDetailCopy(locale);
   const t = resolveTourContentCopy(locale);
   const s = (status: ReviewStatus) => (reviewMode ? status : undefined);
-  const priceValue = offer.priceCents === null ? t.pricePending : formatPriceBRL(offer.priceCents);
+  const priceValue = offer.priceCents === null ? pickL(offer.priceLabel, locale) || t.pricePending : formatPriceBRL(offer.priceCents);
   const priceStatus: ReviewStatus = offer.priceCents === null ? "PENDING" : "CONFIRMED";
   const languages = content.languages.map((code) => t.language[code] ?? code.toUpperCase()).join(" · ");
   // Review chips only (lab): mock stays MOCK; real content uses the offer's editorial status (Owner-approved texts can
@@ -91,11 +99,13 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
 
   const essentials: EssentialItem[] = [];
   if (pickL(offer.modality.value, locale)) essentials.push({ key: "modality", icon: essentialIcons.Users, label: t.modality, value: pickL(offer.modality.value, locale), status: s(offer.modality.status) });
-  if (content.meetingPoint && !content.isMock) essentials.push({ key: "meeting", icon: essentialIcons.MapPin, label: t.meetingPoint, value: content.meetingPoint, status: s(offer.pickup.status) });
+  if (content.meetingPoint && !content.isMock) essentials.push({ key: "meeting", icon: offer.hotelPickup ? essentialIcons.Car : essentialIcons.MapPin, label: offer.hotelPickup ? t.hotelPickup : t.meetingPoint, value: content.meetingPoint, status: s(offer.pickup.status) });
   else if (pickL(offer.pickup.value, locale)) essentials.push({ key: "pickup", icon: essentialIcons.Car, label: t.pickup, value: pickL(offer.pickup.value, locale), status: s(offer.pickup.status) });
   essentials.push({ key: "duration", icon: essentialIcons.Clock, label: t.duration, value: offer.duration.value ? pickL(offer.duration.value, locale) : t.pendingValue, status: s(offer.duration.status) });
   if (offer.groupSize) essentials.push({ key: "group", icon: essentialIcons.Users, label: t.participants, value: pickL(offer.groupSize.value, locale), status: s(offer.groupSize.status) });
   if (offer.minAge) essentials.push({ key: "age", icon: essentialIcons.UserCheck, label: t.minimumAge, value: pickL(offer.minAge.value, locale), status: s(offer.minAge.status) });
+  if (offer.children) essentials.push({ key: "children", icon: essentialIcons.UserCheck, label: t.children, value: pickL(offer.children.value, locale), status: s(offer.children.status) });
+  if (offer.transport) essentials.push({ key: "transport", icon: essentialIcons.Car, label: t.transport, value: pickL(offer.transport.value, locale), status: s(offer.transport.status) });
   if (content.startTimeNote) essentials.push({ key: "time", icon: essentialIcons.Timer, label: t.startTime, value: content.startTimeNote, status: s(contentStatus) });
   if (languages) essentials.push({ key: "languages", icon: essentialIcons.Languages, label: t.languages, value: languages, status: s(contentStatus) });
 
@@ -213,7 +223,13 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
               <p className={sectionLabel}>{title}</p>
               <h2 id="tour-request-heading" className="site-display mt-2 text-[32px] font-medium leading-[1.1] text-[var(--site-on-dark,#F4F0E8)] md:text-[38px]">{t.contactTitle}</h2>
               <p className="mt-3 max-w-[60ch] text-[16px] leading-[1.6] text-[var(--site-on-dark-muted,#CAC7BF)]">{t.ctaNote}</p>
-              {reviewMode ? <p className="mt-3 max-w-[60ch] text-[14px] text-[var(--site-on-dark-subtle,#9DA3A5)]">{t.contactBody}</p> : null}
+              {offer.requestViaWhatsapp && whatsappExternal ? (
+                <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className={`${secondaryButtonClass} mt-6 w-full sm:w-auto`} data-testid="tour-request-whatsapp">
+                  <MessageCircle className="h-[18px] w-[18px]" aria-hidden="true" />
+                  {t.requestWhatsapp}
+                </a>
+              ) : null}
+              {reviewMode && !offer.requestViaWhatsapp ? <p className="mt-3 max-w-[60ch] text-[14px] text-[var(--site-on-dark-subtle,#9DA3A5)]">{t.contactBody}</p> : null}
             </section>
           </article>
         </div>

@@ -1,0 +1,312 @@
+{
+  "ok": true,
+  "date": "2026-10-18T09:55:41.536Z",
+  "results": [
+    {
+      "locale": "pt",
+      "device": "desktop",
+      "ok": true,
+      "status": 200,
+      "checks": {
+        "h1": [
+          "Cristo Redentor + Pão de Açúcar — Tour Privativo"
+        ],
+        "price": false,
+        "priceLabel": "Orçamento sob consulta",
+        "whatsappLinks": 2,
+        "whatsappHasTitle": true,
+        "ctaInViewport": true,
+        "overflowX": false,
+        "unnamedControls": 0,
+        "videoAutoplay": false,
+        "videoPreload": "none",
+        "sections": [],
+        "thirdParty": false
+      },
+      "photos": [
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-01-IMG_1162-mirante.webp&w=828&q=75",
+          "alt": "Dois visitantes no mirante com o Pão de Açúcar ao fundo, sob céu azul com nuvens",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-02-IMG_1171-bondinho-cume.webp&w=828&q=75",
+          "alt": "Cabos do bondinho chegando ao cume do Pão de Açúcar, com o mar ao fundo",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-03-IMG_1163-mirante-baia.webp&w=828&q=75",
+          "alt": "Visitante apoiado no guarda-corpo do mirante, com a baía e os barcos ao fundo",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-04-IMG_1181-visitante-deck.webp&w=828&q=75",
+          "alt": "Visitante no deck do mirante, com montanhas e a cidade ao fundo",
+          "loaded": true,
+          "fit": "contain"
+        }
+      ],
+      "focused": "A",
+      "errors": [],
+      "screenshot": "docs/baseline/rt-112-tour01-cristo-pao/pt-desktop-viewport.png"
+    },
+    {
+      "locale": "pt",
+      "device": "mobile",
+      "ok": true,
+      "status": 200,
+      "checks": {
+        "h1": [
+          "Cristo Redentor + Pão de Açúcar — Tour Privativo"
+        ],
+        "price": false,
+        "priceLabel": "Orçamento sob consulta",
+        "whatsappLinks": 2,
+        "whatsappHasTitle": true,
+        "ctaInViewport": true,
+        "overflowX": false,
+        "unnamedControls": 0,
+        "videoAutoplay": false,
+        "videoPreload": "none",
+        "sections": [],
+        "thirdParty": false
+      },
+      "photos": [
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-01-IMG_1162-mirante.webp&w=384&q=75",
+          "alt": "Dois visitantes no mirante com o Pão de Açúcar ao fundo, sob céu azul com nuvens",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-02-IMG_1171-bondinho-cume.webp&w=384&q=75",
+          "alt": "Cabos do bondinho chegando ao cume do Pão de Açúcar, com o mar ao fundo",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-03-IMG_1163-mirante-baia.webp&w=384&q=75",
+          "alt": "Visitante apoiado no guarda-corpo do mirante, com a baía e os barcos ao fundo",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-04-IMG_1181-visitante-deck.webp&w=384&q=75",
+          "alt": "Visitante no deck do mirante, com montanhas e a cidade ao fundo",
+          "loaded": true,
+          "fit": "contain"
+        }
+      ],
+      "focused": "A",
+      "errors": [],
+      "screenshot": "docs/baseline/rt-112-tour01-cristo-pao/pt-mobile-viewport.png"
+    },
+    {
+      "locale": "en",
+      "device": "desktop",
+      "ok": true,
+      "status": 200,
+      "checks": {
+        "h1": [
+          "Christ the Redeemer + Sugarloaf Mountain — Private Tour"
+        ],
+        "price": false,
+        "priceLabel": "Quote on request",
+        "whatsappLinks": 2,
+        "whatsappHasTitle": true,
+        "ctaInViewport": true,
+        "overflowX": false,
+        "unnamedControls": 0,
+        "videoAutoplay": false,
+        "videoPreload": "none",
+        "sections": [],
+        "thirdParty": false
+      },
+      "photos": [
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-01-IMG_1162-mirante.webp&w=828&q=75",
+          "alt": "Two visitors at a viewpoint with Sugarloaf Mountain behind them, under a blue sky with clouds",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-02-IMG_1171-bondinho-cume.webp&w=828&q=75",
+          "alt": "Cable car wires reaching the summit of Sugarloaf Mountain, with the sea behind",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-03-IMG_1163-mirante-baia.webp&w=828&q=75",
+          "alt": "A visitor leaning on the viewpoint railing, with the bay and boats behind",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-04-IMG_1181-visitante-deck.webp&w=828&q=75",
+          "alt": "A visitor on the viewpoint deck, with mountains and the city behind",
+          "loaded": true,
+          "fit": "contain"
+        }
+      ],
+      "focused": "A",
+      "errors": [],
+      "screenshot": "docs/baseline/rt-112-tour01-cristo-pao/en-desktop-viewport.png"
+    },
+    {
+      "locale": "en",
+      "device": "mobile",
+      "ok": true,
+      "status": 200,
+      "checks": {
+        "h1": [
+          "Christ the Redeemer + Sugarloaf Mountain — Private Tour"
+        ],
+        "price": false,
+        "priceLabel": "Quote on request",
+        "whatsappLinks": 2,
+        "whatsappHasTitle": true,
+        "ctaInViewport": true,
+        "overflowX": false,
+        "unnamedControls": 0,
+        "videoAutoplay": false,
+        "videoPreload": "none",
+        "sections": [],
+        "thirdParty": false
+      },
+      "photos": [
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-01-IMG_1162-mirante.webp&w=384&q=75",
+          "alt": "Two visitors at a viewpoint with Sugarloaf Mountain behind them, under a blue sky with clouds",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-02-IMG_1171-bondinho-cume.webp&w=384&q=75",
+          "alt": "Cable car wires reaching the summit of Sugarloaf Mountain, with the sea behind",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-03-IMG_1163-mirante-baia.webp&w=384&q=75",
+          "alt": "A visitor leaning on the viewpoint railing, with the bay and boats behind",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-04-IMG_1181-visitante-deck.webp&w=384&q=75",
+          "alt": "A visitor on the viewpoint deck, with mountains and the city behind",
+          "loaded": true,
+          "fit": "contain"
+        }
+      ],
+      "focused": "A",
+      "errors": [],
+      "screenshot": "docs/baseline/rt-112-tour01-cristo-pao/en-mobile-viewport.png"
+    },
+    {
+      "locale": "es",
+      "device": "desktop",
+      "ok": true,
+      "status": 200,
+      "checks": {
+        "h1": [
+          "Cristo Redentor + Pan de Azúcar — Tour Privado"
+        ],
+        "price": false,
+        "priceLabel": "Presupuesto a consultar",
+        "whatsappLinks": 2,
+        "whatsappHasTitle": true,
+        "ctaInViewport": true,
+        "overflowX": false,
+        "unnamedControls": 0,
+        "videoAutoplay": false,
+        "videoPreload": "none",
+        "sections": [],
+        "thirdParty": false
+      },
+      "photos": [
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-01-IMG_1162-mirante.webp&w=828&q=75",
+          "alt": "Dos visitantes en el mirador con el Pan de Azúcar al fondo, bajo un cielo azul con nubes",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-02-IMG_1171-bondinho-cume.webp&w=828&q=75",
+          "alt": "Cables del teleférico llegando a la cima del Pan de Azúcar, con el mar al fondo",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-03-IMG_1163-mirante-baia.webp&w=828&q=75",
+          "alt": "Visitante apoyado en la baranda del mirador, con la bahía y los barcos al fondo",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-04-IMG_1181-visitante-deck.webp&w=828&q=75",
+          "alt": "Visitante en la terraza del mirador, con montañas y la ciudad al fondo",
+          "loaded": true,
+          "fit": "contain"
+        }
+      ],
+      "focused": "A",
+      "errors": [],
+      "screenshot": "docs/baseline/rt-112-tour01-cristo-pao/es-desktop-viewport.png"
+    },
+    {
+      "locale": "es",
+      "device": "mobile",
+      "ok": true,
+      "status": 200,
+      "checks": {
+        "h1": [
+          "Cristo Redentor + Pan de Azúcar — Tour Privado"
+        ],
+        "price": false,
+        "priceLabel": "Presupuesto a consultar",
+        "whatsappLinks": 2,
+        "whatsappHasTitle": true,
+        "ctaInViewport": true,
+        "overflowX": false,
+        "unnamedControls": 0,
+        "videoAutoplay": false,
+        "videoPreload": "none",
+        "sections": [],
+        "thirdParty": false
+      },
+      "photos": [
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-01-IMG_1162-mirante.webp&w=384&q=75",
+          "alt": "Dos visitantes en el mirador con el Pan de Azúcar al fondo, bajo un cielo azul con nubes",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-02-IMG_1171-bondinho-cume.webp&w=384&q=75",
+          "alt": "Cables del teleférico llegando a la cima del Pan de Azúcar, con el mar al fondo",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-03-IMG_1163-mirante-baia.webp&w=384&q=75",
+          "alt": "Visitante apoyado en la baranda del mirador, con la bahía y los barcos al fondo",
+          "loaded": true,
+          "fit": "contain"
+        },
+        {
+          "src": "http://127.0.0.1:3251/_next/image?url=/media/tours/cristo-pao-selaron/pao-04-IMG_1181-visitante-deck.webp&w=384&q=75",
+          "alt": "Visitante en la terraza del mirador, con montañas y la ciudad al fondo",
+          "loaded": true,
+          "fit": "contain"
+        }
+      ],
+      "focused": "A",
+      "errors": [],
+      "screenshot": "docs/baseline/rt-112-tour01-cristo-pao/es-mobile-viewport.png"
+    }
+  ]
+}

@@ -5,6 +5,7 @@
 // Owner-approved launch set (by canonical database id, never by title) AND it passes data-integrity checks.
 // The Home Experiences section, the /tours listing and (RT-54) the tour detail all consume this module, so they cannot
 // drift into different definitions of "public". Excluded records are never deleted or modified; they are only hidden.
+import { PRICE_ON_REQUEST_TRIP_IDS } from "@/lib/catalog/price-on-request";
 import { prisma } from "@/lib/prisma";
 import { normalizeTripImage } from "@/lib/image-utils";
 import { getLocalizedField } from "@/lib/localized-field";
@@ -171,7 +172,7 @@ export type TripBrowseParams = {
 
 /** Accent-insensitive text search over title, description, city and location (same behavior as the legacy listing). */
 export function filterPublicTrips<
-  T extends { title: unknown; description?: unknown; city: string; location?: string | null; priceCents: number; durationDays?: number; physicalLevel?: string; childrenAllowed?: boolean }
+  T extends { id?: string; title: unknown; description?: unknown; city: string; location?: string | null; priceCents: number; durationDays?: number; physicalLevel?: string; childrenAllowed?: boolean }
 >(trips: T[], params: TripBrowseParams, locale: string) {
   const search = norm(params.search ?? "");
   const min = params.minPrice ? Number(params.minPrice) * 100 : undefined;
@@ -179,6 +180,8 @@ export function filterPublicTrips<
   const duration = params.duration && params.duration !== "all" ? Number(params.duration) : undefined;
   const level = params.level && params.level !== "all" ? params.level : undefined;
   return trips.filter((trip) => {
+    // Obsolete published price (price on request): a price filter must not reveal it, so such tours never match one.
+    if ((min !== undefined || max !== undefined) && trip.id && PRICE_ON_REQUEST_TRIP_IDS.has(trip.id)) return false;
     if (min !== undefined && trip.priceCents < min) return false;
     if (max !== undefined && trip.priceCents > max) return false;
     if (duration !== undefined && (duration === 3 ? (trip.durationDays ?? 1) < 3 : (trip.durationDays ?? 1) !== duration)) return false;

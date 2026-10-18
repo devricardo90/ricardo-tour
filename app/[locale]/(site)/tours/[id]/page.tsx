@@ -8,6 +8,7 @@ import { asLocalizedText } from "@/lib/types";
 import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
 import { buildTouristTripJsonLd, serializeJsonLd } from "@/lib/seo/structured-data";
 import { TourDetailView } from "@/components/site/tour/tour-detail-view";
+import { publicOfferPriceCents } from "@/lib/catalog/price-on-request";
 
 // Same request-time catalog read as the Home and the listing.
 export const dynamic = "force-dynamic";
@@ -52,7 +53,7 @@ export default async function TourDetailsPage(props: PageProps) {
 
   const name = getLocalizedField<string>(asLocalizedText(trip.title), locale).trim();
   const summary = parseTripDescription(getLocalizedField<string>(asLocalizedText(trip.description), locale) ?? "").summary ?? undefined;
-  const jsonLd = buildTouristTripJsonLd({ siteUrl: PUBLIC_SITE_URL, url: `${PUBLIC_SITE_URL}/${locale}/tours/${id}`, name, description: summary, image: trip.imageUrl, priceCents: trip.priceCents });
+  const jsonLd = buildTouristTripJsonLd({ siteUrl: PUBLIC_SITE_URL, url: `${PUBLIC_SITE_URL}/${locale}/tours/${id}`, name, description: summary, image: trip.imageUrl, priceCents: publicOfferPriceCents(id, trip.priceCents) ?? 0 }); // 0 = no Offer (obsolete published price)
 
   return (
     <>
