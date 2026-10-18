@@ -209,3 +209,31 @@ Locally the removal is safe:
 No column is dropped, renamed or re-typed, and no existing row is rewritten. RT-100 is independent of RT-113 (both only reference `Trip`), but `schema.prisma` and the code expect all five, so they must be applied together, in timestamp order (1 → 5). None of the five is on `origin/main`.
 
 **Re-run:** full suite 893 passed / 6 skipped; `tsc` OK; working tree clean before this note.
+
+## 9. Production URL removed from the main checkout's `.env` (18/10/2026, Owner authorization)
+- **Owner authorization (18/10/2026):** the Owner confirmed administrative access to the Neon project and that the PostgreSQL credential is stored in a safe place. Authorized only: removing the production `DATABASE_URL` line from the main checkout's `.env`.
+- **Before removal:** `.env` was untracked (`git ls-files`: not tracked; ignored by `.gitignore:42 .env*`), with exactly one `DATABASE_URL` line, a hosted Neon host.
+- **Removed:** that line only. Keys before: `DATABASE_URL`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `RESEND_API_KEY`. Keys after: `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `RESEND_API_KEY` (unchanged, as instructed).
+  - No hosted URL remains in any Rick Travel env file.
+  - `.env.local` was not modified.
+  - No value was printed or copied.
+- **Other local configurations:**
+  - No Rick Travel env file in any checkout points to a hosted database.
+  - No `pgpass` or `pg_service` file exists.
+  - The PowerShell profile does not mention `DATABASE_URL` or `neon`.
+  - No database variables in the shell, User or Machine environment.
+  - `.vercel/project.json` holds only project and org IDs.
+  - Other unrelated Desktop projects have their own hosted URLs. None mentions the Rick Travel endpoint.
+- **After removal:**
+  - Next.js (`@next/env`): `next dev` and `next build` / `start` resolve `DATABASE_URL` → `127.0.0.1:5433/ricktravel` (local); the auth and Resend keys are still present.
+  - Main checkout, old config (reads `.env` only): `prisma migrate status` → "datasource.url property is required". It fails closed and can no longer reach production.
+  - Guarded worktree with the `.env.local` URL: `prisma validate` OK; `migrate status` reaches the dev DB (the 5 pending migrations are kept, not applied); `check:db` "Database connection OK".
+- **Dev server smoke test** (main checkout, `next dev -p 3299`, stopped afterwards): `/pt`, `/pt/tours`, `/en` and `/api/trips` returned 200; `/api/trips` returned the 4 tours from the local database; no errors in the server log.
+- **Suite:** 893 passed / 6 skipped.
+- **Repositories:** the worktree is unchanged by the removal; the main checkout's `git status` is identical to the session start (`.env` is ignored).
+- **Effect:** in the main checkout, a Prisma CLI command now needs an explicit `DATABASE_URL`, or the guarded branch, to reach any database. The known repository paths can no longer reach production by accident.
+- **Remaining, out of scope:**
+  - possible production values of `BETTER_AUTH_SECRET` / `RESEND_API_KEY` in the local `.env` (RT-105 / RT-108);
+  - credentials in Vercel and rotation (RT-108);
+  - database roles (RT-106 / 108);
+  - publication control (RT-107).
