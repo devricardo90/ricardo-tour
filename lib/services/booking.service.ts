@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { DomainError } from "@/lib/errors/domain-error";
+import { isBookingBlockedForUnapprovedPrice } from "@/lib/catalog/price-on-request";
 
 const USER_CANCELLATION_WINDOW_HOURS = 24;
 
@@ -178,6 +179,15 @@ export async function createBookingForUser(userId: string, input: CreateBookingI
         throw new DomainError("Campo obrigatorio: tripId", {
             code: "INVALID_TRIP_ID",
             status: 400,
+        });
+    }
+
+    // RT-110 (local, Owner 18/10/2026): no new booking for a tour whose commercial price is not approved (the stored
+    // price is obsolete). Checked on the server before any database access; existing bookings are not changed.
+    if (isBookingBlockedForUnapprovedPrice(tripId)) {
+        throw new DomainError("Este passeio e reservado mediante solicitacao de disponibilidade. Fale com a equipe pelo WhatsApp.", {
+            code: "PRICE_NOT_APPROVED",
+            status: 409,
         });
     }
 

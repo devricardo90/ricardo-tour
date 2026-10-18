@@ -13,6 +13,15 @@ const LABELS = {
   es: { label: "Precio", value: "Presupuesto a consultar" },
 } as const;
 
+/**
+ * RT-110 (Owner authorization 18/10/2026, local only): a tour whose commercial price is not approved cannot receive a new
+ * booking through the legacy booking API, because that flow would store the obsolete published price. Availability is
+ * requested through the WhatsApp / request-form flow with human confirmation instead. Existing bookings are untouched.
+ */
+export function isBookingBlockedForUnapprovedPrice(tripId: string): boolean {
+  return PRICE_ON_REQUEST_TRIP_IDS.has(tripId);
+}
+
 /** Price for the JSON-LD Offer: null (no Offer) while the published price is obsolete. */
 export function publicOfferPriceCents(tripId: string, priceCents: number): number | null {
   return PRICE_ON_REQUEST_TRIP_IDS.has(tripId) ? null : priceCents;
