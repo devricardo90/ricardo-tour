@@ -10,6 +10,7 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import dotenv from "dotenv";
 import fs from "node:fs";
 import path from "node:path";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
@@ -20,6 +21,8 @@ fs.mkdirSync(outDir, { recursive: true });
 const failures = [];
 const notes = [];
 const check = (cond, msg) => { if (!cond) failures.push(msg); };
+
+assertDatabaseAccess({ operation: "read", label: "scripts/rt-30-experiences-validation.mjs" }); // RT-104: deny by default
 
 const prisma = new PrismaClient({ adapter: new PrismaPg({ connectionString: process.env.DATABASE_URL }) });
 const dbTrips = await prisma.trip.findMany({

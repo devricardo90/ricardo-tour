@@ -5,6 +5,7 @@ import { loginAsAdmin, loginAsUser } from "./helpers/auth";
 import { E2E_USER_EMAIL } from "./helpers/constants";
 import { readE2EData } from "./helpers/e2e-data";
 import { confirmBookingByAdmin } from "../lib/services/booking.service";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 const databaseUrl = process.env.DATABASE_URL;
 
@@ -17,6 +18,8 @@ const databaseHost = new URL(databaseUrl).hostname;
 if (!["localhost", "127.0.0.1"].includes(databaseHost)) {
   throw new Error("Refusing RT-022A smoke: DATABASE_URL is not local.");
 }
+// RT-104: creates bookings → only on a positively identified local isolated database (loopback alone is not proof).
+assertDatabaseAccess({ operation: "write", label: "e2e/rt-022a-admin-booking-actions.spec.ts" });
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({

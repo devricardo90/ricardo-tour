@@ -3,9 +3,12 @@ import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import dotenv from "dotenv";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 dotenv.config({ path: ".env.local", quiet: true });
 dotenv.config({ quiet: true });
+
+assertDatabaseAccess({ operation: "read", label: "scripts/rt-69-catalog-snapshot.ts" }); // RT-104: deny by default
 
 function explicitPt(value: unknown): string {
   if (!value || typeof value !== "object" || Array.isArray(value)) return "";

@@ -21,6 +21,7 @@ import { randomBytes } from "node:crypto";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import pg from "pg";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 const ADMIN_URL = process.env.RT100_ADMIN_URL;
 if (!ADMIN_URL) throw new Error("Set RT100_ADMIN_URL to a LOCAL Postgres admin connection string (database 'postgres').");
@@ -37,6 +38,7 @@ function assertLocal(urlString) {
   return u;
 }
 const adminUrl = assertLocal(ADMIN_URL);
+assertDatabaseAccess({ operation: "destructive", label: "scripts/rt-100-validate-migration.mjs", url: ADMIN_URL, urlVar: "RT100_ADMIN_URL" }); // RT-104: deny by default
 const suffix = randomBytes(3).toString("hex");
 const DB_A = `rt100_scratch_legacy_${suffix}`;
 const DB_B = `rt100_scratch_prisma_${suffix}`;
@@ -89,6 +91,7 @@ try {
   for (const db of [DB_A, DB_B, DB_C]) {
     if (!db.startsWith("rt100_scratch_")) throw new Error("bad scratch name");
     await admin.query(`CREATE DATABASE "${db}"`);
+    await admin.query(`ALTER DATABASE "${db}" SET rt.environment = 'local-isolated'`); // RT-104 local marker
     created.push(db);
   }
 

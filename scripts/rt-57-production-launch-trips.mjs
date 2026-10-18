@@ -22,6 +22,7 @@
 import fs from "node:fs";
 import pg from "pg";
 import dotenv from "dotenv";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 const ALLOWED_HOST = "ep-silent-forest-abhp9s19-pooler.eu-west-2.aws.neon.tech";
 const ALLOWED_DB = "neondb";
@@ -91,6 +92,7 @@ if (offline) {
   const env = dotenv.parse(fs.readFileSync(".env.local"));
   const local = mask(env.DATABASE_URL);
   if (!["localhost", "127.0.0.1"].includes(local.host)) throw new Error("--offline compares against the local database only");
+  assertDatabaseAccess({ operation: "read", label: "rt-57 --offline", url: env.DATABASE_URL }); // RT-104
   const c = new pg.Client({ connectionString: env.DATABASE_URL });
   await c.connect();
   const res = await c.query('select * from "Trip" where id = any($1)', [APPROVED.map((a) => a.id)]);
@@ -115,6 +117,7 @@ if (["localhost", "127.0.0.1"].includes(target.host)) throw new Error("refusing 
 if (target.host !== ALLOWED_HOST || target.database !== ALLOWED_DB) throw new Error(`refusing unknown target ${target.host}/${target.database}`);
 if (apply && confirm !== `${target.host}/${target.database}`) throw new Error(`--apply requires --confirm-production=${target.host}/${target.database}`);
 
+assertDatabaseAccess({ operation: apply ? "write" : "read", label: "rt-57 production launch", url, urlVar: "RT57_TARGET_DATABASE_URL" }); // RT-104: hosted needs RT_DB_TARGET + allowlist + ack
 const client = new pg.Client({ connectionString: url, ssl: { rejectUnauthorized: false } });
 await client.connect();
 try {

@@ -3,6 +3,9 @@ import fs from "node:fs";
 import path from "node:path";
 import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
+
+assertDatabaseAccess({ operation: "write", label: "scripts/import-real-trips.mjs" }); // RT-104: deny by default
 
 const prisma = new PrismaClient({
   adapter: new PrismaPg({

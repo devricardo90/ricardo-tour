@@ -7,11 +7,13 @@ import { prisma } from "@/lib/prisma";
 import { getTourContent } from "@/lib/catalog/tour-content";
 import { approveTourContent } from "@/lib/catalog/content-approval";
 import { MOCK_TOUR_CONTENT } from "@/lib/catalog/mock/tour-content.mock";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 const url = new URL(process.env.DATABASE_URL ?? "");
 if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "5433" || !url.pathname.startsWith("/rt113_") || /neon/i.test(url.href)) {
   throw new Error("Refusing to run: DATABASE_URL must be a local throw-away database localhost:5433/rt113_*");
 }
+assertDatabaseAccess({ operation: "destructive", label: "scripts/rt-113-validate.ts" }); // RT-104: deny by default
 
 let failures = 0;
 const check = (ok: boolean, label: string) => {

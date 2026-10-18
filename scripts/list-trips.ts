@@ -1,4 +1,7 @@
 import { prisma } from "../lib/prisma";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
+
+assertDatabaseAccess({ operation: "read", label: "scripts/list-trips.ts" }); // RT-104: deny by default
 
 async function main() {
   const trips = await prisma.trip.findMany();

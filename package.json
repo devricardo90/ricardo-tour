@@ -17,6 +17,7 @@
     "typecheck": "tsc --noEmit",
     "check:env": "tsx scripts/validate-env.ts",
     "check:db": "tsx scripts/test-db.ts",
+    "db:mark-local": "node scripts/db/mark-local-database.mjs",
     "preflight:staging": "npm run check:env -- --target=staging && npm run check:db && npm run lint && npm run typecheck && npm run test && npm run build",
     "test": "vitest run",
     "check:concierge-sources": "node scripts/rt-69-registry.mjs validate && node --test tests/rt-69-registry.test.mjs",

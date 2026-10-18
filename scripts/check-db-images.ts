@@ -1,4 +1,7 @@
 import { prisma } from '../lib/prisma';
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
+
+assertDatabaseAccess({ operation: "read", label: "scripts/check-db-images.ts" }); // RT-104: deny by default
 
 async function checkImagePaths() {
     console.log('🔍 Verificando imageUrls no banco...\n');

@@ -8,6 +8,10 @@ export default async function globalSetup(config: FullConfig) {
     return;
   }
 
+  // RT-104: deletes/recreates users → only on a positively identified local isolated database.
+  const { assertDatabaseAccess } = await import("../lib/db/guard-runtime.mjs");
+  assertDatabaseAccess({ operation: "destructive", label: "e2e/global.setup.ts" });
+
   const { PrismaClient } = await import("@prisma/client");
   const { PrismaPg } = await import("@prisma/adapter-pg");
   const {

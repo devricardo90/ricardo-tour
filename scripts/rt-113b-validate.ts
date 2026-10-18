@@ -9,11 +9,13 @@ import fs from "node:fs";
 import { prisma } from "@/lib/prisma";
 import { getTourContent } from "@/lib/catalog/tour-content";
 import { approveTourContent } from "@/lib/catalog/content-approval";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 const url = new URL(process.env.DATABASE_URL ?? "");
 if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "5433" || !url.pathname.startsWith("/rt113b_") || url.searchParams.has("host") || url.searchParams.has("hostaddr") || /neon|aws|vercel|supabase/i.test(url.href)) {
   throw new Error("Refusing to run: DATABASE_URL must be a local throw-away database localhost:5433/rt113b_*");
 }
+assertDatabaseAccess({ operation: "destructive", label: "scripts/rt-113b-validate.ts" }); // RT-104: deny by default
 
 let failures = 0;
 let passes = 0;

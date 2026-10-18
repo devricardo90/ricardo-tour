@@ -1,4 +1,7 @@
 const { PrismaClient } = require('@prisma/client');
+const { assertDatabaseAccess } = require('../lib/db/guard-runtime.mjs');
+assertDatabaseAccess({ operation: "read", label: "scripts/diagnose-trip-images.js" }); // RT-104: deny by default
+
 const prisma = new PrismaClient();
 
 async function diagnoseTripImages() {

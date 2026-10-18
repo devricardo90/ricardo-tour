@@ -21,6 +21,7 @@ import { PrismaClient, PhysicalLevel } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import dotenv from 'dotenv'
 import { isLocalDatabaseUrl } from '../lib/db/local-database'
+import { assertDatabaseAccess } from '../lib/db/guard-runtime.mjs'
 
 dotenv.config()
 
@@ -81,6 +82,8 @@ async function main() {
     console.error('[seed] The seed is development-only (Owner decision 2026-10-13). Nothing was changed.')
     process.exit(1)
   }
+
+  assertDatabaseAccess({ operation: 'write', label: 'prisma/seed.ts' }) // RT-104: local isolated database only
 
   const adapter = new PrismaPg({ connectionString })
   const prisma = new PrismaClient({ adapter })

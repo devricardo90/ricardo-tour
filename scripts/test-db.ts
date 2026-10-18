@@ -2,8 +2,11 @@
 import { PrismaClient } from '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'
 import dotenv from 'dotenv'
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 dotenv.config()
+
+assertDatabaseAccess({ operation: "read", label: "scripts/test-db.ts" }); // RT-104: deny by default
 
 async function main() {
     const connectionString = process.env.DATABASE_URL

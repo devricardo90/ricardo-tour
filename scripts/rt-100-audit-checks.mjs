@@ -14,6 +14,7 @@ import { randomBytes } from "node:crypto";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import pg from "pg";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 const ADMIN_URL = process.env.RT100_ADMIN_URL;
 if (!ADMIN_URL) throw new Error("Set RT100_ADMIN_URL to a LOCAL Postgres admin connection string (database 'postgres').");
@@ -27,6 +28,7 @@ function assertLocal(urlString) {
   return u;
 }
 const adminUrl = assertLocal(ADMIN_URL);
+assertDatabaseAccess({ operation: "destructive", label: "scripts/rt-100-audit-checks.mjs", url: ADMIN_URL, urlVar: "RT100_ADMIN_URL" }); // RT-104: deny by default
 const suffix = randomBytes(3).toString("hex");
 const DB_R = `rt100_audit_rollback_${suffix}`;
 const DB_G = `rt100_audit_gate_${suffix}`;
@@ -58,6 +60,7 @@ const created = [];
 try {
   for (const db of [DB_R, DB_G]) {
     await admin.query(`CREATE DATABASE "${db}"`);
+    await admin.query(`ALTER DATABASE "${db}" SET rt.environment = 'local-isolated'`); // RT-104 local marker
     created.push(db);
   }
 
@@ -119,6 +122,7 @@ try {
   const CONTAINER = process.env.RT100_DOCKER_CONTAINER || "ricktravel-db";
   const dump = (db) => spawnSync("docker", ["exec", CONTAINER, "pg_dump", "-U", "postgres", "-s", "--no-owner", "--no-privileges", db], { encoding: "utf8" });
   await admin.query(`CREATE DATABASE "${DB_O}"`);
+  await admin.query(`ALTER DATABASE "${DB_O}" SET rt.environment = 'local-isolated'`); // RT-104 local marker
   created.push(DB_O);
   const o = new pg.Client({ connectionString: urlFor(DB_O) });
   await o.connect();

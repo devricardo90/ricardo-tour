@@ -1,5 +1,8 @@
 
 import { PrismaClient } from '@prisma/client'
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
+
+assertDatabaseAccess({ operation: "destructive", label: "scripts/cleanup-trips.ts" }); // RT-104: deny by default
 
 const prisma = new PrismaClient()
 

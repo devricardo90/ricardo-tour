@@ -14,11 +14,13 @@ import { getTourContent, loadTourContentRecord, validateTourContent } from "@/li
 import { approveTourContent } from "@/lib/catalog/content-approval";
 import { applyLoad, planLoad, rocinhaLoadRecord } from "@/lib/catalog/content-load";
 import { Client } from "pg";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 const url = new URL(process.env.DATABASE_URL ?? "");
 if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "5433" || !url.pathname.startsWith("/rt119_") || url.searchParams.has("host") || url.searchParams.has("hostaddr") || /neon|aws|vercel|supabase/i.test(url.href)) {
   throw new Error("Refusing to run: only a local throw-away database localhost:5433/rt119_* is allowed");
 }
+assertDatabaseAccess({ operation: "destructive", label: "scripts/rt-119-verify-load.ts" }); // RT-104: deny by default
 
 const ROC = "cmli1a6im000034zqqzc9sppb";
 const OTHERS = ["cmlhxkpy9000028zq27rhytew", "cmlibniq40000z4zqkbujnutt", "cmljo0s1u0000t0zqa0bpd23p"];

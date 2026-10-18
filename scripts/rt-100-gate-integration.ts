@@ -2,12 +2,14 @@
 // MIGRATED, THROW-AWAY local database. Run only through scripts/rt-100-audit-checks.mjs (it sets DATABASE_URL and refuses
 // non-local hosts). This file refuses to run against a non-local database as well.
 import { isLocalDatabaseUrl } from "../lib/db/local-database";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 const url = process.env.DATABASE_URL ?? "";
 if (!isLocalDatabaseUrl(url)) {
   console.error("REFUSING: DATABASE_URL is not a local database.");
   process.exit(2);
 }
+assertDatabaseAccess({ operation: "write", label: "scripts/rt-100-gate-integration.ts" }); // RT-104: deny by default
 
 async function main() {
   const { prisma } = await import("../lib/prisma");

@@ -5,9 +5,12 @@
  *   npx tsx scripts/rt-53-catalog-audit.ts
  */
 import dotenv from "dotenv";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 dotenv.config({ path: ".env.local" });
 dotenv.config();
+
+assertDatabaseAccess({ operation: "read", label: "scripts/rt-53-catalog-audit.ts" }); // RT-104: deny by default
 
 async function main() {
   const { prisma } = await import("../lib/prisma");

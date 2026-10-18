@@ -9,11 +9,13 @@
 import { prisma } from "@/lib/prisma";
 import { loadTourContentRecord, contentFingerprint } from "@/lib/catalog/tour-content";
 import { applyLoad, planLoad, rocinhaLoadRecord } from "@/lib/catalog/content-load";
+import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 const url = new URL(process.env.DATABASE_URL ?? "");
 if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "5433" || !url.pathname.startsWith("/rt119_") || url.searchParams.has("host") || url.searchParams.has("hostaddr") || /neon|aws|vercel|supabase/i.test(url.href)) {
   throw new Error("Refusing to run: only a local throw-away database localhost:5433/rt119_* is allowed (hosted load not authorized)");
 }
+assertDatabaseAccess({ operation: "write", label: "scripts/rt-119-load-content.ts" }); // RT-104: deny by default
 
 const apply = process.argv.includes("--apply");
 const allowReplaceApproved = process.argv.includes("--allow-replace-approved");
