@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PUBLISHED_SNAPSHOT } from "@/lib/catalog/mock/tour-content.mock";
+import { PUBLISHED_SNAPSHOT, PROTOTYPE_OFFER } from "@/lib/catalog/mock/tour-content.mock";
 
 export const metadata: Metadata = { title: "RT-114 · Tour page prototypes — Ricardo Tour", robots: { index: false, follow: false } };
 
@@ -14,7 +14,7 @@ export default async function TourContentPreviewIndex({ params }: { params: Prom
       <ul className="mt-6 space-y-2">
         {Object.values(PUBLISHED_SNAPSHOT).map((tour) => (
           <li key={tour.id} className="flex flex-wrap gap-3">
-            <span className="font-medium">{tour.title}</span>
+            <span className="font-medium">{PROTOTYPE_OFFER[tour.id]?.title ?? tour.title}</span>
             {(["pt", "en", "es"] as const).map((l) => (
               <Link key={l} className="underline" href={`/${l}/rebuild-lab/tour-content-preview/${tour.id}`}>{l.toUpperCase()}</Link>
             ))}

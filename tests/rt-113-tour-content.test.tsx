@@ -120,8 +120,8 @@ describe("RT-114 mock data integrity", () => {
   });
 
   it("marks every mock record as MOCK and DRAFT, and every mock text as fictitious in its language", () => {
-    // Rocinha carries REAL draft content since 17/10 (RT-115); the other three tours stay fictitious.
-    for (const record of Object.values(MOCK_TOUR_CONTENT).filter((r) => r.tripId !== "cmli1a6im000034zqqzc9sppb")) {
+    // Rocinha has real draft copy; Centro has only Owner-selected media. The remaining two records stay fictitious.
+    for (const record of Object.values(MOCK_TOUR_CONTENT).filter((r) => !["cmli1a6im000034zqqzc9sppb", "cmlibniq40000z4zqkbujnutt"].includes(r.tripId))) {
       expect(record.source).toMatch(/^MOCK/);
       expect(record.status).toBe("DRAFT");
       const texts = [record.meetingPoint, record.startTimeNote, record.requirements, record.accessibility, record.weatherPolicy, ...record.itinerary.map((s) => s.title)];
@@ -141,10 +141,36 @@ describe("RT-114 mock data integrity", () => {
         const ownerApproved = img.src.startsWith("/media/tours/") && img.rightsStatus === "OWNER_ATTESTED" && /^Owner, \d{2}\/\d{2}\/\d{4}/.test(img.rightsNote ?? "");
         // Third-party candidates may appear in the lab only as UNVERIFIED (the public gate hides them).
         const thirdPartyCandidate = img.src.startsWith("/media/tours/") && img.rightsStatus === "UNVERIFIED" && /^UNVERIFIED third-party photo/.test(img.rightsNote ?? "");
-        expect(allowed.has(img.src) || ownerApproved || thirdPartyCandidate, img.src).toBe(true);
+        const centroLocalPreview = img.src.startsWith("/media/tours/centro-historico-cultural/") && img.rightsStatus === "UNVERIFIED" && /Commercial use and image rights remain under review/.test(img.rightsNote ?? "");
+        expect(allowed.has(img.src) || ownerApproved || thirdPartyCandidate || centroLocalPreview, img.src).toBe(true);
         expect(fs.existsSync(path.join(process.cwd(), "public", img.src))).toBe(true);
       }
     }
+  });
+
+  it("keeps the Centro media preview local and omits unconfirmed sales facts", () => {
+    const id = "cmlibniq40000z4zqkbujnutt";
+    const record = MOCK_TOUR_CONTENT[id];
+    const offer = PROTOTYPE_OFFER[id];
+    expect(record.status).toBe("DRAFT");
+    expect(record.images.map((image) => image.src)).toEqual([
+      "/media/tours/centro-historico-cultural/centro-historico-img-1337.webp",
+      "/media/tours/centro-historico-cultural/centro-historico-img-1802.webp",
+      "/media/tours/centro-historico-cultural/centro-historico-img-1328.webp",
+      "/media/tours/centro-historico-cultural/centro-historico-img-1321.webp",
+      "/media/tours/centro-historico-cultural/centro-historico-img-1332.webp",
+      "/media/tours/centro-historico-cultural/centro-historico-img-1136.webp",
+      "/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp",
+    ]);
+    expect(record.images.every((image) => image.rightsStatus === "UNVERIFIED" && image.alt.pt && image.alt.en && image.alt.es)).toBe(true);
+    expect(toTourContentView(record, "pt", "public")).toBeNull();
+    expect(record.itinerary).toEqual([]);
+    expect(record.languages).toEqual([]);
+    expect(offer.priceCents).toBeNull();
+    expect(offer.pitch).toEqual({});
+    expect(offer.modality.value).toEqual({});
+    expect(offer.pickup.value).toEqual({});
+    expect(offer.title).toBe("Centro Histórico e Cultural do Rio");
   });
 
   it("is never imported by public routes, APIs or public components", () => {
@@ -195,7 +221,7 @@ describe("RT-114 copy and prototype rendering (round 1 + Owner addendum)", () =>
   it("never carries old catalog prices, durations or routes into the prototype; price shows as pending", () => {
     for (const id of Object.keys(PROTOTYPE_OFFER)) {
       expect(PROTOTYPE_OFFER[id].priceCents).toBeNull();
-      expect(PROTOTYPE_OFFER[id].modality.status).toBe("CONFIRMED");
+      expect(PROTOTYPE_OFFER[id].modality.status).toBe(id === "cmlibniq40000z4zqkbujnutt" ? "PENDING" : "CONFIRMED");
       const html = render(id, "pt");
       for (const old of ["R$ 385,00", "R$ 120,00", "R$ 245,00", "R$ 900,00", "5–6 horas", "5 a 6 horas", "Transporte em van", "8 horas", "3 a 4 horas"]) {
         expect(html, `${id} must not show ${old}`).not.toContain(old);
@@ -446,8 +472,8 @@ describe("RT-115 / RT-112 Rocinha real content (Owner commercial closing 17/10/2
     expect(pt).not.toContain("Busca no hotel");
   });
 
-  it("leaves the other three tours on their fictitious placeholders", () => {
-    for (const id of ["cmlhxkpy9000028zq27rhytew", "cmlibniq40000z4zqkbujnutt", "cmljo0s1u0000t0zqa0bpd23p"]) {
+  it("leaves the two other tours on their fictitious placeholders", () => {
+    for (const id of ["cmlhxkpy9000028zq27rhytew", "cmljo0s1u0000t0zqa0bpd23p"]) {
       expect(isMockRecord(MOCK_TOUR_CONTENT[id])).toBe(true);
       expect(PROTOTYPE_OFFER[id].provisionalPricing).toBeUndefined();
       expect(PROTOTYPE_OFFER[id].whatsappMessage).toBeUndefined();
@@ -633,10 +659,9 @@ describe("RT-115 final verification: approved texts as specification (17/10/2026
     expect(offer.provisionalPricing?.map((r) => r.totalCents)).toEqual([45000, 58000, 75000, 88000]);
   });
 
-  it("leaves the other three tours exactly as before (titles, mock pitches, no real-content fields)", () => {
+  it("leaves the two other tours exactly as before (titles, mock pitches, no real-content fields)", () => {
     const expectedPitch: Record<string, string> = {
       cmlhxkpy9000028zq27rhytew: "Conheça os cartões-postais mais famosos do Rio em uma experiência privativa, com guia dedicado (exemplo fictício)",
-      cmlibniq40000z4zqkbujnutt: "O centro histórico do Rio e a Confeitaria Colombo em uma experiência privativa (exemplo fictício)",
       cmljo0s1u0000t0zqa0bpd23p: "Um dia inteiro no Rio, com roteiro desenhado para o seu grupo (exemplo fictício)",
     };
     for (const [id, pitch] of Object.entries(expectedPitch)) {

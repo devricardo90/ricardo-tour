@@ -89,18 +89,15 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
   const whatsappHref = offer.whatsappMessage ? buildPublicWhatsAppUrl(pickL(offer.whatsappMessage, locale)) : CTA_TARGET;
   const whatsappExternal = whatsappHref !== CTA_TARGET;
 
-  const essentials: EssentialItem[] = [
-    { key: "modality", icon: essentialIcons.Users, label: t.modality, value: pickL(offer.modality.value, locale), status: s(offer.modality.status) },
-    // Real content shows the meeting point itself; mock content keeps the provisional pickup line.
-    content.meetingPoint && !content.isMock
-      ? { key: "meeting", icon: essentialIcons.MapPin, label: t.meetingPoint, value: content.meetingPoint, status: s(offer.pickup.status) }
-      : { key: "pickup", icon: essentialIcons.Car, label: t.pickup, value: pickL(offer.pickup.value, locale), status: s(offer.pickup.status) },
-    { key: "duration", icon: essentialIcons.Clock, label: t.duration, value: offer.duration.value ? pickL(offer.duration.value, locale) : t.pendingValue, status: s(offer.duration.status) },
-    ...(offer.groupSize ? [{ key: "group", icon: essentialIcons.Users, label: t.participants, value: pickL(offer.groupSize.value, locale), status: s(offer.groupSize.status) }] : []),
-    ...(offer.minAge ? [{ key: "age", icon: essentialIcons.UserCheck, label: t.minimumAge, value: pickL(offer.minAge.value, locale), status: s(offer.minAge.status) }] : []),
-    ...(content.startTimeNote ? [{ key: "time", icon: essentialIcons.Timer, label: t.startTime, value: content.startTimeNote, status: s(contentStatus) }] : []),
-    ...(languages ? [{ key: "languages", icon: essentialIcons.Languages, label: t.languages, value: languages, status: s(contentStatus) }] : []),
-  ];
+  const essentials: EssentialItem[] = [];
+  if (pickL(offer.modality.value, locale)) essentials.push({ key: "modality", icon: essentialIcons.Users, label: t.modality, value: pickL(offer.modality.value, locale), status: s(offer.modality.status) });
+  if (content.meetingPoint && !content.isMock) essentials.push({ key: "meeting", icon: essentialIcons.MapPin, label: t.meetingPoint, value: content.meetingPoint, status: s(offer.pickup.status) });
+  else if (pickL(offer.pickup.value, locale)) essentials.push({ key: "pickup", icon: essentialIcons.Car, label: t.pickup, value: pickL(offer.pickup.value, locale), status: s(offer.pickup.status) });
+  essentials.push({ key: "duration", icon: essentialIcons.Clock, label: t.duration, value: offer.duration.value ? pickL(offer.duration.value, locale) : t.pendingValue, status: s(offer.duration.status) });
+  if (offer.groupSize) essentials.push({ key: "group", icon: essentialIcons.Users, label: t.participants, value: pickL(offer.groupSize.value, locale), status: s(offer.groupSize.status) });
+  if (offer.minAge) essentials.push({ key: "age", icon: essentialIcons.UserCheck, label: t.minimumAge, value: pickL(offer.minAge.value, locale), status: s(offer.minAge.status) });
+  if (content.startTimeNote) essentials.push({ key: "time", icon: essentialIcons.Timer, label: t.startTime, value: content.startTimeNote, status: s(contentStatus) });
+  if (languages) essentials.push({ key: "languages", icon: essentialIcons.Languages, label: t.languages, value: languages, status: s(contentStatus) });
 
   return (
     <div className="bg-[var(--site-charcoal,#0B0E11)] pb-28 text-[var(--site-on-dark,#F4F0E8)] lg:pb-0" data-testid="tour-page-surface">
@@ -134,14 +131,14 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                 <p className={sectionLabel}>{td.eyebrow}</p>
                 <h1 className="site-display mt-3 text-balance text-[38px] font-medium leading-[1.04] text-[var(--site-on-dark,#F4F0E8)] md:text-[48px]">{title}</h1>
                 {reviewMode ? <p className="mt-2"><StatusBadge status={offer.titleStatus} locale={locale} /></p> : null}
-                <p className="mt-4 text-[19px] leading-[1.5] text-[var(--site-on-dark-muted,#CAC7BF)]" data-testid="tour-pitch">
+                {pickL(offer.pitch, locale) ? <p className="mt-4 text-[19px] leading-[1.5] text-[var(--site-on-dark-muted,#CAC7BF)]" data-testid="tour-pitch">
                   {pickL(offer.pitch, locale)}
                   {reviewMode ? <span className="ml-2 align-middle"><StatusBadge status={offer.pitchStatus ?? "MOCK"} locale={locale} /></span> : null}
-                </p>
-                <ul className="mt-4 flex flex-wrap gap-2 text-[14px] font-medium">
-                  <li className="inline-flex items-center rounded-full border border-[var(--site-gold,#C8A86B)]/40 bg-[var(--site-gold,#C8A86B)]/10 px-3 py-1.5 text-[var(--site-gold-bright,#E8C780)]">{pickL(offer.modality.value, locale)}</li>
-                  <li className="inline-flex items-center rounded-full border border-white/15 px-3 py-1.5 text-[var(--site-on-dark,#F4F0E8)]">{pickL(offer.pickup.value, locale)}</li>
-                </ul>
+                </p> : null}
+                {pickL(offer.modality.value, locale) || pickL(offer.pickup.value, locale) ? <ul className="mt-4 flex flex-wrap gap-2 text-[14px] font-medium">
+                  {pickL(offer.modality.value, locale) ? <li className="inline-flex items-center rounded-full border border-[var(--site-gold,#C8A86B)]/40 bg-[var(--site-gold,#C8A86B)]/10 px-3 py-1.5 text-[var(--site-gold-bright,#E8C780)]">{pickL(offer.modality.value, locale)}</li> : null}
+                  {pickL(offer.pickup.value, locale) ? <li className="inline-flex items-center rounded-full border border-white/15 px-3 py-1.5 text-[var(--site-on-dark,#F4F0E8)]">{pickL(offer.pickup.value, locale)}</li> : null}
+                </ul> : null}
 
                 <div className={`${raisedCard} mt-6 p-5`} data-testid="tour-booking-card">
                   <p className="flex flex-wrap items-center gap-2 text-[14px] font-medium text-[var(--site-on-dark-muted,#CAC7BF)]">
