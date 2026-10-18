@@ -21,7 +21,7 @@
 4. **Existing guards trusted the host name only:**
    - the seed uses `isLocalDatabaseUrl`;
    - RT-100 / RT-113 / RT-119 and the RT-022A e2e test check for loopback and/or port 5433.
-   
+
    A tunnel (`ssh -L 5433:…`) on localhost defeats all of them.
 5. No CI exists, and `build` / `postinstall` (`prisma generate`) / `dev` / `start` never migrate (now asserted by a test).
 
@@ -47,11 +47,11 @@
   - **Local:** all of the following must hold:
     - the host is a **literal** loopback address (`127.0.0.1` or `[::1]`) with an **explicit port**. The name `localhost` is refused, because it may resolve differently for the check and for the real connection;
     - at run time, the server reports the marker `rt.environment = 'local-isolated'` **stored for that database** (read from `pg_db_role_setting`, not the session, so `?options=-c …` / `PGOPTIONS` cannot fake it), and `current_database()` matches. The check runs in a sanitized child process.
-    
+
     Neither loopback nor port 5433 alone counts as proof. `host.docker.internal` and private IPs are not local.
   - **Hosted / unknown:** requires `RT_DB_TARGET=preview|production` and a host in the committed allowlist `HOSTED_TARGETS`. The allowlist is **empty** today, so every hosted database is refused. Production additionally needs `RT_PROD_MIGRATION_ACK=RT-<n>`. Destructive operations are never allowed on a hosted database.
   - **Refused:** a missing or unparseable URL when a connection is needed; non-postgres protocols (e.g. `prisma+postgres://`); multiple hosts.
-  - **Query parameters:** only an allowlist that cannot redirect the connection or alter the session is accepted (`schema`, `sslmode`, `ssl*` files, pool/timeouts, `application_name`, `pgbouncer`, `statement_cache_size`). Everything else is refused, e.g. `?host=`, `?hostaddr=`, `?port=`, `?user=`, `?options=`, `?service=`.
+  - **Query parameters:** only an allowlist that cannot redirect the connection or alter the session is accepted (`schema`, `sslmode`, `channel_binding`, `ssl*` files, pool/timeouts, `application_name`, `pgbouncer`, `statement_cache_size`). Everything else is refused, e.g. `?host=`, `?hostaddr=`, `?port=`, `?user=`, `?options=`, `?service=`.
   - **`PG*` environment variables:** every one is refused except `PGPASSWORD`, `PGPASSFILE`, `PGAPPNAME` and `PGCONNECT_TIMEOUT`. `PGPORT`, `PGHOST` and `PGOPTIONS` could otherwise point the script at a different server than the one checked.
   - **Refused as conflicts:**
     - other connection variables (`DIRECT_URL`, `SHADOW_DATABASE_URL`, `POSTGRES_*`, …) pointing elsewhere;
@@ -66,7 +66,7 @@
   - guard at config load, reading `.env.local` only;
   - an explicit `DATABASE_URL` is passed to the `next dev` server it starts;
   - an already running server is never reused, and an external `PLAYWRIGHT_BASE_URL` is refused, because their database cannot be verified.
-  
+
   The read-only public suite is unchanged.
 - **Marker tooling** — `npm run db:mark-local -- <db>` runs `ALTER DATABASE … SET rt.environment` **inside** the local container. The throw-away helpers (`rt-113b-local-db.mjs`, RT-100 scratch DBs) mark the databases they create.
   - The developer's own local DB must be marked once, e.g. `npm run db:mark-local -- <your_local_db>`, and `.env.local` must use `127.0.0.1:<port>` instead of `localhost`. Until then scripts and Prisma refuse it (fail-closed).
@@ -79,7 +79,7 @@
   - `psql` / `pg_dump` or other tools;
   - ad-hoc code with its own client;
   - the Next.js runtime (`lib/prisma.ts`).
-  
+
   Someone who edits the guard or the allowlist bypasses it. That edit is a visible code change.
 - **B. Credentials.** The production URL still sits in the developer `.env` of the main checkout and in Vercel (Preview builds included, plan §4.6–4.7). The guard stops the repo from **using** it accidentally; it does not remove the secret. Recommended Owner actions: delete the hosted URL from the local `.env`; rotate the production credentials after the Preview DB exists (RT-108).
 - **C. Database permissions.** The production role can still do anything. Real protection needs separate roles: a migrator role used only in the authorized procedure, and an app role without DDL (RT-106 / RT-108). Not done here: no hosted change is authorized.
@@ -118,3 +118,45 @@ Confirmed correct by the reviewer:
 
 Accepted limitations: see §4.
 
+## 7. Operational closure (18/10/2026, Owner directive "Fechamento operacional e revisão")
+No hosted database contacted; no credential printed; only host/port/database names and cluster identifiers recorded.
+
+**Development database confirmed local:**
+- **Container:** Docker container `ricktravel-db`, image `postgres:16` (PostgreSQL 16.11), published as `0.0.0.0:5433` and `[::]:5433` → 5432.
+- **Docker context:** `desktop-linux` (local named pipe, not a remote engine).
+- **WSL:** the only distro is `docker-desktop`.
+- **Port 5433:** listened on only by `com.docker.backend` (`:::5433`) and `wslrelay` (`::1:5433`, Docker Desktop's IPv6 relay).
+- **No tunnel or proxy:** no `ssh` / `plink` / `cloudflared` / `ngrok` / proxy process, and no `-L` / `-R` port forwarding in any command line.
+- **Positive identity:** the Postgres `system_identifier` reached over TCP at `127.0.0.1:5433` and at `[::1]:5433` is **7604176269319524391**, equal to the one read inside the container (`docker exec … pg_control_system()`). Database `ricktravel`.
+- **Variables:** `DATABASE_URL`, `PG*`, `RT_DB_TARGET`, `VERCEL_ENV`, `DIRECT_URL` and `POSTGRES_*` are not set in the shell, User or Machine environment.
+
+**Next.js precedence:** `process.env` wins over `.env.local`, which wins over `.env`. Checked with `@next/env` in the main checkout: `next dev` and `next build` / `start` load `.env.local`, `.env` and resolve `DATABASE_URL` to the local `ricktravel` database. The hosted URL in `.env` is shadowed by `.env.local`.
+
+**Tests:** Vitest loads no env file and no unit test reads `DATABASE_URL`. The e2e suite is guarded; the public Playwright suite does not touch the database.
+
+**Applied:**
+- `.env.local` (main checkout, git-ignored): host `localhost` → `127.0.0.1` in `DATABASE_URL` (one line).
+- `npm run db:mark-local -- ricktravel`. The stored setting `ricktravel | {rt.environment=local-isolated}` is the only marked database.
+
+**Continuity through the guard** (worktree, dev URL taken from `.env.local` without printing it):
+- `prisma validate` OK;
+- `prisma migrate status` reaches the dev DB;
+- `check:db` ("Database connection OK").
+
+**Negative controls:**
+- The `.env` (hosted) URL is DENIED for Prisma and for `check:db` before any connection.
+- The old `localhost` form is DENIED.
+- **Precedence:**
+  - a hosted URL in `process.env` wins over `.env.local` and is DENIED;
+  - with no `process.env` value, `.env.local` is used and still verified;
+  - a `.env` file is ignored.
+
+  This was checked with temporary files containing fictitious URLs only, deleted afterwards.
+- `channel_binding` (Neon SCRAM hardening, cannot redirect) was added to the allowed parameters; the host rules still decide.
+
+**Residual risks (to the Owner):**
+1. **The guard exists only on `sprint10/tours-content`.** `main` and the main checkout's branch (`daniela/rt-96-audit`) still have the old `prisma.config.ts` (`import 'dotenv/config'`), and the main checkout's `.env` holds the production URL. A direct `npx prisma migrate …` **in the main checkout** would still reach production until this branch is merged (merge not authorized), or until the hosted URL is removed from that `.env`.
+   - Removing it is safe for `next dev`, which uses `.env.local`. It is an Owner decision because it touches a credential file.
+2. **The dev DB is 5 migrations behind the repository:** `20261013120000_rt100…` and the four `rt113…` migrations. They were not applied; applying them locally is an Owner choice.
+3. **Not covered:** credentials in Vercel and rotation (RT-108), database roles (RT-106 / 108), deployment control (RT-107).
+4. Denial messages show the hosted **host name** (never user or password), to explain the refusal.

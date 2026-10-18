@@ -85,6 +85,10 @@ describe("RT-104 — required scenarios (fictitious URLs only)", () => {
     expect(decide({ DATABASE_URL: `${LOCAL}?options=-c%20rt.environment%3Dlocal-isolated` }).reasons.join()).toMatch(/"\?options="/);
     expect(decide({ DATABASE_URL: `${LOCAL}?user=postgres` }).allowed).toBe(false);
     expect(decide({ DATABASE_URL: `${LOCAL}?sslmode=disable&schema=public` }).allowed).toBe(true);
+    // channel_binding (SCRAM hardening used by Neon URLs) cannot redirect: allowed; the host rules still decide.
+    expect(decide({ DATABASE_URL: `${LOCAL}?sslmode=require&channel_binding=require` }).allowed).toBe(true);
+    expect(decide({ DATABASE_URL: `${NEON_LIKE}&channel_binding=require` }).reasons.join()).not.toMatch(/channel_binding/);
+    expect(decide({ DATABASE_URL: `${NEON_LIKE}&channel_binding=require` }).allowed).toBe(false);
     for (const name of ["PGPORT", "PGOPTIONS", "PGDATABASE", "PGUSER", "PGSSLMODE"]) expect(decide({ DATABASE_URL: LOCAL, [name]: "x" }).reasons.join(), name).toMatch(new RegExp(`${name} is set`));
     expect(decide({ DATABASE_URL: LOCAL, PGPASSWORD: "x" }).allowed).toBe(true);
     expect(decide({ DATABASE_URL: "postgresql://u:p@localhost:5433/rt104_local" }).reasons.join()).toMatch(/use 127\.0\.0\.1 instead of "localhost"/);
