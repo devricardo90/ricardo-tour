@@ -160,3 +160,52 @@ No hosted database contacted; no credential printed; only host/port/database nam
 2. **The dev DB is 5 migrations behind the repository:** `20261013120000_rt100…` and the four `rt113…` migrations. They were not applied; applying them locally is an Owner choice.
 3. **Not covered:** credentials in Vercel and rotation (RT-108), database roles (RT-106 / 108), deployment control (RT-107).
 4. Denial messages show the hosted **host name** (never user or password), to explain the refusal.
+
+## 8. Final security review (18/10/2026, Owner directive "Revisão final de segurança")
+Read-only checks; no secret printed; Neon not accessed; Vercel only read for project metadata (no environment values read).
+
+**Git — true state:**
+- **Local:**
+  - current branch `sprint10/tours-content` at `7fe2e6f`, clean, **no upstream**;
+  - local commits not on the remote: `7a044b5`, `444aae5`, `23cb3d0`, `7fe2e6f` (and the earlier Sprint 10 commits);
+  - local `main` = `40136a3`, unchanged, one commit behind `origin/main`.
+- **Remote (`git ls-remote`):**
+  - no `sprint10/*` branch exists;
+  - `origin/main` = `a4a7252` (RT-97 favicon, 14/10/2026, the last authorized publication);
+  - none of the RT-104 / RT-119 commits is on any remote ref.
+- **Push:** none. No report of this work states a push; every report records "no upstream, nothing pushed".
+- **Deploy:** none. The Vercel project's last update is 14/10/2026 (RT-97). The deployment list returned 403 to this token and the Vercel CLI is not installed, so this conclusion rests on that indirect evidence plus the absence of any push (deploys are push-triggered).
+
+**Credential files:**
+- `.env*` has been git-ignored from the start (`.gitignore:42`). No env file has ever been committed on any ref.
+- The history scan found only fictitious test URLs (placeholder passwords, reserved hosts, `127.0.0.1`).
+- The production **host name** (no password) appears in the RT-57 script (`e5df179`, `ALLOWED_HOST`). That is low risk in a private repository.
+- `.env.example` holds the local example only.
+
+**Checkouts:**
+- Only the main checkout's `.env` holds a hosted `DATABASE_URL`, and it has one `DATABASE_URL` line.
+- `rick-travel/.env.local` → `127.0.0.1:5433/ricktravel`; `rick-travel-rt97/.env.local` → `localhost:5433/ricktravel` (local); the other worktrees have no env files.
+- No database variables in the shell, User or Machine environment.
+
+**Removing the production `DATABASE_URL` from the main checkout's `.env`: STOPPED before removal.** The Owner's condition, "credential preserved in secure storage", could not be confirmed:
+- the Owner's password manager cannot be inspected;
+- verifying the Vercel copy would require reading the secret value, which was deliberately not done.
+
+Locally the removal is safe:
+- `.env` keys: `DATABASE_URL`, `BETTER_AUTH_URL`, `BETTER_AUTH_SECRET`, `RESEND_API_KEY`. Only `DATABASE_URL` would be removed.
+- `.env.local` defines `DATABASE_URL` and wins in Next.js.
+- In the main checkout's old configuration, Prisma CLI commands would then have no URL and fail closed.
+
+**Pending migrations on the dev DB (static analysis only; not executed):**
+
+| Order | Migration | Changes | Data |
+|---|---|---|---|
+| 1 | `20261013120000_rt100_operation_type_partner_commercial` | 5 enums; `Trip` + `operationType` (NOT NULL DEFAULT 'UNCLASSIFIED') + `partnerId` (nullable, FK `Partner`); new `Partner`, `TripCommercial`, `TripCommercialRate`; 9 CHECKs | additive; existing trips become UNCLASSIFIED with no partner (satisfies the partner CHECK); rollback in the header (no `rollback.sql` file) |
+| 2 | `20261016120000_rt113_tour_content_gallery` | 2 enums; new `TripContent`, `TripItineraryStop`, `TripImage` (FK `Trip`, cascade); CHECKs | additive, new tables empty |
+| 3 | `20261017180000_rt113_faq_conditions_media` | `TripContent` + 2 JSONB; `TripImage` + credit / `mediaType` (DEFAULT 'IMAGE') / poster / mobile / duration; new `TripFaqItem`; CHECKs | additive; depends on 2 |
+| 4 | `20261017200000_rt113_approval_fingerprint` | `TripContent` + `approvedContentHash` + CHECK | additive; depends on 2 |
+| 5 | `20261017220000_rt113_durable_approval_media_publication` | 3 nullable columns; 1 CHECK; functions and triggers on `TripContent` / `TripItineraryStop` / `TripFaqItem` / `TripImage` / `Trip` | additive; the `Trip` trigger only reads `Trip` and writes `TripContent` when content is approved (none); depends on 2, 3 and 4 |
+
+No column is dropped, renamed or re-typed, and no existing row is rewritten. RT-100 is independent of RT-113 (both only reference `Trip`), but `schema.prisma` and the code expect all five, so they must be applied together, in timestamp order (1 → 5). None of the five is on `origin/main`.
+
+**Re-run:** full suite 893 passed / 6 skipped; `tsc` OK; working tree clean before this note.
