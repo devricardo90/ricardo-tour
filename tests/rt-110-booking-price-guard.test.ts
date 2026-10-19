@@ -35,6 +35,16 @@ describe("RT-110 (local, Owner 18/10/2026): no new booking for a tour without an
     expect(prismaMock.booking.create).not.toHaveBeenCalled();
   });
 
+  it("returns 409 through the legacy endpoint for all four tours before database access", async () => {
+    for (const id of CATALOG) {
+      const res = await POST(new Request("http://test.local/api/bookings", { method: "POST", body: JSON.stringify({ tripId: id, guestCount: 1 }) }));
+      expect(res.status, id).toBe(409);
+    }
+    expect(prismaMock.trip.findUnique).not.toHaveBeenCalled();
+    expect(prismaMock.booking.create).not.toHaveBeenCalled();
+    expect(prismaMock.booking.update).not.toHaveBeenCalled();
+  });
+
   it("blocks all four own-catalog tours (none has an approved price stored)", async () => {
     for (const id of CATALOG) {
       expect(isBookingBlockedForUnapprovedPrice(id), id).toBe(true);

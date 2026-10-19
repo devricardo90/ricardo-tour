@@ -238,7 +238,7 @@ describe("RT-114 copy and prototype rendering (round 1 + Owner addendum)", () =>
       for (const old of ["R$ 385,00", "R$ 120,00", "R$ 245,00", "R$ 900,00", "5–6 horas", "5 a 6 horas", "Transporte em van", "8 horas", "3 a 4 horas"].filter((o) => !exempt.includes(o))) {
         expect(html, `${id} must not show ${old}`).not.toContain(old);
       }
-      expect(html).toContain(id === "cmlhxkpy9000028zq27rhytew" ? "Orçamento sob consulta" : "Valores em validação");
+      expect(html).toContain("Orçamento sob consulta");
       expect(html).toContain('data-status="PENDING"');
     }
   });
@@ -449,7 +449,7 @@ describe("RT-115 / RT-112 Rocinha real content (Owner commercial closing 17/10/2
     expect(reader).not.toContain("NÃO PUBLICAR");
     expect(reader).not.toContain("data-testid=\"tour-provisional-prices\"");
     expect(reader.replace(/\u00a0/g, " ")).not.toMatch(/R\$ (450|290|580|250|750|220|880),00/);
-    expect(reader).toContain("Valores em validação");
+    expect(reader).toContain("Orçamento sob consulta");
   });
 
   it("uses the canonical WhatsApp number with a prefilled message in each language", () => {
@@ -494,8 +494,8 @@ describe("RT-115 Owner review versions (17/10/2026)", () => {
   const ROC = "cmli1a6im000034zqqzc9sppb";
   const view = (locale: string) => toTourContentView(MOCK_TOUR_CONTENT[ROC], locale, "preview")!;
 
-  it("visual-review version hides the internal prices and shows 'Valores em validação' (PT/EN/ES)", () => {
-    const label = { pt: "Valores em validação", en: "Prices being validated", es: "Valores en validación" } as const;
+  it("visual-review version hides the internal prices and shows the quote-on-request label (PT/EN/ES)", () => {
+    const label = { pt: "Orçamento sob consulta", en: "Quote on request", es: "Presupuesto a consultar" } as const;
     for (const locale of ["pt", "en", "es"] as const) {
       const html = renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[ROC]} content={view(locale)} locale={locale} reviewMode showProvisionalPrices={false} />).replace(/\u00a0/g, " ");
       expect(html).toContain(label[locale]);

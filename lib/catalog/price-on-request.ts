@@ -1,11 +1,15 @@
 /**
- * Tours whose published price is OBSOLETE and must not be shown (Owner, 18/10/2026). TOUR-01 Cristo Redentor + Pão de
- * Açúcar: the R$ 385 stored on Trip belongs to the old catalog and is not the price of the new private experience, which
- * is not approved yet. Until an approved price exists, public surfaces show a quote-on-request label instead of any amount
- * and the JSON-LD carries no Offer price. The Trip row and the database are NOT changed.
+ * The legacy Trip.priceCents value is not authorized for public display for any of the four own-catalog tours. Local
+ * cards/details therefore show a quote-on-request label and JSON-LD omits Offer pricing. This does not replace the
+ * commercial decisions in the Manual, modify Trip rows, or authorize publication.
  * LOCAL ONLY: reaching production requires the Owner's release authorization (main auto-deploys production).
  */
-export const PRICE_ON_REQUEST_TRIP_IDS: ReadonlySet<string> = new Set(["cmlhxkpy9000028zq27rhytew"]);
+export const PRICE_ON_REQUEST_TRIP_IDS: ReadonlySet<string> = new Set([
+  "cmlhxkpy9000028zq27rhytew", // TOUR-01 Cristo Redentor + Pão de Açúcar
+  "cmli1a6im000034zqqzc9sppb", // TOUR-02 Rocinha
+  "cmlibniq40000z4zqkbujnutt", // TOUR-03 Centro Histórico
+  "cmljo0s1u0000t0zqa0bpd23p", // TOUR-04 Premium
+]);
 
 const LABELS = {
   pt: { label: "Preço", value: "Orçamento sob consulta" },

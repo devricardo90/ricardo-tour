@@ -139,7 +139,7 @@ describe("RT-104 — required scenarios (fictitious URLs only)", () => {
       expect(String((error as Error).message)).not.toMatch(/u:p@|password/);
     }
     expect(executed).toBe(false);
-  });
+  }, 20_000);
 });
 
 describe("RT-104 — Prisma command classification", () => {

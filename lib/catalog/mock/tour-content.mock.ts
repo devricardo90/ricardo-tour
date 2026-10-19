@@ -356,7 +356,7 @@ export type PrototypeOffer = {
   conditionsStatus?: FactStatus;
   /** INTERNAL provisional prices: shown only in the lab review mode as "NÃO PUBLICAR"; never on the public page. */
   provisionalPricing?: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }>;
-  /** Shown instead of "Valores em validação" while no price is approved (TOUR-01: "Orçamento sob consulta"). */
+  /** Local quote-on-request label while the stored catalog price is not authorized for display. */
   priceLabel?: LocalizedText;
   hotelPickup?: boolean;
   children?: { value: LocalizedText; status: FactStatus };
@@ -424,6 +424,7 @@ const PROTOTYPE_VIDEO: Record<string, PrototypeVideo> = {
 
 const PRIVATE: LocalizedText = { pt: "Experiência privativa", en: "Private experience", es: "Experiencia privada" };
 const PICKUP: LocalizedText = { pt: "Busca no hotel", en: "Hotel pickup", es: "Recogida en el hotel" };
+const QUOTE_ON_REQUEST: LocalizedText = { pt: "Orçamento sob consulta", en: "Quote on request", es: "Presupuesto a consultar" };
 const BENEFITS = mockList([
   ["Só o seu grupo, no seu ritmo", "Only your group, at your own pace", "Solo tu grupo, a tu ritmo"],
   ["Guia dedicado do início ao fim", "A dedicated guide from start to finish", "Guía dedicado de principio a fin"],
@@ -439,6 +440,7 @@ function offer(id: string, pitch: LocalizedText): PrototypeOffer {
     modality: { value: PRIVATE, status: "CONFIRMED", source: "Owner, 16/10/2026: os quatro produtos próprios serão experiências privativas nesta fase" },
     pickup: { value: PICKUP, status: "PROVISIONAL" },
     priceCents: null,
+    priceLabel: QUOTE_ON_REQUEST,
     duration: { value: null, status: "PENDING" },
     benefits: BENEFITS as { pt: string[]; en: string[]; es: string[] },
     // RT-116: the Owner confirmed the Rocinha cover and gallery (17/10/2026); the other tours still wait for their photos.
