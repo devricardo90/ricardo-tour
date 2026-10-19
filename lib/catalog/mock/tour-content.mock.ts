@@ -1,5 +1,6 @@
 import type { LocalizedText, TourContentRecord } from "@/lib/catalog/tour-content";
-import { CENTRO_ID, CENTRO_MEDIA_PREVIEW, CENTRO_TITLE } from "@/lib/catalog/drafts/centro-historico-media";
+import { CENTRO_ID, CENTRO_TITLE } from "@/lib/catalog/drafts/centro-historico-media";
+import { CENTRO_APPROVED_PRICING, CENTRO_COMMERCIAL_DRAFT, CENTRO_ROUTE_OPTIONS } from "@/lib/catalog/drafts/centro-historico-commercial";
 import {
   ROCINHA_BENEFITS,
   ROCINHA_CONTENT,
@@ -324,10 +325,10 @@ function mockRecord(id: string): TourContentRecord {
 
 /**
  * RT-115/RT-116: real draft content replaces mock texts (still DRAFT: never public). Rocinha has Owner-reviewed copy;
- * Centro has only the selected photographs and commercial name. The remaining two keep the fictitious placeholders.
+ * Centro's approved commercial facts are available only in its local DRAFT review record; the remaining two tours keep their fictitious placeholders.
  */
 function draftRecord(id: string): TourContentRecord | null {
-  if (id === CENTRO_ID) return CENTRO_MEDIA_PREVIEW;
+  if (id === CENTRO_ID) return CENTRO_COMMERCIAL_DRAFT;
   if (id !== ROCINHA_ID) return null;
   return { tripId: id, status: "DRAFT", source: ROCINHA_DRAFT_SOURCE, ...ROCINHA_CONTENT, images: OWNER_GALLERY[id] ?? [] };
 }
@@ -346,11 +347,11 @@ export type PrototypeOffer = {
   titleStatus: FactStatus;
   /** Editorial proposal for the hero line — NOT approved copy (RT-115). */
   pitch: LocalizedText;
-  modality: { value: LocalizedText; status: FactStatus; source: string };
-  pickup: { value: LocalizedText; status: FactStatus };
+  modality: { value: LocalizedText; status: FactStatus; statusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>>; source: string };
+  pickup: { value: LocalizedText; status: FactStatus; statusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>> };
   /** null = pending pricing. Old catalog prices are deliberately NOT carried over (Owner, 16/10). */
   priceCents: number | null;
-  duration: { value: LocalizedText | null; status: FactStatus };
+  duration: { value: LocalizedText | null; status: FactStatus; statusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>> };
   benefits: { pt: string[]; en: string[]; es: string[] };
   /** The current cover is provisional until RT-116 supplies a rights-cleared photo that shows the attraction. */
   coverStatus: FactStatus;
@@ -358,16 +359,31 @@ export type PrototypeOffer = {
   video: PrototypeVideo | null;
   /** RT-115 (real content): localized commercial name, statuses of hero texts, extra essentials, WhatsApp prefill. */
   titleByLocale?: LocalizedText;
+  titleStatusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>>;
   pitchStatus: FactStatus;
   benefitsStatus: FactStatus;
-  groupSize?: { value: LocalizedText; status: FactStatus };
+  groupSize?: { value: LocalizedText; status: FactStatus; statusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>> };
   minAge?: { value: LocalizedText; status: FactStatus };
   whatsappMessage?: LocalizedText;
+  hideWhatsAppCta?: boolean;
   /** Review chips for real content (record stays DRAFT): editorial status of the texts and of the FAQ/conditions. */
   contentStatus?: FactStatus;
+  contentStatusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>>;
   conditionsStatus?: FactStatus;
   /** INTERNAL provisional prices: shown only in the lab review mode as "NÃO PUBLICAR"; never on the public page. */
   provisionalPricing?: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }>;
+  /** Owner-approved price table, exposed only in the local review lab. */
+  approvedPricing?: typeof CENTRO_APPROVED_PRICING;
+  /** Both Owner-approved route options for the Centro draft. */
+  routeOptions?: typeof CENTRO_ROUTE_OPTIONS;
+  translationStatusNotice?: LocalizedText;
+  priceSummary?: LocalizedText;
+  reviewBannerNotice?: LocalizedText;
+  requestFlowNotice?: LocalizedText;
+  /** Localized-only rendering for this draft: never fill missing EN/ES fields with Portuguese copy. */
+  noPortugueseFallback?: boolean;
+  /** Optional local review CTA flow; this is an inquiry link, never a booking or payment. */
+  requestFlowMode?: "whatsapp";
 };
 
 export type PrototypeVideo = {
@@ -482,14 +498,61 @@ function centroOffer(base: PrototypeOffer): PrototypeOffer {
   return {
     ...base,
     title: CENTRO_TITLE.pt ?? base.title,
-    titleByLocale: CENTRO_TITLE,
-    titleStatus: "PROVISIONAL", // PT name approved; EN/ES translations still need RT-115 review.
-    pitch: {},
-    modality: { value: {}, status: "PENDING", source: "Formato do passeio pendente de confirmação pelo Owner" },
-    pickup: { value: {}, status: "PENDING" },
-    benefits: { pt: [], en: [], es: [] },
+    titleByLocale: {
+      pt: "Centro Histórico e Cultural do Rio",
+      en: "Rio Historic and Cultural Center",
+      es: "Centro Histórico y Cultural de Río",
+    },
+    noPortugueseFallback: true,
+    requestFlowMode: "whatsapp",
+    titleStatus: "CONFIRMED",
+    titleStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
+    pitch: {
+      pt: "Uma caminhada guiada pela história, arquitetura e cultura do Centro do Rio, em experiência privativa.",
+      en: "A privately guided walk through downtown Rio’s history, architecture and culture.",
+      es: "Un paseo privado con guía por la historia, la arquitectura y la cultura del centro de Río.",
+    },
+    modality: { value: { pt: "Experiência exclusivamente privativa", en: "Private experience only", es: "Experiencia exclusivamente privada" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" }, source: "Owner-approved TOUR-03 Ficha v1.0, 18/10/2026" },
+    pickup: { value: { pt: "Busca e retorno ao endereço combinado; confirme a logística", en: "Pickup and return at the agreed address; logistics confirmation required", es: "Recogida y regreso en la dirección acordada; requiere confirmación logística" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" } },
+    duration: { value: { pt: "Roteiros de 4 ou 6 horas", en: "4-hour or 6-hour itineraries", es: "Recorridos de 4 o 6 horas" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" } },
+    hideWhatsAppCta: true,
+    benefits: {
+      pt: ["Grupo privativo de 1 a 4 turistas", "Horário e roteiro combinados com a equipe", "Acompanhamento de guia durante a caminhada"],
+      en: ["Private group of 1 to 4 guests", "Start time and itinerary agreed with the team", "Guide accompanying the walking tour"],
+      es: ["Grupo privado de 1 a 4 turistas", "Horario e itinerario acordados con el equipo", "Guía durante el recorrido a pie"],
+    },
     coverStatus: "CONFIRMED",
-    contentStatus: "PENDING",
+    contentStatus: "CONFIRMED",
+    contentStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
+    conditionsStatus: "PENDING",
+    groupSize: { value: { pt: "1 a 4 turistas da mesma reserva", en: "1 to 4 guests on the same booking", es: "De 1 a 4 turistas en la misma reserva" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" } },
+    approvedPricing: CENTRO_APPROVED_PRICING,
+    routeOptions: CENTRO_ROUTE_OPTIONS,
+    translationStatusNotice: {
+      pt: "Português revisado. As traduções para inglês e espanhol estão preparadas como rascunhos para aprovação final do Owner e não estão liberadas para publicação.",
+      en: "English copy is a draft for the Owner’s final review. It is not approved for publication.",
+      es: "El texto en español es un borrador para la revisión final del Owner. No está aprobado para su publicación.",
+    },
+    priceSummary: {
+      pt: "Consulte a tabela por duração e tamanho do grupo",
+      en: "See the table by tour duration and group size",
+      es: "Consulta la tabla según la duración y el tamaño del grupo",
+    },
+    reviewBannerNotice: {
+      pt: "PRÉVIA INTERNA DE REVISÃO. O conteúdo não está publicado. A tabela comercial aprovada pelo Owner aparece somente para conferência local e não autoriza publicação.",
+      en: "INTERNAL REVIEW PREVIEW. The content is unpublished. The Owner-approved commercial table is shown for local review only and does not authorize publication.",
+      es: "VISTA PREVIA INTERNA DE REVISIÓN. El contenido no está publicado. La tabla comercial aprobada por el Owner se muestra solo para revisión local y no autoriza su publicación.",
+    },
+    requestFlowNotice: {
+      pt: "Na prévia local, o botão abre uma mensagem de consulta de disponibilidade para o WhatsApp comercial. A mensagem não confirma data, reserva ou pagamento; a equipe verifica a operação e responde com uma proposta.",
+      en: "In this local preview, the button opens an availability inquiry in the business WhatsApp account. The message does not confirm a date, booking or payment; the team checks the operation and replies with a proposal.",
+      es: "En esta vista previa local, el botón abre una consulta de disponibilidad en el WhatsApp comercial. El mensaje no confirma una fecha, reserva ni pago; el equipo verifica la operación y responde con una propuesta.",
+    },
+    whatsappMessage: {
+      pt: "Olá! Gostaria de consultar disponibilidade para o passeio Centro Histórico e Cultural do Rio. Ainda vou informar a data e a composição do grupo. Entendo que esta mensagem não confirma reserva nem pagamento.",
+      en: "Hello! I would like to ask about availability for the Rio Historic and Cultural Center tour. I will share my preferred date and group details. I understand this message does not confirm a booking or payment.",
+      es: "¡Hola! Quisiera consultar la disponibilidad para el paseo Centro Histórico y Cultural de Río. Compartiré la fecha y los datos del grupo. Entiendo que este mensaje no confirma una reserva ni un pago.",
+    },
   };
 }
 

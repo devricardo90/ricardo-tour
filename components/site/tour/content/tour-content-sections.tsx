@@ -201,7 +201,12 @@ export function TourGallery({ content, locale, priority = false }: { content: To
   if (content.gallery.length === 0) return null;
   return (
     <ImageGallery
-      images={content.gallery.map((img) => ({ src: img.src, alt: img.alt, objectPosition: img.objectPosition, credit: img.credit }))}
+      images={content.gallery.map((img) => ({
+        src: img.src, alt: img.alt, objectPosition: img.objectPosition, credit: img.credit,
+        aspectClassName: content.tripId === "cmlibniq40000z4zqkbujnutt" && img.src.endsWith("/centro-historico-museu-do-amanha.webp")
+          ? "aspect-[2400/1589]"
+          : undefined,
+      }))}
       labels={{ gallery: t.gallery, prev: t.galleryPrev, next: t.galleryNext, thumb: t.galleryThumb, position: t.galleryPosition }}
       aspectClassName={content.tripId === "cmlibniq40000z4zqkbujnutt" ? "aspect-[3/4]" : undefined}
       priority={priority}

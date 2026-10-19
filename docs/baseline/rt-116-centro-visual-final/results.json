@@ -1,0 +1,29 @@
+{
+  "checkedAt": "2026-10-18T17:45:40.300Z",
+  "results": [
+    {
+      "viewport": "desktop",
+      "http": 200,
+      "count": 7,
+      "portraitRatio": 0.749741468459152,
+      "museumRatio": 1.5135699373695197,
+      "museumNaturalRatio": 1.5121951219512195,
+      "museumFit": "contain",
+      "museumSource": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp&w=828&q=75",
+      "overflow": false,
+      "errors": []
+    },
+    {
+      "viewport": "mobile",
+      "http": 200,
+      "count": 7,
+      "portraitRatio": 0.7483870967741936,
+      "museumRatio": 1.5130434782608695,
+      "museumNaturalRatio": 1.510548523206751,
+      "museumFit": "contain",
+      "museumSource": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp&w=384&q=75",
+      "overflow": false,
+      "errors": []
+    }
+  ]
+}
