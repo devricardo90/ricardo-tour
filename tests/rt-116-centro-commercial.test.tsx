@@ -45,7 +45,7 @@ describe("RT-116 approved commercial draft", () => {
     const reviewHtml = renderToStaticMarkup(<TourDetailPrototype offer={offer} content={content} locale="pt" reviewMode showProvisionalPrices />).replace(/[\u00a0\u202f]/g, " ");
     expect(reviewHtml).toContain('data-testid="tour-approved-prices"');
     expect(reviewHtml).toContain("R$ 650,00");
-    expect(reviewHtml).toContain("R$ 1280,00");
+    expect(reviewHtml).toContain("R$ 1.280,00");
     expect(reviewHtml).toContain('data-testid="centro-route-options"');
     expect(reviewHtml).toContain("Centro Histórico Essencial");
     expect(reviewHtml).toContain("Centro Histórico + Porto Maravilha");

@@ -69,7 +69,9 @@ export function displayLocation(location: string | null | undefined, city: strin
   return loc && !isCityOnly(loc, city) ? loc : null;
 }
 
-/** "R$ 900,00" */
+const BRL_AMOUNT = new Intl.NumberFormat("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+/** "R$ 900,00", "R$ 1.040,00" (pt-BR thousands grouping; plain space after "R$"). */
 export function formatPriceBRL(priceCents: number) {
-  return `R$ ${(priceCents / 100).toFixed(2).replace(".", ",")}`;
+  return `R$ ${BRL_AMOUNT.format(priceCents / 100)}`;
 }

@@ -46,5 +46,15 @@ describe("trip presentation helpers (RT-53)", () => {
   it("formats BRL prices", () => {
     expect(formatPriceBRL(90000)).toBe("R$ 900,00");
     expect(formatPriceBRL(24500)).toBe("R$ 245,00");
+    expect(formatPriceBRL(65000)).toBe("R$ 650,00");
+    expect(formatPriceBRL(99999)).toBe("R$ 999,99");
+    expect(formatPriceBRL(5)).toBe("R$ 0,05");
+  });
+
+  it("groups thousands in BRL prices (pt-BR) without changing the amount", () => {
+    expect(formatPriceBRL(100000)).toBe("R$ 1.000,00");
+    expect(formatPriceBRL(104000)).toBe("R$ 1.040,00");
+    expect(formatPriceBRL(128000)).toBe("R$ 1.280,00");
+    expect(formatPriceBRL(123456789)).toBe("R$ 1.234.567,89");
   });
 });
