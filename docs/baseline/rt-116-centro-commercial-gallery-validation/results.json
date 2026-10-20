@@ -1,0 +1,176 @@
+[
+  {
+    "device": "desktop",
+    "http": 200,
+    "count": 7,
+    "thumbs": 7,
+    "title": "Centro Histórico e Cultural do Rio",
+    "h1Count": 1,
+    "unnamedButtons": 0,
+    "galleryFrame": {
+      "width": 727,
+      "height": 969,
+      "ratio": 0.75
+    },
+    "maxHorizontalGapRatio": 0,
+    "initialImageTransferBytes": 134734,
+    "ctaHref": "https://wa.me/5522998461906?text=Ol%C3%A1!%20Gostaria%20de%20consultar%20disponibilidade%20para%20o%20passeio%20Centro%20Hist%C3%B3rico%20e%20Cultural%20do%20Rio.%20Ainda%20vou%20informar%20a%20data%20e%20a%20composi%C3%A7%C3%A3o%20do%20grupo.%20Entendo%20que%20esta%20mensagem%20n%C3%A3o%20confirma%20reserva%20nem%20pagamento.",
+    "ctaUsesCanonicalWhatsApp": true,
+    "ctaAboveFold": true,
+    "overflow": false,
+    "keyboardMoved": true,
+    "images": [
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1337.webp&w=828&q=75",
+        "alt": "Real Gabinete Português de Leitura, no Centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1337",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1802.webp&w=828&q=75",
+        "alt": "Igreja da Candelária, no Centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1802",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1328.webp&w=828&q=75",
+        "alt": "Igreja histórica no Centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1328",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1321.webp&w=828&q=75",
+        "alt": "Palácio Tiradentes, no Centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1321",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1332.webp&w=828&q=75",
+        "alt": "Região comercial do SAARA",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1332",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1136.webp&w=828&q=75",
+        "alt": "Interior de igreja histórica no Centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1136",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp&w=828&q=75",
+        "alt": "Museu do Amanhã, na Praça Mauá",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "museu-do-amanha",
+        "matches": true
+      }
+    ],
+    "errors": []
+  },
+  {
+    "device": "mobile",
+    "http": 200,
+    "count": 7,
+    "thumbs": 7,
+    "title": "Centro Histórico e Cultural do Rio",
+    "h1Count": 1,
+    "unnamedButtons": 0,
+    "galleryFrame": {
+      "width": 350,
+      "height": 467,
+      "ratio": 0.75
+    },
+    "maxHorizontalGapRatio": 0,
+    "initialImageTransferBytes": 50450,
+    "ctaHref": "https://wa.me/5522998461906?text=Ol%C3%A1!%20Gostaria%20de%20consultar%20disponibilidade%20para%20o%20passeio%20Centro%20Hist%C3%B3rico%20e%20Cultural%20do%20Rio.%20Ainda%20vou%20informar%20a%20data%20e%20a%20composi%C3%A7%C3%A3o%20do%20grupo.%20Entendo%20que%20esta%20mensagem%20n%C3%A3o%20confirma%20reserva%20nem%20pagamento.",
+    "ctaUsesCanonicalWhatsApp": true,
+    "ctaAboveFold": true,
+    "overflow": false,
+    "keyboardMoved": true,
+    "images": [
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1337.webp&w=384&q=75",
+        "alt": "Real Gabinete Português de Leitura, no Centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1337",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1802.webp&w=384&q=75",
+        "alt": "Igreja da Candelária, no Centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1802",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1328.webp&w=384&q=75",
+        "alt": "Igreja histórica no Centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1328",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1321.webp&w=384&q=75",
+        "alt": "Palácio Tiradentes, no Centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1321",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1332.webp&w=384&q=75",
+        "alt": "Região comercial do SAARA",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1332",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-img-1136.webp&w=384&q=75",
+        "alt": "Interior de igreja histórica no Centro do Rio",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "img-1136",
+        "matches": true
+      },
+      {
+        "src": "http://127.0.0.1:3248/_next/image?url=/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp&w=384&q=75",
+        "alt": "Museu do Amanhã, na Praça Mauá",
+        "loaded": true,
+        "fit": "contain",
+        "horizontalGapRatio": 0,
+        "expected": "museu-do-amanha",
+        "matches": true
+      }
+    ],
+    "errors": []
+  }
+]

@@ -1,0 +1,65 @@
+{
+  "checkedAt": "2026-10-18T11:59:15.776Z",
+  "baseUrl": "http://127.0.0.1:3248",
+  "results": [
+    {
+      "viewport": "desktop",
+      "status": "PASS",
+      "viewportWidth": 1440,
+      "documentWidth": 1440,
+      "mainImageLoaded": true,
+      "tableWidths": [
+        438,
+        438
+      ],
+      "routeCards": 2,
+      "pricingTables": 2,
+      "cta": "canonical WhatsApp inquiry",
+      "liveSubmission": false
+    },
+    {
+      "viewport": 1440,
+      "status": "PASS",
+      "document": 1440,
+      "pricesHidden": true,
+      "routesVisible": true
+    },
+    {
+      "viewport": 1440,
+      "status": "PASS",
+      "document": 1440,
+      "pricesHidden": true,
+      "routesVisible": true
+    },
+    {
+      "viewport": "mobile",
+      "status": "PASS",
+      "viewportWidth": 390,
+      "documentWidth": 390,
+      "mainImageLoaded": true,
+      "tableWidths": [
+        282,
+        282
+      ],
+      "routeCards": 2,
+      "pricingTables": 2,
+      "cta": "canonical WhatsApp inquiry",
+      "liveSubmission": false
+    },
+    {
+      "viewport": 390,
+      "status": "PASS",
+      "document": 390,
+      "pricesHidden": true,
+      "routesVisible": true
+    },
+    {
+      "viewport": 390,
+      "status": "PASS",
+      "document": 390,
+      "pricesHidden": true,
+      "routesVisible": true
+    }
+  ],
+  "browserErrors": []
+}

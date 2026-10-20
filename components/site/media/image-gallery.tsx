@@ -9,6 +9,8 @@ export type GalleryImage = {
   alt: string;
   /** CSS object-position for cropped frames (thumbnails). */
   objectPosition?: string;
+  /** Optional frame ratio for an individual landscape image in a portrait gallery. */
+  aspectClassName?: string;
   /** Visible credit for the current photo (e.g. the artist of a mural), shown under the frame. */
   credit?: string | null;
 };
@@ -80,7 +82,7 @@ export function ImageGallery({
   return (
     <section aria-labelledby={headingId} onKeyDown={onKeyDown} data-testid="image-gallery" data-count={total} className="min-w-0">
       <h2 id={headingId} className="sr-only">{labels.gallery}</h2>
-      <div className={`relative overflow-hidden rounded-xl border border-white/10 bg-[var(--site-charcoal-raised,#15191D)] ${aspectClassName}`}>
+      <div className={`relative overflow-hidden rounded-xl border border-white/10 bg-[var(--site-charcoal-raised,#15191D)] ${current.aspectClassName ?? aspectClassName}`}>
         {/* Blurred backdrop of the same photo (decorative) so the uncropped photo never leaves empty bars. */}
         {backdrop === "immersive" ? (
           <div aria-hidden="true" className="absolute inset-0" data-testid="gallery-backdrop" data-backdrop="immersive">

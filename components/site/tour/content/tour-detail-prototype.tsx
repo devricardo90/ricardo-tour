@@ -26,25 +26,39 @@ import { formatPriceBRL } from "@/lib/catalog/trip-presentation";
 import { buildPublicWhatsAppUrl } from "@/lib/public-contact";
 
 type Localized = { pt?: string; en?: string; es?: string };
+type ApprovedPricingForReview = {
+  durations: ReadonlyArray<{ hours: number; label: Localized; prices: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }> }>;
+  additionalHourPerGroupCents: number;
+};
+type ApprovedRouteForReview = {
+  id: string;
+  title: Localized;
+  durationLabel: Localized;
+  durationMinutes: number;
+  stops: ReadonlyArray<{ position: number; title: Localized; durationMinutes: number }>;
+};
 export type PrototypeOfferView = {
   title: string;
   titleStatus: ReviewStatus;
   pitch: Localized;
-  modality: { value: Localized; status: ReviewStatus };
-  pickup: { value: Localized; status: ReviewStatus };
+  modality: { value: Localized; status: ReviewStatus; statusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>> };
+  pickup: { value: Localized; status: ReviewStatus; statusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>> };
   priceCents: number | null;
-  duration: { value: Localized | null; status: ReviewStatus };
+  duration: { value: Localized | null; status: ReviewStatus; statusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>> };
   benefits: { pt: string[]; en: string[]; es: string[] };
   coverStatus: ReviewStatus;
   video?: { title: Localized; src: string; mobileSrc?: string; poster: string; durationSeconds: number; caption: Localized; status: ReviewStatus } | null;
   titleByLocale?: Localized;
+  titleStatusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>>;
   pitchStatus?: ReviewStatus;
   benefitsStatus?: ReviewStatus;
-  groupSize?: { value: Localized; status: ReviewStatus };
+  groupSize?: { value: Localized; status: ReviewStatus; statusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>> };
   minAge?: { value: Localized; status: ReviewStatus };
   whatsappMessage?: Localized;
+  hideWhatsAppCta?: boolean;
   provisionalPricing?: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }>;
   contentStatus?: ReviewStatus;
+  contentStatusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>>;
   conditionsStatus?: ReviewStatus;
   /** Shown instead of "Valores em validação" while no price is approved (e.g. "Orçamento sob consulta"). */
   priceLabel?: Localized;
@@ -54,6 +68,16 @@ export type PrototypeOfferView = {
   transport?: { value: Localized; status: ReviewStatus };
   /** Sprint 10 channel: the final request section also offers the prefilled WhatsApp message. */
   requestViaWhatsapp?: boolean;
+  approvedPricing?: ApprovedPricingForReview;
+  routeOptions?: ReadonlyArray<ApprovedRouteForReview>;
+  translationStatusNotice?: Localized;
+  priceSummary?: Localized;
+  reviewBannerNotice?: Localized;
+  requestFlowNotice?: Localized;
+  /** Keeps the TOUR-03 local draft from falling back to Portuguese for missing EN/ES copy. */
+  noPortugueseFallback?: boolean;
+  /** Local review CTA mode; WhatsApp opens an inquiry only, never a booking or payment. */
+  requestFlowMode?: "whatsapp";
 };
 
 const CTA_TARGET = "#solicitar";
@@ -62,13 +86,15 @@ const CTA_TARGET = "#solicitar";
  * Visual-review hardening: returns the offer WITHOUT the internal provisional prices, so they cannot reach the browser in
  * the no-price mode even if this component ever became a client component (props are serialized to the client).
  */
-export function offerForReview<T extends { provisionalPricing?: unknown }>(offer: T, showProvisionalPrices: boolean): T {
+export function offerForReview<T extends { provisionalPricing?: unknown; approvedPricing?: unknown }>(offer: T, showProvisionalPrices: boolean): T {
   if (showProvisionalPrices) return offer;
-  const { provisionalPricing: _omitted, ...rest } = offer;
-  void _omitted;
+  const { provisionalPricing: _provisionalPrices, approvedPricing: _approvedPrices, ...rest } = offer;
+  void _provisionalPrices;
+  void _approvedPrices;
   return rest as T;
 }
-const pickL = (v: Localized | null | undefined, locale: string) => (v ? (v[locale as keyof Localized] ?? v.pt ?? "") : "");
+const pickL = (v: Localized | null | undefined, locale: string, allowPortugueseFallback = true) =>
+  (v ? (v[locale as keyof Localized] ?? (allowPortugueseFallback ? v.pt : undefined) ?? "") : "");
 const raisedCard = "rounded-xl border border-white/10 bg-[var(--site-charcoal-raised,#15191D)]";
 
 /**
@@ -84,28 +110,32 @@ const raisedCard = "rounded-xl border border-white/10 bg-[var(--site-charcoal-ra
 export function TourDetailPrototype({ offer, content, locale, reviewMode, showProvisionalPrices = true }: { offer: PrototypeOfferView; content: TourContentView; locale: string; reviewMode: boolean; showProvisionalPrices?: boolean }) {
   const td = resolveTourDetailCopy(locale);
   const t = resolveTourContentCopy(locale);
+  const localize = (value: Localized | null | undefined) => pickL(value, locale, !offer.noPortugueseFallback);
   const s = (status: ReviewStatus) => (reviewMode ? status : undefined);
-  const priceValue = offer.priceCents === null ? pickL(offer.priceLabel, locale) || t.pricePending : formatPriceBRL(offer.priceCents);
-  const priceStatus: ReviewStatus = offer.priceCents === null ? "PENDING" : "CONFIRMED";
+  const hasVisibleApprovedPricing = Boolean(reviewMode && showProvisionalPrices && offer.approvedPricing);
+  const priceValue = hasVisibleApprovedPricing ? localize(offer.priceSummary) || (offer.noPortugueseFallback ? "" : "Consulte a tabela por duração e tamanho do grupo") : offer.priceCents === null ? localize(offer.priceLabel) || t.pricePending : formatPriceBRL(offer.priceCents);
+  const priceStatus: ReviewStatus = hasVisibleApprovedPricing ? "CONFIRMED" : offer.priceCents === null ? "PENDING" : "CONFIRMED";
   const languages = content.languages.map((code) => t.language[code] ?? code.toUpperCase()).join(" · ");
   // Review chips only (lab): mock stays MOCK; real content uses the offer's editorial status (Owner-approved texts can
   // show CONFIRMED while the record is still DRAFT). Publication is decided by the gate in lib/catalog/tour-content.ts
   // (status OWNER_APPROVED), never by these chips.
-  const contentStatus: ReviewStatus = content.isMock ? "MOCK" : content.approvalValid ? "CONFIRMED" : (offer.contentStatus ?? "PROVISIONAL");
+  const localeKey = (locale === "en" || locale === "es" ? locale : "pt") as "pt" | "en" | "es";
+  const contentStatus: ReviewStatus = content.isMock ? "MOCK" : content.approvalValid ? "CONFIRMED" : (offer.contentStatusByLocale?.[localeKey] ?? offer.contentStatus ?? "PROVISIONAL");
   const conditionsStatus: ReviewStatus = content.isMock ? "MOCK" : (offer.conditionsStatus ?? contentStatus);
-  const title = pickL(offer.titleByLocale, locale) || offer.title;
-  const whatsappHref = offer.whatsappMessage ? buildPublicWhatsAppUrl(pickL(offer.whatsappMessage, locale)) : CTA_TARGET;
+  const title = localize(offer.titleByLocale) || (offer.noPortugueseFallback ? "" : offer.title);
+  const whatsappHref = offer.whatsappMessage ? buildPublicWhatsAppUrl(localize(offer.whatsappMessage)) : CTA_TARGET;
   const whatsappExternal = whatsappHref !== CTA_TARGET;
+  const ctaHref = reviewMode && offer.requestFlowMode === "whatsapp" ? whatsappHref : CTA_TARGET;
 
   const essentials: EssentialItem[] = [];
-  if (pickL(offer.modality.value, locale)) essentials.push({ key: "modality", icon: essentialIcons.Users, label: t.modality, value: pickL(offer.modality.value, locale), status: s(offer.modality.status) });
-  if (content.meetingPoint && !content.isMock) essentials.push({ key: "meeting", icon: offer.hotelPickup ? essentialIcons.Car : essentialIcons.MapPin, label: offer.hotelPickup ? t.hotelPickup : t.meetingPoint, value: content.meetingPoint, status: s(offer.pickup.status) });
-  else if (pickL(offer.pickup.value, locale)) essentials.push({ key: "pickup", icon: essentialIcons.Car, label: t.pickup, value: pickL(offer.pickup.value, locale), status: s(offer.pickup.status) });
-  essentials.push({ key: "duration", icon: essentialIcons.Clock, label: t.duration, value: offer.duration.value ? pickL(offer.duration.value, locale) : t.pendingValue, status: s(offer.duration.status) });
-  if (offer.groupSize) essentials.push({ key: "group", icon: essentialIcons.Users, label: t.participants, value: pickL(offer.groupSize.value, locale), status: s(offer.groupSize.status) });
-  if (offer.minAge) essentials.push({ key: "age", icon: essentialIcons.UserCheck, label: t.minimumAge, value: pickL(offer.minAge.value, locale), status: s(offer.minAge.status) });
-  if (offer.children) essentials.push({ key: "children", icon: essentialIcons.UserCheck, label: t.children, value: pickL(offer.children.value, locale), status: s(offer.children.status) });
-  if (offer.transport) essentials.push({ key: "transport", icon: essentialIcons.Car, label: t.transport, value: pickL(offer.transport.value, locale), status: s(offer.transport.status) });
+  if (localize(offer.modality.value)) essentials.push({ key: "modality", icon: essentialIcons.Users, label: t.modality, value: localize(offer.modality.value), status: s(offer.modality.statusByLocale?.[localeKey] ?? offer.modality.status) });
+  if (content.meetingPoint && !content.isMock) essentials.push({ key: "meeting", icon: offer.hotelPickup ? essentialIcons.Car : essentialIcons.MapPin, label: offer.hotelPickup ? t.hotelPickup : t.meetingPoint, value: content.meetingPoint, status: s(offer.pickup.statusByLocale?.[localeKey] ?? offer.pickup.status) });
+  else if (localize(offer.pickup.value)) essentials.push({ key: "pickup", icon: essentialIcons.Car, label: t.pickup, value: localize(offer.pickup.value), status: s(offer.pickup.statusByLocale?.[localeKey] ?? offer.pickup.status) });
+  essentials.push({ key: "duration", icon: essentialIcons.Clock, label: t.duration, value: offer.duration.value ? localize(offer.duration.value) : t.pendingValue, status: s(offer.duration.statusByLocale?.[localeKey] ?? offer.duration.status) });
+  if (offer.groupSize) essentials.push({ key: "group", icon: essentialIcons.Users, label: t.participants, value: localize(offer.groupSize.value), status: s(offer.groupSize.statusByLocale?.[localeKey] ?? offer.groupSize.status) });
+  if (offer.minAge) essentials.push({ key: "age", icon: essentialIcons.UserCheck, label: t.minimumAge, value: localize(offer.minAge.value), status: s(offer.minAge.status) });
+  if (offer.children) essentials.push({ key: "children", icon: essentialIcons.UserCheck, label: t.children, value: localize(offer.children.value), status: s(offer.children.status) });
+  if (offer.transport) essentials.push({ key: "transport", icon: essentialIcons.Car, label: t.transport, value: localize(offer.transport.value), status: s(offer.transport.status) });
   if (content.startTimeNote) essentials.push({ key: "time", icon: essentialIcons.Timer, label: t.startTime, value: content.startTimeNote, status: s(contentStatus) });
   if (languages) essentials.push({ key: "languages", icon: essentialIcons.Languages, label: t.languages, value: languages, status: s(contentStatus) });
 
@@ -113,13 +143,14 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
     <div className="bg-[var(--site-charcoal,#0B0E11)] pb-28 text-[var(--site-on-dark,#F4F0E8)] lg:pb-0" data-testid="tour-page-surface">
       {reviewMode ? (
         <div role="note" data-testid="mock-banner" className="border-b border-[var(--site-gold,#C8A86B)]/40 bg-[#3a2f12] px-5 py-3 text-[14px] text-[#f3d58a]">
-          <p className="mx-auto max-w-[1280px] font-medium">{content.isMock ? t.mockBanner : showProvisionalPrices ? t.reviewBanner : t.reviewBannerNoPrices}</p>
+          <p className="mx-auto max-w-[1280px] font-medium">{content.isMock ? t.mockBanner : offer.reviewBannerNotice && showProvisionalPrices ? localize(offer.reviewBannerNotice) : showProvisionalPrices ? t.reviewBanner : t.reviewBannerNoPrices}</p>
           <p className="mx-auto mt-1.5 flex max-w-[1280px] flex-wrap items-center gap-2 text-[13px]">
             <span className="font-semibold">{t.reviewLegend}:</span>
             {(["CONFIRMED", "PROVISIONAL", "PENDING", "MOCK"] as const).map((st) => (
               <StatusBadge key={st} status={st} locale={locale} />
             ))}
           </p>
+          {offer.translationStatusNotice ? <p className="mx-auto mt-2 max-w-[1280px] text-[13px] leading-[1.45]">{localize(offer.translationStatusNotice)}</p> : null}
         </div>
       ) : null}
 
@@ -140,14 +171,14 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
               <header className="lg:col-span-5" data-testid="tour-hero">
                 <p className={sectionLabel}>{td.eyebrow}</p>
                 <h1 className="site-display mt-3 text-balance text-[38px] font-medium leading-[1.04] text-[var(--site-on-dark,#F4F0E8)] md:text-[48px]">{title}</h1>
-                {reviewMode ? <p className="mt-2"><StatusBadge status={offer.titleStatus} locale={locale} /></p> : null}
-                {pickL(offer.pitch, locale) ? <p className="mt-4 text-[19px] leading-[1.5] text-[var(--site-on-dark-muted,#CAC7BF)]" data-testid="tour-pitch">
-                  {pickL(offer.pitch, locale)}
+                {reviewMode ? <p className="mt-2"><StatusBadge status={offer.titleStatusByLocale?.[localeKey] ?? offer.titleStatus} locale={locale} /></p> : null}
+                {localize(offer.pitch) ? <p className="mt-4 text-[19px] leading-[1.5] text-[var(--site-on-dark-muted,#CAC7BF)]" data-testid="tour-pitch">
+                  {localize(offer.pitch)}
                   {reviewMode ? <span className="ml-2 align-middle"><StatusBadge status={offer.pitchStatus ?? "MOCK"} locale={locale} /></span> : null}
                 </p> : null}
-                {pickL(offer.modality.value, locale) || pickL(offer.pickup.value, locale) ? <ul className="mt-4 flex flex-wrap gap-2 text-[14px] font-medium">
-                  {pickL(offer.modality.value, locale) ? <li className="inline-flex items-center rounded-full border border-[var(--site-gold,#C8A86B)]/40 bg-[var(--site-gold,#C8A86B)]/10 px-3 py-1.5 text-[var(--site-gold-bright,#E8C780)]">{pickL(offer.modality.value, locale)}</li> : null}
-                  {pickL(offer.pickup.value, locale) ? <li className="inline-flex items-center rounded-full border border-white/15 px-3 py-1.5 text-[var(--site-on-dark,#F4F0E8)]">{pickL(offer.pickup.value, locale)}</li> : null}
+                  {localize(offer.modality.value) || localize(offer.pickup.value) ? <ul className="mt-4 flex flex-wrap gap-2 text-[14px] font-medium">
+                  {localize(offer.modality.value) ? <li className="inline-flex items-center rounded-full border border-[var(--site-gold,#C8A86B)]/40 bg-[var(--site-gold,#C8A86B)]/10 px-3 py-1.5 text-[var(--site-gold-bright,#E8C780)]">{localize(offer.modality.value)}</li> : null}
+                  {localize(offer.pickup.value) ? <li className="inline-flex items-center rounded-full border border-white/15 px-3 py-1.5 text-[var(--site-on-dark,#F4F0E8)]">{localize(offer.pickup.value)}</li> : null}
                 </ul> : null}
 
                 <div className={`${raisedCard} mt-6 p-5`} data-testid="tour-booking-card">
@@ -156,12 +187,28 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                     {reviewMode ? <StatusBadge status={priceStatus} locale={locale} /> : null}
                   </p>
                   <p className="mt-1 text-[26px] font-semibold leading-tight text-[var(--site-on-dark,#F4F0E8)]" data-testid="tour-price">{priceValue}</p>
-                  <TourCtaButton href={CTA_TARGET} label={t.cta} className="mt-4 w-full" />
-                  <a href={whatsappHref} {...(whatsappExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})} className={`${secondaryButtonClass} mt-3 w-full`} data-testid="tour-whatsapp">
+                  <TourCtaButton href={ctaHref} label={t.cta} className="mt-4 w-full" />
+                  {!offer.hideWhatsAppCta ? <a href={whatsappHref} {...(whatsappExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})} className={`${secondaryButtonClass} mt-3 w-full`} data-testid="tour-whatsapp">
                     <MessageCircle className="h-[18px] w-[18px]" aria-hidden="true" />
                     {t.ctaWhatsapp}
-                  </a>
+                  </a> : null}
                   <p className="mt-3 text-[14px] leading-[1.5] text-[var(--site-on-dark-muted,#CAC7BF)]">{t.ctaNote}</p>
+                  {reviewMode && showProvisionalPrices && offer.approvedPricing ? (
+                    <div className="mt-4 rounded-lg border border-[var(--site-gold,#C8A86B)]/50 bg-[var(--site-gold,#C8A86B)]/10 p-3" data-testid="tour-approved-prices" role="note">
+                      <p className="text-[12px] font-bold tracking-[0.04em]">{t.approvedTablePreview}</p>
+                      {offer.approvedPricing.durations.map((duration) => (
+                        <div key={duration.hours} className="mt-3 overflow-x-auto">
+                          <p className="mb-1 text-[13px] font-semibold">{localize(duration.label) || (offer.noPortugueseFallback ? "" : duration.label.pt)}</p>
+                          <table className="w-full text-[13px]">
+                            <thead><tr className="text-left text-[11px] uppercase tracking-wide"><th scope="col" className="py-1">{t.participantsShort}</th><th scope="col" className="py-1">{t.perPerson}</th><th scope="col" className="py-1">{t.total}</th></tr></thead>
+                            <tbody>{duration.prices.map((row) => <tr key={row.participants} className="border-t border-white/10"><th scope="row" className="py-1 text-left font-normal">{row.participants}</th><td className="py-1">{formatPriceBRL(row.perPersonCents)}</td><td className="py-1">{formatPriceBRL(row.totalCents)}</td></tr>)}</tbody>
+                          </table>
+                        </div>
+                      ))}
+                      <p className="mt-3 text-[12px] leading-[1.45]">{t.approvedPricingNote.replace("{price}", formatPriceBRL(offer.approvedPricing.additionalHourPerGroupCents))}</p>
+                      <p className="mt-2 text-[11px] leading-[1.4]">{t.publicationGateNote}</p>
+                    </div>
+                  ) : null}
                   {reviewMode && showProvisionalPrices && offer.provisionalPricing ? (
                     <div className="mt-4 rounded-lg border border-[#e0a63c] bg-[#2e2108] p-3 text-[#f3cf86]" data-testid="tour-provisional-prices" role="note">
                       <p className="text-[12px] font-bold tracking-[0.08em]">{t.provisionalPricesTitle}</p>
@@ -202,7 +249,23 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                 <TourAbout content={content} locale={locale} status={s(contentStatus)} />
                 <TourEssentials items={essentials} locale={locale} />
                 <TourBenefits items={offer.benefits[(locale === "en" || locale === "es" ? locale : "pt") as "pt" | "en" | "es"]} locale={locale} status={s(offer.benefitsStatus ?? "MOCK")} />
-                <TourItinerary content={content} locale={locale} status={s(contentStatus)} />
+                {reviewMode && offer.routeOptions ? (
+                  <section aria-labelledby="centro-route-options-heading" data-testid="centro-route-options">
+    <h2 id="centro-route-options-heading" className="site-display flex flex-wrap items-center gap-3 text-[30px] font-medium leading-[1.1] text-[var(--site-on-dark,#F4F0E8)] md:text-[34px]">{t.routeOptionsTitle} <StatusBadge status={localeKey === "pt" ? "CONFIRMED" : "PENDING"} locale={locale} /></h2>
+                    <div className="mt-5 grid gap-5">
+                      {offer.routeOptions.map((route) => (
+                        <article key={route.id} className={`${raisedCard} p-5`}>
+                          <h3 className="text-[19px] font-semibold">{localize(route.title) || (offer.noPortugueseFallback ? "" : route.title.pt)}</h3>
+                          <p className="mt-1 text-[14px] text-[var(--site-gold-bright,#E8C780)]">{localize(route.durationLabel) || (offer.noPortugueseFallback ? "" : route.durationLabel.pt)}</p>
+                          <ol className="mt-4 space-y-3">
+                            {route.stops.map((stop, index) => <li key={stop.position} className="flex gap-3 text-[15px]"><span className="shrink-0 font-semibold text-[var(--site-gold,#C8A86B)]" aria-hidden="true">{index + 1}.</span><span>{localize(stop.title) || (offer.noPortugueseFallback ? "" : stop.title.pt)}<span className="ml-2 text-[13px] text-[var(--site-on-dark-muted,#CAC7BF)]">{stop.durationMinutes} min</span></span></li>)}
+                          </ol>
+                        </article>
+                      ))}
+                    </div>
+                    <p className="mt-3 text-[13px] leading-[1.5] text-[var(--site-on-dark-muted,#CAC7BF)]">{t.routeValidationNote}</p>
+                  </section>
+                ) : <TourItinerary content={content} locale={locale} status={s(contentStatus)} />}
                 <TourIncludes content={content} locale={locale} labels={{ included: td.included, notIncluded: td.notIncluded }} status={s(contentStatus)} />
                 <TourOptionalServices content={content} locale={locale} status={s(contentStatus)} />
                 <TourConditionsNotes content={content} locale={locale} status={s(conditionsStatus)} />
@@ -214,7 +277,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                   <p className="site-display text-[22px] font-medium leading-tight text-[var(--site-on-dark,#F4F0E8)]">{title}</p>
                   <p className="mt-3 text-[14px] text-[var(--site-on-dark-muted,#CAC7BF)]">{t.price}</p>
                   <p className="text-[20px] font-semibold text-[var(--site-on-dark,#F4F0E8)]">{priceValue}</p>
-                  <TourCtaButton href={CTA_TARGET} label={t.cta} className="mt-4 w-full" testId="tour-cta-aside" />
+                  <TourCtaButton href={ctaHref} label={t.cta} className="mt-4 w-full" testId="tour-cta-aside" />
                 </div>
               </aside>
             </div>
@@ -229,13 +292,13 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                   {t.requestWhatsapp}
                 </a>
               ) : null}
-              {reviewMode && !offer.requestViaWhatsapp ? <p className="mt-3 max-w-[60ch] text-[14px] text-[var(--site-on-dark-subtle,#9DA3A5)]">{t.contactBody}</p> : null}
+              {reviewMode && !offer.requestViaWhatsapp ? <p className="mt-3 max-w-[60ch] text-[14px] text-[var(--site-on-dark-subtle,#9DA3A5)]">{localize(offer.requestFlowNotice) || t.contactBody}</p> : null}
             </section>
           </article>
         </div>
       </div>
 
-      <TourMobileCtaBar href={CTA_TARGET} label={t.cta} priceLabel={t.price} priceValue={priceValue} />
+      <TourMobileCtaBar href={ctaHref} label={t.cta} priceLabel={t.price} priceValue={priceValue} />
     </div>
   );
 }

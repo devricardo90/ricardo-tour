@@ -158,7 +158,7 @@ describe("RT-114 mock data integrity", () => {
     }
   });
 
-  it("keeps the Centro media preview local and omits unconfirmed sales facts", () => {
+  it("keeps the approved Centro commercial draft local and preserves publication/media gates", () => {
     const id = "cmlibniq40000z4zqkbujnutt";
     const record = MOCK_TOUR_CONTENT[id];
     const offer = PROTOTYPE_OFFER[id];
@@ -174,12 +174,15 @@ describe("RT-114 mock data integrity", () => {
     ]);
     expect(record.images.every((image) => image.rightsStatus === "UNVERIFIED" && image.alt.pt && image.alt.en && image.alt.es)).toBe(true);
     expect(toTourContentView(record, "pt", "public")).toBeNull();
-    expect(record.itinerary).toEqual([]);
-    expect(record.languages).toEqual([]);
+    expect(record.itinerary).toHaveLength(6);
+    expect(record.languages).toEqual(["pt", "es", "en"]);
     expect(offer.priceCents).toBeNull();
-    expect(offer.pitch).toEqual({});
-    expect(offer.modality.value).toEqual({});
-    expect(offer.pickup.value).toEqual({});
+    expect(offer.pitch).toEqual(expect.objectContaining({ pt: expect.any(String), en: expect.any(String), es: expect.any(String) }));
+    expect(offer.modality.value).toEqual(expect.objectContaining({ pt: expect.any(String), en: expect.any(String), es: expect.any(String) }));
+    expect(offer.pickup.value).toEqual(expect.objectContaining({ pt: expect.any(String), en: expect.any(String), es: expect.any(String) }));
+    expect(offer.approvedPricing?.publishable).toBe(false);
+    expect(offer.routeOptions?.map((route) => route.id)).toEqual(["essential-4h", "porto-maravilha-6h"]);
+    expect(offer.titleStatusByLocale).toEqual({ pt: "CONFIRMED", en: "PENDING", es: "PENDING" });
     expect(offer.title).toBe("Centro Histórico e Cultural do Rio");
   });
 
@@ -231,14 +234,23 @@ describe("RT-114 copy and prototype rendering (round 1 + Owner addendum)", () =>
   it("never carries old catalog prices, durations or routes into the prototype; price shows as pending", () => {
     for (const id of Object.keys(PROTOTYPE_OFFER)) {
       expect(PROTOTYPE_OFFER[id].priceCents).toBeNull();
-      expect(PROTOTYPE_OFFER[id].modality.status).toBe(id === "cmlibniq40000z4zqkbujnutt" ? "PENDING" : "CONFIRMED");
+      expect(PROTOTYPE_OFFER[id].modality.status).toBe("CONFIRMED");
       const html = render(id, "pt");
       // TOUR-01: "Aproximadamente 8 horas" is the Owner-approved duration (Ficha v1.0 §4.1), not the old Premium value.
       const exempt = id === "cmlhxkpy9000028zq27rhytew" ? ["8 horas"] : [];
-      for (const old of ["R$ 385,00", "R$ 120,00", "R$ 245,00", "R$ 900,00", "5–6 horas", "5 a 6 horas", "Transporte em van", "8 horas", "3 a 4 horas"].filter((o) => !exempt.includes(o))) {
+      const oldFacts = ["R$ 385,00", "R$ 245,00", "5–6 horas", "5 a 6 horas", "Transporte em van", "8 horas", "3 a 4 horas"];
+      // TOUR-03: R$ 900,00 and R$ 120,00 are Owner-approved fares in its local review table, not old catalog values.
+      if (id !== "cmlibniq40000z4zqkbujnutt") oldFacts.push("R$ 900,00", "R$ 120,00");
+      for (const old of oldFacts.filter((o) => !exempt.includes(o))) {
         expect(html, `${id} must not show ${old}`).not.toContain(old);
       }
-      expect(html).toContain("Orçamento sob consulta");
+      if (id === "cmlibniq40000z4zqkbujnutt") {
+        expect(html).toContain('data-testid="tour-approved-prices"');
+        expect(html).toContain("R$ 120,00 por grupo");
+        expect(html).toContain('data-testid="centro-route-options"');
+      } else {
+        expect(html).toContain("Orçamento sob consulta");
+      }
       expect(html).toContain('data-status="PENDING"');
     }
   });
@@ -260,6 +272,16 @@ describe("RT-114 copy and prototype rendering (round 1 + Owner addendum)", () =>
     expect(eight).toContain('data-count="8"');
     expect((eight.match(/Mostrar foto \d de 8/g) ?? []).length).toBe(8);
     expect(eight).toContain("object-contain"); // the main photo is never cropped
+  });
+
+  it("keeps the shared gallery ratio unless the current image explicitly overrides it", () => {
+    const standard = renderToStaticMarkup(<ImageGallery images={[{ src: "/a.jpg", alt: "a" }]} labels={galleryLabels} />);
+    expect(standard).toContain("aspect-[4/3] md:aspect-[16/10]");
+    const portrait = renderToStaticMarkup(<ImageGallery images={[{ src: "/b.jpg", alt: "b" }]} labels={galleryLabels} aspectClassName="aspect-[3/4]" />);
+    expect(portrait).toContain("aspect-[3/4]");
+    const landscape = renderToStaticMarkup(<ImageGallery images={[{ src: "/c.jpg", alt: "c", aspectClassName: "aspect-[2400/1589]" }]} labels={galleryLabels} aspectClassName="aspect-[3/4]" />);
+    expect(landscape).toContain("aspect-[2400/1589]");
+    expect(landscape).not.toContain("aspect-[3/4]");
   });
 
   it("converts and validates the framing focal point", () => {
@@ -505,10 +527,14 @@ describe("RT-115 Owner review versions (17/10/2026)", () => {
     }
   });
 
-  it("keeps 'Em definição' for missing non-price facts (duration of the mock tours)", () => {
+  it("shows approved Centro durations in PT and keeps EN/ES copy pending", () => {
     const id = "cmlibniq40000z4zqkbujnutt";
-    const html = renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={toTourContentView(MOCK_TOUR_CONTENT[id], "pt", "preview")!} locale="pt" reviewMode />);
-    expect(html).toContain("Em definição");
+    const pt = renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={toTourContentView(MOCK_TOUR_CONTENT[id], "pt", "preview")!} locale="pt" reviewMode />);
+    const en = renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={toTourContentView(MOCK_TOUR_CONTENT[id], "en", "preview")!} locale="en" reviewMode />);
+    expect(pt).toContain("Roteiros de 4 ou 6 horas");
+    expect(pt).not.toContain("Em definição");
+    expect(en).toContain('data-status="PENDING"');
+    expect(en).toContain("English copy is a draft for the Owner’s final review. It is not approved for publication.");
   });
 });
 
