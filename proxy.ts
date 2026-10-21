@@ -7,6 +7,7 @@ import {
     parseAttributionCookie,
     serializeAttributionCookie,
 } from "@/lib/analytics/attribution";
+import { isRebuildLabEnabled } from "@/lib/rebuild-lab/config";
 import { routing } from "./i18n/routing";
 
 const handleI18nRouting = createMiddleware(routing);
@@ -16,6 +17,16 @@ export default function proxy(req: NextRequest) {
 
     if (pathname.startsWith("/api") || pathname.startsWith("/_next") || pathname.includes(".")) {
         return NextResponse.next();
+    }
+
+    // Rebuild lab (internal review surface): when disabled it must not render at all. The layout's notFound() alone is
+    // not enough: the App Router streams the page segment in parallel, so a 404 response still carried the lab page
+    // (statuses, internal prices) in its RSC payload. Refusing here returns a bare 404 before any rendering.
+    if (/^\/(?:[a-z]{2}\/)?rebuild-lab(?:\/|$)/.test(pathname) && !isRebuildLabEnabled()) {
+        return new NextResponse("Not Found", {
+            status: 404,
+            headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "no-store", "x-robots-tag": "noindex, nofollow" },
+        });
     }
 
     const isProtectedPath = pathname.match(/^\/(?:[a-z]{2}\/)?(?:admin|reservas)(?:\/|$)/);
