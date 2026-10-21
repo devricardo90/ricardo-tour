@@ -795,3 +795,30 @@ describe("RT-112/RT-114 TOUR-01 gallery backdrop (Owner visual correction, 18/10
     for (let n = 1; n <= 4; n += 1) expect(page).toContain(`aria-label="${thumbLabel(n)}"`);
   });
 });
+
+describe("TOUR-01/TOUR-02 gallery frame aligned with TOUR-03 (Owner visual decision, 21/10/2026)", () => {
+  const html = (id: string) => renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={toTourContentView(MOCK_TOUR_CONTENT[id], "pt", "preview")!} locale="pt" reviewMode />);
+  const frameOf = (page: string) => page.match(/data-testid="image-gallery"[\s\S]*?<div class="([^"]*rounded-xl[^"]*)"/)?.[1] ?? "";
+
+  it("uses the 3:4 portrait frame of TOUR-03 for TOUR-01 and TOUR-02, whose approved photos are all 3:4", () => {
+    for (const id of ["cmlhxkpy9000028zq27rhytew", "cmli1a6im000034zqqzc9sppb", "cmlibniq40000z4zqkbujnutt"]) {
+      const frame = frameOf(html(id));
+      expect(frame, id).toContain("aspect-[3/4]");
+      expect(frame, id).not.toContain("aspect-[4/3]");
+      const mainImg = html(id).match(/<img[^>]*data-testid="gallery-main-image"[^>]*>/)?.[0] ?? "";
+      expect(mainImg, id).toContain("object-contain"); // whole photo: no crop, no distortion
+    }
+  });
+
+  it("keeps the gallery order, the backdrops and the fictitious Premium placeholder frame unchanged", () => {
+    expect(MOCK_TOUR_CONTENT["cmlhxkpy9000028zq27rhytew"].images.map((i) => i.src.split("/").pop())).toEqual([
+      "pao-01-IMG_1162-mirante.webp", "pao-02-IMG_1171-bondinho-cume.webp", "pao-03-IMG_1163-mirante-baia.webp", "pao-04-IMG_1181-visitante-deck.webp",
+    ]);
+    expect(MOCK_TOUR_CONTENT["cmli1a6im000034zqqzc9sppb"].images.map((i) => i.src.split("/").pop())).toEqual([
+      "rocinha-01-panorama-bandeira.jpg", "rocinha-02-beco.jpg", "rocinha-03-mural.jpg", "rocinha-04-mirante-deck.jpg", "rocinha-05-panorama.jpg",
+    ]);
+    expect(html("cmlhxkpy9000028zq27rhytew")).toContain('data-backdrop="immersive"');
+    expect(html("cmli1a6im000034zqqzc9sppb")).toContain("opacity-45 blur-2xl");
+    expect(frameOf(html("cmljo0s1u0000t0zqa0bpd23p"))).toContain("aspect-[4/3] md:aspect-[16/10]");
+  });
+});

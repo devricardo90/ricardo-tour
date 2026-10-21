@@ -195,6 +195,17 @@ export function TourConditionsNotes({ content, locale, status }: { content: Tour
   );
 }
 
+/**
+ * Tours whose approved photos are all 3:4 portrait: the frame uses the same ratio, so each photo fills the card whole,
+ * with no side bands, crop or distortion (TOUR-03 approved reference; TOUR-01 and TOUR-02 aligned by the Owner,
+ * 21/10/2026). The blurred backdrop stays as the fallback for any photo of another ratio.
+ */
+const PORTRAIT_GALLERY_TRIP_IDS: ReadonlySet<string> = new Set([
+  "cmlhxkpy9000028zq27rhytew", // TOUR-01 Cristo Redentor + Pão de Açúcar
+  "cmli1a6im000034zqqzc9sppb", // TOUR-02 Favela Rocinha
+  "cmlibniq40000z4zqkbujnutt", // TOUR-03 Centro Histórico
+]);
+
 /** RT-116: tour gallery wired to the shared ImageGallery with localized labels. */
 export function TourGallery({ content, locale, priority = false }: { content: TourContentView; locale: string; priority?: boolean }) {
   const t = resolveTourContentCopy(locale);
@@ -208,7 +219,7 @@ export function TourGallery({ content, locale, priority = false }: { content: To
           : undefined,
       }))}
       labels={{ gallery: t.gallery, prev: t.galleryPrev, next: t.galleryNext, thumb: t.galleryThumb, position: t.galleryPosition }}
-      aspectClassName={content.tripId === "cmlibniq40000z4zqkbujnutt" ? "aspect-[3/4]" : undefined}
+      aspectClassName={PORTRAIT_GALLERY_TRIP_IDS.has(content.tripId) ? "aspect-[3/4]" : undefined}
       // TOUR-01 (Owner, 18/10/2026): portrait photos must not leave grey side bands -> immersive blurred backdrop.
       backdrop={content.tripId === "cmlhxkpy9000028zq27rhytew" ? "immersive" : "soft"}
       priority={priority}
