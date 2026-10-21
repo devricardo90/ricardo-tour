@@ -343,19 +343,24 @@ export function TourCtaButton({ href, label, className = "", testId = "tour-cta"
 }
 
 /** RT-114: mobile-only sticky bar (price status + CTA), clear of the phone's safe area. Hidden from lg upwards. */
-export function TourMobileCtaBar({ href, label, priceLabel, priceValue }: { href: string; label: string; priceLabel: string; priceValue: string }) {
+/**
+ * Mobile sticky CTA bar. The price is never clipped or ellipsized: it keeps its natural width (wrapping between words when
+ * long, or on the explicit two lines of `priceLines`), and when price and button do not fit side by side the button wraps
+ * to a full-width row below (narrow phones), so neither overlaps the other.
+ */
+export function TourMobileCtaBar({ href, label, priceLabel, priceValue, priceLines }: { href: string; label: string; priceLabel: string; priceValue: string; priceLines?: { lead: string; value: string } }) {
   return (
     <div
       data-testid="tour-mobile-cta"
       className="fixed inset-x-0 bottom-0 z-40 border-t border-[var(--site-gold,#C8A86B)]/25 bg-[var(--site-charcoal,#0B0E11)]/95 px-4 pt-3 backdrop-blur lg:hidden"
       style={{ paddingBottom: "max(12px, env(safe-area-inset-bottom, 0px))" }}
     >
-      <div className="mx-auto flex max-w-[640px] items-center justify-between gap-3">
-        <p className="min-w-0 text-[13px] leading-tight text-[var(--site-on-dark-muted,#CAC7BF)]">
-          {priceLabel}
-          <span className="block whitespace-nowrap text-[16px] font-semibold text-[var(--site-on-dark,#F4F0E8)]">{priceValue}</span>
+      <div className="mx-auto flex max-w-[640px] flex-wrap items-center justify-between gap-x-3 gap-y-2">
+        <p className="max-w-full shrink-0 text-[13px] leading-tight text-[var(--site-on-dark-muted,#CAC7BF)]" data-testid="tour-mobile-price">
+          {priceLines ? priceLines.lead : priceLabel}
+          <span className={`block text-[16px] font-semibold text-[var(--site-on-dark,#F4F0E8)] ${priceLines ? "whitespace-nowrap" : "max-w-[11rem] text-balance"}`}>{priceLines ? priceLines.value : priceValue}</span>
         </p>
-        <TourCtaButton href={href} label={label} className="shrink-0 gap-1.5 px-4 text-[15px]" testId="tour-cta-mobile" />
+        <TourCtaButton href={href} label={label} className="shrink-0 grow gap-1.5 px-4 text-[15px]" testId="tour-cta-mobile" />
       </div>
     </div>
   );

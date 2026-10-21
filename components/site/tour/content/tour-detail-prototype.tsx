@@ -77,6 +77,8 @@ export type PrototypeOfferView = {
   /** Condition shown right under the summary price (e.g. which group size and duration the "from" price applies to). */
   priceCondition?: Localized;
   priceStatusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>>;
+  /** Two-line price for the mobile sticky bar (e.g. "A partir de" / "R$ 260/pessoa"); the card keeps the full summary. */
+  mobilePriceLines?: { lead: Localized; value: Localized };
   reviewBannerNotice?: Localized;
   requestFlowNotice?: Localized;
   /** Keeps the TOUR-03 local draft from falling back to Portuguese for missing EN/ES copy. */
@@ -145,7 +147,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
   if (languages) essentials.push({ key: "languages", icon: essentialIcons.Languages, label: t.languages, value: languages, status: s(contentStatus) });
 
   return (
-    <div className="bg-[var(--site-charcoal,#0B0E11)] pb-28 text-[var(--site-on-dark,#F4F0E8)] lg:pb-0" data-testid="tour-page-surface">
+    <div className="bg-[var(--site-charcoal,#0B0E11)] pb-40 text-[var(--site-on-dark,#F4F0E8)] lg:pb-0" data-testid="tour-page-surface">
       {reviewMode ? (
         <div role="note" data-testid="mock-banner" className="border-b border-[var(--site-gold,#C8A86B)]/40 bg-[#3a2f12] px-5 py-3 text-[14px] text-[#f3d58a]">
           <p className="mx-auto max-w-[1280px] font-medium">{content.isMock ? t.mockBanner : offer.reviewBannerNotice && showProvisionalPrices ? localize(offer.reviewBannerNotice) : showProvisionalPrices ? t.reviewBanner : t.reviewBannerNoPrices}</p>
@@ -307,7 +309,13 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
         </div>
       </div>
 
-      <TourMobileCtaBar href={ctaHref} label={t.cta} priceLabel={t.price} priceValue={priceValue} />
+      <TourMobileCtaBar
+        href={ctaHref}
+        label={t.cta}
+        priceLabel={t.price}
+        priceValue={priceValue}
+        priceLines={hasVisibleApprovedPricing && offer.mobilePriceLines && localize(offer.mobilePriceLines.value) ? { lead: localize(offer.mobilePriceLines.lead), value: localize(offer.mobilePriceLines.value) } : undefined}
+      />
     </div>
   );
 }

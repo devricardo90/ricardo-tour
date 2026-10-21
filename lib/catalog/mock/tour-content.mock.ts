@@ -375,6 +375,7 @@ export type PrototypeOffer = {
   translationStatusNotice?: LocalizedText;
   priceSummary?: LocalizedText;
   priceCondition?: LocalizedText;
+  mobilePriceLines?: { lead: LocalizedText; value: LocalizedText };
   priceStatusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>>;
   reviewBannerNotice?: LocalizedText;
   requestFlowNotice?: LocalizedText;
@@ -586,6 +587,11 @@ function centroOffer(base: PrototypeOffer): PrototypeOffer {
       es: "Valor por persona para grupos de 4 participantes en el paseo privado de 4 horas.",
     },
     priceStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
+    // Mobile sticky bar (Owner, 21/10/2026): two lines so the amount and "per person" are never cut.
+    mobilePriceLines: {
+      lead: { pt: "A partir de", en: "From", es: "Desde" },
+      value: { pt: "R$ 260/pessoa", en: "R$ 260/person", es: "R$ 260/persona" },
+    },
     reviewBannerNotice: {
       pt: "PRÉVIA INTERNA DE REVISÃO. O conteúdo não está publicado. A tabela comercial aprovada pelo Owner aparece somente para conferência local e não autoriza publicação.",
       en: "INTERNAL REVIEW PREVIEW. The content is unpublished. The Owner-approved commercial table is shown for local review only and does not authorize publication.",

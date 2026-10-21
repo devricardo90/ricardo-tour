@@ -229,3 +229,37 @@ describe("TOUR-03 commercial presentation: 'A partir de R$ 260 por pessoa' (Owne
     expect(textOf(render(CRISTO, "pt", false), "tour-price")).toBe("Orçamento sob consulta");
   });
 });
+
+describe("Mobile sticky price bar never clips the price (Owner decision 21/10/2026)", () => {
+  const render = (id: string, locale: "pt" | "en" | "es", showProvisionalPrices = true) =>
+    renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={toTourContentView(MOCK_TOUR_CONTENT[id], locale, "preview")!} locale={locale} reviewMode showProvisionalPrices={showProvisionalPrices} />).replace(/[  ]/g, " ");
+  const bar = (html: string) => html.slice(html.indexOf('data-testid="tour-mobile-cta"'));
+  const barPrice = (html: string) => bar(html).match(/data-testid="tour-mobile-price">([^<]*)<span[^>]*>([^<]*)<\/span>/)?.slice(1, 3);
+
+  it("shows TOUR-03 on two lines in the bar while the card keeps the full summary and condition", () => {
+    const expected = { pt: ["A partir de", "R$ 260/pessoa", "A partir de R$ 260 por pessoa"], en: ["From", "R$ 260/person", "From R$ 260 per person"], es: ["Desde", "R$ 260/persona", "Desde R$ 260 por persona"] } as const;
+    for (const locale of ["pt", "en", "es"] as const) {
+      const html = render(CENTRO_ID, locale);
+      expect(barPrice(html), locale).toEqual([expected[locale][0], expected[locale][1]]);
+      expect(html, locale).toContain(`data-testid="tour-price">${expected[locale][2]}<`);
+      expect(html, locale).toContain('data-testid="tour-price-condition"');
+    }
+  });
+
+  it("keeps quote-on-request wording (TOUR-01, TOUR-02, TOUR-03 without prices) whole, with no truncation classes", () => {
+    for (const [id, hidden] of [["cmlhxkpy9000028zq27rhytew", false], ["cmli1a6im000034zqqzc9sppb", false], [CENTRO_ID, true]] as const) {
+      const html = render(id, "pt", !hidden);
+      expect(barPrice(html), id).toEqual(["Preço", "Orçamento sob consulta"]);
+      expect(bar(html), id).not.toContain("R$ 260");
+    }
+  });
+
+  it("lets the button wrap below instead of overlapping, and never ellipsizes the price", () => {
+    const markup = bar(render(CENTRO_ID, "pt"));
+    expect(markup).toMatch(/class="mx-auto flex max-w-\[640px\] flex-wrap/);
+    expect(markup).toMatch(/data-testid="tour-cta-mobile"/);
+    expect(markup).toMatch(/class="[^"]*\bgrow\b[^"]*"[^>]*data-testid="tour-cta-mobile"|data-testid="tour-cta-mobile"[^>]*class="[^"]*\bgrow\b/);
+    expect(markup).not.toMatch(/\btruncate\b|text-ellipsis|line-clamp/);
+    expect(markup).toContain("padding-bottom:max(12px, env(safe-area-inset-bottom, 0px))");
+  });
+});
