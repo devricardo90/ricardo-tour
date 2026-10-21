@@ -60,6 +60,9 @@ describe("RT-116 approved commercial draft", () => {
     expect(hiddenHtml).not.toContain('data-testid="tour-approved-prices"');
     expect(hiddenHtml.replace(/[\u00a0\u202f]/g, " ")).not.toContain("R$ 650,00");
     expect(hiddenHtml).not.toContain("Consulte a tabela por duração e tamanho do grupo");
+    expect(hiddenHtml).not.toContain("A partir de R$ 260 por pessoa");
+    expect(hiddenHtml).not.toContain('data-testid="tour-price-condition"');
+    expect(hiddenHtml).not.toContain('data-testid="tour-pricing-section"');
     expect(hiddenHtml).toContain('data-testid="centro-route-options"');
   });
 
@@ -149,5 +152,80 @@ describe("TOUR-03 editorial status of the hero pitch and benefit lines", () => {
     expect(PROTOTYPE_OFFER["cmli1a6im000034zqqzc9sppb"]).toMatchObject({ pitchStatus: "CONFIRMED", benefitsStatus: "PROVISIONAL" });
     expect(PROTOTYPE_OFFER["cmlhxkpy9000028zq27rhytew"]).toMatchObject({ pitchStatus: "PROVISIONAL", benefitsStatus: "PROVISIONAL" });
     expect(PROTOTYPE_OFFER["cmljo0s1u0000t0zqa0bpd23p"]).toMatchObject({ pitchStatus: "MOCK", benefitsStatus: "MOCK" });
+  });
+});
+
+describe("TOUR-03 commercial presentation: 'A partir de R$ 260 por pessoa' (Owner decision 21/10/2026)", () => {
+  const ROCINHA = "cmli1a6im000034zqqzc9sppb";
+  const CRISTO = "cmlhxkpy9000028zq27rhytew";
+  const PREMIUM = "cmljo0s1u0000t0zqa0bpd23p";
+  const render = (id: string, locale: "pt" | "en" | "es", showProvisionalPrices = true) =>
+    renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={toTourContentView(MOCK_TOUR_CONTENT[id], locale, "preview")!} locale={locale} reviewMode showProvisionalPrices={showProvisionalPrices} />).replace(/[  ]/g, " ");
+  const textOf = (html: string, testId: string) => html.match(new RegExp(`data-testid="${testId}"[^>]*>([^<]*)<`))?.[1];
+  const badgeAfter = (html: string, testId: string) => {
+    const start = html.indexOf(`data-testid="${testId}"`);
+    return start < 0 ? undefined : html.slice(start).match(/data-status="(\w+)"/)?.[1];
+  };
+
+  it("leads with the lowest approved per-person fare, which is the 4-guest, 4-hour rate of the approved table", () => {
+    const rows = CENTRO_APPROVED_PRICING.durations.flatMap((duration) => duration.prices.map((row) => ({ hours: duration.hours, ...row })));
+    const lowest = rows.reduce((min, row) => (row.perPersonCents < min.perPersonCents ? row : min));
+    expect(lowest).toMatchObject({ hours: 4, participants: 4, perPersonCents: 26000 });
+    const html = render(CENTRO_ID, "pt");
+    expect(textOf(html, "tour-price")).toBe("A partir de R$ 260 por pessoa");
+    expect(textOf(html, "tour-price-condition")).toBe("Valor por pessoa para grupos de 4 participantes, no passeio privativo de 4 horas.");
+    const card = html.slice(html.indexOf('data-testid="tour-booking-card"'), html.indexOf("</header>"));
+    expect(card).toContain("A partir de R$ 260 por pessoa");
+    expect(card).toContain('data-testid="tour-price-condition"');
+    expect(card).toContain("Solicitar disponibilidade");
+    expect(card).not.toContain('data-testid="tour-approved-prices"'); // the table left the price card
+    expect(html).toContain("A partir de R$ 260 por pessoa</p>"); // sticky aside / mobile bar reuse the summary
+  });
+
+  it("keeps all 8 approved fares, the extra-hour rule and the infant policy in a 'Valores e opções do passeio' section further down", () => {
+    const html = render(CENTRO_ID, "pt");
+    const section = html.indexOf('data-testid="tour-pricing-section"');
+    expect(section).toBeGreaterThan(html.indexOf('data-testid="centro-route-options"'));
+    expect(section).toBeLessThan(html.indexOf('data-testid="tour-includes"'));
+    expect(html).toContain(">Valores e opções do passeio");
+    const table = html.slice(html.indexOf('data-testid="tour-approved-prices"'), html.indexOf("</section>", section));
+    const cells = [...table.matchAll(/<td class="py-1">([^<]+)<\/td>/g)].map((m) => m[1]);
+    expect(cells).toEqual([
+      "R$ 650,00", "R$ 650,00", "R$ 380,00", "R$ 760,00", "R$ 300,00", "R$ 900,00", "R$ 260,00", "R$ 1.040,00",
+      "R$ 890,00", "R$ 890,00", "R$ 500,00", "R$ 1.000,00", "R$ 380,00", "R$ 1.140,00", "R$ 320,00", "R$ 1.280,00",
+    ]);
+    expect(table).toContain("Hora adicional: R$ 120,00 por grupo.");
+    expect(table).toContain("Crianças de 0 a 2 anos pagam 50% da tarifa individual");
+    expect(CENTRO_APPROVED_PRICING.additionalHourPerGroupCents).toBe(12000);
+  });
+
+  it("is CONFIRMED in PT and PENDING in EN/ES (translations not approved), with localized copy", () => {
+    const expected = {
+      pt: ["A partir de R$ 260 por pessoa", "CONFIRMED"],
+      en: ["From R$ 260 per person", "PENDING"],
+      es: ["Desde R$ 260 por persona", "PENDING"],
+    } as const;
+    for (const locale of ["pt", "en", "es"] as const) {
+      const html = render(CENTRO_ID, locale);
+      expect(textOf(html, "tour-price"), locale).toBe(expected[locale][0]);
+      expect(badgeAfter(html, "tour-booking-card"), locale).toBe(expected[locale][1]);
+      expect(badgeAfter(html, "tour-pricing-section"), locale).toBe(expected[locale][1]);
+    }
+  });
+
+  it("does not touch TOUR-01, TOUR-02 or TOUR-04 and never uses R$ 260 for them", () => {
+    for (const id of [CRISTO, ROCINHA, PREMIUM]) {
+      for (const hidden of [true, false]) {
+        const html = render(id, "pt", hidden);
+        expect(html, id).not.toContain("R$ 260");
+        expect(html, id).not.toContain("A partir de");
+        expect(html, id).not.toContain('data-testid="tour-price-condition"');
+        expect(html, id).not.toContain('data-testid="tour-pricing-section"');
+      }
+      expect(PROTOTYPE_OFFER[id].priceSummary, id).toBeUndefined();
+      expect(PROTOTYPE_OFFER[id].priceCondition, id).toBeUndefined();
+    }
+    expect(textOf(render(ROCINHA, "pt", false), "tour-price")).toBe("Orçamento sob consulta");
+    expect(textOf(render(CRISTO, "pt", false), "tour-price")).toBe("Orçamento sob consulta");
   });
 });

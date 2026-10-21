@@ -374,6 +374,8 @@ export type PrototypeOffer = {
   routeOptions?: typeof CENTRO_ROUTE_OPTIONS;
   translationStatusNotice?: LocalizedText;
   priceSummary?: LocalizedText;
+  priceCondition?: LocalizedText;
+  priceStatusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>>;
   reviewBannerNotice?: LocalizedText;
   requestFlowNotice?: LocalizedText;
   /** Localized-only rendering for this draft: never fill missing EN/ES fields with Portuguese copy. */
@@ -571,11 +573,19 @@ function centroOffer(base: PrototypeOffer): PrototypeOffer {
       en: "English copy is a draft for the Owner’s final review. It is not approved for publication.",
       es: "El texto en español es un borrador para la revisión final del Owner. No está aprobado para su publicación.",
     },
+    // Owner commercial decision (21/10/2026): lead with the lowest approved per-person fare (4 guests, 4 hours; Manual
+    // §12.11). The full table moves to the "Valores e opções do passeio" section. PT approved; EN/ES translations PENDING.
     priceSummary: {
-      pt: "Consulte a tabela por duração e tamanho do grupo",
-      en: "See the table by tour duration and group size",
-      es: "Consulta la tabla según la duración y el tamaño del grupo",
+      pt: "A partir de R$ 260 por pessoa",
+      en: "From R$ 260 per person",
+      es: "Desde R$ 260 por persona",
     },
+    priceCondition: {
+      pt: "Valor por pessoa para grupos de 4 participantes, no passeio privativo de 4 horas.",
+      en: "Price per person for groups of 4 guests on the 4-hour private tour.",
+      es: "Valor por persona para grupos de 4 participantes en el paseo privado de 4 horas.",
+    },
+    priceStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
     reviewBannerNotice: {
       pt: "PRÉVIA INTERNA DE REVISÃO. O conteúdo não está publicado. A tabela comercial aprovada pelo Owner aparece somente para conferência local e não autoriza publicação.",
       en: "INTERNAL REVIEW PREVIEW. The content is unpublished. The Owner-approved commercial table is shown for local review only and does not authorize publication.",

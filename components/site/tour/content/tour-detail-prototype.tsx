@@ -74,6 +74,9 @@ export type PrototypeOfferView = {
   routeOptions?: ReadonlyArray<ApprovedRouteForReview>;
   translationStatusNotice?: Localized;
   priceSummary?: Localized;
+  /** Condition shown right under the summary price (e.g. which group size and duration the "from" price applies to). */
+  priceCondition?: Localized;
+  priceStatusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>>;
   reviewBannerNotice?: Localized;
   requestFlowNotice?: Localized;
   /** Keeps the TOUR-03 local draft from falling back to Portuguese for missing EN/ES copy. */
@@ -114,14 +117,14 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
   const t = resolveTourContentCopy(locale);
   const localize = (value: Localized | null | undefined) => pickL(value, locale, !offer.noPortugueseFallback);
   const s = (status: ReviewStatus) => (reviewMode ? status : undefined);
+  const localeKey = (locale === "en" || locale === "es" ? locale : "pt") as "pt" | "en" | "es";
   const hasVisibleApprovedPricing = Boolean(reviewMode && showProvisionalPrices && offer.approvedPricing);
   const priceValue = hasVisibleApprovedPricing ? localize(offer.priceSummary) || (offer.noPortugueseFallback ? "" : "Consulte a tabela por duração e tamanho do grupo") : offer.priceCents === null ? localize(offer.priceLabel) || t.pricePending : formatPriceBRL(offer.priceCents);
-  const priceStatus: ReviewStatus = hasVisibleApprovedPricing ? "CONFIRMED" : offer.priceCents === null ? "PENDING" : "CONFIRMED";
+  const priceStatus: ReviewStatus = hasVisibleApprovedPricing ? (offer.priceStatusByLocale?.[localeKey] ?? "CONFIRMED") : offer.priceCents === null ? "PENDING" : "CONFIRMED";
   const languages = content.languages.map((code) => t.language[code] ?? code.toUpperCase()).join(" · ");
   // Review chips only (lab): mock stays MOCK; real content uses the offer's editorial status (Owner-approved texts can
   // show CONFIRMED while the record is still DRAFT). Publication is decided by the gate in lib/catalog/tour-content.ts
   // (status OWNER_APPROVED), never by these chips.
-  const localeKey = (locale === "en" || locale === "es" ? locale : "pt") as "pt" | "en" | "es";
   const contentStatus: ReviewStatus = content.isMock ? "MOCK" : content.approvalValid ? "CONFIRMED" : (offer.contentStatusByLocale?.[localeKey] ?? offer.contentStatus ?? "PROVISIONAL");
   const conditionsStatus: ReviewStatus = content.isMock ? "MOCK" : (offer.conditionsStatus ?? contentStatus);
   const title = localize(offer.titleByLocale) || (offer.noPortugueseFallback ? "" : offer.title);
@@ -189,28 +192,13 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                     {reviewMode ? <StatusBadge status={priceStatus} locale={locale} /> : null}
                   </p>
                   <p className="mt-1 text-[26px] font-semibold leading-tight text-[var(--site-on-dark,#F4F0E8)]" data-testid="tour-price">{priceValue}</p>
+                  {hasVisibleApprovedPricing && localize(offer.priceCondition) ? <p className="mt-1 text-[14px] leading-[1.5] text-[var(--site-on-dark-muted,#CAC7BF)]" data-testid="tour-price-condition">{localize(offer.priceCondition)}</p> : null}
                   <TourCtaButton href={ctaHref} label={t.cta} className="mt-4 w-full" />
                   {!offer.hideWhatsAppCta ? <a href={whatsappHref} {...(whatsappExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})} className={`${secondaryButtonClass} mt-3 w-full`} data-testid="tour-whatsapp">
                     <MessageCircle className="h-[18px] w-[18px]" aria-hidden="true" />
                     {t.ctaWhatsapp}
                   </a> : null}
                   <p className="mt-3 text-[14px] leading-[1.5] text-[var(--site-on-dark-muted,#CAC7BF)]">{t.ctaNote}</p>
-                  {reviewMode && showProvisionalPrices && offer.approvedPricing ? (
-                    <div className="mt-4 rounded-lg border border-[var(--site-gold,#C8A86B)]/50 bg-[var(--site-gold,#C8A86B)]/10 p-3" data-testid="tour-approved-prices" role="note">
-                      <p className="text-[12px] font-bold tracking-[0.04em]">{t.approvedTablePreview}</p>
-                      {offer.approvedPricing.durations.map((duration) => (
-                        <div key={duration.hours} className="mt-3 overflow-x-auto">
-                          <p className="mb-1 text-[13px] font-semibold">{localize(duration.label) || (offer.noPortugueseFallback ? "" : duration.label.pt)}</p>
-                          <table className="w-full text-[13px]">
-                            <thead><tr className="text-left text-[11px] uppercase tracking-wide"><th scope="col" className="py-1">{t.participantsShort}</th><th scope="col" className="py-1">{t.perPerson}</th><th scope="col" className="py-1">{t.total}</th></tr></thead>
-                            <tbody>{duration.prices.map((row) => <tr key={row.participants} className="border-t border-white/10"><th scope="row" className="py-1 text-left font-normal">{row.participants}</th><td className="py-1">{formatPriceBRL(row.perPersonCents)}</td><td className="py-1">{formatPriceBRL(row.totalCents)}</td></tr>)}</tbody>
-                          </table>
-                        </div>
-                      ))}
-                      <p className="mt-3 text-[12px] leading-[1.45]">{t.approvedPricingNote.replace("{price}", formatPriceBRL(offer.approvedPricing.additionalHourPerGroupCents))}</p>
-                      <p className="mt-2 text-[11px] leading-[1.4]">{t.publicationGateNote}</p>
-                    </div>
-                  ) : null}
                   {reviewMode && showProvisionalPrices && offer.provisionalPricing ? (
                     <div className="mt-4 rounded-lg border border-[#e0a63c] bg-[#2e2108] p-3 text-[#f3cf86]" data-testid="tour-provisional-prices" role="note">
                       <p className="text-[12px] font-bold tracking-[0.08em]">{t.provisionalPricesTitle}</p>
@@ -268,6 +256,25 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                     <p className="mt-3 text-[13px] leading-[1.5] text-[var(--site-on-dark-muted,#CAC7BF)]">{t.routeValidationNote}</p>
                   </section>
                 ) : <TourItinerary content={content} locale={locale} status={s(contentStatus)} />}
+                {hasVisibleApprovedPricing && offer.approvedPricing ? (
+                  <section aria-labelledby="tour-pricing-heading" data-testid="tour-pricing-section">
+                    <h2 id="tour-pricing-heading" className="site-display flex flex-wrap items-center gap-3 text-[30px] font-medium leading-[1.1] text-[var(--site-on-dark,#F4F0E8)] md:text-[34px]">{t.pricingSectionTitle} <StatusBadge status={priceStatus} locale={locale} /></h2>
+                    <div className="mt-5 rounded-lg border border-[var(--site-gold,#C8A86B)]/50 bg-[var(--site-gold,#C8A86B)]/10 p-3" data-testid="tour-approved-prices" role="note">
+                      <p className="text-[12px] font-bold tracking-[0.04em]">{t.approvedTablePreview}</p>
+                      {offer.approvedPricing.durations.map((duration) => (
+                        <div key={duration.hours} className="mt-3 overflow-x-auto">
+                          <p className="mb-1 text-[13px] font-semibold">{localize(duration.label) || (offer.noPortugueseFallback ? "" : duration.label.pt)}</p>
+                          <table className="w-full text-[13px]">
+                            <thead><tr className="text-left text-[11px] uppercase tracking-wide"><th scope="col" className="py-1">{t.participantsShort}</th><th scope="col" className="py-1">{t.perPerson}</th><th scope="col" className="py-1">{t.total}</th></tr></thead>
+                            <tbody>{duration.prices.map((row) => <tr key={row.participants} className="border-t border-white/10"><th scope="row" className="py-1 text-left font-normal">{row.participants}</th><td className="py-1">{formatPriceBRL(row.perPersonCents)}</td><td className="py-1">{formatPriceBRL(row.totalCents)}</td></tr>)}</tbody>
+                          </table>
+                        </div>
+                      ))}
+                      <p className="mt-3 text-[12px] leading-[1.45]">{t.approvedPricingNote.replace("{price}", formatPriceBRL(offer.approvedPricing.additionalHourPerGroupCents))}</p>
+                      <p className="mt-2 text-[11px] leading-[1.4]">{t.publicationGateNote}</p>
+                    </div>
+                  </section>
+                ) : null}
                 <TourIncludes content={content} locale={locale} labels={{ included: td.included, notIncluded: td.notIncluded }} status={s(contentStatus)} />
                 <TourOptionalServices content={content} locale={locale} status={s(contentStatus)} />
                 <TourConditionsNotes content={content} locale={locale} status={s(conditionsStatus)} />
