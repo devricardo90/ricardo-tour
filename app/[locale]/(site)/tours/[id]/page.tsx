@@ -9,6 +9,8 @@ import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
 import { buildTouristTripJsonLd, serializeJsonLd } from "@/lib/seo/structured-data";
 import { TourDetailView } from "@/components/site/tour/tour-detail-view";
 import { publicOfferPriceCents } from "@/lib/catalog/price-on-request";
+import { getPublicTourPresentation } from "@/lib/catalog/public-tour-presentation";
+import { TourDetailPrototype } from "@/components/site/tour/content/tour-detail-prototype";
 
 // Same request-time catalog read as the Home and the listing.
 export const dynamic = "force-dynamic";
@@ -28,9 +30,12 @@ export async function generateMetadata(props: PageProps): Promise<Metadata> {
     return { title: "Tour not found | Ricardo Tour", robots: { index: false, follow: false } };
   }
 
-  const title = getLocalizedField<string>(asLocalizedText(trip.title), locale).trim();
+  // Sprint 10: when the Owner-approved design passes the content and presentation gates, its approved title and summary
+  // describe the page; otherwise the catalog fields, as before.
+  const presentation = await getPublicTourPresentation(id, locale);
+  const title = presentation?.offer.title || getLocalizedField<string>(asLocalizedText(trip.title), locale).trim();
   // The parsed summary, never the raw description (which carries Duracao/Categoria/... metadata blocks).
-  const summary = parseTripDescription(getLocalizedField<string>(asLocalizedText(trip.description), locale) ?? "").summary ?? undefined;
+  const summary = presentation?.content.summary ?? parseTripDescription(getLocalizedField<string>(asLocalizedText(trip.description), locale) ?? "").summary ?? undefined;
   const path = `/${locale}/tours/${id}`;
   const images = trip.imageUrl ? [trip.imageUrl] : [];
 
@@ -51,14 +56,20 @@ export default async function TourDetailsPage(props: PageProps) {
     notFound();
   }
 
-  const name = getLocalizedField<string>(asLocalizedText(trip.title), locale).trim();
-  const summary = parseTripDescription(getLocalizedField<string>(asLocalizedText(trip.description), locale) ?? "").summary ?? undefined;
+  const presentation = await getPublicTourPresentation(id, locale);
+  const name = presentation?.offer.title || getLocalizedField<string>(asLocalizedText(trip.title), locale).trim();
+  const summary = presentation?.content.summary ?? parseTripDescription(getLocalizedField<string>(asLocalizedText(trip.description), locale) ?? "").summary ?? undefined;
   const jsonLd = buildTouristTripJsonLd({ siteUrl: PUBLIC_SITE_URL, url: `${PUBLIC_SITE_URL}/${locale}/tours/${id}`, name, description: summary, image: trip.imageUrl, priceCents: publicOfferPriceCents(id, trip.priceCents) ?? 0 }); // 0 = no Offer (obsolete published price)
 
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
-      <TourDetailView trip={trip} locale={locale} />
+      {presentation ? (
+        // Approved design, public mode: no review chips or lab notices; prices only if publication is authorized.
+        <TourDetailPrototype offer={presentation.offer} content={presentation.content} locale={locale} reviewMode={false} showProvisionalPrices={false} />
+      ) : (
+        <TourDetailView trip={trip} locale={locale} />
+      )}
     </>
   );
 }

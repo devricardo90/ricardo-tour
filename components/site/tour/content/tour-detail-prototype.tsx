@@ -71,6 +71,8 @@ export type PrototypeOfferView = {
   /** Sprint 10 channel: the final request section also offers the prefilled WhatsApp message. */
   requestViaWhatsapp?: boolean;
   approvedPricing?: ApprovedPricingForReview;
+  /** Public page only: the Owner authorized publishing the approved table (lib/catalog/public-tour-presentation.ts). */
+  approvedPricingPublic?: boolean;
   routeOptions?: ReadonlyArray<ApprovedRouteForReview>;
   translationStatusNotice?: Localized;
   priceSummary?: Localized;
@@ -120,7 +122,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
   const localize = (value: Localized | null | undefined) => pickL(value, locale, !offer.noPortugueseFallback);
   const s = (status: ReviewStatus) => (reviewMode ? status : undefined);
   const localeKey = (locale === "en" || locale === "es" ? locale : "pt") as "pt" | "en" | "es";
-  const hasVisibleApprovedPricing = Boolean(reviewMode && showProvisionalPrices && offer.approvedPricing);
+  const hasVisibleApprovedPricing = Boolean(offer.approvedPricing && ((reviewMode && showProvisionalPrices) || offer.approvedPricingPublic));
   const priceValue = hasVisibleApprovedPricing ? localize(offer.priceSummary) || (offer.noPortugueseFallback ? "" : "Consulte a tabela por duração e tamanho do grupo") : offer.priceCents === null ? localize(offer.priceLabel) || t.pricePending : formatPriceBRL(offer.priceCents);
   const priceStatus: ReviewStatus = hasVisibleApprovedPricing ? (offer.priceStatusByLocale?.[localeKey] ?? "CONFIRMED") : offer.priceCents === null ? "PENDING" : "CONFIRMED";
   const languages = content.languages.map((code) => t.language[code] ?? code.toUpperCase()).join(" · ");
@@ -132,7 +134,8 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
   const title = localize(offer.titleByLocale) || (offer.noPortugueseFallback ? "" : offer.title);
   const whatsappHref = offer.whatsappMessage ? buildPublicWhatsAppUrl(localize(offer.whatsappMessage)) : CTA_TARGET;
   const whatsappExternal = whatsappHref !== CTA_TARGET;
-  const ctaHref = reviewMode && offer.requestFlowMode === "whatsapp" ? whatsappHref : CTA_TARGET;
+  // WhatsApp availability inquiry (Sprint 10 channel: never a booking or payment), in the lab and on the public page.
+  const ctaHref = offer.requestFlowMode === "whatsapp" ? whatsappHref : CTA_TARGET;
 
   const essentials: EssentialItem[] = [];
   if (localize(offer.modality.value)) essentials.push({ key: "modality", icon: essentialIcons.Users, label: t.modality, value: localize(offer.modality.value), status: s(offer.modality.statusByLocale?.[localeKey] ?? offer.modality.status) });
