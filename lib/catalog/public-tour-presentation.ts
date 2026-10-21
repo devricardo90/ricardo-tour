@@ -52,9 +52,9 @@ export function buildPublicOffer(source: PrototypeOffer, locale: string, content
   const benefits = { pt: [] as string[], en: [] as string[], es: [] as string[] };
   if (benefitsConfirmed) benefits[l] = [...source.benefits[l]];
 
-  // Video: only a clip that passed the content gate (rights + publication act), described with its approved caption.
+  // Video: only a clip the Owner CONFIRMED that also passed the content gate (rights + publication act).
   const gatedVideo = source.video ? content.videos.find((v) => v.src === source.video?.src) : undefined;
-  const video = source.video && gatedVideo && has(source.video.title, l) && has(source.video.caption, l)
+  const video = source.video && source.video.status === "CONFIRMED" && gatedVideo && has(source.video.title, l) && has(source.video.caption, l)
     ? { title: only(source.video.title, l), src: gatedVideo.src, mobileSrc: gatedVideo.mobileSrc ?? undefined, poster: gatedVideo.poster, durationSeconds: gatedVideo.durationSeconds ?? source.video.durationSeconds, caption: only(source.video.caption, l), status: "CONFIRMED" as const }
     : null;
 

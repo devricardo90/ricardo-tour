@@ -81,7 +81,7 @@ describe("Sprint 10 public tour presentation gate", () => {
     expect(cells).toEqual(["R$ 650,00", "R$ 650,00", "R$ 380,00", "R$ 760,00", "R$ 300,00", "R$ 900,00", "R$ 260,00", "R$ 1.040,00", "R$ 890,00", "R$ 890,00", "R$ 500,00", "R$ 1.000,00", "R$ 380,00", "R$ 1.140,00", "R$ 320,00", "R$ 1.280,00"]);
   });
 
-  it("publishes media only through the content gate: unverified rights leave the public gallery and video empty", () => {
+  it("publishes media only through the content gate, and a video only once the Owner confirmed the clip", () => {
     const unverified = approveRecord(MOCK_TOUR_CONTENT[ROCINHA], new Date("2026-10-21T12:00:00Z")); // rights UNVERIFIED
     const view = toTourContentView(unverified, "pt", "public")!;
     expect(view.gallery).toEqual([]);
@@ -92,8 +92,13 @@ describe("Sprint 10 public tour presentation gate", () => {
     expect(load.images.find((m) => m.mediaType === "VIDEO")?.rightsStatus).toBe("UNVERIFIED");
     expect(toTourContentView(approveRecord(load, new Date("2026-10-21T12:00:00Z")), "pt", "public")!.videos).toEqual([]);
     const attested = approveRecord({ ...load, images: load.images.map((m) => ({ ...m, rightsStatus: "OWNER_ATTESTED" as const })) }, new Date("2026-10-21T12:00:00Z")); // TEST ONLY
-    const offer = buildPublicOffer(PROTOTYPE_OFFER[ROCINHA], "pt", toTourContentView(attested, "pt", "public")!, { pricePublicationAuthorized: false })!;
-    expect(offer.video?.src).toBe("/media/tours/favela-rocinha/rocinha-praca-movimento.mp4");
+    const attestedView = toTourContentView(attested, "pt", "public")!;
+    expect(attestedView.videos.map((v) => v.src)).toEqual(["/media/tours/favela-rocinha/rocinha-praca-movimento.mp4"]);
+    // Rights alone are not enough: the clip is still PROVISIONAL (Owner approval of the clip pending), so it stays private.
+    expect(PROTOTYPE_OFFER[ROCINHA].video?.status).toBe("PROVISIONAL");
+    expect(buildPublicOffer(PROTOTYPE_OFFER[ROCINHA], "pt", attestedView, { pricePublicationAuthorized: false })!.video).toBeNull();
+    const confirmedClip = { ...PROTOTYPE_OFFER[ROCINHA], video: { ...PROTOTYPE_OFFER[ROCINHA].video!, status: "CONFIRMED" as const } }; // TEST ONLY
+    expect(buildPublicOffer(confirmedClip, "pt", attestedView, { pricePublicationAuthorized: false })!.video?.src).toBe("/media/tours/favela-rocinha/rocinha-praca-movimento.mp4");
   });
 
   it("keeps the current page for DRAFT content, mock content or other tours", async () => {
