@@ -9,6 +9,8 @@
 
 ### Centro Histórico e Cultural do Rio
 
+**Apresentação — APROVADA pelo Owner (21/10/2026), texto exato:** “Descubra a história, a arquitetura e o patrimônio cultural do Centro do Rio em uma experiência privativa, acompanhada por um guia especializado.” EN/ES da apresentação continuam PENDENTES (RT-115). As linhas da seção “Sobre a experiência” continuam PROVISÓRIAS. Registro canônico: Manual Mestre §12.0 e versão 0.13.
+
 Descubra a história, a arquitetura e o patrimônio cultural do Centro do Rio em um passeio privativo com guia. O roteiro acompanha os seus interesses, a duração contratada e o funcionamento dos locais. Visitas internas dependem de abertura e confirmação; a programação pode ser ajustada às condições do dia.
 
 O passeio combina transporte privativo no trajeto contratado, acompanhamento do guia e caminhadas pelo Centro. Há duas opções de circuito guiado: **Centro Histórico Essencial, 4 horas**, e **Centro Histórico + Porto Maravilha, 6 horas**. O tempo de retirada e retorno é estimado em cerca de 1 hora, para um total aproximado de 5 ou 7 horas. Trânsito, distância do endereço e retirada em aeroporto podem aumentar esse tempo.

@@ -51,7 +51,9 @@ export type PrototypeOfferView = {
   titleByLocale?: Localized;
   titleStatusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>>;
   pitchStatus?: ReviewStatus;
+  pitchStatusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>>;
   benefitsStatus?: ReviewStatus;
+  benefitsStatusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>>;
   groupSize?: { value: Localized; status: ReviewStatus; statusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>> };
   minAge?: { value: Localized; status: ReviewStatus };
   whatsappMessage?: Localized;
@@ -174,7 +176,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                 {reviewMode ? <p className="mt-2"><StatusBadge status={offer.titleStatusByLocale?.[localeKey] ?? offer.titleStatus} locale={locale} /></p> : null}
                 {localize(offer.pitch) ? <p className="mt-4 text-[19px] leading-[1.5] text-[var(--site-on-dark-muted,#CAC7BF)]" data-testid="tour-pitch">
                   {localize(offer.pitch)}
-                  {reviewMode ? <span className="ml-2 align-middle"><StatusBadge status={offer.pitchStatus ?? "MOCK"} locale={locale} /></span> : null}
+                  {reviewMode ? <span className="ml-2 align-middle"><StatusBadge status={offer.pitchStatusByLocale?.[localeKey] ?? offer.pitchStatus ?? "MOCK"} locale={locale} /></span> : null}
                 </p> : null}
                   {localize(offer.modality.value) || localize(offer.pickup.value) ? <ul className="mt-4 flex flex-wrap gap-2 text-[14px] font-medium">
                   {localize(offer.modality.value) ? <li className="inline-flex items-center rounded-full border border-[var(--site-gold,#C8A86B)]/40 bg-[var(--site-gold,#C8A86B)]/10 px-3 py-1.5 text-[var(--site-gold-bright,#E8C780)]">{localize(offer.modality.value)}</li> : null}
@@ -248,7 +250,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                 ) : null}
                 <TourAbout content={content} locale={locale} status={s(contentStatus)} />
                 <TourEssentials items={essentials} locale={locale} />
-                <TourBenefits items={offer.benefits[(locale === "en" || locale === "es" ? locale : "pt") as "pt" | "en" | "es"]} locale={locale} status={s(offer.benefitsStatus ?? "MOCK")} />
+                <TourBenefits items={offer.benefits[(locale === "en" || locale === "es" ? locale : "pt") as "pt" | "en" | "es"]} locale={locale} status={s(offer.benefitsStatusByLocale?.[localeKey] ?? offer.benefitsStatus ?? "MOCK")} />
                 {reviewMode && offer.routeOptions ? (
                   <section aria-labelledby="centro-route-options-heading" data-testid="centro-route-options">
     <h2 id="centro-route-options-heading" className="site-display flex flex-wrap items-center gap-3 text-[30px] font-medium leading-[1.1] text-[var(--site-on-dark,#F4F0E8)] md:text-[34px]">{t.routeOptionsTitle} <StatusBadge status={localeKey === "pt" ? "CONFIRMED" : "PENDING"} locale={locale} /></h2>

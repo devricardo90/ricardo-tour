@@ -349,7 +349,9 @@ export type PrototypeOffer = {
   titleByLocale?: LocalizedText;
   titleStatusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>>;
   pitchStatus: FactStatus;
+  pitchStatusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>>;
   benefitsStatus: FactStatus;
+  benefitsStatusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>>;
   groupSize?: { value: LocalizedText; status: FactStatus; statusByLocale?: Partial<Record<"pt" | "en" | "es", FactStatus>> };
   minAge?: { value: LocalizedText; status: FactStatus };
   whatsappMessage?: LocalizedText;
@@ -537,7 +539,7 @@ function centroOffer(base: PrototypeOffer): PrototypeOffer {
     titleStatus: "CONFIRMED",
     titleStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
     pitch: {
-      pt: "Uma caminhada guiada pela história, arquitetura e cultura do Centro do Rio, em experiência privativa.",
+      pt: "Descubra a história, a arquitetura e o patrimônio cultural do Centro do Rio em uma experiência privativa, acompanhada por um guia especializado.",
       en: "A privately guided walk through downtown Rio’s history, architecture and culture.",
       es: "Un paseo privado con guía por la historia, la arquitectura y la cultura del centro de Río.",
     },
@@ -550,6 +552,13 @@ function centroOffer(base: PrototypeOffer): PrototypeOffer {
       en: ["Private group of 1 to 4 guests", "Start time and itinerary agreed with the team", "Guide accompanying the walking tour"],
       es: ["Grupo privado de 1 a 4 turistas", "Horario e itinerario acordados con el equipo", "Guía durante el recorrido a pie"],
     },
+    // PT pitch approved verbatim by the Owner (editorial decision, 21/10/2026); EN/ES translations still PENDING.
+    pitchStatus: "CONFIRMED",
+    pitchStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
+    // Benefit lines: real copy derived from approved facts but not in the Owner-approved texts (Ficha v1.0 / Manual §12 /
+    // PT/EN/ES review document): PROVISIONAL in PT, EN/ES PENDING. Never MOCK.
+    benefitsStatus: "PROVISIONAL",
+    benefitsStatusByLocale: { pt: "PROVISIONAL", en: "PENDING", es: "PENDING" },
     coverStatus: "CONFIRMED",
     contentStatus: "CONFIRMED",
     contentStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },

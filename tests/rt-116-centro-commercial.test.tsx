@@ -116,3 +116,38 @@ describe("RT-116 approved commercial draft", () => {
     expect(CENTRO_APPROVED_PRICING.additionalHourPerGroupCents).toBe(12000);
   });
 });
+
+describe("TOUR-03 editorial status of the hero pitch and benefit lines", () => {
+  const render = (locale: "pt" | "en" | "es") =>
+    renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[CENTRO_ID]} content={toTourContentView(MOCK_TOUR_CONTENT[CENTRO_ID], locale, "preview")!} locale={locale} reviewMode />);
+  const badgeAfter = (html: string, testId: string) => {
+    const start = html.indexOf(`data-testid="${testId}"`);
+    return start < 0 ? undefined : html.slice(start).match(/data-status="(\w+)"/)?.[1];
+  };
+
+  it("pitch is CONFIRMED in PT (Owner editorial approval 21/10/2026), benefits PROVISIONAL in PT, EN/ES PENDING, never MOCK", () => {
+    const pitch = { pt: "CONFIRMED", en: "PENDING", es: "PENDING" } as const;
+    const benefits = { pt: "PROVISIONAL", en: "PENDING", es: "PENDING" } as const;
+    for (const locale of ["pt", "en", "es"] as const) {
+      const html = render(locale);
+      expect(badgeAfter(html, "tour-pitch"), `${locale} pitch`).toBe(pitch[locale]);
+      expect(badgeAfter(html, "tour-benefits"), `${locale} benefits`).toBe(benefits[locale]);
+      // The only MOCK badge left is the review legend in the banner.
+      expect(html.match(/data-status="MOCK"/g) ?? [], `${locale} MOCK badges`).toHaveLength(1);
+    }
+  });
+
+  it("keeps the approved texts, the DRAFT record and the other tours' statuses unchanged", () => {
+    const offer = PROTOTYPE_OFFER[CENTRO_ID];
+    expect(offer.pitch.pt).toBe("Descubra a história, a arquitetura e o patrimônio cultural do Centro do Rio em uma experiência privativa, acompanhada por um guia especializado.");
+    expect(render("pt")).toContain("Descubra a história, a arquitetura e o patrimônio cultural do Centro do Rio em uma experiência privativa, acompanhada por um guia especializado.");
+    expect(offer.pitch.en).toBe("A privately guided walk through downtown Rio’s history, architecture and culture.");
+    expect(offer.pitch.es).toBe("Un paseo privado con guía por la historia, la arquitectura y la cultura del centro de Río.");
+    expect(offer.benefits.pt).toEqual(["Grupo privativo de 1 a 4 turistas", "Horário e roteiro combinados com a equipe", "Acompanhamento de guia durante a caminhada"]);
+    expect(MOCK_TOUR_CONTENT[CENTRO_ID].status).toBe("DRAFT");
+    expect(MOCK_TOUR_CONTENT[CENTRO_ID].images.every((image) => image.rightsStatus === "UNVERIFIED")).toBe(true);
+    expect(PROTOTYPE_OFFER["cmli1a6im000034zqqzc9sppb"]).toMatchObject({ pitchStatus: "CONFIRMED", benefitsStatus: "PROVISIONAL" });
+    expect(PROTOTYPE_OFFER["cmlhxkpy9000028zq27rhytew"]).toMatchObject({ pitchStatus: "PROVISIONAL", benefitsStatus: "PROVISIONAL" });
+    expect(PROTOTYPE_OFFER["cmljo0s1u0000t0zqa0bpd23p"]).toMatchObject({ pitchStatus: "MOCK", benefitsStatus: "MOCK" });
+  });
+});
