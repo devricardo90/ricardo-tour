@@ -41,15 +41,18 @@ describe("RT-104 — required scenarios (fictitious URLs only)", () => {
 
   it("2b. the committed production allowlist is EMPTY; preview allows only the isolated Neon preview project", () => {
     // RT-106 (22/10/2026): only the isolated Neon preview project; production stays empty (no hosted production access).
-    expect(HOSTED_TARGETS.preview).toEqual(["ep-crimson-river-zam6stkf.c-2.eu-west-2.aws.neon.tech"]);
+    expect(HOSTED_TARGETS.preview).toEqual(["ep-raspy-resonance-zaaizaps.c-2.eu-west-2.aws.neon.tech"]);
     expect(HOSTED_TARGETS.production).toEqual([]);
-    const PREVIEW_URL = "postgresql://u:p@ep-crimson-river-zam6stkf.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require";
+    const PREVIEW_URL = "postgresql://u:p@ep-raspy-resonance-zaaizaps.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require";
     expect(evaluateDatabaseAccess({ env: { DATABASE_URL: PREVIEW_URL, RT_DB_TARGET: "preview" }, operation: "schema" }).allowed).toBe(true);
     // The preview host can never be used as a production target.
     expect(evaluateDatabaseAccess({ env: { DATABASE_URL: PREVIEW_URL, RT_DB_TARGET: "production", RT_PROD_MIGRATION_ACK: "RT-123" }, operation: "schema" }).allowed).toBe(false);
     // Without the declared target the preview host is still refused, and destructive operations stay local-only.
     expect(evaluateDatabaseAccess({ env: { DATABASE_URL: PREVIEW_URL }, operation: "read" }).allowed).toBe(false);
     expect(evaluateDatabaseAccess({ env: { DATABASE_URL: PREVIEW_URL, RT_DB_TARGET: "preview" }, operation: "destructive" }).allowed).toBe(false);
+    // The retired PostgreSQL 18 preview host is no longer allowed, nor is the production endpoint as a preview target.
+    expect(evaluateDatabaseAccess({ env: { DATABASE_URL: "postgresql://u:p@ep-crimson-river-zam6stkf.c-2.eu-west-2.aws.neon.tech/neondb", RT_DB_TARGET: "preview" }, operation: "schema" }).allowed).toBe(false);
+    expect(evaluateDatabaseAccess({ env: { DATABASE_URL: "postgresql://u:p@ep-silent-forest-abhp9s19.eu-west-2.aws.neon.tech/neondb", RT_DB_TARGET: "preview" }, operation: "schema" }).allowed).toBe(false);
     expect(evaluateDatabaseAccess({ env: { DATABASE_URL: NEON_LIKE, RT_DB_TARGET: "production", RT_PROD_MIGRATION_ACK: "RT-123" }, operation: "read" }).allowed).toBe(false);
     expect(ACK_PATTERN.test("RT-123")).toBe(true);
   });
