@@ -265,3 +265,42 @@ The Neon plan in use cannot be verified from here: no Neon access, and the Verce
 - **RT-104 guard:** the preview host is allowlisted (`3d3eabd`). Migrations still need `RT_DB_TARGET=preview`. The host is refused as a production target and for destructive operations; production stays empty.
 - **Version note:** the preview runs Postgres 18 and production runs 17. For strict parity, the empty project can be recreated with `--pg-version 17`; this is an Owner decision.
 - **Not done yet:** migrations on the preview database, fixtures, and the Vercel variables (section 12). Each needs the Owner's go-ahead.
+
+## 15. Preview infrastructure — EXECUTED 22/10/2026 (Owner authorization of 22/10/2026)
+
+**Neon (organization `org-proud-tooth-06275788`, plan free, $0):**
+- The preview runs on **`nameless-block-90349181` "ricardotour-preview-pg17"**: PostgreSQL 17.11 like production, region `aws-eu-west-2`, branch `br-shy-term-za1w2543`, endpoint `ep-raspy-resonance-zaaizaps.c-2.eu-west-2.aws.neon.tech`.
+- It was verified as a different project, branch and endpoint from production (`proud-dawn-01862435`, endpoint `ep-silent-forest-abhp9s19`). Production was never queried or modified.
+- The interim PostgreSQL 18 project `patient-sky-47974087` was deleted after an exact identity check: empty, nothing referencing it. Section 14 is superseded.
+- **RT-104:** the preview allowlist now holds only the PostgreSQL 17 host (`1a415ac`). The retired PG18 host and the production endpoint are refused as preview; production stays empty.
+
+**Migrations and data (preview database only):**
+- All 23 migrations applied.
+- `prisma validate` ok; `migrate status` up to date; `migrate diff` against `schema.prisma`: no difference.
+- Schema: 20 tables, 47 indexes, 11 triggers, 20 foreign keys, 23 checks.
+- Fictitious data only: the 4 fixture trips ("Fixture …", arbitrary prices) and the TOUR-01/02/03 content loaded through the RT-119 loader **as DRAFT**.
+- 18 media items, all `UNVERIFIED`, none authorized. No approval act, no TEST ONLY approval yet.
+- 0 users, bookings, contact submissions, partners or commercial records.
+
+**Vercel `rick-travel` (scopes changed by API; values never sent or read):**
+
+| Variable | Before | After |
+|---|---|---|
+| `DATABASE_URL` (sensitive) | production + preview | **production only** (same id, value untouched) |
+| `BETTER_AUTH_SECRET` (encrypted) | production + preview + development | **production only** (same id; ciphertext byte-identical before/after, so no rotation) |
+| `RESEND_API_KEY` (sensitive) | production + preview | **production only** |
+| `CONTACT_EMAIL_MODE` (plain) | — | **`log`, preview only** (new) |
+| `REBUILD_LAB_ENABLED` | absent | absent |
+
+**Manual step (Owner):** two new Preview values must be entered so they never pass through an agent or a log.
+- `DATABASE_URL`: Preview (+ Development), *Sensitive*, value = the preview PG17 connection string, stored locally outside the repository.
+- `BETTER_AUTH_SECRET`: Preview (+ Development), *Sensitive*, value = the new independent secret generated locally.
+
+Until these are added, Preview builds have no database URL and no auth secret, so they fail closed and can never reach production.
+
+**Old Preview deployments:** 14 deployments built before 22/10 keep the variables they were built with (production database, production auth secret, Resend). They are behind Vercel Authentication. Do not use them for forms or writes. Deleting them is an Owner decision.
+
+**Checks:**
+- production `/pt`, `/pt/tours`, `/api/health` → 200 and `/pt/rebuild-lab` → 9-byte 404, unchanged;
+- TypeScript, ESLint and RT-104/RT-119/RT-113b/public-presentation/lab-proxy tests (95/95) passed;
+- exact-value scan: the preview password and the new secret are absent from git history and the working tree.
