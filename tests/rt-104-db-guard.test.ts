@@ -39,9 +39,17 @@ describe("RT-104 — required scenarios (fictitious URLs only)", () => {
     expect(decide({ DATABASE_URL: `postgresql://u:p@${PROD_HOST}/neondb`, RT_DB_TARGET: "production", RT_PROD_MIGRATION_ACK: "RT-123" })).toMatchObject({ allowed: true, target: "production" });
   });
 
-  it("2b. the committed allowlist is EMPTY: with the real configuration every hosted database is refused", () => {
-    expect(HOSTED_TARGETS.preview).toEqual([]);
+  it("2b. the committed production allowlist is EMPTY; preview allows only the isolated Neon preview project", () => {
+    // RT-106 (22/10/2026): only the isolated Neon preview project; production stays empty (no hosted production access).
+    expect(HOSTED_TARGETS.preview).toEqual(["ep-crimson-river-zam6stkf.c-2.eu-west-2.aws.neon.tech"]);
     expect(HOSTED_TARGETS.production).toEqual([]);
+    const PREVIEW_URL = "postgresql://u:p@ep-crimson-river-zam6stkf.c-2.eu-west-2.aws.neon.tech/neondb?sslmode=require";
+    expect(evaluateDatabaseAccess({ env: { DATABASE_URL: PREVIEW_URL, RT_DB_TARGET: "preview" }, operation: "schema" }).allowed).toBe(true);
+    // The preview host can never be used as a production target.
+    expect(evaluateDatabaseAccess({ env: { DATABASE_URL: PREVIEW_URL, RT_DB_TARGET: "production", RT_PROD_MIGRATION_ACK: "RT-123" }, operation: "schema" }).allowed).toBe(false);
+    // Without the declared target the preview host is still refused, and destructive operations stay local-only.
+    expect(evaluateDatabaseAccess({ env: { DATABASE_URL: PREVIEW_URL }, operation: "read" }).allowed).toBe(false);
+    expect(evaluateDatabaseAccess({ env: { DATABASE_URL: PREVIEW_URL, RT_DB_TARGET: "preview" }, operation: "destructive" }).allowed).toBe(false);
     expect(evaluateDatabaseAccess({ env: { DATABASE_URL: NEON_LIKE, RT_DB_TARGET: "production", RT_PROD_MIGRATION_ACK: "RT-123" }, operation: "read" }).allowed).toBe(false);
     expect(ACK_PATTERN.test("RT-123")).toBe(true);
   });
