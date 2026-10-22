@@ -176,3 +176,70 @@ Rules for reading the table:
   - rented-car legal gate (§12.2);
   - 6-hour infant formula;
   - public price authorization (RT-120).
+
+## 11. Status after the production hotfix (22/10/2026)
+
+- **Production:** `main` = `5b88ecd` (RT-97 favicon `a4a7252` + security hotfix), Vercel deploy `dpl_ET4SjPrAv77ZLCMJabKBwDKsTKsY` READY. The lab routes answer a 9-byte 404 and every public route is byte-identical to before. Rollback target: `dpl_2HtGFsdG66hnvc3vWPgZku5WZNTf` (`a4a7252`).
+- **Sprint 10 release-prep branch:** `sprint10/release-prep` = `af01a72` + merge of `origin/main` (`5b88ecd`). There were no conflicts, and the resulting tree is **identical** to `af01a72` (the favicon and the proxy fix were already on the branch with the same content). Production `main` is now an ancestor, so the eventual release can be a fast-forward. Sprint 10 history was not rewritten.
+- **Validation of the merged branch:**
+  - TypeScript passed; ESLint has 0 errors (2 pre-existing warnings in `scripts/rt-35-chrome-validation.mjs`); `prisma validate` passed.
+  - Full suite: **944/944**.
+  - Production build passed.
+  - `next start` against the local throw-away database: TOUR-03 PT and TOUR-02 PT/EN/ES render the approved design; TOUR-03 EN/ES, TOUR-01 and TOUR-04 keep the current page.
+  - Lab paths answer the 9-byte 404, and the RT-97 favicon is served.
+  - No review chips, internal prices, rights notes or test markers appear in the public payloads.
+
+## 12. Preview database isolation (Neon) — plan, NOT executed
+
+**Current state (read-only audit, 21/10/2026):**
+- A single `DATABASE_URL` entry targets **production and preview**. It was created manually, not through the Vercel–Neon integration, so every Preview deployment uses the production database.
+- `BETTER_AUTH_SECRET` is shared by production, preview and development, and Vercel flags it `readable-secret`.
+- `RESEND_API_KEY` is also available to previews.
+- `REBUILD_LAB_ENABLED` is absent in every environment.
+- Previews are behind Vercel Authentication (`all_except_custom_domains`).
+
+**Why this blocks a Sprint 10 preview:** the Sprint 10 code reads `Trip.operationType`/`Partner` (RT-100) and the RT-113/RT-119 tables. A preview pointed at the production database would fail on those reads. Any form used on a preview would also write real production rows and could send real e-mails.
+
+**Options (Neon, per its plans documentation, 2026):**
+
+| Option | Isolation | Data | Cost |
+|---|---|---|---|
+| **A (recommended)** — a separate Neon **project** for preview/development (e.g. `ricardotour-preview`) | full: separate compute quota, credentials and storage | empty; migrations 1–23 + fictitious fixtures only (no customer data) | the Free plan allows 100 projects (1 GB each, 100 CU-hours/month per project): **$0 within Free limits**; on paid plans, compute and storage are usage-based |
+| B — a child **branch** of the production project | logical: separate database and credentials, but the same project compute quota | copy-on-write copy of production, which **includes personal data** (users, bookings, contacts) unless the branch is schema-only | Free: 10 branches per project; paid: extra branches at $1.50/branch-month beyond the allowance. On Free, preview usage consumes the production project's compute quota (risk to production availability) |
+
+The Neon plan in use cannot be verified from here: no Neon access, and the Vercel team endpoint returns 403. Confirm the plan and the limits on neon.com/pricing before choosing. Nothing is to be created without the Owner's authorization.
+
+**Recovery:** the preview database is disposable. It can be recreated from zero with `prisma migrate deploy` plus the fictitious fixtures. It must never be restored from, or pointed back at, production. Production is untouched by every step below.
+
+**Vercel configuration needed (Owner or with explicit authorization; values never shown):**
+1. Edit the existing `DATABASE_URL` so it targets **Production only**.
+2. Add a new `DATABASE_URL` (type *sensitive*) targeting **Preview** (and Development if wanted) with the preview database connection string.
+3. `BETTER_AUTH_SECRET`:
+   - add a new, different, *sensitive* value for Preview/Development;
+   - recreate the Production value as *sensitive* (Vercel flags it readable). Rotating it ends the existing sessions (admin only), so it is an Owner decision.
+4. E-mail on previews:
+   - remove `RESEND_API_KEY` from the Preview target. The code then skips delivery: `lib/resend.ts` warns, and the contact/tour-request notifications resolve to mode `off`;
+   - additionally set `CONTACT_EMAIL_MODE=log` on Preview.
+5. Keep `REBUILD_LAB_ENABLED` unset everywhere. Optionally check that `BETTER_AUTH_URL` on Preview does not point login flows at production.
+
+**Preview database preparation (after the configuration above):**
+1. `prisma migrate deploy` against the **preview** URL only, from a trusted machine. The RT-104 guard must be adjusted or acknowledged for that specific target: it refuses any non-local host by design.
+2. Load the fictitious fixture trips.
+3. Load each tour's content through the RT-119 loader **as DRAFT**.
+4. **First preview pass (no approval):**
+   - every tour keeps the current page; the publication gates are working;
+   - the lab answers the 404;
+   - there are no write paths to production.
+5. **Optional second pass**, only with Owner approval: a rehearsal approval act on the **preview database only**, with media rights recorded as `TEST ONLY` attestations (as in the local rehearsal), to view the approved design on the real public routes. It is clearly marked test data, never copied to production, and does not replace the real RT-120/RT-116 approvals.
+6. Reservations and payments stay closed (RT-110 guard). No real e-mails (step 4 of the Vercel configuration).
+
+## 13. Next step to publication
+
+1. **Owner decisions:**
+   - choose option A or B;
+   - authorize the Vercel environment changes (section 12);
+   - decide on rotating `BETTER_AUTH_SECRET`.
+2. **Create the preview database and configure Vercel**, with the Owner or with authorization.
+3. **Push `sprint10/release-prep`** → protected Preview against the preview database → smoke tests (section 5) and the two passes of section 12.
+4. **Owner content and legal decisions** (section 10 matrix, RT-81/RT-118, RT-116 rights, RT-115 EN/ES, transport documents, price publication).
+5. **Production migrations** (section 8 rehearsal, backup restored and counted) → RT-119 content load and the approval act → fast-forward of `main` to the reviewed commit → production smoke tests and rollback readiness.
