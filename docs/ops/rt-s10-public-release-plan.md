@@ -243,3 +243,25 @@ The Neon plan in use cannot be verified from here: no Neon access, and the Verce
 3. **Push `sprint10/release-prep`** → protected Preview against the preview database → smoke tests (section 5) and the two passes of section 12.
 4. **Owner content and legal decisions** (section 10 matrix, RT-81/RT-118, RT-116 rights, RT-115 EN/ES, transport documents, price publication).
 5. **Production migrations** (section 8 rehearsal, backup restored and counted) → RT-119 content load and the approval act → fast-forward of `main` to the reviewed commit → production smoke tests and rollback readiness.
+
+## 14. Neon preview project — CREATED 22/10/2026 (option A, Owner-authorized)
+
+| Item | Preview (new) | Production (untouched) |
+|---|---|---|
+| Neon organization | `org-proud-tooth-06275788` (plan **free**) | same organization |
+| Project | `patient-sky-47974087` "ricardotour-preview" | `proud-dawn-01862435` "Rick Travel" |
+| Region | `aws-eu-west-2` | `aws-eu-west-2` |
+| Postgres | 18 (Neon default) | 17 |
+| Default branch | `br-polished-shape-zat4oyxm` (`main`) | `br-proud-wave-abjgekrv` (`production`) |
+| Endpoint host | `ep-crimson-river-zam6stkf.c-2.eu-west-2.aws.neon.tech` | `ep-silent-forest-abhp9s19.eu-west-2.aws.neon.tech` |
+
+- **Cost:** $0. The organization is on the Free plan (4 of the 100 allowed projects in use). No paid resource was created.
+- **Isolation:**
+  - a separate project, branch, endpoint and credentials;
+  - empty database: 0 user tables, no `Trip`, verified read-only over TLS;
+  - no real data copied;
+  - production was only listed (branch and host), never queried.
+- **Credentials:** the connection string is stored only in a local file outside the repository; it was never printed, committed or sent to Jira.
+- **RT-104 guard:** the preview host is allowlisted (`3d3eabd`). Migrations still need `RT_DB_TARGET=preview`. The host is refused as a production target and for destructive operations; production stays empty.
+- **Version note:** the preview runs Postgres 18 and production runs 17. For strict parity, the empty project can be recreated with `--pg-version 17`; this is an Owner decision.
+- **Not done yet:** migrations on the preview database, fixtures, and the Vercel variables (section 12). Each needs the Owner's go-ahead.
