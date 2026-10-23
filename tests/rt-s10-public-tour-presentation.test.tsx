@@ -94,11 +94,39 @@ describe("Sprint 10 public tour presentation gate", () => {
     const attested = approveRecord({ ...load, images: load.images.map((m) => ({ ...m, rightsStatus: "OWNER_ATTESTED" as const })) }, new Date("2026-10-21T12:00:00Z")); // TEST ONLY
     const attestedView = toTourContentView(attested, "pt", "public")!;
     expect(attestedView.videos.map((v) => v.src)).toEqual(["/media/tours/favela-rocinha/rocinha-praca-movimento.mp4"]);
-    // Rights alone are not enough: the clip is still PROVISIONAL (Owner approval of the clip pending), so it stays private.
-    expect(PROTOTYPE_OFFER[ROCINHA].video?.status).toBe("PROVISIONAL");
-    expect(buildPublicOffer(PROTOTYPE_OFFER[ROCINHA], "pt", attestedView, { pricePublicationAuthorized: false })!.video).toBeNull();
-    const confirmedClip = { ...PROTOTYPE_OFFER[ROCINHA], video: { ...PROTOTYPE_OFFER[ROCINHA].video!, status: "CONFIRMED" as const } }; // TEST ONLY
-    expect(buildPublicOffer(confirmedClip, "pt", attestedView, { pricePublicationAuthorized: false })!.video?.src).toBe("/media/tours/favela-rocinha/rocinha-praca-movimento.mp4");
+    // The Owner confirmed the clip (23/10/2026), but that is editorial only: without verified rights it stays private.
+    expect(PROTOTYPE_OFFER[ROCINHA].video?.status).toBe("CONFIRMED");
+    expect(buildPublicOffer(PROTOTYPE_OFFER[ROCINHA], "pt", view, { pricePublicationAuthorized: false })!.video).toBeNull();
+    for (const locale of ["pt", "en", "es"]) {
+      const localized = toTourContentView(attested, locale, "public")!;
+      const video = buildPublicOffer(PROTOTYPE_OFFER[ROCINHA], locale, localized, { pricePublicationAuthorized: false })!.video;
+      expect(video?.src, locale).toBe("/media/tours/favela-rocinha/rocinha-praca-movimento.mp4");
+      expect(video?.mobileSrc, locale).toBe("/media/tours/favela-rocinha/rocinha-praca-movimento-mobile.mp4");
+      expect(video?.poster, locale).toBe("/media/tours/favela-rocinha/rocinha-praca-movimento-poster.jpg");
+    }
+    // A PROVISIONAL clip never goes public, even with verified rights.
+    const provisionalClip = { ...PROTOTYPE_OFFER[ROCINHA], video: { ...PROTOTYPE_OFFER[ROCINHA].video!, status: "PROVISIONAL" as const } };
+    expect(buildPublicOffer(provisionalClip, "pt", attestedView, { pricePublicationAuthorized: false })!.video).toBeNull();
+    // TOUR-01's clip is still PROVISIONAL (not reviewed by the Owner).
+    expect(PROTOTYPE_OFFER[CRISTO].video?.status).toBe("PROVISIONAL");
+  });
+
+  it("renders the approved Rocinha clip on the public page: poster, no autoplay, no preload, mobile rendition, no chips", () => {
+    const load = rocinhaLoadRecord();
+    const attested = approveRecord({ ...load, images: load.images.map((m) => ({ ...m, rightsStatus: "OWNER_ATTESTED" as const })) }, new Date("2026-10-21T12:00:00Z")); // TEST ONLY
+    for (const locale of ["pt", "en", "es"]) {
+      const content = toTourContentView(attested, locale, "public")!;
+      const offer = buildPublicOffer(PROTOTYPE_OFFER[ROCINHA], locale, content, { pricePublicationAuthorized: false })!;
+      const html = renderToStaticMarkup(<TourDetailPrototype offer={offer} content={content} locale={locale} reviewMode={false} showProvisionalPrices={false} />);
+      const player = html.match(/<video[^>]*data-testid="tour-video-player"[^>]*>/)?.[0] ?? "";
+      expect(player, locale).toContain('preload="none"');
+      expect(player, locale).toContain('poster="/media/tours/favela-rocinha/rocinha-praca-movimento-poster.jpg"');
+      expect(player, locale).not.toMatch(/autoplay/i);
+      expect(html, locale).toContain('<source src="/media/tours/favela-rocinha/rocinha-praca-movimento-mobile.mp4" type="video/mp4" media="(max-width: 767px)"/>');
+      expect(html, locale).toContain('<source src="/media/tours/favela-rocinha/rocinha-praca-movimento.mp4" type="video/mp4"/>');
+      expect(html.match(/data-testid="tour-video"/g), locale).toHaveLength(1);
+      expect(html, locale).not.toMatch(/PROVISIONAL|PENDING|MOCK|TEST ONLY|rightsNote/);
+    }
   });
 
   it("keeps the current page for DRAFT content, mock content or other tours", async () => {

@@ -410,7 +410,9 @@ const ROCINHA_VIDEO: PrototypeVideo = {
     en: "Rocinha's main square from above: motorcycle taxis, shops and everyday life.",
     es: "La plaza principal de la Rocinha desde lo alto: mototaxis, comercios y el movimiento del día a día.",
   },
-  status: "PROVISIONAL",
+  // Owner, 23/10/2026: clip approved for the visual use of the approved TOUR-02 design. Editorial approval only: the
+  // public page still shows it only when its media row passes the rights/publication gate (RT-113/RT-119).
+  status: "CONFIRMED",
   rightsNote: ROCINHA_RIGHTS("IMG_1256.MOV"),
 };
 

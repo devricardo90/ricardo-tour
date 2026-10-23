@@ -333,7 +333,7 @@ describe("RT-116 Favela Rocinha media (Owner decision 17/10/2026)", () => {
   it("uses a clip of at most 18 s, without audio, location or other metadata (MP4 atoms)", () => {
     const video = PROTOTYPE_OFFER[ROCINHA].video!;
     expect(video.durationSeconds).toBeLessThanOrEqual(18);
-    expect(video.status).toBe("PROVISIONAL"); // the Owner reviews the clip before final approval
+    expect(video.status).toBe("CONFIRMED"); // Owner approved the clip (23/10/2026); rights still gate publication
     const buf = fs.readFileSync(path.join(process.cwd(), "public", video.src));
     expect(buf.length).toBeLessThan(5 * 1024 * 1024);
     expect(buf.includes(Buffer.from("soun"))).toBe(false); // no audio track handler
