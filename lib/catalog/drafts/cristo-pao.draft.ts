@@ -20,15 +20,17 @@ export const CRISTO_DRAFT_SOURCE =
 type Tri = { pt: string; en: string; es: string };
 const list = (items: Array<[string, string, string]>) => ({ pt: items.map((i) => i[0]), en: items.map((i) => i[1]), es: items.map((i) => i[2]) });
 
-/** Working name approved by the Owner (Ficha v1.0 §2.1). EN/ES are translations pending RT-115 review. */
+/** PT name approved verbatim by the Owner (23/10/2026, replaces the Ficha v1.0 §2.1 working name). EN/ES are the old
+ *  translations, PENDING RT-115 review. */
 export const CRISTO_TITLE: Tri = {
-  pt: "Cristo Redentor + Pão de Açúcar — Tour Privativo",
+  pt: "Cristo Redentor, Escadaria Selarón e Pão de Açúcar — Tour Privativo",
   en: "Christ the Redeemer + Sugarloaf Mountain — Private Tour",
   es: "Cristo Redentor + Pan de Azúcar — Tour Privado",
 };
 
+/** PT pitch approved verbatim by the Owner (23/10/2026). EN/ES PENDING RT-115. */
 export const CRISTO_SUBTITLE: Tri = {
-  pt: "Os principais cartões-postais do Rio em um dia privativo, com guia, transporte e ingressos incluídos.",
+  pt: "Descubra o Cristo Redentor, a Escadaria Selarón e o Pão de Açúcar em uma experiência privativa pelo Rio de Janeiro, com roteiro planejado e acompanhamento de guia especializado.",
   en: "Rio's best-known landmarks on a private day out, with your guide, transport and tickets included.",
   es: "Las postales más famosas de Río en un día privado, con guía, transporte y entradas incluidos.",
 };
@@ -154,7 +156,7 @@ export const CRISTO_CONTENT: Omit<TourContentRecord, "tripId" | "status" | "sour
 
 /** Prefilled WhatsApp message (sent through the canonical public number in lib/public-contact.ts). */
 export const CRISTO_WHATSAPP_MESSAGE: Tri = {
-  pt: "Olá! Quero consultar a disponibilidade do passeio Cristo Redentor + Pão de Açúcar — Tour Privativo.\nData desejada: \nParticipantes (1 a 4, informe a idade das crianças): \nBairro do hotel: \nSubida ao Cristo (trem ou van): \nSelarón ou Dona Marta: \nIdioma preferido: ",
+  pt: "Olá! Quero consultar a disponibilidade do passeio Cristo Redentor, Escadaria Selarón e Pão de Açúcar — Tour Privativo.\nData desejada: \nParticipantes (1 a 4, informe a idade das crianças): \nBairro do hotel: \nSubida ao Cristo (trem ou van): \nSelarón ou Dona Marta: \nIdioma preferido: ",
   en: "Hello! I'd like to check availability for Christ the Redeemer + Sugarloaf Mountain — Private Tour.\nPreferred date: \nGuests (1–4, children's ages): \nHotel area: \nChrist the Redeemer access (train or van): \nSelarón or Dona Marta: \nPreferred language: ",
   es: "¡Hola! Quisiera consultar la disponibilidad del tour Cristo Redentor + Pan de Azúcar — Tour Privado.\nFecha deseada: \nParticipantes (1 a 4, edad de los niños): \nBarrio del hotel: \nSubida al Cristo (tren o van): \nSelarón o Dona Marta: \nIdioma preferido: ",
 };

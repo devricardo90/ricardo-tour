@@ -7,7 +7,7 @@ import { chromium } from "@playwright/test";
 const base = process.argv[2] ?? "http://127.0.0.1:3251";
 const out = process.argv[3] ?? "docs/baseline/rt-112-tour01-cristo-pao";
 const id = "cmlhxkpy9000028zq27rhytew";
-const titles = { pt: "Cristo Redentor + Pão de Açúcar — Tour Privativo", en: "Christ the Redeemer + Sugarloaf Mountain — Private Tour", es: "Cristo Redentor + Pan de Azúcar — Tour Privado" };
+const titles = { pt: "Cristo Redentor, Escadaria Selarón e Pão de Açúcar — Tour Privativo", en: "Christ the Redeemer + Sugarloaf Mountain — Private Tour", es: "Cristo Redentor + Pan de Azúcar — Tour Privado" };
 const expectedPhotos = ["IMG_1162", "IMG_1171", "IMG_1163", "IMG_1181"];
 fs.mkdirSync(out, { recursive: true });
 

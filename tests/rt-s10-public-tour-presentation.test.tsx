@@ -35,7 +35,13 @@ describe("Sprint 10 public tour presentation gate", () => {
     expect(buildPublicOffer(PROTOTYPE_OFFER[CENTRO], "en", publicView(CENTRO, "en"), opts)).toBeNull(); // EN pending (RT-115)
     expect(buildPublicOffer(PROTOTYPE_OFFER[CENTRO], "es", publicView(CENTRO, "es"), opts)).toBeNull();
     for (const l of ["pt", "en", "es"]) expect(buildPublicOffer(PROTOTYPE_OFFER[ROCINHA], l, publicView(ROCINHA, l), opts), l).not.toBeNull();
-    for (const l of ["pt", "en", "es"]) expect(buildPublicOffer(PROTOTYPE_OFFER[CRISTO], l, publicView(CRISTO, l), opts), l).toBeNull(); // title/pitch PROVISIONAL
+    // TOUR-01: PT title and pitch approved verbatim by the Owner (23/10/2026); EN/ES PENDING.
+    const cristoPt = buildPublicOffer(PROTOTYPE_OFFER[CRISTO], "pt", publicView(CRISTO, "pt"), opts)!;
+    expect(cristoPt.title).toBe("Cristo Redentor, Escadaria Selarón e Pão de Açúcar — Tour Privativo");
+    expect(cristoPt.pitch.pt).toBe("Descubra o Cristo Redentor, a Escadaria Selarón e o Pão de Açúcar em uma experiência privativa pelo Rio de Janeiro, com roteiro planejado e acompanhamento de guia especializado.");
+    expect(cristoPt.video).toBeNull(); // Pão de Açúcar clip still PROVISIONAL
+    expect(cristoPt.transport).toBeUndefined(); // T1 vehicle regularization PENDING
+    for (const l of ["en", "es"]) expect(buildPublicOffer(PROTOTYPE_OFFER[CRISTO], l, publicView(CRISTO, l), opts), l).toBeNull();
   });
 
   it("drops PROVISIONAL/PENDING/MOCK facts, provisional prices and lab notices; keeps approved texts verbatim", () => {

@@ -507,9 +507,12 @@ function cristoOffer(base: PrototypeOffer): PrototypeOffer {
     ...base,
     title: CRISTO_TITLE.pt,
     titleByLocale: CRISTO_TITLE,
-    titleStatus: "PROVISIONAL", // PT working name approved (Ficha §2.1); EN/ES names pending RT-115
+    // PT title and pitch approved verbatim by the Owner (editorial decision, 23/10/2026); EN/ES still PENDING (RT-115).
+    titleStatus: "CONFIRMED",
+    titleStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
     pitch: CRISTO_SUBTITLE,
-    pitchStatus: "PROVISIONAL",
+    pitchStatus: "CONFIRMED",
+    pitchStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
     pickup: { value: CRISTO_PICKUP_SHORT, status: "CONFIRMED" }, // CR-08/CR-16
     hotelPickup: true,
     duration: { value: CRISTO_CONTENT.durationLabel ?? null, status: "CONFIRMED" }, // ~8 h reference (Ficha §4.1)

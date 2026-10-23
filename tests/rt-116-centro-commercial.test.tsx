@@ -150,7 +150,7 @@ describe("TOUR-03 editorial status of the hero pitch and benefit lines", () => {
     expect(MOCK_TOUR_CONTENT[CENTRO_ID].status).toBe("DRAFT");
     expect(MOCK_TOUR_CONTENT[CENTRO_ID].images.every((image) => image.rightsStatus === "UNVERIFIED")).toBe(true);
     expect(PROTOTYPE_OFFER["cmli1a6im000034zqqzc9sppb"]).toMatchObject({ pitchStatus: "CONFIRMED", benefitsStatus: "PROVISIONAL" });
-    expect(PROTOTYPE_OFFER["cmlhxkpy9000028zq27rhytew"]).toMatchObject({ pitchStatus: "PROVISIONAL", benefitsStatus: "PROVISIONAL" });
+    expect(PROTOTYPE_OFFER["cmlhxkpy9000028zq27rhytew"]).toMatchObject({ pitchStatus: "CONFIRMED", pitchStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" }, benefitsStatus: "PROVISIONAL" }); // TOUR-01 PT pitch approved 23/10/2026
     expect(PROTOTYPE_OFFER["cmljo0s1u0000t0zqa0bpd23p"]).toMatchObject({ pitchStatus: "MOCK", benefitsStatus: "MOCK" });
   });
 });
