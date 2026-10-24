@@ -97,6 +97,22 @@ describe("RT-110: the booking API applies the public catalog gate on the server"
     expect(prismaMock.booking.create).not.toHaveBeenCalled();
   });
 
+  it.each([
+    ["invalid JSON", "{not json"],
+    ["no tripId", JSON.stringify({ guestCount: 1 })],
+    ["guestCount as a string", JSON.stringify({ tripId: CENTRO, guestCount: "2" })],
+    ["fractional guestCount", JSON.stringify({ tripId: CENTRO, guestCount: 0.5 })],
+    ["guestCount zero", JSON.stringify({ tripId: CENTRO, guestCount: 0 })],
+    ["a JSON array", JSON.stringify([CENTRO])],
+  ])("answers 400 to a malformed body (%s) without reading the database", async (_label, body) => {
+    setTrip(publicTrip());
+    const res = await POST(new Request("http://test.local/api/bookings", { method: "POST", body }));
+    expect(res.status).toBe(400);
+    expect(await res.json()).toEqual({ error: "Dados da reserva invalidos" });
+    expect(prismaMock.trip.findFirst).not.toHaveBeenCalled();
+    expect(prismaMock.$transaction).not.toHaveBeenCalled();
+  });
+
   it("keeps the price guard first: with the guard on, the database is not read", async () => {
     priceGuard.blocked = true;
     await expect(createBookingForUser("user-1", { tripId: CENTRO })).rejects.toMatchObject({ code: "PRICE_NOT_APPROVED", status: 409 });
@@ -116,20 +132,23 @@ describe("Booking write is serialized (no overbooking or duplicate under concurr
   it("takes the advisory lock inside the transaction before the checks and the insert", async () => {
     const order: string[] = [];
     setTrip(publicTrip({ schedules: [{ id: "s1" }] }));
-    prismaMock.$queryRaw.mockImplementationOnce(async () => (order.push("lock"), [{ locked: 1 }]));
+    prismaMock.$queryRaw
+      .mockImplementationOnce(async () => (order.push("lock-timeout"), [{ lock_timeout: "2s" }]))
+      .mockImplementationOnce(async () => (order.push("lock"), [{ locked: 1 }]));
     prismaMock.booking.findFirst.mockImplementationOnce(async () => (order.push("duplicate-check"), null));
-    prismaMock.tripSchedule.findUnique.mockImplementationOnce(async () => (order.push("schedule"), { id: "s1", tripId: CENTRO, capacity: 4, pricePerPersonCents: 1000, status: "OPEN" }));
+    prismaMock.tripSchedule.findUnique.mockImplementationOnce(async () => (order.push("schedule"), { id: "s1", tripId: CENTRO, capacity: 4, pricePerPersonCents: 1000, status: "OPEN", startAt: new Date(Date.now() + 7 * 86_400_000) }));
     prismaMock.booking.aggregate.mockImplementationOnce(async () => (order.push("capacity"), { _sum: { guestCount: 0 } }));
     prismaMock.booking.create.mockImplementationOnce(async () => (order.push("insert"), { id: "b1" }));
 
     await createBookingForUser("user-1", { tripId: CENTRO, scheduleId: "s1", guestCount: 2 });
 
     expect(prismaMock.$transaction).toHaveBeenCalledTimes(1);
-    expect(order[0]).toBe("lock");
+    // The lock wait is bounded first (transaction-local lock_timeout), then the lock is taken before any check.
+    expect(order.slice(0, 2)).toEqual(["lock-timeout", "lock"]);
     expect(order.at(-1)).toBe("insert");
-    const sql = (prismaMock.$queryRaw.mock.calls[0][0] as TemplateStringsArray).join("?");
+    const sql = (prismaMock.$queryRaw.mock.calls[1][0] as TemplateStringsArray).join("?");
     expect(sql).toContain("pg_advisory_xact_lock");
-    expect(prismaMock.$queryRaw.mock.calls[0][1]).toBe(bookingLockKey("user-1", CENTRO, "s1"));
+    expect(prismaMock.$queryRaw.mock.calls[1][1]).toBe(bookingLockKey("user-1", CENTRO, "s1"));
   });
 
   it("uses one key per schedule (shared by all users) and one per user+trip without a schedule", () => {
@@ -140,7 +159,7 @@ describe("Booking write is serialized (no overbooking or duplicate under concurr
 
   it("rejects when the capacity read inside the lock is already used", async () => {
     setTrip(publicTrip({ schedules: [{ id: "s1" }] }));
-    prismaMock.tripSchedule.findUnique.mockResolvedValue({ id: "s1", tripId: CENTRO, capacity: 4, pricePerPersonCents: 1000, status: "OPEN" });
+    prismaMock.tripSchedule.findUnique.mockResolvedValue({ id: "s1", tripId: CENTRO, capacity: 4, pricePerPersonCents: 1000, status: "OPEN", startAt: new Date(Date.now() + 7 * 86_400_000) });
     prismaMock.booking.aggregate.mockResolvedValue({ _sum: { guestCount: 3 } });
     await expect(createBookingForUser("user-1", { tripId: CENTRO, scheduleId: "s1", guestCount: 2 })).rejects.toMatchObject({ code: "SCHEDULE_CAPACITY_EXCEEDED" });
     expect(prismaMock.booking.create).not.toHaveBeenCalled();

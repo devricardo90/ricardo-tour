@@ -14,6 +14,50 @@ export function bookingLockKey(userId: string, tripId: string, scheduleId?: stri
     return scheduleId ? `booking:schedule:${scheduleId}` : `booking:user-trip:${userId}:${tripId}`;
 }
 
+/**
+ * Bounds for the serialized booking write. Prisma's transaction timeout does not cancel a statement that waits on the
+ * advisory lock (audit 24/10/2026: a request stayed blocked for as long as the lock was held), so the wait is bounded
+ * on the server with a transaction-local lock_timeout, shorter than the transaction timeout. Both are compatible with
+ * a transaction-mode pooler (set_config(..., true) and the xact lock end with the transaction).
+ */
+export const BOOKING_LOCK_TIMEOUT = "2s";
+export const BOOKING_TRANSACTION_OPTIONS = { maxWait: 2_000, timeout: 5_000 } as const;
+
+/** Largest value of a Postgres INTEGER column (Booking.totalPriceCents). */
+const MAX_INT4 = 2_147_483_647;
+
+/**
+ * True when the booking write could not get the lock, a connection or finish in time: the lock wait hit lock_timeout
+ * (SQLSTATE 55P03) or Prisma refused/expired the interactive transaction (P2028). Nothing was written in either case.
+ */
+export function isBookingBusyError(error: unknown): boolean {
+    if (!error || typeof error !== "object") return false;
+    const candidate = error as { code?: unknown; meta?: unknown; cause?: unknown; message?: unknown };
+    if (candidate.code === "P2028" || candidate.code === "55P03") return true;
+    const text = `${typeof candidate.message === "string" ? candidate.message : ""} ${safeJson(candidate.meta)} ${safeJson(candidate.cause)}`;
+    return /55P03|lock timeout|canceling statement due to lock timeout/i.test(text);
+}
+
+function safeJson(value: unknown) {
+    try {
+        return value === undefined ? "" : JSON.stringify(value);
+    } catch {
+        return "";
+    }
+}
+
+/** A guest count must be an integer from 1 (absent means 1); fractions, zero, negatives and non-numbers are refused. */
+export function parseGuestCount(value: unknown): number {
+    if (value === undefined || value === null) return 1;
+    if (typeof value !== "number" || !Number.isSafeInteger(value) || value < 1) {
+        throw new DomainError("Quantidade de hospedes invalida.", {
+            code: "INVALID_GUEST_COUNT",
+            status: 400,
+        });
+    }
+    return value;
+}
+
 export interface CreateBookingInput {
     tripId: string;
     scheduleId?: string;
@@ -131,12 +175,25 @@ export async function cancelBookingByAdmin(bookingId: string) {
         );
     }
 
-    // Altera apenas booking.status — paymentStatus permanece intacto
-    return prisma.booking.update({
-        where: { id: normalizedId },
+    // Altera apenas booking.status — paymentStatus permanece intacto. Gravacao condicional ao status lido: uma
+    // mudanca concorrente nao e sobrescrita (auditoria 24/10/2026).
+    const updated = await prisma.booking.updateMany({
+        where: { id: normalizedId, status: { in: ["PENDING", "CONFIRMED"] } },
         data: { status: "CANCELED" },
-        select: { id: true, status: true },
     });
+
+    if (updated.count === 0) {
+        const current = await prisma.booking.findUnique({ where: { id: normalizedId }, select: { status: true } });
+        if (current?.status === "CANCELED") {
+            return { id: normalizedId, status: "CANCELED" as const };
+        }
+        throw new DomainError("A reserva mudou durante a operacao. Atualize a pagina.", {
+            code: "BOOKING_STATUS_CHANGED",
+            status: 409,
+        });
+    }
+
+    return { id: normalizedId, status: "CANCELED" as const };
 }
 
 /**
@@ -155,7 +212,7 @@ export async function confirmBookingByAdmin(bookingId: string) {
 
     const booking = await prisma.booking.findUnique({
         where: { id: normalizedId },
-        select: { id: true, status: true },
+        select: { id: true, status: true, paymentStatus: true },
     });
 
     if (!booking) {
@@ -172,18 +229,27 @@ export async function confirmBookingByAdmin(bookingId: string) {
         });
     }
 
-    return prisma.booking.update({
-        where: { id: normalizedId },
+    // Gravacao condicional: so confirma se a reserva ainda estiver PENDING no momento da escrita. Sem isso, um
+    // cancelamento feito entre a leitura e a escrita era sobrescrito e a reserva voltava a ocupar lugares ja liberados
+    // (auditoria 24/10/2026: 6 hospedes numa agenda de 4). Confirmar nao muda a ocupacao (PENDING ja conta).
+    const updated = await prisma.booking.updateMany({
+        where: { id: normalizedId, status: "PENDING" },
         data: { status: "CONFIRMED" },
-        select: { id: true, status: true, paymentStatus: true },
     });
+
+    if (updated.count === 0) {
+        throw new DomainError("A reserva mudou durante a operacao e nao esta mais pendente. Atualize a pagina.", {
+            code: "BOOKING_STATUS_CHANGED",
+            status: 409,
+        });
+    }
+
+    return { id: booking.id, status: "CONFIRMED" as const, paymentStatus: booking.paymentStatus };
 }
 
 export async function createBookingForUser(userId: string, input: CreateBookingInput) {
     const tripId = typeof input.tripId === "string" ? input.tripId.trim() : "";
     const scheduleId = typeof input.scheduleId === "string" ? input.scheduleId.trim() : undefined;
-    const guestCount =
-        typeof input.guestCount === "number" && input.guestCount > 0 ? Math.floor(input.guestCount) : 1;
 
     if (!tripId) {
         throw new DomainError("Campo obrigatorio: tripId", {
@@ -200,6 +266,9 @@ export async function createBookingForUser(userId: string, input: CreateBookingI
             status: 409,
         });
     }
+
+    // Before 24/10/2026 the count was floored (0.5 became a 0-guest booking); now only integers from 1 are accepted.
+    const guestCount = parseGuestCount(input.guestCount);
 
     // RT-110: the booking API applies the same public catalog gate as the tour page and the request form (launch
     // allowlist, published, Rio, active and identified partner, data integrity). A trip hidden from visitors answers
@@ -250,92 +319,121 @@ export async function createBookingForUser(userId: string, input: CreateBookingI
 
     // The duplicate check, the capacity check and the insert run in one transaction under an advisory lock, so two
     // concurrent requests cannot both pass the checks and overbook a schedule or create the same booking twice.
-    return prisma.$transaction(async (tx) => {
-        await tx.$queryRaw`SELECT 1 AS locked FROM (SELECT pg_advisory_xact_lock(hashtext(${bookingLockKey(userId, tripId, scheduleId)}))) AS l`;
+    // The lock wait is bounded (BOOKING_LOCK_TIMEOUT); a busy lock or an expired transaction answers 409 BOOKING_BUSY
+    // ("try again") instead of a generic 500, and nothing is written.
+    try {
+        return await prisma.$transaction(async (tx) => {
+            await tx.$queryRaw`SELECT set_config('lock_timeout', ${BOOKING_LOCK_TIMEOUT}, true) AS lock_timeout`;
+            await tx.$queryRaw`SELECT 1 AS locked FROM (SELECT pg_advisory_xact_lock(hashtext(${bookingLockKey(userId, tripId, scheduleId)}))) AS l`;
 
-        const duplicateBooking = await tx.booking.findFirst({
-            where: scheduleId
-                ? {
-                      userId,
-                      scheduleId,
-                      status: { in: ["PENDING", "CONFIRMED"] },
-                  }
-                : {
-                      userId,
-                      tripId,
-                      scheduleId: null,
-                      status: { in: ["PENDING", "CONFIRMED"] },
-                  },
-            select: { id: true },
-        });
+            const duplicateBooking = await tx.booking.findFirst({
+                where: scheduleId
+                    ? {
+                          userId,
+                          scheduleId,
+                          status: { in: ["PENDING", "CONFIRMED"] },
+                      }
+                    : {
+                          userId,
+                          tripId,
+                          scheduleId: null,
+                          status: { in: ["PENDING", "CONFIRMED"] },
+                      },
+                select: { id: true },
+            });
 
-        if (duplicateBooking) {
-            throw new DomainError(
-                scheduleId ? "Voce ja possui reserva para esta data" : "Voce ja possui reserva para esse passeio",
-                {
-                    code: "DUPLICATE_BOOKING",
-                    status: 409,
+            if (duplicateBooking) {
+                throw new DomainError(
+                    scheduleId ? "Voce ja possui reserva para esta data" : "Voce ja possui reserva para esse passeio",
+                    {
+                        code: "DUPLICATE_BOOKING",
+                        status: 409,
+                    }
+                );
+            }
+
+            let totalPriceCents = trip.priceCents * guestCount;
+
+            if (scheduleId) {
+                const [schedule, bookedGuests] = await Promise.all([
+                    tx.tripSchedule.findUnique({
+                        where: { id: scheduleId },
+                        select: {
+                            id: true,
+                            tripId: true,
+                            capacity: true,
+                            pricePerPersonCents: true,
+                            status: true,
+                            startAt: true,
+                        },
+                    }),
+                    tx.booking.aggregate({
+                        where: {
+                            scheduleId,
+                            status: { in: ["PENDING", "CONFIRMED"] },
+                        },
+                        _sum: { guestCount: true },
+                    }),
+                ]);
+
+                // A schedule that already started is not bookable, even if nobody closed it (the public page hides past
+                // dates, but the API accepted them until 24/10/2026).
+                if (
+                    !schedule ||
+                    schedule.tripId !== tripId ||
+                    schedule.status === "CLOSED" ||
+                    !(schedule.startAt instanceof Date) ||
+                    schedule.startAt.getTime() <= Date.now()
+                ) {
+                    throw new DomainError("Agenda nao disponivel", {
+                        code: "SCHEDULE_UNAVAILABLE",
+                        status: 400,
+                    });
                 }
-            );
-        }
 
-        let totalPriceCents = trip.priceCents * guestCount;
+                const usedCapacity = bookedGuests._sum.guestCount ?? 0;
 
-        if (scheduleId) {
-            const [schedule, bookedGuests] = await Promise.all([
-                tx.tripSchedule.findUnique({
-                    where: { id: scheduleId },
-                    select: {
-                        id: true,
-                        tripId: true,
-                        capacity: true,
-                        pricePerPersonCents: true,
-                        status: true,
-                    },
-                }),
-                tx.booking.aggregate({
-                    where: {
-                        scheduleId,
-                        status: { in: ["PENDING", "CONFIRMED"] },
-                    },
-                    _sum: { guestCount: true },
-                }),
-            ]);
+                if (schedule.capacity > 0 && usedCapacity + guestCount > schedule.capacity) {
+                    throw new DomainError("Capacidade esgotada para esta data", {
+                        code: "SCHEDULE_CAPACITY_EXCEEDED",
+                        status: 400,
+                    });
+                }
 
-            if (!schedule || schedule.tripId !== tripId || schedule.status === "CLOSED") {
-                throw new DomainError("Agenda nao disponivel", {
-                    code: "SCHEDULE_UNAVAILABLE",
+                totalPriceCents = schedule.pricePerPersonCents * guestCount;
+            }
+
+            if (!Number.isSafeInteger(totalPriceCents) || totalPriceCents > MAX_INT4) {
+                throw new DomainError("Quantidade de hospedes invalida.", {
+                    code: "INVALID_GUEST_COUNT",
                     status: 400,
                 });
             }
 
-            const usedCapacity = bookedGuests._sum.guestCount ?? 0;
-
-            if (schedule.capacity > 0 && usedCapacity + guestCount > schedule.capacity) {
-                throw new DomainError("Capacidade esgotada para esta data", {
-                    code: "SCHEDULE_CAPACITY_EXCEEDED",
-                    status: 400,
-                });
-            }
-
-            totalPriceCents = schedule.pricePerPersonCents * guestCount;
+            return tx.booking.create({
+                data: {
+                    userId,
+                    tripId,
+                    scheduleId,
+                    guestCount,
+                    totalPriceCents,
+                    status: "PENDING",
+                    paymentStatus: "UNPAID",
+                },
+                include: {
+                    trip: { select: { id: true, title: true, city: true, priceCents: true } },
+                },
+            });
+        }, BOOKING_TRANSACTION_OPTIONS);
+    } catch (error) {
+        if (!(error instanceof DomainError) && isBookingBusyError(error)) {
+            throw new DomainError("Muitas solicitacoes para esta data agora. Tente novamente em instantes.", {
+                code: "BOOKING_BUSY",
+                status: 409,
+            });
         }
-
-        return tx.booking.create({
-            data: {
-                userId,
-                tripId,
-                scheduleId,
-                guestCount,
-                totalPriceCents,
-                status: "PENDING",
-                paymentStatus: "UNPAID",
-            },
-            include: {
-                trip: { select: { id: true, title: true, city: true, priceCents: true } },
-            },
-        });
-    });
+        throw error;
+    }
 }
 
 export async function cancelBookingForUser(userId: string, bookingId: string) {
@@ -394,9 +492,23 @@ export async function cancelBookingForUser(userId: string, bookingId: string) {
         }
     }
 
-    return prisma.booking.update({
-        where: { id: normalizedBookingId },
+    // Conditional write (audit 24/10/2026): only an active booking of this user is canceled; a concurrent change is
+    // never overwritten.
+    const updated = await prisma.booking.updateMany({
+        where: { id: normalizedBookingId, userId, status: { in: ["PENDING", "CONFIRMED"] } },
         data: { status: "CANCELED" },
-        select: { id: true, status: true },
     });
+
+    if (updated.count === 0) {
+        const current = await prisma.booking.findUnique({ where: { id: normalizedBookingId }, select: { status: true } });
+        if (current?.status === "CANCELED") {
+            return { ok: true, status: "CANCELED" as const };
+        }
+        throw new DomainError("A reserva mudou durante a operacao. Atualize a pagina.", {
+            code: "BOOKING_STATUS_CHANGED",
+            status: 409,
+        });
+    }
+
+    return { id: normalizedBookingId, status: "CANCELED" as const };
 }
