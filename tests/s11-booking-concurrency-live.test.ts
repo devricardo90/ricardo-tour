@@ -175,4 +175,52 @@ describe.skipIf(!enabled)("Sprint 11 — booking concurrency on a real PostgreSQ
     });
     expect(await prisma.booking.count({ where: { scheduleId: past.id } })).toBe(0);
   }, 60_000);
+
+  // V6 (audit 24/10/2026, Prisma issue #29719, fixed in 7.9.0 by PR #29727): when an interactive transaction hit maxWait
+  // while its BEGIN was still in flight, Prisma 7.2–7.8 returned the connection to the pool INSIDE the open transaction
+  // (no ROLLBACK). On 7.8.0 this left all 10 connections "idle in transaction" and 30/30 later writes that resolved
+  // successfully were never committed (lost). Verified from an independent session, never through the Prisma Client.
+  it("pool exhaustion with maxWait expiries leaks no open transaction and every reported write is committed", async () => {
+    const watcher = new pg.Client({ connectionString: url, application_name: "s11-v6-watcher" });
+    await watcher.connect();
+    try {
+      for (let wave = 0; wave < 2; wave++) {
+        const occupying = Array.from({ length: 10 }, () =>
+          prisma.$transaction(async (tx) => tx.$queryRaw`SELECT pg_sleep(1.5)::text AS slept`, { maxWait: 2_000, timeout: 10_000 }),
+        );
+        await new Promise((resolve) => setTimeout(resolve, 200));
+        const starved = await Promise.allSettled(
+          Array.from({ length: 15 }, () => prisma.$transaction(async (tx) => tx.$queryRaw`SELECT 1 AS one`, { maxWait: 300, timeout: 5_000 })),
+        );
+        await Promise.allSettled(occupying);
+        expect(starved.some((r) => r.status === "rejected" && (r.reason as { code?: string }).code === "P2028")).toBe(true);
+        await new Promise((resolve) => setTimeout(resolve, 2_500)); // the late BEGINs land here
+        const leaked = await watcher.query(
+          "SELECT count(*)::int AS n FROM pg_stat_activity WHERE datname = current_database() AND state = 'idle in transaction' AND pid <> pg_backend_pid()",
+        );
+        expect(leaked.rows[0].n).toBe(0);
+      }
+
+      const reported: string[] = [];
+      for (let i = 0; i < 20; i++) {
+        const schedule = await prisma.tripSchedule.create({
+          data: { tripId, startAt: new Date(Date.now() + 10 * 86_400_000), capacity: 1, pricePerPersonCents: 1000 },
+        });
+        reported.push(schedule.id);
+        const seen = await watcher.query('SELECT 1 FROM "TripSchedule" WHERE id = $1', [schedule.id]);
+        expect(seen.rowCount).toBe(1); // committed at the moment Prisma reported success
+      }
+      // A rolled-back transaction afterwards must not take earlier, already-reported writes with it.
+      await prisma
+        .$transaction(async (tx) => {
+          await tx.tripSchedule.create({ data: { tripId, startAt: new Date(Date.now() + 11 * 86_400_000), capacity: 1, pricePerPersonCents: 1 } });
+          throw new Error("intentional rollback");
+        })
+        .catch(() => undefined);
+      const still = await watcher.query('SELECT count(*)::int AS n FROM "TripSchedule" WHERE id = ANY($1)', [reported]);
+      expect(still.rows[0].n).toBe(reported.length);
+    } finally {
+      await watcher.end();
+    }
+  }, 120_000);
 });
