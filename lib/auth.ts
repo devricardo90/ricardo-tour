@@ -27,6 +27,9 @@ export const auth = betterAuth({
       role: {
         type: "string",
         defaultValue: "USER",
+        // Security (RT-129): better-auth accepts additional fields as client input by default. The role is never
+        // client input; ADMIN is granted only directly in the database.
+        input: false,
       },
     },
   },
