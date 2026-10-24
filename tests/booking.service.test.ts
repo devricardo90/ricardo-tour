@@ -14,10 +14,19 @@ const prismaMock = vi.hoisted(() => ({
   tripSchedule: {
     findUnique: vi.fn(),
   },
+  $queryRaw: vi.fn(async () => [{ locked: 1 }]),
+  // Interactive transaction: the callback receives the same client mock (tx === prisma in these unit tests).
+  $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn(prismaMock)),
 }));
 
 vi.mock("@/lib/prisma", () => ({
   prisma: prismaMock,
+}));
+
+// These tests cover the booking rules on an arbitrary trip; the RT-110 public gate is tested on its own
+// (tests/rt-110-booking-public-gate.test.ts), so here it lets every trip through.
+vi.mock("@/lib/catalog/public-trips", () => ({
+  getPublicTripById: vi.fn(async (id: string) => ({ id })),
 }));
 
 import { DomainError } from "@/lib/errors/domain-error";

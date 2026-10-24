@@ -1,8 +1,18 @@
 import { prisma } from "@/lib/prisma";
 import { DomainError } from "@/lib/errors/domain-error";
 import { isBookingBlockedForUnapprovedPrice } from "@/lib/catalog/price-on-request";
+import { getPublicTripById } from "@/lib/catalog/public-trips";
 
 const USER_CANCELLATION_WINDOW_HOURS = 24;
+
+/**
+ * Serialization key for the booking write. With a schedule, every booking of that schedule shares the key (capacity is
+ * per schedule); without one, the key is per user and trip (the duplicate check). Used with pg_advisory_xact_lock, so
+ * the lock is released automatically when the transaction ends.
+ */
+export function bookingLockKey(userId: string, tripId: string, scheduleId?: string) {
+    return scheduleId ? `booking:schedule:${scheduleId}` : `booking:user-trip:${userId}:${tripId}`;
+}
 
 export interface CreateBookingInput {
     tripId: string;
@@ -191,6 +201,16 @@ export async function createBookingForUser(userId: string, input: CreateBookingI
         });
     }
 
+    // RT-110: the booking API applies the same public catalog gate as the tour page and the request form (launch
+    // allowlist, published, Rio, active and identified partner, data integrity). A trip hidden from visitors answers
+    // exactly like a missing one, so the API does not reveal that it exists.
+    if (!(await getPublicTripById(tripId))) {
+        throw new DomainError("Trip nao encontrada", {
+            code: "TRIP_NOT_FOUND",
+            status: 404,
+        });
+    }
+
     const trip = await prisma.trip.findUnique({
         where: { id: tripId },
         select: {
@@ -228,87 +248,93 @@ export async function createBookingForUser(userId: string, input: CreateBookingI
         });
     }
 
-    const duplicateBooking = await prisma.booking.findFirst({
-        where: scheduleId
-            ? {
-                  userId,
-                  scheduleId,
-                  status: { in: ["PENDING", "CONFIRMED"] },
-              }
-            : {
-                  userId,
-                  tripId,
-                  scheduleId: null,
-                  status: { in: ["PENDING", "CONFIRMED"] },
-              },
-        select: { id: true },
-    });
+    // The duplicate check, the capacity check and the insert run in one transaction under an advisory lock, so two
+    // concurrent requests cannot both pass the checks and overbook a schedule or create the same booking twice.
+    return prisma.$transaction(async (tx) => {
+        await tx.$queryRaw`SELECT 1 AS locked FROM (SELECT pg_advisory_xact_lock(hashtext(${bookingLockKey(userId, tripId, scheduleId)}))) AS l`;
 
-    if (duplicateBooking) {
-        throw new DomainError(
-            scheduleId ? "Voce ja possui reserva para esta data" : "Voce ja possui reserva para esse passeio",
-            {
-                code: "DUPLICATE_BOOKING",
-                status: 409,
+        const duplicateBooking = await tx.booking.findFirst({
+            where: scheduleId
+                ? {
+                      userId,
+                      scheduleId,
+                      status: { in: ["PENDING", "CONFIRMED"] },
+                  }
+                : {
+                      userId,
+                      tripId,
+                      scheduleId: null,
+                      status: { in: ["PENDING", "CONFIRMED"] },
+                  },
+            select: { id: true },
+        });
+
+        if (duplicateBooking) {
+            throw new DomainError(
+                scheduleId ? "Voce ja possui reserva para esta data" : "Voce ja possui reserva para esse passeio",
+                {
+                    code: "DUPLICATE_BOOKING",
+                    status: 409,
+                }
+            );
+        }
+
+        let totalPriceCents = trip.priceCents * guestCount;
+
+        if (scheduleId) {
+            const [schedule, bookedGuests] = await Promise.all([
+                tx.tripSchedule.findUnique({
+                    where: { id: scheduleId },
+                    select: {
+                        id: true,
+                        tripId: true,
+                        capacity: true,
+                        pricePerPersonCents: true,
+                        status: true,
+                    },
+                }),
+                tx.booking.aggregate({
+                    where: {
+                        scheduleId,
+                        status: { in: ["PENDING", "CONFIRMED"] },
+                    },
+                    _sum: { guestCount: true },
+                }),
+            ]);
+
+            if (!schedule || schedule.tripId !== tripId || schedule.status === "CLOSED") {
+                throw new DomainError("Agenda nao disponivel", {
+                    code: "SCHEDULE_UNAVAILABLE",
+                    status: 400,
+                });
             }
-        );
-    }
 
-    let totalPriceCents = trip.priceCents * guestCount;
+            const usedCapacity = bookedGuests._sum.guestCount ?? 0;
 
-    if (scheduleId) {
-        const [schedule, bookedGuests] = await Promise.all([
-            prisma.tripSchedule.findUnique({
-                where: { id: scheduleId },
-                select: {
-                    id: true,
-                    tripId: true,
-                    capacity: true,
-                    pricePerPersonCents: true,
-                    status: true,
-                },
-            }),
-            prisma.booking.aggregate({
-                where: {
-                    scheduleId,
-                    status: { in: ["PENDING", "CONFIRMED"] },
-                },
-                _sum: { guestCount: true },
-            }),
-        ]);
+            if (schedule.capacity > 0 && usedCapacity + guestCount > schedule.capacity) {
+                throw new DomainError("Capacidade esgotada para esta data", {
+                    code: "SCHEDULE_CAPACITY_EXCEEDED",
+                    status: 400,
+                });
+            }
 
-        if (!schedule || schedule.tripId !== tripId || schedule.status === "CLOSED") {
-            throw new DomainError("Agenda nao disponivel", {
-                code: "SCHEDULE_UNAVAILABLE",
-                status: 400,
-            });
+            totalPriceCents = schedule.pricePerPersonCents * guestCount;
         }
 
-        const usedCapacity = bookedGuests._sum.guestCount ?? 0;
-
-        if (schedule.capacity > 0 && usedCapacity + guestCount > schedule.capacity) {
-            throw new DomainError("Capacidade esgotada para esta data", {
-                code: "SCHEDULE_CAPACITY_EXCEEDED",
-                status: 400,
-            });
-        }
-
-        totalPriceCents = schedule.pricePerPersonCents * guestCount;
-    }
-
-    return prisma.booking.create({
-        data: {
-            userId,
-            tripId,
-            scheduleId,
-            guestCount,
-            totalPriceCents,
-            status: "PENDING",
-            paymentStatus: "UNPAID",
-        },
-        include: {
-            trip: { select: { id: true, title: true, city: true, priceCents: true } },
-        },
+        return tx.booking.create({
+            data: {
+                userId,
+                tripId,
+                scheduleId,
+                guestCount,
+                totalPriceCents,
+                status: "PENDING",
+                paymentStatus: "UNPAID",
+            },
+            include: {
+                trip: { select: { id: true, title: true, city: true, priceCents: true } },
+            },
+        });
     });
 }
 

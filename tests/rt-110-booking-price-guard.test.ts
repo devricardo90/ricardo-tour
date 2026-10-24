@@ -4,6 +4,8 @@ const prismaMock = vi.hoisted(() => ({
   trip: { findUnique: vi.fn() },
   booking: { findFirst: vi.fn(), aggregate: vi.fn(), create: vi.fn(), findUnique: vi.fn(), update: vi.fn(), findMany: vi.fn() },
   tripSchedule: { findUnique: vi.fn() },
+  $queryRaw: vi.fn(async () => [{ locked: 1 }]),
+  $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn(prismaMock)),
 }));
 vi.mock("@/lib/prisma", () => ({ prisma: prismaMock }));
 vi.mock("@/lib/authz", () => ({ requireSession: vi.fn(async () => ({ user: { id: "user-1" } })) }));
@@ -53,14 +55,12 @@ describe("RT-110 (local, Owner 18/10/2026): no new booking for a tour without an
     expect(prismaMock.booking.create).not.toHaveBeenCalled();
   });
 
-  it("leaves any other trip on the existing flow", async () => {
+  it("a trip outside the public catalog is not bookable either (RT-110 public gate, after the price guard)", async () => {
     expect(isBookingBlockedForUnapprovedPrice(OTHER)).toBe(false);
-    prismaMock.trip.findUnique.mockResolvedValue({ id: OTHER, priceCents: 12000, maxGuests: null, schedules: [] });
-    prismaMock.booking.findFirst.mockResolvedValue(null);
-    prismaMock.booking.create.mockResolvedValue({ id: "b1" });
-    await createBookingForUser("user-1", { tripId: OTHER, guestCount: 2 });
-    expect(prismaMock.booking.create).toHaveBeenCalledTimes(1);
-    expect(prismaMock.booking.create.mock.calls[0][0].data.totalPriceCents).toBe(24000);
+    await expect(createBookingForUser("user-1", { tripId: OTHER, guestCount: 2 })).rejects.toMatchObject({ code: "TRIP_NOT_FOUND", status: 404 });
+    // Outside the launch allowlist the gate answers without reading the trip, and nothing is written.
+    expect(prismaMock.trip.findUnique).not.toHaveBeenCalled();
+    expect(prismaMock.booking.create).not.toHaveBeenCalled();
   });
 
   it("does not touch existing bookings (no update/cancel path is involved)", async () => {
