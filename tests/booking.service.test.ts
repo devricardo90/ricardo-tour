@@ -15,6 +15,9 @@ const prismaMock = vi.hoisted(() => ({
   tripSchedule: {
     findUnique: vi.fn(),
   },
+  bookingEvent: {
+    create: vi.fn(),
+  },
   $queryRaw: vi.fn(async () => [{ locked: 1 }]),
   // Interactive transaction: the callback receives the same client mock (tx === prisma in these unit tests).
   $transaction: vi.fn(async (fn: (tx: unknown) => unknown) => fn(prismaMock)),
@@ -192,11 +195,15 @@ describe("booking.service", () => {
     });
     prismaMock.booking.updateMany.mockResolvedValue({ count: 1 });
 
-    const result = await confirmBookingByAdmin(" booking-1 ");
+    const result = await confirmBookingByAdmin(" booking-1 ", { userId: "admin-1", role: "ADMIN" });
 
     expect(prismaMock.booking.updateMany).toHaveBeenCalledWith({
       where: { id: "booking-1", status: "PENDING" },
       data: { status: "CONFIRMED" },
+    });
+    // RT-124: the transition and its history row are written in the same transaction.
+    expect(prismaMock.bookingEvent.create).toHaveBeenCalledWith({
+      data: { bookingId: "booking-1", type: "CONFIRMED", fromStatus: "PENDING", toStatus: "CONFIRMED", actorUserId: "admin-1", actorRole: "ADMIN" },
     });
     expect(prismaMock.booking.update).not.toHaveBeenCalled();
     expect(result).toEqual({ id: "booking-1", status: "CONFIRMED", paymentStatus: "UNPAID" });
@@ -210,6 +217,7 @@ describe("booking.service", () => {
       code: "BOOKING_STATUS_CHANGED",
       status: 409,
     } satisfies Partial<DomainError>);
+    expect(prismaMock.bookingEvent.create).not.toHaveBeenCalled(); // no history for a change that did not happen
   });
 
   it("blocks admin confirmation unless the booking is pending", async () => {
@@ -234,10 +242,24 @@ describe("booking.service", () => {
 
     await expect(cancelBookingByAdmin("booking-1")).resolves.toEqual({ id: "booking-1", status: "CANCELED" });
 
+    // Conditional on the exact status read, so the recorded "from" status is the real one (RT-124).
     expect(prismaMock.booking.updateMany).toHaveBeenCalledWith({
-      where: { id: "booking-1", status: { in: ["PENDING", "CONFIRMED"] } },
+      where: { id: "booking-1", status: "CONFIRMED" },
       data: { status: "CANCELED" },
     });
+    expect(prismaMock.bookingEvent.create).toHaveBeenCalledWith({
+      data: { bookingId: "booking-1", type: "CANCELED_BY_ADMIN", fromStatus: "CONFIRMED", toStatus: "CANCELED", actorUserId: null, actorRole: "SYSTEM" },
+    });
+  });
+
+  it("refuses an admin cancel when the booking changed to another active status meanwhile", async () => {
+    prismaMock.booking.findUnique
+      .mockResolvedValueOnce({ id: "booking-1", status: "PENDING" })
+      .mockResolvedValueOnce({ status: "CONFIRMED" });
+    prismaMock.booking.updateMany.mockResolvedValue({ count: 0 });
+
+    await expect(cancelBookingByAdmin("booking-1")).rejects.toMatchObject({ code: "BOOKING_STATUS_CHANGED", status: 409 });
+    expect(prismaMock.bookingEvent.create).not.toHaveBeenCalled();
   });
 
   it("treats an admin cancel that lost the race to another cancel as idempotent", async () => {
@@ -260,8 +282,11 @@ describe("booking.service", () => {
 
     await expect(cancelBookingForUser("user-1", "booking-1")).resolves.toEqual({ id: "booking-1", status: "CANCELED" });
     expect(prismaMock.booking.updateMany).toHaveBeenCalledWith({
-      where: { id: "booking-1", userId: "user-1", status: { in: ["PENDING", "CONFIRMED"] } },
+      where: { id: "booking-1", userId: "user-1", status: "PENDING" },
       data: { status: "CANCELED" },
+    });
+    expect(prismaMock.bookingEvent.create).toHaveBeenCalledWith({
+      data: { bookingId: "booking-1", type: "CANCELED_BY_USER", fromStatus: "PENDING", toStatus: "CANCELED", actorUserId: "user-1", actorRole: "USER" },
     });
   });
 

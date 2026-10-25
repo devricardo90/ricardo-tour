@@ -72,9 +72,9 @@ export async function getBookingByIdAction(id: string) {
  * Somente PENDING e CONFIRMED. Nao altera paymentStatus. (RT-014B).
  */
 export async function cancelBookingByAdminAction(id: string, locale?: string) {
-    await requireAdminSession();
+    const session = await requireAdminSession();
     try {
-        await cancelBookingByAdmin(id);
+        await cancelBookingByAdmin(id, { userId: session.user.id, role: "ADMIN" });
         revalidatePath(`/admin/bookings/${id}`);
         revalidatePath("/admin/bookings");
         if (locale) {
@@ -93,9 +93,9 @@ export async function cancelBookingByAdminAction(id: string, locale?: string) {
  * Somente PENDING. Nao altera paymentStatus. (RT-022A).
  */
 export async function confirmBookingByAdminAction(id: string, locale?: string) {
-    await requireAdminSession();
+    const session = await requireAdminSession();
     try {
-        await confirmBookingByAdmin(id);
+        await confirmBookingByAdmin(id, { userId: session.user.id, role: "ADMIN" });
         revalidatePath(`/admin/bookings/${id}`);
         revalidatePath("/admin/bookings");
         if (locale) {

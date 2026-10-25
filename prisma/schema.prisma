@@ -192,11 +192,67 @@ model Booking {
   analyticsEvents AnalyticsEvent[]
   emailLogs       EmailLog[]
   paymentAttempts PaymentAttempt[]
+  // RT-124 private group booking (local). NULL on bookings made by the legacy per-person flow.
+  pricingModel    String?
+  fullFareCount   Int?
+  infantCount     Int?
+  quote           BookingQuote?
+  contact         BookingContact?
+  events          BookingEvent[]
 
   @@index([userId, createdAt])
   @@index([tripId])
   @@index([userId, tripId, scheduleId])
   @@index([status])
+}
+
+/// RT-124: immutable snapshot of the price shown when the booking was made (a database trigger refuses UPDATE).
+model BookingQuote {
+  id                  String   @id @default(cuid())
+  bookingId           String   @unique
+  currency            String   @default("BRL")
+  priceTableId        String
+  priceTableVersion   String
+  participants        Int
+  fullFareCount       Int
+  infantCount         Int
+  groupTotalCents     Int
+  totalCents          Int
+  prepaidTicketsCents Int
+  depositBasisPoints  Int
+  depositCents        Int
+  balanceCents        Int
+  createdAt           DateTime @default(now())
+  booking             Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+/// RT-124: contact and pickup data of a private booking (personal data: shown only to the owner and to ADMIN).
+model BookingContact {
+  id            String   @id @default(cuid())
+  bookingId     String   @unique
+  fullName      String
+  phone         String
+  language      String
+  pickupAddress String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  booking       Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+}
+
+/// RT-124: append-only booking history (a database trigger refuses UPDATE). Never stores personal data.
+model BookingEvent {
+  id          String   @id @default(cuid())
+  bookingId   String
+  type        String
+  fromStatus  String?
+  toStatus    String?
+  actorUserId String?
+  actorRole   String
+  createdAt   DateTime @default(now())
+  booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  @@index([bookingId, createdAt])
 }
 
 model PaymentAttempt {

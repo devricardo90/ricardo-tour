@@ -23,29 +23,26 @@ const enabled = Boolean(url);
 vi.mock("@/lib/catalog/public-trips", () => ({ getPublicTripById: async (id: string) => ({ id }) }));
 vi.mock("@/lib/catalog/price-on-request", () => ({ isBookingBlockedForUnapprovedPrice: () => false }));
 
-// Interleaving hook for the confirm/cancel race: while `parked` is set, a booking.updateMany that writes the parked status
-// waits (its read already happened) until the test releases it. Everything else goes straight to the real client.
-const parked = vi.hoisted(() => ({ current: undefined as undefined | { status: string; reached: () => void; release: Promise<void> } }));
+// Interleaving hook for the confirm/cancel race: while `parked` is set, the NEXT interactive transaction (the status
+// write, which since RT-124 runs in a transaction together with its history row) waits until the test releases it; the
+// read already happened. The hook is consumed by that one call; everything else goes straight to the real client.
+const parked = vi.hoisted(() => ({ current: undefined as undefined | { reached: () => void; release: Promise<void> } }));
 vi.mock("@/lib/prisma", async (importOriginal) => {
-  const real = (await importOriginal()) as { prisma: Record<string, unknown> & { booking: Record<string, unknown> } };
+  const real = (await importOriginal()) as { prisma: Record<string, unknown> };
   const bind = (target: object, key: string | symbol) => {
     const value = Reflect.get(target, key);
     return typeof value === "function" ? value.bind(target) : value;
   };
-  const booking = new Proxy(real.prisma.booking, {
-    get(target, key) {
-      if (key !== "updateMany") return bind(target, key);
-      return async (args: { data?: { status?: string } }) => {
-        const gate = parked.current;
-        if (gate && args?.data?.status === gate.status) {
-          gate.reached();
-          await gate.release;
-        }
-        return (target.updateMany as (a: unknown) => Promise<unknown>)(args);
-      };
-    },
-  });
-  return { prisma: new Proxy(real.prisma, { get: (target, key) => (key === "booking" ? booking : bind(target, key)) }) };
+  const transaction = async (...args: unknown[]) => {
+    const gate = parked.current;
+    if (gate) {
+      parked.current = undefined;
+      gate.reached();
+      await gate.release;
+    }
+    return (real.prisma.$transaction as (...a: unknown[]) => Promise<unknown>)(...args);
+  };
+  return { prisma: new Proxy(real.prisma, { get: (target, key) => (key === "$transaction" ? transaction : bind(target, key)) }) };
 });
 
 type Service = typeof import("@/lib/services/booking.service");
@@ -123,7 +120,7 @@ describe.skipIf(!enabled)("Sprint 11 — booking concurrency on a real PostgreSQ
     let reached!: () => void;
     let release!: () => void;
     const reachedP = new Promise<void>((resolve) => (reached = resolve));
-    parked.current = { status: "CONFIRMED", reached, release: new Promise<void>((resolve) => (release = resolve)) };
+    parked.current = { reached, release: new Promise<void>((resolve) => (release = resolve)) };
     try {
       const confirm = service.confirmBookingByAdmin(victim.id).then(
         () => "CONFIRMED",

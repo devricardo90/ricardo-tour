@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { DomainError } from "@/lib/errors/domain-error";
 import { isBookingBlockedForUnapprovedPrice } from "@/lib/catalog/price-on-request";
 import { getPublicTripById } from "@/lib/catalog/public-trips";
+import type { BookingActor, BookingEventType, BookingStatusValue } from "@/lib/booking/booking-state";
 
 const USER_CANCELLATION_WINDOW_HOURS = 24;
 
@@ -22,6 +23,41 @@ export function bookingLockKey(userId: string, tripId: string, scheduleId?: stri
  */
 export const BOOKING_LOCK_TIMEOUT = "2s";
 export const BOOKING_TRANSACTION_OPTIONS = { maxWait: 2_000, timeout: 5_000 } as const;
+
+/**
+ * RT-124: a status change and its history row are written together. The write is conditional on the exact status that
+ * was read, so the recorded "from" status is the real one; a concurrent change makes the write affect 0 rows and
+ * nothing is recorded. Returns false when the booking was no longer in `from`.
+ */
+async function transitionBooking(input: {
+    bookingId: string;
+    userId?: string;
+    from: BookingStatusValue;
+    to: BookingStatusValue;
+    type: BookingEventType;
+    actor: BookingActor;
+}): Promise<boolean> {
+    return prisma.$transaction(async (tx) => {
+        const updated = await tx.booking.updateMany({
+            where: { id: input.bookingId, ...(input.userId ? { userId: input.userId } : {}), status: input.from },
+            data: { status: input.to },
+        });
+        if (updated.count === 0) return false;
+        await tx.bookingEvent.create({
+            data: {
+                bookingId: input.bookingId,
+                type: input.type,
+                fromStatus: input.from,
+                toStatus: input.to,
+                actorUserId: input.actor.userId,
+                actorRole: input.actor.role,
+            },
+        });
+        return true;
+    });
+}
+
+const SYSTEM_ACTOR: BookingActor = { userId: null, role: "SYSTEM" };
 
 /** Largest value of a Postgres INTEGER column (Booking.totalPriceCents). */
 const MAX_INT4 = 2_147_483_647;
@@ -137,7 +173,7 @@ export async function getBookingById(id: string) {
  * Nao altera paymentStatus. Nao envia e-mail. Nao registra analytics.
  * Admin nao segue janela de 24h. Funcao separada de cancelBookingForUser (RT-014B).
  */
-export async function cancelBookingByAdmin(bookingId: string) {
+export async function cancelBookingByAdmin(bookingId: string, actor: BookingActor = SYSTEM_ACTOR) {
     const normalizedId = typeof bookingId === "string" ? bookingId.trim() : "";
 
     if (!normalizedId) {
@@ -176,13 +212,10 @@ export async function cancelBookingByAdmin(bookingId: string) {
     }
 
     // Altera apenas booking.status — paymentStatus permanece intacto. Gravacao condicional ao status lido: uma
-    // mudanca concorrente nao e sobrescrita (auditoria 24/10/2026).
-    const updated = await prisma.booking.updateMany({
-        where: { id: normalizedId, status: { in: ["PENDING", "CONFIRMED"] } },
-        data: { status: "CANCELED" },
-    });
+    // mudanca concorrente nao e sobrescrita (auditoria 24/10/2026); o historico registra a transicao (RT-124).
+    const changed = await transitionBooking({ bookingId: normalizedId, from: booking.status, to: "CANCELED", type: "CANCELED_BY_ADMIN", actor });
 
-    if (updated.count === 0) {
+    if (!changed) {
         const current = await prisma.booking.findUnique({ where: { id: normalizedId }, select: { status: true } });
         if (current?.status === "CANCELED") {
             return { id: normalizedId, status: "CANCELED" as const };
@@ -200,7 +233,7 @@ export async function cancelBookingByAdmin(bookingId: string) {
  * Confirma uma reserva pelo admin. Somente PENDING pode ser confirmado.
  * Nao altera paymentStatus. Nao envia e-mail. Nao registra analytics.
  */
-export async function confirmBookingByAdmin(bookingId: string) {
+export async function confirmBookingByAdmin(bookingId: string, actor: BookingActor = SYSTEM_ACTOR) {
     const normalizedId = typeof bookingId === "string" ? bookingId.trim() : "";
 
     if (!normalizedId) {
@@ -232,12 +265,9 @@ export async function confirmBookingByAdmin(bookingId: string) {
     // Gravacao condicional: so confirma se a reserva ainda estiver PENDING no momento da escrita. Sem isso, um
     // cancelamento feito entre a leitura e a escrita era sobrescrito e a reserva voltava a ocupar lugares ja liberados
     // (auditoria 24/10/2026: 6 hospedes numa agenda de 4). Confirmar nao muda a ocupacao (PENDING ja conta).
-    const updated = await prisma.booking.updateMany({
-        where: { id: normalizedId, status: "PENDING" },
-        data: { status: "CONFIRMED" },
-    });
+    const changed = await transitionBooking({ bookingId: normalizedId, from: "PENDING", to: "CONFIRMED", type: "CONFIRMED", actor });
 
-    if (updated.count === 0) {
+    if (!changed) {
         throw new DomainError("A reserva mudou durante a operacao e nao esta mais pendente. Atualize a pagina.", {
             code: "BOOKING_STATUS_CHANGED",
             status: 409,
@@ -487,13 +517,17 @@ export async function cancelBookingForUser(userId: string, bookingId: string) {
     }
 
     // Conditional write (audit 24/10/2026): only an active booking of this user is canceled; a concurrent change is
-    // never overwritten.
-    const updated = await prisma.booking.updateMany({
-        where: { id: normalizedBookingId, userId, status: { in: ["PENDING", "CONFIRMED"] } },
-        data: { status: "CANCELED" },
+    // never overwritten. The history records the transition (RT-124).
+    const changed = await transitionBooking({
+        bookingId: normalizedBookingId,
+        userId,
+        from: booking.status,
+        to: "CANCELED",
+        type: "CANCELED_BY_USER",
+        actor: { userId, role: "USER" },
     });
 
-    if (updated.count === 0) {
+    if (!changed) {
         const current = await prisma.booking.findUnique({ where: { id: normalizedBookingId }, select: { status: true } });
         if (current?.status === "CANCELED") {
             return { ok: true, status: "CANCELED" as const };
