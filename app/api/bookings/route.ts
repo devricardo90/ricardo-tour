@@ -4,6 +4,8 @@ import { requireSession } from "@/lib/authz";
 import { isDomainError } from "@/lib/errors/domain-error";
 import { createBookingForUser, listBookingsForUser } from "@/lib/services/booking.service";
 import { reportServerError } from "@/lib/observability/report";
+import { isBookingWriteLimited } from "@/lib/rate-limit/server";
+import { isSameOrigin } from "@/lib/security/same-origin";
 
 // Shape check of the request body (audit 24/10/2026). The business rules (guest count limits, schedule, gate) stay in
 // createBookingForUser; this only refuses malformed input with 400 instead of coercing it or failing with 500.
@@ -30,7 +32,14 @@ export async function GET() {
 
 export async function POST(req: Request) {
   try {
+    // RT-129: browser writes from this site only, and a bounded rate per account and per client.
+    if (!isSameOrigin(req.headers)) {
+      return NextResponse.json({ error: "Origem nao permitida" }, { status: 403 });
+    }
     const session = await requireSession();
+    if (await isBookingWriteLimited(req.headers, session.user.id, "create")) {
+      return NextResponse.json({ error: "Muitas tentativas. Tente novamente em alguns minutos." }, { status: 429 });
+    }
     const body: unknown = await req.json().catch(() => null);
     const parsed = createBookingBodySchema.safeParse(body);
     if (!parsed.success) {

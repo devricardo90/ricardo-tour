@@ -458,17 +458,11 @@ export async function cancelBookingForUser(userId: string, bookingId: string) {
         },
     });
 
-    if (!booking) {
+    // RT-129: another account's booking answers exactly like a missing one, so booking ids cannot be probed.
+    if (!booking || booking.userId !== userId) {
         throw new DomainError("Reserva nao encontrada", {
             code: "BOOKING_NOT_FOUND",
             status: 404,
-        });
-    }
-
-    if (booking.userId !== userId) {
-        throw new DomainError("Sem permissao", {
-            code: "BOOKING_FORBIDDEN",
-            status: 403,
         });
     }
 

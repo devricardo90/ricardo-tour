@@ -61,3 +61,22 @@ export async function isFormSubmissionLimited(headers: { get(name: string): stri
   const result = await getLimiter("degrade").check({ rule, dimension: `form:${form}`, identifier: clientKeyFromHeaders(headers) });
   return !result.allowed;
 }
+
+/**
+ * Booking writes (RT-129): counted per signed-in account AND per client address, so neither one account from many
+ * addresses nor many accounts from one address can flood bookings or cancellations.
+ */
+export const BOOKING_WRITE_LIMITS = {
+  create: { limit: 10, windowSeconds: 600 },
+  cancel: { limit: 20, windowSeconds: 600 },
+} as const;
+
+export async function isBookingWriteLimited(headers: { get(name: string): string | null }, userId: string, action: keyof typeof BOOKING_WRITE_LIMITS) {
+  const rule: RateLimitRule = { name: `booking_${action}`, ...BOOKING_WRITE_LIMITS[action] };
+  const limiter = getLimiter("degrade");
+  const [byUser, byClient] = await Promise.all([
+    limiter.check({ rule, dimension: `booking:${action}:user`, identifier: userId }),
+    limiter.check({ rule, dimension: `booking:${action}:client`, identifier: clientKeyFromHeaders(headers) }),
+  ]);
+  return !byUser.allowed || !byClient.allowed;
+}

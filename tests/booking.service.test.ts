@@ -171,6 +171,19 @@ describe("booking.service", () => {
     } satisfies Partial<DomainError>);
   });
 
+  it("another account's booking answers exactly like a missing one (RT-129: no id probing)", async () => {
+    prismaMock.booking.findUnique.mockResolvedValueOnce(null);
+    const missing = await cancelBookingForUser("user-1", "booking-x").catch((e: DomainError) => e);
+    prismaMock.booking.findUnique.mockResolvedValueOnce({ id: "booking-2", userId: "user-2", status: "PENDING", schedule: null });
+    const foreign = await cancelBookingForUser("user-1", "booking-2").catch((e: DomainError) => e);
+
+    for (const error of [missing, foreign]) expect(error).toBeInstanceOf(DomainError);
+    const shape = (e: DomainError) => ({ code: e.code, status: e.status, message: e.message });
+    expect(shape(foreign as DomainError)).toEqual(shape(missing as DomainError));
+    expect(shape(foreign as DomainError)).toEqual({ code: "BOOKING_NOT_FOUND", status: 404, message: "Reserva nao encontrada" });
+    expect(prismaMock.booking.updateMany).not.toHaveBeenCalled();
+  });
+
   it("confirms pending bookings without changing payment status, with a write conditional on PENDING", async () => {
     prismaMock.booking.findUnique.mockResolvedValue({
       id: "booking-1",
