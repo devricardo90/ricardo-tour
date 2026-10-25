@@ -199,6 +199,8 @@ model Booking {
   quote           BookingQuote?
   contact         BookingContact?
   events          BookingEvent[]
+  payments        BookingPayment[]
+  paymentEvents   BookingPaymentEvent[]
 
   @@index([userId, createdAt])
   @@index([tripId])
@@ -253,6 +255,48 @@ model BookingEvent {
   booking     Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 
   @@index([bookingId, createdAt])
+}
+
+/// RT-125: one manual payment line (deposit or balance) of a private booking, registered by an ADMIN. Amount, kind,
+/// method and booking never change after creation (database trigger); only the status moves along
+/// PENDING -> RECORDED -> CONFIRMED -> REFUNDED, or to CANCELED from PENDING/RECORDED. Never deleted.
+model BookingPayment {
+  id              String                @id @default(cuid())
+  bookingId       String
+  kind            String
+  method          String
+  amountCents     Int
+  status          String
+  reference       String?
+  idempotencyKey  String                @unique
+  createdByUserId String
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+  booking         Booking               @relation(fields: [bookingId], references: [id], onDelete: Restrict)
+  events          BookingPaymentEvent[]
+
+  @@index([bookingId, createdAt])
+}
+
+/// RT-125: immutable financial history (database triggers refuse UPDATE and DELETE). One row per operation, with the
+/// responsible ADMIN and the idempotency key of the request that produced it.
+model BookingPaymentEvent {
+  id             String         @id @default(cuid())
+  paymentId      String
+  bookingId      String
+  type           String
+  fromStatus     String?
+  toStatus       String
+  amountCents    Int
+  actorUserId    String
+  idempotencyKey String         @unique
+  note           String?
+  createdAt      DateTime       @default(now())
+  payment        BookingPayment @relation(fields: [paymentId], references: [id], onDelete: Restrict)
+  booking        Booking        @relation(fields: [bookingId], references: [id], onDelete: Restrict)
+
+  @@index([bookingId, createdAt])
+  @@index([paymentId, createdAt])
 }
 
 model PaymentAttempt {

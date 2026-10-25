@@ -6,6 +6,7 @@ import { getLocalizedField } from "@/lib/localized-field";
 import { ArrowLeft } from "lucide-react";
 import { CancelBookingButton } from "./cancel-booking-button";
 import { ConfirmBookingButton } from "./confirm-booking-button";
+import { PaymentsPanel } from "./payments-panel";
 
 /**
  * RT-013G: Admin Booking Detail Read-Only
@@ -275,6 +276,9 @@ export default async function AdminBookingDetailPage({
           </CardContent>
         </Card>
       </div>
+
+      {/* RT-125: controle manual de pagamentos (sinal e saldo) */}
+      <PaymentsPanel bookingId={booking.id} bookingStatus={booking.status} locale={locale} />
 
       {/* Tentativas de Pagamento */}
       <Card>
