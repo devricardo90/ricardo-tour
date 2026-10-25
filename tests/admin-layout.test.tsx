@@ -17,8 +17,22 @@ vi.mock("next/navigation", () => ({
   redirect: redirectMock,
 }));
 
+vi.mock("next-intl/server", () => ({
+  getTranslations: async () => (key: string) => ({ logout: "Sair", logoutError: "Erro ao sair" })[key] ?? key,
+}));
+
 import AdminLayout from "@/app/[locale]/admin/layout";
 import { DomainError } from "@/lib/errors/domain-error";
+import { SignOutButton } from "@/components/sign-out-button";
+
+/** Props of every SignOutButton element in the rendered tree. */
+function findSignOutButtons(node: unknown): Array<Record<string, unknown>> {
+  if (node == null || typeof node !== "object") return [];
+  if (Array.isArray(node)) return node.flatMap(findSignOutButtons);
+  const element = node as { type?: unknown; props?: Record<string, unknown> & { children?: unknown } };
+  const own = element.type === SignOutButton && element.props ? [element.props] : [];
+  return [...own, ...findSignOutButtons(element.props?.children)];
+}
 
 function collectText(node: unknown): string {
   if (node == null || typeof node === "boolean") {
@@ -76,6 +90,8 @@ describe("AdminLayout authorization", () => {
     expect(collectText(result)).toContain("Acesso negado");
     expect(collectText(result)).toContain("nao tem permissao");
     expect(collectText(result)).not.toContain("Admin content");
+    // A signed-in non-admin can leave the account from the access-denied card.
+    expect(findSignOutButtons(result)).toEqual([expect.objectContaining({ locale: "pt", label: "Sair" })]);
   });
 
   it("renders admin content for users with ADMIN role", async () => {
@@ -90,5 +106,6 @@ describe("AdminLayout authorization", () => {
 
     expect(collectText(result)).toContain("Rick Travel Admin");
     expect(collectText(result)).toContain("Admin content");
+    expect(findSignOutButtons(result)).toEqual([expect.objectContaining({ locale: "pt", label: "Sair", errorLabel: "Erro ao sair" })]);
   });
 });
