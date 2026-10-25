@@ -134,7 +134,8 @@
         "greetingPrefix": "Hej,",
         "userFallback": "användare",
         "myBookings": "Mina bokningar",
-        "logout": "Logga ut"
+        "logout": "Logga ut",
+        "logoutError": "Det gick inte att logga ut. Försök igen."
     },
     "MobileMenu": {
         "welcomeBack": "Välkommen tillbaka",

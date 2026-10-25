@@ -38,7 +38,10 @@ export default function proxy(req: NextRequest) {
 
         if (!sessionToken) {
             const locale = pathname.match(/^\/([a-z]{2})/)?.[1] || routing.defaultLocale;
-            return NextResponse.redirect(new URL(`/${locale}/login`, req.url));
+            const loginUrl = new URL(`/${locale}/login`, req.url);
+            // Back to the protected page after sign-in (the login page accepts same-site paths only).
+            loginUrl.searchParams.set("redirect", pathname);
+            return NextResponse.redirect(loginUrl);
         }
     }
 

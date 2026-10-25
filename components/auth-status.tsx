@@ -4,7 +4,7 @@
 import { Link } from "@/i18n/routing";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@/lib/auth-client";
+import { signOutAndLeave } from "@/lib/sign-out";
 import { useLocale, useTranslations } from "next-intl";
 
 type SessionUser = {
@@ -47,13 +47,7 @@ export function AuthStatus() {
 
 
   async function logout() {
-    await authClient.signOut({
-      fetchOptions: {
-        onSuccess: () => {
-          window.location.href = `/${locale}`;
-        },
-      },
-    });
+    await signOutAndLeave(locale);
   }
 
 

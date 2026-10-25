@@ -18,7 +18,7 @@ import { Link } from "@/i18n/routing";
 import { useLocale, useTranslations } from "next-intl";
 import { ThemeToggleButton } from "./ThemeToggleButton";
 import { LanguageSwitcher } from "./LanguageSwitcher";
-import { authClient } from "@/lib/auth-client";
+import { signOutAndLeave } from "@/lib/sign-out";
 import { cn } from "@/lib/utils";
 
 /* ─── Types ─── */
@@ -306,14 +306,7 @@ export default function MobileMenu({ open, onClose }: Props) {
 
     /* Logout */
     async function logout() {
-        await authClient.signOut({
-            fetchOptions: {
-                onSuccess: () => {
-                    onClose();
-                    window.location.href = `/${locale}`;
-                },
-            },
-        });
+        if (await signOutAndLeave(locale)) onClose();
     }
 
     /* Press feedback para botões */

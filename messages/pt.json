@@ -134,7 +134,8 @@
         "greetingPrefix": "Olá,",
         "userFallback": "usuário",
         "myBookings": "Minhas reservas",
-        "logout": "Sair"
+        "logout": "Sair",
+        "logoutError": "Não foi possível sair. Tente novamente."
     },
     "MobileMenu": {
         "welcomeBack": "Bem-vindo de volta",

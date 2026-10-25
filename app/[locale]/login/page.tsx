@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { useLocale, useTranslations } from 'next-intl';
 import { Link } from "@/i18n/routing";
 import { useSearchParams } from "next/navigation";
+import { safeRedirectPath } from "@/lib/safe-redirect";
 
 export default function LoginPage() {
   const t = useTranslations('LoginPage');
@@ -36,8 +37,9 @@ export default function LoginPage() {
       return;
     }
 
-    const redirectTarget = searchParams.get("redirect") || `/${locale}`;
-    window.location.href = redirectTarget;
+    // Only same-site paths: an external or javascript: target in the link would otherwise run right after sign-in.
+    // "callbackUrl" is what the admin layout sends.
+    window.location.href = safeRedirectPath(searchParams.get("redirect") ?? searchParams.get("callbackUrl"), `/${locale}`);
   }
 
   return (

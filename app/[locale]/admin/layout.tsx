@@ -6,6 +6,8 @@ import Link from "next/link";
 import { LayoutDashboard, CalendarDays, MessageSquare, Map, ShieldAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getTranslations } from "next-intl/server";
+import { SignOutButton } from "@/components/sign-out-button";
 
 export default async function AdminLayout({
   children,
@@ -15,6 +17,8 @@ export default async function AdminLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "AuthStatus" });
+  const signOut = <SignOutButton locale={locale} label={t("logout")} errorLabel={t("logoutError")} />;
 
   try {
     await requireAdminSession();
@@ -38,9 +42,12 @@ export default async function AdminLayout({
                 <p className="text-sm leading-6 text-muted-foreground">
                   Sua conta nao tem permissao para acessar o painel administrativo.
                 </p>
-                <Button asChild variant="outline">
-                  <Link href={`/${locale}`}>Voltar para o site</Link>
-                </Button>
+                <div className="flex flex-wrap items-center justify-center gap-3">
+                  <Button asChild variant="outline">
+                    <Link href={`/${locale}`}>Voltar para o site</Link>
+                  </Button>
+                  {signOut}
+                </div>
               </CardContent>
             </Card>
           </main>
@@ -78,9 +85,10 @@ export default async function AdminLayout({
             </nav>
           </div>
           <div className="flex items-center gap-4">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground/50 border border-muted-foreground/20 px-2 py-0.5 rounded">
+            <span className="hidden sm:inline-block text-[10px] uppercase font-bold tracking-widest text-muted-foreground/50 border border-muted-foreground/20 px-2 py-0.5 rounded">
               MVP Protected
             </span>
+            {signOut}
           </div>
         </div>
       </header>
