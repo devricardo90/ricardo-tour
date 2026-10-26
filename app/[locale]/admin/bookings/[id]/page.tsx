@@ -83,6 +83,18 @@ export default async function AdminBookingDetailPage({
     CANCELED: "Cancelada",
   };
 
+  const bookingEventLabels: Record<string, string> = {
+    CREATED: "Reserva solicitada",
+    CONFIRMED: "Reserva confirmada",
+    CANCELED: "Reserva cancelada",
+  };
+
+  const actorRoleLabels: Record<string, string> = {
+    USER: "cliente",
+    ADMIN: "admin",
+    SYSTEM: "sistema",
+  };
+
   const paymentStatusLabels: Record<string, string> = {
     UNPAID: "A combinar",
     PAID: "Pago",
@@ -279,6 +291,32 @@ export default async function AdminBookingDetailPage({
 
       {/* RT-125: controle manual de pagamentos (sinal e saldo) */}
       <PaymentsPanel bookingId={booking.id} bookingStatus={booking.status} locale={locale} />
+
+      {/* RT-124: historico da reserva (criacao, confirmacao e cancelamento, com o responsavel) */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Historico da Reserva</CardTitle>
+        </CardHeader>
+        <CardContent>
+          {booking.events.length === 0 ? (
+            <p className="text-muted-foreground text-sm">Nenhum evento registrado para esta reserva.</p>
+          ) : (
+            <ol className="space-y-1 text-xs text-muted-foreground">
+              {booking.events.map((event) => (
+                <li key={event.id}>
+                  {new Date(event.createdAt).toLocaleString(locale, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}
+                  {" · "}
+                  {bookingEventLabels[event.type] ?? event.type}
+                  {event.fromStatus ? ` (${statusLabels[event.fromStatus] ?? event.fromStatus} → ${statusLabels[event.toStatus ?? ""] ?? event.toStatus})` : ""}
+                  {" · "}
+                  {actorRoleLabels[event.actorRole] ?? event.actorRole}
+                  {event.actorName ? ` ${event.actorName}` : ""}
+                </li>
+              ))}
+            </ol>
+          )}
+        </CardContent>
+      </Card>
 
       {/* Tentativas de Pagamento */}
       <Card>

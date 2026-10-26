@@ -149,9 +149,14 @@ export async function listAllBookings() {
  * Somente leitura (RT-013G).
  */
 export async function getBookingById(id: string) {
-    return prisma.booking.findUnique({
+    const booking = await prisma.booking.findUnique({
         where: { id },
         include: {
+            // RT-124: append-only history of the booking status (who confirmed or canceled, and when).
+            events: {
+                select: { id: true, type: true, fromStatus: true, toStatus: true, actorUserId: true, actorRole: true, createdAt: true },
+                orderBy: { createdAt: "asc" },
+            },
             user: { select: { name: true, email: true } },
             trip: { select: { id: true, title: true, city: true, location: true, priceCents: true } },
             schedule: { select: { startAt: true, endAt: true, capacity: true, pricePerPersonCents: true, status: true } },
@@ -165,6 +170,17 @@ export async function getBookingById(id: string) {
             },
         },
     });
+    if (!booking) return null;
+    // Names of the people who acted on the booking (the event row keeps only the id, by design).
+    const actorIds = [...new Set(booking.events.map((event) => event.actorUserId).filter((value): value is string => !!value))];
+    const actors = actorIds.length
+        ? await prisma.user.findMany({ where: { id: { in: actorIds } }, select: { id: true, name: true } })
+        : [];
+    const actorNames = new Map(actors.map((actor) => [actor.id, actor.name]));
+    return {
+        ...booking,
+        events: booking.events.map((event) => ({ ...event, actorName: event.actorUserId ? actorNames.get(event.actorUserId) ?? null : null })),
+    };
 }
 
 /**

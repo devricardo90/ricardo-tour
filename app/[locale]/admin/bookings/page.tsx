@@ -20,6 +20,13 @@ export default async function AdminBookingsPage({
     CONFIRMED: "Confirmada",
     CANCELED: "Cancelada",
   };
+
+  const paymentStatusLabels: Record<string, string> = {
+    UNPAID: "A combinar",
+    PARTIAL: "Parcial",
+    PAID: "Pago",
+    REFUNDED: "Estornado",
+  };
   
   try {
     bookings = await getBookingsAction();
@@ -63,6 +70,7 @@ export default async function AdminBookingsPage({
                     <th className="py-3 px-4 font-semibold">Hospedes</th>
                     <th className="py-3 px-4 font-semibold">Total</th>
                     <th className="py-3 px-4 font-semibold">Status</th>
+                    <th className="py-3 px-4 font-semibold">Pagamento</th>
                     <th className="py-3 px-4 font-semibold text-right">Acoes</th>
                   </tr>
                 </thead>
@@ -99,6 +107,9 @@ export default async function AdminBookingsPage({
                         }`}>
                           {statusLabels[booking.status] ?? booking.status}
                         </span>
+                      </td>
+                      <td className="py-3 px-4 text-xs">
+                        {paymentStatusLabels[booking.paymentStatus] ?? booking.paymentStatus}
                       </td>
                       <td className="py-3 px-4 text-right">
                         <Link

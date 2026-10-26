@@ -53,7 +53,7 @@ describe.skipIf(!url)("RT-121 TOUR-03 4 h complete flow (local isolated database
       });
     }
     admin = { userId: (await prisma.user.create({ data: { name: "Admin Teste", email: `${tag}-admin@example.invalid`, role: "ADMIN" } })).id, role: "ADMIN" };
-    for (let i = 0; i < 6; i++) customers.push((await prisma.user.create({ data: { name: `Cliente ${i}`, email: `${tag}-${i}@example.invalid` } })).id);
+    for (let i = 0; i < 7; i++) customers.push((await prisma.user.create({ data: { name: `Cliente ${i}`, email: `${tag}-${i}@example.invalid` } })).id);
   }, 60_000);
 
   afterAll(async () => {
@@ -84,6 +84,37 @@ describe.skipIf(!url)("RT-121 TOUR-03 4 h complete flow (local isolated database
     const overview = await payments.getBookingPaymentsOverview(admin, created.id);
     expect(overview?.summary).toMatchObject({ totalCents: total, deposit: { expectedCents: deposit, openCents: deposit }, balance: { expectedCents: balance, openCents: balance } });
     await expect(prisma.bookingQuote.update({ where: { bookingId: created.id }, data: { depositCents: 1 } })).rejects.toThrow(/immutable/);
+  });
+
+  it("Owner sequence: 3 people, deposit verified, admin confirms with PARTIAL payment, balance at the start keeps it CONFIRMED", async () => {
+    // 1-2. The customer asks for the tour (engine, real registry): PENDING / UNPAID, R$ 900 = R$ 270 + R$ 630.
+    const { id, quote } = await engine.createPrivateBookingForUser(customers[6], { tripId: TOUR_03, scheduleId: await newSchedule(), priceTableId: "TOUR-03-4H", party: { fullFare: 3, infants: 0 }, contact });
+    expect(quote).toMatchObject({ totalCents: 90_000, depositCents: 27_000, balanceCents: 63_000 });
+    expect(await state(id)).toEqual({ status: "PENDING", paymentStatus: "UNPAID" });
+
+    // 3-4. 30% deposit by PIX: the admin records it, then verifies it. The booking is NOT confirmed by the payment.
+    const deposit = await record(id, "DEPOSIT", 27_000);
+    expect(await state(id)).toEqual({ status: "PENDING", paymentStatus: "UNPAID" });
+    await confirm(deposit.payment.id);
+    expect(await state(id)).toEqual({ status: "PENDING", paymentStatus: "PARTIAL" });
+
+    // 5-6. Explicit administrative confirmation with only the deposit paid.
+    await expect(bookings.confirmBookingByAdmin(id, { userId: admin.userId, role: "ADMIN" })).resolves.toMatchObject({ status: "CONFIRMED", paymentStatus: "PARTIAL" });
+    expect(await state(id)).toEqual({ status: "CONFIRMED", paymentStatus: "PARTIAL" });
+
+    // 7-9. 70% balance at the start of the tour (card terminal), recorded and confirmed: still CONFIRMED, now PAID.
+    const balance = await record(id, "BALANCE", 63_000, "CARD_TERMINAL");
+    expect(await state(id)).toEqual({ status: "CONFIRMED", paymentStatus: "PARTIAL" });
+    await confirm(balance.payment.id);
+    expect(await state(id)).toEqual({ status: "CONFIRMED", paymentStatus: "PAID" });
+
+    const events = await prisma.bookingEvent.findMany({ where: { bookingId: id }, orderBy: { createdAt: "asc" } });
+    expect(events.map((e) => `${e.type}:${e.toStatus}:${e.actorRole}`)).toEqual(["CREATED:PENDING:USER", "CONFIRMED:CONFIRMED:ADMIN"]);
+    // The admin detail page shows the same history with the responsible person's name.
+    const detail = await bookings.getBookingById(id);
+    expect(detail?.events.map((e) => `${e.type}:${e.actorRole}:${e.actorName}`)).toEqual(["CREATED:USER:Cliente 6", "CONFIRMED:ADMIN:Admin Teste"]);
+    const history = await prisma.bookingPaymentEvent.findMany({ where: { bookingId: id }, orderBy: { createdAt: "asc" } });
+    expect(history.map((e) => `${e.type}:${e.toStatus}:${e.amountCents}`)).toEqual(["CREATED:RECORDED:27000", "CONFIRMED:CONFIRMED:27000", "CREATED:RECORDED:63000", "CONFIRMED:CONFIRMED:63000"]);
   });
 
   it("deposit, then balance at the start of the tour: payments never confirm the booking; the admin does", async () => {
