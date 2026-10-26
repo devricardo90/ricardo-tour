@@ -12,8 +12,8 @@ import { BOOKING_LOCK_TIMEOUT, BOOKING_TRANSACTION_OPTIONS, bookingLockKey, isBo
  * Owner approves prices (RT-121), terms (RT-81/RT-118) and the payment flow (RT-125).
  *
  * Model (Owner decisions recorded in the Manual Mestre): one private group per schedule slot; closed price per group
- * by number of participants; children 0-2 pay 50% and count for capacity; deposit = prepaid tickets + bp × services,
- * balance = the rest. The price comes ONLY from an approved table (lib/commerce/price-tables.ts, empty today).
+ * by number of participants; children 0-2 only where the table's child policy is approved; deposit 30% and balance 70%
+ * of the total (RT-121). The price comes ONLY from an approved table (lib/commerce/price-tables.ts: TOUR-03 4 h).
  */
 const text = (max: number) =>
   z
@@ -26,6 +26,8 @@ const text = (max: number) =>
 export const privateBookingInputSchema = z.object({
   tripId: z.string().trim().min(1).max(64),
   scheduleId: z.string().trim().min(1).max(64),
+  /** The approved option (e.g. "TOUR-03-4H"); required when a trip has more than one approved table. */
+  priceTableId: z.string().trim().min(1).max(64).optional(),
   party: z.object({
     fullFare: z.number().int().min(1).max(20),
     infants: z.number().int().min(0).max(20),
@@ -43,7 +45,7 @@ export type PrivateBookingInput = z.infer<typeof privateBookingInputSchema>;
 
 export type PrivateBookingDeps = {
   /** Approved table lookup; tests inject a TEST ONLY table, production uses the (empty) approved registry. */
-  resolvePriceTable?: (tripId: string) => ApprovedGroupPriceTable | null;
+  resolvePriceTable?: (tripId: string, priceTableId?: string) => ApprovedGroupPriceTable | null;
   now?: () => Date;
 };
 
@@ -57,7 +59,7 @@ export async function createPrivateBookingForUser(userId: string, rawInput: unkn
   if (!parsed.success) {
     throw new DomainError("Dados da reserva invalidos", { code: "INVALID_BOOKING_INPUT", status: 400 });
   }
-  const { tripId, scheduleId, party, contact } = parsed.data;
+  const { tripId, scheduleId, priceTableId, party, contact } = parsed.data;
   const now = deps.now ?? (() => new Date());
 
   // Same public catalog gate as the tour page: a hidden trip answers exactly like a missing one.
@@ -65,10 +67,18 @@ export async function createPrivateBookingForUser(userId: string, rawInput: unkn
     throw new DomainError("Trip nao encontrada", { code: "TRIP_NOT_FOUND", status: 404 });
   }
 
-  const table = (deps.resolvePriceTable ?? getApprovedGroupPriceTable)(tripId);
-  if (!table || table.tripId !== tripId) {
+  const table = (deps.resolvePriceTable ?? getApprovedGroupPriceTable)(tripId, priceTableId);
+  if (!table || table.tripId !== tripId || (priceTableId !== undefined && table.id !== priceTableId)) {
     throw new DomainError("Este passeio e reservado mediante solicitacao de disponibilidade. Fale com a equipe pelo WhatsApp.", {
       code: "PRICE_NOT_APPROVED",
+      status: 409,
+    });
+  }
+
+  // RT-121: no child rule is presumed. Without an approved policy for this table, children 0-2 cannot be quoted here.
+  if (party.infants > 0 && table.childPolicy !== "INFANT_HALF_FARE_0_2") {
+    throw new DomainError("Para criancas de 0 a 2 anos, fale com a equipe pelo WhatsApp para confirmar as condicoes.", {
+      code: "CHILD_POLICY_NOT_APPROVED",
       status: 409,
     });
   }
@@ -78,10 +88,7 @@ export async function createPrivateBookingForUser(userId: string, rawInput: unkn
   let split;
   try {
     quote = quoteGroupPrice(table, { fullFare: party.fullFare, infants: party.infants });
-    const prepaid = table.prepaidTicketsCents
-      ? party.fullFare * table.prepaidTicketsCents.fullFare + party.infants * table.prepaidTicketsCents.infant
-      : 0;
-    split = splitDeposit(quote.totalCents, prepaid, table.depositBasisPoints);
+    split = splitDeposit(quote.totalCents);
   } catch (error) {
     if (error instanceof PricingError) {
       throw new DomainError(PRICING_ERROR_MESSAGES[error.code] ?? "Composicao do grupo invalida.", { code: error.code, status: 400 });
@@ -144,7 +151,8 @@ export async function createPrivateBookingForUser(userId: string, rawInput: unkn
               infantCount: party.infants,
               groupTotalCents: table.groupTotalCents[quote.participants],
               totalCents: split.totalCents,
-              prepaidTicketsCents: split.prepaidTicketsCents,
+              // RT-121 discarded the "tickets + 30%" formula: tickets are part of the total, nothing is split off.
+              prepaidTicketsCents: 0,
               depositBasisPoints: split.depositBasisPoints,
               depositCents: split.depositCents,
               balanceCents: split.balanceCents,

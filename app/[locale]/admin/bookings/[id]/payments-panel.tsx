@@ -77,6 +77,10 @@ export async function PaymentsPanel({ bookingId, bookingStatus, locale }: { book
                 Total contratado {formatBrl(overview.summary.totalCents, locale)} · confirmado{" "}
                 {formatBrl(overview.summary.confirmedCents, locale)} · cotacao {overview.quote.priceTableId} v{overview.quote.priceTableVersion}
               </p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Politica RT-121: sinal de 30% do total na reserva; saldo de 70% pago no inicio do passeio, no encontro com o
+                cliente. Confirmar um pagamento nao confirma a reserva.
+              </p>
             </div>
 
             <div className="overflow-x-auto">

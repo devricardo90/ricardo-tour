@@ -3,13 +3,17 @@
 // usable for sales only after the Owner approves it and it is stored through the reviewed commercial flow (RT-110 /
 // price publication gate); until then the tours stay on "orçamento sob consulta".
 //
-// Rules implemented, as recorded in the Manual Mestre (Owner decisions, 18/10/2026):
+// Rules implemented:
 // - Closed price per group, by number of participants (TOUR-01 CR-12; TOUR-03 Ficha v1.0; TOUR-02 §11.18 model).
-// - Children 0–2 years inclusive pay 50% of the per-person price of the group band; from 3 years, 100%; every child
-//   counts for capacity and for the band (TOUR-01 CR-13/CR-14, TOUR-03 §12). TOTAL = P(N) × (A + 0,5 × B), in cents.
-// - Deposit (TOUR-01 CR-18, §10.19): S = T − I; at booking I + 30% of S; balance 70% of S. With no tickets bought in
-//   advance (I = 0) this is simply 30% / 70% of the total, which is the general decision for the other tours.
-// The percentage is a parameter so that a different Owner decision does not need a code change.
+// - Infant formula (TOUR-01 CR-13/CR-14): children 0–2 pay 50% of the per-person price of the band and count for the
+//   band; TOTAL = P(N) × (A + 0,5 × B), in cents. It applies ONLY to a table whose child policy the Owner approved
+//   (price-tables.ts); it is never extended to another tour automatically.
+// - Deposit (RT-121, Owner decision 26/10/2026, ALL tours, TOUR-01 included with its tickets inside the total):
+//   deposit = 30% of the TOTAL, balance = 70% of the TOTAL, paid at the start of the tour. The former TOUR-01
+//   "tickets + 30% of services" formula (CR-18) is discarded.
+
+/** RT-121: deposit share of the total, in basis points (3000 = 30%). */
+export const DEPOSIT_BASIS_POINTS = 3000;
 
 export type GroupPriceTable = {
   currency: "BRL";
@@ -34,11 +38,9 @@ export type GroupQuote = {
 
 export type DepositSplit = {
   totalCents: number;
-  /** Tickets bought by the agency at booking time (I); 0 when the tour has no prepaid tickets. */
-  prepaidTicketsCents: number;
   depositCents: number;
   balanceCents: number;
-  /** Deposit share of the services part (S = T − I), in basis points (3000 = 30%). */
+  /** Deposit share of the total, in basis points (RT-121: 3000 = 30%). */
   depositBasisPoints: number;
 };
 
@@ -55,8 +57,6 @@ export class PricingError extends Error {
     this.name = "PricingError";
   }
 }
-
-export const DEFAULT_DEPOSIT_BASIS_POINTS = 3000;
 
 const isNonNegativeInt = (n: unknown): n is number => typeof n === "number" && Number.isInteger(n) && n >= 0;
 
@@ -99,28 +99,15 @@ export function quoteGroupPrice(table: GroupPriceTable, party: PartyComposition)
   return { participants, perPersonCents, totalCents, currency: "BRL" };
 }
 
-/** Deposit at booking and balance before the tour: deposit = I + bp × (T − I); balance = T − deposit. */
-export function splitDeposit(
-  totalCents: number,
-  prepaidTicketsCents = 0,
-  depositBasisPoints = DEFAULT_DEPOSIT_BASIS_POINTS,
-): DepositSplit {
-  if (!isNonNegativeInt(totalCents) || totalCents === 0 || !isNonNegativeInt(prepaidTicketsCents)) {
+/**
+ * RT-121 deposit and balance of a total, in whole cents: deposit = 30% of the total rounded half up to the cent (only
+ * when the total is not a multiple of 10 cents), balance = total − deposit, so the two always add up to the total.
+ */
+export function splitDeposit(totalCents: number): DepositSplit {
+  if (!Number.isSafeInteger(totalCents) || totalCents <= 0) {
     throw new PricingError("INVALID_AMOUNT", "Valores precisam ser centavos inteiros");
   }
-  if (prepaidTicketsCents > totalCents) {
-    throw new PricingError("INVALID_AMOUNT", "Os ingressos nao podem exceder o total");
-  }
-  if (!Number.isInteger(depositBasisPoints) || depositBasisPoints < 0 || depositBasisPoints > 10000) {
-    throw new PricingError("INVALID_AMOUNT", "Percentual de sinal invalido");
-  }
-  const services = totalCents - prepaidTicketsCents;
-  const depositCents = prepaidTicketsCents + Math.round((services * depositBasisPoints) / 10000);
-  return {
-    totalCents,
-    prepaidTicketsCents,
-    depositCents,
-    balanceCents: totalCents - depositCents,
-    depositBasisPoints,
-  };
+  // Integer arithmetic only: floor((T × bp + 5000) / 10000) is T × bp / 10000 rounded half up.
+  const depositCents = Math.floor((totalCents * DEPOSIT_BASIS_POINTS + 5000) / 10000);
+  return { totalCents, depositCents, balanceCents: totalCents - depositCents, depositBasisPoints: DEPOSIT_BASIS_POINTS };
 }

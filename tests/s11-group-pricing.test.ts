@@ -54,34 +54,27 @@ describe("Sprint 11: group price (closed price per group, infant rule)", () => {
   });
 });
 
-describe("Sprint 11: deposit and balance (CR-18 formula)", () => {
-  it("without prepaid tickets: 30% at booking, 70% before the tour", () => {
-    expect(splitDeposit(200000)).toEqual({ totalCents: 200000, prepaidTicketsCents: 0, depositCents: 60000, balanceCents: 140000, depositBasisPoints: 3000 });
+describe("Sprint 11: deposit and balance (RT-121: 30% / 70% of the total)", () => {
+  it("30% of the total at booking, 70% at the start of the tour", () => {
+    expect(splitDeposit(200000)).toEqual({ totalCents: 200000, depositCents: 60000, balanceCents: 140000, depositBasisPoints: 3000 });
   });
 
-  it("with prepaid tickets: deposit = I + 30% × (T − I); tickets are never charged twice", () => {
-    const split = splitDeposit(200000, 50000);
-    expect(split.depositCents).toBe(50000 + 45000);
-    expect(split.balanceCents).toBe(105000);
-    expect(split.depositCents + split.balanceCents).toBe(200000);
-  });
-
-  it("deposit + balance always equals the total, for any rounding", () => {
-    for (const total of [1, 3, 999, 100001, 123457]) {
-      for (const tickets of [0, 1, Math.floor(total / 3)]) {
-        const split = splitDeposit(total, tickets);
-        expect(split.depositCents + split.balanceCents).toBe(total);
-        expect(split.depositCents).toBeGreaterThanOrEqual(tickets);
-      }
+  it("deposit + balance always equals the total; the deposit is rounded half up to the cent", () => {
+    for (const total of [1, 3, 5, 15, 999, 100001, 123457, 2_147_483_647]) {
+      const split = splitDeposit(total);
+      expect(split.depositCents + split.balanceCents).toBe(total);
+      expect(Number.isInteger(split.depositCents)).toBe(true);
+      expect(Math.abs(split.depositCents - total * 0.3)).toBeLessThanOrEqual(0.5);
     }
+    expect(splitDeposit(5).depositCents).toBe(2); // 1.5 -> 2
+    expect(splitDeposit(15).depositCents).toBe(5); // 4.5 -> 5
+    expect(splitDeposit(1).depositCents).toBe(0); // 0.3 -> 0
   });
 
-  it("keeps the percentage configurable and validated", () => {
-    expect(splitDeposit(100000, 0, 5000).depositCents).toBe(50000);
-    expect(() => splitDeposit(100000, 0, 10001)).toThrow(PricingError);
-    expect(() => splitDeposit(100000, 100001)).toThrow(PricingError);
-    expect(() => splitDeposit(0)).toThrow(PricingError);
-    expect(() => splitDeposit(100.5)).toThrow(PricingError);
+  it("refuses totals that are not positive whole cents", () => {
+    for (const total of [0, -100, 100.5, Number.NaN, Number.POSITIVE_INFINITY, 2 ** 53]) {
+      expect(() => splitDeposit(total)).toThrow(PricingError);
+    }
   });
 
   it("matches the TOUR-03 review calculator deposit (30% of the total, no tickets)", () => {

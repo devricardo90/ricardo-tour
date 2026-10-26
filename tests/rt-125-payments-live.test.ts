@@ -19,7 +19,7 @@ const TEST_ONLY_TABLE = (tripId: string): ApprovedGroupPriceTable => ({
   tripId,
   currency: "BRL",
   groupTotalCents: { 1: 100_000, 2: 120_000, 3: 150_000, 4: 160_000 },
-  depositBasisPoints: 3000,
+  childPolicy: "NOT_APPROVED",
   approvalRecord: "TEST ONLY — not an approval",
 });
 

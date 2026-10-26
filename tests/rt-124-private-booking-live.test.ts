@@ -16,8 +16,8 @@ const TEST_ONLY_TABLE = (tripId: string): ApprovedGroupPriceTable => ({
   tripId,
   currency: "BRL",
   groupTotalCents: { 1: 100_000, 2: 120_000, 3: 150_000, 4: 160_000 },
-  depositBasisPoints: 3000,
-  prepaidTicketsCents: { fullFare: 5_000, infant: 2_500 },
+  // The infant mechanism is exercised with TEST ONLY data; no real tour has it approved (RT-121).
+  childPolicy: "INFANT_HALF_FARE_0_2",
   approvalRecord: "TEST ONLY — not an approval",
 });
 
@@ -65,7 +65,7 @@ describe.skipIf(!url)("RT-124 private group booking (local isolated database onl
     await prisma.$disconnect();
   });
 
-  it("refuses every booking while no price table is approved (the real registry is empty)", async () => {
+  it("refuses a trip that has no approved table in the real registry (PRICE_NOT_APPROVED preserved)", async () => {
     const scheduleId = await newSchedule();
     await expect(
       service.createPrivateBookingForUser(userIds[0], { tripId, scheduleId, party: { fullFare: 2, infants: 0 }, contact }),
@@ -76,14 +76,14 @@ describe.skipIf(!url)("RT-124 private group booking (local isolated database onl
   it("stores the booking, its immutable quote snapshot, the contact and a CREATED event in one write", async () => {
     const scheduleId = await newSchedule();
     const created = await service.createPrivateBookingForUser(userIds[0], { tripId, scheduleId, party: { fullFare: 2, infants: 1 }, contact }, deps());
-    // 3 participants: P(3) = 150000 / 3 = 50000; total = 50000 × (2 + 0.5) = 125000; tickets 2×5000 + 2500 = 12500;
-    // deposit = 12500 + 30% × 112500 = 46250; balance = 78750.
+    // 3 participants: P(3) = 150000 / 3 = 50000; total = 50000 × (2 + 0.5) = 125000.
+    // RT-121: deposit = 30% × 125000 = 37500; balance = 87500.
     expect(created).toMatchObject({ status: "PENDING", paymentStatus: "UNPAID", guestCount: 3, totalPriceCents: 125_000 });
-    expect(created.quote).toMatchObject({ totalCents: 125_000, depositCents: 46_250, balanceCents: 78_750, priceTableId: "TEST-ONLY-TABLE" });
+    expect(created.quote).toMatchObject({ totalCents: 125_000, depositCents: 37_500, balanceCents: 87_500, priceTableId: "TEST-ONLY-TABLE" });
 
     const row = await prisma.booking.findUniqueOrThrow({ where: { id: created.id }, include: { quote: true, contact: true, events: true } });
     expect(row).toMatchObject({ pricingModel: "PRIVATE_GROUP", fullFareCount: 2, infantCount: 1 });
-    expect(row.quote).toMatchObject({ participants: 3, groupTotalCents: 150_000, prepaidTicketsCents: 12_500, depositBasisPoints: 3000 });
+    expect(row.quote).toMatchObject({ participants: 3, groupTotalCents: 150_000, prepaidTicketsCents: 0, depositBasisPoints: 3000 });
     expect(row.contact).toMatchObject({ fullName: "Cliente Teste", language: "pt", pickupAddress: "Hotel em Copacabana" });
     expect(row.events.map((e) => [e.type, e.fromStatus, e.toStatus, e.actorRole])).toEqual([["CREATED", null, "PENDING", "USER"]]);
 

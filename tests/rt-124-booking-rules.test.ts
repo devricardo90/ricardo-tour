@@ -4,9 +4,9 @@ import { getApprovedGroupPriceTable, listApprovedGroupPriceTables } from "@/lib/
 import { privateBookingInputSchema } from "@/lib/services/private-booking.service";
 
 describe("RT-124 rules", () => {
-  it("no group price table is approved yet (RT-121 pending): the engine can sell nothing", () => {
-    expect(listApprovedGroupPriceTables()).toHaveLength(0);
-    for (const tripId of ["cmlibniq40000z4zqkbujnutt", "any-trip"]) expect(getApprovedGroupPriceTable(tripId)).toBeNull();
+  it("only the RT-121 approved table exists (TOUR-03 4 h); any other trip has none (detail in rt-121-payment-policy)", () => {
+    expect(listApprovedGroupPriceTables().map((table) => table.id)).toEqual(["TOUR-03-4H"]);
+    for (const tripId of ["cmlhxkpy9000028zq27rhytew", "cmli1a6im000034zqqzc9sppb", "any-trip"]) expect(getApprovedGroupPriceTable(tripId)).toBeNull();
   });
 
   it("allows only the structural transitions PENDING -> CONFIRMED/CANCELED and CONFIRMED -> CANCELED", () => {
