@@ -254,11 +254,15 @@ export async function getBookingPaymentsOverview(actor: AdminActor, bookingId: s
     },
   });
   if (!booking || booking.pricingModel !== "PRIVATE_GROUP" || !booking.quote) return null;
+  // Names of the admins who acted (the event row keeps only the id, by design).
+  const actorIds = [...new Set(booking.paymentEvents.map((event) => event.actorUserId))];
+  const actors = actorIds.length ? await prisma.user.findMany({ where: { id: { in: actorIds } }, select: { id: true, name: true } }) : [];
+  const actorNames = new Map(actors.map((user) => [user.id, user.name]));
   return {
     quote: booking.quote,
     paymentStatus: booking.paymentStatus,
     payments: booking.payments,
-    events: booking.paymentEvents,
+    events: booking.paymentEvents.map((event) => ({ ...event, actorName: actorNames.get(event.actorUserId) ?? null })),
     summary: summarizePayments(booking.quote, booking.payments as PaymentLine[]),
   };
 }

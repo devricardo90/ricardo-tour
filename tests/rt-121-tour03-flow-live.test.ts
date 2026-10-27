@@ -113,8 +113,13 @@ describe.skipIf(!url)("RT-121 TOUR-03 4 h complete flow (local isolated database
     // The admin detail page shows the same history with the responsible person's name.
     const detail = await bookings.getBookingById(id);
     expect(detail?.events.map((e) => `${e.type}:${e.actorRole}:${e.actorName}`)).toEqual(["CREATED:USER:Cliente 6", "CONFIRMED:ADMIN:Admin Teste"]);
+    expect(detail?.quote).toMatchObject({ totalCents: 90_000, participants: 3, priceTableId: "TOUR-03-4H" });
     const history = await prisma.bookingPaymentEvent.findMany({ where: { bookingId: id }, orderBy: { createdAt: "asc" } });
     expect(history.map((e) => `${e.type}:${e.toStatus}:${e.amountCents}`)).toEqual(["CREATED:RECORDED:27000", "CONFIRMED:CONFIRMED:27000", "CREATED:RECORDED:63000", "CONFIRMED:CONFIRMED:63000"]);
+    // The financial history shows who acted by name; the stored row still keeps only the id.
+    const overview = await payments.getBookingPaymentsOverview(admin, id);
+    expect(overview?.events.map((e) => e.actorName)).toEqual(["Admin Teste", "Admin Teste", "Admin Teste", "Admin Teste"]);
+    expect(overview?.events.every((e) => e.actorUserId === admin.userId)).toBe(true);
   });
 
   it("deposit, then balance at the start of the tour: payments never confirm the booking; the admin does", async () => {

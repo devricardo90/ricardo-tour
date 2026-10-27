@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getBookingByIdAction } from "@/app/actions/admin";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getLocalizedField } from "@/lib/localized-field";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronDown } from "lucide-react";
 import { CancelBookingButton } from "./cancel-booking-button";
 import { ConfirmBookingButton } from "./confirm-booking-button";
 import { PaymentsPanel } from "./payments-panel";
@@ -39,7 +39,7 @@ export default async function AdminBookingDetailPage({
             <CardTitle className="text-destructive">Erro ao carregar reserva</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>Nao foi possivel carregar os dados da reserva. Verifique suas permissoes.</p>
+            <p>Não foi possível carregar os dados da reserva. Verifique suas permissões.</p>
           </CardContent>
         </Card>
       </div>
@@ -102,6 +102,24 @@ export default async function AdminBookingDetailPage({
     PARTIAL: "Parcial",
   };
 
+  const scheduleStatusLabels: Record<string, string> = {
+    OPEN: "Disponível",
+    CLOSED: "Fechada",
+  };
+
+  // The tour happens in Rio: date and time are always shown in Brazil's time zone.
+  const tourDate = (value: Date) =>
+    new Date(value).toLocaleDateString(locale, { weekday: "long", day: "2-digit", month: "long", year: "numeric", timeZone: "America/Sao_Paulo" });
+  const tourTime = (value: Date) =>
+    new Date(value).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" });
+  const dateTime = (value: Date) =>
+    new Date(value).toLocaleString(locale, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  const brl = (cents: number) => (cents / 100).toLocaleString(locale, { style: "currency", currency: "BRL" });
+
+  // RT-124: a private booking has a closed group price (quote snapshot); the legacy per-person schedule price does not apply.
+  const quote = booking.quote;
+  const participants = quote?.participants ?? booking.guestCount;
+
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-4">
@@ -114,10 +132,12 @@ export default async function AdminBookingDetailPage({
         </Link>
       </div>
 
-      <div className="flex items-start justify-between">
-        <div>
+      <div className="flex flex-wrap items-start justify-between gap-4">
+        <div className="min-w-0">
           <h1 className="text-3xl font-bold tracking-tight">Detalhe da Reserva</h1>
-          <p className="text-xs text-muted-foreground font-mono mt-1">{booking.id}</p>
+          <p className="mt-1 break-all text-[11px] text-muted-foreground/80">
+            Ref. <span className="font-mono select-all" title={booking.id}>{booking.id}</span>
+          </p>
         </div>
         <div className="flex flex-col items-end gap-3">
           <div className="flex items-center gap-2">
@@ -165,15 +185,25 @@ export default async function AdminBookingDetailPage({
           </CardContent>
         </Card>
 
-        {/* Viagem */}
+        {/* Passeio */}
         <Card>
           <CardHeader>
-            <CardTitle className="text-base">Viagem</CardTitle>
+            <CardTitle className="text-base">Passeio</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <div>
-              <span className="text-muted-foreground text-xs">Titulo</span>
+              <span className="text-muted-foreground text-xs">Passeio</span>
               <p className="font-medium">{tripTitle}</p>
+            </div>
+            <div>
+              <span className="text-muted-foreground text-xs">Data e horário</span>
+              {booking.schedule ? (
+                <p className="font-medium first-letter:uppercase">
+                  {tourDate(booking.schedule.startAt)} · {tourTime(booking.schedule.startAt)}
+                </p>
+              ) : (
+                <p className="text-muted-foreground">A definir</p>
+              )}
             </div>
             <div>
               <span className="text-muted-foreground text-xs">Cidade</span>
@@ -181,7 +211,7 @@ export default async function AdminBookingDetailPage({
             </div>
             {booking.trip.location && (
               <div>
-                <span className="text-muted-foreground text-xs">Localizacao</span>
+                <span className="text-muted-foreground text-xs">Localização</span>
                 <p>{booking.trip.location}</p>
               </div>
             )}
@@ -195,41 +225,37 @@ export default async function AdminBookingDetailPage({
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             <div>
-              <span className="text-muted-foreground text-xs">Hospedes</span>
-              <p className="font-medium">{booking.guestCount}</p>
-            </div>
-            <div>
-              <span className="text-muted-foreground text-xs">Total</span>
+              <span className="text-muted-foreground text-xs">Participantes</span>
               <p className="font-medium">
-                {(booking.totalPriceCents / 100).toLocaleString(locale, {
-                  style: "currency",
-                  currency: "BRL",
-                })}
+                {participants}
+                {quote && quote.infantCount > 0 && (
+                  <span className="font-normal text-muted-foreground">
+                    {" "}({quote.fullFareCount} pagantes integrais, {quote.infantCount} {quote.infantCount === 1 ? "bebê" : "bebês"})
+                  </span>
+                )}
               </p>
             </div>
+            {quote ? (
+              <div>
+                <span className="text-muted-foreground text-xs">Total fechado do grupo (passeio privativo)</span>
+                <p className="text-xl font-bold">{brl(quote.totalCents)}</p>
+                <p className="text-xs text-muted-foreground">
+                  Preço por grupo, não por pessoa · tabela {quote.priceTableId} v{quote.priceTableVersion}
+                </p>
+              </div>
+            ) : (
+              <div>
+                <span className="text-muted-foreground text-xs">Total</span>
+                <p className="font-medium">{brl(booking.totalPriceCents)}</p>
+              </div>
+            )}
             <div>
-              <span className="text-muted-foreground text-xs">Criado em</span>
-              <p>
-                {new Date(booking.createdAt).toLocaleDateString(locale, {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
+              <span className="text-muted-foreground text-xs">Solicitada em</span>
+              <p>{dateTime(booking.createdAt)}</p>
             </div>
             <div>
-              <span className="text-muted-foreground text-xs">Atualizado em</span>
-              <p>
-                {new Date(booking.updatedAt).toLocaleDateString(locale, {
-                  day: "2-digit",
-                  month: "2-digit",
-                  year: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </p>
+              <span className="text-muted-foreground text-xs">Atualizada em</span>
+              <p>{dateTime(booking.updatedAt)}</p>
             </div>
           </CardContent>
         </Card>
@@ -241,28 +267,20 @@ export default async function AdminBookingDetailPage({
           </CardHeader>
           <CardContent className="space-y-2 text-sm">
             {!booking.schedule ? (
-              <p className="text-muted-foreground">Sem data especifica agendada.</p>
+              <p className="text-muted-foreground">Sem data específica agendada.</p>
             ) : (
               <>
                 <div>
-                  <span className="text-muted-foreground text-xs">Inicio</span>
-                  <p className="font-medium">
-                    {new Date(booking.schedule.startAt).toLocaleDateString(locale, {
-                      day: "2-digit",
-                      month: "2-digit",
-                      year: "numeric",
-                    })}
+                  <span className="text-muted-foreground text-xs">Início</span>
+                  <p className="font-medium first-letter:uppercase">
+                    {tourDate(booking.schedule.startAt)} · {tourTime(booking.schedule.startAt)}
                   </p>
                 </div>
                 {booking.schedule.endAt && (
                   <div>
                     <span className="text-muted-foreground text-xs">Fim</span>
-                    <p>
-                      {new Date(booking.schedule.endAt).toLocaleDateString(locale, {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                      })}
+                    <p className="first-letter:uppercase">
+                      {tourDate(booking.schedule.endAt)} · {tourTime(booking.schedule.endAt)}
                     </p>
                   </div>
                 )}
@@ -270,18 +288,15 @@ export default async function AdminBookingDetailPage({
                   <span className="text-muted-foreground text-xs">Capacidade da agenda</span>
                   <p>{booking.schedule.capacity}</p>
                 </div>
-                <div>
-                  <span className="text-muted-foreground text-xs">Preco por pessoa (agenda)</span>
-                  <p>
-                    {(booking.schedule.pricePerPersonCents / 100).toLocaleString(locale, {
-                      style: "currency",
-                      currency: "BRL",
-                    })}
-                  </p>
-                </div>
+                {!quote && (
+                  <div>
+                    <span className="text-muted-foreground text-xs">Preço por pessoa (agenda)</span>
+                    <p>{brl(booking.schedule.pricePerPersonCents)}</p>
+                  </div>
+                )}
                 <div>
                   <span className="text-muted-foreground text-xs">Status da agenda</span>
-                  <p className="uppercase font-medium">{booking.schedule.status}</p>
+                  <p className="font-medium">{scheduleStatusLabels[booking.schedule.status] ?? booking.schedule.status}</p>
                 </div>
               </>
             )}
@@ -295,22 +310,29 @@ export default async function AdminBookingDetailPage({
       {/* RT-124: historico da reserva (criacao, confirmacao e cancelamento, com o responsavel) */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Historico da Reserva</CardTitle>
+          <CardTitle className="text-base">Histórico da Reserva</CardTitle>
         </CardHeader>
         <CardContent>
           {booking.events.length === 0 ? (
             <p className="text-muted-foreground text-sm">Nenhum evento registrado para esta reserva.</p>
           ) : (
-            <ol className="space-y-1 text-xs text-muted-foreground">
+            <ol className="space-y-2 border-l pl-4 text-xs">
               {booking.events.map((event) => (
                 <li key={event.id}>
-                  {new Date(event.createdAt).toLocaleString(locale, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })}
-                  {" · "}
-                  {bookingEventLabels[event.type] ?? event.type}
-                  {event.fromStatus ? ` (${statusLabels[event.fromStatus] ?? event.fromStatus} → ${statusLabels[event.toStatus ?? ""] ?? event.toStatus})` : ""}
-                  {" · "}
-                  {actorRoleLabels[event.actorRole] ?? event.actorRole}
-                  {event.actorName ? ` ${event.actorName}` : ""}
+                  <p className="font-medium">
+                    {bookingEventLabels[event.type] ?? event.type}
+                    {event.fromStatus ? (
+                      <span className="font-normal text-muted-foreground">
+                        {` (${statusLabels[event.fromStatus] ?? event.fromStatus} → ${statusLabels[event.toStatus ?? ""] ?? event.toStatus})`}
+                      </span>
+                    ) : null}
+                  </p>
+                  <p className="text-muted-foreground">
+                    {dateTime(event.createdAt)}
+                    {" · "}
+                    {actorRoleLabels[event.actorRole] ?? event.actorRole}
+                    {event.actorName ? ` ${event.actorName}` : ""}
+                  </p>
                 </li>
               ))}
             </ol>
@@ -318,14 +340,19 @@ export default async function AdminBookingDetailPage({
         </CardContent>
       </Card>
 
-      {/* Tentativas de Pagamento */}
+      {/* Tentativas de Pagamento (recolhivel; dados preservados para auditoria) */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Tentativas de Pagamento</CardTitle>
-        </CardHeader>
+        <details className="group">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-6 py-4 [&::-webkit-details-marker]:hidden">
+            <span className="text-base font-semibold">Tentativas de Pagamento (online)</span>
+            <span className="flex items-center gap-2 text-xs text-muted-foreground">
+              {booking.paymentAttempts.length === 0 ? "Nenhum registro" : `${booking.paymentAttempts.length} ${booking.paymentAttempts.length === 1 ? "registro" : "registros"}`}
+              <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+            </span>
+          </summary>
         <CardContent>
           {booking.paymentAttempts.length === 0 ? (
-            <p className="text-muted-foreground text-sm">Nenhuma tentativa de pagamento registrada.</p>
+            <p className="text-muted-foreground text-sm">Nenhuma tentativa de pagamento online. Os pagamentos desta reserva são registrados manualmente no painel acima.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
@@ -386,16 +413,22 @@ export default async function AdminBookingDetailPage({
             </div>
           )}
         </CardContent>
+        </details>
       </Card>
 
-      {/* Logs de E-mail */}
+      {/* Logs de E-mail (recolhivel; dados preservados para auditoria) */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-base">Logs de E-mail</CardTitle>
-        </CardHeader>
+        <details className="group">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-6 py-4 [&::-webkit-details-marker]:hidden">
+            <span className="text-base font-semibold">Logs de E-mail</span>
+            <span className="flex items-center gap-2 text-xs text-muted-foreground">
+              {booking.emailLogs.length === 0 ? "Nenhum registro" : `${booking.emailLogs.length} ${booking.emailLogs.length === 1 ? "registro" : "registros"}`}
+              <ChevronDown className="h-4 w-4 transition-transform group-open:rotate-180" aria-hidden="true" />
+            </span>
+          </summary>
         <CardContent>
           {booking.emailLogs.length === 0 ? (
-            <p className="text-muted-foreground text-sm">Nenhum e-mail registrado para esta reserva.</p>
+            <p className="text-muted-foreground text-sm">Nenhum e-mail enviado para esta reserva. O sistema não envia confirmações comerciais automaticamente.</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm border-collapse">
@@ -449,6 +482,7 @@ export default async function AdminBookingDetailPage({
             </div>
           )}
         </CardContent>
+        </details>
       </Card>
     </div>
   );

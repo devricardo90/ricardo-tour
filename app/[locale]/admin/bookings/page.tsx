@@ -38,7 +38,7 @@ export default async function AdminBookingsPage({
             <CardTitle className="text-destructive">Erro ao carregar reservas</CardTitle>
           </CardHeader>
           <CardContent>
-            <p>Nao foi possivel carregar a lista de reservas. Verifique suas permissoes.</p>
+            <p>Não foi possível carregar a lista de reservas. Verifique suas permissões.</p>
           </CardContent>
         </Card>
       </div>
@@ -65,13 +65,13 @@ export default async function AdminBookingsPage({
                   <tr className="border-b text-left">
                     <th className="py-3 px-4 font-semibold">ID</th>
                     <th className="py-3 px-4 font-semibold">Cliente</th>
-                    <th className="py-3 px-4 font-semibold">Viagem</th>
+                    <th className="py-3 px-4 font-semibold">Passeio</th>
                     <th className="py-3 px-4 font-semibold">Data</th>
-                    <th className="py-3 px-4 font-semibold">Hospedes</th>
+                    <th className="py-3 px-4 font-semibold">Participantes</th>
                     <th className="py-3 px-4 font-semibold">Total</th>
                     <th className="py-3 px-4 font-semibold">Status</th>
                     <th className="py-3 px-4 font-semibold">Pagamento</th>
-                    <th className="py-3 px-4 font-semibold text-right">Acoes</th>
+                    <th className="py-3 px-4 font-semibold text-right">Ações</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -114,9 +114,9 @@ export default async function AdminBookingsPage({
                       <td className="py-3 px-4 text-right">
                         <Link
                           href={`/${locale}/admin/bookings/${booking.id}`}
-                          className="text-xs text-primary hover:underline"
+                          className="inline-flex items-center whitespace-nowrap rounded-md bg-primary px-3 py-1.5 text-xs font-semibold text-primary-foreground shadow-sm hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 dark:border dark:border-primary-foreground/20"
                         >
-                          Ver detalhes
+                          Abrir reserva
                         </Link>
                       </td>
                     </tr>

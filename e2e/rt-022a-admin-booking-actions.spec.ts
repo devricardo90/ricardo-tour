@@ -78,14 +78,14 @@ test.describe.serial("RT-022A admin booking actions local smoke", () => {
 
     await page.goto(`/pt/admin/bookings/${booking.id}`);
     await expect(page.getByRole("heading", { name: "Detalhe da Reserva" })).toBeVisible();
-    await expect(page.getByText("Pendente")).toBeVisible();
-    await expect(page.getByText("Pago")).toBeVisible();
+    await expect(page.getByText("Pendente", { exact: true })).toBeVisible();
+    await expect(page.getByText("Pago", { exact: true })).toBeVisible();
 
     page.once("dialog", (dialog) => dialog.accept());
     await page.getByRole("button", { name: "Confirmar Reserva" }).click();
 
-    await expect(page.getByText("Confirmada")).toBeVisible();
-    await expect(page.getByText("Pago")).toBeVisible();
+    await expect(page.getByText("Confirmada", { exact: true })).toBeVisible();
+    await expect(page.getByText("Pago", { exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Confirmar Reserva" })).toHaveCount(0);
 
     await expect.poll(async () => getBooking(booking.id)).toMatchObject({
@@ -98,7 +98,7 @@ test.describe.serial("RT-022A admin booking actions local smoke", () => {
     const booking = await createSmokeBooking("PENDING", "UNPAID");
 
     await loginAsAdmin(page, `/pt/admin/bookings/${booking.id}`);
-    await expect(page.getByText("Pendente")).toBeVisible();
+    await expect(page.getByText("Pendente", { exact: true })).toBeVisible();
 
     page.once("dialog", (dialog) => dialog.accept());
     await page.getByRole("button", { name: "Cancelar Reserva" }).click();
@@ -114,7 +114,7 @@ test.describe.serial("RT-022A admin booking actions local smoke", () => {
     const booking = await createSmokeBooking("CONFIRMED", "PAID");
 
     await loginAsAdmin(page, `/pt/admin/bookings/${booking.id}`);
-    await expect(page.getByText("Confirmada")).toBeVisible();
+    await expect(page.getByText("Confirmada", { exact: true })).toBeVisible();
 
     page.once("dialog", (dialog) => dialog.accept());
     await page.getByRole("button", { name: "Cancelar Reserva" }).click();
@@ -131,7 +131,7 @@ test.describe.serial("RT-022A admin booking actions local smoke", () => {
 
     await loginAsAdmin(page, `/pt/admin/bookings/${booking.id}`);
 
-    await expect(page.getByText("Cancelada")).toBeVisible();
+    await expect(page.getByText("Cancelada", { exact: true })).toBeVisible();
     await expect(page.getByRole("button", { name: "Confirmar Reserva" })).toHaveCount(0);
     await expect(page.getByRole("button", { name: "Cancelar Reserva" })).toHaveCount(0);
   });

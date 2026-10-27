@@ -104,7 +104,7 @@ describe("AdminLayout authorization", () => {
       params: Promise.resolve({ locale: "pt" }),
     });
 
-    expect(collectText(result)).toContain("Rick Travel Admin");
+    expect(collectText(result)).toContain("Ricardo Tour Admin");
     expect(collectText(result)).toContain("Admin content");
     expect(findSignOutButtons(result)).toEqual([expect.objectContaining({ locale: "pt", label: "Sair", errorLabel: "Erro ao sair" })]);
   });

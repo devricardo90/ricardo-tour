@@ -70,7 +70,7 @@ export default async function AdminLayout({
       <header className="border-b bg-background px-6 py-4 sticky top-0 z-10">
         <div className="flex items-center justify-between max-w-7xl mx-auto w-full">
           <div className="flex items-center gap-8">
-            <h1 className="text-xl font-bold tracking-tight">Rick Travel Admin</h1>
+            <h1 className="text-xl font-bold tracking-tight">Ricardo Tour Admin</h1>
             <nav className="hidden md:flex items-center gap-1">
               {navItems.map((item) => (
                 <Link

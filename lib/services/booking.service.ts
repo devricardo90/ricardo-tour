@@ -160,6 +160,8 @@ export async function getBookingById(id: string) {
             user: { select: { name: true, email: true } },
             trip: { select: { id: true, title: true, city: true, location: true, priceCents: true } },
             schedule: { select: { startAt: true, endAt: true, capacity: true, pricePerPersonCents: true, status: true } },
+            // RT-124: closed group price of a private booking (read only; the snapshot itself is immutable).
+            quote: { select: { totalCents: true, participants: true, fullFareCount: true, infantCount: true, priceTableId: true, priceTableVersion: true } },
             paymentAttempts: {
                 select: { id: true, provider: true, status: true, amountCents: true, currency: true, paidAt: true, createdAt: true },
                 orderBy: { createdAt: "desc" },

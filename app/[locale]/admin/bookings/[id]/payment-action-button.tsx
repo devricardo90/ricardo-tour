@@ -7,9 +7,9 @@ import { transitionBookingPaymentAction } from "@/app/actions/admin-payments";
 type Target = "RECORDED" | "CONFIRMED" | "CANCELED" | "REFUNDED";
 
 const COPY: Record<Target, { label: string; confirm: string }> = {
-  RECORDED: { label: "Marcar recebido", confirm: "Marcar este pagamento como RECEBIDO? Ele ainda precisara ser confirmado." },
+  RECORDED: { label: "Marcar recebido", confirm: "Marcar este pagamento como RECEBIDO? Ele ainda precisará ser confirmado." },
   CONFIRMED: { label: "Confirmar", confirm: "Confirmar este pagamento? Confira o valor no extrato, comprovante ou caixa antes." },
-  CANCELED: { label: "Cancelar registro", confirm: "Cancelar este registro de pagamento? O historico sera mantido." },
+  CANCELED: { label: "Cancelar registro", confirm: "Cancelar este registro de pagamento? O histórico será mantido." },
   REFUNDED: { label: "Registrar estorno", confirm: "Registrar o ESTORNO deste pagamento? Use apenas se o valor foi devolvido ao cliente." },
 };
 
