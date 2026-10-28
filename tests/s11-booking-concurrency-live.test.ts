@@ -16,6 +16,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
  * instead of hanging; a schedule that already started is refused.
  */
 const url = process.env.S11_LOCAL_DB_URL;
+const V6_APP = "s11-v6-prisma";
 const enabled = Boolean(url);
 
 // The public gate and the price guard are covered by their own unit tests; here they let the fixture trip through so
@@ -59,7 +60,9 @@ describe.skipIf(!enabled)("Sprint 11 — booking concurrency on a real PostgreSQ
   beforeAll(async () => {
     const { assertDatabaseAccess } = await import("@/lib/db/guard-runtime.mjs");
     assertDatabaseAccess({ operation: "write", label: "s11 booking concurrency live test", url, env: { DATABASE_URL: url } });
-    process.env.DATABASE_URL = url;
+    // Named connections: the V6 check below counts only this file's Prisma connections. Other live suites share the
+    // database in parallel, and their interactive transactions are legitimately "idle in transaction" between statements.
+    process.env.DATABASE_URL = `${url}${url!.includes("?") ? "&" : "?"}application_name=${V6_APP}`;
     prisma = (await import("@/lib/prisma")).prisma;
     service = await import("@/lib/services/booking.service");
 
@@ -193,8 +196,12 @@ describe.skipIf(!enabled)("Sprint 11 — booking concurrency on a real PostgreSQ
         expect(starved.some((r) => r.status === "rejected" && (r.reason as { code?: string }).code === "P2028")).toBe(true);
         await new Promise((resolve) => setTimeout(resolve, 2_500)); // the late BEGINs land here
         const leaked = await watcher.query(
-          "SELECT count(*)::int AS n FROM pg_stat_activity WHERE datname = current_database() AND state = 'idle in transaction' AND pid <> pg_backend_pid()",
+          "SELECT count(*)::int AS n FROM pg_stat_activity WHERE datname = current_database() AND state = 'idle in transaction' AND application_name = $1",
+          [V6_APP],
         );
+        // The check is only meaningful if this file's Prisma connections are visible under that name.
+        const named = await watcher.query("SELECT count(*)::int AS n FROM pg_stat_activity WHERE datname = current_database() AND application_name = $1", [V6_APP]);
+        expect(named.rows[0].n).toBeGreaterThan(0);
         expect(leaked.rows[0].n).toBe(0);
       }
 

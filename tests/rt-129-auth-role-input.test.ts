@@ -19,7 +19,7 @@ describe("RT-129: the user role is never client input", () => {
     } finally {
       vi.doUnmock("@/lib/prisma");
     }
-  });
+  }, 120_000); // cold import of lib/auth under a full-suite load (see tests/auth-trusted-origins.test.ts)
 });
 
 const url = process.env.S11_LOCAL_DB_URL;
@@ -114,5 +114,5 @@ describe.skipIf(!url)("RT-129 live: role and account fields cannot be set by the
       await watcher.query('DELETE FROM "User" WHERE email = ANY($1)', [Object.values(emails)]);
       await watcher.end();
     }
-  }, 60_000);
+  }, 120_000);
 });

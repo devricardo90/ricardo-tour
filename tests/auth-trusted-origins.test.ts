@@ -8,6 +8,15 @@ import { describe, expect, it, vi } from "vitest";
  * at a disposable local database (literal loopback URL whose database carries rt.environment = local-isolated; anything
  * else is refused before any write). It drives the real auth handler with BETTER_AUTH_URL set like production.
  */
+/**
+ * RT-129 intermittent failure (investigated 28/10/2026): this check is not slow, the first import of lib/auth is. After
+ * vi.resetModules() the worker loads better-auth and its Next.js integration from scratch: ~1.5 s alone, but up to 45 s
+ * in a cold full-suite run while the other workers load their own graphs (measured: the import stalled, the assertions
+ * then passed; the live test with real HTTP and database passed in the same run). The bound covers that load time; a
+ * real hang still fails.
+ */
+const AUTH_COLD_IMPORT_TIMEOUT_MS = 120_000;
+
 describe("auth trusted origins", () => {
   it("trusts the official domains without wildcards or disabled checks, and keeps the role out of client input", async () => {
     vi.resetModules();
@@ -23,7 +32,7 @@ describe("auth trusted origins", () => {
     } finally {
       vi.doUnmock("@/lib/prisma");
     }
-  }, 30_000);
+  }, AUTH_COLD_IMPORT_TIMEOUT_MS);
 });
 
 const url = process.env.S11_LOCAL_DB_URL;
@@ -94,5 +103,5 @@ describe.skipIf(!url)("auth trusted origins live (local isolated database only)"
       await watcher.query('DELETE FROM "User" WHERE email = ANY($1)', [Object.values(emails)]);
       await watcher.end();
     }
-  }, 60_000);
+  }, 120_000);
 });

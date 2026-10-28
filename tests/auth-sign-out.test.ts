@@ -131,5 +131,5 @@ describe.skipIf(!url)("sign-in, sign-out and sign-in again (local isolated datab
       await watcher.query('DELETE FROM "User" WHERE email = $1', [email]);
       await watcher.end();
     }
-  }, 60_000);
+  }, 120_000);
 });
