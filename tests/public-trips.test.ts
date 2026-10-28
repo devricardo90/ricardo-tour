@@ -18,7 +18,9 @@ import {
 } from "@/lib/catalog/public-trips";
 
 const root = path.resolve(__dirname, "..");
-const [PREMIUM, COLOMBO, ROCINHA, CRISTO] = LAUNCH_TRIP_IDS;
+const [COLOMBO, ROCINHA, CRISTO] = LAUNCH_TRIP_IDS;
+// TOUR-04 (Premium) is out of the 27/10/2026 commercial launch: its row stays in the database, hidden by the gate.
+const PREMIUM = "cmljo0s1u0000t0zqa0bpd23p";
 
 function trip(overrides: Partial<GateTrip> & { id: string }): GateTrip {
   return {
@@ -51,17 +53,19 @@ describe("public catalog gate (RT-53)", () => {
     findFirst.mockReset();
   });
 
-  it("approves exactly the four launch ids", () => {
-    expect(LAUNCH_TRIP_IDS).toHaveLength(4);
+  it("approves exactly the three launch ids (TOUR-01, TOUR-02, TOUR-03); TOUR-04 is out of the launch", () => {
+    expect(LAUNCH_TRIP_IDS).toHaveLength(3);
     for (const id of LAUNCH_TRIP_IDS) expect(isLaunchApproved(id)).toBe(true);
+    expect(isLaunchApproved(PREMIUM)).toBe(false);
     expect(isLaunchApproved("cmljpnazn0001t0zq92ywd6xk")).toBe(false);
   });
 
   it("includes the approved ids and excludes every other published record", () => {
     const audit = auditTrips(database);
-    expect(audit.filter((a) => a.included).map((a) => a.id)).toEqual([PREMIUM, COLOMBO, ROCINHA, CRISTO]);
+    expect(audit.filter((a) => a.included).map((a) => a.id)).toEqual([COLOMBO, ROCINHA, CRISTO]);
     const excluded = audit.filter((a) => !a.included);
-    expect(excluded).toHaveLength(4);
+    expect(excluded).toHaveLength(5);
+    expect(excluded.map((a) => a.id)).toContain(PREMIUM);
     for (const entry of excluded) expect(entry.reasons).toContain("NOT_APPROVED_FOR_LAUNCH");
   });
 
@@ -78,13 +82,13 @@ describe("public catalog gate (RT-53)", () => {
   });
 
   it("hides an approved record whose data became invalid (price, media, content, scope)", () => {
-    expect(evaluatePublicTrip(trip({ id: PREMIUM, priceCents: 0 })).reasons).toContain("INVALID_PRICE");
-    expect(evaluatePublicTrip(trip({ id: PREMIUM, imageUrl: null })).reasons).toContain("PLACEHOLDER_MEDIA");
-    expect(evaluatePublicTrip(trip({ id: PREMIUM, imageUrl: "/images/placeholder.svg" })).reasons).toContain("PLACEHOLDER_MEDIA");
-    expect(evaluatePublicTrip(trip({ id: PREMIUM, title: { pt: "" } })).reasons).toContain("INCOMPLETE_DATA");
-    expect(evaluatePublicTrip(trip({ id: PREMIUM, description: null })).reasons).toContain("INCOMPLETE_DATA");
-    expect(evaluatePublicTrip(trip({ id: PREMIUM, city: "Buzios" })).reasons).toContain("NON_RIO");
-    expect(evaluatePublicTrip(trip({ id: PREMIUM, city: "rio de janeiro" })).reasons).toContain("ARTIFACT_RECORD");
+    expect(evaluatePublicTrip(trip({ id: COLOMBO, priceCents: 0 })).reasons).toContain("INVALID_PRICE");
+    expect(evaluatePublicTrip(trip({ id: COLOMBO, imageUrl: null })).reasons).toContain("PLACEHOLDER_MEDIA");
+    expect(evaluatePublicTrip(trip({ id: COLOMBO, imageUrl: "/images/placeholder.svg" })).reasons).toContain("PLACEHOLDER_MEDIA");
+    expect(evaluatePublicTrip(trip({ id: COLOMBO, title: { pt: "" } })).reasons).toContain("INCOMPLETE_DATA");
+    expect(evaluatePublicTrip(trip({ id: COLOMBO, description: null })).reasons).toContain("INCOMPLETE_DATA");
+    expect(evaluatePublicTrip(trip({ id: COLOMBO, city: "Buzios" })).reasons).toContain("NON_RIO");
+    expect(evaluatePublicTrip(trip({ id: COLOMBO, city: "rio de janeiro" })).reasons).toContain("ARTIFACT_RECORD");
   });
 
   it("getPublicTrips queries only approved published ids and returns them in launch order", async () => {
@@ -106,6 +110,7 @@ describe("public catalog gate (RT-53)", () => {
 
   it("getPublicTripById never queries or returns non-catalog ids (RT-54 detail guard)", async () => {
     expect(await getPublicTripById("cmljpnazn0001t0zq92ywd6xk")).toBeNull();
+    expect(await getPublicTripById(PREMIUM)).toBeNull(); // TOUR-04: out of the launch, never even queried
     expect(findFirst).not.toHaveBeenCalled();
     findFirst.mockResolvedValueOnce(trip({ id: CRISTO }));
     expect((await getPublicTripById(CRISTO))?.id).toBe(CRISTO);

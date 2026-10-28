@@ -20,8 +20,8 @@ const activeWith = (publicLabel: unknown) => ({ status: "ACTIVE", publicLabel })
 const ID = LAUNCH_TRIP_IDS[0];
 
 describe("public gate vs OWN/PARTNER (RT-100)", () => {
-  it("the four launch trips stay public whether the row is a legacy shape, UNCLASSIFIED without partner, or carries the new fields", () => {
-    expect(LAUNCH_TRIP_IDS).toHaveLength(4);
+  it("the three launch trips stay public whether the row is a legacy shape, UNCLASSIFIED without partner, or carries the new fields", () => {
+    expect(LAUNCH_TRIP_IDS).toHaveLength(3);
     for (const id of LAUNCH_TRIP_IDS) {
       expect(evaluatePublicTrip(base(id)).included).toBe(true); // legacy row (no new fields)
       expect(evaluatePublicTrip(base(id, { operationType: "UNCLASSIFIED", partner: null })).included).toBe(true);

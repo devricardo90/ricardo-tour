@@ -19,9 +19,12 @@ import { hasCompletePartnerLabel } from "@/lib/catalog/operation-type";
  *   cmli1a6im000034zqqzc9sppb  Tour Favela Rocinha com Guia Local
  *   cmlhxkpy9000028zq27rhytew  Cristo Redentor + Pão de Açúcar
  * Adding a trip to the public catalog is an explicit, reviewed change to this list.
+ *
+ * Owner directive 27/10/2026 (commercial launch): only the three own tours TOUR-01, TOUR-02 and TOUR-03 are launched.
+ * TOUR-04 (cmljo0s1u0000t0zqa0bpd23p, Tour Privado Premium) is OUT of this launch: removed from this list only, so it is
+ * hidden from every public surface while its database row, bookings and history stay untouched.
  */
 export const LAUNCH_TRIP_IDS = [
-  "cmljo0s1u0000t0zqa0bpd23p",
   "cmlibniq40000z4zqkbujnutt",
   "cmli1a6im000034zqqzc9sppb",
   "cmlhxkpy9000028zq27rhytew",
