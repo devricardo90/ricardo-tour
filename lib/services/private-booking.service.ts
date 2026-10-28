@@ -5,6 +5,7 @@ import { getPublicTripById } from "@/lib/catalog/public-trips";
 import { PricingError, quoteGroupPrice, splitDeposit } from "@/lib/commerce/group-pricing";
 import { getApprovedGroupPriceTable, type ApprovedGroupPriceTable } from "@/lib/commerce/price-tables";
 import { ACTIVE_BOOKING_STATUSES } from "@/lib/booking/booking-state";
+import { GUIDE_DAY_TRIP_IDS, MAX_DEPARTURES_PER_GUIDE_DAY, guideDayLockKey, isGuideDayTrip, rioDayOf } from "@/lib/booking/guide-calendar";
 import { BOOKING_LOCK_TIMEOUT, BOOKING_TRANSACTION_OPTIONS, bookingLockKey, isBookingBusyError } from "@/lib/services/booking.service";
 
 /**
@@ -129,6 +130,24 @@ export async function createPrivateBookingForUser(userId: string, rawInput: unkn
           throw new DomainError("Voce ja possui reserva para esta data", { code: "DUPLICATE_BOOKING", status: 409 });
         }
         throw new DomainError("Agenda nao disponivel", { code: "SCHEDULE_UNAVAILABLE", status: 409 });
+      }
+
+      // Guide calendar (lib/booking/guide-calendar.ts): the three own tours share one guide, so an active booking of any
+      // of them on the same Rio day makes the day unavailable (same answer as a taken slot). Serialized per guide-day,
+      // always after the schedule lock, so two requests for different tours on the same day cannot both pass.
+      if (isGuideDayTrip(tripId)) {
+        const { day, start, end } = rioDayOf(schedule.startAt);
+        await tx.$queryRaw`SELECT 1 AS locked FROM (SELECT pg_advisory_xact_lock(hashtext(${guideDayLockKey(day)}))) AS l`;
+        const sameDay = await tx.booking.count({
+          where: {
+            tripId: { in: [...GUIDE_DAY_TRIP_IDS] },
+            status: { in: [...ACTIVE_BOOKING_STATUSES] },
+            schedule: { startAt: { gte: start, lt: end } },
+          },
+        });
+        if (sameDay >= MAX_DEPARTURES_PER_GUIDE_DAY) {
+          throw new DomainError("Agenda nao disponivel", { code: "SCHEDULE_UNAVAILABLE", status: 409 });
+        }
       }
 
       return tx.booking.create({

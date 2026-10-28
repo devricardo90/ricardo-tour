@@ -8,7 +8,8 @@ import { isRebuildLabEnabled } from "@/lib/rebuild-lab/config";
  * ADMIN verifies it, records the 30% deposit (RT-125) and only then confirms the booking. Nothing is charged online.
  *
  * Start time: PROVISIONAL, pending the Owner's availability rules (RT-123: departure times, minimum notice, blocked
- * days). One slot per tour per day; the team confirms the exact start time with the customer before the deposit.
+ * days). One slot per tour per day, and one departure per guide per Rio day across TOUR-01/02/03
+ * (lib/booking/guide-calendar.ts); the team confirms the exact start time with the customer before the deposit.
  */
 export const PUBLIC_REQUEST_SLOTS: Readonly<Record<string, { startLocalTime: string; durationMinutes: number; priceTableId: string }>> = {
   // TOUR-03 Centro Histórico e Cultural, 4-hour route (the only approved table, RT-121 26/10/2026).

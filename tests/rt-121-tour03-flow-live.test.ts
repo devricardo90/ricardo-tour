@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { guideDayPicker } from "./helpers/guide-day";
 
 /**
  * RT-121 first complete commercial test flow: TOUR-03 4 hours on a REAL PostgreSQL, quoted from the REAL approved
@@ -25,12 +26,13 @@ describe.skipIf(!url)("RT-121 TOUR-03 4 h complete flow (local isolated database
   const tag = `rt121-live-${Date.now()}`;
   let admin: { userId: string; role: "ADMIN" };
   const customers: string[] = [];
-  let day = 0;
   const contact = { fullName: "Cliente Teste", phone: "+55 21 99999-0000", language: "pt" as const, pickupAddress: "Hotel no Centro (teste)" };
 
+  // One departure per guide per Rio day (lib/booking/guide-calendar.ts): every schedule gets its own free day.
+  let nextFreeGuideDay: () => Promise<string>;
   const newSchedule = async (tripId = TOUR_03) =>
     (await prisma.tripSchedule.create({
-      data: { tripId, startAt: new Date(Date.now() + (14 + ++day) * 86_400_000), capacity: 4, pricePerPersonCents: 0 },
+      data: { tripId, startAt: new Date(`${await nextFreeGuideDay()}T12:00:00.000Z`), capacity: 4, pricePerPersonCents: 0 },
     })).id;
   const record = (bookingId: string, kind: "DEPOSIT" | "BALANCE", amountCents: number, method = "PIX") =>
     payments.recordBookingPayment(admin, { bookingId, kind, method, amountCents, initialStatus: "RECORDED", reference: `TESTE-${kind}`, idempotencyKey: key() });
@@ -42,6 +44,7 @@ describe.skipIf(!url)("RT-121 TOUR-03 4 h complete flow (local isolated database
     assertDatabaseAccess({ operation: "write", label: "rt-121 TOUR-03 flow live test", url, env: { DATABASE_URL: url } });
     process.env.DATABASE_URL = url;
     prisma = (await import("@/lib/prisma")).prisma;
+    nextFreeGuideDay = guideDayPicker(prisma, 15, 120);
     engine = await import("@/lib/services/private-booking.service");
     payments = await import("@/lib/services/booking-payment.service");
     bookings = await import("@/lib/services/booking.service");
