@@ -7,6 +7,9 @@ import { ArrowLeft, ChevronDown } from "lucide-react";
 import { CancelBookingButton } from "./cancel-booking-button";
 import { ConfirmBookingButton } from "./confirm-booking-button";
 import { PaymentsPanel } from "./payments-panel";
+import { DepositInstructions } from "./deposit-instructions";
+import { getBookingPaymentsAction } from "@/app/actions/admin-payments";
+import { GUEST_REQUEST_OWNER_EMAIL } from "@/lib/services/private-booking-request.service";
 
 /**
  * RT-013G: Admin Booking Detail Read-Only
@@ -119,6 +122,14 @@ export default async function AdminBookingDetailPage({
   // RT-124: a private booking has a closed group price (quote snapshot); the legacy per-person schedule price does not apply.
   const quote = booking.quote;
   const participants = quote?.participants ?? booking.guestCount;
+  const contact = booking.contact;
+  const viaSiteRequest = booking.user.email === GUEST_REQUEST_OWNER_EMAIL;
+  const languageLabels: Record<string, string> = { pt: "Português", en: "Inglês", es: "Espanhol" };
+
+  // RT-124 MVP policy: a private booking is confirmed only after the 30% deposit is verified (RT-125 CONFIRMED lines).
+  const payments = booking.pricingModel === "PRIVATE_GROUP" ? await getBookingPaymentsAction(booking.id) : null;
+  const depositVerified = !payments || payments.summary.deposit.confirmedCents >= payments.summary.deposit.expectedCents;
+  const confirmBlockedReason = depositVerified ? null : "Aguardando o sinal de 30% verificado (registre e confirme o sinal em Pagamentos).";
 
   return (
     <div className="space-y-6">
@@ -158,7 +169,7 @@ export default async function AdminBookingDetailPage({
           </div>
           <div className="flex flex-col items-end gap-2 sm:flex-row">
             {booking.status === "PENDING" && (
-              <ConfirmBookingButton bookingId={booking.id} locale={locale} />
+              <ConfirmBookingButton bookingId={booking.id} locale={locale} blockedReason={confirmBlockedReason} />
             )}
             {(booking.status === "PENDING" || booking.status === "CONFIRMED") && (
               <CancelBookingButton bookingId={booking.id} locale={locale} />
@@ -176,12 +187,37 @@ export default async function AdminBookingDetailPage({
           <CardContent className="space-y-2 text-sm">
             <div>
               <span className="text-muted-foreground text-xs">Nome</span>
-              <p className="font-medium">{booking.user.name}</p>
+              <p className="font-medium">{contact?.fullName ?? booking.user.name}</p>
             </div>
             <div>
               <span className="text-muted-foreground text-xs">E-mail</span>
-              <p>{booking.user.email}</p>
+              <p className="break-all">{contact?.email ?? (viaSiteRequest ? "—" : booking.user.email)}</p>
             </div>
+            {contact && (
+              <>
+                <div>
+                  <span className="text-muted-foreground text-xs">WhatsApp / telefone</span>
+                  <p>{contact.phone}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground text-xs">Idioma</span>
+                  <p>{languageLabels[contact.language] ?? contact.language}</p>
+                </div>
+                <div>
+                  <span className="text-muted-foreground text-xs">Hotel ou endereço de busca</span>
+                  <p className="break-words">{contact.pickupAddress ?? "Não informado"}</p>
+                </div>
+                {contact.notes && (
+                  <div>
+                    <span className="text-muted-foreground text-xs">Observações do cliente</span>
+                    <p className="whitespace-pre-line break-words">{contact.notes}</p>
+                  </div>
+                )}
+              </>
+            )}
+            <p className="text-xs text-muted-foreground">
+              {viaSiteRequest ? "Solicitação pelo formulário do site (sem conta de cliente)." : `Conta do cliente: ${booking.user.email}`}
+            </p>
           </CardContent>
         </Card>
 
@@ -303,6 +339,21 @@ export default async function AdminBookingDetailPage({
           </CardContent>
         </Card>
       </div>
+
+      {/* RT-124: texto pronto com valores e prazo do sinal para enviar ao cliente (o meio de pagamento é preenchido pela equipe) */}
+      {quote && booking.status === "PENDING" && !depositVerified && booking.schedule && (
+        <DepositInstructions
+          language={contact?.language ?? "pt"}
+          customerName={contact?.fullName ?? booking.user.name}
+          tourTitle={tripTitle}
+          dateLabel={tourDate(booking.schedule.startAt)}
+          participants={participants}
+          totalLabel={brl(quote.totalCents)}
+          depositLabel={brl(quote.depositCents)}
+          balanceLabel={brl(quote.balanceCents)}
+          reference={booking.id.slice(-8).toUpperCase()}
+        />
+      )}
 
       {/* RT-125: controle manual de pagamentos (sinal e saldo) */}
       <PaymentsPanel bookingId={booking.id} bookingStatus={booking.status} locale={locale} />

@@ -140,6 +140,8 @@ export async function listAllBookings() {
             trip: { select: { id: true, title: true, city: true, priceCents: true } },
             schedule: { select: { startAt: true } },
             user: { select: { name: true, email: true } },
+            // RT-124: a request from the tour page belongs to the site's request account; the customer is the contact.
+            contact: { select: { fullName: true, email: true } },
         },
     });
 }
@@ -161,7 +163,9 @@ export async function getBookingById(id: string) {
             trip: { select: { id: true, title: true, city: true, location: true, priceCents: true } },
             schedule: { select: { startAt: true, endAt: true, capacity: true, pricePerPersonCents: true, status: true } },
             // RT-124: closed group price of a private booking (read only; the snapshot itself is immutable).
-            quote: { select: { totalCents: true, participants: true, fullFareCount: true, infantCount: true, priceTableId: true, priceTableVersion: true } },
+            quote: { select: { totalCents: true, depositCents: true, balanceCents: true, participants: true, fullFareCount: true, infantCount: true, priceTableId: true, priceTableVersion: true } },
+            // RT-124: the customer's contact and pickup data (personal data; this read is ADMIN only).
+            contact: { select: { fullName: true, email: true, phone: true, language: true, pickupAddress: true, notes: true } },
             paymentAttempts: {
                 select: { id: true, provider: true, status: true, amountCents: true, currency: true, paidAt: true, createdAt: true },
                 orderBy: { createdAt: "desc" },
@@ -263,7 +267,7 @@ export async function confirmBookingByAdmin(bookingId: string, actor: BookingAct
 
     const booking = await prisma.booking.findUnique({
         where: { id: normalizedId },
-        select: { id: true, status: true, paymentStatus: true },
+        select: { id: true, status: true, paymentStatus: true, pricingModel: true, quote: { select: { depositCents: true } } },
     });
 
     if (!booking) {
@@ -278,6 +282,23 @@ export async function confirmBookingByAdmin(bookingId: string, actor: BookingAct
             code: "INVALID_STATUS_FOR_CONFIRMATION",
             status: 400,
         });
+    }
+
+    // MVP policy (Owner, 27/10/2026): a private booking is confirmed only after the 30% deposit was received AND verified
+    // (RT-125 payment lines CONFIRMED by an ADMIN). Recorded-but-unverified money does not count. Still an explicit
+    // admin action: a confirmed deposit never confirms the booking by itself.
+    if (booking.pricingModel === "PRIVATE_GROUP") {
+        const deposit = await prisma.bookingPayment.aggregate({
+            where: { bookingId: normalizedId, kind: "DEPOSIT", status: "CONFIRMED" },
+            _sum: { amountCents: true },
+        });
+        const required = booking.quote?.depositCents ?? Number.POSITIVE_INFINITY;
+        if ((deposit._sum.amountCents ?? 0) < required) {
+            throw new DomainError("Confirme o recebimento do sinal de 30% antes de confirmar a reserva.", {
+                code: "DEPOSIT_NOT_CONFIRMED",
+                status: 409,
+            });
+        }
     }
 
     // Gravacao condicional: so confirma se a reserva ainda estiver PENDING no momento da escrita. Sem isso, um

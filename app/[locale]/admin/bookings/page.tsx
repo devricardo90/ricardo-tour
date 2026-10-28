@@ -81,8 +81,8 @@ export default async function AdminBookingsPage({
                         {booking.id.substring(0, 8)}
                       </td>
                       <td className="py-3 px-4">
-                        <div className="font-medium text-sm">{booking.user.name}</div>
-                        <div className="text-[10px] text-muted-foreground">{booking.user.email}</div>
+                        <div className="font-medium text-sm">{booking.contact?.fullName ?? booking.user.name}</div>
+                        <div className="text-[10px] text-muted-foreground">{booking.contact?.email ?? booking.user.email}</div>
                       </td>
                       <td className="py-3 px-4 text-xs">
                         {getLocalizedField<string>(booking.trip.title as Record<string, string>, locale)}
