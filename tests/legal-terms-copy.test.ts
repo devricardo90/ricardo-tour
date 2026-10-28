@@ -5,7 +5,7 @@ import { TERMS_COPY, TERMS_PENDING_MARKER, TERMS_REVIEW_STATUS } from "@/lib/leg
 const LANGS = ["pt", "en", "es"] as const;
 const allText = (lang: (typeof LANGS)[number]) => TERMS_COPY[lang].sections.flatMap((s) => s.paragraphs).join("\n");
 
-describe("RT-81 terms draft (factual skeleton)", () => {
+describe("RT-81 terms draft (approved commercial rules + pending items)", () => {
   it("is a draft: Owner approval and legal review are PENDING and no lawyer approval is claimed", () => {
     expect(TERMS_REVIEW_STATUS).toMatchObject({ owner_approval: "PENDING", legal_review: "PENDING" });
     for (const lang of LANGS) {
@@ -24,26 +24,32 @@ describe("RT-81 terms draft (factual skeleton)", () => {
     }
   });
 
-  it("leaves every undecided commercial or legal rule as an explicit placeholder", () => {
+  it("leaves every undecided commercial or legal rule as an explicit placeholder; Q6 and Q9 are decided", () => {
     for (const lang of LANGS) {
       const byId = Object.fromEntries(TERMS_COPY[lang].sections.map((s) => [s.id, s.paragraphs]));
-      for (const id of ["operator", "cancellation", "rules", "legal"]) {
+      for (const id of ["rules", "legal"]) {
         expect(byId[id].every((p) => TERMS_PENDING_MARKER.test(p)), `${lang}/${id}`).toBe(true);
       }
-      for (const code of ["Q1", "Q6", "Q7", "Q8", "Q9", "Q10", "Q11"]) expect(allText(lang), `${lang} ${code}`).toMatch(new RegExp(`\\(${code}[),]`));
+      // Cancellation: the Owner's base policy (28/10/2026) plus the retention details left to the legal review.
+      expect(byId.cancellation.filter((p) => TERMS_PENDING_MARKER.test(p)), `${lang}/cancellation`).toHaveLength(1);
+      for (const code of ["Q1", "Q7", "Q8", "Q10", "Q11"]) expect(allText(lang), `${lang} ${code}`).toMatch(new RegExp(`\\(${code}[),]`));
+      for (const code of ["Q6", "Q9"]) expect(allText(lang), `${lang} ${code}`).not.toMatch(new RegExp(`\\(${code}[),]`));
     }
   });
 
-  it("invents no deadline, percentage, fee, guarantee, refund or jurisdiction", () => {
+  it("uses only the deadlines and percentages the Owner approved, and invents no fee, guarantee or jurisdiction", () => {
+    const approved = new Set(["24 h", "72 h", "30%", "70%"]);
     for (const lang of LANGS) {
       const all = allText(lang);
-      expect(all, lang).not.toMatch(/\d+\s*(?:h\b|horas?|hours?|dias?|days?|días?|%)/i);
-      expect(all, lang).not.toMatch(/garant|guarantee|reembolso (?:integral|total)|full refund|taxa de|fee of|comarca de|courts of|tribunales de/i);
+      const figures = [...all.matchAll(/(\d+)\s*(h\b|horas?|hours?|dias?|days?|días?|%)/gi)].map(([, n, unit]) => (unit === "%" ? `${n}%` : /^d/i.test(unit) ? `${n} d` : `${n} h`));
+      expect(figures.filter((f) => !approved.has(f)), lang).toEqual([]);
+      expect(all, lang).toMatch(/72/);
+      expect(all, lang).not.toMatch(/garant|guarantee|taxa de|fee of|comarca de|courts of|tribunales de/i);
       expect(all, lang).not.toMatch(/R\$\s*\d/); // the policy names the currency only, never an amount
     }
   });
 
-  it("states the facts the site already shows: request is not a booking, no online payment, prices per person in R$", () => {
+  it("states the approved rules: request is not a booking, no online payment, closed group price in R$, 30% deposit", () => {
     expect(allText("pt")).toMatch(/não é uma reserva/);
     expect(allText("en")).toMatch(/is not a booking/);
     expect(allText("es")).toMatch(/no es una reserva/);
@@ -51,6 +57,12 @@ describe("RT-81 terms draft (factual skeleton)", () => {
     expect(allText("en")).toMatch(/does not take online payments/);
     expect(allText("es")).toMatch(/no recibe pagos en línea/);
     for (const lang of LANGS) expect(allText(lang)).toContain("R$");
+    expect(allText("pt")).toMatch(/preço fechado por grupo privativo/);
+    expect(allText("en")).toMatch(/closed price per private group/);
+    expect(allText("es")).toMatch(/precio cerrado por grupo privado/);
+    expect(allText("pt")).toMatch(/não são retidos automaticamente/);
+    expect(allText("en")).toMatch(/not retained automatically/);
+    expect(allText("es")).toMatch(/no se retienen automáticamente/);
   });
 
   it("reads contact values from PUBLIC_CONTACT and contains no superseded contact data", () => {

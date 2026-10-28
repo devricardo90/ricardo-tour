@@ -34,6 +34,7 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
       { id: "data", title: "Quais dados tratamos e para quê", paragraphs: [
         "Formulários de contato e de solicitação de passeio: nome, e-mail, telefone (opcional) e a mensagem que você escrever. Usamos para responder ao seu pedido. Ficam gravados em nosso banco de dados e uma cópia da mensagem é enviada por e-mail à equipe.",
         "Conta e reservas: nome, e-mail e dados da sessão (endereço IP e navegador) quando você usa as áreas de conta ou reserva do site.",
+        "Solicitação de reserva de passeio privativo: nome, e-mail, WhatsApp ou telefone, idioma, hotel ou endereço de busca, observações, data pedida e número de participantes. Usamos para conferir a disponibilidade, enviar as instruções do sinal, combinar e realizar o passeio. Ficam no nosso banco de dados e só a equipe administrativa vê; o aviso enviado por e-mail à equipe não leva esses dados de contato. Valores e meios de pagamento recebidos são registrados pela equipe, sem número de cartão.",
         "Estatísticas de uso: eventos como visualização de passeio e clique em reservar, com um identificador aleatório de sessão (guardado apenas enquanto a aba está aberta), o caminho da página e a origem da visita (parâmetros de campanha). Esse identificador não contém dados pessoais.",
         "Registros técnicos: erros do site e medidas de desempenho (caminho da página, sem dados pessoais) ficam nos registros da plataforma de hospedagem.",
       ] },
@@ -79,6 +80,7 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
       { id: "data", title: "What data we handle and why", paragraphs: [
         "Contact and tour-request forms: name, e-mail, phone (optional) and the message you write. We use them to answer your request. They are stored in our database and a copy of the message is e-mailed to the team.",
         "Account and bookings: name, e-mail and session data (IP address and browser) when you use the account or booking areas.",
+        "Private tour booking request: name, e-mail, WhatsApp or phone, language, hotel or pickup address, notes, requested date and number of participants. We use them to check availability, send the deposit instructions, arrange and run the tour. They are kept in our database and only the administrative team sees them; the notice e-mailed to the team does not include these contact details. Amounts and payment methods received are recorded by the team, never a card number.",
         "Usage statistics: events such as viewing a tour or clicking reserve, with a random session identifier (kept only while the tab is open), the page path and the source of the visit (campaign parameters). This identifier contains no personal data.",
         "Technical records: site errors and performance measurements (page path, no personal data) are kept in the hosting platform's logs.",
       ] },
@@ -124,6 +126,7 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
       { id: "data", title: "Qué datos tratamos y para qué", paragraphs: [
         "Formularios de contacto y de solicitud de paseo: nombre, correo, teléfono (opcional) y el mensaje que escribas. Los usamos para responder a tu solicitud. Se guardan en nuestra base de datos y una copia del mensaje se envía por correo al equipo.",
         "Cuenta y reservas: nombre, correo y datos de sesión (dirección IP y navegador) cuando usas las áreas de cuenta o reserva.",
+        "Solicitud de reserva de paseo privado: nombre, correo, WhatsApp o teléfono, idioma, hotel o dirección de recogida, observaciones, fecha solicitada y número de participantes. Los usamos para verificar la disponibilidad, enviar las instrucciones de la seña, acordar y realizar el paseo. Se guardan en nuestra base de datos y solo los ve el equipo administrativo; el aviso enviado por correo al equipo no incluye esos datos de contacto. Los importes y medios de pago recibidos los registra el equipo, nunca un número de tarjeta.",
         "Estadísticas de uso: eventos como ver un paseo o hacer clic en reservar, con un identificador aleatorio de sesión (guardado solo mientras la pestaña está abierta), la ruta de la página y el origen de la visita (parámetros de campaña). Ese identificador no contiene datos personales.",
         "Registros técnicos: errores del sitio y mediciones de rendimiento (ruta de la página, sin datos personales) quedan en los registros de la plataforma de alojamiento.",
       ] },
