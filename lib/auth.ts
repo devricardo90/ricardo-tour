@@ -3,7 +3,9 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
+import { APIError } from "better-auth/api";
 import { prisma } from "@/lib/prisma";
+import { isReservedSystemEmail } from "@/lib/auth-reserved-email";
 
 const appUrl = process.env.BETTER_AUTH_URL;
 
@@ -45,6 +47,19 @@ export const auth = betterAuth({
     modelName: "Session",
     expiresIn: 60 * 60 * 24, // 1 dia
     updateAge: 60 * 30,     // renova a cada 30 min se ativo
+  },
+
+  // RT-124 isolation (28/10/2026): the reserved system domain holds internal accounts nobody signs in to (the site's
+  // request account owns every booking requested without an account). Whoever registered one would see and cancel
+  // other customers' requests, so sign-up refuses the whole domain before anything is written.
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          if (isReservedSystemEmail(user.email)) throw new APIError("BAD_REQUEST", { message: "Invalid email" });
+        },
+      },
+    },
   },
 
   account: { modelName: "Account" },
