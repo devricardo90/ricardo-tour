@@ -33,7 +33,8 @@ describe("RT-116 approved commercial draft", () => {
       ["porto-maravilha-6h", 360],
     ]);
     expect(CENTRO_COMMERCIAL_DRAFT.status).toBe("DRAFT");
-    expect(CENTRO_COMMERCIAL_DRAFT.images.every((image) => image.rightsStatus === "UNVERIFIED")).toBe(true);
+    // Owner declaration 28/10/2026: own photos attested; the third-party Museu do Amanhã photo stays blocked.
+    expect(CENTRO_COMMERCIAL_DRAFT.images.filter((image) => image.rightsStatus === "UNVERIFIED").map((image) => image.src)).toEqual(["/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp"]);
     expect(toTourContentView(CENTRO_COMMERCIAL_DRAFT, "pt", "public")).toBeNull();
     expect(MOCK_TOUR_CONTENT[CENTRO_ID]).toBe(CENTRO_COMMERCIAL_DRAFT);
   });
@@ -148,7 +149,7 @@ describe("TOUR-03 editorial status of the hero pitch and benefit lines", () => {
     expect(offer.pitch.es).toBe("Un paseo privado con guía por la historia, la arquitectura y la cultura del centro de Río.");
     expect(offer.benefits.pt).toEqual(["Grupo privativo de 1 a 4 turistas", "Horário e roteiro combinados com a equipe", "Acompanhamento de guia durante a caminhada"]);
     expect(MOCK_TOUR_CONTENT[CENTRO_ID].status).toBe("DRAFT");
-    expect(MOCK_TOUR_CONTENT[CENTRO_ID].images.every((image) => image.rightsStatus === "UNVERIFIED")).toBe(true);
+    expect(MOCK_TOUR_CONTENT[CENTRO_ID].images.filter((image) => image.rightsStatus !== "OWNER_ATTESTED")).toHaveLength(1);
     expect(PROTOTYPE_OFFER["cmli1a6im000034zqqzc9sppb"]).toMatchObject({ pitchStatus: "CONFIRMED", benefitsStatus: "PROVISIONAL" });
     expect(PROTOTYPE_OFFER["cmlhxkpy9000028zq27rhytew"]).toMatchObject({ pitchStatus: "CONFIRMED", pitchStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" }, benefitsStatus: "PROVISIONAL" }); // TOUR-01 PT pitch approved 23/10/2026
     expect(PROTOTYPE_OFFER["cmljo0s1u0000t0zqa0bpd23p"]).toMatchObject({ pitchStatus: "MOCK", benefitsStatus: "MOCK" });
@@ -261,5 +262,15 @@ describe("Mobile sticky price bar never clips the price (Owner decision 21/10/20
     expect(markup).toMatch(/class="[^"]*\bgrow\b[^"]*"[^>]*data-testid="tour-cta-mobile"|data-testid="tour-cta-mobile"[^>]*class="[^"]*\bgrow\b/);
     expect(markup).not.toMatch(/\btruncate\b|text-ellipsis|line-clamp/);
     expect(markup).toContain("padding-bottom:max(12px, env(safe-area-inset-bottom, 0px))");
+  });
+});
+
+describe("vehicle (Owner, definitive 27/10/2026): own Renault Mégane 2025, never a rented vehicle", () => {
+  it("no tour text of TOUR-01, TOUR-02 or TOUR-03 mentions a rented vehicle or a rental company", () => {
+    for (const id of ["cmlhxkpy9000028zq27rhytew", "cmli1a6im000034zqqzc9sppb", CENTRO_ID]) {
+      const text = JSON.stringify({ content: MOCK_TOUR_CONTENT[id], offer: PROTOTYPE_OFFER[id] });
+      expect(text, id).not.toMatch(/alugad|locadora|rented|rental|alquilad|empresa de alquiler/i);
+    }
+    expect(CENTRO_COMMERCIAL_DRAFT.operationalConditions?.pt).toContain("veículo próprio da empresa (Renault Mégane 2025)");
   });
 });

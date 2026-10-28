@@ -115,27 +115,34 @@ const mockList = (items: Array<[string, string, string]>) => ({
 });
 
 const ROCINHA_DIR = "/media/tours/favela-rocinha";
-// Rights PENDING (Owner decision 17/10/2026): a verbal declaration, a visual approval or a credit is not proof of rights,
-// so these items stay UNVERIFIED (never public) until the documentary verification is recorded.
-const ROCINHA_RIGHTS = (file: string, extra = "") =>
-  `PENDING rights verification (Owner decision 17/10/2026). Declared by the Owner (17/10/2026): own media (photo/video) and consent/authorisation of the people shown — a declaration is not documentary proof; authorship and consent documents still to be recorded.${extra} Original: Drive MIDIAS/02_FAVELA_ROCINHA/ORIGINAIS/${file} (SHA-256 in docs/product/rt-116-rocinha-originals.sha256). Web copy: sRGB, metadata (incl. GPS) removed.`;
+/**
+ * RT-116 rights (Owner decision 28/10/2026, replaces the 17/10/2026 rule "a declaration is not proof"): the Owner
+ * declared that Ricardo Tour's OWN photos and videos are authorised for commercial use, including the authorisation of
+ * the people shown. That declaration is recorded once (RT-116, Manual Mestre) and is not requested again: own media is
+ * OWNER_ATTESTED. Material whose authorship or rights remain uncertain (third-party photos, artworks shown) stays
+ * UNVERIFIED and is never public.
+ */
+export const OWNER_OWN_MEDIA_DECLARATION =
+  "Owner, 28/10/2026: own photo/video of Ricardo Tour, authorised for commercial use, people shown included (declaration recorded in RT-116).";
+const ROCINHA_ORIGINAL = (file: string) =>
+  `Original: Drive MIDIAS/02_FAVELA_ROCINHA/ORIGINAIS/${file} (SHA-256 in docs/product/rt-116-rocinha-originals.sha256). Web copy: sRGB, metadata (incl. GPS) removed.`;
+const ROCINHA_RIGHTS = (file: string) => `${OWNER_OWN_MEDIA_DECLARATION} ${ROCINHA_ORIGINAL(file)}`;
 
 /**
- * RT-116 — REAL photographs selected and ordered by the Owner (17/10/2026), per tour. Rights: UNVERIFIED for Cristo/Pão
- * and Rocinha (pending documentary verification, Owner rule 17/10/2026; Cristo/Pão aligned on 18/10/2026).
+ * RT-116 — REAL photographs selected and ordered by the Owner (17/10/2026), per tour. Rights: own media OWNER_ATTESTED
+ * (Owner declaration 28/10/2026); the Rocinha mural photo stays UNVERIFIED (artwork rights uncertain).
  * Alt texts describe what each photo shows (no fictitious marker: they are real descriptions, still to be reviewed with
  * RT-115). The record that holds them stays MOCK/DRAFT, so the public gate never shows it.
  */
 const CRISTO_DIR = "/media/tours/cristo-pao-selaron";
-// Rights PENDING (Owner rule 17/10/2026, Manual Mestre §10.17): a declaration or an editorial approval is not proof of
-// rights, so the own photos stay UNVERIFIED (never public) until the documentary verification is recorded.
+// Own photos: OWNER_ATTESTED by the Owner's declaration of 28/10/2026 (see OWNER_OWN_MEDIA_DECLARATION).
 const CRISTO_RIGHTS = (driveFile: string, camera: string, people: boolean) =>
-  `PENDING rights verification (Owner rule 17/10/2026). Own photo ${camera}, editorially approved by the Owner (17/10/2026), identified by content (correlation 0.99+ against the Owner's visual index). File: Drive MIDIAS/01_CRISTO_PAO_DE_ACUCAR_SELARON/ORIGINAIS/${driveFile} (WebP 952×1269, no metadata; HEIC original not in the Drive).${people ? " Identifiable visitors: authorisation DECLARED by the Owner; written proof pending." : ""}`;
+  `${OWNER_OWN_MEDIA_DECLARATION} Own photo ${camera}, editorially approved by the Owner (17/10/2026), identified by content (correlation 0.99+ against the Owner's visual index). File: Drive MIDIAS/01_CRISTO_PAO_DE_ACUCAR_SELARON/ORIGINAIS/${driveFile} (WebP 952×1269, no metadata; HEIC original not in the Drive).${people ? " Identifiable visitors: covered by the Owner's declaration." : ""}`;
 
 const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
   // RT-116 — Cristo Redentor + Pão de Açúcar + Escadaria Selarón (Owner editorial definition, 17/10/2026).
   // Own photos: 4 of the 5 approved (IMG_1162/1171/1163/1181), identified BY CONTENT against the Owner's visual index
-  // (the Drive's 5th WebP is IMG_1180, not the approved IMG_1179: pending, so it is not shown). Rights PENDING (UNVERIFIED).
+  // (the Drive's 5th WebP is IMG_1180, not the approved IMG_1179: pending, so it is not shown). Rights: OWNER_ATTESTED (28/10).
   // The two third-party candidates (Cristo, Selarón) were REMOVED on 18/10/2026: their real source is unknown (the Drive
   // files are not the cited Pexels photos) and Manual Mestre §10.17 says "não usar". ORDER AND COVER ARE A PROPOSAL.
   cmlhxkpy9000028zq27rhytew: [
@@ -148,7 +155,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Dos visitantes en el mirador con el Pan de Azúcar al fondo, bajo un cielo azul con nubes",
       },
       isCover: true,
-      rightsStatus: "UNVERIFIED",
+      rightsStatus: "OWNER_ATTESTED",
       rightsNote: CRISTO_RIGHTS("img1-pao-de-acucar.webp", "IMG_1162", true),
       focalX: 0.45,
       focalY: 0.45,
@@ -162,7 +169,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Cables del teleférico llegando a la cima del Pan de Azúcar, con el mar al fondo",
       },
       isCover: false,
-      rightsStatus: "UNVERIFIED",
+      rightsStatus: "OWNER_ATTESTED",
       rightsNote: CRISTO_RIGHTS("img2-pao-de-acucar.webp", "IMG_1171", false),
       focalX: 0.5,
       focalY: 0.4,
@@ -176,7 +183,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Visitante apoyado en la baranda del mirador, con la bahía y los barcos al fondo",
       },
       isCover: false,
-      rightsStatus: "UNVERIFIED",
+      rightsStatus: "OWNER_ATTESTED",
       rightsNote: CRISTO_RIGHTS("img3-pao-de-acucar.webp", "IMG_1163", true),
       focalX: 0.4,
       focalY: 0.55,
@@ -190,7 +197,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Visitante en la terraza del mirador, con montañas y la ciudad al fondo",
       },
       isCover: false,
-      rightsStatus: "UNVERIFIED",
+      rightsStatus: "OWNER_ATTESTED",
       rightsNote: CRISTO_RIGHTS("img4-pao-de-acucar.webp", "IMG_1181", true),
       focalX: 0.3,
       focalY: 0.5,
@@ -206,7 +213,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Vista desde lo alto de la Rocinha hasta São Conrado y el mar, con la bandera de Brasil en primer plano",
       },
       isCover: true,
-      rightsStatus: "UNVERIFIED",
+      rightsStatus: "OWNER_ATTESTED",
       rightsNote: ROCINHA_RIGHTS("IMG_1243.HEIC"),
       focalX: 0.5,
       focalY: 0.62,
@@ -220,7 +227,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Visitantes bajan por un callejón estrecho de la Rocinha entre casas coloridas",
       },
       isCover: false,
-      rightsStatus: "UNVERIFIED",
+      rightsStatus: "OWNER_ATTESTED",
       rightsNote: ROCINHA_RIGHTS("IMG_1253.HEIC"),
       focalX: 0.5,
       focalY: 0.55,
@@ -235,7 +242,9 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
       },
       isCover: false,
       rightsStatus: "UNVERIFIED",
-      rightsNote: ROCINHA_RIGHTS("IMG_1252.HEIC", " The mural artwork shown: artist authorship and rights NOT verified."),
+      // The photo is own media, but the mural it shows is a third-party artwork whose authorship and rights are uncertain:
+      // blocked (UNVERIFIED) until legal confirmation (e.g. Lei 9.610/1998 art. 48, works permanently in public places).
+      rightsNote: `PENDING rights verification: the mural artwork shown (artist authorship and rights NOT verified) — the photo itself is covered by the Owner's declaration of 28/10/2026. ${ROCINHA_ORIGINAL("IMG_1252.HEIC")}`,
       // Transcription of the inscription visible on the mural (17/10, crop of the original); artist identity NOT verified.
       credit: { pt: "Mural com a inscrição “@WARK ROCINHA...”", en: "Mural with the inscription “@WARK ROCINHA...”", es: "Mural con la inscripción “@WARK ROCINHA...”" },
       focalX: 0.55,
@@ -250,7 +259,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Vista desde una terraza de madera sobre la Rocinha, con montañas y el mar al fondo",
       },
       isCover: false,
-      rightsStatus: "UNVERIFIED",
+      rightsStatus: "OWNER_ATTESTED",
       rightsNote: ROCINHA_RIGHTS("img-favela-deck.HEIC"),
       focalX: 0.5,
       focalY: 0.45,
@@ -264,7 +273,7 @@ const OWNER_GALLERY: Record<string, TourContentRecord["images"]> = {
         es: "Panorama de la Rocinha bajando hasta el mar bajo un cielo nublado",
       },
       isCover: false,
-      rightsStatus: "UNVERIFIED",
+      rightsStatus: "OWNER_ATTESTED",
       rightsNote: ROCINHA_RIGHTS("IMG_1247.HEIC"),
       focalX: 0.5,
       focalY: 0.65,
@@ -434,7 +443,7 @@ const PAO_VIDEO: PrototypeVideo = {
     es: "Desde lo alto del Pan de Azúcar: la Bahía de Botafogo, la ciudad y el Cristo Redentor a lo lejos.",
   },
   status: "PROVISIONAL",
-  rightsNote: "Owner, 17/10/2026: own video IMG_1157.MOV (Drive MIDIAS/01_CRISTO_PAO_DE_ACUCAR_SELARON/ORIGINAIS), window 41–58 s selected by the Owner; no people in the window; original audio not used.",
+  rightsNote: "Owner, 28/10/2026: own video, authorised for commercial use (declaration recorded in RT-116). Owner, 17/10/2026: own video IMG_1157.MOV (Drive MIDIAS/01_CRISTO_PAO_DE_ACUCAR_SELARON/ORIGINAIS), window 41–58 s selected by the Owner; no people in the window; original audio not used.",
 };
 
 /** Tours whose cover/order the Owner confirmed (Rocinha, 17/10). Cristo + Pão + Selarón: order and cover are a proposal. */

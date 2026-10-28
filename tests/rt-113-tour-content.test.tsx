@@ -149,10 +149,9 @@ describe("RT-114 mock data integrity", () => {
         const ownerApproved = img.src.startsWith("/media/tours/") && img.rightsStatus === "OWNER_ATTESTED" && /^Owner, \d{2}\/\d{2}\/\d{4}/.test(img.rightsNote ?? "");
         // Third-party candidates may appear in the lab only as UNVERIFIED (the public gate hides them).
         const thirdPartyCandidate = img.src.startsWith("/media/tours/") && img.rightsStatus === "UNVERIFIED" && /^UNVERIFIED third-party photo/.test(img.rightsNote ?? "");
-        // Owner-declared media whose rights are still pending documentary verification (Owner decision 17/10/2026).
+        // Own media showing something whose rights are uncertain (e.g. an artwork): blocked until verified.
         const pendingRights = img.src.startsWith("/media/tours/") && img.rightsStatus === "UNVERIFIED" && /^PENDING rights verification/.test(img.rightsNote ?? "");
-        const centroLocalPreview = img.src.startsWith("/media/tours/centro-historico-cultural/") && img.rightsStatus === "UNVERIFIED" && /Commercial use and image rights remain under review/.test(img.rightsNote ?? "");
-        expect(allowed.has(img.src) || ownerApproved || thirdPartyCandidate || pendingRights || centroLocalPreview, img.src).toBe(true);
+        expect(allowed.has(img.src) || ownerApproved || thirdPartyCandidate || pendingRights, img.src).toBe(true);
         expect(fs.existsSync(path.join(process.cwd(), "public", img.src))).toBe(true);
       }
     }
@@ -172,7 +171,10 @@ describe("RT-114 mock data integrity", () => {
       "/media/tours/centro-historico-cultural/centro-historico-img-1136.webp",
       "/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp",
     ]);
-    expect(record.images.every((image) => image.rightsStatus === "UNVERIFIED" && image.alt.pt && image.alt.en && image.alt.es)).toBe(true);
+    expect(record.images.every((image) => image.alt.pt && image.alt.en && image.alt.es)).toBe(true);
+    // Owner declaration 28/10/2026: the six own photos are authorised; the Museu do Amanhã photo (Pexels) stays blocked.
+    expect(record.images.filter((image) => image.rightsStatus === "UNVERIFIED").map((image) => image.src)).toEqual(["/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp"]);
+    expect(record.images.filter((image) => image.rightsStatus === "OWNER_ATTESTED")).toHaveLength(6);
     expect(toTourContentView(record, "pt", "public")).toBeNull();
     expect(record.itinerary).toHaveLength(6);
     expect(record.languages).toEqual(["pt", "es", "en"]);
@@ -297,12 +299,13 @@ describe("RT-116 Favela Rocinha media (Owner decision 17/10/2026)", () => {
   const ROCINHA = "cmli1a6im000034zqqzc9sppb";
   const ORDER = ["rocinha-01-panorama-bandeira.jpg", "rocinha-02-beco.jpg", "rocinha-03-mural.jpg", "rocinha-04-mirante-deck.jpg", "rocinha-05-panorama.jpg"];
 
-  it("keeps the Owner's 5 photos in the approved order, cover first, rights pending (UNVERIFIED), with PT/EN/ES alt text", () => {
+  it("keeps the Owner's 5 photos in the approved order, cover first, own media attested (mural pending), with PT/EN/ES alt text", () => {
     const record = MOCK_TOUR_CONTENT[ROCINHA];
     expect(record.images.map((img) => path.basename(img.src))).toEqual(ORDER);
     expect(record.images.filter((img) => img.isCover).map((img) => path.basename(img.src))).toEqual([ORDER[0]]);
     for (const img of record.images) {
-      expect(img.rightsStatus).toBe("UNVERIFIED"); // Owner decision 17/10/2026: declaration ≠ proof of rights
+      // Owner declaration 28/10/2026: own media authorised; the mural photo stays blocked (artwork rights uncertain).
+      expect(img.rightsStatus).toBe(path.basename(img.src) === "rocinha-03-mural.jpg" ? "UNVERIFIED" : "OWNER_ATTESTED");
       for (const l of ["pt", "en", "es"] as const) {
         expect(img.alt[l]?.trim()).toBeTruthy();
         expect(img.alt[l]).not.toMatch(/fictício|fictitious|ficticio/);
@@ -403,17 +406,18 @@ describe("RT-116 lighter mobile clips and Cristo + Pão de Açúcar + Selarón p
     expect(record.images.some((img) => /1179|1180|img5/.test(img.src))).toBe(false);
     for (const img of record.images) {
       expect(fs.existsSync(path.join(process.cwd(), "public", img.src))).toBe(true);
-      // Owner rule 17/10/2026 (Manual §10.17): a declaration is not proof of rights -> PENDING, never public.
-      expect(img.rightsStatus).toBe("UNVERIFIED");
-      expect(img.rightsNote).toMatch(/^PENDING rights verification/);
+      // Owner declaration 28/10/2026 (RT-116): own photos authorised for commercial use.
+      expect(img.rightsStatus).toBe("OWNER_ATTESTED");
+      expect(img.rightsNote).toMatch(/^Owner, 28\/10\/2026: own photo/);
       expect(img.src).not.toContain("terceiros-");
     }
     // The cover/order is a proposal, and the third-party photos would be hidden publicly even if the record were approved.
     expect(PROTOTYPE_OFFER[CRISTO].coverStatus).toBe("PROVISIONAL");
     const nonMock = { ...record, source: "Owner test" }; // approvalFor refuses MOCK records (RT-119 guard)
     const approved = approveRecord(nonMock, new Date("2026-10-17"));
-    // Even an approved record would publish none of these photos until their rights are verified.
-    expect(toTourContentView(approved, "pt", "public")!.gallery).toHaveLength(0);
+    // Owner declaration 28/10/2026: the four own photos are attested, so an approved record publishes exactly them.
+    expect(toTourContentView(approved, "pt", "public")!.gallery).toHaveLength(4);
+    expect(toTourContentView(record, "pt", "public")).toBeNull(); // the DRAFT record itself is never public
   });
 
   it("ships the photo web copies and the poster without EXIF, XMP or ICC", async () => {

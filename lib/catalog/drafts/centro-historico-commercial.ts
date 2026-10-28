@@ -182,10 +182,10 @@ export const CENTRO_COMMERCIAL_DRAFT: TourContentRecord = {
   languages: ["pt", "es", "en"],
   inclusions: {
     pt: [
-      "Guia turístico privativo.", "Transporte de ida e volta.", "Veículo alugado.", "Combustível.", "Estacionamento.", "Circuito histórico acompanhado.", "Água.", "Fotografias informais feitas pelo guia.", "Personalização do roteiro.", "Planejamento das atrações conforme a duração contratada.",
+      "Guia turístico privativo.", "Transporte de ida e volta.", "Veículo próprio da Ricardo Tour.", "Combustível.", "Estacionamento.", "Circuito histórico acompanhado.", "Água.", "Fotografias informais feitas pelo guia.", "Personalização do roteiro.", "Planejamento das atrações conforme a duração contratada.",
     ],
-    en: ["Private tour guide.", "Round-trip transport.", "Rented vehicle.", "Fuel.", "Parking.", "Guided historic-center tour.", "Water.", "Informal photos taken by the guide.", "Itinerary personalization.", "Attraction planning according to the contracted duration."],
-    es: ["Guía turístico privado.", "Transporte de ida y vuelta.", "Vehículo alquilado.", "Combustible.", "Estacionamiento.", "Recorrido guiado por el centro histórico.", "Agua.", "Fotografías informales tomadas por el guía.", "Personalización del recorrido.", "Planificación de los atractivos según la duración contratada."],
+    en: ["Private tour guide.", "Round-trip transport.", "Ricardo Tour's own vehicle.", "Fuel.", "Parking.", "Guided historic-center tour.", "Water.", "Informal photos taken by the guide.", "Itinerary personalization.", "Attraction planning according to the contracted duration."],
+    es: ["Guía turístico privado.", "Transporte de ida y vuelta.", "Vehículo propio de Ricardo Tour.", "Combustible.", "Estacionamiento.", "Recorrido guiado por el centro histórico.", "Agua.", "Fotografías informales tomadas por el guía.", "Personalización del recorrido.", "Planificación de los atractivos según la duración contratada."],
   },
   exclusions: {
     pt: [
@@ -210,9 +210,11 @@ export const CENTRO_COMMERCIAL_DRAFT: TourContentRecord = {
     es: "El recorrido puede ajustarse según el clima y el acceso a los atractivos. En caso de lluvia intensa o cierre, el equipo evaluará alternativas y una posible reprogramación según términos contractuales que aún esperan aprobación. Esta versión no define plazos, penalizaciones ni reembolsos.",
   },
   operationalConditions: {
-    pt: "O modelo comercial aprovado prevê veículo alugado dirigido por Ricardo, guia e motorista, com até 4 turistas. A autorização da locadora para transporte turístico remunerado, a cobertura de seguro, os documentos do veículo e os requisitos de transporte infantil ainda precisam ser comprovados. A aprovação comercial não valida esses documentos nem autoriza publicação.",
-    en: "The approved commercial model uses a rented vehicle driven by Ricardo, who acts as guide and driver, for up to 4 guests. Written rental-company authorization for paid tourist transport, insurance coverage, vehicle documents and child-transport requirements still need documentary confirmation. Commercial approval does not validate these documents or authorize publication.",
-    es: "El modelo comercial aprobado contempla un vehículo alquilado conducido por Ricardo, quien será guía y conductor, para un máximo de 4 turistas. Aún deben documentarse la autorización de la empresa de alquiler para el transporte turístico remunerado, la cobertura del seguro, los documentos del vehículo y los requisitos de transporte infantil. La aprobación comercial no valida estos documentos ni autoriza la publicación.",
+    // Owner, 27/10/2026 (definitive): own Renault Mégane 2025, Ricardo guide and driver, up to 4 tourists; documents declared
+    // by the Owner. The rented-vehicle premise is superseded and must not reappear.
+    pt: "Operação própria da Ricardo Tour: Ricardo é o guia e o motorista, no veículo próprio da empresa (Renault Mégane 2025), para até 4 turistas. O horário exato de início é combinado com você.",
+    en: "Operated by Ricardo Tour itself: Ricardo is your guide and driver, in the company's own vehicle (Renault Mégane 2025), for up to 4 guests. The exact start time is agreed with you.",
+    es: "Operación propia de Ricardo Tour: Ricardo es tu guía y conductor, en el vehículo propio de la empresa (Renault Mégane 2025), para un máximo de 4 turistas. La hora exacta de inicio se acuerda contigo.",
   },
   faq: [
     {

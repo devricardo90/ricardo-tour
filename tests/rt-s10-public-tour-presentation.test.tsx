@@ -88,15 +88,16 @@ describe("Sprint 10 public tour presentation gate", () => {
   });
 
   it("publishes media only through the content gate, and a video only once the Owner confirmed the clip", () => {
-    const unverified = approveRecord(MOCK_TOUR_CONTENT[ROCINHA], new Date("2026-10-21T12:00:00Z")); // rights UNVERIFIED
-    const view = toTourContentView(unverified, "pt", "public")!;
+    // An UNVERIFIED item never becomes public, even inside an approved record (TEST ONLY: everything marked unverified).
+    const unverifiedRecord = { ...MOCK_TOUR_CONTENT[ROCINHA], images: MOCK_TOUR_CONTENT[ROCINHA].images.map((m) => ({ ...m, rightsStatus: "UNVERIFIED" as const })) };
+    const view = toTourContentView(approveRecord(unverifiedRecord, new Date("2026-10-21T12:00:00Z")), "pt", "public")!;
     expect(view.gallery).toEqual([]);
     expect(view.videos).toEqual([]);
     expect(buildPublicOffer(PROTOTYPE_OFFER[ROCINHA], "pt", view, { pricePublicationAuthorized: false })!.video).toBeNull();
-    // The real RT-119 load record carries the clip as a VIDEO media row (rights UNVERIFIED): public only once verified.
+    // The real RT-119 load record carries the clip as a VIDEO media row, attested by the Owner (28/10/2026).
     const load = rocinhaLoadRecord();
-    expect(load.images.find((m) => m.mediaType === "VIDEO")?.rightsStatus).toBe("UNVERIFIED");
-    expect(toTourContentView(approveRecord(load, new Date("2026-10-21T12:00:00Z")), "pt", "public")!.videos).toEqual([]);
+    expect(load.images.find((m) => m.mediaType === "VIDEO")?.rightsStatus).toBe("OWNER_ATTESTED");
+    expect(toTourContentView(load, "pt", "public")).toBeNull(); // still DRAFT: nothing public without an approval act
     const attested = approveRecord({ ...load, images: load.images.map((m) => ({ ...m, rightsStatus: "OWNER_ATTESTED" as const })) }, new Date("2026-10-21T12:00:00Z")); // TEST ONLY
     const attestedView = toTourContentView(attested, "pt", "public")!;
     expect(attestedView.videos.map((v) => v.src)).toEqual(["/media/tours/favela-rocinha/rocinha-praca-movimento.mp4"]);

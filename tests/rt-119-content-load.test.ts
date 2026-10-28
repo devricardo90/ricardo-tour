@@ -23,9 +23,11 @@ describe("RT-119 — Rocinha load record", () => {
     for (const l of ["pt", "en", "es"] as const) for (const f of r.faq!) expect(f.question[l] && f.answer[l]).toBeTruthy();
     expect(r.images.filter((m) => (m.mediaType ?? "IMAGE") === "IMAGE")).toHaveLength(5);
     expect(r.images.filter((m) => m.mediaType === "VIDEO")).toHaveLength(1);
-    // Owner decision 17/10/2026: declaration/visual approval/credit ≠ proof of rights → all six stay pending.
-    expect(r.images.every((m) => m.rightsStatus === "UNVERIFIED" && /^PENDING rights verification/.test(m.rightsNote ?? ""))).toBe(true);
-    expect(r.images[2].rightsNote).toMatch(/mural artwork shown: artist authorship and rights NOT verified/);
+    // Owner declaration 28/10/2026 (replaces the 17/10 rule): own photos and the clip are authorised; the mural photo
+    // stays pending because the artwork's rights are uncertain.
+    expect(r.images.filter((m) => m.rightsStatus === "OWNER_ATTESTED" && /^Owner, 28\/10\/2026/.test(m.rightsNote ?? ""))).toHaveLength(5);
+    expect(r.images[2].rightsStatus).toBe("UNVERIFIED");
+    expect(r.images[2].rightsNote).toMatch(/^PENDING rights verification: the mural artwork shown/);
   });
 
   it("never carries prices, internal costs or the operator fee", () => {
@@ -179,12 +181,15 @@ describe("RT-119 — media: editorial approval, rights and publication are separ
   const appr = () => approveRecord(verified(rocinhaLoadRecord()), at);
   const photos = (r: TourContentRecord) => toTourContentView(r, "pt", "public")!.gallery.length;
 
-  it("REAL state: an approval act never authorizes the Rocinha media while rights are pending", () => {
+  it("REAL state: an approval act authorizes the attested Rocinha media and never the pending mural photo", () => {
     const real = approveRecord(rocinhaLoadRecord(), at);
-    expect(real.images.every((m) => m.publicationApprovedAt === null)).toBe(true);
+    expect(real.images.filter((m) => m.publicationApprovedAt === null).map((m) => m.src)).toEqual(["/media/tours/favela-rocinha/rocinha-03-mural.jpg"]);
     const view = toTourContentView(real, "pt", "public")!;
-    expect(view.gallery).toHaveLength(0);
-    expect(view.videos).toHaveLength(0);
+    expect(view.gallery.map((g) => g.src)).not.toContain("/media/tours/favela-rocinha/rocinha-03-mural.jpg");
+    expect(view.gallery).toHaveLength(4);
+    expect(view.videos).toHaveLength(1);
+    // Without an approval act nothing is public, attested or not.
+    expect(toTourContentView(rocinhaLoadRecord(), "pt", "public")).toBeNull();
   });
 
   it("approved content without edits stays public with all verified media", () => {

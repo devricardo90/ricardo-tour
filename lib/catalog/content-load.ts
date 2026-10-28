@@ -22,9 +22,9 @@ export type LoadPlan = { tripId: string; action: LoadAction; reasons: string[]; 
 const REQUIRED_TEXT = ["summary", "description", "durationLabel", "meetingPoint", "requirements", "accessibility", "operationalConditions"] as const;
 
 /**
- * Rocinha record to load: real draft content + the 5 photos and the clip (VIDEO) visually approved by the Owner. All six
- * keep their rights PENDING (UNVERIFIED): they are stored but never public until rights are verified AND a new approval
- * act authorizes them.
+ * Rocinha record to load: real draft content + the 5 photos and the clip (VIDEO) visually approved by the Owner. Own media
+ * is OWNER_ATTESTED (Owner declaration 28/10/2026); the mural photo stays UNVERIFIED (artwork rights uncertain). Nothing
+ * is public until a new approval act authorizes the loaded content.
  */
 export function rocinhaLoadRecord(): TourContentRecord {
   const base = MOCK_TOUR_CONTENT[ROCINHA_ID];
@@ -37,9 +37,9 @@ export function rocinhaLoadRecord(): TourContentRecord {
       src: video.src,
       alt: video.caption,
       isCover: false,
-      // Rights PENDING (Owner decision 17/10/2026): visual approval of the clip is not proof of rights → UNVERIFIED.
-      rightsStatus: "UNVERIFIED",
-      rightsNote: `PENDING rights verification (Owner decision 17/10/2026): visual approval and the Owner's declaration are not documentary proof. ${video.rightsNote}`,
+      // Own video: authorised for commercial use by the Owner's declaration of 28/10/2026 (RT-116).
+      rightsStatus: "OWNER_ATTESTED",
+      rightsNote: video.rightsNote,
       mediaType: "VIDEO",
       posterSrc: video.poster,
       mobileSrc: video.mobileSrc ?? null,
