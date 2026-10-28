@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { MOCK_TOUR_CONTENT, PROTOTYPE_OFFER } from "@/lib/catalog/mock/tour-content.mock";
 import { toTourContentView } from "@/lib/catalog/tour-content";
 import { TourDetailPrototype, offerForReview } from "@/components/site/tour/content/tour-detail-prototype";
+import { TourBookingRequestForm } from "@/components/site/tour/content/tour-booking-request-form";
+import { publicRequestTable } from "@/lib/booking/public-request";
 import { siteBody, siteDisplay } from "@/app/[locale]/(site)/fonts";
 import "@/app/[locale]/(site)/site-theme.css";
 
@@ -28,9 +30,11 @@ export default async function TourContentPreviewPage({ params, searchParams }: {
   const content = toTourContentView(record, locale, "preview");
   if (!content) notFound();
   const showPrices = precos !== "ocultos";
+  // RT-124 local review: the booking request with the approved table (lab only; creates a PENDING booking, no charge).
+  const requestTable = showPrices ? publicRequestTable(id, "lab") : null;
   return (
     <div className={`site-theme ${siteDisplay.variable} ${siteBody.variable}`} data-testid="tour-content-preview">
-      <TourDetailPrototype offer={offerForReview(offer, showPrices)} content={content} locale={locale} reviewMode showProvisionalPrices={showPrices} />
+      <TourDetailPrototype offer={offerForReview(offer, showPrices)} content={content} locale={locale} reviewMode showProvisionalPrices={showPrices} bookingRequest={requestTable ? <TourBookingRequestForm tripId={id} locale={locale} mode="lab" groupTotalCents={requestTable.groupTotalCents} /> : null} />
     </div>
   );
 }

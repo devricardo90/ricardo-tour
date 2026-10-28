@@ -116,7 +116,7 @@ const raisedCard = "rounded-xl border border-white/10 bg-[var(--site-charcoal-ra
  * the CTA points to the existing request form; no automatic confirmation.
  */
 /** `showProvisionalPrices=false` produces the visual-review version (no internal prices; only "Valores em validação"). */
-export function TourDetailPrototype({ offer, content, locale, reviewMode, showProvisionalPrices = true }: { offer: PrototypeOfferView; content: TourContentView; locale: string; reviewMode: boolean; showProvisionalPrices?: boolean }) {
+export function TourDetailPrototype({ offer, content, locale, reviewMode, showProvisionalPrices = true, bookingRequest = null }: { offer: PrototypeOfferView; content: TourContentView; locale: string; reviewMode: boolean; showProvisionalPrices?: boolean; /** RT-124: booking request form, only for a tour with an approved price that may be shown. */ bookingRequest?: React.ReactNode }) {
   const td = resolveTourDetailCopy(locale);
   const t = resolveTourContentCopy(locale);
   const localize = (value: Localized | null | undefined) => pickL(value, locale, !offer.noPortugueseFallback);
@@ -306,7 +306,8 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                   {t.requestWhatsapp}
                 </a>
               ) : null}
-              {reviewMode && !offer.requestViaWhatsapp ? <p className="mt-3 max-w-[60ch] text-[14px] text-[var(--site-on-dark-subtle,#9DA3A5)]">{localize(offer.requestFlowNotice) || t.contactBody}</p> : null}
+              {reviewMode && !offer.requestViaWhatsapp && !bookingRequest ? <p className="mt-3 max-w-[60ch] text-[14px] text-[var(--site-on-dark-subtle,#9DA3A5)]">{localize(offer.requestFlowNotice) || t.contactBody}</p> : null}
+              {bookingRequest}
             </section>
           </article>
         </div>

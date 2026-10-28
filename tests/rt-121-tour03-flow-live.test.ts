@@ -46,11 +46,10 @@ describe.skipIf(!url)("RT-121 TOUR-03 4 h complete flow (local isolated database
     payments = await import("@/lib/services/booking-payment.service");
     bookings = await import("@/lib/services/booking.service");
     for (const [id, name] of [[TOUR_03, "TOUR-03 fixture"], [TOUR_01, "TOUR-01 fixture"]]) {
-      await prisma.trip.upsert({
-        where: { id },
-        update: {},
-        create: { id, city: "Rio de Janeiro", priceCents: 0, title: { pt: `${name} ${tag}` }, highlights: [], isPublished: false, maxGuests: 4 },
-      });
+      // Other live suites create the same fixture trip in parallel: insert it once, never fail on a concurrent insert.
+      await prisma.$executeRaw`INSERT INTO "Trip" ("id", "city", "priceCents", "title", "highlights", "isPublished", "maxGuests", "updatedAt")
+        VALUES (${id}, 'Rio de Janeiro', 0, ${JSON.stringify({ pt: `${name} ${tag}` })}::jsonb, '[]'::jsonb, false, 4, now())
+        ON CONFLICT ("id") DO NOTHING`;
     }
     admin = { userId: (await prisma.user.create({ data: { name: "Admin Teste", email: `${tag}-admin@example.invalid`, role: "ADMIN" } })).id, role: "ADMIN" };
     for (let i = 0; i < 7; i++) customers.push((await prisma.user.create({ data: { name: `Cliente ${i}`, email: `${tag}-${i}@example.invalid` } })).id);

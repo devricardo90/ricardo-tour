@@ -35,6 +35,8 @@ export const privateBookingInputSchema = z.object({
   contact: z.object({
     fullName: text(120).refine((value) => value.length >= 2, "too short"),
     phone: z.string().trim().regex(/^\+?[0-9][0-9 ()-]{6,22}[0-9]$/, "phone"),
+    /** Required by the public request form (no account); optional for a signed-in customer, whose account has one. */
+    email: z.string().trim().toLowerCase().max(254).email().optional(),
     language: z.enum(["pt", "en", "es"]),
     pickupAddress: text(300).optional(),
     notes: text(1000).optional(),
@@ -162,6 +164,7 @@ export async function createPrivateBookingForUser(userId: string, rawInput: unkn
             create: {
               fullName: contact.fullName,
               phone: contact.phone,
+              email: contact.email ?? null,
               language: contact.language,
               pickupAddress: contact.pickupAddress ?? null,
               notes: contact.notes ?? null,

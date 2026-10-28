@@ -11,6 +11,8 @@ import { TourDetailView } from "@/components/site/tour/tour-detail-view";
 import { publicOfferPriceCents } from "@/lib/catalog/price-on-request";
 import { getPublicTourPresentation } from "@/lib/catalog/public-tour-presentation";
 import { TourDetailPrototype } from "@/components/site/tour/content/tour-detail-prototype";
+import { TourBookingRequestForm } from "@/components/site/tour/content/tour-booking-request-form";
+import { publicRequestTable } from "@/lib/booking/public-request";
 
 // Same request-time catalog read as the Home and the listing.
 export const dynamic = "force-dynamic";
@@ -59,6 +61,8 @@ export default async function TourDetailsPage(props: PageProps) {
   const presentation = await getPublicTourPresentation(id, locale);
   const name = presentation?.offer.title || getLocalizedField<string>(asLocalizedText(trip.title), locale).trim();
   const summary = presentation?.content.summary ?? parseTripDescription(getLocalizedField<string>(asLocalizedText(trip.description), locale) ?? "").summary ?? undefined;
+  // RT-124: the booking request appears only where the price is approved AND its publication is authorized.
+  const requestTable = presentation ? publicRequestTable(id, "public") : null;
   const jsonLd = buildTouristTripJsonLd({ siteUrl: PUBLIC_SITE_URL, url: `${PUBLIC_SITE_URL}/${locale}/tours/${id}`, name, description: summary, image: trip.imageUrl, priceCents: publicOfferPriceCents(id, trip.priceCents) ?? 0 }); // 0 = no Offer (obsolete published price)
 
   return (
@@ -66,7 +70,14 @@ export default async function TourDetailsPage(props: PageProps) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }} />
       {presentation ? (
         // Approved design, public mode: no review chips or lab notices; prices only if publication is authorized.
-        <TourDetailPrototype offer={presentation.offer} content={presentation.content} locale={locale} reviewMode={false} showProvisionalPrices={false} />
+        <TourDetailPrototype
+          offer={presentation.offer}
+          content={presentation.content}
+          locale={locale}
+          reviewMode={false}
+          showProvisionalPrices={false}
+          bookingRequest={requestTable ? <TourBookingRequestForm tripId={id} locale={locale} mode="public" groupTotalCents={requestTable.groupTotalCents} /> : null}
+        />
       ) : (
         <TourDetailView trip={trip} locale={locale} />
       )}

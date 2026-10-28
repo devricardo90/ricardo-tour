@@ -234,6 +234,7 @@ model BookingContact {
   bookingId     String   @unique
   fullName      String
   phone         String
+  email         String?
   language      String
   pickupAddress String?
   notes         String?

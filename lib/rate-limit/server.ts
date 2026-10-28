@@ -56,7 +56,7 @@ export function resetLimitersForTests() {
 /** Same numbers as before the shared limiter existed (5 attempts / 10 minutes per client), now counted in the shared store. */
 export const FORM_LIMIT = { limit: 5, windowSeconds: 600 } as const;
 
-export async function isFormSubmissionLimited(headers: { get(name: string): string | null }, form: "contact_message" | "tour_request") {
+export async function isFormSubmissionLimited(headers: { get(name: string): string | null }, form: "contact_message" | "tour_request" | "private_booking_request") {
   const rule: RateLimitRule = { name: `form_${form}`, ...FORM_LIMIT };
   const result = await getLimiter("degrade").check({ rule, dimension: `form:${form}`, identifier: clientKeyFromHeaders(headers) });
   return !result.allowed;
