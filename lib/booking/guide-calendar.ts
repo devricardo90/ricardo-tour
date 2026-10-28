@@ -5,10 +5,10 @@
  * driver, own Renault Mégane 2025, ~8 h hotel to hotel), TOUR-02 (Ricardo Tour guide during the whole visit, ~3 h) and
  * TOUR-03 (guide and driver, own Mégane, 4 h + ~1 h pickup/return). A booking on any of them therefore occupies the guide.
  *
- * Rule: at most ONE active private departure (PENDING or CONFIRMED) per guide per Rio calendar day, whatever the tour.
- * PROVISIONAL and conservative until the Owner answers RT-123 (questions 1 and 5: departures per day; does a booking
- * block the other tours that day). It can refuse a combination the Owner might later allow (e.g. TOUR-02 in the morning
- * and TOUR-03 in the afternoon), never accept two tours the guide cannot run.
+ * Rule APPROVED by the Owner (RT-123, 28/10/2026): operation every day; one confirmed private tour per day across
+ * TOUR-01, TOUR-02 and TOUR-03; a confirmed booking blocks the date for the other tours. Here a PENDING request also
+ * holds the day (so two customers are never sent deposit instructions for the same day); the expiry of pending
+ * requests, so that none blocks a day for good, is the technical proposal in docs/product/rt-123-availability-rules.md.
  */
 export const GUIDE_DAY_TRIP_IDS: readonly string[] = [
   "cmlhxkpy9000028zq27rhytew", // TOUR-01 Cristo Redentor + Pão de Açúcar

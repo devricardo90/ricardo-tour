@@ -58,6 +58,15 @@ describe("RT-124 public request: which tours accept it and the slot rules", () =
     expect(isRequestDateAllowed("2027-11-11", "2026-11-10")).toBe(false); // beyond 365 days
     expect(isRequestDateAllowed("2026-11-09", "2026-11-10")).toBe(false); // past
   });
+
+  it("Owner 28/10/2026: less than 24 hours before the start (09:00 in Rio) is on request, not an online request", async () => {
+    const { isRequestLeadTimeAllowed } = await import("@/lib/booking/public-request");
+    // 17 Nov 09:00 in Rio = 12:00 UTC.
+    expect(isRequestLeadTimeAllowed(TOUR_03, "2026-11-17", new Date("2026-11-16T12:00:00Z"))).toBe(true); // exactly 24 h
+    expect(isRequestLeadTimeAllowed(TOUR_03, "2026-11-17", new Date("2026-11-16T12:00:01Z"))).toBe(false); // 23:59:59
+    expect(isRequestLeadTimeAllowed(TOUR_03, "2026-11-17", new Date("2026-11-16T21:00:00Z"))).toBe(false); // 18:00 the day before
+    expect(isRequestLeadTimeAllowed(TOUR_01, "2026-11-17", new Date("2026-11-01T12:00:00Z"))).toBe(false); // no online request
+  });
 });
 
 describe("RT-124 public request: server action", () => {

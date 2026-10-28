@@ -6,7 +6,7 @@ import { isFormSubmissionLimited } from "@/lib/rate-limit/server";
 import { reportServerError } from "@/lib/observability/report";
 import { sendContactNotification } from "@/lib/services/tour-request-notification";
 import { createPublicBookingRequest } from "@/lib/services/private-booking-request.service";
-import { isRequestDateAllowed, publicRequestTable, type PublicRequestMode } from "@/lib/booking/public-request";
+import { isRequestDateAllowed, isRequestLeadTimeAllowed, publicRequestTable, type PublicRequestMode } from "@/lib/booking/public-request";
 import { isValidEmail, isValidPhone, todayInRio, NAME_MAX, NOTES_MAX } from "@/lib/tour-request";
 import { formatBrl } from "@/lib/commerce/money";
 
@@ -58,7 +58,7 @@ export async function submitPrivateBookingRequest(formData: FormData): Promise<B
   if (!phone) errors.phone = "required";
   else if (!isValidPhone(phone) || !/^\+?[0-9][0-9 ()-]{6,22}[0-9]$/.test(phone)) errors.phone = "invalid";
   if (!date) errors.date = "required";
-  else if (!isRequestDateAllowed(date, todayInRio())) errors.date = "date_not_allowed";
+  else if (!isRequestDateAllowed(date, todayInRio()) || !isRequestLeadTimeAllowed(tripId, date)) errors.date = "date_not_allowed";
   if (!Number.isInteger(party) || party < 1 || party > maxParty) errors.party = "party_invalid";
   if (pickup.length > 300) errors.pickup = "too_long";
   if (notes.length > NOTES_MAX) errors.notes = "too_long";
