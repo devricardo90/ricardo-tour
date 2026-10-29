@@ -7,7 +7,7 @@ import { chromium } from "@playwright/test";
 const base = process.argv[2] ?? process.env.RT116_PREVIEW_URL ?? "http://127.0.0.1:3248";
 const out = process.argv[3] ?? "docs/baseline/rt-116-centro-commercial-gallery-validation";
 const id = "cmlibniq40000z4zqkbujnutt";
-const expected = ["img-1337", "img-1802", "img-1328", "img-1321", "img-1332", "img-1136", "museu-do-amanha"];
+const expected = ["img-1337", "img-1802", "img-1328", "img-1321", "img-1332", "img-1136"]; // Museu do Amanha photo removed 28/10/2026 (licence unverified)
 fs.mkdirSync(out, { recursive: true });
 
 const browser = await chromium.launch();

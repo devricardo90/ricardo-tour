@@ -169,12 +169,11 @@ describe("RT-114 mock data integrity", () => {
       "/media/tours/centro-historico-cultural/centro-historico-img-1321.webp",
       "/media/tours/centro-historico-cultural/centro-historico-img-1332.webp",
       "/media/tours/centro-historico-cultural/centro-historico-img-1136.webp",
-      "/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp",
     ]);
     expect(record.images.every((image) => image.alt.pt && image.alt.en && image.alt.es)).toBe(true);
-    // Owner declaration 28/10/2026: the six own photos are authorised; the Museu do Amanhã photo (Pexels) stays blocked.
-    expect(record.images.filter((image) => image.rightsStatus === "UNVERIFIED").map((image) => image.src)).toEqual(["/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp"]);
-    expect(record.images.filter((image) => image.rightsStatus === "OWNER_ATTESTED")).toHaveLength(6);
+    // Owner 28/10/2026: the six own photos are authorised; the unverified Museu do Amanhã photo left the selection.
+    expect(record.images.every((image) => image.rightsStatus === "OWNER_ATTESTED")).toBe(true);
+    expect(record.images).toHaveLength(6);
     expect(toTourContentView(record, "pt", "public")).toBeNull();
     expect(record.itinerary).toHaveLength(6);
     expect(record.languages).toEqual(["pt", "es", "en"]);
@@ -761,12 +760,13 @@ describe("RT-112 / RT-115 TOUR-01 Cristo Redentor + Pão de Açúcar (Ficha Come
     expect(all).not.toMatch(/R\$/);
   });
 
-  it("explains the CR-18 payment rule without amounts", () => {
+  it("explains the approved payment rule without amounts: 30% of the total, 70% at the start (CR-18 superseded)", () => {
     const answer = MOCK_TOUR_CONTENT[ID].faq!.find((f) => f.question.pt?.includes("pagamento"))!.answer;
-    expect(answer.pt).toContain("30% dos serviços");
-    expect(answer.pt).toContain("70% restantes");
-    expect(answer.en).toContain("30% of the services");
-    expect(answer.es).toContain("30% de los servicios");
+    expect(answer.pt).toContain("sinal de 30% do valor total");
+    expect(answer.pt).toContain("70% restantes são pagos no início do passeio");
+    expect(answer.en).toContain("30% deposit of the total");
+    expect(answer.es).toContain("seña del 30% del total");
+    for (const l of ["pt", "en", "es"] as const) expect(answer[l]).not.toMatch(/servi[çc]os|services|servicios/);
   });
 });
 

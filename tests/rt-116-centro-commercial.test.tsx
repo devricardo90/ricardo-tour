@@ -33,8 +33,9 @@ describe("RT-116 approved commercial draft", () => {
       ["porto-maravilha-6h", 360],
     ]);
     expect(CENTRO_COMMERCIAL_DRAFT.status).toBe("DRAFT");
-    // Owner declaration 28/10/2026: own photos attested; the third-party Museu do Amanhã photo stays blocked.
-    expect(CENTRO_COMMERCIAL_DRAFT.images.filter((image) => image.rightsStatus === "UNVERIFIED").map((image) => image.src)).toEqual(["/media/tours/centro-historico-cultural/centro-historico-museu-do-amanha.webp"]);
+    // Owner 28/10/2026: own photos attested; material without proven rights is out of the public selection.
+    expect(CENTRO_COMMERCIAL_DRAFT.images.every((image) => image.rightsStatus === "OWNER_ATTESTED")).toBe(true);
+    expect(JSON.stringify(CENTRO_COMMERCIAL_DRAFT.images)).not.toContain("museu-do-amanha");
     expect(toTourContentView(CENTRO_COMMERCIAL_DRAFT, "pt", "public")).toBeNull();
     expect(MOCK_TOUR_CONTENT[CENTRO_ID]).toBe(CENTRO_COMMERCIAL_DRAFT);
   });
@@ -149,7 +150,7 @@ describe("TOUR-03 editorial status of the hero pitch and benefit lines", () => {
     expect(offer.pitch.es).toBe("Un paseo privado con guía por la historia, la arquitectura y la cultura del centro de Río.");
     expect(offer.benefits.pt).toEqual(["Grupo privativo de 1 a 4 turistas", "Horário e roteiro combinados com a equipe", "Acompanhamento de guia durante a caminhada"]);
     expect(MOCK_TOUR_CONTENT[CENTRO_ID].status).toBe("DRAFT");
-    expect(MOCK_TOUR_CONTENT[CENTRO_ID].images.filter((image) => image.rightsStatus !== "OWNER_ATTESTED")).toHaveLength(1);
+    expect(MOCK_TOUR_CONTENT[CENTRO_ID].images.filter((image) => image.rightsStatus !== "OWNER_ATTESTED")).toHaveLength(0);
     expect(PROTOTYPE_OFFER["cmli1a6im000034zqqzc9sppb"]).toMatchObject({ pitchStatus: "CONFIRMED", benefitsStatus: "PROVISIONAL" });
     expect(PROTOTYPE_OFFER["cmlhxkpy9000028zq27rhytew"]).toMatchObject({ pitchStatus: "CONFIRMED", pitchStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" }, benefitsStatus: "PROVISIONAL" }); // TOUR-01 PT pitch approved 23/10/2026
     expect(PROTOTYPE_OFFER["cmljo0s1u0000t0zqa0bpd23p"]).toMatchObject({ pitchStatus: "MOCK", benefitsStatus: "MOCK" });
@@ -271,6 +272,8 @@ describe("vehicle (Owner, definitive 27/10/2026): own Renault Mégane 2025, neve
       const text = JSON.stringify({ content: MOCK_TOUR_CONTENT[id], offer: PROTOTYPE_OFFER[id] });
       expect(text, id).not.toMatch(/alugad|locadora|rented|rental|alquilad|empresa de alquiler/i);
     }
-    expect(CENTRO_COMMERCIAL_DRAFT.operationalConditions?.pt).toContain("veículo próprio da empresa (Renault Mégane 2025)");
+    expect(CENTRO_COMMERCIAL_DRAFT.operationalConditions?.pt).toContain("no veículo próprio da empresa");
+    // The vehicle model stays internal on the public pages (same rule as TOUR-01).
+    expect(JSON.stringify(CENTRO_COMMERCIAL_DRAFT)).not.toMatch(/Mégane|Megane/);
   });
 });

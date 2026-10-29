@@ -13,6 +13,8 @@ const SOURCE = "Owner selection, 17/10/2026; Drive: RICARDO TOUR / MIDIAS / 03_C
 /** Own photos: authorised for commercial use by the Owner's declaration of 28/10/2026 (RT-116). */
 const RIGHTS = `Owner, 28/10/2026: own photo of Ricardo Tour, authorised for commercial use (declaration recorded in RT-116). ${SOURCE}`;
 
+// Owner, 28/10/2026 (RT-116): material without proven rights is out of the public selection. The Museu do Amanhã
+// photo (Pexels; photographer and licence never verified) was removed from the gallery and from the repository.
 const images: TourContentRecord["images"] = [
   {
     position: 0, src: `${DIR}/centro-historico-img-1337.webp`, isCover: true, rightsStatus: "OWNER_ATTESTED", rightsNote: RIGHTS,
@@ -37,10 +39,6 @@ const images: TourContentRecord["images"] = [
   {
     position: 5, src: `${DIR}/centro-historico-img-1136.webp`, isCover: false, rightsStatus: "OWNER_ATTESTED", rightsNote: RIGHTS,
     alt: { pt: "Interior de uma igreja histórica, com bancos e altar", en: "Interior of a historic church, with pews and an altar", es: "Interior de una iglesia histórica, con bancos y altar" },
-  },
-  {
-    position: 6, src: `${DIR}/centro-historico-museu-do-amanha.webp`, isCover: false, rightsStatus: "UNVERIFIED", rightsNote: `UNVERIFIED third-party photo (Pexels): original page, photographer and licence not verified; blocked until verified. ${SOURCE}`,
-    alt: { pt: "Edifício do Museu do Amanhã junto à área portuária do Rio", en: "Museum of Tomorrow building by Rio's port area", es: "Edificio del Museo del Mañana junto a la zona portuaria de Río" },
   },
 ];
 

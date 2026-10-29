@@ -212,9 +212,9 @@ export const CENTRO_COMMERCIAL_DRAFT: TourContentRecord = {
   operationalConditions: {
     // Owner, 27/10/2026 (definitive): own Renault Mégane 2025, Ricardo guide and driver, up to 4 tourists; documents declared
     // by the Owner. The rented-vehicle premise is superseded and must not reappear.
-    pt: "Operação própria da Ricardo Tour: Ricardo é o guia e o motorista, no veículo próprio da empresa (Renault Mégane 2025), para até 4 turistas. O horário exato de início é combinado com você.",
-    en: "Operated by Ricardo Tour itself: Ricardo is your guide and driver, in the company's own vehicle (Renault Mégane 2025), for up to 4 guests. The exact start time is agreed with you.",
-    es: "Operación propia de Ricardo Tour: Ricardo es tu guía y conductor, en el vehículo propio de la empresa (Renault Mégane 2025), para un máximo de 4 turistas. La hora exacta de inicio se acuerda contigo.",
+    pt: "Operação própria da Ricardo Tour: Ricardo é o guia e o motorista, no veículo próprio da empresa, para até 4 turistas. O horário exato de início é combinado com você.",
+    en: "Operated by Ricardo Tour itself: Ricardo is your guide and driver, in the company's own vehicle, for up to 4 guests. The exact start time is agreed with you.",
+    es: "Operación propia de Ricardo Tour: Ricardo es tu guía y conductor, en el vehículo propio de la empresa, para un máximo de 4 turistas. La hora exacta de inicio se acuerda contigo.",
   },
   faq: [
     {

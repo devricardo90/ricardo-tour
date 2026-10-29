@@ -18,8 +18,8 @@ Nada fica público sem o ato de aprovação do conteúdo (RT-119) e sem a autori
 | `pao-03-IMG_1163-mirante-baia.webp` | IMG_1163 | **LIBERADA**: visitante coberto pela declaração |
 | `pao-04-IMG_1181-visitante-deck.webp` | IMG_1181 | **LIBERADA**: visitante coberto pela declaração |
 | `pao-bondinho-41-58.mp4` / `-mobile.mp4` / `-poster.jpg` | IMG_1157.MOV, trecho 41–58 s | **LIBERADO** (direitos). A aprovação editorial do clipe ainda está PROVISÓRIA: o Owner não revisou a reprodução |
-| `terceiros-cristo-redentor.jpg` | `img-cristo-redentor1.jpg`: origem desconhecida, não é a foto do Pexels citada | **BLOQUEADA** (fora da galeria) |
-| `terceiros-escadaria-selaron.jpg` | `img-escadaria-selarao1.jpg`: origem desconhecida | **BLOQUEADA** (fora da galeria) |
+| ~~`terceiros-cristo-redentor.jpg`~~ | `img-cristo-redentor1.jpg`: origem desconhecida, não é a foto do Pexels citada | **RETIRADA** do repositório (28/10/2026) |
+| ~~`terceiros-escadaria-selaron.jpg`~~ | `img-escadaria-selarao1.jpg`: origem desconhecida | **RETIRADA** do repositório (28/10/2026) |
 
 Lacunas que não são de direitos:
 - A galeria **não tem foto própria do Cristo nem da Selarón**.
@@ -32,7 +32,7 @@ Lacunas que não são de direitos:
 |---|---|---|
 | `rocinha-01-panorama-bandeira.jpg` (capa confirmada) | IMG_1243.HEIC | **LIBERADA** |
 | `rocinha-02-beco.jpg` | IMG_1253.HEIC | **LIBERADA** |
-| `rocinha-03-mural.jpg` | IMG_1252.HEIC | **BLOQUEADA**: a foto é própria, mas o mural mostrado é obra de terceiro, com autoria e direitos não verificados. Confirmar com o jurídico se a Lei 9.610/1998, art. 48 (obras em logradouros públicos), se aplica |
+| `rocinha-03-mural.jpg` | IMG_1252.HEIC | **BLOQUEADA**: a foto é própria, mas mostra o mural assinado "@WARK ROCINHA", pintado na parede externa de um imóvel voltada para uma escadaria de passagem pública, como fundo de uma cena com visitantes. Pela Lei 9.610/1998, art. 48, a representação fotográfica de obra permanente em logradouro público é livre; ficam duas dúvidas: se a escadaria conta como logradouro público e se o uso em página comercial está coberto. Libera com o parecer jurídico (pergunta 5 de `docs/ops/s10-external-validations-2026-10-28.md`) ou com a autorização escrita do artista; citar a autoria (art. 24, II) |
 | `rocinha-04-mirante-deck.jpg` | img-favela-deck.HEIC | **LIBERADA** |
 | `rocinha-05-panorama.jpg` | IMG_1247.HEIC | **LIBERADA** |
 | `rocinha-praca-movimento.mp4` / `-mobile.mp4` / `-poster.jpg` | IMG_1256.MOV, 6,5–22 s | **LIBERADO**, com o clipe confirmado pelo Owner em 23/10 |
@@ -49,12 +49,11 @@ Enquanto o mural estiver bloqueado, a galeria pública mostra 4 fotos.
 | `centro-historico-img-1321.webp` (Palácio Tiradentes) | idem | **LIBERADA** |
 | `centro-historico-img-1332.webp` (SAARA) | idem | **LIBERADA** |
 | `centro-historico-img-1136.webp` (interior de igreja) | idem | **LIBERADA**. Falta identificar qual igreja aparece (legenda) |
-| `centro-historico-museu-do-amanha.webp` | Pexels; página original, fotógrafo e licença não verificados | **BLOQUEADA** |
+| ~~`centro-historico-museu-do-amanha.webp`~~ | Pexels; página original, fotógrafo e licença não verificados | **RETIRADA** da seleção e do repositório (Owner, 28/10/2026). A galeria do TOUR-03 fica com 6 fotos próprias |
 
 ## Fora das galerias, mas acessíveis por URL ou usadas no catálogo atual
 
 | Arquivo | Situação | Ação antes do lançamento |
 |---|---|---|
 | `public/images/trips/imagem-pao-de-acucar.jpg`, `imagem-tour-favela-rocinha.jpg`, `imagem-igreja-centro-rio.jpg` | Capas atuais dos cards (`Trip.imageUrl`) dos três passeios; **origem desconhecida** (inventário RT-79) | **BLOQUEADAS**: trocar `Trip.imageUrl` pela capa própria de cada passeio na carga RT-119 |
-| `public/media/tours/cristo-pao-selaron/terceiros-*.jpg` | Fora da galeria, mas publicados e acessíveis por URL | Remover do repositório antes do deploy de lançamento |
 | Outros `public/images/trips/*` (Búzios, Tijuca, helicóptero etc.) | Origem desconhecida, passeios fora do lançamento | Fora do escopo; limpeza no RT-79 |
