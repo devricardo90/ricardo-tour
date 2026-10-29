@@ -10,6 +10,7 @@ import { PaymentsPanel } from "./payments-panel";
 import { DepositInstructions } from "./deposit-instructions";
 import { getBookingPaymentsAction } from "@/app/actions/admin-payments";
 import { GUEST_REQUEST_OWNER_EMAIL } from "@/lib/services/private-booking-request.service";
+import { DEPOSIT_INSTRUCTIONS_SENT_EVENT, HOLD_TIME_ZONE, PROTECTING_PAYMENT_STATUSES, holdDeadline, instructionsDueAt, isDepositHoldExpired } from "@/lib/booking/deposit-hold";
 
 /**
  * RT-013G: Admin Booking Detail Read-Only
@@ -90,6 +91,10 @@ export default async function AdminBookingDetailPage({
     CREATED: "Reserva solicitada",
     CONFIRMED: "Reserva confirmada",
     CANCELED: "Reserva cancelada",
+    CANCELED_BY_ADMIN: "Reserva cancelada",
+    CANCELED_BY_USER: "Reserva cancelada pelo cliente",
+    DEPOSIT_INSTRUCTIONS_SENT: "Instruções do sinal enviadas",
+    EXPIRED: "Prazo do sinal vencido (data liberada)",
   };
 
   const actorRoleLabels: Record<string, string> = {
@@ -116,7 +121,7 @@ export default async function AdminBookingDetailPage({
   const tourTime = (value: Date) =>
     new Date(value).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" });
   const dateTime = (value: Date) =>
-    new Date(value).toLocaleString(locale, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" });
+    new Date(value).toLocaleString(locale, { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", timeZone: "America/Sao_Paulo" });
   const brl = (cents: number) => (cents / 100).toLocaleString(locale, { style: "currency", currency: "BRL" });
 
   // RT-124: a private booking has a closed group price (quote snapshot); the legacy per-person schedule price does not apply.
@@ -130,6 +135,20 @@ export default async function AdminBookingDetailPage({
   const payments = booking.pricingModel === "PRIVATE_GROUP" ? await getBookingPaymentsAction(booking.id) : null;
   const depositVerified = !payments || payments.summary.deposit.confirmedCents >= payments.summary.deposit.expectedCents;
   const confirmBlockedReason = depositVerified ? null : "Aguardando o sinal de 30% verificado (registre e confirme o sinal em Pagamentos).";
+
+  // RT-123 temporary hold: 24 hours to send the deposit instructions (D1), then 48 hours from the sending to pay.
+  const instructionsSentAt = booking.events.find((event) => event.type === DEPOSIT_INSTRUCTIONS_SENT_EVENT)?.createdAt ?? null;
+  const protectingPayments = (payments?.payments ?? []).filter((line) => (PROTECTING_PAYMENT_STATUSES as readonly string[]).includes(line.status)).length;
+  const hold = { status: booking.status, pricingModel: booking.pricingModel ?? "", requestedAt: booking.createdAt, instructionsSentAt, protectingPayments };
+  const renderedAt = new Date();
+  const holdExpired = isDepositHoldExpired(hold, renderedAt);
+  const instructionsOverdue = !instructionsSentAt && renderedAt >= instructionsDueAt(booking.createdAt);
+  // D3: the deadline told to the customer, in their language and in Brasília time.
+  const customerLanguage = contact?.language ?? "pt";
+  const customerDeadline = new Date(holdDeadline(hold)).toLocaleString(
+    customerLanguage === "en" ? "en-GB" : customerLanguage === "es" ? "es-ES" : "pt-BR",
+    { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit", hourCycle: "h23", timeZone: HOLD_TIME_ZONE },
+  );
 
   return (
     <div className="space-y-6">
@@ -343,7 +362,7 @@ export default async function AdminBookingDetailPage({
       {/* RT-124: texto pronto com valores e prazo do sinal para enviar ao cliente (o meio de pagamento é preenchido pela equipe) */}
       {quote && booking.status === "PENDING" && !depositVerified && booking.schedule && (
         <DepositInstructions
-          language={contact?.language ?? "pt"}
+          language={customerLanguage}
           customerName={contact?.fullName ?? booking.user.name}
           tourTitle={tripTitle}
           dateLabel={tourDate(booking.schedule.startAt)}
@@ -352,6 +371,15 @@ export default async function AdminBookingDetailPage({
           depositLabel={brl(quote.depositCents)}
           balanceLabel={brl(quote.balanceCents)}
           reference={booking.id.slice(-8).toUpperCase()}
+          bookingId={booking.id}
+          locale={locale}
+          sentLabel={instructionsSentAt ? dateTime(instructionsSentAt) : null}
+          deadlineLabel={instructionsSentAt ? dateTime(holdDeadline(hold)) : null}
+          customerDeadlineLabel={instructionsSentAt ? customerDeadline : null}
+          instructionsDueLabel={dateTime(instructionsDueAt(booking.createdAt))}
+          holdExpired={holdExpired}
+          instructionsOverdue={instructionsOverdue}
+          holdProtected={protectingPayments > 0}
         />
       )}
 

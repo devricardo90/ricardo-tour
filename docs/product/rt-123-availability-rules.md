@@ -18,24 +18,35 @@ Decisões encerradas e que não devem voltar a ser perguntadas:
 - O dia da semana não bloqueia nenhum passeio.
 - No TOUR-03, as visitas internas não são prometidas (Real Gabinete só em dias úteis), e o roteiro se adapta.
 
-## 2. Proposta técnica: expiração das solicitações pendentes (para aprovação)
+## 2. Reserva temporária (APROVADA pelo Owner em 28/10/2026 e 29/10/2026; implementada localmente)
 
-Hoje uma solicitação PENDENTE já ocupa o dia do guia. Isso evita que dois clientes recebam instruções de sinal para a
-mesma data, mas sem prazo ela poderia bloquear o dia para sempre. Proposta, sem criar bloqueio permanente:
+Uma solicitação PENDENTE ocupa o dia do guia, para que dois clientes nunca recebam instruções de sinal para a mesma
+data. Para que ela não bloqueie o dia para sempre:
 
-1. **Prazo de 48 horas** a partir da solicitação para o sinal de 30% ser **verificado**. Nunca depois de 24 horas antes
-   do início: a partir daí a data entra no regime "sob consulta".
-2. **Expiração preguiçosa, sem rotina agendada:** passado o prazo e sem sinal verificado, a solicitação deixa de ocupar
-   o dia. O próximo pedido para a data é aceito, e a solicitação vencida passa a CANCELADA com o evento "EXPIRED" (ator
-   SYSTEM), na mesma transação, sob o lock do dia do guia.
-3. **Prorrogação manual:** o admin prorroga uma vez, por exemplo quando o cliente avisou que vai pagar.
-4. **Sinal registrado mas ainda não verificado:** a solicitação não expira até o admin decidir. Dinheiro recebido nunca
-   perde a data sozinho.
-5. **Admin:** mostra "expira em …" na lista e no detalhe. Nenhum e-mail automático (RT-128 é separado).
+1. **D1 — 24 horas para enviar as instruções.** A equipe tem 24 horas, contadas da criação da solicitação, para
+   registrar o envio das instruções de pagamento ("Registrar envio e gerar o prazo", no detalhe da reserva; evento
+   `DEPOSIT_INSTRUCTIONS_SENT`). Sem o registro nesse prazo, a solicitação expira e a data é liberada. Um registro feito
+   depois das 24 horas é recusado (`INSTRUCTIONS_DEADLINE_PASSED`).
+2. **48 horas para o sinal**, contadas a partir do envio das instruções. O registro é idempotente: vale o primeiro envio.
+3. **D2 — sem reinício.** Um pagamento cancelado depois das 48 horas não reinicia o prazo. Sem outro pagamento que
+   proteja a solicitação, ela expira no próximo pedido para a data.
+4. **D3 — prazo informado ao cliente.** O texto das instruções, no idioma do cliente, traz a data e a hora exatas do
+   vencimento no horário de Brasília. O texto só pode ser copiado depois do registro do envio, que gera o prazo.
+5. **Expiração preguiçosa, sem rotina agendada:** depois do prazo, sem pagamento que a proteja, o próximo pedido para a
+   mesma agenda ou para o mesmo dia do guia expira a solicitação: ela passa a CANCELADA com o evento `EXPIRED` (ator
+   SYSTEM), na mesma transação do novo pedido.
+6. **Proteção do dinheiro:** não expira enquanto houver linha de pagamento PENDENTE, REGISTRADA ou CONFIRMADA. Só linhas
+   canceladas ou estornadas deixam de proteger. Uma reserva CONFIRMADA nunca expira. As linhas de pagamento e o
+   histórico financeiro nunca são alterados pela expiração.
+7. **Concorrência:** ordem fixa de locks em todo pedido: agenda → dia do guia → pagamentos da reserva. A expiração usa o
+   mesmo lock do registro de pagamento: um pagamento registrado ao mesmo tempo ou entra antes (e protege a solicitação)
+   ou é recusado depois. A confirmação pelo admin também verifica o sinal e grava sob esse lock, de modo que um estorno
+   simultâneo do sinal não deixa uma reserva confirmada sem sinal (revisão de 29/10/2026). Dois pedidos simultâneos para
+   um dia vencido resultam em exatamente um aceito.
 
-Implementação estimada: pequena. Usa um campo calculado a partir de `createdAt` e dos pagamentos; não exige migration
-nova, exceto se o Owner quiser o prazo configurável por passeio. Fica **aguardando o "de acordo" do Owner com o prazo
-de 48 horas**.
+Sem migration: os eventos usam o histórico existente. Nenhum e-mail automático (RT-128 é separado).
+Código: `lib/booking/deposit-hold.ts`, `lib/services/deposit-hold.service.ts`. Testes:
+`tests/rt-123-deposit-hold-live.test.ts`.
 
 ## 3. Exemplos (hoje = 28/10/2026, 10:00 no Rio)
 
@@ -45,7 +56,7 @@ de 48 horas**.
 | TOUR-03 em 30/10, dia livre | aceito como PENDENTE |
 | TOUR-03 em 30/10, já com pedido ativo do TOUR-03 | data indisponível |
 | TOUR-01 em 30/10, com TOUR-03 ativo no mesmo dia | data indisponível (guia ocupado) |
-| TOUR-03 em 30/10, depois do cancelamento (ou da expiração, se aprovada) do pedido anterior | aceito |
+| TOUR-03 em 30/10, depois do cancelamento ou da expiração do pedido anterior | aceito |
 | TOUR-02 às 23:30 de 30/10 e TOUR-01 às 00:30 de 31/10 | ambos aceitos (dias diferentes no Rio) |
 | TOUR-03 num domingo | aceito (operação todos os dias) |
 

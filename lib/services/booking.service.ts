@@ -1,3 +1,4 @@
+import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import { DomainError } from "@/lib/errors/domain-error";
 import { isBookingBlockedForUnapprovedPrice } from "@/lib/catalog/price-on-request";
@@ -36,8 +37,8 @@ async function transitionBooking(input: {
     to: BookingStatusValue;
     type: BookingEventType;
     actor: BookingActor;
-}): Promise<boolean> {
-    return prisma.$transaction(async (tx) => {
+}, inTx?: Prisma.TransactionClient): Promise<boolean> {
+    const write = async (tx: Prisma.TransactionClient) => {
         const updated = await tx.booking.updateMany({
             where: { id: input.bookingId, ...(input.userId ? { userId: input.userId } : {}), status: input.from },
             data: { status: input.to },
@@ -54,7 +55,8 @@ async function transitionBooking(input: {
             },
         });
         return true;
-    });
+    };
+    return inTx ? write(inTx) : prisma.$transaction(write);
 }
 
 const SYSTEM_ACTOR: BookingActor = { userId: null, role: "SYSTEM" };
@@ -287,24 +289,39 @@ export async function confirmBookingByAdmin(bookingId: string, actor: BookingAct
     // MVP policy (Owner, 27/10/2026): a private booking is confirmed only after the 30% deposit was received AND verified
     // (RT-125 payment lines CONFIRMED by an ADMIN). Recorded-but-unverified money does not count. Still an explicit
     // admin action: a confirmed deposit never confirms the booking by itself.
-    if (booking.pricingModel === "PRIVATE_GROUP") {
-        const deposit = await prisma.bookingPayment.aggregate({
-            where: { bookingId: normalizedId, kind: "DEPOSIT", status: "CONFIRMED" },
-            _sum: { amountCents: true },
-        });
-        const required = booking.quote?.depositCents ?? Number.POSITIVE_INFINITY;
-        if ((deposit._sum.amountCents ?? 0) < required) {
-            throw new DomainError("Confirme o recebimento do sinal de 30% antes de confirmar a reserva.", {
-                code: "DEPOSIT_NOT_CONFIRMED",
-                status: 409,
+    // The deposit check and the write run in one transaction under the booking's payment lock (the lock every payment
+    // change takes), so a refund of the deposit cannot land between the check and the confirmation (review 29/10/2026).
+    const confirmUnderPaymentLock = async (tx: Prisma.TransactionClient) => {
+        if (booking.pricingModel === "PRIVATE_GROUP") {
+            await tx.$queryRaw`SELECT set_config('lock_timeout', ${BOOKING_LOCK_TIMEOUT}, true) AS lock_timeout`;
+            await tx.$queryRaw`SELECT 1 AS locked FROM (SELECT pg_advisory_xact_lock(hashtext(${`booking-payments:${normalizedId}`}))) AS l`;
+            const deposit = await tx.bookingPayment.aggregate({
+                where: { bookingId: normalizedId, kind: "DEPOSIT", status: "CONFIRMED" },
+                _sum: { amountCents: true },
             });
+            const required = booking.quote?.depositCents ?? Number.POSITIVE_INFINITY;
+            if ((deposit._sum.amountCents ?? 0) < required) {
+                throw new DomainError("Confirme o recebimento do sinal de 30% antes de confirmar a reserva.", {
+                    code: "DEPOSIT_NOT_CONFIRMED",
+                    status: 409,
+                });
+            }
         }
-    }
 
-    // Gravacao condicional: so confirma se a reserva ainda estiver PENDING no momento da escrita. Sem isso, um
-    // cancelamento feito entre a leitura e a escrita era sobrescrito e a reserva voltava a ocupar lugares ja liberados
-    // (auditoria 24/10/2026: 6 hospedes numa agenda de 4). Confirmar nao muda a ocupacao (PENDING ja conta).
-    const changed = await transitionBooking({ bookingId: normalizedId, from: "PENDING", to: "CONFIRMED", type: "CONFIRMED", actor });
+        // Gravacao condicional: so confirma se a reserva ainda estiver PENDING no momento da escrita. Sem isso, um
+        // cancelamento feito entre a leitura e a escrita era sobrescrito e a reserva voltava a ocupar lugares ja liberados
+        // (auditoria 24/10/2026: 6 hospedes numa agenda de 4). Confirmar nao muda a ocupacao (PENDING ja conta).
+        return transitionBooking({ bookingId: normalizedId, from: "PENDING", to: "CONFIRMED", type: "CONFIRMED", actor }, tx);
+    };
+    let changed: boolean;
+    try {
+        changed = await prisma.$transaction(confirmUnderPaymentLock, BOOKING_TRANSACTION_OPTIONS);
+    } catch (error) {
+        if (!(error instanceof DomainError) && isBookingBusyError(error)) {
+            throw new DomainError("Operacao em andamento nesta reserva. Tente novamente.", { code: "BOOKING_BUSY", status: 409 });
+        }
+        throw error;
+    }
 
     if (!changed) {
         throw new DomainError("A reserva mudou durante a operacao e nao esta mais pendente. Atualize a pagina.", {

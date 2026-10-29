@@ -10,6 +10,7 @@ import {
   transitionBookingPayment,
   type AdminActor,
 } from "@/lib/services/booking-payment.service";
+import { markDepositInstructionsSent } from "@/lib/services/deposit-hold.service";
 
 /**
  * RT-125 admin actions. Every call authenticates the ADMIN first (requireAdminSession throws for anonymous or non-admin
@@ -54,5 +55,19 @@ export async function transitionBookingPaymentAction(input: unknown, locale?: st
     if (isDomainError(error)) return { error: error.message, code: error.code };
     reportServerError({ source: "server_action", where: "admin:transitionBookingPayment", error });
     return { error: "Falha ao atualizar pagamento." };
+  }
+}
+
+/** RT-123: the team sent the deposit instructions to the customer; the 48-hour deposit window starts now (idempotent). */
+export async function markDepositInstructionsSentAction(bookingId: string, locale?: string) {
+  const actor = await adminActor();
+  try {
+    const { sentAt } = await markDepositInstructionsSent(bookingId, actor);
+    revalidateBooking(bookingId, locale);
+    return { success: true as const, sentAt: sentAt.toISOString() };
+  } catch (error) {
+    if (isDomainError(error)) return { error: error.message, code: error.code };
+    reportServerError({ source: "server_action", where: "admin:markDepositInstructionsSent", error });
+    return { error: "Falha ao registrar o envio das instruções." };
   }
 }

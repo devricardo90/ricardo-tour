@@ -6,6 +6,7 @@ import { PricingError, quoteGroupPrice, splitDeposit } from "@/lib/commerce/grou
 import { getApprovedGroupPriceTable, type ApprovedGroupPriceTable } from "@/lib/commerce/price-tables";
 import { ACTIVE_BOOKING_STATUSES } from "@/lib/booking/booking-state";
 import { GUIDE_DAY_TRIP_IDS, MAX_DEPARTURES_PER_GUIDE_DAY, guideDayLockKey, isGuideDayTrip, rioDayOf } from "@/lib/booking/guide-calendar";
+import { expireLapsedHold } from "@/lib/services/deposit-hold.service";
 import { BOOKING_LOCK_TIMEOUT, BOOKING_TRANSACTION_OPTIONS, bookingLockKey, isBookingBusyError } from "@/lib/services/booking.service";
 
 /**
@@ -119,13 +120,22 @@ export async function createPrivateBookingForUser(userId: string, rawInput: unkn
         throw new DomainError("O grupo excede a capacidade desta data.", { code: "SCHEDULE_CAPACITY_EXCEEDED", status: 400 });
       }
 
+      // Guide calendar lock taken BEFORE any RT-123 expiry below, so every transaction locks schedule -> guide-day ->
+      // booking payments (an expiry takes the payment lock); expiring on the slot first could deadlock against a request
+      // for another tour on the same day that is expiring the same booking.
+      const guideDay = isGuideDayTrip(tripId) ? rioDayOf(schedule.startAt) : null;
+      if (guideDay) {
+        await tx.$queryRaw`SELECT 1 AS locked FROM (SELECT pg_advisory_xact_lock(hashtext(${guideDayLockKey(guideDay.day)}))) AS l`;
+      }
+
       // Private tour: the slot belongs to one group. The same customer gets DUPLICATE_BOOKING; anyone else gets the
       // same answer as an unavailable date (nothing about the other booking is revealed).
       const active = await tx.booking.findFirst({
         where: { scheduleId, status: { in: [...ACTIVE_BOOKING_STATUSES] } },
-        select: { userId: true },
+        select: { id: true, userId: true },
       });
-      if (active) {
+      // RT-123: a request whose 48-hour deposit window lapsed (no protecting payment) releases the slot here.
+      if (active && !(await expireLapsedHold(tx, active.id, now()))) {
         if (active.userId === userId) {
           throw new DomainError("Voce ja possui reserva para esta data", { code: "DUPLICATE_BOOKING", status: 409 });
         }
@@ -134,17 +144,19 @@ export async function createPrivateBookingForUser(userId: string, rawInput: unkn
 
       // Guide calendar (lib/booking/guide-calendar.ts): the three own tours share one guide, so an active booking of any
       // of them on the same Rio day makes the day unavailable (same answer as a taken slot). Serialized per guide-day,
-      // always after the schedule lock, so two requests for different tours on the same day cannot both pass.
-      if (isGuideDayTrip(tripId)) {
-        const { day, start, end } = rioDayOf(schedule.startAt);
-        await tx.$queryRaw`SELECT 1 AS locked FROM (SELECT pg_advisory_xact_lock(hashtext(${guideDayLockKey(day)}))) AS l`;
-        const sameDay = await tx.booking.count({
+      // always after the schedule lock (taken above), so two requests for different tours on the same day cannot both pass.
+      if (guideDay) {
+        const { start, end } = guideDay;
+        const sameDayBookings = await tx.booking.findMany({
           where: {
             tripId: { in: [...GUIDE_DAY_TRIP_IDS] },
             status: { in: [...ACTIVE_BOOKING_STATUSES] },
             schedule: { startAt: { gte: start, lt: end } },
           },
+          select: { id: true },
         });
+        let sameDay = 0;
+        for (const other of sameDayBookings) if (!(await expireLapsedHold(tx, other.id, now()))) sameDay++;
         if (sameDay >= MAX_DEPARTURES_PER_GUIDE_DAY) {
           throw new DomainError("Agenda nao disponivel", { code: "SCHEDULE_UNAVAILABLE", status: 409 });
         }
@@ -152,6 +164,8 @@ export async function createPrivateBookingForUser(userId: string, rawInput: unkn
 
       return tx.booking.create({
         data: {
+          // RT-123 D1: the 24-hour allowance counts from createdAt, so it uses the same clock as the hold checks.
+          createdAt: now(),
           userId,
           tripId,
           scheduleId,

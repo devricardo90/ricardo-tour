@@ -7,8 +7,8 @@
  *
  * Rule APPROVED by the Owner (RT-123, 28/10/2026): operation every day; one confirmed private tour per day across
  * TOUR-01, TOUR-02 and TOUR-03; a confirmed booking blocks the date for the other tours. Here a PENDING request also
- * holds the day (so two customers are never sent deposit instructions for the same day); the expiry of pending
- * requests, so that none blocks a day for good, is the technical proposal in docs/product/rt-123-availability-rules.md.
+ * holds the day (so two customers are never sent deposit instructions for the same day); so that none blocks a day for
+ * good, it expires 48 hours after the deposit instructions are sent (lib/booking/deposit-hold.ts, Owner 28/10/2026).
  */
 export const GUIDE_DAY_TRIP_IDS: readonly string[] = [
   "cmlhxkpy9000028zq27rhytew", // TOUR-01 Cristo Redentor + Pão de Açúcar
