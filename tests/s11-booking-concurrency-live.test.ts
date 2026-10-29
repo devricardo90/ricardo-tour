@@ -157,7 +157,13 @@ describe.skipIf(!enabled)("Sprint 11 — booking concurrency on a real PostgreSQ
         status: 409,
       });
       expect(Date.now() - started).toBeLessThan(4_500); // bounded by the 2 s lock_timeout, not by the holder
-      const waiting = await holder.query("SELECT count(*)::int AS n FROM pg_stat_activity WHERE datname = current_database() AND wait_event = 'advisory'");
+      // Only waiters on THIS lock key: other live suites legitimately wait on their own advisory locks in parallel.
+      const waiting = await holder.query(
+        `SELECT count(*)::int AS n FROM pg_locks l JOIN pg_database d ON d.oid = l.database
+          WHERE d.datname = current_database() AND l.locktype = 'advisory' AND NOT l.granted
+            AND l.objsubid = 1 AND l.objid::bigint = (hashtext($1)::bigint & 4294967295)`,
+        [service.bookingLockKey(userIds[3], tripId, schedule.id)],
+      );
       expect(waiting.rows[0].n).toBe(0);
     } finally {
       await holder.query("SELECT pg_advisory_unlock_all()");
@@ -195,14 +201,20 @@ describe.skipIf(!enabled)("Sprint 11 — booking concurrency on a real PostgreSQ
         await Promise.allSettled(occupying);
         expect(starved.some((r) => r.status === "rejected" && (r.reason as { code?: string }).code === "P2028")).toBe(true);
         await new Promise((resolve) => setTimeout(resolve, 2_500)); // the late BEGINs land here
-        const leaked = await watcher.query(
-          "SELECT count(*)::int AS n FROM pg_stat_activity WHERE datname = current_database() AND state = 'idle in transaction' AND application_name = $1",
-          [V6_APP],
-        );
         // The check is only meaningful if this file's Prisma connections are visible under that name.
         const named = await watcher.query("SELECT count(*)::int AS n FROM pg_stat_activity WHERE datname = current_database() AND application_name = $1", [V6_APP]);
         expect(named.rows[0].n).toBeGreaterThan(0);
-        expect(leaked.rows[0].n).toBe(0);
+        // Under a loaded full suite a late BEGIN can still be rolling back here. The V6 defect left those connections
+        // "idle in transaction" FOREVER (and lost later writes), so wait up to 15 s for them to close instead of
+        // sampling once: a real leak still fails, a slow rollback does not.
+        let leaked = -1;
+        for (const deadline = Date.now() + 15_000; leaked !== 0 && Date.now() < deadline; await new Promise((resolve) => setTimeout(resolve, 250))) {
+          leaked = (await watcher.query(
+            "SELECT count(*)::int AS n FROM pg_stat_activity WHERE datname = current_database() AND state = 'idle in transaction' AND application_name = $1",
+            [V6_APP],
+          )).rows[0].n;
+        }
+        expect(leaked).toBe(0);
       }
 
       const reported: string[] = [];
