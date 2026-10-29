@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { PUBLIC_CONTACT, SUPERSEDED_CONTACT_PATTERNS } from "@/lib/public-contact";
 import { TERMS_COPY, TERMS_PENDING_MARKER, TERMS_REVIEW_STATUS } from "@/lib/legal/terms-copy";
+import { PRIVACY_COPY } from "@/lib/legal/privacy-copy";
 
 const LANGS = ["pt", "en", "es"] as const;
 const allText = (lang: (typeof LANGS)[number]) => TERMS_COPY[lang].sections.flatMap((s) => s.paragraphs).join("\n");
@@ -71,6 +72,18 @@ describe("RT-81 terms draft (approved commercial rules + pending items)", () => 
       expect(all).toContain(PUBLIC_CONTACT.email);
       expect(all).toContain(PUBLIC_CONTACT.whatsappDisplay);
       for (const pattern of SUPERSEDED_CONTACT_PATTERNS) expect(all).not.toMatch(pattern);
+    }
+  });
+});
+
+describe("Owner-declared address (28/10/2026), registry check still pending", () => {
+  it("shows the declared address and never claims it was verified, in the terms and the privacy policy", () => {
+    for (const lang of LANGS) {
+      for (const all of [allText(lang), JSON.stringify(PRIVACY_COPY[lang])]) {
+        expect(all, lang).toContain("Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000");
+        expect(all, lang).toMatch(/Cartão CNPJ|pendente|pending|pendiente/);
+        expect(all, lang).not.toMatch(/endereço (?:oficialmente )?verificado:|address verified|dirección verificada:/i);
+      }
     }
   });
 });

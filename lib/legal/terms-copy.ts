@@ -33,8 +33,8 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
     updated: "Rascunho atualizado em 28/10/2026.",
     sections: [
       { id: "who", title: "Quem somos", paragraphs: [
-        `Este site (www.ricardotour.com) é da Ricardo Tour, CNPJ ${COMPANY_CNPJ}. Contato: ${CONTACT} ou WhatsApp ${WHATSAPP}.`,
-        "PENDENTE (Q1): razão social, endereço cadastral e número do Cadastur.",
+        `Este site (www.ricardotour.com) é da Ricardo Tour, CNPJ ${COMPANY_CNPJ}, com endereço declarado na Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000. Contato: ${CONTACT} ou WhatsApp ${WHATSAPP}.`,
+        "PENDENTE (Q1): verificação cadastral do endereço. O endereço acima foi declarado pelo Owner em 28/10/2026; o registro público do CNPJ indica o bairro Cidade Nova, e o endereço só será dado como verificado após a conferência do comprovante de inscrição atualizado (Cartão CNPJ). Razão social e Cadastur (número igual ao CNPJ) já conferidos.",
       ] },
       { id: "service", title: "O que o site oferece", paragraphs: [
         "O site apresenta passeios no Rio de Janeiro, recebe solicitações de passeio e mensagens de contato e oferece atendimento pelo WhatsApp.",
@@ -83,8 +83,8 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
     updated: "Draft updated on 28 Oct 2026.",
     sections: [
       { id: "who", title: "Who we are", paragraphs: [
-        `This website (www.ricardotour.com) belongs to Ricardo Tour, CNPJ (Brazilian company number) ${COMPANY_CNPJ}. Contact: ${CONTACT} or WhatsApp ${WHATSAPP}.`,
-        "PENDING (Q1): registered legal name, registered address and Cadastur number.",
+        `This website (www.ricardotour.com) belongs to Ricardo Tour, CNPJ (Brazilian company number) ${COMPANY_CNPJ}, with its declared address at Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000, Brazil. Contact: ${CONTACT} or WhatsApp ${WHATSAPP}.`,
+        "PENDING (Q1): registry check of the address. The address above was declared by the Owner on 28 Oct 2026; the public CNPJ record shows the Cidade Nova district, and the address will only be treated as verified after the updated registration certificate (Cartão CNPJ) is checked. Legal name and Cadastur (number equal to the CNPJ) already checked.",
       ] },
       { id: "service", title: "What the website offers", paragraphs: [
         "The website presents tours in Rio de Janeiro, receives tour requests and contact messages, and offers support over WhatsApp.",
@@ -133,8 +133,8 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
     updated: "Borrador actualizado el 28/10/2026.",
     sections: [
       { id: "who", title: "Quiénes somos", paragraphs: [
-        `Este sitio (www.ricardotour.com) pertenece a Ricardo Tour, CNPJ (registro de empresa en Brasil) ${COMPANY_CNPJ}. Contacto: ${CONTACT} o WhatsApp ${WHATSAPP}.`,
-        "PENDIENTE (Q1): razón social, dirección registrada y número de Cadastur.",
+        `Este sitio (www.ricardotour.com) pertenece a Ricardo Tour, CNPJ (registro de empresa en Brasil) ${COMPANY_CNPJ}, con dirección declarada en Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000, Brasil. Contacto: ${CONTACT} o WhatsApp ${WHATSAPP}.`,
+        "PENDIENTE (Q1): verificación registral de la dirección. La dirección anterior fue declarada por el Owner el 28/10/2026; el registro público del CNPJ indica el barrio Cidade Nova, y la dirección solo se considerará verificada tras revisar el comprobante de inscripción actualizado (Cartão CNPJ). Razón social y Cadastur (número igual al CNPJ) ya verificados.",
       ] },
       { id: "service", title: "Qué ofrece el sitio", paragraphs: [
         "El sitio presenta paseos en Río de Janeiro, recibe solicitudes de paseo y mensajes de contacto, y ofrece atención por WhatsApp.",

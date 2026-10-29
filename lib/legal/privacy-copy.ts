@@ -30,7 +30,7 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
     draftBanner: "Rascunho para aprovação do Owner. A revisão jurídica aprofundada está PENDENTE: este texto ainda não foi aprovado por advogado e não deve ser publicado até a aprovação do Owner.",
     updated: "Rascunho preparado em 11/10/2026 e atualizado em 15/10/2026.",
     sections: [
-      { id: "who", title: "Quem somos", paragraphs: [`Esta política descreve como o site da Ricardo Tour trata dados pessoais. Nome comercial: Ricardo Tour. CNPJ: ${CNPJ}. Razão social e endereço cadastral do responsável pelo tratamento: a confirmar antes da publicação. Contato para assuntos de privacidade: ${CONTACT}.`] },
+      { id: "who", title: "Quem somos", paragraphs: [`Esta política descreve como o site da Ricardo Tour trata dados pessoais. Nome comercial: Ricardo Tour. CNPJ: ${CNPJ}. Endereço declarado: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000 (verificação cadastral pendente). Razão social do responsável pelo tratamento: a confirmar antes da publicação. Contato para assuntos de privacidade: ${CONTACT}.`] },
       { id: "data", title: "Quais dados tratamos e para quê", paragraphs: [
         "Formulários de contato e de solicitação de passeio: nome, e-mail, telefone (opcional) e a mensagem que você escrever. Usamos para responder ao seu pedido. Ficam gravados em nosso banco de dados e uma cópia da mensagem é enviada por e-mail à equipe.",
         "Conta e reservas: nome, e-mail e dados da sessão (endereço IP e navegador) quando você usa as áreas de conta ou reserva do site.",
@@ -60,11 +60,14 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
         "Se você entrar em uma conta do site, um cookie de sessão de login mantém você conectado; ele é necessário para as áreas de conta e reserva funcionarem.",
         "Quando você usa o site em um idioma diferente do idioma do seu navegador, um cookie de idioma (válido até fechar o navegador) guarda essa escolha.",
       ] },
-      { id: "rights", title: "Seus direitos e como falar conosco", paragraphs: [`Você pode pedir acesso, correção ou exclusão dos seus dados e tirar dúvidas pelo e-mail ${CONTACT}.`] },
+      { id: "rights", title: "Seus direitos e como falar conosco", paragraphs: [
+        `Você pode pedir acesso, correção ou exclusão dos seus dados e tirar dúvidas pelo e-mail ${CONTACT}.`,
+        `A Ricardo Tour é um agente de tratamento de pequeno porte e, como permite a Resolução CD/ANPD nº 2/2022 (art. 11), não indicou um encarregado; o e-mail ${CONTACT} é o canal de comunicação com os titulares dos dados.`,
+      ] },
     ],
     pendingTitle: "Decisões pendentes antes da publicação",
     pending: [
-      "Q1: razão social e endereço cadastral do responsável; número do Cadastur (CNPJ confirmado pelo Owner em 15/10/2026).",
+      "Q1: verificação cadastral do endereço do responsável. Endereço declarado pelo Owner em 28/10/2026: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000. O registro público do CNPJ indica o bairro Cidade Nova; o endereço só será dado como verificado após a conferência do Cartão CNPJ atualizado. Razão social (49.142.341 RICARDO DE SOUZA FRANCISCO) e Cadastur (número = CNPJ, válido até 02/04/2027) conferidos em 28/10/2026.",
       "Q3: prazo de guarda de mensagens, pedidos, contas e estatísticas.",
       "Q4: publicar sem a seção da Daniela enquanto ela estiver desativada.",
       "Q5: dados e cookies do widget de voos, a confirmar com a Oner.",
@@ -76,7 +79,7 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
     draftBanner: "Draft for the Owner's approval. The in-depth legal review is PENDING: this text has not been approved by a lawyer and must not be published until the Owner approves it.",
     updated: "Draft prepared on 11 Oct 2026 and updated on 15 Oct 2026.",
     sections: [
-      { id: "who", title: "Who we are", paragraphs: [`This policy describes how the Ricardo Tour website handles personal data. Trade name: Ricardo Tour. CNPJ (Brazilian company number): ${CNPJ}. Registered legal name and address of the data controller: to be confirmed before publication. Privacy contact: ${CONTACT}.`] },
+      { id: "who", title: "Who we are", paragraphs: [`This policy describes how the Ricardo Tour website handles personal data. Trade name: Ricardo Tour. CNPJ (Brazilian company number): ${CNPJ}. Declared address: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000, Brazil (registry check pending). Registered legal name of the data controller: to be confirmed before publication. Privacy contact: ${CONTACT}.`] },
       { id: "data", title: "What data we handle and why", paragraphs: [
         "Contact and tour-request forms: name, e-mail, phone (optional) and the message you write. We use them to answer your request. They are stored in our database and a copy of the message is e-mailed to the team.",
         "Account and bookings: name, e-mail and session data (IP address and browser) when you use the account or booking areas.",
@@ -106,11 +109,14 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
         "If you sign in to an account on the site, a login session cookie keeps you signed in; it is needed for the account and booking areas to work.",
         "When you use the site in a language different from your browser's, a language cookie (kept until you close the browser) stores that choice.",
       ] },
-      { id: "rights", title: "Your rights and how to contact us", paragraphs: [`You can ask for access, correction or deletion of your data, or ask questions, at ${CONTACT}.`] },
+      { id: "rights", title: "Your rights and how to contact us", paragraphs: [
+        `You can ask for access, correction or deletion of your data, or ask questions, at ${CONTACT}.`,
+        `Ricardo Tour is a small-scale processing agent and, as allowed by Brazil's ANPD Resolution CD/ANPD No. 2/2022 (art. 11), has not appointed a data protection officer; ${CONTACT} is the communication channel for data subjects.`,
+      ] },
     ],
     pendingTitle: "Decisions pending before publication",
     pending: [
-      "Q1: registered legal name and address of the controller; Cadastur number (CNPJ confirmed by the Owner on 15 Oct 2026).",
+      "Q1: registry check of the controller's address. Address declared by the Owner on 28 Oct 2026: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000. The public CNPJ record shows the Cidade Nova district; the address will only be treated as verified after the updated Cartão CNPJ is checked. Legal name (49.142.341 RICARDO DE SOUZA FRANCISCO) and Cadastur (number = CNPJ, valid until 2 Apr 2027) checked on 28 Oct 2026.",
       "Q3: retention period for messages, requests, accounts and statistics.",
       "Q4: publish without the Daniela section while she is disabled.",
       "Q5: data and cookies of the flight widget, to be confirmed with Oner.",
@@ -122,7 +128,7 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
     draftBanner: "Borrador para aprobación del Owner. La revisión jurídica en profundidad está PENDIENTE: este texto no ha sido aprobado por un abogado y no debe publicarse hasta que el Owner lo apruebe.",
     updated: "Borrador preparado el 11/10/2026 y actualizado el 15/10/2026.",
     sections: [
-      { id: "who", title: "Quiénes somos", paragraphs: [`Esta política describe cómo el sitio de Ricardo Tour trata los datos personales. Nombre comercial: Ricardo Tour. CNPJ (registro de empresa en Brasil): ${CNPJ}. Razón social y dirección registrada del responsable del tratamiento: se confirmarán antes de la publicación. Contacto de privacidad: ${CONTACT}.`] },
+      { id: "who", title: "Quiénes somos", paragraphs: [`Esta política describe cómo el sitio de Ricardo Tour trata los datos personales. Nombre comercial: Ricardo Tour. CNPJ (registro de empresa en Brasil): ${CNPJ}. Dirección declarada: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000, Brasil (verificación registral pendiente). Razón social del responsable del tratamiento: se confirmará antes de la publicación. Contacto de privacidad: ${CONTACT}.`] },
       { id: "data", title: "Qué datos tratamos y para qué", paragraphs: [
         "Formularios de contacto y de solicitud de paseo: nombre, correo, teléfono (opcional) y el mensaje que escribas. Los usamos para responder a tu solicitud. Se guardan en nuestra base de datos y una copia del mensaje se envía por correo al equipo.",
         "Cuenta y reservas: nombre, correo y datos de sesión (dirección IP y navegador) cuando usas las áreas de cuenta o reserva.",
@@ -152,11 +158,14 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
         "Si inicias sesión en una cuenta del sitio, una cookie de sesión mantiene tu sesión abierta; es necesaria para que funcionen las áreas de cuenta y reservas.",
         "Cuando usas el sitio en un idioma distinto al de tu navegador, una cookie de idioma (válida hasta cerrar el navegador) guarda esa elección.",
       ] },
-      { id: "rights", title: "Tus derechos y cómo contactarnos", paragraphs: [`Puedes pedir acceso, corrección o eliminación de tus datos, o hacer consultas, en ${CONTACT}.`] },
+      { id: "rights", title: "Tus derechos y cómo contactarnos", paragraphs: [
+        `Puedes pedir acceso, corrección o eliminación de tus datos, o hacer consultas, en ${CONTACT}.`,
+        `Ricardo Tour es un agente de tratamiento de pequeño porte y, como permite la Resolución CD/ANPD n.º 2/2022 de Brasil (art. 11), no designó un encargado de datos; ${CONTACT} es el canal de comunicación con los titulares.`,
+      ] },
     ],
     pendingTitle: "Decisiones pendientes antes de la publicación",
     pending: [
-      "Q1: razón social y dirección registrada del responsable; número de Cadastur (CNPJ confirmado por el Owner el 15/10/2026).",
+      "Q1: verificación registral de la dirección del responsable. Dirección declarada por el Owner el 28/10/2026: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000. El registro público del CNPJ indica el barrio Cidade Nova; la dirección solo se considerará verificada tras revisar el Cartão CNPJ actualizado. Razón social (49.142.341 RICARDO DE SOUZA FRANCISCO) y Cadastur (número = CNPJ, válido hasta el 02/04/2027) verificados el 28/10/2026.",
       "Q3: plazo de conservación de mensajes, solicitudes, cuentas y estadísticas.",
       "Q4: publicar sin la sección de Daniela mientras esté desactivada.",
       "Q5: datos y cookies del widget de vuelos, a confirmar con Oner.",
