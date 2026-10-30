@@ -12,6 +12,7 @@ import {
   type PaymentLine,
   type PaymentStatus,
 } from "@/lib/payments/payment-state";
+import { DEPOSIT_INSTRUCTIONS_SENT_EVENT, PROTECTING_PAYMENT_STATUSES, isDepositHoldExpired } from "@/lib/booking/deposit-hold";
 import { BOOKING_LOCK_TIMEOUT, BOOKING_TRANSACTION_OPTIONS, isBookingBusyError } from "@/lib/services/booking.service";
 
 /**
@@ -126,7 +127,29 @@ async function runPaymentTransaction<T>(fn: (tx: Tx) => Promise<T>): Promise<T> 
 
 const KIND_LABEL: Record<PaymentKind, string> = { DEPOSIT: "sinal", BALANCE: "saldo" };
 
-export async function recordBookingPayment(actor: AdminActor, rawInput: unknown) {
+/**
+ * RT-123 (Owner 30/10/2026): whether a PENDING private request's hold has lapsed (deadline passed, nothing protecting it)
+ * although the lazy expiry has not canceled it yet. Read under the booking's payment lock (same rules as expireLapsedHold).
+ */
+async function isHoldLapsed(tx: Tx, bookingId: string, now: Date) {
+  const booking = await tx.booking.findUnique({
+    where: { id: bookingId },
+    select: {
+      status: true,
+      pricingModel: true,
+      createdAt: true,
+      events: { where: { type: DEPOSIT_INSTRUCTIONS_SENT_EVENT }, orderBy: { createdAt: "asc" }, take: 1, select: { createdAt: true } },
+      _count: { select: { payments: { where: { status: { in: [...PROTECTING_PAYMENT_STATUSES] } } } } },
+    },
+  });
+  if (!booking) return false;
+  return isDepositHoldExpired(
+    { status: booking.status, pricingModel: booking.pricingModel ?? "", requestedAt: booking.createdAt, instructionsSentAt: booking.events[0]?.createdAt ?? null, protectingPayments: booking._count.payments },
+    now,
+  );
+}
+
+export async function recordBookingPayment(actor: AdminActor, rawInput: unknown, options: { now?: Date } = {}) {
   assertAdmin(actor);
   const parsed = recordPaymentInputSchema.safeParse(rawInput);
   if (!parsed.success) invalidInput(parsed.error);
@@ -150,6 +173,15 @@ export async function recordBookingPayment(actor: AdminActor, rawInput: unknown)
     const booking = await loadBookingForPayments(tx, input.bookingId);
     if (booking.status === "CANCELED") {
       throw new DomainError("Reserva cancelada: novos pagamentos nao podem ser registrados.", { code: "BOOKING_CANCELED", status: 409 });
+    }
+    // RT-123 (Owner 30/10/2026): a lapsed request takes no new payment in the normal flow (a PENDING line would protect
+    // and revive it). Money actually received is still reconciled: RECORDED with a note, then refunded or, only if the
+    // admin decides, confirmed by the separate confirmation (which requires the verified deposit; nothing is automatic).
+    if (booking.status === "PENDING" && (input.initialStatus !== "RECORDED" || !input.note) && (await isHoldLapsed(tx, input.bookingId, options.now ?? new Date()))) {
+      throw new DomainError(
+        "Prazo da solicitacao vencido: so registre valor efetivamente recebido (status Recebido), com uma observacao explicando a conciliacao.",
+        { code: "HOLD_LAPSED", status: 409 },
+      );
     }
     const summary = summarizePayments(booking.quote, booking.lines);
     const open = input.kind === "DEPOSIT" ? summary.deposit.openCents : summary.balance.openCents;

@@ -163,6 +163,25 @@ describe.skipIf(!url)("deposit hold live (local isolated database only)", () => 
     ).rejects.toMatchObject({ status: 409 });
   });
 
+  it("Owner 30/10: a lapsed request not yet expired takes no normal payment; money received is reconciled, never auto-confirmed", async () => {
+    const { scheduleId, id } = await pendingRequest();
+    await hold.markDepositInstructionsSent(id, admin);
+    const at = { now: hoursFromNow(49)() };
+    const line = (initialStatus: "PENDING" | "RECORDED", note?: string) => ({ bookingId: id, kind: "DEPOSIT", method: "PIX", amountCents: 22_800, initialStatus, reference: "TESTE", note, idempotencyKey: key() });
+    // Normal operation after the deadline: an expected (PENDING) line, or a receipt without explanation, is refused.
+    await expect(payments.recordBookingPayment(admin, line("PENDING"), at)).rejects.toMatchObject({ code: "HOLD_LAPSED", status: 409 });
+    await expect(payments.recordBookingPayment(admin, line("RECORDED"), at)).rejects.toMatchObject({ code: "HOLD_LAPSED" });
+    expect(await prisma.bookingPayment.count({ where: { bookingId: id } })).toBe(0);
+    // Reconciliation: the PIX really arrived late; the admin records it with a note. Nothing becomes paid or confirmed.
+    await payments.recordBookingPayment(admin, line("RECORDED", "PIX recebido apos o prazo; conciliacao"), at);
+    expect(await state(id)).toEqual({ status: "PENDING", paymentStatus: "UNPAID" });
+    const { confirmBookingByAdmin } = await import("@/lib/services/booking.service");
+    await expect(confirmBookingByAdmin(id, admin)).rejects.toMatchObject({ code: "DEPOSIT_NOT_CONFIRMED" });
+    // The request still holds its date: no overbooking while the admin refunds or confirms.
+    await expect(tour03(scheduleId, hoursFromNow(50))).rejects.toMatchObject({ status: 409 });
+    expect(await prisma.booking.count({ where: { scheduleId, status: { in: ["PENDING", "CONFIRMED"] } } })).toBe(1);
+  });
+
   it("a payment registered or under verification protects the request; only canceled lines do not", async () => {
     const recorded = await pendingRequest();
     await hold.markDepositInstructionsSent(recorded.id, admin);
