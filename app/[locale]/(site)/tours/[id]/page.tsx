@@ -12,7 +12,7 @@ import { publicOfferPriceCents } from "@/lib/catalog/price-on-request";
 import { getPublicTourPresentation } from "@/lib/catalog/public-tour-presentation";
 import { TourDetailPrototype } from "@/components/site/tour/content/tour-detail-prototype";
 import { TourBookingRequestForm } from "@/components/site/tour/content/tour-booking-request-form";
-import { publicRequestTable } from "@/lib/booking/public-request";
+import { PUBLIC_REQUEST_SLOTS, publicRequestTable } from "@/lib/booking/public-request";
 
 // Same request-time catalog read as the Home and the listing.
 export const dynamic = "force-dynamic";
@@ -76,7 +76,7 @@ export default async function TourDetailsPage(props: PageProps) {
           locale={locale}
           reviewMode={false}
           showProvisionalPrices={false}
-          bookingRequest={requestTable ? <TourBookingRequestForm tripId={id} locale={locale} mode="public" groupTotalCents={requestTable.groupTotalCents} /> : null}
+          bookingRequest={requestTable ? <TourBookingRequestForm tripId={id} locale={locale} mode="public" groupTotalCents={requestTable.groupTotalCents} adultsOnly={PUBLIC_REQUEST_SLOTS[id]?.adultsOnly} meetingPoint={PUBLIC_REQUEST_SLOTS[id]?.meetingPoint} infantHalfFare={requestTable.childPolicy === "INFANT_HALF_FARE_0_2"} optionNote={PUBLIC_REQUEST_SLOTS[id]?.optionNote?.[locale as "pt" | "en" | "es"]} /> : null}
         />
       ) : (
         <TourDetailView trip={trip} locale={locale} />

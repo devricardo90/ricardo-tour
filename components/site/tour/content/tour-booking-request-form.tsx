@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 import { submitPrivateBookingRequest, type BookingRequestErrors, type BookingRequestState } from "@/app/actions/private-booking-request";
-import { splitDeposit } from "@/lib/commerce/group-pricing";
+import { quoteGroupPrice, splitDeposit } from "@/lib/commerce/group-pricing";
 import { formatBrl } from "@/lib/commerce/money";
 import { todayInRio } from "@/lib/tour-request";
 
@@ -16,6 +16,10 @@ const COPY = {
     party: "Participantes",
     person: (n: number) => (n === 1 ? "1 pessoa" : `${n} pessoas`),
     infants: "Viaja com bebê de 0 a 2 anos? Fale com a equipe pelo WhatsApp antes de solicitar.",
+    adultsOnly: "Passeio somente para adultos (18 anos ou mais).",
+    infantsCount: "Dos quais, crianças de 0 a 2 anos",
+    infantsRule: "Crianças de 0 a 2 anos pagam 50% da tarifa individual e contam no limite de 4 pessoas.",
+    noInfants: "Nenhuma",
     name: "Nome completo",
     email: "E-mail",
     phone: "WhatsApp / telefone",
@@ -52,6 +56,10 @@ const COPY = {
     party: "Guests",
     person: (n: number) => (n === 1 ? "1 person" : `${n} people`),
     infants: "Travelling with a baby aged 0 to 2? Please message us on WhatsApp before requesting.",
+    adultsOnly: "Adults only (18 and over).",
+    infantsCount: "Of which, children aged 0–2",
+    infantsRule: "Children aged 0–2 pay 50% of the individual fare and count toward the limit of 4 guests.",
+    noInfants: "None",
     name: "Full name",
     email: "E-mail",
     phone: "WhatsApp / phone",
@@ -88,6 +96,10 @@ const COPY = {
     party: "Participantes",
     person: (n: number) => (n === 1 ? "1 persona" : `${n} personas`),
     infants: "¿Viajas con un bebé de 0 a 2 años? Escríbenos por WhatsApp antes de solicitar.",
+    adultsOnly: "Paseo solo para adultos (18 años o más).",
+    infantsCount: "De ellos, niños de 0 a 2 años",
+    infantsRule: "Los niños de 0 a 2 años pagan el 50% de la tarifa individual y cuentan dentro del límite de 4 personas.",
+    noInfants: "Ninguno",
     name: "Nombre completo",
     email: "Correo electrónico",
     phone: "WhatsApp / teléfono",
@@ -127,16 +139,18 @@ const addDays = (iso: string, days: number) => new Date(Date.parse(`${iso}T12:00
  * RT-124 (27/10/2026, local): booking request inside the approved tour page's "Solicitar" section. Shown only where the
  * price is approved and may be displayed; it creates a PENDING booking (nothing charged, nothing confirmed).
  */
-export function TourBookingRequestForm({ tripId, locale, mode, groupTotalCents }: { tripId: string; locale: string; mode: "public" | "lab"; groupTotalCents: Record<number, number> }) {
+export function TourBookingRequestForm({ tripId, locale, mode, groupTotalCents, adultsOnly = false, meetingPoint = false, infantHalfFare = false, optionNote }: { tripId: string; locale: string; mode: "public" | "lab"; groupTotalCents: Record<number, number>; adultsOnly?: boolean; meetingPoint?: boolean; infantHalfFare?: boolean; optionNote?: string }) {
   const t = COPY[(locale === "en" || locale === "es" ? locale : "pt") as Lang];
   const uid = useId();
   const sizes = Object.keys(groupTotalCents).map(Number).sort((a, b) => a - b);
   const [party, setParty] = useState<number | null>(null);
+  const [infants, setInfants] = useState(0);
   const [errors, setErrors] = useState<BookingRequestErrors>({});
   const [result, setResult] = useState<BookingRequestState | null>(null);
   const [sending, setSending] = useState(false);
   const today = todayInRio();
-  const split = party ? splitDeposit(groupTotalCents[party]) : null;
+  const childCount = party && infantHalfFare ? Math.min(infants, party - 1) : 0;
+  const split = party ? splitDeposit(quoteGroupPrice({ currency: "BRL", groupTotalCents }, { fullFare: party - childCount, infants: childCount }).totalCents) : null;
   const money = (cents: number) => formatBrl(cents, locale === "en" ? "en-US" : locale === "es" ? "es" : "pt-BR");
   const err = (field: keyof BookingRequestErrors) => (errors[field] ? t.errors[errors[field]!] : null);
   const border = (field: keyof BookingRequestErrors) => (errors[field] ? "border-[#F2B8B5]" : "border-white/15");
@@ -180,6 +194,7 @@ export function TourBookingRequestForm({ tripId, locale, mode, groupTotalCents }
     <form onSubmit={onSubmit} noValidate className="mt-8 space-y-4" data-testid="booking-request-form" aria-labelledby={`${uid}-title`}>
       <h3 id={`${uid}-title`} className="text-[20px] font-semibold text-[var(--site-on-dark,#F4F0E8)]">{t.title}</h3>
       <p className="max-w-[60ch] text-[15px] leading-[1.6] text-[var(--site-on-dark-muted,#CAC7BF)]">{t.intro}</p>
+      {optionNote ? <p className="max-w-[60ch] text-[14px] leading-[1.5] text-[var(--site-on-dark,#F4F0E8)]" data-testid="booking-request-option-note">{optionNote}</p> : null}
       {failure ? <p role="alert" className="rounded-md border border-[#F2B8B5]/60 bg-[#F2B8B5]/10 px-3 py-2 text-[14px] text-[var(--site-on-dark,#F4F0E8)]">{failure}</p> : null}
       {Object.keys(errors).length > 0 ? <p role="alert" className="text-[14px] text-[#F2B8B5]">{t.summary}</p> : null}
 
@@ -200,8 +215,16 @@ export function TourBookingRequestForm({ tripId, locale, mode, groupTotalCents }
             <option value="" disabled>—</option>
             {sizes.map((n) => <option key={n} value={n}>{t.person(n)}</option>)}
           </select>
-          <p className="mt-1 text-[13px] text-[var(--site-on-dark-subtle,#9DA3A5)]">{err("party") ?? t.infants}</p>
+          <p className="mt-1 text-[13px] text-[var(--site-on-dark-subtle,#9DA3A5)]">{err("party") ?? (adultsOnly ? t.adultsOnly : infantHalfFare ? t.infantsRule : t.infants)}</p>
         </div>
+        {infantHalfFare && party && party > 1 ? (
+          <div>
+            <label htmlFor={`${uid}-infants`} className={label}>{t.infantsCount}</label>
+            <select id={`${uid}-infants`} name="infants" value={childCount} onChange={(e) => setInfants(Number(e.target.value) || 0)} className={`${input} border-white/15`} data-testid="booking-request-infants">
+              {Array.from({ length: party }, (_, n) => n).map((n) => <option key={n} value={n}>{n === 0 ? t.noInfants : n}</option>)}
+            </select>
+          </div>
+        ) : null}
       </div>
 
       {split ? (
@@ -230,10 +253,12 @@ export function TourBookingRequestForm({ tripId, locale, mode, groupTotalCents }
           {err("phone") ? <p className="mt-1 text-[13px] text-[#F2B8B5]">{err("phone")}</p> : null}
         </div>
       </div>
-      <div>
-        <label htmlFor={`${uid}-pickup`} className={label}>{t.pickup} <span className="font-normal text-[var(--site-on-dark-subtle,#9DA3A5)]">{t.optional}</span></label>
-        <input id={`${uid}-pickup`} name="pickup" type="text" maxLength={300} aria-invalid={!!errors.pickup} className={`${input} ${border("pickup")}`} />
-      </div>
+      {meetingPoint ? null : (
+        <div>
+          <label htmlFor={`${uid}-pickup`} className={label}>{t.pickup} <span className="font-normal text-[var(--site-on-dark-subtle,#9DA3A5)]">{t.optional}</span></label>
+          <input id={`${uid}-pickup`} name="pickup" type="text" maxLength={300} aria-invalid={!!errors.pickup} className={`${input} ${border("pickup")}`} />
+        </div>
+      )}
       <div>
         <label htmlFor={`${uid}-notes`} className={label}>{t.notes} <span className="font-normal text-[var(--site-on-dark-subtle,#9DA3A5)]">{t.optional}</span></label>
         <textarea id={`${uid}-notes`} name="notes" rows={3} maxLength={1000} aria-invalid={!!errors.notes} className={`mt-1.5 w-full rounded-md border bg-[var(--site-charcoal,#0B0E11)] px-3 py-2.5 text-[15px] text-[var(--site-on-dark,#F4F0E8)] ${focus} ${border("notes")}`} />

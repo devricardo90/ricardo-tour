@@ -12,9 +12,34 @@ import { isRebuildLabEnabled } from "@/lib/rebuild-lab/config";
  * customer. The 09:00 slot below is only the reference for the request and the 24-hour rule. One slot per tour per day, and one departure per guide per Rio day across TOUR-01/02/03
  * (lib/booking/guide-calendar.ts); the team confirms the exact start time with the customer before the deposit.
  */
-export const PUBLIC_REQUEST_SLOTS: Readonly<Record<string, { startLocalTime: string; durationMinutes: number; priceTableId: string }>> = {
-  // TOUR-03 Centro Histórico e Cultural, 4-hour route (the only approved table, RT-121 26/10/2026).
-  cmlibniq40000z4zqkbujnutt: { startLocalTime: "09:00", durationMinutes: 240, priceTableId: "TOUR-03-4H" },
+export type PublicRequestSlot = {
+  startLocalTime: string;
+  durationMinutes: number;
+  priceTableId: string;
+  /** Adults only (TOUR-02, minimum age 18): the form says so instead of the infant hint. */
+  adultsOnly?: true;
+  /** Fixed meeting point instead of hotel pickup (TOUR-02): the form hides the pickup-address field. */
+  meetingPoint?: true;
+  /** Which option the online request quotes, when the page shows more than one (TOUR-03: 4 h online, 6 h on WhatsApp). */
+  optionNote?: { pt: string; en: string; es: string };
+};
+
+export const PUBLIC_REQUEST_SLOTS: Readonly<Record<string, PublicRequestSlot>> = {
+  // TOUR-01 Cristo + Selarón + Pão de Açúcar, ~8 hours hotel to hotel (Ficha TOUR-01 §4.1); table RT-121 28/10/2026.
+  cmlhxkpy9000028zq27rhytew: { startLocalTime: "09:00", durationMinutes: 480, priceTableId: "TOUR-01" },
+  // TOUR-02 Favela da Rocinha, ~3 hours; table RT-121 28/10/2026.
+  cmli1a6im000034zqqzc9sppb: { startLocalTime: "09:00", durationMinutes: 180, priceTableId: "TOUR-02", adultsOnly: true, meetingPoint: true },
+  // TOUR-03 Centro Histórico e Cultural, 4-hour route (RT-121 26/10/2026; the 6-hour option is not offered online).
+  cmlibniq40000z4zqkbujnutt: {
+    startLocalTime: "09:00",
+    durationMinutes: 240,
+    priceTableId: "TOUR-03-4H",
+    optionNote: {
+      pt: "A solicitação online é para o passeio de 4 horas (Centro Histórico Essencial). Para o roteiro de 6 horas, fale com a equipe pelo WhatsApp.",
+      en: "The online request is for the 4-hour tour (Essential Historic Center). For the 6-hour itinerary, please contact our team on WhatsApp.",
+      es: "La solicitud en línea es para el recorrido de 4 horas (Centro Histórico Esencial). Para el itinerario de 6 horas, habla con el equipo por WhatsApp.",
+    },
+  },
 };
 
 /** A request is for tomorrow or later, never for today (and see REQUEST_MIN_LEAD_HOURS). */

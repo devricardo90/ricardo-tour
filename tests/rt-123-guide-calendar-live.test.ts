@@ -9,7 +9,7 @@ import { guideDayPicker } from "./helpers/guide-day";
  *
  * The LIVE block is SKIPPED unless S11_LOCAL_DB_URL points at a disposable local database (RT-104 guard first). The
  * price table is TEST ONLY (invented numbers injected into the engine so TOUR-01/02 can be booked here); it is not a
- * price and not an approval: the real registry still refuses TOUR-01 and TOUR-02 (PRICE_NOT_APPROVED).
+ * price and not an approval: the real registry quotes TOUR-01/TOUR-02 only with the Owner's RT-121 tables (28/10/2026).
  */
 const TOUR_01 = "cmlhxkpy9000028zq27rhytew";
 const TOUR_02 = "cmli1a6im000034zqqzc9sppb";
@@ -134,11 +134,11 @@ describe.skipIf(!url)("guide calendar live (local isolated database only)", () =
     ).resolves.toMatchObject({ status: "PENDING" });
   });
 
-  it("the real registry still refuses TOUR-01 and TOUR-02 (the TEST ONLY table above is never an approval)", async () => {
+  it("with the real registry, TOUR-01 quotes the Owner's table (never the TEST ONLY one) and blocks TOUR-02 on the same day", async () => {
     const day = await nextFreeGuideDay();
-    for (const tripId of [TOUR_01, TOUR_02]) {
-      const scheduleId = await slot(tripId, rio(day, "09:00"));
-      await expect(engine.createPrivateBookingForUser(await customer(), { tripId, scheduleId, party: { fullFare: 2, infants: 0 }, contact })).rejects.toMatchObject({ code: "PRICE_NOT_APPROVED" });
-    }
+    const first = await engine.createPrivateBookingForUser(await customer(), { tripId: TOUR_01, scheduleId: await slot(TOUR_01, rio(day, "09:00")), party: { fullFare: 2, infants: 0 }, contact });
+    expect(first.quote).toMatchObject({ totalCents: 170_000, priceTableId: "TOUR-01" });
+    const scheduleId = await slot(TOUR_02, rio(day, "09:00"));
+    await expect(engine.createPrivateBookingForUser(await customer(), { tripId: TOUR_02, scheduleId, party: { fullFare: 2, infants: 0 }, contact })).rejects.toMatchObject({ code: "SCHEDULE_UNAVAILABLE" });
   });
 });

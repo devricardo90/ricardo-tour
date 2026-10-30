@@ -63,6 +63,8 @@ export type PublicBookingRequest = {
   tripId: string;
   date: string;
   fullFare: number;
+  /** Children 0-2 (count toward the group size); refused by the engine where the table has no child rule. */
+  infants?: number;
   contact: { fullName: string; email: string; phone: string; language: "pt" | "en" | "es"; pickupAddress?: string; notes?: string };
 };
 
@@ -76,7 +78,7 @@ export async function createPublicBookingRequest(request: PublicBookingRequest, 
     tripId: request.tripId,
     scheduleId,
     priceTableId: config.priceTableId,
-    party: { fullFare: request.fullFare, infants: 0 },
+    party: { fullFare: request.fullFare, infants: request.infants ?? 0 },
     contact: request.contact,
   });
 }

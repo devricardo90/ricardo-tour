@@ -73,7 +73,7 @@ describe.skipIf(!url)("RT-121 TOUR-03 4 h complete flow (local isolated database
     const quote = await prisma.bookingQuote.findUniqueOrThrow({ where: { bookingId: created.id } });
     expect(quote).toMatchObject({
       priceTableId: "TOUR-03-4H",
-      priceTableVersion: "2026-10-26",
+      priceTableVersion: "2026-10-30",
       participants: people,
       groupTotalCents: total,
       totalCents: total,
@@ -151,12 +151,12 @@ describe.skipIf(!url)("RT-121 TOUR-03 4 h complete flow (local isolated database
     expect(history.every((e) => e.actorUserId === admin.userId)).toBe(true);
   });
 
-  it("refusals: children 0-2 (no TOUR-03 child rule), 5 people, the 6-hour option and TOUR-01 (price pending)", async () => {
+  it("refusals: children without a full-fare adult, 5 people, the 6-hour option and another tour's table on TOUR-01", async () => {
     const scheduleId = await newSchedule();
-    await expect(engine.createPrivateBookingForUser(customers[5], { tripId: TOUR_03, scheduleId, party: { fullFare: 2, infants: 1 }, contact })).rejects.toMatchObject({ code: "CHILD_POLICY_NOT_APPROVED" });
+    await expect(engine.createPrivateBookingForUser(customers[5], { tripId: TOUR_03, scheduleId, party: { fullFare: 0, infants: 2 }, contact })).rejects.toMatchObject({ code: "INVALID_BOOKING_INPUT" });
     await expect(engine.createPrivateBookingForUser(customers[5], { tripId: TOUR_03, scheduleId, party: { fullFare: 5, infants: 0 }, contact })).rejects.toMatchObject({ code: "PARTY_TOO_LARGE" });
     await expect(engine.createPrivateBookingForUser(customers[5], { tripId: TOUR_03, scheduleId, priceTableId: "TOUR-03-6H", party: { fullFare: 2, infants: 0 }, contact })).rejects.toMatchObject({ code: "PRICE_NOT_APPROVED" });
-    await expect(engine.createPrivateBookingForUser(customers[5], { tripId: TOUR_01, scheduleId: await newSchedule(TOUR_01), party: { fullFare: 2, infants: 0 }, contact })).rejects.toMatchObject({ code: "PRICE_NOT_APPROVED" });
+    await expect(engine.createPrivateBookingForUser(customers[5], { tripId: TOUR_01, scheduleId: await newSchedule(TOUR_01), priceTableId: "TOUR-03-4H", party: { fullFare: 2, infants: 0 }, contact })).rejects.toMatchObject({ code: "PRICE_NOT_APPROVED" }); // another tour's table
     expect(await prisma.booking.count({ where: { userId: customers[5] } })).toBe(0);
   });
 });

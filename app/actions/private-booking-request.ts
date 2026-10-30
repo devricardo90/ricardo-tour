@@ -46,6 +46,8 @@ export async function submitPrivateBookingRequest(formData: FormData): Promise<B
   const phone = str(formData, "phone");
   const date = str(formData, "date");
   const party = Number(str(formData, "party"));
+  // Children 0-2 are part of the group size; only tables with a child rule accept them (TOUR-02 is adults only).
+  const infants = str(formData, "infants") === "" ? 0 : Number(str(formData, "infants"));
   const pickup = str(formData, "pickup");
   const notes = str(formData, "notes");
   const maxParty = Math.max(...Object.keys(table.groupTotalCents).map(Number));
@@ -60,6 +62,7 @@ export async function submitPrivateBookingRequest(formData: FormData): Promise<B
   if (!date) errors.date = "required";
   else if (!isRequestDateAllowed(date, todayInRio()) || !isRequestLeadTimeAllowed(tripId, date)) errors.date = "date_not_allowed";
   if (!Number.isInteger(party) || party < 1 || party > maxParty) errors.party = "party_invalid";
+  else if (!Number.isInteger(infants) || infants < 0 || infants >= party || (infants > 0 && table.childPolicy !== "INFANT_HALF_FARE_0_2")) errors.party = "party_invalid";
   if (pickup.length > 300) errors.pickup = "too_long";
   if (notes.length > NOTES_MAX) errors.notes = "too_long";
   if (Object.keys(errors).length > 0) return { ok: false, reason: "invalid", errors };
@@ -69,7 +72,8 @@ export async function submitPrivateBookingRequest(formData: FormData): Promise<B
     booking = await createPublicBookingRequest({
       tripId,
       date,
-      fullFare: party,
+      fullFare: party - infants,
+      infants,
       contact: { fullName: name, email, phone, language, pickupAddress: pickup || undefined, notes: notes || undefined },
     });
   } catch (error) {
@@ -79,6 +83,7 @@ export async function submitPrivateBookingRequest(formData: FormData): Promise<B
       if (error.code === "BOOKING_BUSY") return { ok: false, reason: "busy" };
       if (error.code === "TRIP_NOT_FOUND" || error.code === "PRICE_NOT_APPROVED") return { ok: false, reason: "not_available" };
       if (error.code === "INVALID_BOOKING_INPUT" || error.code === "INVALID_REQUEST_DATE") return { ok: false, reason: "invalid", errors: {} };
+      if (error.code === "CHILD_POLICY_NOT_APPROVED" || error.code === "NO_ADULT_RESPONSIBLE") return { ok: false, reason: "invalid", errors: { party: "party_invalid" } };
     }
     reportServerError({ source: "form", where: "private-booking-request:create", error });
     return { ok: false, reason: "unavailable" };
@@ -95,7 +100,7 @@ export async function submitPrivateBookingRequest(formData: FormData): Promise<B
       `Referência: ${reference} (reserva PENDENTE no ADMIN › Reservas)`,
       `Passeio: ${tripId} · tabela ${quote.priceTableId} v${quote.priceTableVersion}`,
       `Data pedida: ${date} (horário de início a confirmar com o cliente)`,
-      `Participantes: ${party}`,
+      `Participantes: ${party}${infants > 0 ? ` (${infants} criança${infants === 1 ? "" : "s"} de 0 a 2 anos)` : ""}`,
       `Total: ${formatBrl(quote.totalCents)} · sinal 30%: ${formatBrl(quote.depositCents)} · saldo 70% no início: ${formatBrl(quote.balanceCents)}`,
       `Idioma: ${language}`,
       "Contato e endereço: no ADMIN (dados pessoais não vão por e-mail).",

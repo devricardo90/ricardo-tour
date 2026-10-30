@@ -32,18 +32,26 @@ function form(fields: Record<string, string>) {
 }
 
 describe("RT-124 public request: which tours accept it and the slot rules", () => {
-  it("only TOUR-03 (approved 4 h table) accepts a request; TOUR-01, TOUR-02 and TOUR-04 never do", async () => {
+  it("the three own tours with an approved table accept a request in the lab (TOUR-01, TOUR-02, TOUR-03 4 h); TOUR-04 never does", async () => {
     const { publicRequestTable } = await import("@/lib/booking/public-request");
+    expect(publicRequestTable(TOUR_01, "lab", { NODE_ENV: "development" })?.id).toBe("TOUR-01");
+    expect(publicRequestTable(TOUR_02, "lab", { NODE_ENV: "development" })?.id).toBe("TOUR-02");
     expect(publicRequestTable(TOUR_03, "lab", { NODE_ENV: "development" })?.id).toBe("TOUR-03-4H");
-    for (const id of [TOUR_01, TOUR_02, TOUR_04]) {
-      expect(publicRequestTable(id, "lab", { NODE_ENV: "development" })).toBeNull();
-      expect(publicRequestTable(id, "public")).toBeNull();
-    }
+    expect(publicRequestTable(TOUR_04, "lab", { NODE_ENV: "development" })).toBeNull();
+    for (const id of [TOUR_01, TOUR_02, TOUR_03, TOUR_04]) expect(publicRequestTable(id, "public")).toBeNull();
+  });
+
+  it("TOUR-02 is adults only with a meeting point: the form drops the infant hint and the pickup field", async () => {
+    const { PUBLIC_REQUEST_SLOTS } = await import("@/lib/booking/public-request");
+    expect(PUBLIC_REQUEST_SLOTS[TOUR_02]).toMatchObject({ adultsOnly: true, meetingPoint: true, durationMinutes: 180 });
+    expect(PUBLIC_REQUEST_SLOTS[TOUR_01]).toMatchObject({ durationMinutes: 480 });
+    expect(PUBLIC_REQUEST_SLOTS[TOUR_01].adultsOnly).toBeUndefined();
+    expect(PUBLIC_REQUEST_SLOTS[TOUR_03].meetingPoint).toBeUndefined();
   });
 
   it("publicly the request needs the Owner's price-publication authorization (still empty); the lab never runs on deployments", async () => {
     const { publicRequestTable } = await import("@/lib/booking/public-request");
-    expect(publicRequestTable(TOUR_03, "public")).toBeNull();
+    for (const id of [TOUR_01, TOUR_02, TOUR_03]) expect(publicRequestTable(id, "public")).toBeNull();
     expect(publicRequestTable(TOUR_03, "lab", { NODE_ENV: "production" })).toBeNull();
     expect(publicRequestTable(TOUR_03, "lab", { NODE_ENV: "production", VERCEL_ENV: "preview" })).toBeNull();
   });
@@ -52,7 +60,8 @@ describe("RT-124 public request: which tours accept it and the slot rules", () =
     const { requestSlotStart, isRequestDateAllowed } = await import("@/lib/booking/public-request");
     expect(requestSlotStart(TOUR_03, "2026-11-17")?.toISOString()).toBe("2026-11-17T12:00:00.000Z");
     expect(requestSlotStart(TOUR_03, "2026-02-30")).toBeNull();
-    expect(requestSlotStart(TOUR_01, "2026-11-17")).toBeNull();
+    expect(requestSlotStart(TOUR_01, "2026-11-17")?.toISOString()).toBe("2026-11-17T12:00:00.000Z");
+    expect(requestSlotStart(TOUR_04, "2026-11-17")).toBeNull();
     expect(isRequestDateAllowed("2026-11-10", "2026-11-10")).toBe(false); // today
     expect(isRequestDateAllowed("2026-11-11", "2026-11-10")).toBe(true); // tomorrow
     expect(isRequestDateAllowed("2027-11-11", "2026-11-10")).toBe(false); // beyond 365 days
@@ -65,7 +74,7 @@ describe("RT-124 public request: which tours accept it and the slot rules", () =
     expect(isRequestLeadTimeAllowed(TOUR_03, "2026-11-17", new Date("2026-11-16T12:00:00Z"))).toBe(true); // exactly 24 h
     expect(isRequestLeadTimeAllowed(TOUR_03, "2026-11-17", new Date("2026-11-16T12:00:01Z"))).toBe(false); // 23:59:59
     expect(isRequestLeadTimeAllowed(TOUR_03, "2026-11-17", new Date("2026-11-16T21:00:00Z"))).toBe(false); // 18:00 the day before
-    expect(isRequestLeadTimeAllowed(TOUR_01, "2026-11-17", new Date("2026-11-01T12:00:00Z"))).toBe(false); // no online request
+    expect(isRequestLeadTimeAllowed(TOUR_04, "2026-11-17", new Date("2026-11-01T12:00:00Z"))).toBe(false); // no online request
   });
 });
 
@@ -86,6 +95,7 @@ describe("RT-124 public request: server action", () => {
       tripId: TOUR_03,
       date: plusDays(7),
       fullFare: 3,
+      infants: 0,
       contact: { fullName: "Cliente Teste", email: "cliente@example.invalid", phone: "+55 21 99999-0000", language: "pt", pickupAddress: "Hotel (teste)", notes: undefined },
     });
     const mail = sendContactNotification.mock.calls[0][0];
@@ -111,7 +121,6 @@ describe("RT-124 public request: server action", () => {
 
   it("closed tours, the public page without price authorization, the honeypot and the rate limit never create anything", async () => {
     const { submitPrivateBookingRequest } = await import("@/app/actions/private-booking-request");
-    expect(await submitPrivateBookingRequest(form({ tripId: TOUR_01 }))).toEqual({ ok: false, reason: "not_available" });
     expect(await submitPrivateBookingRequest(form({ tripId: TOUR_04 }))).toEqual({ ok: false, reason: "not_available" });
     expect(await submitPrivateBookingRequest(form({ mode: "public" }))).toEqual({ ok: false, reason: "not_available" });
     expect(await submitPrivateBookingRequest(form({ company_website: "spam" }))).toEqual({ ok: false, reason: "unavailable" });
