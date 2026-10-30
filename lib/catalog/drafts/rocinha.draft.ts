@@ -136,17 +136,19 @@ export const ROCINHA_CONTENT: Omit<TourContentRecord, "tripId" | "status" | "sou
     {
       question: { pt: "Como funciona a reserva?", en: "How does booking work?", es: "¿Cómo funciona la reserva?" },
       answer: {
-        pt: "Solicite disponibilidade. Após confirmar a operação, nossa equipe enviará a proposta e as condições. A reserva é confirmada com sinal de 30%, e o restante é pago antes do início. O site não processa pagamentos.",
-        en: "Request availability first. Once our team confirms the tour can go ahead, we'll send you a quote and the terms. A 30% deposit confirms the booking, and the balance is due before the tour starts. Payments are not processed on this website.",
-        es: "Primero solicita disponibilidad. Cuando nuestro equipo confirme la operación, te enviaremos la propuesta y las condiciones. La reserva se confirma con un anticipo del 30% y el resto se paga antes de comenzar. Los pagos no se procesan en este sitio web.",
+        // RT-121 (Owner 26/10/2026, confirmed 28/10/2026): 30% of the total as deposit, 70% at the start of the tour.
+        pt: "Solicite disponibilidade. Após confirmar a operação, nossa equipe enviará a proposta e as condições. A reserva é confirmada com sinal de 30% do valor total, e os 70% restantes são pagos no início do passeio. O site não processa pagamentos.",
+        en: "Request availability first. Once our team confirms the tour can go ahead, we'll send you a quote and the terms. A deposit of 30% of the total confirms the booking, and the remaining 70% is paid at the start of the tour. Payments are not processed on this website.",
+        es: "Primero solicita disponibilidad. Cuando nuestro equipo confirme la operación, te enviaremos la propuesta y las condiciones. La reserva se confirma con un anticipo del 30% del valor total, y el 70% restante se paga al inicio del paseo. Los pagos no se procesan en este sitio web.",
       },
     },
     {
       question: { pt: "Quais formas de pagamento são aceitas?", en: "Which payment methods are available?", es: "¿Qué medios de pago están disponibles?" },
       answer: {
-        pt: "A equipe informará na proposta quais meios de pagamento estão disponíveis para sua reserva. PIX, cartão ou dinheiro poderão ser oferecidos, conforme a operação confirmada.",
-        en: "Our team will confirm the payment methods available for your booking in the quote. Depending on the arrangements, options may include PIX, card or cash.",
-        es: "Nuestro equipo confirmará en la propuesta los medios de pago disponibles para tu reserva. Según la operación, pueden incluir PIX, tarjeta o efectivo.",
+        // RT-121 approved methods: PIX, card terminal (maquininha) or cash; nothing is charged on the website.
+        pt: "O sinal e o saldo podem ser pagos por PIX, cartão na maquininha ou dinheiro. A equipe informa na proposta como pagar o sinal.",
+        en: "The deposit and the balance can be paid by PIX, card (on a card terminal) or cash. Our team explains in the quote how to pay the deposit.",
+        es: "El anticipo y el saldo se pueden pagar por PIX, tarjeta (en terminal de pago) o efectivo. Nuestro equipo indica en la propuesta cómo pagar el anticipo.",
       },
     },
     {
@@ -176,16 +178,38 @@ export const ROCINHA_WHATSAPP_MESSAGE: Tri = {
 };
 
 /**
- * INTERNAL provisional target prices (Owner, 17/10/2026): closed price per booking by group size. UNCHANGED.
- * NOT FOR PUBLICATION — still subject to full costs, taxes and operation validation. Rendered only in the lab review
- * mode, labelled "PREÇOS PROVISÓRIOS — NÃO PUBLICAR", and never in the ?precos=ocultos version. Never stored on Trip.
+ * Owner-approved group table (RT-121 final decision, 28/10/2026; registry id TOUR-02 in lib/commerce/price-tables.ts):
+ * closed price per private group of adults. Shown only in the local review lab until the Owner authorizes publication
+ * (PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS); never stored on Trip. Replaces the 17/10 provisional targets.
  */
-export const ROCINHA_PROVISIONAL_PRICING = [
-  { participants: 1, perPersonCents: 45000, totalCents: 45000 },
-  { participants: 2, perPersonCents: 29000, totalCents: 58000 },
-  { participants: 3, perPersonCents: 25000, totalCents: 75000 },
-  { participants: 4, perPersonCents: 22000, totalCents: 88000 },
-] as const;
+export const ROCINHA_APPROVED_PRICING = {
+  publishable: false as const,
+  durations: [
+    {
+      hours: 3,
+      label: { pt: "Passeio privativo de aproximadamente 3 horas", en: "Private tour of about 3 hours", es: "Paseo privado de aproximadamente 3 horas" },
+      prices: [
+        { participants: 1, perPersonCents: 45000, totalCents: 45000 },
+        { participants: 2, perPersonCents: 29000, totalCents: 58000 },
+        { participants: 3, perPersonCents: 23000, totalCents: 69000 },
+        { participants: 4, perPersonCents: 19500, totalCents: 78000 },
+      ],
+    },
+  ],
+} as const;
+
+export const ROCINHA_PRICING_NOTE: Tri = {
+  pt: "Somente adultos (18 anos ou mais). Valor fechado por grupo privativo; mototáxi de subida e descida incluído. Sinal de 30% do valor total e 70% no início do passeio; pagamento por PIX, cartão na maquininha ou dinheiro.",
+  en: "Adults only (18 and over). Closed price per private group; motorcycle-taxi rides up and down included. A deposit of 30% of the total and 70% at the start of the tour; payment by PIX, card terminal or cash.",
+  es: "Solo adultos (18 años o más). Precio cerrado por grupo privado; mototaxi de subida y bajada incluido. Anticipo del 30% del valor total y 70% al inicio del paseo; pago por PIX, tarjeta en terminal o efectivo.",
+};
+export const ROCINHA_PRICE_SUMMARY: Tri = { pt: "A partir de R$ 195 por pessoa", en: "From R$ 195 per person", es: "Desde R$ 195 por persona" };
+// The "from" price is only true for a group of 4 adults: the condition always states it with the group total.
+export const ROCINHA_PRICE_CONDITION: Tri = {
+  pt: "Valor por pessoa para um grupo de 4 adultos (total do grupo: R$ 780). Para 1 a 3 pessoas, veja o total na tabela.",
+  en: "Price per person for a group of 4 adults (group total: R$ 780). For 1 to 3 guests, see the total in the table.",
+  es: "Valor por persona para un grupo de 4 adultos (total del grupo: R$ 780). Para 1 a 3 personas, consulta el total en la tabla.",
+};
 
 export const ROCINHA_GROUP_SIZE: Tri = { pt: "1 a 4 adultos", en: "1 to 4 adults", es: "1 a 4 adultos" };
 export const ROCINHA_MIN_AGE: Tri = { pt: "18 anos ou mais", en: "18 and over", es: "18 años o más" };

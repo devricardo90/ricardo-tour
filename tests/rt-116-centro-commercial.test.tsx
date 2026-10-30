@@ -215,18 +215,17 @@ describe("TOUR-03 commercial presentation: 'A partir de R$ 260 por pessoa' (Owne
     }
   });
 
-  it("does not touch TOUR-01, TOUR-02 or TOUR-04 and never uses R$ 260 for them", () => {
+  it("never uses R$ 260 for TOUR-01, TOUR-02 or TOUR-04; TOUR-01/02 show their own RT-121 summary only with prices visible", () => {
     for (const id of [CRISTO, ROCINHA, PREMIUM]) {
-      for (const hidden of [true, false]) {
-        const html = render(id, "pt", hidden);
-        expect(html, id).not.toContain("R$ 260");
-        expect(html, id).not.toContain("A partir de");
-        expect(html, id).not.toContain('data-testid="tour-price-condition"');
-        expect(html, id).not.toContain('data-testid="tour-pricing-section"');
-      }
-      expect(PROTOTYPE_OFFER[id].priceSummary, id).toBeUndefined();
-      expect(PROTOTYPE_OFFER[id].priceCondition, id).toBeUndefined();
+      const hiddenHtml = render(id, "pt", false);
+      expect(hiddenHtml, id).not.toContain("A partir de");
+      expect(hiddenHtml, id).not.toContain('data-testid="tour-pricing-section"');
+      for (const hidden of [true, false]) expect(render(id, "pt", hidden), id).not.toContain("R$ 260");
     }
+    expect(PROTOTYPE_OFFER[PREMIUM].priceSummary).toBeUndefined();
+    expect(render(PREMIUM, "pt", true)).not.toContain('data-testid="tour-pricing-section"');
+    expect(textOf(render(CRISTO, "pt", true), "tour-price")).toBe("A partir de R$ 650 por pessoa");
+    expect(textOf(render(ROCINHA, "pt", true), "tour-price")).toBe("A partir de R$ 195 por pessoa");
     expect(textOf(render(ROCINHA, "pt", false), "tour-price")).toBe("Orçamento sob consulta");
     expect(textOf(render(CRISTO, "pt", false), "tour-price")).toBe("Orçamento sob consulta");
   });
@@ -249,8 +248,8 @@ describe("Mobile sticky price bar never clips the price (Owner decision 21/10/20
   });
 
   it("keeps quote-on-request wording (TOUR-01, TOUR-02, TOUR-03 without prices) whole, with no truncation classes", () => {
-    for (const [id, hidden] of [["cmlhxkpy9000028zq27rhytew", false], ["cmli1a6im000034zqqzc9sppb", false], [CENTRO_ID, true]] as const) {
-      const html = render(id, "pt", !hidden);
+    for (const id of ["cmlhxkpy9000028zq27rhytew", "cmli1a6im000034zqqzc9sppb", CENTRO_ID]) {
+      const html = render(id, "pt", false);
       expect(barPrice(html), id).toEqual(["Preço", "Orçamento sob consulta"]);
       expect(bar(html), id).not.toContain("R$ 260");
     }

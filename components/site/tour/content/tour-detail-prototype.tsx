@@ -28,7 +28,8 @@ import { buildPublicWhatsAppUrl } from "@/lib/public-contact";
 type Localized = { pt?: string; en?: string; es?: string };
 type ApprovedPricingForReview = {
   durations: ReadonlyArray<{ hours: number; label: Localized; prices: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }> }>;
-  additionalHourPerGroupCents: number;
+  /** TOUR-03 only: price of an additional hour per group (quoted by the shared note). */
+  additionalHourPerGroupCents?: number;
 };
 type ApprovedRouteForReview = {
   id: string;
@@ -71,6 +72,8 @@ export type PrototypeOfferView = {
   /** Sprint 10 channel: the final request section also offers the prefilled WhatsApp message. */
   requestViaWhatsapp?: boolean;
   approvedPricing?: ApprovedPricingForReview;
+  /** Tour-specific note under the approved table; without it the shared TOUR-03 note (extra hour) is used. */
+  pricingNote?: Localized;
   /** Public page only: the Owner authorized publishing the approved table (lib/catalog/public-tour-presentation.ts). */
   approvedPricingPublic?: boolean;
   routeOptions?: ReadonlyArray<ApprovedRouteForReview>;
@@ -275,7 +278,7 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                           </table>
                         </div>
                       ))}
-                      <p className="mt-3 text-[12px] leading-[1.45]">{t.approvedPricingNote.replace("{price}", formatPriceBRL(offer.approvedPricing.additionalHourPerGroupCents))}</p>
+                      <p className="mt-3 text-[12px] leading-[1.45]">{offer.pricingNote ? localize(offer.pricingNote) : t.approvedPricingNote.replace("{price}", formatPriceBRL(offer.approvedPricing.additionalHourPerGroupCents ?? 0))}</p>
                       <p className="mt-2 text-[11px] leading-[1.4]">{t.publicationGateNote}</p>
                     </div>
                   </section>

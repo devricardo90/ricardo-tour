@@ -9,7 +9,11 @@ import {
   CRISTO_GROUP_SIZE,
   CRISTO_ID,
   CRISTO_PICKUP_SHORT,
+  CRISTO_APPROVED_PRICING,
+  CRISTO_PRICE_CONDITION,
   CRISTO_PRICE_LABEL,
+  CRISTO_PRICE_SUMMARY,
+  CRISTO_PRICING_NOTE,
   CRISTO_SUBTITLE,
   CRISTO_TITLE,
   CRISTO_WHATSAPP_MESSAGE,
@@ -22,7 +26,10 @@ import {
   ROCINHA_ID,
   ROCINHA_MEETING_SHORT,
   ROCINHA_MIN_AGE,
-  ROCINHA_PROVISIONAL_PRICING,
+  ROCINHA_APPROVED_PRICING,
+  ROCINHA_PRICING_NOTE,
+  ROCINHA_PRICE_SUMMARY,
+  ROCINHA_PRICE_CONDITION,
   ROCINHA_SUBTITLE,
   ROCINHA_TITLE,
   ROCINHA_WHATSAPP_MESSAGE,
@@ -378,7 +385,14 @@ export type PrototypeOffer = {
   transport?: { value: LocalizedText; status: FactStatus };
   requestViaWhatsapp?: boolean;
   /** Owner-approved price table, exposed only in the local review lab. */
-  approvedPricing?: typeof CENTRO_APPROVED_PRICING;
+  approvedPricing?: {
+    durations: ReadonlyArray<{ hours: number; label: LocalizedText; prices: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }> }>;
+    additionalHourPerGroupCents?: number;
+    /** Always false until the Owner authorizes price publication (PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS). */
+    publishable: false;
+  };
+  /** Tour-specific note under the approved table (TOUR-01/02); TOUR-03 uses the shared note with its extra-hour price. */
+  pricingNote?: LocalizedText;
   /** Both Owner-approved route options for the Centro draft. */
   routeOptions?: typeof CENTRO_ROUTE_OPTIONS;
   translationStatusNotice?: LocalizedText;
@@ -502,14 +516,25 @@ function rocinhaOffer(base: PrototypeOffer): PrototypeOffer {
     groupSize: { value: ROCINHA_GROUP_SIZE, status: "CONFIRMED" },
     minAge: { value: ROCINHA_MIN_AGE, status: "CONFIRMED" },
     whatsappMessage: ROCINHA_WHATSAPP_MESSAGE,
-    provisionalPricing: ROCINHA_PROVISIONAL_PRICING,
+    // RT-121 table approved 28/10/2026 (registry TOUR-02); lab only until the Owner authorizes price publication.
+    approvedPricing: ROCINHA_APPROVED_PRICING,
+    pricingNote: ROCINHA_PRICING_NOTE,
+    priceSummary: ROCINHA_PRICE_SUMMARY,
+    priceCondition: ROCINHA_PRICE_CONDITION,
+    // Values approved; the summary wording follows the TOUR-03 pattern and waits for the Owner's text review.
+    priceStatusByLocale: { pt: "PROVISIONAL", en: "PROVISIONAL", es: "PROVISIONAL" },
+    mobilePriceLines: {
+      // Mobile bar: the per-person value always next to its condition (group of 4 adults).
+      lead: { pt: "Grupo de 4 adultos", en: "Group of 4 adults", es: "Grupo de 4 adultos" },
+      value: { pt: "R$ 195/pessoa", en: "R$ 195/person", es: "R$ 195/persona" },
+    },
   };
 }
 
 /**
  * RT-112/RT-115 — TOUR-01 offer from the Owner's Ficha Comercial v1.0 and the T1 transport decision (18/10/2026).
- * Facts are Owner decisions; the texts are agent drafts pending Owner review (PROVISIONAL). No price is approved, so none
- * is shown (not even internal values: the price proposal lives only in the Manual Mestre's confidential §14.6.12).
+ * Facts are Owner decisions; the texts are agent drafts pending Owner review (PROVISIONAL). Group table approved by the
+ * Owner on 28/10/2026 (RT-121): shown only in the lab review mode; the public page keeps "Orçamento sob consulta".
  */
 function cristoOffer(base: PrototypeOffer): PrototypeOffer {
   return {
@@ -538,6 +563,16 @@ function cristoOffer(base: PrototypeOffer): PrototypeOffer {
     },
     whatsappMessage: CRISTO_WHATSAPP_MESSAGE,
     priceLabel: CRISTO_PRICE_LABEL,
+    // RT-121 table approved 28/10/2026 (registry TOUR-01); lab only until the Owner authorizes price publication.
+    approvedPricing: CRISTO_APPROVED_PRICING,
+    pricingNote: CRISTO_PRICING_NOTE,
+    priceSummary: CRISTO_PRICE_SUMMARY,
+    priceCondition: CRISTO_PRICE_CONDITION,
+    priceStatusByLocale: { pt: "PROVISIONAL", en: "PROVISIONAL", es: "PROVISIONAL" },
+    mobilePriceLines: {
+      lead: { pt: "Grupo de 4 adultos", en: "Group of 4 adults", es: "Grupo de 4 adultos" },
+      value: { pt: "R$ 650/pessoa", en: "R$ 650/person", es: "R$ 650/persona" },
+    },
     requestViaWhatsapp: true,
   };
 }

@@ -9,6 +9,9 @@ import { TourDetailPrototype, offerForReview } from "@/components/site/tour/cont
 import { ImageGallery } from "@/components/site/media/image-gallery";
 
 const tri = (pt: string, en: string, es: string) => ({ pt, en, es });
+// The approved RT-121 table and its wording (lab only) are the one place with amounts; every other offer text has none.
+const PRICE_FIELDS = new Set(["approvedPricing", "pricingNote", "priceSummary", "priceCondition", "mobilePriceLines"]);
+const withoutApprovedPrices = (offer: object) => Object.fromEntries(Object.entries(offer).filter(([key]) => !PRICE_FIELDS.has(key)));
 
 function approvedRecord(overrides: Partial<TourContentRecord> = {}): TourContentRecord {
   const r: TourContentRecord = {
@@ -249,6 +252,11 @@ describe("RT-114 copy and prototype rendering (round 1 + Owner addendum)", () =>
         expect(html).toContain('data-testid="tour-approved-prices"');
         expect(html).toContain("R$ 120,00 por grupo");
         expect(html).toContain('data-testid="centro-route-options"');
+      } else if (id === "cmlhxkpy9000028zq27rhytew" || id === "cmli1a6im000034zqqzc9sppb") {
+        // RT-121 tables approved 28/10/2026: shown in the lab review only, with the tour's own note (never the TOUR-03 extra hour).
+        expect(html).toContain('data-testid="tour-approved-prices"');
+        expect(html).not.toContain("Hora adicional");
+        expect(html).not.toContain("R$ 120,00");
       } else {
         expect(html).toContain("Orçamento sob consulta");
       }
@@ -435,7 +443,8 @@ describe("RT-115 / RT-112 Rocinha real content (Owner commercial closing 17/10/2
   const record = MOCK_TOUR_CONTENT[ROC];
   const renderRoc = (locale: string, reviewMode: boolean) =>
     renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[ROC]} content={toTourContentView(record, locale, "preview")!} locale={locale} reviewMode={reviewMode} />);
-  const allText = JSON.stringify({ record: { ...record, images: undefined }, offer: { ...PROTOTYPE_OFFER[ROC], provisionalPricing: undefined } });
+  const rocOfferText = withoutApprovedPrices(PROTOTYPE_OFFER[ROC]);
+  const allText = JSON.stringify({ record: { ...record, images: undefined }, offer: rocOfferText });
 
   it("is real draft content: not MOCK, DRAFT, valid in PT/EN/ES, and never public", () => {
     expect(isMockRecord(record)).toBe(false);
@@ -465,15 +474,19 @@ describe("RT-115 / RT-112 Rocinha real content (Owner commercial closing 17/10/2
     expect(allText).not.toMatch(/multa|penalt|reembols|refund|penalidad|devoluci/i);
   });
 
-  it("shows the provisional prices only in the lab review mode, clearly labelled, with consistent totals", () => {
-    for (const row of PROTOTYPE_OFFER[ROC].provisionalPricing!) expect(row.totalCents).toBe(row.perPersonCents * row.participants);
-    const review = renderRoc("pt", true);
-    expect(review).toContain("PREÇOS PROVISÓRIOS — NÃO PUBLICAR");
-    for (const v of ["R$ 450,00", "R$ 290,00", "R$ 580,00", "R$ 250,00", "R$ 750,00", "R$ 220,00", "R$ 880,00"]) expect(review.replace(/\u00a0/g, " ")).toContain(v);
+  it("shows the approved RT-121 table (28/10/2026) only in the lab review mode, with consistent totals and the adults-only note", () => {
+    const table = PROTOTYPE_OFFER[ROC].approvedPricing!;
+    expect(PROTOTYPE_OFFER[ROC].provisionalPricing).toBeUndefined();
+    expect(table.durations[0].prices.map((row) => row.totalCents)).toEqual([45000, 58000, 69000, 78000]);
+    for (const row of table.durations[0].prices) expect(row.totalCents).toBe(row.perPersonCents * row.participants);
+    const review = renderRoc("pt", true).replace(/\u00a0/g, " ");
+    expect(review).toContain('data-testid="tour-approved-prices"');
+    for (const v of ["R$ 450,00", "R$ 290,00", "R$ 580,00", "R$ 230,00", "R$ 690,00", "R$ 195,00", "R$ 780,00", "A partir de R$ 195 por pessoa"]) expect(review).toContain(v);
+    expect(review).toContain("Somente adultos (18 anos ou mais)");
+    expect(review).not.toMatch(/R\$ (750|880|250|220),00/); // the 17/10 provisional targets are gone
     const reader = renderRoc("pt", false);
-    expect(reader).not.toContain("NÃO PUBLICAR");
-    expect(reader).not.toContain("data-testid=\"tour-provisional-prices\"");
-    expect(reader.replace(/\u00a0/g, " ")).not.toMatch(/R\$ (450|290|580|250|750|220|880),00/);
+    expect(reader).not.toContain('data-testid="tour-approved-prices"');
+    expect(reader.replace(/\u00a0/g, " ")).not.toMatch(/R\$ ?\d/);
     expect(reader).toContain("Orçamento sob consulta");
   });
 
@@ -627,7 +640,19 @@ describe("RT-115 final verification: approved texts as specification (17/10/2026
   const render = (o: typeof offer, locale: string, showProvisionalPrices: boolean) =>
     renderToStaticMarkup(<TourDetailPrototype offer={o} content={toTourContentView(record, locale, "preview")!} locale={locale} reviewMode showProvisionalPrices={showProvisionalPrices} />);
 
-  it("keeps the 7 approved FAQ answers verbatim in PT/EN/ES", () => {
+  // FAQ 4 and 5 follow the RT-121 payment rule (30% of the total, 70% at the start; PIX, card terminal or cash), 29/10/2026.
+  FAQ[3] = [
+    "Solicite disponibilidade. Após confirmar a operação, nossa equipe enviará a proposta e as condições. A reserva é confirmada com sinal de 30% do valor total, e os 70% restantes são pagos no início do passeio. O site não processa pagamentos.",
+    "Request availability first. Once our team confirms the tour can go ahead, we'll send you a quote and the terms. A deposit of 30% of the total confirms the booking, and the remaining 70% is paid at the start of the tour. Payments are not processed on this website.",
+    "Primero solicita disponibilidad. Cuando nuestro equipo confirme la operación, te enviaremos la propuesta y las condiciones. La reserva se confirma con un anticipo del 30% del valor total, y el 70% restante se paga al inicio del paseo. Los pagos no se procesan en este sitio web.",
+  ];
+  FAQ[4] = [
+    "O sinal e o saldo podem ser pagos por PIX, cartão na maquininha ou dinheiro. A equipe informa na proposta como pagar o sinal.",
+    "The deposit and the balance can be paid by PIX, card (on a card terminal) or cash. Our team explains in the quote how to pay the deposit.",
+    "El anticipo y el saldo se pueden pagar por PIX, tarjeta (en terminal de pago) o efectivo. Nuestro equipo indica en la propuesta cómo pagar el anticipo.",
+  ];
+
+  it("keeps the 7 approved FAQ answers verbatim in PT/EN/ES (4 and 5 aligned with RT-121)", () => {
     expect(record.faq).toHaveLength(7);
     record.faq!.forEach((item, i) => {
       expect(item.answer.pt).toBe(FAQ[i][0]);
@@ -688,13 +713,15 @@ describe("RT-115 final verification: approved texts as specification (17/10/2026
   it("strips the internal prices from the offer before rendering in the no-price mode (defence in depth)", () => {
     const stripped = offerForReview(offer, false);
     expect("provisionalPricing" in stripped).toBe(false);
-    expect(offerForReview(offer, true).provisionalPricing).toEqual(offer.provisionalPricing);
+    expect("approvedPricing" in stripped).toBe(false);
+    expect(offerForReview(offer, true).approvedPricing).toEqual(offer.approvedPricing);
     // Even if the flag were wrong, a stripped offer cannot render prices.
     const html = render(stripped, "pt", true).replace(/\u00a0/g, " ");
     expect(html).not.toMatch(/R\$ ?\d/);
     expect(html).not.toContain("tour-provisional-prices");
-    // Internal prices unchanged.
-    expect(offer.provisionalPricing?.map((r) => r.totalCents)).toEqual([45000, 58000, 75000, 88000]);
+    expect(html).not.toContain("tour-approved-prices");
+    // Approved table unchanged (RT-121, 28/10/2026).
+    expect(offer.approvedPricing?.durations[0].prices.map((r) => r.totalCents)).toEqual([45000, 58000, 69000, 78000]);
   });
 
   it("leaves the Premium tour exactly as before (title, mock pitch, no real-content fields)", () => {
@@ -754,7 +781,10 @@ describe("RT-112 / RT-115 TOUR-01 Cristo Redentor + Pão de Açúcar (Ficha Come
     expect(offer.transport?.status).toBe("PENDING");
     expect(offer.provisionalPricing).toBeUndefined();
     expect(offer.priceCents).toBeNull();
-    const all = JSON.stringify({ offer, record: MOCK_TOUR_CONTENT[ID] });
+    // The approved RT-121 table (lab only) is the one place with amounts; the content record never has any.
+    const offerText = withoutApprovedPrices(offer);
+    expect(offer.approvedPricing?.durations[0].prices.map((r) => r.totalCents)).toEqual([120000, 170000, 220000, 260000]);
+    const all = JSON.stringify({ offer: offerText, record: MOCK_TOUR_CONTENT[ID] });
     // Internal data (vehicle, costs, margins, price proposals) lives only in the Manual Mestre's confidential section.
     for (const internal of ["Mégane", "Megane", "margem", "margin", "custo", " cost", " fee", "cachê", "diária", "combustível", "aluguel", "gasolina", "rental"]) expect(all, internal).not.toContain(internal);
     expect(all).not.toMatch(/R\$/);

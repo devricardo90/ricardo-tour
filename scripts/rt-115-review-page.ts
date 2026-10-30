@@ -1,6 +1,7 @@
 /**
  * RT-115: builds the Owner review page (single HTML, images inlined) for the Rocinha commercial closing, from the same
- * draft data the preview uses. Internal costs are never included; provisional prices appear labelled "NÃO PUBLICAR".
+ * draft data the preview uses. Internal costs are never included; the approved table (RT-121, 28/10/2026) appears labelled
+ * "NÃO PUBLICAR" until the Owner authorizes price publication.
  * Usage: npx tsx scripts/rt-115-review-page.ts <captures dir> <out.html> [--sem-precos]
  * --sem-precos: visual-review version (no provisional prices anywhere; "Valores em validação"). Use captures taken with ?precos=ocultos.
  */
@@ -11,7 +12,7 @@ import {
   ROCINHA_CONTENT,
   ROCINHA_GROUP_SIZE,
   ROCINHA_MIN_AGE,
-  ROCINHA_PROVISIONAL_PRICING,
+  ROCINHA_APPROVED_PRICING,
   ROCINHA_SUBTITLE,
   ROCINHA_TITLE,
   ROCINHA_WHATSAPP_MESSAGE,
@@ -103,7 +104,7 @@ footer{font-size:13px;color:var(--subtle)}
   </tbody></table></div>
   ${noPrices
     ? `<div class="warn" role="note"><b>Preço: Valores em validação.</b> Os valores não fazem parte desta versão de revisão visual.</div>`
-    : `<div class="warn" role="note"><b>VERSÃO INTERNA — PREÇOS PROVISÓRIOS — NÃO PUBLICAR.</b> Preço fechado por reserva: ${ROCINHA_PROVISIONAL_PRICING.map((r) => `${r.participants} ${r.participants === 1 ? "pessoa" : "pessoas"} ${brl(r.totalCents)}`).join(" · ")}. Dependem da validação de custos, tributos e operação. Custos internos estão só no Manual Mestre (seção confidencial).</div>`}
+    : `<div class="warn" role="note"><b>VERSÃO INTERNA — TABELA APROVADA — NÃO PUBLICAR.</b> Preço fechado por reserva: ${ROCINHA_APPROVED_PRICING.durations[0].prices.map((r) => `${r.participants} ${r.participants === 1 ? "pessoa" : "pessoas"} ${brl(r.totalCents)}`).join(" · ")}. Publicação depende da autorização do Owner e da validação contábil. Custos internos estão só no Manual Mestre (seção confidencial).</div>`}
 </section>
 <section aria-labelledby="texts-h">
   <h2 id="texts-h">Textos finais</h2>

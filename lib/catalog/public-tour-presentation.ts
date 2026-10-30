@@ -89,7 +89,7 @@ export function buildPublicOffer(source: PrototypeOffer, locale: string, content
     requestFlowMode: source.requestFlowMode,
     noPortugueseFallback: true,
     ...(pricePublic
-      ? { approvedPricing: source.approvedPricing, approvedPricingPublic: true, priceSummary: only(source.priceSummary, l), priceCondition: only(source.priceCondition, l), priceStatusByLocale: { [l]: "CONFIRMED" as const }, mobilePriceLines: source.mobilePriceLines && has(source.mobilePriceLines.value, l) ? { lead: only(source.mobilePriceLines.lead, l), value: only(source.mobilePriceLines.value, l) } : undefined }
+      ? { approvedPricing: source.approvedPricing, approvedPricingPublic: true, pricingNote: source.pricingNote ? only(source.pricingNote, l) : undefined, priceSummary: only(source.priceSummary, l), priceCondition: only(source.priceCondition, l), priceStatusByLocale: { [l]: "CONFIRMED" as const }, mobilePriceLines: source.mobilePriceLines && has(source.mobilePriceLines.value, l) ? { lead: only(source.mobilePriceLines.lead, l), value: only(source.mobilePriceLines.value, l) } : undefined }
       : {}),
   };
 }

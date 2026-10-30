@@ -137,6 +137,22 @@ function byLaunchOrder<T extends { id: string }>(trips: T[]) {
 }
 
 /**
+ * RT-116 (Owner, 28/10/2026): the catalog rows still point to legacy /images/trips covers of unknown origin, which must
+ * never be shown again. The three own tours use their own OWNER_ATTESTED cover instead (same files as their galleries).
+ * Code only: the rows are not changed (no hosted write); RT-119 replaces Trip.imageUrl when the catalog is loaded.
+ */
+export const OWN_TOUR_COVERS: Readonly<Record<string, string>> = {
+  cmlhxkpy9000028zq27rhytew: "/media/tours/cristo-pao-selaron/pao-01-IMG_1162-mirante.webp",
+  cmli1a6im000034zqqzc9sppb: "/media/tours/favela-rocinha/rocinha-01-panorama-bandeira.jpg",
+  cmlibniq40000z4zqkbujnutt: "/media/tours/centro-historico-cultural/centro-historico-img-1337.webp",
+};
+
+function withOwnCover<T extends { id: string; imageUrl?: string | null }>(row: T): T {
+  const cover = OWN_TOUR_COVERS[row.id];
+  return cover ? { ...row, imageUrl: cover } : row;
+}
+
+/**
  * All publicly sellable trips, in launch order. The database query is already restricted to the approved ids; the
  * integrity checks then run on the rows that come back, so a corrupted approved record is hidden rather than shown.
  */
@@ -147,7 +163,7 @@ export async function getPublicTrips() {
     where: { id: { in: [...LAUNCH_TRIP_IDS] }, isPublished: true },
     include: { partner: { select: { status: true, publicLabel: true } } },
   });
-  return byLaunchOrder(rows.filter((row) => evaluatePublicTrip(row).included));
+  return byLaunchOrder(rows.filter((row) => evaluatePublicTrip(row).included).map(withOwnCover));
 }
 
 /** One public trip by id, or null when it is not part of the public catalog (RT-54 uses this to 404 hidden records). */
@@ -161,7 +177,7 @@ export async function getPublicTripById(id: string) {
       partner: { select: { status: true, publicLabel: true } },
     },
   });
-  return row && evaluatePublicTrip(row).included ? row : null;
+  return row && evaluatePublicTrip(row).included ? withOwnCover(row) : null;
 }
 
 export type TripBrowseParams = {

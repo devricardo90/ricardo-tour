@@ -168,3 +168,37 @@ export const CRISTO_CHILDREN: Tri = { pt: "Bem-vindas · 0 a 2 anos pagam 50%", 
 export const CRISTO_PICKUP_SHORT: Tri = { pt: "Busca e retorno no hotel", en: "Hotel pickup and drop-off", es: "Recogida y regreso al hotel" };
 /** Price is not approved: the page asks for a quote instead of showing any amount. */
 export const CRISTO_PRICE_LABEL: Tri = { pt: "Orçamento sob consulta", en: "Quote on request", es: "Presupuesto a consultar" };
+
+/**
+ * Owner-approved group table (RT-121 final decision, 28/10/2026; registry id TOUR-01 in lib/commerce/price-tables.ts),
+ * Corcovado train and Sugarloaf cable car tickets included. Shown only in the local review lab until the Owner authorizes
+ * publication; the public page keeps CRISTO_PRICE_LABEL. Never stored on Trip.
+ */
+export const CRISTO_APPROVED_PRICING = {
+  publishable: false as const,
+  durations: [
+    {
+      hours: 8,
+      label: { pt: "Passeio privativo de aproximadamente 8 horas, ingressos incluídos", en: "Private tour of about 8 hours, tickets included", es: "Paseo privado de aproximadamente 8 horas, entradas incluidas" },
+      prices: [
+        { participants: 1, perPersonCents: 120000, totalCents: 120000 },
+        { participants: 2, perPersonCents: 85000, totalCents: 170000 },
+        { participants: 3, perPersonCents: 73333, totalCents: 220000 },
+        { participants: 4, perPersonCents: 65000, totalCents: 260000 },
+      ],
+    },
+  ],
+} as const;
+
+export const CRISTO_PRICING_NOTE: Tri = {
+  pt: "Valor fechado por grupo privativo, com os ingressos do Trem do Corcovado e do Bondinho do Pão de Açúcar incluídos. Crianças de 0 a 2 anos pagam 50% da tarifa individual da faixa do grupo e contam para o limite de 4 pessoas. Sinal de 30% do valor total e 70% no início do passeio; pagamento por PIX, cartão na maquininha ou dinheiro.",
+  en: "Closed price per private group, with the Corcovado train and Sugarloaf cable car tickets included. Children aged 0–2 pay 50% of the individual fare for the group size and count toward the limit of 4 guests. A deposit of 30% of the total and 70% at the start of the tour; payment by PIX, card terminal or cash.",
+  es: "Precio cerrado por grupo privado, con las entradas del Tren del Corcovado y del Teleférico del Pan de Azúcar incluidas. Los niños de 0 a 2 años pagan el 50% de la tarifa individual de su grupo y cuentan dentro del límite de 4 personas. Anticipo del 30% del valor total y 70% al inicio del paseo; pago por PIX, tarjeta en terminal o efectivo.",
+};
+export const CRISTO_PRICE_SUMMARY: Tri = { pt: "A partir de R$ 650 por pessoa", en: "From R$ 650 per person", es: "Desde R$ 650 por persona" };
+// The "from" price is only true for a group of 4 adults: the condition always states it with the group total.
+export const CRISTO_PRICE_CONDITION: Tri = {
+  pt: "Valor por pessoa para um grupo de 4 adultos, ingressos incluídos (total do grupo: R$ 2.600). Para 1 a 3 pessoas ou com crianças de 0 a 2 anos, veja o total na tabela.",
+  en: "Price per person for a group of 4 adults, tickets included (group total: R$ 2,600). For 1 to 3 guests or with children aged 0–2, see the total in the table.",
+  es: "Valor por persona para un grupo de 4 adultos, entradas incluidas (total del grupo: R$ 2.600). Para 1 a 3 personas o con niños de 0 a 2 años, consulta el total en la tabla.",
+};
