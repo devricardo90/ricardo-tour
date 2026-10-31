@@ -175,7 +175,7 @@ describe("TOUR-03 commercial presentation: 'A partir de R$ 260 por pessoa' (Owne
     expect(lowest).toMatchObject({ hours: 4, participants: 4, perPersonCents: 26000 });
     const html = render(CENTRO_ID, "pt");
     expect(textOf(html, "tour-price")).toBe("A partir de R$ 260 por pessoa");
-    expect(textOf(html, "tour-price-condition")).toBe("Valor por pessoa para grupos de 4 participantes, no passeio privativo de 4 horas.");
+    expect(textOf(html, "tour-price-condition")).toBe("Valor por pessoa para um grupo de 4 adultos no passeio privativo de 4 horas (total do grupo: R$ 1.040).");
     const card = html.slice(html.indexOf('data-testid="tour-booking-card"'), html.indexOf("</header>"));
     expect(card).toContain("A partir de R$ 260 por pessoa");
     expect(card).toContain('data-testid="tour-price-condition"');
@@ -271,7 +271,9 @@ describe("vehicle (Owner, definitive 27/10/2026): own Renault Mégane 2025, neve
       const text = JSON.stringify({ content: MOCK_TOUR_CONTENT[id], offer: PROTOTYPE_OFFER[id] });
       expect(text, id).not.toMatch(/alugad|locadora|rented|rental|alquilad|empresa de alquiler/i);
     }
-    expect(CENTRO_COMMERCIAL_DRAFT.operationalConditions?.pt).toContain("no veículo próprio da empresa");
+    expect(CENTRO_COMMERCIAL_DRAFT.operationalConditions?.pt).toContain("em veículo próprio");
+    // Ownership by the legal entity is not proven (Owner 30/10/2026): no text attributes the vehicle to the company.
+    expect(JSON.stringify(CENTRO_COMMERCIAL_DRAFT)).not.toMatch(/veículo próprio da (empresa|Ricardo Tour)|company's own vehicle|Ricardo Tour's own vehicle|vehículo propio de (la empresa|Ricardo Tour)/);
     // The vehicle model stays internal on the public pages (same rule as TOUR-01).
     expect(JSON.stringify(CENTRO_COMMERCIAL_DRAFT)).not.toMatch(/Mégane|Megane/);
   });

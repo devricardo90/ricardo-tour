@@ -47,7 +47,7 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
         "PENDENTE (Q7): prazo de resposta às solicitações.",
       ] },
       { id: "operator", title: "Quem opera os passeios", paragraphs: [
-        "Os passeios oferecidos no site são operados pela própria Ricardo Tour, com o guia Ricardo. Nos passeios com transporte, o deslocamento é feito no veículo próprio da Ricardo Tour, com até 4 participantes.",
+        "Os passeios oferecidos no site são operados pela própria Ricardo Tour, com o guia Ricardo. Nos passeios com transporte, o deslocamento é feito em veículo próprio, conduzido pelo guia, com até 4 participantes.",
       ] },
       { id: "prices", title: "Preços e pagamento", paragraphs: [
         "Os passeios têm preço fechado por grupo privativo, conforme o número de participantes, em reais (R$).",
@@ -97,7 +97,7 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
         "PENDING (Q7): response time to requests.",
       ] },
       { id: "operator", title: "Who operates the tours", paragraphs: [
-        "The tours offered on the website are operated by Ricardo Tour itself, with the guide Ricardo. On tours that include transport, travel is in Ricardo Tour's own vehicle, with up to 4 participants.",
+        "The tours offered on the website are operated by Ricardo Tour itself, with the guide Ricardo. On tours that include transport, travel is in a private vehicle driven by the guide, with up to 4 participants.",
       ] },
       { id: "prices", title: "Prices and payment", paragraphs: [
         "Tours have a closed price per private group, according to the number of participants, in Brazilian reais (R$).",
@@ -147,7 +147,7 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
         "PENDIENTE (Q7): plazo de respuesta a las solicitudes.",
       ] },
       { id: "operator", title: "Quién opera los paseos", paragraphs: [
-        "Los paseos que ofrece el sitio los opera la propia Ricardo Tour, con el guía Ricardo. En los paseos con transporte, el traslado se hace en el vehículo propio de Ricardo Tour, con hasta 4 participantes.",
+        "Los paseos que ofrece el sitio los opera la propia Ricardo Tour, con el guía Ricardo. En los paseos con transporte, el traslado se hace en vehículo propio, conducido por el guía, con hasta 4 participantes.",
       ] },
       { id: "prices", title: "Precios y pago", paragraphs: [
         "Los paseos tienen un precio cerrado por grupo privado, según el número de participantes, en reales brasileños (R$).",

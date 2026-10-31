@@ -24,8 +24,8 @@ const list = (items: Array<[string, string, string]>) => ({ pt: items.map((i) =>
  *  translations, PENDING RT-115 review. */
 export const CRISTO_TITLE: Tri = {
   pt: "Cristo Redentor, Escadaria Selarón e Pão de Açúcar — Tour Privativo",
-  en: "Christ the Redeemer + Sugarloaf Mountain — Private Tour",
-  es: "Cristo Redentor + Pan de Azúcar — Tour Privado",
+  en: "Christ the Redeemer, Selarón Steps and Sugarloaf Mountain — Private Tour",
+  es: "Cristo Redentor, Escalera Selarón y Pan de Azúcar — Tour Privado",
 };
 
 /** PT pitch approved verbatim by the Owner (23/10/2026). EN/ES PENDING RT-115. */
@@ -159,8 +159,8 @@ export const CRISTO_CONTENT: Omit<TourContentRecord, "tripId" | "status" | "sour
 /** Prefilled WhatsApp message (sent through the canonical public number in lib/public-contact.ts). */
 export const CRISTO_WHATSAPP_MESSAGE: Tri = {
   pt: "Olá! Quero consultar a disponibilidade do passeio Cristo Redentor, Escadaria Selarón e Pão de Açúcar — Tour Privativo.\nData desejada: \nParticipantes (1 a 4, informe a idade das crianças): \nBairro do hotel: \nSubida ao Cristo (trem ou van): \nSelarón ou Dona Marta: \nIdioma preferido: ",
-  en: "Hello! I'd like to check availability for Christ the Redeemer + Sugarloaf Mountain — Private Tour.\nPreferred date: \nGuests (1–4, children's ages): \nHotel area: \nChrist the Redeemer access (train or van): \nSelarón or Dona Marta: \nPreferred language: ",
-  es: "¡Hola! Quisiera consultar la disponibilidad del tour Cristo Redentor + Pan de Azúcar — Tour Privado.\nFecha deseada: \nParticipantes (1 a 4, edad de los niños): \nBarrio del hotel: \nSubida al Cristo (tren o van): \nSelarón o Dona Marta: \nIdioma preferido: ",
+  en: "Hello! I'd like to check availability for Christ the Redeemer, Selarón Steps and Sugarloaf Mountain — Private Tour.\nPreferred date: \nGuests (1–4, children's ages): \nHotel area: \nChrist the Redeemer access (train or van): \nSelarón or Dona Marta: \nPreferred language: ",
+  es: "¡Hola! Quisiera consultar la disponibilidad del tour Cristo Redentor, Escalera Selarón y Pan de Azúcar — Tour Privado.\nFecha deseada: \nParticipantes (1 a 4, edad de los niños): \nBarrio del hotel: \nSubida al Cristo (tren o van): \nSelarón o Dona Marta: \nIdioma preferido: ",
 };
 
 export const CRISTO_GROUP_SIZE: Tri = { pt: "1 a 4 turistas, crianças incluídas", en: "1 to 4 guests, children included", es: "1 a 4 personas, niños incluidos" };

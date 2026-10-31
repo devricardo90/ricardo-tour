@@ -170,9 +170,9 @@ export const CENTRO_COMMERCIAL_DRAFT: TourContentRecord = {
     es: "Elige un recorrido guiado de 4 o 6 horas. La recogida y el regreso añaden aproximadamente 1 hora estimada, para un total aproximado de 5 o 7 horas, respectivamente.",
   },
   meetingPoint: {
-    pt: "Busca e retorno ao mesmo endereço combinado, após confirmação logística. Regiões incluídas: Copacabana, Ipanema, Botafogo, Zona Sul e Centro; outros locais admitidos incluem hotéis, Airbnb, residências, porto de cruzeiros e aeroportos. A inclusão de cada endereço depende de confirmação prévia. A retirada no Galeão ou no Santos Dumont não tem sobretaxa específica aprovada. A devolução em endereço diferente não está incluída. A capacidade de bagagens deve ser confirmada para retiradas em aeroportos.",
-    en: "Pickup and return are at the same agreed address, subject to logistics confirmation. Included areas are Copacabana, Ipanema, Botafogo, the South Zone and downtown; other eligible locations include hotels, Airbnb stays, residences, the cruise port and airports. Each address must be confirmed in advance. No separate surcharge is approved for pickup at Galeão or Santos Dumont airport. Drop-off at a different address is not included. Luggage capacity must be confirmed for airport pickups.",
-    es: "La recogida y el regreso se realizan en la misma dirección acordada, sujetos a confirmación logística. Las zonas incluidas son Copacabana, Ipanema, Botafogo, la Zona Sur y el centro; otros lugares admitidos incluyen hoteles, alojamientos de Airbnb, residencias, el puerto de cruceros y aeropuertos. Cada dirección debe confirmarse con antelación. No hay un recargo específico aprobado para la recogida en Galeão o Santos Dumont. No se incluye el regreso a otra dirección. Debe confirmarse la capacidad para equipaje en las recogidas en aeropuertos.",
+    pt: "Busca e retorno ao mesmo endereço combinado, após confirmação logística. Regiões incluídas: Copacabana, Ipanema, Botafogo, Zona Sul e Centro; outros locais admitidos incluem hotéis, Airbnb, residências, porto de cruzeiros e aeroportos. A inclusão de cada endereço depende de confirmação prévia. A retirada nos aeroportos Galeão e Santos Dumont não tem sobretaxa, desde que confirmada previamente. A devolução em endereço diferente não está incluída. A capacidade de bagagens deve ser confirmada para retiradas em aeroportos.",
+    en: "Pickup and return are at the same agreed address, subject to logistics confirmation. Included areas are Copacabana, Ipanema, Botafogo, the South Zone and downtown; other eligible locations include hotels, Airbnb stays, residences, the cruise port and airports. Each address must be confirmed in advance. There is no surcharge for pickup at Galeão or Santos Dumont airport, provided it is confirmed in advance. Drop-off at a different address is not included. Luggage capacity must be confirmed for airport pickups.",
+    es: "La recogida y el regreso se realizan en la misma dirección acordada, sujetos a confirmación logística. Las zonas incluidas son Copacabana, Ipanema, Botafogo, la Zona Sur y el centro; otros lugares admitidos incluyen hoteles, alojamientos de Airbnb, residencias, el puerto de cruceros y aeropuertos. Cada dirección debe confirmarse con antelación. La recogida en los aeropuertos Galeão y Santos Dumont no tiene recargo, siempre que se confirme previamente. No se incluye el regreso a otra dirección. Debe confirmarse la capacidad para equipaje en las recogidas en aeropuertos.",
   },
   startTimeNote: {
     pt: "Início a partir das 6h; o horário exato é combinado com o cliente. Visitas internas dependem do funcionamento e da confirmação de cada atração.",
@@ -182,10 +182,10 @@ export const CENTRO_COMMERCIAL_DRAFT: TourContentRecord = {
   languages: ["pt", "es", "en"],
   inclusions: {
     pt: [
-      "Guia turístico privativo.", "Transporte de ida e volta.", "Veículo próprio da Ricardo Tour.", "Combustível.", "Estacionamento.", "Circuito histórico acompanhado.", "Água.", "Fotografias informais feitas pelo guia.", "Personalização do roteiro.", "Planejamento das atrações conforme a duração contratada.",
+      "Guia turístico privativo.", "Transporte de ida e volta.", "Veículo próprio, conduzido pelo guia.", "Combustível.", "Estacionamento.", "Circuito histórico acompanhado.", "Água.", "Fotografias informais feitas pelo guia.", "Personalização do roteiro.", "Planejamento das atrações conforme a duração contratada.",
     ],
-    en: ["Private tour guide.", "Round-trip transport.", "Ricardo Tour's own vehicle.", "Fuel.", "Parking.", "Guided historic-center tour.", "Water.", "Informal photos taken by the guide.", "Itinerary personalization.", "Attraction planning according to the contracted duration."],
-    es: ["Guía turístico privado.", "Transporte de ida y vuelta.", "Vehículo propio de Ricardo Tour.", "Combustible.", "Estacionamiento.", "Recorrido guiado por el centro histórico.", "Agua.", "Fotografías informales tomadas por el guía.", "Personalización del recorrido.", "Planificación de los atractivos según la duración contratada."],
+    en: ["Private tour guide.", "Round-trip transport.", "Private vehicle driven by your guide.", "Fuel.", "Parking.", "Guided historic-center tour.", "Water.", "Informal photos taken by the guide.", "Itinerary personalization.", "Attraction planning according to the contracted duration."],
+    es: ["Guía turístico privado.", "Transporte de ida y vuelta.", "Vehículo propio conducido por el guía.", "Combustible.", "Estacionamiento.", "Recorrido guiado por el centro histórico.", "Agua.", "Fotografías informales tomadas por el guía.", "Personalización del recorrido.", "Planificación de los atractivos según la duración contratada."],
   },
   exclusions: {
     pt: [
@@ -205,16 +205,16 @@ export const CENTRO_COMMERCIAL_DRAFT: TourContentRecord = {
     es: "El paseo se realiza principalmente a pie y el ritmo puede adaptarse. El vehículo estándar no cuenta con adaptación específica para silla de ruedas. Las solicitudes de accesibilidad se evalúan individualmente y se comunican las limitaciones y posibles alternativas.",
   },
   weatherPolicy: {
-    pt: "O roteiro pode ser ajustado conforme o clima e o acesso às atrações. Em caso de chuva forte ou fechamento, a equipe avaliará alternativas e eventual remarcação conforme os termos contratuais que ainda precisam ser aprovados. Prazos, multas e reembolsos não estão definidos nesta versão.",
-    en: "The itinerary may be adjusted for weather and access conditions. In case of heavy rain or a closure, the team will assess alternatives and possible rescheduling under contractual terms that are still awaiting approval. Deadlines, penalties and refunds are not defined in this draft.",
-    es: "El recorrido puede ajustarse según el clima y el acceso a los atractivos. En caso de lluvia intensa o cierre, el equipo evaluará alternativas y una posible reprogramación según términos contractuales que aún esperan aprobación. Esta versión no define plazos, penalizaciones ni reembolsos.",
+    pt: "O roteiro pode ser ajustado conforme o clima e o acesso às atrações. Em caso de chuva forte ou fechamento de atrações, a equipe propõe uma alternativa, a remarcação ou o reembolso, conforme os Termos de Uso.",
+    en: "The itinerary may be adjusted for weather and access conditions. In case of heavy rain or the closure of attractions, the team offers an alternative, rescheduling or a refund, as set out in the Terms of Use.",
+    es: "El recorrido puede ajustarse según el clima y el acceso a los atractivos. En caso de lluvia intensa o cierre de atractivos, el equipo propone una alternativa, la reprogramación o el reembolso, según los Términos de Uso.",
   },
   operationalConditions: {
     // Owner, 27/10/2026 (definitive): own Renault Mégane 2025, Ricardo guide and driver, up to 4 tourists; documents declared
     // by the Owner. The rented-vehicle premise is superseded and must not reappear.
-    pt: "Operação própria da Ricardo Tour: Ricardo é o guia e o motorista, no veículo próprio da empresa, para até 4 turistas. O horário exato de início é combinado com você.",
-    en: "Operated by Ricardo Tour itself: Ricardo is your guide and driver, in the company's own vehicle, for up to 4 guests. The exact start time is agreed with you.",
-    es: "Operación propia de Ricardo Tour: Ricardo es tu guía y conductor, en el vehículo propio de la empresa, para un máximo de 4 turistas. La hora exacta de inicio se acuerda contigo.",
+    pt: "Operação própria da Ricardo Tour: Ricardo é o guia e o motorista, em veículo próprio, para até 4 turistas. O horário exato de início é combinado com você.",
+    en: "Operated by Ricardo Tour itself: Ricardo is your guide and driver, in a private vehicle, for up to 4 guests. The exact start time is agreed with you.",
+    es: "Operación propia de Ricardo Tour: Ricardo es tu guía y conductor, en vehículo propio, para un máximo de 4 turistas. La hora exacta de inicio se acuerda contigo.",
   },
   faq: [
     {
@@ -260,9 +260,9 @@ export const CENTRO_COMMERCIAL_DRAFT: TourContentRecord = {
     {
       question: { pt: "Quais são as condições de cancelamento e remarcação?", en: "What are the cancellation and rescheduling terms?", es: "¿Cuáles son las condiciones de cancelación y reprogramación?" },
       answer: {
-        pt: "Os prazos, reembolsos, penalidades e regras específicas ainda aguardam aprovação e não são definidos nesta prévia. As condições aprovadas deverão ser apresentadas antes de qualquer pagamento.",
-        en: "Deadlines, refunds, penalties and specific rules are still awaiting approval and are not defined in this preview. Approved terms must be presented before any payment.",
-        es: "Los plazos, reembolsos, penalizaciones y reglas específicas aún esperan aprobación y no se definen en esta vista previa. Las condiciones aprobadas deben presentarse antes de cualquier pago.",
+        pt: "Cancelamento com pelo menos 72 horas de antecedência: sem custo, com devolução dos valores pagos. Com menos de 72 horas, só podem ser retidos valores justificados, proporcionais e permitidos pela lei, informados por escrito antes do pagamento; o sinal não é retido automaticamente. Se a Ricardo Tour cancelar, você recebe o reembolso integral ou remarca, se preferir; com chuva forte ou fechamento de atrações, oferecemos remarcação ou reembolso. As condições completas estão nos Termos de Uso.",
+        en: "Cancel at least 72 hours before the start: free of charge, with the amounts paid returned. With less than 72 hours, only amounts that are justified, proportional and allowed by law may be retained, stated in writing before payment; the deposit is not retained automatically. If Ricardo Tour cancels, you get a full refund or reschedule if you prefer; for heavy rain or closed attractions, we offer rescheduling or a refund. The full conditions are in the Terms of Use.",
+        es: "Cancelación con al menos 72 horas de antelación: sin costo, con devolución de los importes pagados. Con menos de 72 horas, solo pueden retenerse importes justificados, proporcionales y permitidos por la ley, informados por escrito antes del pago; la seña no se retiene automáticamente. Si Ricardo Tour cancela, recibes el reembolso total o reprogramas, si lo prefieres; con lluvia intensa o cierre de atractivos, ofrecemos reprogramación o reembolso. Las condiciones completas están en los Términos de Uso.",
       },
     },
   ],

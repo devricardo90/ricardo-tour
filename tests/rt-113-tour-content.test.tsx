@@ -763,8 +763,8 @@ describe("RT-112 / RT-115 TOUR-01 Cristo Redentor + Pão de Açúcar (Ficha Come
   it("states the approved facts and never a price (PT/EN/ES)", () => {
     const facts = {
       pt: ["Cristo Redentor, Escadaria Selarón e Pão de Açúcar — Tour Privativo", "Aproximadamente 8 horas", "Escadaria Selarón", "Mirante Dona Marta", "Trem do Corcovado", "van oficial", "Copacabana, Ipanema, Leblon, Botafogo, Flamengo e Centro", "0 a 2 anos", "1 a 4 turistas", "Orçamento sob consulta", "Solicitar pelo WhatsApp"],
-      en: ["Christ the Redeemer + Sugarloaf Mountain — Private Tour", "Approximately 8 hours", "Selarón Steps", "Dona Marta viewpoint", "Corcovado Train", "official van", "Copacabana, Ipanema, Leblon, Botafogo, Flamengo and Centro", "0 to 2", "1 to 4 guests", "Quote on request", "Request on WhatsApp"],
-      es: ["Cristo Redentor + Pan de Azúcar — Tour Privado", "Aproximadamente 8 horas", "Escalera Selarón", "Mirador Dona Marta", "Tren del Corcovado", "van oficial", "Copacabana, Ipanema, Leblon, Botafogo, Flamengo y Centro", "0 a 2 años", "1 a 4 personas", "Presupuesto a consultar", "Solicitar por WhatsApp"],
+      en: ["Christ the Redeemer, Selarón Steps and Sugarloaf Mountain — Private Tour", "Approximately 8 hours", "Selarón Steps", "Dona Marta viewpoint", "Corcovado Train", "official van", "Copacabana, Ipanema, Leblon, Botafogo, Flamengo and Centro", "0 to 2", "1 to 4 guests", "Quote on request", "Request on WhatsApp"],
+      es: ["Cristo Redentor, Escalera Selarón y Pan de Azúcar — Tour Privado", "Aproximadamente 8 horas", "Escalera Selarón", "Mirador Dona Marta", "Tren del Corcovado", "van oficial", "Copacabana, Ipanema, Leblon, Botafogo, Flamengo y Centro", "0 a 2 años", "1 a 4 personas", "Presupuesto a consultar", "Solicitar por WhatsApp"],
     } as const;
     for (const locale of ["pt", "en", "es"] as const) {
       const page = html(locale);

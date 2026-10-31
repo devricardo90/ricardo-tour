@@ -631,9 +631,10 @@ function centroOffer(base: PrototypeOffer): PrototypeOffer {
       es: "Desde R$ 260 por persona",
     },
     priceCondition: {
-      pt: "Valor por pessoa para grupos de 4 participantes, no passeio privativo de 4 horas.",
-      en: "Price per person for groups of 4 guests on the 4-hour private tour.",
-      es: "Valor por persona para grupos de 4 participantes en el paseo privado de 4 horas.",
+      // Owner 30/10/2026: R$ 260 is the per-person price of a group of four adults on the 4-hour tour (total R$ 1.040).
+      pt: "Valor por pessoa para um grupo de 4 adultos no passeio privativo de 4 horas (total do grupo: R$ 1.040).",
+      en: "Price per person for a group of 4 adults on the 4-hour private tour (group total: R$ 1,040).",
+      es: "Valor por persona para un grupo de 4 adultos en el paseo privado de 4 horas (total del grupo: R$ 1.040).",
     },
     priceStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
     // Mobile sticky bar (Owner, 21/10/2026): two lines so the amount and "per person" are never cut.
