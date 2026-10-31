@@ -38,7 +38,7 @@ describe("RT-80 privacy draft", () => {
     expect(storage("es")).toMatch(/cookie de sesión/);
     for (const copy of Object.values(PRIVACY_COPY)) {
       expect(JSON.stringify(copy.sections.find((s) => s.id === "providers"))).toMatch(/Oner/);
-      expect(copy.pending.map((p) => p.slice(0, p.indexOf(":")))).toEqual(["Q1", "Q3", "Q4", "Q5", "Q11"]);
+      expect(copy.pending.map((p) => p.slice(0, p.indexOf(":")))).toEqual(["Q1", "Q3", "Q5", "Q11"]);
     }
   });
 

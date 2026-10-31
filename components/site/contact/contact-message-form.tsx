@@ -17,7 +17,7 @@ type Status = "idle" | "submitting" | "success" | "failed" | "rate_limited";
 
 // General contact form (RT-56). The server action is called inside try/catch (not <form action>), so a network failure
 // shows a calm error with fallbacks and never a fake success; entered values are kept.
-export function ContactMessageForm({ locale }: { locale: string }) {
+export function ContactMessageForm({ locale, privacyHref = null }: { locale: string; privacyHref?: string | null }) {
   const t = resolveContactCopy(locale);
   const uid = useId();
   const [values, setValues] = useState<ContactMessageValues>(empty);
@@ -153,6 +153,12 @@ export function ContactMessageForm({ locale }: { locale: string }) {
           {err("message") ? <p id={id("message-err")} className="mt-1 text-[13px] text-[#B3261E]">{err("message")}</p> : null}
         </div>
 
+        {privacyHref ? (
+          <p className="text-[13px] leading-[1.5] text-[var(--site-ink-muted)]" data-testid="contact-privacy-notice">
+            {t.privacyNotice}{" "}
+            <a href={privacyHref} target="_blank" rel="noopener" className={`underline underline-offset-2 hover:text-[var(--site-gold-deep)] ${focus}`}>{t.privacyLink}</a>.
+          </p>
+        ) : null}
         <button type="submit" disabled={status === "submitting"} aria-busy={status === "submitting"} className={`inline-flex min-h-12 w-full items-center justify-center rounded-md bg-[var(--site-ink)] px-5 text-[15px] font-medium text-[var(--site-on-dark)] transition-colors hover:bg-[var(--site-charcoal-raised)] disabled:opacity-60 ${focus}`}>
           {status === "submitting" ? t.sending : t.submit}
         </button>

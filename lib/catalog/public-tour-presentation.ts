@@ -1,5 +1,6 @@
 import { PROTOTYPE_OFFER, type FactStatus, type PrototypeOffer } from "@/lib/catalog/mock/tour-content.mock";
 import { getTourContent, type LocalizedText, type TourContentView } from "@/lib/catalog/tour-content";
+import { legalPagesPublished } from "@/lib/legal/publication";
 import type { PrototypeOfferView } from "@/components/site/tour/content/tour-detail-prototype";
 
 /**
@@ -27,6 +28,9 @@ export const PUBLIC_DESIGN_TRIP_IDS: ReadonlySet<string> = new Set([
  * publication authorization (RT-120). Until the Owner authorizes it, the public price reads "Orçamento sob consulta".
  */
 export const PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS: ReadonlySet<string> = new Set([]);
+
+/** Answers that list payment methods (RT-121: PIX, card terminal, cash) in PT/EN/ES. */
+export const PAYMENT_METHOD_TEXT = /PIX|maquininha|card terminal|terminal de pago|dinheiro|cash|efectivo/i;
 
 const toLocale = (locale: string): Locale => (locale === "en" || locale === "es" ? locale : "pt");
 const statusIn = (locale: Locale, status: FactStatus, byLocale?: Partial<Record<Locale, FactStatus>>) => byLocale?.[locale] ?? status;
@@ -113,6 +117,10 @@ export async function getPublicTourPresentation(tripId: string, locale: string):
     return null;
   }
   if (!content || content.isMock || !content.approvalValid) return null;
+  // Owner 31/10/2026: until paid bookings open (separate PIX sprint), the informative catalog names no payment method.
+  // The approved FAQ text is kept as is; only the answers that list methods are left out of the public page.
+  const bookingsOpen = PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS.has(tripId) && legalPagesPublished();
+  if (!bookingsOpen) content = { ...content, faq: content.faq.filter((item) => !PAYMENT_METHOD_TEXT.test(item.answer)) };
   const offer = buildPublicOffer(source, locale, content, { pricePublicationAuthorized: PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS.has(tripId) });
   return offer ? { offer, content } : null;
 }

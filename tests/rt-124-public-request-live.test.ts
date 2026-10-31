@@ -9,6 +9,7 @@ import { guideDayPicker } from "./helpers/guide-day";
  */
 const url = process.env.S11_LOCAL_DB_URL;
 const TOUR_03 = "cmlibniq40000z4zqkbujnutt";
+const ACCEPTANCE = { termsVersion: "2026-10-31-draft", privacyVersion: "2026-10-31-draft-r2" };
 
 vi.mock("@/lib/catalog/public-trips", () => ({ getPublicTripById: async (id: string) => ({ id }) }));
 
@@ -48,14 +49,18 @@ describe.skipIf(!url)("RT-124 public booking request (local isolated database on
 
   it("a request without an account creates a PENDING booking with the approved quote, the contact e-mail and the day's slot", async () => {
     const date = await nextDay();
-    const created = await requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 3, contact: contact(1) });
+    const created = await requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 3, contact: contact(1), acceptance: ACCEPTANCE });
     expect(created).toMatchObject({ status: "PENDING", paymentStatus: "UNPAID", guestCount: 3, totalPriceCents: 90_000 });
     expect(created.quote).toMatchObject({ totalCents: 90_000, depositCents: 27_000, balanceCents: 63_000, priceTableId: "TOUR-03-4H" });
 
     const row = await prisma.booking.findUniqueOrThrow({
       where: { id: created.id },
-      select: { pricingModel: true, user: { select: { email: true } }, contact: true, schedule: { select: { startAt: true, capacity: true, pricePerPersonCents: true } } },
+      select: { pricingModel: true, user: { select: { email: true } }, contact: true, quote: { select: { termsVersion: true, privacyVersion: true, termsAcceptedAt: true } }, schedule: { select: { startAt: true, capacity: true, pricePerPersonCents: true } } },
     });
+    // RT-81: the accepted document versions and the server time of the acceptance are stored with the immutable quote.
+    expect(row.quote).toMatchObject({ termsVersion: ACCEPTANCE.termsVersion, privacyVersion: ACCEPTANCE.privacyVersion });
+    expect(row.quote!.termsAcceptedAt).toBeInstanceOf(Date);
+    await expect(prisma.$executeRaw`UPDATE "BookingQuote" SET "termsVersion" = 'forged' WHERE "bookingId" = ${created.id}`).rejects.toThrow();
     expect(row.pricingModel).toBe("PRIVATE_GROUP");
     expect(row.user.email).toBe(requests.GUEST_REQUEST_OWNER_EMAIL);
     expect(row.contact).toMatchObject({ fullName: "Cliente Site 1", email: `${tag}-1@example.invalid`, phone: "+55 21 98888-0000", language: "pt" });
@@ -67,15 +72,15 @@ describe.skipIf(!url)("RT-124 public booking request (local isolated database on
 
   it("one private group per tour per day: a second request for the same day is refused and no second slot is created", async () => {
     const date = await nextDay();
-    await requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 2, contact: contact(2) });
-    await expect(requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 1, contact: contact(3) })).rejects.toMatchObject({ status: 409 });
+    await requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 2, contact: contact(2), acceptance: ACCEPTANCE });
+    await expect(requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 1, contact: contact(3), acceptance: ACCEPTANCE })).rejects.toMatchObject({ status: 409 });
     expect(await prisma.tripSchedule.count({ where: { tripId: TOUR_03, startAt: new Date(`${date}T12:00:00.000Z`) } })).toBe(1);
   });
 
   it("concurrent requests for the same free day: exactly one booking and one slot", async () => {
     const date = await nextDay();
     const results = await Promise.allSettled(
-      Array.from({ length: 6 }, (_, i) => requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 2, contact: contact(10 + i) })),
+      Array.from({ length: 6 }, (_, i) => requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 2, contact: contact(10 + i), acceptance: ACCEPTANCE })),
     );
     expect(results.filter((r) => r.status === "fulfilled")).toHaveLength(1);
     const startAt = new Date(`${date}T12:00:00.000Z`);
@@ -85,14 +90,14 @@ describe.skipIf(!url)("RT-124 public booking request (local isolated database on
 
   it("a canceled request frees the day for a new request", async () => {
     const date = await nextDay();
-    const first = await requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 2, contact: contact(20) });
+    const first = await requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 2, contact: contact(20), acceptance: ACCEPTANCE });
     await bookings.cancelBookingByAdmin(first.id, admin);
-    const second = await requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 4, contact: contact(21) });
+    const second = await requests.createPublicBookingRequest({ tripId: TOUR_03, date, fullFare: 4, contact: contact(21), acceptance: ACCEPTANCE });
     expect(second).toMatchObject({ status: "PENDING", totalPriceCents: 104_000 });
   });
 
   it("MVP policy: the booking is confirmed only after the full 30% deposit is VERIFIED, and only by the admin", async () => {
-    const { id } = await requests.createPublicBookingRequest({ tripId: TOUR_03, date: await nextDay(), fullFare: 3, contact: contact(30) });
+    const { id } = await requests.createPublicBookingRequest({ tripId: TOUR_03, date: await nextDay(), fullFare: 3, contact: contact(30), acceptance: ACCEPTANCE });
     const state = () => prisma.booking.findUniqueOrThrow({ where: { id }, select: { status: true, paymentStatus: true } });
     const record = (amountCents: number) =>
       payments.recordBookingPayment(admin, { bookingId: id, kind: "DEPOSIT", method: "PIX", amountCents, initialStatus: "RECORDED", reference: "TESTE-PIX", idempotencyKey: key() });

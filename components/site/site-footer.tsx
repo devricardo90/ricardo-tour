@@ -7,11 +7,13 @@ import { OpenConciergeButton } from "@/components/ai-concierge/open-concierge-bu
 import { isConciergeEnabled } from "@/lib/ai-concierge/launch";
 import { navHashes, resolveSiteChromeCopy, type AnchorMode } from "@/components/site/site-chrome-copy";
 import { PUBLIC_CONTACT } from "@/lib/public-contact";
+import { LEGAL_PATHS, legalPagesAvailable } from "@/lib/legal/publication";
 
 // Public-site footer (RT-52, generalized from the RT-35 Home footer): charcoal closing band.
 // Verified destinations only: Home section links, the /contato route, the canonical email and WhatsApp from
 // lib/public-contact.ts, the approved Instagram profile and the individual Cadastur mark (no number/status).
-// No legal links (no real Privacy/Terms routes yet) and no account links.
+// Legal links (Terms, Privacy) only where those pages are available (lib/legal/publication.ts: published after the Owner's
+// and the legal approval, or in the local review lab); no account links.
 const focusRing = "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--site-focus,#E8C780)]";
 const linkClass = `inline-flex min-h-8 items-center rounded text-[14px] text-[var(--site-on-dark-muted,#CAC7BF)] transition-colors hover:text-[var(--site-gold-bright,#E8C780)] ${focusRing}`;
 const headingClass = "text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold,#C8A86B)]";
@@ -89,9 +91,19 @@ export function SiteFooter({ locale, anchorMode = "home", homeHref = "#top-of-ho
             <p className="text-[12px] uppercase tracking-[0.14em] text-[var(--site-on-dark-subtle,#9DA3A5)]">{f.institutionalTitle}</p>
             <Image src="/cadastro/cadastur.png" alt="Cadastur" width={490} height={110} loading="lazy" className="h-7 w-auto shrink-0" />
           </div>
-          <p className="text-[13px] text-[var(--site-on-dark-subtle,#9DA3A5)]">
-            &copy; {new Date().getFullYear()} Ricardo Tour · {f.city}
-          </p>
+          <div className="flex flex-col gap-1 md:flex-row md:items-center md:gap-4">
+            {legalPagesAvailable() ? (
+              <nav aria-label={f.legalAria} data-testid="footer-legal-links">
+                <ul className="flex flex-wrap gap-x-4">
+                  <li><Link href={LEGAL_PATHS.terms} className={`${linkClass} text-[13px]`}>{f.terms}</Link></li>
+                  <li><Link href={LEGAL_PATHS.privacy} className={`${linkClass} text-[13px]`}>{f.privacy}</Link></li>
+                </ul>
+              </nav>
+            ) : null}
+            <p className="text-[13px] text-[var(--site-on-dark-subtle,#9DA3A5)]">
+              &copy; {new Date().getFullYear()} Ricardo Tour · {f.city}
+            </p>
+          </div>
         </div>
       </div>
     </footer>

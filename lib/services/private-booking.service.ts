@@ -43,6 +43,10 @@ export const privateBookingInputSchema = z.object({
     pickupAddress: text(300).optional(),
     notes: text(1000).optional(),
   }),
+  /** RT-81: the Terms of Use and Privacy Policy versions the customer accepted (public request form); the time is the server's. */
+  acceptance: z
+    .object({ termsVersion: z.string().trim().min(1).max(40), privacyVersion: z.string().trim().min(1).max(40) })
+    .optional(),
 });
 
 export type PrivateBookingInput = z.infer<typeof privateBookingInputSchema>;
@@ -63,7 +67,7 @@ export async function createPrivateBookingForUser(userId: string, rawInput: unkn
   if (!parsed.success) {
     throw new DomainError("Dados da reserva invalidos", { code: "INVALID_BOOKING_INPUT", status: 400 });
   }
-  const { tripId, scheduleId, priceTableId, party, contact } = parsed.data;
+  const { tripId, scheduleId, priceTableId, party, contact, acceptance } = parsed.data;
   const now = deps.now ?? (() => new Date());
 
   // Same public catalog gate as the tour page: a hidden trip answers exactly like a missing one.
@@ -191,6 +195,7 @@ export async function createPrivateBookingForUser(userId: string, rawInput: unkn
               depositBasisPoints: split.depositBasisPoints,
               depositCents: split.depositCents,
               balanceCents: split.balanceCents,
+              ...(acceptance ? { termsVersion: acceptance.termsVersion, privacyVersion: acceptance.privacyVersion, termsAcceptedAt: now() } : {}),
             },
           },
           contact: {

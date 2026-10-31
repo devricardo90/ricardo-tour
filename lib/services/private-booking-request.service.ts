@@ -66,6 +66,8 @@ export type PublicBookingRequest = {
   /** Children 0-2 (count toward the group size); refused by the engine where the table has no child rule. */
   infants?: number;
   contact: { fullName: string; email: string; phone: string; language: "pt" | "en" | "es"; pickupAddress?: string; notes?: string };
+  /** RT-81: required — a public request is always sent with the Terms of Use and Privacy Policy versions it accepted. */
+  acceptance: { termsVersion: string; privacyVersion: string };
 };
 
 /** Creates the PENDING booking for a request. `userId` = signed-in customer; without it, the site's request account. */
@@ -80,5 +82,6 @@ export async function createPublicBookingRequest(request: PublicBookingRequest, 
     priceTableId: config.priceTableId,
     party: { fullFare: request.fullFare, infants: request.infants ?? 0 },
     contact: request.contact,
+    acceptance: request.acceptance,
   });
 }

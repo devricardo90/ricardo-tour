@@ -28,13 +28,13 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
   pt: {
     title: "Política de Privacidade (rascunho)",
     draftBanner: "Rascunho para aprovação do Owner. A revisão jurídica aprofundada está PENDENTE: este texto ainda não foi aprovado por advogado e não deve ser publicado até a aprovação do Owner.",
-    updated: "Rascunho preparado em 11/10/2026 e atualizado em 15/10/2026.",
+    updated: "Rascunho preparado em 11/10/2026 e atualizado em 31/10/2026.",
     sections: [
       { id: "who", title: "Quem somos", paragraphs: [`Esta política descreve como o site da Ricardo Tour trata dados pessoais. Nome comercial: Ricardo Tour. CNPJ: ${CNPJ}. Endereço declarado: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000 (verificação cadastral pendente). Razão social do responsável pelo tratamento: a confirmar antes da publicação. Contato para assuntos de privacidade: ${CONTACT}.`] },
       { id: "data", title: "Quais dados tratamos e para quê", paragraphs: [
         "Formulários de contato e de solicitação de passeio: nome, e-mail, telefone (opcional) e a mensagem que você escrever. Usamos para responder ao seu pedido. Ficam gravados em nosso banco de dados e uma cópia da mensagem é enviada por e-mail à equipe.",
         "Conta e reservas: nome, e-mail e dados da sessão (endereço IP e navegador) quando você usa as áreas de conta ou reserva do site.",
-        "Solicitação de reserva de passeio privativo: nome, e-mail, WhatsApp ou telefone, idioma, hotel ou endereço de busca, observações, data pedida e número de participantes. Usamos para conferir a disponibilidade, enviar as instruções do sinal, combinar e realizar o passeio. Ficam no nosso banco de dados e só a equipe administrativa vê; o aviso enviado por e-mail à equipe não leva esses dados de contato. Valores e meios de pagamento recebidos são registrados pela equipe, sem número de cartão.",
+        "Solicitação de reserva de passeio privativo: nome, e-mail, WhatsApp ou telefone, idioma, hotel ou endereço de busca, observações, data pedida e número de participantes. Usamos para conferir a disponibilidade, enviar as instruções do sinal, combinar e realizar o passeio. Ficam no nosso banco de dados e só a equipe administrativa vê; o aviso enviado por e-mail à equipe não leva esses dados de contato. Valores e meios de pagamento recebidos são registrados pela equipe, sem número de cartão. Ao enviar a solicitação, registramos também a versão dos Termos de Uso e desta Política que foi apresentada e o horário do seu aceite.",
         "Estatísticas de uso: eventos como visualização de passeio e clique em reservar, com um identificador aleatório de sessão (guardado apenas enquanto a aba está aberta), o caminho da página e a origem da visita (parâmetros de campanha). Esse identificador não contém dados pessoais.",
         "Registros técnicos: erros do site e medidas de desempenho (caminho da página, sem dados pessoais) ficam nos registros da plataforma de hospedagem.",
       ] },
@@ -69,7 +69,6 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
     pending: [
       "Q1: verificação cadastral do endereço do responsável. Endereço declarado pelo Owner em 28/10/2026: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000. O registro público do CNPJ indica o bairro Cidade Nova; o endereço só será dado como verificado após a conferência do Cartão CNPJ atualizado. Razão social (49.142.341 RICARDO DE SOUZA FRANCISCO) e Cadastur (número = CNPJ, válido até 02/04/2027) conferidos em 28/10/2026.",
       "Q3: prazo de guarda de mensagens, pedidos, contas e estatísticas.",
-      "Q4: publicar sem a seção da Daniela enquanto ela estiver desativada.",
       "Q5: dados e cookies do widget de voos, a confirmar com a Oner.",
       "Q11: revisão jurídica, transferência internacional e necessidade de aviso de cookies.",
     ],
@@ -77,13 +76,13 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
   en: {
     title: "Privacy Policy (draft)",
     draftBanner: "Draft for the Owner's approval. The in-depth legal review is PENDING: this text has not been approved by a lawyer and must not be published until the Owner approves it.",
-    updated: "Draft prepared on 11 Oct 2026 and updated on 15 Oct 2026.",
+    updated: "Draft prepared on 11 Oct 2026 and updated on 31 Oct 2026.",
     sections: [
       { id: "who", title: "Who we are", paragraphs: [`This policy describes how the Ricardo Tour website handles personal data. Trade name: Ricardo Tour. CNPJ (Brazilian company number): ${CNPJ}. Declared address: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000, Brazil (registry check pending). Registered legal name of the data controller: to be confirmed before publication. Privacy contact: ${CONTACT}.`] },
       { id: "data", title: "What data we handle and why", paragraphs: [
         "Contact and tour-request forms: name, e-mail, phone (optional) and the message you write. We use them to answer your request. They are stored in our database and a copy of the message is e-mailed to the team.",
         "Account and bookings: name, e-mail and session data (IP address and browser) when you use the account or booking areas.",
-        "Private tour booking request: name, e-mail, WhatsApp or phone, language, hotel or pickup address, notes, requested date and number of participants. We use them to check availability, send the deposit instructions, arrange and run the tour. They are kept in our database and only the administrative team sees them; the notice e-mailed to the team does not include these contact details. Amounts and payment methods received are recorded by the team, never a card number.",
+        "Private tour booking request: name, e-mail, WhatsApp or phone, language, hotel or pickup address, notes, requested date and number of participants. We use them to check availability, send the deposit instructions, arrange and run the tour. They are kept in our database and only the administrative team sees them; the notice e-mailed to the team does not include these contact details. Amounts and payment methods received are recorded by the team, never a card number. When you send the request, we also record the version of the Terms of Use and of this Policy shown to you and the time of your acceptance.",
         "Usage statistics: events such as viewing a tour or clicking reserve, with a random session identifier (kept only while the tab is open), the page path and the source of the visit (campaign parameters). This identifier contains no personal data.",
         "Technical records: site errors and performance measurements (page path, no personal data) are kept in the hosting platform's logs.",
       ] },
@@ -118,7 +117,6 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
     pending: [
       "Q1: registry check of the controller's address. Address declared by the Owner on 28 Oct 2026: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000. The public CNPJ record shows the Cidade Nova district; the address will only be treated as verified after the updated Cartão CNPJ is checked. Legal name (49.142.341 RICARDO DE SOUZA FRANCISCO) and Cadastur (number = CNPJ, valid until 2 Apr 2027) checked on 28 Oct 2026.",
       "Q3: retention period for messages, requests, accounts and statistics.",
-      "Q4: publish without the Daniela section while she is disabled.",
       "Q5: data and cookies of the flight widget, to be confirmed with Oner.",
       "Q11: legal review, international transfer and whether a cookie notice is needed.",
     ],
@@ -126,13 +124,13 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
   es: {
     title: "Política de Privacidad (borrador)",
     draftBanner: "Borrador para aprobación del Owner. La revisión jurídica en profundidad está PENDIENTE: este texto no ha sido aprobado por un abogado y no debe publicarse hasta que el Owner lo apruebe.",
-    updated: "Borrador preparado el 11/10/2026 y actualizado el 15/10/2026.",
+    updated: "Borrador preparado el 11/10/2026 y actualizado el 31/10/2026.",
     sections: [
       { id: "who", title: "Quiénes somos", paragraphs: [`Esta política describe cómo el sitio de Ricardo Tour trata los datos personales. Nombre comercial: Ricardo Tour. CNPJ (registro de empresa en Brasil): ${CNPJ}. Dirección declarada: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000, Brasil (verificación registral pendiente). Razón social del responsable del tratamiento: se confirmará antes de la publicación. Contacto de privacidad: ${CONTACT}.`] },
       { id: "data", title: "Qué datos tratamos y para qué", paragraphs: [
         "Formularios de contacto y de solicitud de paseo: nombre, correo, teléfono (opcional) y el mensaje que escribas. Los usamos para responder a tu solicitud. Se guardan en nuestra base de datos y una copia del mensaje se envía por correo al equipo.",
         "Cuenta y reservas: nombre, correo y datos de sesión (dirección IP y navegador) cuando usas las áreas de cuenta o reserva.",
-        "Solicitud de reserva de paseo privado: nombre, correo, WhatsApp o teléfono, idioma, hotel o dirección de recogida, observaciones, fecha solicitada y número de participantes. Los usamos para verificar la disponibilidad, enviar las instrucciones de la seña, acordar y realizar el paseo. Se guardan en nuestra base de datos y solo los ve el equipo administrativo; el aviso enviado por correo al equipo no incluye esos datos de contacto. Los importes y medios de pago recibidos los registra el equipo, nunca un número de tarjeta.",
+        "Solicitud de reserva de paseo privado: nombre, correo, WhatsApp o teléfono, idioma, hotel o dirección de recogida, observaciones, fecha solicitada y número de participantes. Los usamos para verificar la disponibilidad, enviar las instrucciones de la seña, acordar y realizar el paseo. Se guardan en nuestra base de datos y solo los ve el equipo administrativo; el aviso enviado por correo al equipo no incluye esos datos de contacto. Los importes y medios de pago recibidos los registra el equipo, nunca un número de tarjeta. Al enviar la solicitud, registramos también la versión de los Términos de Uso y de esta Política que se te mostró y la hora de tu aceptación.",
         "Estadísticas de uso: eventos como ver un paseo o hacer clic en reservar, con un identificador aleatorio de sesión (guardado solo mientras la pestaña está abierta), la ruta de la página y el origen de la visita (parámetros de campaña). Ese identificador no contiene datos personales.",
         "Registros técnicos: errores del sitio y mediciones de rendimiento (ruta de la página, sin datos personales) quedan en los registros de la plataforma de alojamiento.",
       ] },
@@ -167,9 +165,33 @@ export const PRIVACY_COPY: Record<"pt" | "en" | "es", PrivacyCopy> = {
     pending: [
       "Q1: verificación registral de la dirección del responsable. Dirección declarada por el Owner el 28/10/2026: Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000. El registro público del CNPJ indica el barrio Cidade Nova; la dirección solo se considerará verificada tras revisar el Cartão CNPJ actualizado. Razón social (49.142.341 RICARDO DE SOUZA FRANCISCO) y Cadastur (número = CNPJ, válido hasta el 02/04/2027) verificados el 28/10/2026.",
       "Q3: plazo de conservación de mensajes, solicitudes, cuentas y estadísticas.",
-      "Q4: publicar sin la sección de Daniela mientras esté desactivada.",
       "Q5: datos y cookies del widget de vuelos, a confirmar con Oner.",
       "Q11: revisión jurídica, transferencia internacional y necesidad de aviso de cookies.",
     ],
   },
 };
+
+/**
+ * Owner 31/10/2026 (Q4 decided): while Daniela is disabled the policy does not describe her processing as active. The
+ * published text is this variant: no Daniela section, no AI provider, no Daniela retention or browser-storage line.
+ * Each removal must match the source text exactly once (tested), so a later copy change cannot silently skip one.
+ */
+const DANIELA_ONLY: Record<"pt" | "en" | "es", { provider: string; retention: string; storage: string }> = {
+  pt: { provider: " e IA (OpenAI)", retention: "Conversas com a Daniela: não são guardadas por nós.", storage: " A Daniela não grava nada no seu navegador." },
+  en: { provider: " and AI (OpenAI)", retention: "Conversations with Daniela: not stored by us.", storage: " Daniela does not write anything to your browser." },
+  es: { provider: " e IA (OpenAI)", retention: "Conversaciones con Daniela: no las guardamos.", storage: " Daniela no escribe nada en tu navegador." },
+};
+
+export function privacyCopyFor(locale: string, options: { conciergeEnabled: boolean }): PrivacyCopy {
+  const lang = locale === "en" || locale === "es" ? locale : "pt";
+  const copy = PRIVACY_COPY[lang];
+  if (options.conciergeEnabled) return copy;
+  const cut = DANIELA_ONLY[lang];
+  const sections = copy.sections
+    .filter((section) => section.id !== "daniela")
+    .map((section) => ({
+      ...section,
+      paragraphs: section.paragraphs.filter((p) => p !== cut.retention).map((p) => p.replace(cut.provider, "").replace(cut.storage, "")),
+    }));
+  return { ...copy, sections };
+}

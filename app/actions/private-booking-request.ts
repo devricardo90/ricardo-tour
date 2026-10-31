@@ -9,14 +9,16 @@ import { createPublicBookingRequest } from "@/lib/services/private-booking-reque
 import { isRequestDateAllowed, isRequestLeadTimeAllowed, publicRequestTable, type PublicRequestMode } from "@/lib/booking/public-request";
 import { isValidEmail, isValidPhone, todayInRio, NAME_MAX, NOTES_MAX } from "@/lib/tour-request";
 import { formatBrl } from "@/lib/commerce/money";
+import { LEGAL_DOCUMENT_VERSIONS, privacyVersionFor } from "@/lib/legal/publication";
+import { isConciergeEnabled } from "@/lib/ai-concierge/launch";
 
 // RT-124 (27/10/2026, local): private booking REQUEST from the tour page. It creates a PENDING booking through the
 // existing engine; nothing is charged and nothing is confirmed here. The team verifies the request, sends the deposit
 // instructions, records the deposit (RT-125) and confirms the booking. Abuse protection as the guest tour request:
 // server-side validation, Next's same-origin check for Server Actions, honeypot and the shared rate limiter.
 
-export type BookingRequestField = "name" | "email" | "phone" | "date" | "party" | "pickup" | "notes";
-export type BookingRequestErrorCode = "required" | "invalid" | "too_long" | "date_not_allowed" | "party_invalid";
+export type BookingRequestField = "name" | "email" | "phone" | "date" | "party" | "pickup" | "notes" | "terms";
+export type BookingRequestErrorCode = "required" | "invalid" | "too_long" | "date_not_allowed" | "party_invalid" | "terms_required" | "terms_outdated";
 export type BookingRequestErrors = Partial<Record<BookingRequestField, BookingRequestErrorCode>>;
 
 export type BookingRequestState =
@@ -65,6 +67,10 @@ export async function submitPrivateBookingRequest(formData: FormData): Promise<B
   else if (!Number.isInteger(infants) || infants < 0 || infants >= party || (infants > 0 && table.childPolicy !== "INFANT_HALF_FARE_0_2")) errors.party = "party_invalid";
   if (pickup.length > 300) errors.pickup = "too_long";
   if (notes.length > NOTES_MAX) errors.notes = "too_long";
+  // RT-81: explicit acceptance of the Terms (never pre-checked), for the versions the visitor was shown. A page opened
+  // before a document changed sends the old version and is asked to review the current one.
+  if (str(formData, "acceptTerms") !== "on") errors.terms = "terms_required";
+  else if (str(formData, "termsVersion") !== LEGAL_DOCUMENT_VERSIONS.terms || str(formData, "privacyVersion") !== LEGAL_DOCUMENT_VERSIONS.privacy) errors.terms = "terms_outdated";
   if (Object.keys(errors).length > 0) return { ok: false, reason: "invalid", errors };
 
   let booking: Awaited<ReturnType<typeof createPublicBookingRequest>>;
@@ -75,6 +81,8 @@ export async function submitPrivateBookingRequest(formData: FormData): Promise<B
       fullFare: party - infants,
       infants,
       contact: { fullName: name, email, phone, language, pickupAddress: pickup || undefined, notes: notes || undefined },
+      // The privacy variant shown in this environment (with or without the Daniela section).
+      acceptance: { termsVersion: LEGAL_DOCUMENT_VERSIONS.terms, privacyVersion: privacyVersionFor(isConciergeEnabled()) },
     });
   } catch (error) {
     if (isDomainError(error)) {

@@ -224,6 +224,11 @@ model BookingQuote {
   depositBasisPoints  Int
   depositCents        Int
   balanceCents        Int
+  /// RT-81 (31/10/2026): versions of the Terms of Use and of the Privacy Policy the customer accepted with the request,
+  /// and when (server time). NULL for bookings created without the public request form. Immutable with the quote.
+  termsVersion        String?
+  privacyVersion      String?
+  termsAcceptedAt     DateTime?
   createdAt           DateTime @default(now())
   booking             Booking  @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }

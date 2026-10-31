@@ -6,6 +6,7 @@ import { PUBLIC_CONTACT } from "@/lib/public-contact";
 import { PUBLIC_SITE_URL } from "@/lib/public-site-url";
 import { resolveContactCopy } from "@/components/site/contact/contact-copy";
 import { ContactMessageForm } from "@/components/site/contact/contact-message-form";
+import { legalHref, legalPagesAvailable } from "@/lib/legal/publication";
 
 export async function generateMetadata({ params }: { params: Promise<{ locale: string }> }): Promise<Metadata> {
   const { locale } = await params;
@@ -79,7 +80,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
           <div className="lg:col-span-7">
             <div className="rounded-xl border border-[var(--site-rule-light)] bg-white p-6 md:p-8">
-              <ContactMessageForm locale={locale} />
+              <ContactMessageForm locale={locale} privacyHref={legalPagesAvailable() ? legalHref(locale, "privacy") : null} />
             </div>
           </div>
         </div>

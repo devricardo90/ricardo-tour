@@ -25,6 +25,9 @@ export type ContactCopy = {
   contactHint: string;
   message: string;
   submit: string;
+  /** RT-80: privacy notice next to the button (information only; shown when the Privacy Policy page is available). */
+  privacyNotice: string;
+  privacyLink: string;
   sending: string;
   summary: string;
   failureTitle: string;
@@ -59,6 +62,8 @@ export const contactCopy: Record<"pt" | "en" | "es", ContactCopy> = {
     contactHint: "Informe pelo menos um: e-mail ou telefone/WhatsApp.",
     message: "Mensagem",
     submit: "Enviar mensagem",
+    privacyNotice: "Usamos seus dados apenas para responder à sua mensagem, como explica a",
+    privacyLink: "Política de Privacidade",
     sending: "Enviando...",
     summary: "Revise os campos destacados.",
     failureTitle: "Não foi possível enviar agora.",
@@ -100,6 +105,8 @@ export const contactCopy: Record<"pt" | "en" | "es", ContactCopy> = {
     contactHint: "Provide at least one: email or phone/WhatsApp.",
     message: "Message",
     submit: "Send message",
+    privacyNotice: "We use your details only to answer your message, as explained in the",
+    privacyLink: "Privacy Policy",
     sending: "Sending...",
     summary: "Please review the highlighted fields.",
     failureTitle: "We couldn't send your message right now.",
@@ -141,6 +148,8 @@ export const contactCopy: Record<"pt" | "en" | "es", ContactCopy> = {
     contactHint: "Indica al menos uno: correo o teléfono/WhatsApp.",
     message: "Mensaje",
     submit: "Enviar mensaje",
+    privacyNotice: "Usamos tus datos solo para responder a tu mensaje, como explica la",
+    privacyLink: "Política de Privacidad",
     sending: "Enviando...",
     summary: "Revisa los campos resaltados.",
     failureTitle: "No pudimos enviar tu mensaje ahora.",

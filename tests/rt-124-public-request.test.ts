@@ -26,7 +26,7 @@ const plusDays = (n: number) => {
 
 function form(fields: Record<string, string>) {
   const data = new FormData();
-  const base = { tripId: TOUR_03, mode: "lab", locale: "pt", name: "Cliente Teste", email: "cliente@example.invalid", phone: "+55 21 99999-0000", date: plusDays(7), party: "3", pickup: "Hotel (teste)", notes: "" };
+  const base = { tripId: TOUR_03, mode: "lab", locale: "pt", name: "Cliente Teste", email: "cliente@example.invalid", phone: "+55 21 99999-0000", date: plusDays(7), party: "3", pickup: "Hotel (teste)", notes: "", acceptTerms: "on", termsVersion: "2026-10-31-draft", privacyVersion: "2026-10-31-draft-r2" };
   for (const [k, v] of Object.entries({ ...base, ...fields })) data.set(k, v);
   return data;
 }
@@ -97,6 +97,7 @@ describe("RT-124 public request: server action", () => {
       fullFare: 3,
       infants: 0,
       contact: { fullName: "Cliente Teste", email: "cliente@example.invalid", phone: "+55 21 99999-0000", language: "pt", pickupAddress: "Hotel (teste)", notes: undefined },
+      acceptance: { termsVersion: "2026-10-31-draft", privacyVersion: "2026-10-31-draft-r2" },
     });
     const mail = sendContactNotification.mock.calls[0][0];
     expect(mail.message).toContain("R$");
@@ -108,6 +109,15 @@ describe("RT-124 public request: server action", () => {
     const { submitPrivateBookingRequest } = await import("@/app/actions/private-booking-request");
     const result = await submitPrivateBookingRequest(form({ name: "", email: "x", phone: "12", date: plusDays(0), party: "5" }));
     expect(result).toEqual({ ok: false, reason: "invalid", errors: { name: "required", email: "invalid", phone: "invalid", date: "date_not_allowed", party: "party_invalid" } });
+    expect(createPublicBookingRequest).not.toHaveBeenCalled();
+  });
+
+  it("RT-81: without the explicit acceptance of the Terms, or with a document version the visitor was not shown, nothing is created", async () => {
+    const { submitPrivateBookingRequest } = await import("@/app/actions/private-booking-request");
+    expect(await submitPrivateBookingRequest(form({ acceptTerms: "" }))).toEqual({ ok: false, reason: "invalid", errors: { terms: "terms_required" } });
+    expect(await submitPrivateBookingRequest(form({ acceptTerms: "true" }))).toEqual({ ok: false, reason: "invalid", errors: { terms: "terms_required" } });
+    expect(await submitPrivateBookingRequest(form({ termsVersion: "2026-10-15-draft" }))).toEqual({ ok: false, reason: "invalid", errors: { terms: "terms_outdated" } });
+    expect(await submitPrivateBookingRequest(form({ privacyVersion: "" }))).toEqual({ ok: false, reason: "invalid", errors: { terms: "terms_outdated" } });
     expect(createPublicBookingRequest).not.toHaveBeenCalled();
   });
 

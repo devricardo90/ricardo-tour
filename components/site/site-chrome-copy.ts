@@ -34,6 +34,9 @@ export const siteChromeCopy = {
       instagramAria: "Instagram · @ricktravelbrasil, perfil da Ricardo Tour (abre em nova aba)",
       institutionalTitle: "Referência institucional",
       city: "Rio de Janeiro, Brasil",
+      terms: "Termos de Uso",
+      privacy: "Política de Privacidade",
+      legalAria: "Documentos legais",
     },
   },
   en: {
@@ -57,6 +60,9 @@ export const siteChromeCopy = {
       instagramAria: "Instagram · @ricktravelbrasil, Ricardo Tour profile (opens in a new tab)",
       institutionalTitle: "Institutional reference",
       city: "Rio de Janeiro, Brazil",
+      terms: "Terms of Use",
+      privacy: "Privacy Policy",
+      legalAria: "Legal documents",
     },
   },
   es: {
@@ -80,6 +86,9 @@ export const siteChromeCopy = {
       instagramAria: "Instagram · @ricktravelbrasil, perfil de Ricardo Tour (se abre en una pestaña nueva)",
       institutionalTitle: "Referencia institucional",
       city: "Río de Janeiro, Brasil",
+      terms: "Términos de Uso",
+      privacy: "Política de Privacidad",
+      legalAria: "Documentos legales",
     },
   },
 } as const;

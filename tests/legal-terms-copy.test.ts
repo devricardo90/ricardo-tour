@@ -28,9 +28,10 @@ describe("RT-81 terms draft (approved commercial rules + pending items)", () => 
   it("leaves every undecided commercial or legal rule as an explicit placeholder; Q6 and Q9 are decided", () => {
     for (const lang of LANGS) {
       const byId = Object.fromEntries(TERMS_COPY[lang].sections.map((s) => [s.id, s.paragraphs]));
-      for (const id of ["rules", "legal"]) {
-        expect(byId[id].every((p) => TERMS_PENDING_MARKER.test(p)), `${lang}/${id}`).toBe(true);
-      }
+      expect(byId.legal.every((p) => TERMS_PENDING_MARKER.test(p)), `${lang}/legal`).toBe(true);
+      // Rules (31/10/2026): children (RT-121 / Ficha TOUR-03 s.13) and rain (base policy) are decided; the physical
+      // condition and accessibility stay pending.
+      expect(byId.rules.filter((p) => TERMS_PENDING_MARKER.test(p)), `${lang}/rules`).toHaveLength(1);
       // Cancellation: the Owner's base policy (28/10/2026) plus the retention details left to the legal review.
       expect(byId.cancellation.filter((p) => TERMS_PENDING_MARKER.test(p)), `${lang}/cancellation`).toHaveLength(1);
       for (const code of ["Q1", "Q7", "Q8", "Q10", "Q11"]) expect(allText(lang), `${lang} ${code}`).toMatch(new RegExp(`\\(${code}[),]`));
@@ -39,7 +40,8 @@ describe("RT-81 terms draft (approved commercial rules + pending items)", () => 
   });
 
   it("uses only the deadlines and percentages the Owner approved, and invents no fee, guarantee or jurisdiction", () => {
-    const approved = new Set(["24 h", "72 h", "30%", "70%"]);
+    // 50%: children aged 0-2 on TOUR-01/TOUR-03 (RT-121 tables, Ficha TOUR-03 s.13).
+    const approved = new Set(["24 h", "72 h", "30%", "70%", "50%"]);
     for (const lang of LANGS) {
       const all = allText(lang);
       const figures = [...all.matchAll(/(\d+)\s*(h\b|horas?|hours?|dias?|days?|días?|%)/gi)].map(([, n, unit]) => (unit === "%" ? `${n}%` : /^d/i.test(unit) ? `${n} d` : `${n} h`));

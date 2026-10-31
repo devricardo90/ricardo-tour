@@ -5,6 +5,7 @@ import { submitPrivateBookingRequest, type BookingRequestErrors, type BookingReq
 import { quoteGroupPrice, splitDeposit } from "@/lib/commerce/group-pricing";
 import { formatBrl } from "@/lib/commerce/money";
 import { todayInRio } from "@/lib/tour-request";
+import { LEGAL_DOCUMENT_VERSIONS, legalHref } from "@/lib/legal/publication";
 
 type Lang = "pt" | "en" | "es";
 const COPY = {
@@ -40,7 +41,14 @@ const COPY = {
       too_long: "Texto muito longo.",
       date_not_allowed: "Escolha uma data com pelo menos 24 horas de antecedência. Antes disso, a reserva é sob consulta pelo WhatsApp.",
       party_invalid: "Escolha o número de participantes.",
+      terms_required: "Para enviar a solicitação, aceite os Termos de Uso.",
+      terms_outdated: "Os Termos de Uso ou a Política de Privacidade foram atualizados. Recarregue a página e confira a versão atual.",
     },
+    privacyNotice: "Usamos seus dados para responder e realizar esta solicitação, como explica a",
+    privacyLink: "Política de Privacidade",
+    termsBefore: "Li e aceito os",
+    termsLink: "Termos de Uso",
+    termsAfter: "da Ricardo Tour, inclusive as condições de sinal, saldo e cancelamento.",
     summary: "Confira os campos destacados.",
     date_unavailable: "Esta data não está disponível. Escolha outra data ou fale com a equipe pelo WhatsApp.",
     not_available: "A reserva online não está disponível para este passeio. Fale com a equipe pelo WhatsApp.",
@@ -80,7 +88,14 @@ const COPY = {
       too_long: "This text is too long.",
       date_not_allowed: "Choose a date at least 24 hours ahead. Sooner than that, booking is on request via WhatsApp.",
       party_invalid: "Choose the number of guests.",
+      terms_required: "To send the request, please accept the Terms of Use.",
+      terms_outdated: "The Terms of Use or the Privacy Policy were updated. Please reload the page and review the current version.",
     },
+    privacyNotice: "We use your details to answer and carry out this request, as explained in the",
+    privacyLink: "Privacy Policy",
+    termsBefore: "I have read and accept Ricardo Tour's",
+    termsLink: "Terms of Use",
+    termsAfter: "including the deposit, balance and cancellation conditions.",
     summary: "Please check the highlighted fields.",
     date_unavailable: "This date is not available. Choose another date or message us on WhatsApp.",
     not_available: "Online booking is not available for this tour. Please message us on WhatsApp.",
@@ -120,7 +135,14 @@ const COPY = {
       too_long: "Texto demasiado largo.",
       date_not_allowed: "Elige una fecha con al menos 24 horas de antelación. Antes de eso, la reserva es bajo consulta por WhatsApp.",
       party_invalid: "Elige el número de participantes.",
+      terms_required: "Para enviar la solicitud, acepta los Términos de Uso.",
+      terms_outdated: "Los Términos de Uso o la Política de Privacidad se actualizaron. Recarga la página y revisa la versión actual.",
     },
+    privacyNotice: "Usamos tus datos para responder y realizar esta solicitud, como explica la",
+    privacyLink: "Política de Privacidad",
+    termsBefore: "He leído y acepto los",
+    termsLink: "Términos de Uso",
+    termsAfter: "de Ricardo Tour, incluidas las condiciones de seña, saldo y cancelación.",
     summary: "Revisa los campos destacados.",
     date_unavailable: "Esta fecha no está disponible. Elige otra fecha o escríbenos por WhatsApp.",
     not_available: "La reserva en línea no está disponible para este tour. Escríbenos por WhatsApp.",
@@ -262,6 +284,25 @@ export function TourBookingRequestForm({ tripId, locale, mode, groupTotalCents, 
       <div>
         <label htmlFor={`${uid}-notes`} className={label}>{t.notes} <span className="font-normal text-[var(--site-on-dark-subtle,#9DA3A5)]">{t.optional}</span></label>
         <textarea id={`${uid}-notes`} name="notes" rows={3} maxLength={1000} aria-invalid={!!errors.notes} className={`mt-1.5 w-full rounded-md border bg-[var(--site-charcoal,#0B0E11)] px-3 py-2.5 text-[15px] text-[var(--site-on-dark,#F4F0E8)] ${focus} ${border("notes")}`} />
+      </div>
+      {/* RT-81: privacy NOTICE (information, no consent box: the data serve the request itself) and, separately, the
+          contractual acceptance of the Terms, never pre-checked, recorded with the document versions and the time. */}
+      <p className="text-[13px] leading-[1.5] text-[var(--site-on-dark-subtle,#9DA3A5)]" data-testid="booking-request-privacy-notice">
+        {t.privacyNotice}{" "}
+        <a href={legalHref(locale, "privacy")} target="_blank" rel="noopener" className={`underline underline-offset-2 hover:text-[var(--site-gold-bright,#E8C780)] ${focus}`}>{t.privacyLink}</a>.
+      </p>
+      <input type="hidden" name="termsVersion" value={LEGAL_DOCUMENT_VERSIONS.terms} />
+      <input type="hidden" name="privacyVersion" value={LEGAL_DOCUMENT_VERSIONS.privacy} />
+      <div>
+        <div className="flex items-start gap-3">
+          <input id={`${uid}-terms`} name="acceptTerms" type="checkbox" required aria-invalid={!!errors.terms} aria-describedby={errors.terms ? `${uid}-terms-error` : undefined} className={`mt-1 h-5 w-5 shrink-0 accent-[var(--site-gold,#C8A86B)] ${focus}`} data-testid="booking-request-terms" />
+          <label htmlFor={`${uid}-terms`} className="text-[14px] leading-[1.5] text-[var(--site-on-dark,#F4F0E8)]">
+            {t.termsBefore}{" "}
+            <a href={legalHref(locale, "terms")} target="_blank" rel="noopener" className={`underline underline-offset-2 hover:text-[var(--site-gold-bright,#E8C780)] ${focus}`}>{t.termsLink}</a>{" "}
+            {t.termsAfter}
+          </label>
+        </div>
+        {err("terms") ? <p id={`${uid}-terms-error`} className="mt-1 text-[13px] text-[#F2B8B5]">{err("terms")}</p> : null}
       </div>
       <button type="submit" disabled={sending} aria-busy={sending} className={`inline-flex min-h-12 w-full items-center justify-center rounded-[6px] border border-[var(--site-gold,#C8A86B)] bg-[var(--site-gold,#C8A86B)] px-6 text-[16px] font-semibold text-[var(--site-charcoal,#0B0E11)] hover:bg-[var(--site-gold-bright,#E8C780)] disabled:opacity-60 sm:w-auto ${focus}`}>
         {sending ? t.sending : t.submit}

@@ -1,4 +1,5 @@
 import { getApprovedGroupPriceTable, type ApprovedGroupPriceTable } from "@/lib/commerce/price-tables";
+import { legalPagesPublished } from "@/lib/legal/publication";
 import { PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS } from "@/lib/catalog/public-tour-presentation";
 import { isRebuildLabEnabled } from "@/lib/rebuild-lab/config";
 
@@ -62,7 +63,8 @@ export function publicRequestTable(tripId: string, mode: PublicRequestMode, env:
   const table = getApprovedGroupPriceTable(tripId, slot.priceTableId);
   if (!table) return null;
   if (mode === "lab") return isRebuildLabEnabled(env) ? table : null;
-  return PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS.has(tripId) ? table : null;
+  // A public request carries the acceptance of the Terms, so it also needs the Terms and the Privacy Policy published.
+  return PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS.has(tripId) && legalPagesPublished() ? table : null;
 }
 
 /** The slot instant for a requested day (YYYY-MM-DD, Rio time). */

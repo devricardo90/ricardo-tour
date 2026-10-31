@@ -30,7 +30,7 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
   pt: {
     title: "Termos de Uso (rascunho)",
     draftBanner: "Rascunho com as regras comerciais aprovadas pelo Owner; o que ainda não foi decidido aparece como PENDENTE. A revisão jurídica está PENDENTE: este texto não foi aprovado por advogado e não deve ser publicado.",
-    updated: "Rascunho atualizado em 28/10/2026.",
+    updated: "Rascunho atualizado em 31/10/2026.",
     sections: [
       { id: "who", title: "Quem somos", paragraphs: [
         `Este site (www.ricardotour.com) é da Ricardo Tour, CNPJ ${COMPANY_CNPJ}, com endereço declarado na Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000. Contato: ${CONTACT} ou WhatsApp ${WHATSAPP}.`,
@@ -44,6 +44,7 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
         "Enviar uma solicitação pelo site ou falar pelo WhatsApp não é uma reserva: o envio não confirma data nem disponibilidade. A equipe da Ricardo Tour analisa a solicitação e entra em contato pelo e-mail ou telefone informado para combinar os detalhes, inclusive o horário exato de início.",
         "A reserva só fica confirmada quando a Ricardo Tour confirma o recebimento do sinal e envia a confirmação por escrito (WhatsApp ou e-mail).",
         "Os passeios são privativos e a Ricardo Tour realiza um passeio por dia. Para datas com menos de 24 horas de antecedência, a reserva é sob consulta.",
+        "Para enviar uma solicitação pelo formulário do site, você precisa aceitar estes Termos de Uso. Registramos, junto com a solicitação, a versão dos Termos e da Política de Privacidade apresentada e o horário do aceite.",
         "PENDENTE (Q7): prazo de resposta às solicitações.",
       ] },
       { id: "operator", title: "Quem opera os passeios", paragraphs: [
@@ -60,10 +61,14 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
         "Cancelamento pela Ricardo Tour: o cliente escolhe entre o reembolso integral dos valores pagos e uma nova data que aceite.",
         "Chuva que inviabilize o passeio ou fechamento de uma atração essencial: remarcação ou reembolso, conforme os direitos aplicáveis.",
         "Os direitos legais do consumidor, incluindo o direito de arrependimento, são preservados.",
-        "PENDENTE (Q8): percentuais e prazos de eventual retenção abaixo de 72 horas, alteração de data ou de participantes, atraso e não comparecimento, a definir com a revisão jurídica.",
+        "Nova data a pedido do cliente: o pedido é feito pelo WhatsApp ou por e-mail; a nova data depende de disponibilidade (a Ricardo Tour realiza um passeio por dia) e só vale depois de confirmada por escrito.",
+        "PENDENTE (Q8): percentuais e prazos de eventual retenção abaixo de 72 horas; custos e limites da remarcação pedida pelo cliente e da alteração de participantes; tolerância de atraso e não comparecimento; forma e prazo da devolução de valores, a definir com a revisão jurídica.",
       ] },
       { id: "rules", title: "Regras dos passeios", paragraphs: [
-        "PENDENTE (Q10): o que acontece em caso de chuva ou mau tempo, idade mínima e participação de crianças, e condição física exigida.",
+        "Crianças: no passeio Cristo Redentor, Escadaria Selarón e Pão de Açúcar e no Centro Histórico e Cultural, crianças de 0 a 2 anos pagam 50% da tarifa individual da faixa e contam no limite de 4 participantes. O Tour Favela Rocinha é somente para adultos (18 anos ou mais).",
+        "Chuva ou mau tempo: quando o passeio ficar inviável, vale a regra de remarcação ou reembolso da seção de cancelamento.",
+        "O que cada passeio inclui e não inclui está descrito na página do passeio.",
+        "PENDENTE (Q10): condição física exigida e regras de acessibilidade.",
       ] },
       { id: "third-party", title: "Serviços de terceiros", paragraphs: [
         "A busca de voos (Oner) e o WhatsApp são serviços de outras empresas.",
@@ -80,7 +85,7 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
   en: {
     title: "Terms of Use (draft)",
     draftBanner: "Draft with the commercial rules approved by the Owner; anything not yet decided appears as PENDING. The legal review is PENDING: this text has not been approved by a lawyer and must not be published.",
-    updated: "Draft updated on 28 Oct 2026.",
+    updated: "Draft updated on 31 Oct 2026.",
     sections: [
       { id: "who", title: "Who we are", paragraphs: [
         `This website (www.ricardotour.com) belongs to Ricardo Tour, CNPJ (Brazilian company number) ${COMPANY_CNPJ}, with its declared address at Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000, Brazil. Contact: ${CONTACT} or WhatsApp ${WHATSAPP}.`,
@@ -94,6 +99,7 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
         "Sending a request on the website or writing on WhatsApp is not a booking: it does not confirm a date or availability. The Ricardo Tour team reviews the request and contacts you at the e-mail or phone you provided to arrange the details, including the exact start time.",
         "A booking is confirmed only when Ricardo Tour confirms receipt of the deposit and sends the confirmation in writing (WhatsApp or e-mail).",
         "Tours are private and Ricardo Tour runs one tour per day. For dates less than 24 hours ahead, booking is on request.",
+        "To send a request through the website form, you must accept these Terms of Use. Together with the request, we record the version of the Terms and of the Privacy Policy shown to you and the time of acceptance.",
         "PENDING (Q7): response time to requests.",
       ] },
       { id: "operator", title: "Who operates the tours", paragraphs: [
@@ -110,10 +116,14 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
         "Cancellation by Ricardo Tour: the customer chooses between a full refund of the amounts paid and a new date they accept.",
         "Rain that makes the tour unfeasible, or closure of an essential attraction: rescheduling or refund, according to the applicable rights.",
         "The customer's legal rights, including the right of withdrawal, are preserved.",
-        "PENDING (Q8): percentages and deadlines of any retention under 72 hours, changes of date or participants, delays and no-show, to be defined with the legal review.",
+        "A new date at the customer's request: ask on WhatsApp or by e-mail; the new date depends on availability (Ricardo Tour runs one tour per day) and applies only once confirmed in writing.",
+        "PENDING (Q8): percentages and deadlines of any retention under 72 hours; costs and limits of a new date requested by the customer and of changes of participants; tolerance for delays and no-show; how and when amounts are refunded, to be defined with the legal review.",
       ] },
       { id: "rules", title: "Tour rules", paragraphs: [
-        "PENDING (Q10): what happens in rain or bad weather, minimum age and children's participation, and the physical condition required.",
+        "Children: on the Christ the Redeemer, Selarón Steps and Sugarloaf Mountain tour and on the Historic and Cultural Center tour, children aged 0 to 2 pay 50% of the individual fare of the group band and count toward the limit of 4 participants. The Rocinha Favela tour is for adults only (18 and over).",
+        "Rain or bad weather: when the tour becomes unfeasible, the rescheduling-or-refund rule of the cancellation section applies.",
+        "What each tour includes and does not include is described on the tour page.",
+        "PENDING (Q10): physical condition required and accessibility rules.",
       ] },
       { id: "third-party", title: "Third-party services", paragraphs: [
         "The flight search (Oner) and WhatsApp are services of other companies.",
@@ -130,7 +140,7 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
   es: {
     title: "Términos de Uso (borrador)",
     draftBanner: "Borrador con las reglas comerciales aprobadas por el Owner; lo que aún no se ha decidido aparece como PENDIENTE. La revisión jurídica está PENDIENTE: este texto no ha sido aprobado por un abogado y no debe publicarse.",
-    updated: "Borrador actualizado el 28/10/2026.",
+    updated: "Borrador actualizado el 31/10/2026.",
     sections: [
       { id: "who", title: "Quiénes somos", paragraphs: [
         `Este sitio (www.ricardotour.com) pertenece a Ricardo Tour, CNPJ (registro de empresa en Brasil) ${COMPANY_CNPJ}, con dirección declarada en Rua Projetada, nº 8, Centro, Itaocara-RJ, CEP 28570-000, Brasil. Contacto: ${CONTACT} o WhatsApp ${WHATSAPP}.`,
@@ -144,6 +154,7 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
         "Enviar una solicitud en el sitio o escribir por WhatsApp no es una reserva: no confirma fecha ni disponibilidad. El equipo de Ricardo Tour revisa la solicitud y te contacta por el correo o teléfono indicado para acordar los detalles, incluida la hora exacta de inicio.",
         "La reserva solo queda confirmada cuando Ricardo Tour confirma la recepción de la seña y envía la confirmación por escrito (WhatsApp o correo).",
         "Los paseos son privados y Ricardo Tour realiza un paseo por día. Para fechas con menos de 24 horas de antelación, la reserva es bajo consulta.",
+        "Para enviar una solicitud mediante el formulario del sitio, debes aceptar estos Términos de Uso. Junto con la solicitud, registramos la versión de los Términos y de la Política de Privacidad que se te mostró y la hora de la aceptación.",
         "PENDIENTE (Q7): plazo de respuesta a las solicitudes.",
       ] },
       { id: "operator", title: "Quién opera los paseos", paragraphs: [
@@ -160,10 +171,14 @@ export const TERMS_COPY: Record<"pt" | "en" | "es", TermsCopy> = {
         "Cancelación por Ricardo Tour: el cliente elige entre el reembolso íntegro de los importes pagados y una nueva fecha que acepte.",
         "Lluvia que haga inviable el paseo o cierre de una atracción esencial: cambio de fecha o reembolso, según los derechos aplicables.",
         "Se preservan los derechos legales del consumidor, incluido el derecho de desistimiento.",
-        "PENDIENTE (Q8): porcentajes y plazos de una eventual retención con menos de 72 horas, cambios de fecha o de participantes, retrasos y no presentación, a definir con la revisión jurídica.",
+        "Nueva fecha a pedido del cliente: se solicita por WhatsApp o por correo; la nueva fecha depende de la disponibilidad (Ricardo Tour realiza un paseo por día) y solo vale después de confirmada por escrito.",
+        "PENDIENTE (Q8): porcentajes y plazos de una eventual retención con menos de 72 horas; costos y límites del cambio de fecha pedido por el cliente y del cambio de participantes; tolerancia de retraso y no presentación; forma y plazo de la devolución de importes, a definir con la revisión jurídica.",
       ] },
       { id: "rules", title: "Reglas de los paseos", paragraphs: [
-        "PENDIENTE (Q10): qué ocurre con lluvia o mal tiempo, edad mínima y participación de niños, y condición física requerida.",
+        "Niños: en el paseo Cristo Redentor, Escalera Selarón y Pan de Azúcar y en el Centro Histórico y Cultural, los niños de 0 a 2 años pagan el 50% de la tarifa individual de la franja y cuentan dentro del límite de 4 participantes. El Tour Favela Rocinha es solo para adultos (18 años o más).",
+        "Lluvia o mal tiempo: cuando el paseo resulte inviable, se aplica la regla de cambio de fecha o reembolso de la sección de cancelación.",
+        "Lo que cada paseo incluye y no incluye está descrito en la página del paseo.",
+        "PENDIENTE (Q10): condición física requerida y reglas de accesibilidad.",
       ] },
       { id: "third-party", title: "Servicios de terceros", paragraphs: [
         "La búsqueda de vuelos (Oner) y WhatsApp son servicios de otras empresas.",
