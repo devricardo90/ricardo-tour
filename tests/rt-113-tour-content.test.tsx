@@ -186,7 +186,7 @@ describe("RT-114 mock data integrity", () => {
     expect(offer.pickup.value).toEqual(expect.objectContaining({ pt: expect.any(String), en: expect.any(String), es: expect.any(String) }));
     expect(offer.approvedPricing?.publishable).toBe(false);
     expect(offer.routeOptions?.map((route) => route.id)).toEqual(["essential-4h", "porto-maravilha-6h"]);
-    expect(offer.titleStatusByLocale).toEqual({ pt: "CONFIRMED", en: "PENDING", es: "PENDING" });
+    expect(offer.titleStatusByLocale).toEqual({ pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" }); // EN/ES confirmed by the Owner 01/11/2026
     expect(offer.title).toBe("Centro Histórico e Cultural do Rio");
   });
 
@@ -543,14 +543,14 @@ describe("RT-115 Owner review versions (17/10/2026)", () => {
     }
   });
 
-  it("shows approved Centro durations in PT and keeps EN/ES copy pending", () => {
+  it("shows approved Centro durations in PT/EN/ES (EN/ES confirmed by the Owner 01/11/2026), without a translation-draft notice", () => {
     const id = "cmlibniq40000z4zqkbujnutt";
     const pt = renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={toTourContentView(MOCK_TOUR_CONTENT[id], "pt", "preview")!} locale="pt" reviewMode />);
     const en = renderToStaticMarkup(<TourDetailPrototype offer={PROTOTYPE_OFFER[id]} content={toTourContentView(MOCK_TOUR_CONTENT[id], "en", "preview")!} locale="en" reviewMode />);
     expect(pt).toContain("Roteiros de 4 ou 6 horas");
     expect(pt).not.toContain("Em definição");
-    expect(en).toContain('data-status="PENDING"');
-    expect(en).toContain("English copy is a draft for the Owner’s final review. It is not approved for publication.");
+    expect(en).toContain("4-hour or 6-hour itineraries");
+    expect(en).not.toContain("English copy is a draft for the Owner’s final review");
   });
 });
 

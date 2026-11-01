@@ -130,9 +130,9 @@ describe("TOUR-03 editorial status of the hero pitch and benefit lines", () => {
     return start < 0 ? undefined : html.slice(start).match(/data-status="(\w+)"/)?.[1];
   };
 
-  it("pitch is CONFIRMED in PT (Owner editorial approval 21/10/2026), benefits PROVISIONAL in PT, EN/ES PENDING, never MOCK", () => {
-    const pitch = { pt: "CONFIRMED", en: "PENDING", es: "PENDING" } as const;
-    const benefits = { pt: "PROVISIONAL", en: "PENDING", es: "PENDING" } as const;
+  it("pitch is CONFIRMED and benefits PROVISIONAL in every locale (PT 21/10/2026; EN/ES mirror PT, Owner 01/11/2026), never MOCK", () => {
+    const pitch = { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" } as const;
+    const benefits = { pt: "PROVISIONAL", en: "PROVISIONAL", es: "PROVISIONAL" } as const;
     for (const locale of ["pt", "en", "es"] as const) {
       const html = render(locale);
       expect(badgeAfter(html, "tour-pitch"), `${locale} pitch`).toBe(pitch[locale]);
@@ -152,7 +152,7 @@ describe("TOUR-03 editorial status of the hero pitch and benefit lines", () => {
     expect(MOCK_TOUR_CONTENT[CENTRO_ID].status).toBe("DRAFT");
     expect(MOCK_TOUR_CONTENT[CENTRO_ID].images.filter((image) => image.rightsStatus !== "OWNER_ATTESTED")).toHaveLength(0);
     expect(PROTOTYPE_OFFER["cmli1a6im000034zqqzc9sppb"]).toMatchObject({ pitchStatus: "CONFIRMED", benefitsStatus: "PROVISIONAL" });
-    expect(PROTOTYPE_OFFER["cmlhxkpy9000028zq27rhytew"]).toMatchObject({ pitchStatus: "CONFIRMED", pitchStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" }, benefitsStatus: "PROVISIONAL" }); // TOUR-01 PT pitch approved 23/10/2026
+    expect(PROTOTYPE_OFFER["cmlhxkpy9000028zq27rhytew"]).toMatchObject({ pitchStatus: "CONFIRMED", pitchStatusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" }, benefitsStatus: "PROVISIONAL" }); // TOUR-01 PT pitch approved 23/10/2026; EN/ES 01/11/2026
     expect(PROTOTYPE_OFFER["cmljo0s1u0000t0zqa0bpd23p"]).toMatchObject({ pitchStatus: "MOCK", benefitsStatus: "MOCK" });
   });
 });
@@ -201,11 +201,11 @@ describe("TOUR-03 commercial presentation: 'A partir de R$ 260 por pessoa' (Owne
     expect(CENTRO_APPROVED_PRICING.additionalHourPerGroupCents).toBe(12000);
   });
 
-  it("is CONFIRMED in PT and PENDING in EN/ES (translations not approved), with localized copy", () => {
+  it("is CONFIRMED in PT/EN/ES (EN/ES confirmed by the Owner 01/11/2026), with localized copy", () => {
     const expected = {
       pt: ["A partir de R$ 260 por pessoa", "CONFIRMED"],
-      en: ["From R$ 260 per person", "PENDING"],
-      es: ["Desde R$ 260 por persona", "PENDING"],
+      en: ["From R$ 260 per person", "CONFIRMED"],
+      es: ["Desde R$ 260 por persona", "CONFIRMED"],
     } as const;
     for (const locale of ["pt", "en", "es"] as const) {
       const html = render(CENTRO_ID, locale);

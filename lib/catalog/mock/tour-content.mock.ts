@@ -541,12 +541,13 @@ function cristoOffer(base: PrototypeOffer): PrototypeOffer {
     ...base,
     title: CRISTO_TITLE.pt,
     titleByLocale: CRISTO_TITLE,
-    // PT title and pitch approved verbatim by the Owner (editorial decision, 23/10/2026); EN/ES still PENDING (RT-115).
+    // PT title and pitch approved verbatim by the Owner (editorial decision, 23/10/2026); EN/ES approved in the Owner gate of
+    // 30/10/2026 and confirmed by the Owner on 01/11/2026.
     titleStatus: "CONFIRMED",
-    titleStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
+    titleStatusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" },
     pitch: CRISTO_SUBTITLE,
     pitchStatus: "CONFIRMED",
-    pitchStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
+    pitchStatusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" },
     pickup: { value: CRISTO_PICKUP_SHORT, status: "CONFIRMED" }, // CR-08/CR-16
     hotelPickup: true,
     duration: { value: CRISTO_CONTENT.durationLabel ?? null, status: "CONFIRMED" }, // ~8 h reference (Ficha §4.1)
@@ -589,42 +590,38 @@ function centroOffer(base: PrototypeOffer): PrototypeOffer {
     noPortugueseFallback: true,
     requestFlowMode: "whatsapp",
     titleStatus: "CONFIRMED",
-    titleStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
+    titleStatusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" },
     pitch: {
       pt: "Descubra a história, a arquitetura e o patrimônio cultural do Centro do Rio em uma experiência privativa, acompanhada por um guia especializado.",
       en: "A privately guided walk through downtown Rio’s history, architecture and culture.",
       es: "Un paseo privado con guía por la historia, la arquitectura y la cultura del centro de Río.",
     },
-    modality: { value: { pt: "Experiência exclusivamente privativa", en: "Private experience only", es: "Experiencia exclusivamente privada" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" }, source: "Owner-approved TOUR-03 Ficha v1.0, 18/10/2026" },
-    pickup: { value: { pt: "Busca e retorno ao endereço combinado; confirme a logística", en: "Pickup and return at the agreed address; logistics confirmation required", es: "Recogida y regreso en la dirección acordada; requiere confirmación logística" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" } },
-    duration: { value: { pt: "Roteiros de 4 ou 6 horas", en: "4-hour or 6-hour itineraries", es: "Recorridos de 4 o 6 horas" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" } },
+    modality: { value: { pt: "Experiência exclusivamente privativa", en: "Private experience only", es: "Experiencia exclusivamente privada" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" }, source: "Owner-approved TOUR-03 Ficha v1.0, 18/10/2026" },
+    pickup: { value: { pt: "Busca e retorno ao endereço combinado; confirme a logística", en: "Pickup and return at the agreed address; logistics confirmation required", es: "Recogida y regreso en la dirección acordada; requiere confirmación logística" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" } },
+    duration: { value: { pt: "Roteiros de 4 ou 6 horas", en: "4-hour or 6-hour itineraries", es: "Recorridos de 4 o 6 horas" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" } },
     hideWhatsAppCta: true,
     benefits: {
       pt: ["Grupo privativo de 1 a 4 turistas", "Horário e roteiro combinados com a equipe", "Acompanhamento de guia durante a caminhada"],
       en: ["Private group of 1 to 4 guests", "Start time and itinerary agreed with the team", "Guide accompanying the walking tour"],
       es: ["Grupo privado de 1 a 4 turistas", "Horario e itinerario acordados con el equipo", "Guía durante el recorrido a pie"],
     },
-    // PT pitch approved verbatim by the Owner (editorial decision, 21/10/2026); EN/ES translations still PENDING.
+    // PT pitch approved verbatim by the Owner (editorial decision, 21/10/2026); EN/ES approved in the Owner gate of
+    // 30/10/2026 and confirmed by the Owner on 01/11/2026 (every EN/ES status mirrors PT).
     pitchStatus: "CONFIRMED",
-    pitchStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
+    pitchStatusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" },
     // Benefit lines: real copy derived from approved facts but not in the Owner-approved texts (Ficha v1.0 / Manual §12 /
-    // PT/EN/ES review document): PROVISIONAL in PT, EN/ES PENDING. Never MOCK.
+    // PT/EN/ES review document): PROVISIONAL in every locale (EN/ES mirror PT, Owner 01/11/2026). Never MOCK.
     benefitsStatus: "PROVISIONAL",
-    benefitsStatusByLocale: { pt: "PROVISIONAL", en: "PENDING", es: "PENDING" },
+    benefitsStatusByLocale: { pt: "PROVISIONAL", en: "PROVISIONAL", es: "PROVISIONAL" },
     coverStatus: "CONFIRMED",
     contentStatus: "CONFIRMED",
-    contentStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
+    contentStatusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" },
     conditionsStatus: "PENDING",
-    groupSize: { value: { pt: "1 a 4 turistas da mesma reserva", en: "1 to 4 guests on the same booking", es: "De 1 a 4 turistas en la misma reserva" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" } },
+    groupSize: { value: { pt: "1 a 4 turistas da mesma reserva", en: "1 to 4 guests on the same booking", es: "De 1 a 4 turistas en la misma reserva" }, status: "CONFIRMED", statusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" } },
     approvedPricing: CENTRO_APPROVED_PRICING,
     routeOptions: CENTRO_ROUTE_OPTIONS,
-    translationStatusNotice: {
-      pt: "Português revisado. As traduções para inglês e espanhol estão preparadas como rascunhos para aprovação final do Owner e não estão liberadas para publicação.",
-      en: "English copy is a draft for the Owner’s final review. It is not approved for publication.",
-      es: "El texto en español es un borrador para la revisión final del Owner. No está aprobado para su publicación.",
-    },
     // Owner commercial decision (21/10/2026): lead with the lowest approved per-person fare (4 guests, 4 hours; Manual
-    // §12.11). The full table moves to the "Valores e opções do passeio" section. PT approved; EN/ES translations PENDING.
+    // §12.11). The full table moves to the "Valores e opções do passeio" section. PT/EN/ES approved (Owner 30/10 and 01/11/2026).
     priceSummary: {
       pt: "A partir de R$ 260 por pessoa",
       en: "From R$ 260 per person",
@@ -636,7 +633,7 @@ function centroOffer(base: PrototypeOffer): PrototypeOffer {
       en: "Price per person for a group of 4 adults on the 4-hour private tour (group total: R$ 1,040).",
       es: "Valor por persona para un grupo de 4 adultos en el paseo privado de 4 horas (total del grupo: R$ 1.040).",
     },
-    priceStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "PENDING" },
+    priceStatusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" },
     // Mobile sticky bar (Owner, 21/10/2026): two lines so the amount and "per person" are never cut.
     mobilePriceLines: {
       lead: { pt: "A partir de", en: "From", es: "Desde" },

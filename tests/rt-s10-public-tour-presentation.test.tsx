@@ -32,16 +32,22 @@ describe("Sprint 10 public tour presentation gate", () => {
   it("publishes the design only for locales whose title and pitch are CONFIRMED", () => {
     const opts = { pricePublicationAuthorized: false };
     expect(buildPublicOffer(PROTOTYPE_OFFER[CENTRO], "pt", publicView(CENTRO, "pt"), opts)).not.toBeNull();
-    expect(buildPublicOffer(PROTOTYPE_OFFER[CENTRO], "en", publicView(CENTRO, "en"), opts)).toBeNull(); // EN pending (RT-115)
-    expect(buildPublicOffer(PROTOTYPE_OFFER[CENTRO], "es", publicView(CENTRO, "es"), opts)).toBeNull();
+    // EN/ES of TOUR-01 and TOUR-03 confirmed by the Owner (gate 30/10/2026, confirmation 01/11/2026).
+    expect(buildPublicOffer(PROTOTYPE_OFFER[CENTRO], "en", publicView(CENTRO, "en"), opts)?.title).toBe("Rio Historic and Cultural Center");
+    expect(buildPublicOffer(PROTOTYPE_OFFER[CENTRO], "es", publicView(CENTRO, "es"), opts)?.title).toBe("Centro Histórico y Cultural de Río");
+    // A locale whose title or pitch is not CONFIRMED still gets no approved design.
+    const pendingEn = { ...PROTOTYPE_OFFER[CENTRO], titleStatusByLocale: { pt: "CONFIRMED", en: "PENDING", es: "CONFIRMED" } } as typeof PROTOTYPE_OFFER[string];
+    expect(buildPublicOffer(pendingEn, "en", publicView(CENTRO, "en"), opts)).toBeNull();
+    expect(buildPublicOffer(pendingEn, "es", publicView(CENTRO, "es"), opts)).not.toBeNull();
     for (const l of ["pt", "en", "es"]) expect(buildPublicOffer(PROTOTYPE_OFFER[ROCINHA], l, publicView(ROCINHA, l), opts), l).not.toBeNull();
-    // TOUR-01: PT title and pitch approved verbatim by the Owner (23/10/2026); EN/ES PENDING.
+    // TOUR-01: PT title and pitch approved verbatim by the Owner (23/10/2026); EN/ES confirmed 01/11/2026.
     const cristoPt = buildPublicOffer(PROTOTYPE_OFFER[CRISTO], "pt", publicView(CRISTO, "pt"), opts)!;
     expect(cristoPt.title).toBe("Cristo Redentor, Escadaria Selarón e Pão de Açúcar — Tour Privativo");
     expect(cristoPt.pitch.pt).toBe("Descubra o Cristo Redentor, a Escadaria Selarón e o Pão de Açúcar em uma experiência privativa pelo Rio de Janeiro, com roteiro planejado e acompanhamento de guia especializado.");
     expect(cristoPt.video).toBeNull(); // Pão de Açúcar clip still PROVISIONAL
     expect(cristoPt.transport).toBeUndefined(); // T1 vehicle regularization PENDING
-    for (const l of ["en", "es"]) expect(buildPublicOffer(PROTOTYPE_OFFER[CRISTO], l, publicView(CRISTO, l), opts), l).toBeNull();
+    expect(buildPublicOffer(PROTOTYPE_OFFER[CRISTO], "en", publicView(CRISTO, "en"), opts)?.title).toBe("Christ the Redeemer, Selarón Steps and Sugarloaf Mountain — Private Tour");
+    expect(buildPublicOffer(PROTOTYPE_OFFER[CRISTO], "es", publicView(CRISTO, "es"), opts)?.title).toBe("Cristo Redentor, Escalera Selarón y Pan de Azúcar — Tour Privado");
   });
 
   it("drops PROVISIONAL/PENDING/MOCK facts, provisional prices and lab notices; keeps approved texts verbatim", () => {
@@ -141,7 +147,6 @@ describe("Sprint 10 public tour presentation gate", () => {
     expect(await getPublicTourPresentation(CENTRO, "pt")).toBeNull();
     getTourContent.mockResolvedValue(publicView(CENTRO, "pt"));
     expect(await getPublicTourPresentation(PREMIUM, "pt")).toBeNull();
-    expect(await getPublicTourPresentation(CENTRO, "en")).toBeNull();
     expect(await getPublicTourPresentation(CENTRO, "pt")).not.toBeNull();
     getTourContent.mockResolvedValue({ ...publicView(CENTRO, "pt"), isMock: true });
     expect(await getPublicTourPresentation(CENTRO, "pt")).toBeNull();

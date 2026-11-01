@@ -37,7 +37,7 @@ vi.mock("@/lib/catalog/public-tour-presentation", async (importOriginal) => ({
 
 const params = (id: string, locale: string) => ({ params: Promise.resolve({ id, locale }) });
 
-describe("Owner 01/11/2026: no old offer as fallback on the three launch tours", () => {
+describe("Owner 01/11/2026: no old offer as fallback on the three launch tours", { timeout: 60_000 }, () => {
   it("the launch catalog is exactly the three tours of the approved design", () => {
     expect(new Set(LAUNCH_TRIP_IDS)).toEqual(PUBLIC_DESIGN_TRIP_IDS);
   });

@@ -3,22 +3,26 @@
 Owner, 01/11/2026: propostas A (dados na origem) e B (gate obrigatório) aprovadas; proteção C (estado neutro) autorizada
 para preparação local. Nada aqui foi executado no banco hospedado. Cada passo hospedado exige autorização escrita do Owner.
 
-## Ordem obrigatória (validada em ensaio local em 01/11/2026)
+## Ordem obrigatória (validada em ensaio local em 01/11/2026, só com os scripts oficiais)
 
 1. **Backup** do banco de produção (Neon) antes de qualquer escrita.
 2. **Migrations pendentes** (9, todas aditivas, incluindo `20261031120000_rt81_terms_acceptance`).
-3. **Carga do conteúdo aprovado** dos três passeios nas tabelas RT-113 (sempre como DRAFT).
-   - Atenção: o carregador `scripts/rt-119-load-content.ts` hoje prepara **só a Rocinha**. TOUR-01 e TOUR-03 precisam de
-     registro de carga equivalente antes do release (o ensaio local usou um auxiliar temporário).
-4. **Plano A — títulos e descrições dos cards** (`scripts/s11-launch-trip-copy.ts`): dry run revisado, depois `--apply`.
-   Escreve só `Trip.title` e `Trip.description` dos três passeios (PT/EN/ES), a partir do conteúdo aprovado.
-5. **Ato de aprovação do Owner** no banco (`approveTourContent`, um por passeio).
-   - **Precisa vir depois do passo 4.** Qualquer mudança de campo público do `Trip` depois da aprovação a invalida
-     automaticamente ("Trip public field changed after approval"); no ensaio, isso devolveu os três passeios ao estado neutro.
+3. **Carga do conteúdo aprovado dos três passeios** nas tabelas RT-113, sempre como DRAFT:
+   `scripts/rt-119-load-content.ts` (simulação; depois `--apply`). Cobre TOUR-01, TOUR-02 e TOUR-03
+   (`launchLoadRecord`), com o vídeo próprio do passeio quando houver.
+4. **Plano A — títulos e descrições dos cards**: `scripts/s11-launch-trip-copy.ts` (simulação com backup; depois
+   `--apply`). Escreve só `Trip.title` e `Trip.description` dos três passeios (PT/EN/ES).
+5. **Ato de aprovação do Owner**: `scripts/s11-approve-launch-content.ts` (simulação; depois
+   `--apply --confirm-owner-approval`).
+   - O script **recusa** aprovar enquanto o passo 4 não estiver aplicado: uma mudança de campo público do `Trip`
+     depois da aprovação a invalida automaticamente ("Trip public field changed after approval").
 6. **Deploy de Preview** do candidato a release (sem promover).
 7. **Gate B** contra a Preview: `npx tsx scripts/s11-release-gate.ts http <url-da-preview>`. Qualquer FAIL = NO-GO.
 8. **Conferência visual do Owner** na Preview (o gate não substitui o olhar do Owner).
 9. **Promoção/merge** somente com autorização expressa do Owner.
+
+Todos os scripts dos passos 3 a 5 recusam hoje qualquer banco que não seja local descartável. Rodá-los no banco
+hospedado exigirá autorização escrita do Owner e uma liberação explícita da trava no momento do release.
 
 ## O que o gate B verifica
 
@@ -33,6 +37,9 @@ para preparação local. Nada aqui foi executado no banco hospedado. Cada passo 
 
 - Antes da carga (igual à produção hoje): NO-GO. Páginas de passeio no estado neutro (nenhum texto antigo); Home e
   listagem com os títulos antigos do banco (ex.: "Confeitaria Colombo + City Tour Rio").
-- Depois dos passos 3, 4 e 5: Home, listagem, sitemap, TOUR-04, preços e mídias OK; 5 de 9 páginas com o design
-  aprovado. Falham TOUR-01 e TOUR-03 em EN/ES: título e chamada marcados `PENDING` no código, embora o Owner tenha aprovado
-  PT/EN/ES no gate de 30/10. Corrigir esses status é decisão do Owner (proposta no relatório de 01/11).
+- Ensaio completo com os scripts oficiais (banco novo com as linhas antigas, TOUR-04 e um produto aposentado):
+  carga dos três passeios; aprovação recusada antes do plano A; plano A; aprovação; recarga sem efeito preservando a
+  aprovação. **Gate B por HTTP: GO nas 9 páginas** (3 passeios × PT/EN/ES com o design e o título aprovados), Home,
+  listagem e sitemap só com os três passeios, TOUR-04 com 404, nenhum preço em R$, nenhum texto ou mídia antiga.
+- EN/ES de TOUR-01 e TOUR-03 confirmados pelo Owner em 01/11/2026 (status por língua igual ao PT).
+- O vídeo do Pão de Açúcar é carregado, mas continua fora da página pública enquanto seu status for PROVISIONAL.

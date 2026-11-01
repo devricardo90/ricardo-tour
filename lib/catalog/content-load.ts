@@ -27,9 +27,26 @@ const REQUIRED_TEXT = ["summary", "description", "durationLabel", "meetingPoint"
  * is public until a new approval act authorizes the loaded content.
  */
 export function rocinhaLoadRecord(): TourContentRecord {
-  const base = MOCK_TOUR_CONTENT[ROCINHA_ID];
-  if (!base || isMockRecord(base)) throw new Error("Rocinha content is missing or still mock");
-  const video = PROTOTYPE_OFFER[ROCINHA_ID]?.video;
+  return launchLoadRecord(ROCINHA_ID);
+}
+
+/**
+ * Owner 01/11/2026: the three launch tours (TOUR-01 Cristo + Selarón + Pão de Açúcar, TOUR-02 Rocinha, TOUR-03 Centro
+ * Histórico e Cultural), in this order. The release load covers all three; it no longer depends on rehearsal helpers.
+ */
+export const LAUNCH_LOAD_TRIP_IDS = ["cmlhxkpy9000028zq27rhytew", ROCINHA_ID, "cmlibniq40000z4zqkbujnutt"] as const;
+
+/**
+ * Record to load for one launch tour: its real draft content and photos as approved in the Owner gate of 30/10/2026, plus
+ * the tour's own clip (VIDEO) when it has one. Both clips (Rocinha, Pão de Açúcar) are own videos authorised for commercial
+ * use by the Owner's declaration of 28/10/2026 (RT-116), hence OWNER_ATTESTED; photos keep their own rights status (the
+ * Rocinha mural stays UNVERIFIED). Always DRAFT: nothing is public until a new approval act authorizes the loaded content.
+ */
+export function launchLoadRecord(tripId: string): TourContentRecord {
+  if (!(LAUNCH_LOAD_TRIP_IDS as readonly string[]).includes(tripId)) throw new Error(`${tripId} is not a launch tour`);
+  const base = MOCK_TOUR_CONTENT[tripId];
+  if (!base || isMockRecord(base)) throw new Error(`${tripId}: content is missing or still mock`);
+  const video = PROTOTYPE_OFFER[tripId]?.video;
   const media: TourContentRecord["images"] = [...base.images];
   if (video) {
     media.push({

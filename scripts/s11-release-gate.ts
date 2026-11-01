@@ -14,14 +14,13 @@
  * check of the design; it blocks the release when any automatic condition fails.
  */
 import { LAUNCH_TRIP_IDS } from "@/lib/catalog/public-trips";
-import { PROTOTYPE_OFFER, MOCK_TOUR_CONTENT } from "@/lib/catalog/mock/tour-content.mock";
+import { PROTOTYPE_OFFER } from "@/lib/catalog/mock/tour-content.mock";
 import { buildPublicOffer } from "@/lib/catalog/public-tour-presentation";
 import { approveRecord, isMockRecord, toTourContentView, type TourContentRecord } from "@/lib/catalog/tour-content";
-import { rocinhaLoadRecord } from "@/lib/catalog/content-load";
+import { launchLoadRecord } from "@/lib/catalog/content-load";
 
 const LOCALES = ["pt", "en", "es"] as const;
 const TOUR_04 = "cmljo0s1u0000t0zqa0bpd23p";
-const ROCINHA = "cmli1a6im000034zqqzc9sppb";
 
 /** What each launch tour must be about (Owner 31/10/2026), checked on the approved title in every locale. */
 const MUST_NAME: Record<string, { label: string; patterns: RegExp[] }> = {
@@ -50,9 +49,13 @@ const OLD_PRICE = /R\$\s*\d/;
 const failures: string[] = [];
 const fail = (msg: string) => failures.push(msg);
 
+/** The same record the release load writes (scripts/rt-119-load-content.ts), or null when it cannot be built. */
 function contentRecord(id: string): TourContentRecord | null {
-  if (id === ROCINHA) return rocinhaLoadRecord();
-  return MOCK_TOUR_CONTENT[id] ?? null;
+  try {
+    return launchLoadRecord(id);
+  } catch {
+    return null;
+  }
 }
 
 function codeGate() {

@@ -1,41 +1,59 @@
 /**
- * RT-119 (LOCAL PREPARATION ONLY) — controlled content load for the Favela Rocinha into the RT-113 tables.
- * Default is a DRY RUN (plan + per-field diff, no write). `--apply` writes in one transaction, always as DRAFT.
+ * RT-119 (LOCAL PREPARATION ONLY) — controlled content load of the three launch tours into the RT-113 tables
+ * (Owner 01/11/2026: TOUR-01 Cristo + Selarón + Pão de Açúcar, TOUR-02 Rocinha, TOUR-03 Centro Histórico e Cultural).
+ * Default is a DRY RUN (plan + per-field diff per tour, no write). `--apply` writes each tour in its own transaction,
+ * always as DRAFT (loading is not an approval). `--trip=<id>` limits the run to one launch tour.
  * `--allow-replace-approved` is required to overwrite OWNER_APPROVED content (the approval is then invalidated).
- * Refuses any database other than a local throw-away one (localhost:5433/rt119_*): running against the hosted database
- * is NOT authorized (RT-119 needs backup, diff approved by the Owner per batch, and written authorization).
- * Usage: DATABASE_URL=<local rt119_*> npx tsx scripts/rt-119-load-content.ts [--apply] [--allow-replace-approved]
+ * Refuses any database other than a local throw-away one (localhost:5433/rt119_* or rt_s11_*): running against the hosted
+ * database is NOT authorized (it belongs to the release procedure: backup, dry run reviewed by the Owner, written
+ * authorization; see docs/ops/rt-s11-catalog-release-procedure.md — the Trip copy (plan A) runs BEFORE the approval act).
+ * Usage: DATABASE_URL=<local rt119_*|rt_s11_*> npx tsx scripts/rt-119-load-content.ts [--apply] [--trip=<id>] [--allow-replace-approved]
  */
 import { prisma } from "@/lib/prisma";
 import { loadTourContentRecord, contentFingerprint } from "@/lib/catalog/tour-content";
-import { applyLoad, planLoad, rocinhaLoadRecord } from "@/lib/catalog/content-load";
+import { applyLoad, launchLoadRecord, LAUNCH_LOAD_TRIP_IDS, planLoad } from "@/lib/catalog/content-load";
 import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 const url = new URL(process.env.DATABASE_URL ?? "");
-if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "5433" || !url.pathname.startsWith("/rt119_") || url.searchParams.has("host") || url.searchParams.has("hostaddr") || /neon|aws|vercel|supabase/i.test(url.href)) {
-  throw new Error("Refusing to run: only a local throw-away database localhost:5433/rt119_* is allowed (hosted load not authorized)");
+if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "5433" || !/^\/(rt119_|rt_s11_)/.test(url.pathname) || url.searchParams.has("host") || url.searchParams.has("hostaddr") || /neon|aws|vercel|supabase/i.test(url.href)) {
+  throw new Error("Refusing to run: only a local throw-away database localhost:5433/rt119_* or rt_s11_* is allowed (hosted load not authorized)");
 }
 assertDatabaseAccess({ operation: "write", label: "scripts/rt-119-load-content.ts" }); // RT-104: deny by default
 
 const apply = process.argv.includes("--apply");
 const allowReplaceApproved = process.argv.includes("--allow-replace-approved");
+const only = process.argv.find((a) => a.startsWith("--trip="))?.slice("--trip=".length);
+if (only && !(LAUNCH_LOAD_TRIP_IDS as readonly string[]).includes(only)) throw new Error(`--trip=${only} is not a launch tour`);
 
 async function main() {
-  const next = rocinhaLoadRecord();
-  const trip = await prisma.trip.findUnique({ where: { id: next.tripId }, select: { id: true } });
-  const current = await loadTourContentRecord(next.tripId);
-  const plan = planLoad(current, next, { tripExists: Boolean(trip), allowReplaceApproved });
-  console.log(JSON.stringify({ mode: apply ? "apply" : "dry-run", ...plan, fingerprintIfApproved: contentFingerprint(next), counts: { itinerary: next.itinerary.length, faq: next.faq?.length ?? 0, media: next.images.length } }, null, 2));
-  if (plan.action === "refused") process.exitCode = 2;
-  else if (apply && (plan.action === "create" || plan.action === "update")) {
-    await applyLoad(prisma, next, plan, { allowReplaceApproved });
-    console.log(`applied: ${plan.action} (status DRAFT, no approval)`);
-  } else if (apply) console.log("nothing to apply (no change)");
-  await prisma.$disconnect();
+  const ids = only ? [only] : [...LAUNCH_LOAD_TRIP_IDS];
+  // Plan every tour first: one refused plan stops the whole run before any write.
+  const plans = [];
+  for (const id of ids) {
+    const next = launchLoadRecord(id);
+    const trip = await prisma.trip.findUnique({ where: { id }, select: { id: true } });
+    const current = await loadTourContentRecord(id);
+    const plan = planLoad(current, next, { tripExists: Boolean(trip), allowReplaceApproved });
+    plans.push({ next, plan });
+    console.log(JSON.stringify({ mode: apply ? "apply" : "dry-run", ...plan, fingerprintIfApproved: contentFingerprint(next), counts: { itinerary: next.itinerary.length, faq: next.faq?.length ?? 0, media: next.images.length } }, null, 2));
+  }
+  if (plans.some(({ plan }) => plan.action === "refused")) {
+    console.log("refused: nothing applied");
+    process.exitCode = 2;
+    return;
+  }
+  if (!apply) return;
+  for (const { next, plan } of plans) {
+    if (plan.action === "create" || plan.action === "update") {
+      await applyLoad(prisma, next, plan, { allowReplaceApproved });
+      console.log(`applied ${next.tripId}: ${plan.action} (status DRAFT, no approval)`);
+    } else console.log(`${next.tripId}: nothing to apply (no change)`);
+  }
 }
 
-main().catch(async (e) => {
-  console.error(e);
-  await prisma.$disconnect();
-  process.exit(1);
-});
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exitCode = 1;
+  })
+  .finally(() => prisma.$disconnect());
