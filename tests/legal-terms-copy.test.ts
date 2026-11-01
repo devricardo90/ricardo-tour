@@ -25,23 +25,57 @@ describe("RT-81 terms draft (approved commercial rules + pending items)", () => 
     }
   });
 
-  it("leaves every undecided commercial or legal rule as an explicit placeholder; Q6 and Q9 are decided", () => {
+  it("leaves every undecided commercial or legal rule as an explicit placeholder; Q6, Q7, Q9 and Q10 are decided", () => {
     for (const lang of LANGS) {
       const byId = Object.fromEntries(TERMS_COPY[lang].sections.map((s) => [s.id, s.paragraphs]));
       expect(byId.legal.every((p) => TERMS_PENDING_MARKER.test(p)), `${lang}/legal`).toBe(true);
-      // Rules (31/10/2026): children (RT-121 / Ficha TOUR-03 s.13) and rain (base policy) are decided; the physical
-      // condition and accessibility stay pending.
-      expect(byId.rules.filter((p) => TERMS_PENDING_MARKER.test(p)), `${lang}/rules`).toHaveLength(1);
-      // Cancellation: the Owner's base policy (28/10/2026) plus the retention details left to the legal review.
+      // Rules: children (RT-121 / Ficha TOUR-03 s.13), rain (base policy) and, since the Owner decision P6 of 01/11/2026,
+      // physical condition and accessibility are decided.
+      expect(byId.rules.filter((p) => TERMS_PENDING_MARKER.test(p)), `${lang}/rules`).toHaveLength(0);
+      // Cancellation: base policy (28/10/2026) + P2-P5 (01/11/2026); retention figures, participant changes and no-show
+      // consequences stay with the legal review.
       expect(byId.cancellation.filter((p) => TERMS_PENDING_MARKER.test(p)), `${lang}/cancellation`).toHaveLength(1);
-      for (const code of ["Q1", "Q7", "Q8", "Q10", "Q11"]) expect(allText(lang), `${lang} ${code}`).toMatch(new RegExp(`\\(${code}[),]`));
-      for (const code of ["Q6", "Q9"]) expect(allText(lang), `${lang} ${code}`).not.toMatch(new RegExp(`\\(${code}[),]`));
+      for (const code of ["Q1", "Q8", "Q11"]) expect(allText(lang), `${lang} ${code}`).toMatch(new RegExp(`\\(${code}[),]`));
+      for (const code of ["Q6", "Q7", "Q9", "Q10"]) expect(allText(lang), `${lang} ${code}`).not.toMatch(new RegExp(`\\(${code}[),]`));
     }
+  });
+
+  it("states the Owner decision P1-P6 of 01/11/2026 without claiming more than was approved", () => {
+    expect(TERMS_REVIEW_STATUS.commercial_rules_p1_p6_approved_on).toBe("2026-11-01");
+    const pt = allText("pt");
+    const en = allText("en");
+    const es = allText("es");
+    // P1: a target, not an absolute deadline; the legal deadlines (Decreto 7.962/2013) are preserved.
+    expect(pt).toMatch(/meta .* até 1 dia útil.*não um prazo absoluto.*Decreto nº 7\.962\/2013/);
+    expect(en).toMatch(/within 1 business day.*not an absolute deadline.*Decree 7,962\/2013/);
+    expect(es).toMatch(/hasta 1 día hábil.*no un plazo absoluto.*Decreto brasileño nº 7\.962\/2013/);
+    // P2: one new date without an administrative charge, 72 h ahead, subject to availability.
+    expect(pt).toMatch(/Uma remarcação .* 72 horas .* sem taxa administrativa, sujeita à disponibilidade/);
+    expect(en).toMatch(/One change of date .* 72 hours .* without an administrative charge, subject to availability/);
+    expect(es).toMatch(/Un cambio de fecha .* 72 horas .* sin cargo administrativo, sujeto a disponibilidad/);
+    // P3: tolerance only when operationally possible.
+    expect(pt).toMatch(/até 30 minutos .* operacionalmente possível .* serviços de terceiros/);
+    expect(en).toMatch(/up to 30 minutes .* operationally possible .* third-party services/);
+    expect(es).toMatch(/hasta 30 minutos .* operativamente posible .* servicios de terceros/);
+    // P4: article 49 of the CDC preserved where applicable.
+    expect(pt).toMatch(/art\. 49 do Código de Defesa do Consumidor é preservado, quando aplicável/);
+    expect(en).toMatch(/article 49 of the Brazilian Consumer Protection Code is preserved, where applicable/);
+    expect(es).toMatch(/art\. 49 del Código de Defensa del Consumidor de Brasil se preserva, cuando corresponda/);
+    // P5: same payment method preferably; full and immediate refund on a valid withdrawal.
+    expect(pt).toMatch(/mesmo meio de pagamento.*integral e imediata/);
+    expect(en).toMatch(/same payment method.*in full and immediately/);
+    expect(es).toMatch(/mismo medio de pago.*íntegra e inmediata/);
+    // P6: informed before confirmation; never a claim that every tour page already shows these conditions.
+    expect(pt).toMatch(/antes de confirmar a reserva, a Ricardo Tour informa as condições reais .* sem discriminação/);
+    expect(en).toMatch(/before confirming the booking, Ricardo Tour states the real conditions .* without discrimination/);
+    expect(es).toMatch(/antes de confirmar la reserva, Ricardo Tour informa las condiciones reales .* sin discriminación/);
+    for (const all of [pt, en, es]) expect(all).not.toMatch(/(?:todas as|cada) páginas? .*(?:acessibilidade|condição física)|every tour page .*accessib|cada página .*accesibilidad/i);
   });
 
   it("uses only the deadlines and percentages the Owner approved, and invents no fee, guarantee or jurisdiction", () => {
     // 50%: children aged 0-2 on TOUR-01/TOUR-03 (RT-121 tables, Ficha TOUR-03 s.13).
-    const approved = new Set(["24 h", "72 h", "30%", "70%", "50%"]);
+    // 1 d: response target (P1, Owner 01/11/2026). 5 d: legal deadline quoted from Decreto 7.962/2013, not a promise.
+    const approved = new Set(["24 h", "72 h", "30%", "70%", "50%", "1 d", "5 d"]);
     for (const lang of LANGS) {
       const all = allText(lang);
       const figures = [...all.matchAll(/(\d+)\s*(h\b|horas?|hours?|dias?|days?|días?|%)/gi)].map(([, n, unit]) => (unit === "%" ? `${n}%` : /^d/i.test(unit) ? `${n} d` : `${n} h`));

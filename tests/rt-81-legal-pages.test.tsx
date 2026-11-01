@@ -88,7 +88,7 @@ describe("RT-80/RT-81 legal pages stay drafts until approved (Owner 31/10/2026)"
 
   it("any change to a document's text requires a new version (the request stores the accepted version)", () => {
     // If this fails after editing lib/legal/*-copy.ts: bump LEGAL_DOCUMENT_VERSIONS and update the fingerprints here.
-    expect({ version: LEGAL_DOCUMENT_VERSIONS.terms, text: fingerprint(TERMS_COPY) }).toEqual({ version: "2026-10-31-draft", text: TERMS_FINGERPRINT });
+    expect({ version: LEGAL_DOCUMENT_VERSIONS.terms, text: fingerprint(TERMS_COPY) }).toEqual({ version: "2026-11-01-draft", text: TERMS_FINGERPRINT });
     expect({ version: LEGAL_DOCUMENT_VERSIONS.privacy, text: fingerprint(PRIVACY_COPY) }).toEqual({ version: "2026-10-31-draft-r2", text: PRIVACY_FINGERPRINT });
   });
 });
@@ -171,5 +171,5 @@ describe("RT-81 acceptance in the forms", () => {
   });
 });
 
-const TERMS_FINGERPRINT = "f3b77aa732c479bf";
+const TERMS_FINGERPRINT = "0fcbaba2cc8c444f";
 const PRIVACY_FINGERPRINT = "d3a46164e77b42ba";

@@ -1,11 +1,12 @@
 # RT-80/RT-81 — Pacote jurídico local: propostas para decisão do Owner (31/10/2026)
 
-> **Status: PROPOSTAS, NÃO APROVADAS.** Nada neste documento é regra em vigor. Os Termos de Uso e a Política de
-> Privacidade continuam como minutas (`owner_approval`/`legal_review` PENDING) e só ficam públicos quando ambos
-> forem aprovados pelo Owner e pela revisão jurídica (`legalPagesPublished()`). As propostas abaixo **não** foram
-> escritas nas minutas: os pontos continuam marcados como PENDENTE (Q7, Q8, Q10) até a decisão do Owner.
+> **Status (01/11/2026): P1–P6 APROVADAS PELO OWNER como decisões comerciais, com ajustes (seção 1-A), e escritas
+> nas minutas dos Termos (versão `2026-11-01-draft`). Continuam sujeitas à revisão jurídica.** Os Termos de Uso e a
+> Política de Privacidade seguem como minutas (`owner_approval`/`legal_review` PENDING) e só ficam públicos quando
+> ambos forem aprovados pelo Owner e pela revisão jurídica (`legalPagesPublished()`). A retenção de dados (seção 2)
+> continua PROPOSTA, não aprovada.
 
-## 1. Regras operacionais propostas (Termos de Uso)
+## 1. Regras operacionais propostas em 31/10 (histórico; a versão aprovada está na seção 1-A)
 
 | # | Ponto da minuta | Proposta | Já decidido (base) | Depende de |
 |---|---|---|---|---|
@@ -16,8 +17,23 @@
 | P5 | Q8 – reembolso | Devolução pelo mesmo meio de pagamento usado, nos prazos legalmente aplicáveis. Não fixar prazo próprio até a revisão jurídica. | — | Advogado |
 | P6 | Q10 – acessibilidade/condição física | Avaliação individual: o cliente informa limitações no pedido; a Ricardo Tour responde, antes da confirmação, se e como o passeio pode ser adaptado. Sem lista genérica de restrições. | Crianças e chuva já decididos (na minuta). | Owner + advogado |
 
-Recomendação técnica: aprovar P1–P6 **sujeitas à revisão jurídica**. Quando aprovadas, entram na minuta com nova
-versão dos Termos (o teste de fingerprint obriga a trocar `LEGAL_DOCUMENT_VERSIONS.terms`).
+## 1-A. Decisão comercial do Owner (01/11/2026) — texto aprovado, sujeito à revisão jurídica
+
+| # | Regra aprovada | Onde está na minuta |
+|---|---|---|
+| P1 | Meta de resposta às consultas comerciais em até 1 dia útil, como meta e não como prazo absoluto. Preservados os prazos legais (Decreto 7.962/2013: confirmação imediata do recebimento e manifestação em até 5 dias). | Seção "Como funciona uma solicitação" (substitui o PENDENTE Q7) |
+| P2 | Uma remarcação sem taxa administrativa, pedida com pelo menos 72 h de antecedência, sujeita à disponibilidade. Diferenças de preço ou custos de fornecedores só quando justificados, juridicamente permitidos e informados antes. Direito de arrependimento preservado. | Seção "Cancelamento…" |
+| P3 | Tolerância de até 30 minutos quando operacionalmente possível, sem comprometer ingressos com horário marcado, serviços de terceiros ou a realização do passeio. | Seção "Cancelamento…" |
+| P4 | 72 h ou mais: gratuito. Menos de 72 h: só retenções proporcionais, justificadas, juridicamente permitidas e previamente informadas. Art. 49 do CDC preservado expressamente, quando aplicável. | Seção "Cancelamento…" (texto de 28/10 mantido + frase do art. 49) |
+| P5 | Devolução preferencialmente pelo mesmo meio de pagamento, nos prazos e condições legais; no arrependimento válido, restituição integral e imediata. | Seção "Cancelamento…" |
+| P6 | Antes da confirmação: informar as condições reais do roteiro, avaliar as necessidades individuais, adaptações razoáveis sem discriminação. A minuta **não** afirma que todas as páginas de passeio já trazem essas informações. | Seção "Regras dos passeios" (substitui o PENDENTE Q10) |
+
+Continuam PENDENTES na minuta (Q8, para a revisão jurídica): percentuais e prazos de eventual retenção abaixo de
+72 h; condições de remarcações adicionais ou pedidas com menos de 72 h; alteração de participantes; consequências de
+atraso acima da tolerância e do não comparecimento.
+
+Pendência de verificação (não de redação): conferir se as páginas publicadas dos três passeios trazem as condições
+reais de cada roteiro (P6) antes de afirmar isso em qualquer texto.
 
 ## 2. Proposta de retenção de dados (Política de Privacidade, Q3 — continua PENDENTE)
 
@@ -51,10 +67,10 @@ como tarefa separada.
 3. Q3 (Privacidade): prazos de retenção (tabela da seção 2).
 4. Q5 (Privacidade): dados e cookies do widget de voos (Oner), a confirmar com o fornecedor.
 5. Q11 (Privacidade): transferência internacional (Vercel, Neon, Resend, Upstash e, quando ligada, OpenAI), aviso/consentimento de cookies (cookie de atribuição de 30 dias) e encarregado (DPO) ou dispensa como agente de pequeno porte.
-6. Redação final de P2 a P6 à luz do CDC (arts. 39, 49 e 51).
+6. Redação final de P1 a P6 à luz do CDC (arts. 39, 49 e 51) e do Decreto 7.962/2013; aplicabilidade do art. 49 a passeios contratados a distância (internet/WhatsApp); itens que continuam em Q8 (retenção abaixo de 72 h, alteração de participantes, atraso acima da tolerância e não comparecimento).
 7. Aprovação final dos dois documentos (`legal_review: APPROVED`). Só então as páginas ficam públicas.
 
-## 4. O que já está no código (local, sem commit)
+## 4. O que já está no código (commits locais b4c59a7 em diante; P1–P6 na minuta sem commit)
 
 - Rotas /termos e /privacidade (PT/EN/ES), com `noindex` e banner de minuta; 404 fora do lab até a aprovação.
 - Links no rodapé e aviso de privacidade no /contato só aparecem quando as páginas estão disponíveis.

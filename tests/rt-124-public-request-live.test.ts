@@ -9,7 +9,7 @@ import { guideDayPicker } from "./helpers/guide-day";
  */
 const url = process.env.S11_LOCAL_DB_URL;
 const TOUR_03 = "cmlibniq40000z4zqkbujnutt";
-const ACCEPTANCE = { termsVersion: "2026-10-31-draft", privacyVersion: "2026-10-31-draft-r2" };
+const ACCEPTANCE = { termsVersion: "2026-11-01-draft", privacyVersion: "2026-10-31-draft-r2" };
 
 vi.mock("@/lib/catalog/public-trips", () => ({ getPublicTripById: async (id: string) => ({ id }) }));
 

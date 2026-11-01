@@ -26,7 +26,7 @@ const plusDays = (n: number) => {
 
 function form(fields: Record<string, string>) {
   const data = new FormData();
-  const base = { tripId: TOUR_03, mode: "lab", locale: "pt", name: "Cliente Teste", email: "cliente@example.invalid", phone: "+55 21 99999-0000", date: plusDays(7), party: "3", pickup: "Hotel (teste)", notes: "", acceptTerms: "on", termsVersion: "2026-10-31-draft", privacyVersion: "2026-10-31-draft-r2" };
+  const base = { tripId: TOUR_03, mode: "lab", locale: "pt", name: "Cliente Teste", email: "cliente@example.invalid", phone: "+55 21 99999-0000", date: plusDays(7), party: "3", pickup: "Hotel (teste)", notes: "", acceptTerms: "on", termsVersion: "2026-11-01-draft", privacyVersion: "2026-10-31-draft-r2" };
   for (const [k, v] of Object.entries({ ...base, ...fields })) data.set(k, v);
   return data;
 }
@@ -97,7 +97,7 @@ describe("RT-124 public request: server action", () => {
       fullFare: 3,
       infants: 0,
       contact: { fullName: "Cliente Teste", email: "cliente@example.invalid", phone: "+55 21 99999-0000", language: "pt", pickupAddress: "Hotel (teste)", notes: undefined },
-      acceptance: { termsVersion: "2026-10-31-draft", privacyVersion: "2026-10-31-draft-r2" },
+      acceptance: { termsVersion: "2026-11-01-draft", privacyVersion: "2026-10-31-draft-r2" },
     });
     const mail = sendContactNotification.mock.calls[0][0];
     expect(mail.message).toContain("R$");

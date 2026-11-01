@@ -18,7 +18,7 @@ export const LEGAL_PATHS = { terms: "/termos", privacy: "/privacidade" } as cons
  * Version of each document as shown to the customer. The booking request stores the versions it was accepted with, so
  * any change to a document's text must come with a new version (a test pins the text fingerprint to the version).
  */
-export const LEGAL_DOCUMENT_VERSIONS = { terms: "2026-10-31-draft", privacy: "2026-10-31-draft-r2" } as const;
+export const LEGAL_DOCUMENT_VERSIONS = { terms: "2026-11-01-draft", privacy: "2026-10-31-draft-r2" } as const;
 
 /**
  * The Privacy Policy shown without the Daniela section (concierge disabled, Owner 31/10/2026) is the base version; the
