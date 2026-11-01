@@ -14,9 +14,9 @@ export async function generateMetadata({ params }: { params: Promise<{ locale: s
   const path = `/${locale}/contato`;
   return {
     title: t.metaTitle,
-    description: t.metaDescription,
+    description: legalPagesAvailable() ? t.metaDescription : t.metaDescriptionNoForm,
     alternates: { canonical: path, languages: getLanguageAlternates("/contato") },
-    openGraph: { title: t.metaTitle, description: t.metaDescription, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Ricardo Tour", images: defaultSocialImages(locale) },
+    openGraph: { title: t.metaTitle, description: legalPagesAvailable() ? t.metaDescription : t.metaDescriptionNoForm, url: `${PUBLIC_SITE_URL}${path}`, siteName: "Ricardo Tour", images: defaultSocialImages(locale) },
   };
 }
 
@@ -39,7 +39,7 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
             <h1 id="contact-heading" className="site-display mt-3 text-balance text-[34px] font-medium leading-[1.05] md:text-[48px]">
               {t.heading}
             </h1>
-            <p className="mt-4 max-w-md text-[15px] leading-[1.6] text-[var(--site-ink-muted)]">{t.intro}</p>
+            <p className="mt-4 max-w-md text-[15px] leading-[1.6] text-[var(--site-ink-muted)]">{legalPagesAvailable() ? t.intro : t.introNoForm}</p>
 
             <section aria-labelledby="contact-channels" className="mt-8">
               <h2 id="contact-channels" className="text-[12px] font-medium uppercase tracking-[0.16em] text-[var(--site-gold-deep)]">
@@ -80,7 +80,26 @@ export default async function ContactPage({ params }: { params: Promise<{ locale
 
           <div className="lg:col-span-7">
             <div className="rounded-xl border border-[var(--site-rule-light)] bg-white p-6 md:p-8">
-              <ContactMessageForm locale={locale} privacyHref={legalPagesAvailable() ? legalHref(locale, "privacy") : null} />
+              {/* Owner 31/10/2026: the form collects personal data, so it renders only while the Privacy Policy is available
+                  (published, or locally in the lab). Until then the same card points to WhatsApp and e-mail. */}
+              {legalPagesAvailable() ? (
+                <ContactMessageForm locale={locale} privacyHref={legalHref(locale, "privacy")} />
+              ) : (
+                <div data-testid="contact-form-paused">
+                  <h2 className="site-display text-balance text-[28px] font-medium leading-[1.1]">{t.formPausedHeading}</h2>
+                  <p className="mt-2 text-[14px] leading-[1.6] text-[var(--site-ink-muted)]">{t.formPausedBody}</p>
+                  <div className="mt-5 flex flex-wrap gap-x-6">
+                    <a href={PUBLIC_CONTACT.whatsappUrl} target="_blank" rel="noopener noreferrer" aria-label={t.whatsappAria} className={linkClass}>
+                      <MessageCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      {PUBLIC_CONTACT.whatsappDisplay}
+                    </a>
+                    <a href={PUBLIC_CONTACT.mailto} className={linkClass}>
+                      <Mail className="h-4 w-4 shrink-0" aria-hidden="true" />
+                      {PUBLIC_CONTACT.email}
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>

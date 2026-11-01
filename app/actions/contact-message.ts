@@ -6,6 +6,7 @@ import { sendContactNotification } from "@/lib/services/tour-request-notificatio
 import { isFormSubmissionLimited } from "@/lib/rate-limit/server";
 import { buildStoredContactMessage, normalizeContactValues, validateContactMessage, type ContactMessageErrors } from "@/lib/contact-message";
 import { reportServerError } from "@/lib/observability/report";
+import { legalPagesAvailable } from "@/lib/legal/publication";
 
 // General contact message (RT-56, /contato). Same pipeline as the RT-55 tour request: the message is stored in the
 // existing ContactSubmission table first (no schema change), then a notification goes to the approved recipient with the
@@ -27,6 +28,8 @@ const LOCALES = ["pt", "en", "es"] as const;
 export async function submitContactMessage(formData: FormData): Promise<ContactMessageState> {
   // Honeypot: real visitors never see this field. Pretend success and store nothing.
   if (String(formData.get("company_website") ?? "").trim() !== "") return { ok: true };
+  // Owner 31/10/2026: no collection while the Privacy Policy is unavailable, even if the action is called directly.
+  if (!legalPagesAvailable()) return { ok: false, reason: "unavailable" };
 
   const h = await headers();
   if (await isFormSubmissionLimited(h, "contact_message")) return { ok: false, reason: "rate_limited" };

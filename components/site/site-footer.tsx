@@ -62,7 +62,7 @@ export function SiteFooter({ locale, anchorMode = "home", homeHref = "#top-of-ho
             <h2 className={headingClass}>{f.contactTitle}</h2>
             <ul className="mt-2 grid grid-cols-1 min-[420px]:grid-cols-2 md:mt-3 md:flex md:flex-col">
               <li>
-                <Link href="/contato" className={linkClass}>{f.contactForm}</Link>
+                <Link href="/contato" className={linkClass}>{legalPagesAvailable() ? f.contactForm : f.contactPage}</Link>
               </li>
               <li>
                 <a href={PUBLIC_CONTACT.mailto} aria-label={f.emailAria} className={`${linkClass} gap-2`}>

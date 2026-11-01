@@ -6,9 +6,12 @@ import type { ContactMessageErrorCode } from "@/lib/contact-message";
 export type ContactCopy = {
   metaTitle: string;
   metaDescription: string;
+  /** Owner 31/10/2026: variants without the form, used while it is hidden (Privacy Policy unavailable). */
+  metaDescriptionNoForm: string;
   eyebrow: string;
   heading: string;
   intro: string;
+  introNoForm: string;
   channels: string;
   email: string;
   whatsapp: string;
@@ -28,6 +31,9 @@ export type ContactCopy = {
   /** RT-80: privacy notice next to the button (information only; shown when the Privacy Policy page is available). */
   privacyNotice: string;
   privacyLink: string;
+  /** Owner 31/10/2026: shown instead of the form while the Privacy Policy is not available (WhatsApp and e-mail stay). */
+  formPausedHeading: string;
+  formPausedBody: string;
   sending: string;
   summary: string;
   failureTitle: string;
@@ -43,9 +49,11 @@ export const contactCopy: Record<"pt" | "en" | "es", ContactCopy> = {
   pt: {
     metaTitle: "Contato | Ricardo Tour",
     metaDescription: "Fale com a equipe da Ricardo Tour sobre passeios e experiências no Rio de Janeiro: formulário, e-mail ou WhatsApp.",
+    metaDescriptionNoForm: "Fale com a equipe da Ricardo Tour sobre passeios e experiências no Rio de Janeiro por e-mail ou WhatsApp.",
     eyebrow: "CONTATO",
     heading: "Fale com a Ricardo Tour",
     intro: "Tire dúvidas sobre passeios e experiências no Rio de Janeiro. Escreva pelo formulário, por e-mail ou pelo WhatsApp.",
+    introNoForm: "Tire dúvidas sobre passeios e experiências no Rio de Janeiro. Escreva por e-mail ou pelo WhatsApp.",
     channels: "Canais de contato",
     email: "E-mail",
     whatsapp: "WhatsApp",
@@ -64,6 +72,8 @@ export const contactCopy: Record<"pt" | "en" | "es", ContactCopy> = {
     submit: "Enviar mensagem",
     privacyNotice: "Usamos seus dados apenas para responder à sua mensagem, como explica a",
     privacyLink: "Política de Privacidade",
+    formPausedHeading: "Fale pelo WhatsApp ou e-mail",
+    formPausedBody: "O envio de mensagens por este site está temporariamente indisponível. Use o WhatsApp ou o e-mail para falar com a nossa equipe.",
     sending: "Enviando...",
     summary: "Revise os campos destacados.",
     failureTitle: "Não foi possível enviar agora.",
@@ -86,9 +96,11 @@ export const contactCopy: Record<"pt" | "en" | "es", ContactCopy> = {
   en: {
     metaTitle: "Contact | Ricardo Tour",
     metaDescription: "Talk to the Ricardo Tour team about tours and experiences in Rio de Janeiro: contact form, email or WhatsApp.",
+    metaDescriptionNoForm: "Talk to the Ricardo Tour team about tours and experiences in Rio de Janeiro by email or WhatsApp.",
     eyebrow: "CONTACT",
     heading: "Talk to Ricardo Tour",
     intro: "Ask about tours and experiences in Rio de Janeiro. Write through the form, by email or on WhatsApp.",
+    introNoForm: "Ask about tours and experiences in Rio de Janeiro. Write by email or on WhatsApp.",
     channels: "Ways to reach us",
     email: "Email",
     whatsapp: "WhatsApp",
@@ -107,6 +119,8 @@ export const contactCopy: Record<"pt" | "en" | "es", ContactCopy> = {
     submit: "Send message",
     privacyNotice: "We use your details only to answer your message, as explained in the",
     privacyLink: "Privacy Policy",
+    formPausedHeading: "Reach us on WhatsApp or by e-mail",
+    formPausedBody: "Sending messages through this website is temporarily unavailable. Please use WhatsApp or e-mail to talk to our team.",
     sending: "Sending...",
     summary: "Please review the highlighted fields.",
     failureTitle: "We couldn't send your message right now.",
@@ -129,9 +143,11 @@ export const contactCopy: Record<"pt" | "en" | "es", ContactCopy> = {
   es: {
     metaTitle: "Contacto | Ricardo Tour",
     metaDescription: "Habla con el equipo de Ricardo Tour sobre tours y experiencias en Río de Janeiro: formulario, correo o WhatsApp.",
+    metaDescriptionNoForm: "Habla con el equipo de Ricardo Tour sobre tours y experiencias en Río de Janeiro por correo o WhatsApp.",
     eyebrow: "CONTACTO",
     heading: "Habla con Ricardo Tour",
     intro: "Consulta sobre tours y experiencias en Río de Janeiro. Escribe por el formulario, por correo o por WhatsApp.",
+    introNoForm: "Consulta sobre tours y experiencias en Río de Janeiro. Escribe por correo o por WhatsApp.",
     channels: "Cómo contactarnos",
     email: "Correo",
     whatsapp: "WhatsApp",
@@ -150,6 +166,8 @@ export const contactCopy: Record<"pt" | "en" | "es", ContactCopy> = {
     submit: "Enviar mensaje",
     privacyNotice: "Usamos tus datos solo para responder a tu mensaje, como explica la",
     privacyLink: "Política de Privacidad",
+    formPausedHeading: "Escríbenos por WhatsApp o correo",
+    formPausedBody: "El envío de mensajes por este sitio no está disponible temporalmente. Usa WhatsApp o el correo para hablar con nuestro equipo.",
     sending: "Enviando...",
     summary: "Revisa los campos resaltados.",
     failureTitle: "No pudimos enviar tu mensaje ahora.",
