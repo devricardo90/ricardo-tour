@@ -9,6 +9,7 @@ import { sendTourRequestNotification } from "@/lib/services/tour-request-notific
 import { isFormSubmissionLimited } from "@/lib/rate-limit/server";
 import { buildStoredRequestMessage, normalizeValues, validateTourRequest, type TourRequestErrors } from "@/lib/tour-request";
 import { reportServerError } from "@/lib/observability/report";
+import { legalPagesAvailable } from "@/lib/legal/publication";
 
 // Guest tour request (RT-55): no account, no payment, no availability confirmation. It reuses the existing
 // ContactSubmission table (no schema change): the tour context travels in the structured message, and the
@@ -28,6 +29,8 @@ const LOCALES = ["pt", "en", "es"] as const;
 export async function submitTourRequest(formData: FormData): Promise<TourRequestState> {
   // Honeypot: real visitors never see or fill this field. Pretend success and store nothing.
   if (String(formData.get("company_website") ?? "").trim() !== "") return { ok: true };
+  // Owner 31/10/2026: no collection while the Privacy Policy is unavailable, even if the action is called directly.
+  if (!legalPagesAvailable()) return { ok: false, reason: "unavailable" };
 
   const h = await headers();
   if (await isFormSubmissionLimited(h, "tour_request")) return { ok: false, reason: "rate_limited" };

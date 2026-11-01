@@ -5,6 +5,8 @@ import type { TourRequestErrorCode } from "@/lib/tour-request";
 type RequestCopy = {
   heading: string;
   intro: string;
+  /** Owner 31/10/2026: intro while the form is hidden (Privacy Policy unavailable). */
+  introNoForm: string;
   name: string;
   email: string;
   phone: string;
@@ -31,6 +33,7 @@ export const tourRequestCopy: Record<"pt" | "en" | "es", RequestCopy> = {
   pt: {
     heading: "Solicite este passeio",
     intro: "Envie uma solicitação ou fale pelo WhatsApp. Nossa equipe retorna para combinar data e detalhes do passeio.",
+    introNoForm: "Fale pelo WhatsApp ou escreva por e-mail. Nossa equipe retorna para combinar data e detalhes do passeio.",
     name: "Nome",
     email: "E-mail",
     phone: "Telefone / WhatsApp",
@@ -66,6 +69,7 @@ export const tourRequestCopy: Record<"pt" | "en" | "es", RequestCopy> = {
   en: {
     heading: "Request this tour",
     intro: "Send a request or message us on WhatsApp. Our team will get back to you to arrange the date and details of the tour.",
+    introNoForm: "Message us on WhatsApp or write by e-mail. Our team will get back to you to arrange the date and details of the tour.",
     name: "Name",
     email: "Email",
     phone: "Phone / WhatsApp",
@@ -101,6 +105,7 @@ export const tourRequestCopy: Record<"pt" | "en" | "es", RequestCopy> = {
   es: {
     heading: "Solicita este tour",
     intro: "Envía una solicitud o escríbenos por WhatsApp. Nuestro equipo te responderá para coordinar la fecha y los detalles del tour.",
+    introNoForm: "Escríbenos por WhatsApp o por correo. Nuestro equipo te responderá para coordinar la fecha y los detalles del tour.",
     name: "Nombre",
     email: "Correo electrónico",
     phone: "Teléfono / WhatsApp",

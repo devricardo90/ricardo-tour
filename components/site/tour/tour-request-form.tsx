@@ -28,7 +28,7 @@ type Status = "idle" | "submitting" | "success" | "failed" | "rate_limited";
 // Guest tour request (RT-55): WhatsApp or a short request form. No account, no payment, no availability promise.
 // The server action is called inside try/catch (not via <form action>), so a network failure shows a calm error with
 // fallbacks and never a fake success; entered values are kept.
-export function TourRequestForm({ tripId, title, locale }: { tripId: string; title: string; locale: string }) {
+export function TourRequestForm({ tripId, title, locale, formAvailable = true }: { tripId: string; title: string; locale: string; formAvailable?: boolean }) {
   const t = resolveTourRequestCopy(locale);
   const uid = useId();
   const [values, setValues] = useState<TourRequestValues>(empty);
@@ -121,6 +121,17 @@ export function TourRequestForm({ tripId, title, locale }: { tripId: string; tit
       </p>
     </div>
   );
+
+  // Owner 31/10/2026: without an available Privacy Policy, no fields at all; WhatsApp and e-mail stay.
+  if (!formAvailable) {
+    return (
+      <div data-testid="tour-request-paused">
+        <h2 className="site-display text-[28px] font-medium leading-[1.1]">{t.heading}</h2>
+        <p className="mt-2 text-[14px] leading-[1.6] text-[var(--site-ink-muted)]">{t.introNoForm}</p>
+        {fallback}
+      </div>
+    );
+  }
 
   if (status === "success") {
     return (
