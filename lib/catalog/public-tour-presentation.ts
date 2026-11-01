@@ -30,7 +30,7 @@ export const PUBLIC_DESIGN_TRIP_IDS: ReadonlySet<string> = new Set([
 export const PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS: ReadonlySet<string> = new Set([]);
 
 /** Answers that list payment methods (RT-121: PIX, card terminal, cash) in PT/EN/ES. */
-export const PAYMENT_METHOD_TEXT = /PIX|maquininha|card terminal|terminal de pago|dinheiro|cash|efectivo/i;
+export const PAYMENT_METHOD_TEXT = /\bPIX\b|maquininha|card terminal|terminal de pago|dinheiro|\bcash\b|efectivo/i;
 
 const toLocale = (locale: string): Locale => (locale === "en" || locale === "es" ? locale : "pt");
 const statusIn = (locale: Locale, status: FactStatus, byLocale?: Partial<Record<Locale, FactStatus>>) => byLocale?.[locale] ?? status;

@@ -122,6 +122,11 @@ describe("Owner 31/10/2026: nothing describes Daniela or a payment method as ava
     for (const text of ["O sinal e o saldo podem ser pagos por PIX, cartão na maquininha ou dinheiro.", "paid by PIX, card (on a card terminal) or cash", "por PIX, tarjeta (en terminal de pago) o efectivo"]) {
       expect(PAYMENT_METHOD_TEXT.test(text), text).toBe(true);
     }
+    // Each method alone (a lone PIX or cash mention must be caught too), but not a word that merely contains it.
+    for (const text of ["Pagamento por PIX.", "Pay in cash at the start.", "Pago en efectivo.", "Em dinheiro."]) expect(PAYMENT_METHOD_TEXT.test(text), text).toBe(true);
+    for (const text of ["PIXEL", "cashew"]) expect(PAYMENT_METHOD_TEXT.test(text), text).toBe(false);
+    // No control characters in the pattern (a "\b" written through a non-raw string once became a backspace).
+    expect(PAYMENT_METHOD_TEXT.source).not.toMatch(/[\u0000-\u001f]/);
     for (const text of ["A reserva é confirmada com sinal de 30% do valor total. O site não processa pagamentos.", "Payments are not processed on this website.", "Los pagos no se procesan en este sitio web."]) {
       expect(PAYMENT_METHOD_TEXT.test(text), text).toBe(false);
     }
