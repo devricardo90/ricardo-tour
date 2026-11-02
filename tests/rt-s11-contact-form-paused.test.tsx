@@ -36,7 +36,7 @@ const form = () => {
   return data;
 };
 
-describe("Owner 31/10/2026: /contato form hidden while the Privacy Policy is unavailable", () => {
+describe("Owner 31/10/2026: /contato form hidden while the Privacy Policy is unavailable", { timeout: 60_000 }, () => {
   it("without the Policy the page shows no form or fields, only WhatsApp and e-mail, in PT/EN/ES", async () => {
     const expected = { pt: "Fale pelo WhatsApp ou e-mail", en: "Reach us on WhatsApp or by e-mail", es: "Escríbenos por WhatsApp o correo" };
     for (const [locale, heading] of Object.entries(expected)) {

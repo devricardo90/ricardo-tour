@@ -238,7 +238,8 @@ describe("Mobile sticky price bar never clips the price (Owner decision 21/10/20
   const barPrice = (html: string) => bar(html).match(/data-testid="tour-mobile-price">([^<]*)<span[^>]*>([^<]*)<\/span>/)?.slice(1, 3);
 
   it("shows TOUR-03 on two lines in the bar while the card keeps the full summary and condition", () => {
-    const expected = { pt: ["A partir de", "R$ 260/pessoa", "A partir de R$ 260 por pessoa"], en: ["From", "R$ 260/person", "From R$ 260 per person"], es: ["Desde", "R$ 260/persona", "Desde R$ 260 por persona"] } as const;
+    // Owner 02/11/2026: the compact line names its condition (group of 4 adults, 4 h); the page summary is unchanged.
+    const expected = { pt: ["Grupo de 4 adultos · 4 h", "R$ 260/pessoa", "A partir de R$ 260 por pessoa"], en: ["Group of 4 adults · 4 h", "R$ 260/person", "From R$ 260 per person"], es: ["Grupo de 4 adultos · 4 h", "R$ 260/persona", "Desde R$ 260 por persona"] } as const;
     for (const locale of ["pt", "en", "es"] as const) {
       const html = render(CENTRO_ID, locale);
       expect(barPrice(html), locale).toEqual([expected[locale][0], expected[locale][1]]);

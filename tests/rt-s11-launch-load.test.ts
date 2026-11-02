@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { LAUNCH_TRIP_IDS } from "@/lib/catalog/public-trips";
@@ -6,7 +6,7 @@ import { LAUNCH_LOAD_TRIP_IDS, launchLoadRecord, loadProblems, rocinhaLoadRecord
 import { PROTOTYPE_OFFER } from "@/lib/catalog/mock/tour-content.mock";
 import { buildPublicOffer } from "@/lib/catalog/public-tour-presentation";
 import { approveRecord, isMockRecord, toTourContentView } from "@/lib/catalog/tour-content";
-import { approvedTripCopy, tripCopyDiff } from "@/lib/catalog/launch-trip-copy";
+import { approvedTripCopy, withApprovedCopy } from "@/lib/catalog/launch-trip-copy";
 
 /**
  * Owner 01/11/2026: the release load covers the three launch tours (not only the Rocinha) and, once loaded and approved,
@@ -79,30 +79,44 @@ describe("Owner 01/11/2026: release load of the three launch tours", () => {
   });
 });
 
-describe("Owner 01/11/2026: plan A card copy and the order of the release steps", () => {
-  it("the approved card copy names each tour in PT/EN/ES and carries nothing of the old offer", () => {
+describe("Owner 01/11/2026, option R: approved card copy from code, no Trip write in the release", () => {
+  it("the approved card copy names each tour in PT/EN/ES, equals the loaded summary and carries nothing of the old offer", () => {
     for (const id of LAUNCH_LOAD_TRIP_IDS) {
       const copy = approvedTripCopy(id);
       for (const l of LOCALES) {
         for (const p of MUST_NAME[id]) expect(copy.title[l], `${id} ${l}`).toMatch(p);
+        expect(copy.title[l]).toBe(PROTOTYPE_OFFER[id].titleByLocale?.[l]);
+        expect(copy.description[l]).toBe(launchLoadRecord(id).summary?.[l]);
         expect(copy.title[l] + copy.description[l]).not.toMatch(LEGACY);
       }
     }
   });
 
-  it("tripCopyDiff flags the production rows and is empty once plan A is applied", () => {
-    expect(tripCopyDiff(TOUR_03, { title: { pt: "Confeitaria Colombo + City Tour Rio" }, description: { pt: "Explore o principal cartão-postal" } })).toHaveLength(6);
-    for (const id of LAUNCH_LOAD_TRIP_IDS) expect(tripCopyDiff(id, approvedTripCopy(id))).toEqual([]);
+  it("withApprovedCopy replaces the legacy production title and description; without approved copy the row is dropped", () => {
+    const legacy = { id: TOUR_03, title: { pt: "Confeitaria Colombo + City Tour Rio" }, description: { pt: "Explore o principal cartão-postal" }, priceCents: 24500 };
+    const row = withApprovedCopy(legacy)!;
+    expect(row.title).toEqual(approvedTripCopy(TOUR_03).title);
+    expect(row.description).toEqual(approvedTripCopy(TOUR_03).description);
+    expect(row.priceCents).toBe(24500); // untouched; the price stays behind its own publication gate
+    expect(JSON.stringify(row.title) + JSON.stringify(row.description)).not.toMatch(LEGACY);
+    expect(withApprovedCopy({ ...legacy, id: TOUR_04 })).toBeNull();
   });
 
-  it("the scripts load all three tours, refuse hosted databases, and approve only after plan A with an explicit Owner flag", () => {
+  it("the plan A step is gone: no script writes Trip, the load and approval scripts touch only content tables, all refuse hosted databases", () => {
+    expect(existsSync(resolve(process.cwd(), "scripts/s11-launch-trip-copy.ts"))).toBe(false);
     const load = read("scripts/rt-119-load-content.ts");
     expect(load).toContain("launchLoadRecord(id)");
     expect(load).toContain("LAUNCH_LOAD_TRIP_IDS");
     expect(load).not.toContain("rocinhaLoadRecord");
     const approve = read("scripts/s11-approve-launch-content.ts");
-    expect(approve).toContain("tripCopyDiff(id, trip).length");
+    expect(approve).not.toMatch(/tripCopyDiff|s11-launch-trip-copy/);
     expect(approve).toContain("--confirm-owner-approval");
-    for (const file of ["scripts/rt-119-load-content.ts", "scripts/s11-launch-trip-copy.ts", "scripts/s11-approve-launch-content.ts"]) expect(read(file)).toMatch(/Refusing to run: only a local throw-away database/);
+    expect(approve).toContain("Trip public fields changed during the approval");
+    for (const file of ["scripts/rt-119-load-content.ts", "scripts/s11-approve-launch-content.ts"]) {
+      expect(read(file)).toMatch(/Refusing to run: only a local throw-away database/);
+      expect(read(file)).not.toMatch(/\.trip\.(update|upsert|create|delete)/);
+    }
+    expect(read("lib/catalog/content-load.ts")).not.toMatch(/\.trip\.(update|upsert|create|delete)/);
+    expect(read("lib/catalog/content-approval.ts")).not.toMatch(/\.trip\.(update|upsert|create|delete)/);
   });
 });

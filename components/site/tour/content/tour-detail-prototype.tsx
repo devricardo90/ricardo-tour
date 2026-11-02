@@ -1,5 +1,6 @@
 import { MessageCircle } from "lucide-react";
 import type { TourContentView } from "@/lib/catalog/tour-content";
+import { withoutPaymentSentences } from "@/lib/catalog/payment-text";
 import { resolveTourDetailCopy } from "@/components/site/tour/tour-detail-copy";
 import { resolveTourContentCopy } from "@/components/site/tour/content/tour-content-copy";
 import {
@@ -76,13 +77,15 @@ export type PrototypeOfferView = {
   pricingNote?: Localized;
   /** Public page only: the Owner authorized publishing the approved table (lib/catalog/public-tour-presentation.ts). */
   approvedPricingPublic?: boolean;
+  /** Public page only: payment methods may be named (paid bookings open). False/absent = such sentences are dropped. */
+  paymentMethodsPublic?: boolean;
   routeOptions?: ReadonlyArray<ApprovedRouteForReview>;
   translationStatusNotice?: Localized;
   priceSummary?: Localized;
   /** Condition shown right under the summary price (e.g. which group size and duration the "from" price applies to). */
   priceCondition?: Localized;
   priceStatusByLocale?: Partial<Record<"pt" | "en" | "es", ReviewStatus>>;
-  /** Two-line price for the mobile sticky bar (e.g. "A partir de" / "R$ 260/pessoa"); the card keeps the full summary. */
+  /** Two-line price for the mobile sticky bar (e.g. "Grupo de 4 adultos · 4 h" / "R$ 260/pessoa"); the card keeps the full summary. */
   mobilePriceLines?: { lead: Localized; value: Localized };
   reviewBannerNotice?: Localized;
   requestFlowNotice?: Localized;
@@ -127,6 +130,10 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
   const localeKey = (locale === "en" || locale === "es" ? locale : "pt") as "pt" | "en" | "es";
   const hasVisibleApprovedPricing = Boolean(offer.approvedPricing && ((reviewMode && showProvisionalPrices) || offer.approvedPricingPublic));
   const priceValue = hasVisibleApprovedPricing ? localize(offer.priceSummary) || (offer.noPortugueseFallback ? "" : "Consulte a tabela por duração e tamanho do grupo") : offer.priceCents === null ? localize(offer.priceLabel) || t.pricePending : formatPriceBRL(offer.priceCents);
+  // Public page (Owner 01/11/2026): the approved table without the lab notices; payment methods only once bookings open.
+  const publicPricing = Boolean(!reviewMode && offer.approvedPricingPublic);
+  const rawPricingNote = offer.approvedPricing ? (offer.pricingNote ? localize(offer.pricingNote) : t.approvedPricingNote.replace("{price}", formatPriceBRL(offer.approvedPricing.additionalHourPerGroupCents ?? 0))) : "";
+  const pricingNoteText = publicPricing && !offer.paymentMethodsPublic ? withoutPaymentSentences(rawPricingNote) : rawPricingNote;
   const priceStatus: ReviewStatus = hasVisibleApprovedPricing ? (offer.priceStatusByLocale?.[localeKey] ?? "CONFIRMED") : offer.priceCents === null ? "PENDING" : "CONFIRMED";
   const languages = content.languages.map((code) => t.language[code] ?? code.toUpperCase()).join(" · ");
   // Review chips only (lab): mock stays MOCK; real content uses the offer's editorial status (Owner-approved texts can
@@ -266,9 +273,9 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                 ) : <TourItinerary content={content} locale={locale} status={s(contentStatus)} />}
                 {hasVisibleApprovedPricing && offer.approvedPricing ? (
                   <section aria-labelledby="tour-pricing-heading" data-testid="tour-pricing-section">
-                    <h2 id="tour-pricing-heading" className="site-display flex flex-wrap items-center gap-3 text-[30px] font-medium leading-[1.1] text-[var(--site-on-dark,#F4F0E8)] md:text-[34px]">{t.pricingSectionTitle} <StatusBadge status={priceStatus} locale={locale} /></h2>
+                    <h2 id="tour-pricing-heading" className="site-display flex flex-wrap items-center gap-3 text-[30px] font-medium leading-[1.1] text-[var(--site-on-dark,#F4F0E8)] md:text-[34px]">{t.pricingSectionTitle} {reviewMode ? <StatusBadge status={priceStatus} locale={locale} /> : null}</h2>
                     <div className="mt-5 rounded-lg border border-[var(--site-gold,#C8A86B)]/50 bg-[var(--site-gold,#C8A86B)]/10 p-3" data-testid="tour-approved-prices" role="note">
-                      <p className="text-[12px] font-bold tracking-[0.04em]">{t.approvedTablePreview}</p>
+                      {publicPricing ? null : <p className="text-[12px] font-bold tracking-[0.04em]">{t.approvedTablePreview}</p>}
                       {offer.approvedPricing.durations.map((duration) => (
                         <div key={duration.hours} className="mt-3 overflow-x-auto">
                           <p className="mb-1 text-[13px] font-semibold">{localize(duration.label) || (offer.noPortugueseFallback ? "" : duration.label.pt)}</p>
@@ -278,8 +285,8 @@ export function TourDetailPrototype({ offer, content, locale, reviewMode, showPr
                           </table>
                         </div>
                       ))}
-                      <p className="mt-3 text-[12px] leading-[1.45]">{offer.pricingNote ? localize(offer.pricingNote) : t.approvedPricingNote.replace("{price}", formatPriceBRL(offer.approvedPricing.additionalHourPerGroupCents ?? 0))}</p>
-                      <p className="mt-2 text-[11px] leading-[1.4]">{t.publicationGateNote}</p>
+                      {pricingNoteText ? <p className="mt-3 text-[12px] leading-[1.45]" data-testid="tour-pricing-note">{pricingNoteText}</p> : null}
+                      {publicPricing ? null : <p className="mt-2 text-[11px] leading-[1.4]">{t.publicationGateNote}</p>}
                     </div>
                   </section>
                 ) : null}

@@ -384,11 +384,11 @@ export type PrototypeOffer = {
   children?: { value: LocalizedText; status: FactStatus };
   transport?: { value: LocalizedText; status: FactStatus };
   requestViaWhatsapp?: boolean;
-  /** Owner-approved price table, exposed only in the local review lab. */
+  /** Owner-approved price table: public only for the tours in PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS (Owner 01/11/2026). */
   approvedPricing?: {
     durations: ReadonlyArray<{ hours: number; label: LocalizedText; prices: ReadonlyArray<{ participants: number; perPersonCents: number; totalCents: number }> }>;
     additionalHourPerGroupCents?: number;
-    /** Always false until the Owner authorizes price publication (PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS). */
+    /** Not a publication switch: public display is decided only by PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS. */
     publishable: false;
   };
   /** Tour-specific note under the approved table (TOUR-01/02); TOUR-03 uses the shared note with its extra-hour price. */
@@ -442,8 +442,9 @@ const ROCINHA_VIDEO: PrototypeVideo = {
 /**
  * RT-116: Pão de Açúcar clip — web version of the Owner's version A window (IMG_1157.MOV 41–58 s, 17 s), poster = 51 s
  * frame. The edited file "versão A" is NOT in the Drive (only version B is): this is the web rendition made from the
- * original with the Rocinha pipeline (HDR→SDR, no audio, metadata incl. GPS removed). Not approved until the Owner
- * reviews playback.
+ * original with the Rocinha pipeline (HDR→SDR, no audio, metadata incl. GPS removed). Owner, 01/11/2026: publication on
+ * the TOUR-01 page expressly authorized. The public page still shows it only when its media row passes the
+ * rights/publication gate (RT-113/RT-119).
  */
 const PAO_VIDEO: PrototypeVideo = {
   title: { pt: "O Rio visto do Pão de Açúcar", en: "Rio seen from Sugarloaf Mountain", es: "Río visto desde el Pan de Azúcar" },
@@ -456,7 +457,7 @@ const PAO_VIDEO: PrototypeVideo = {
     en: "From the top of Sugarloaf Mountain: Botafogo Bay, the city and Christ the Redeemer in the distance.",
     es: "Desde lo alto del Pan de Azúcar: la Bahía de Botafogo, la ciudad y el Cristo Redentor a lo lejos.",
   },
-  status: "PROVISIONAL",
+  status: "CONFIRMED",
   rightsNote: "Owner, 28/10/2026: own video, authorised for commercial use (declaration recorded in RT-116). Owner, 17/10/2026: own video IMG_1157.MOV (Drive MIDIAS/01_CRISTO_PAO_DE_ACUCAR_SELARON/ORIGINAIS), window 41–58 s selected by the Owner; no people in the window; original audio not used.",
 };
 
@@ -516,13 +517,13 @@ function rocinhaOffer(base: PrototypeOffer): PrototypeOffer {
     groupSize: { value: ROCINHA_GROUP_SIZE, status: "CONFIRMED" },
     minAge: { value: ROCINHA_MIN_AGE, status: "CONFIRMED" },
     whatsappMessage: ROCINHA_WHATSAPP_MESSAGE,
-    // RT-121 table approved 28/10/2026 (registry TOUR-02); lab only until the Owner authorizes price publication.
+    // RT-121 table approved 28/10/2026 (registry TOUR-02); public display authorized by the Owner on 01/11/2026.
     approvedPricing: ROCINHA_APPROVED_PRICING,
     pricingNote: ROCINHA_PRICING_NOTE,
     priceSummary: ROCINHA_PRICE_SUMMARY,
     priceCondition: ROCINHA_PRICE_CONDITION,
-    // Values approved; the summary wording follows the TOUR-03 pattern and waits for the Owner's text review.
-    priceStatusByLocale: { pt: "PROVISIONAL", en: "PROVISIONAL", es: "PROVISIONAL" },
+    // Values approved 28/10/2026, texts approved in the Owner gate of 30/10/2026, public display authorized 01/11/2026.
+    priceStatusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" },
     mobilePriceLines: {
       // Mobile bar: the per-person value always next to its condition (group of 4 adults).
       lead: { pt: "Grupo de 4 adultos", en: "Group of 4 adults", es: "Grupo de 4 adultos" },
@@ -564,12 +565,13 @@ function cristoOffer(base: PrototypeOffer): PrototypeOffer {
     },
     whatsappMessage: CRISTO_WHATSAPP_MESSAGE,
     priceLabel: CRISTO_PRICE_LABEL,
-    // RT-121 table approved 28/10/2026 (registry TOUR-01); lab only until the Owner authorizes price publication.
+    // RT-121 table approved 28/10/2026 (registry TOUR-01); public display authorized by the Owner on 01/11/2026.
     approvedPricing: CRISTO_APPROVED_PRICING,
     pricingNote: CRISTO_PRICING_NOTE,
     priceSummary: CRISTO_PRICE_SUMMARY,
     priceCondition: CRISTO_PRICE_CONDITION,
-    priceStatusByLocale: { pt: "PROVISIONAL", en: "PROVISIONAL", es: "PROVISIONAL" },
+    // Values approved 28/10/2026, texts approved in the Owner gate of 30/10/2026, public display authorized 01/11/2026.
+    priceStatusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" },
     mobilePriceLines: {
       lead: { pt: "Grupo de 4 adultos", en: "Group of 4 adults", es: "Grupo de 4 adultos" },
       value: { pt: "R$ 650/pessoa", en: "R$ 650/person", es: "R$ 650/persona" },
@@ -636,7 +638,8 @@ function centroOffer(base: PrototypeOffer): PrototypeOffer {
     priceStatusByLocale: { pt: "CONFIRMED", en: "CONFIRMED", es: "CONFIRMED" },
     // Mobile sticky bar (Owner, 21/10/2026): two lines so the amount and "per person" are never cut.
     mobilePriceLines: {
-      lead: { pt: "A partir de", en: "From", es: "Desde" },
+      // Owner 02/11/2026: keep the per-person price, but always with its condition (group of 4 adults, 4-hour tour).
+      lead: { pt: "Grupo de 4 adultos · 4 h", en: "Group of 4 adults · 4 h", es: "Grupo de 4 adultos · 4 h" },
       value: { pt: "R$ 260/pessoa", en: "R$ 260/person", es: "R$ 260/persona" },
     },
     reviewBannerNotice: {

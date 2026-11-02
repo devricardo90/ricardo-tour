@@ -1,6 +1,8 @@
 import { PROTOTYPE_OFFER, type FactStatus, type PrototypeOffer } from "@/lib/catalog/mock/tour-content.mock";
 import { getTourContent, type LocalizedText, type TourContentView } from "@/lib/catalog/tour-content";
 import { legalPagesPublished } from "@/lib/legal/publication";
+import { PAID_BOOKINGS_OPEN, PAYMENT_METHOD_TEXT, withoutPaymentSentences } from "@/lib/catalog/payment-text";
+import { PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS } from "@/lib/catalog/price-on-request";
 import type { PrototypeOfferView } from "@/components/site/tour/content/tour-detail-prototype";
 
 /**
@@ -24,13 +26,10 @@ export const PUBLIC_DESIGN_TRIP_IDS: ReadonlySet<string> = new Set([
 ]);
 
 /**
- * Tours whose Owner-approved fare table may be shown publicly. EMPTY on purpose: commercial approval of a table is not a
- * publication authorization (RT-120). Until the Owner authorizes it, the public price reads "Orçamento sob consulta".
+ * Tours whose Owner-approved fare table may be shown publicly (Owner 01/11/2026: the three launch tours). Defined in
+ * lib/catalog/price-on-request.ts so the cards and this page share one list.
  */
-export const PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS: ReadonlySet<string> = new Set([]);
-
-/** Answers that list payment methods (RT-121: PIX, card terminal, cash) in PT/EN/ES. */
-export const PAYMENT_METHOD_TEXT = /\bPIX\b|maquininha|card terminal|terminal de pago|dinheiro|\bcash\b|efectivo/i;
+export { PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS, PAYMENT_METHOD_TEXT };
 
 const toLocale = (locale: string): Locale => (locale === "en" || locale === "es" ? locale : "pt");
 const statusIn = (locale: Locale, status: FactStatus, byLocale?: Partial<Record<Locale, FactStatus>>) => byLocale?.[locale] ?? status;
@@ -46,7 +45,7 @@ function confirmedFact<T extends { value: LocalizedText | null; status: FactStat
 }
 
 /** Pure presentation gate: the public offer for one locale, or null when the hero is not confirmed for that locale. */
-export function buildPublicOffer(source: PrototypeOffer, locale: string, content: TourContentView, options: { pricePublicationAuthorized: boolean }): PrototypeOfferView | null {
+export function buildPublicOffer(source: PrototypeOffer, locale: string, content: TourContentView, options: { pricePublicationAuthorized: boolean; paymentMethodsPublic?: boolean }): PrototypeOfferView | null {
   const l = toLocale(locale);
   const title = source.titleByLocale ?? { pt: source.title };
   if (statusIn(l, source.titleStatus, source.titleStatusByLocale) !== "CONFIRMED" || !has(title, l)) return null;
@@ -63,6 +62,11 @@ export function buildPublicOffer(source: PrototypeOffer, locale: string, content
     : null;
 
   const pricePublic = Boolean(options.pricePublicationAuthorized && source.approvedPricing && source.priceStatusByLocale?.[l] === "CONFIRMED" && has(source.priceSummary, l));
+  // Payment methods stay out of the public price note while paid bookings are closed (Owner 31/10/2026).
+  const paymentMethodsPublic = Boolean(options.paymentMethodsPublic);
+  const pricingNote = source.pricingNote && has(source.pricingNote, l)
+    ? { [l]: paymentMethodsPublic ? (source.pricingNote[l] ?? "").trim() : withoutPaymentSentences(source.pricingNote[l] ?? "") }
+    : undefined;
 
   return {
     title: (title[l] ?? "").trim(),
@@ -93,7 +97,7 @@ export function buildPublicOffer(source: PrototypeOffer, locale: string, content
     requestFlowMode: source.requestFlowMode,
     noPortugueseFallback: true,
     ...(pricePublic
-      ? { approvedPricing: source.approvedPricing, approvedPricingPublic: true, pricingNote: source.pricingNote ? only(source.pricingNote, l) : undefined, priceSummary: only(source.priceSummary, l), priceCondition: only(source.priceCondition, l), priceStatusByLocale: { [l]: "CONFIRMED" as const }, mobilePriceLines: source.mobilePriceLines && has(source.mobilePriceLines.value, l) ? { lead: only(source.mobilePriceLines.lead, l), value: only(source.mobilePriceLines.value, l) } : undefined }
+      ? { approvedPricing: source.approvedPricing, approvedPricingPublic: true, paymentMethodsPublic, pricingNote, priceSummary: only(source.priceSummary, l), priceCondition: only(source.priceCondition, l), priceStatusByLocale: { [l]: "CONFIRMED" as const }, mobilePriceLines: source.mobilePriceLines && has(source.mobilePriceLines.value, l) ? { lead: only(source.mobilePriceLines.lead, l), value: only(source.mobilePriceLines.value, l) } : undefined }
       : {}),
   };
 }
@@ -119,8 +123,9 @@ export async function getPublicTourPresentation(tripId: string, locale: string):
   if (!content || content.isMock || !content.approvalValid) return null;
   // Owner 31/10/2026: until paid bookings open (separate PIX sprint), the informative catalog names no payment method.
   // The approved FAQ text is kept as is; only the answers that list methods are left out of the public page.
-  const bookingsOpen = PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS.has(tripId) && legalPagesPublished();
+  // Paid bookings: needs the separate PIX sprint (PAID_BOOKINGS_OPEN), not only the legal publication.
+  const bookingsOpen = PAID_BOOKINGS_OPEN && PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS.has(tripId) && legalPagesPublished();
   if (!bookingsOpen) content = { ...content, faq: content.faq.filter((item) => !PAYMENT_METHOD_TEXT.test(item.answer)) };
-  const offer = buildPublicOffer(source, locale, content, { pricePublicationAuthorized: PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS.has(tripId) });
+  const offer = buildPublicOffer(source, locale, content, { pricePublicationAuthorized: PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS.has(tripId), paymentMethodsPublic: bookingsOpen });
   return offer ? { offer, content } : null;
 }

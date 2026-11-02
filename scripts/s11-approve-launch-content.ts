@@ -3,20 +3,20 @@
  * (content approved in the Owner gate of 30/10/2026; EN/ES confirmed on 01/11/2026). Uses the database approval act
  * (approveTourContent): content fingerprint + publication authorization of the media whose rights are verified now.
  *
- * Refuses to approve a tour unless:
- *  - its content is loaded (scripts/rt-119-load-content.ts) and validates;
- *  - its Trip row already holds the approved card copy (plan A, scripts/s11-launch-trip-copy.ts). Approving first would
- *    be invalidated by the later Trip change, so the order is enforced here.
+ * Refuses to approve a tour unless its content is loaded (scripts/rt-119-load-content.ts) and validates.
+ * Option R (Owner 01/11/2026): the release never writes Trip.title/Trip.description (the public catalog shows the
+ * approved card copy from code), so there is no Trip step before the approval. This script never writes Trip either:
+ * it prints a fingerprint of the Trip public fields before and after, and the run fails if they differ.
  * Default is a DRY RUN (what would be approved, no write). Writing needs `--apply --confirm-owner-approval`.
  * Refuses any database other than a local throw-away one (localhost:5433/rt_s11_* or rt119_*): the hosted approval act
  * belongs to the release procedure and needs the Owner's written authorization.
  * Usage: DATABASE_URL=<local rt_s11_*> npx tsx scripts/s11-approve-launch-content.ts [--apply --confirm-owner-approval]
  */
+import { createHash } from "node:crypto";
 import { prisma } from "@/lib/prisma";
 import { LAUNCH_LOAD_TRIP_IDS } from "@/lib/catalog/content-load";
 import { approveTourContent } from "@/lib/catalog/content-approval";
 import { contentFingerprint, loadTourContentRecord, validateTourContent } from "@/lib/catalog/tour-content";
-import { tripCopyDiff } from "@/lib/catalog/launch-trip-copy";
 import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
 const url = new URL(process.env.DATABASE_URL ?? "");
@@ -30,10 +30,9 @@ assertDatabaseAccess({ operation: apply ? "write" : "read", label: "scripts/s11-
 async function main() {
   const problems: string[] = [];
   for (const id of LAUNCH_LOAD_TRIP_IDS) {
-    const trip = await prisma.trip.findUnique({ where: { id }, select: { title: true, description: true } });
+    const trip = await prisma.trip.findUnique({ where: { id }, select: { id: true } });
     const record = await loadTourContentRecord(id);
     if (!trip) problems.push(`${id}: Trip row missing`);
-    else if (tripCopyDiff(id, trip).length) problems.push(`${id}: Trip copy is not the approved copy yet — run scripts/s11-launch-trip-copy.ts --apply first`);
     if (!record) problems.push(`${id}: content not loaded — run scripts/rt-119-load-content.ts --apply first`);
     else {
       const issues = validateTourContent({ ...record, status: "DRAFT", approvedAt: null, approvedContentHash: null });
@@ -51,10 +50,21 @@ async function main() {
     console.log("dry-run: ready to approve (run with --apply --confirm-owner-approval)");
     return;
   }
+  const before = await tripPublicFieldsHash();
   for (const id of LAUNCH_LOAD_TRIP_IDS) {
     const result = await approveTourContent(prisma, id);
     console.log(`approved ${id}: fingerprint ${result.fingerprint}, media authorized ${result.authorizedMedia}, not authorized ${result.unauthorizedMedia}`);
   }
+  const after = await tripPublicFieldsHash();
+  console.log(`Trip public fields of the launch tours: ${before} -> ${after}`);
+  if (before !== after) throw new Error("Trip public fields changed during the approval (option R forbids any Trip write)");
+}
+
+/** Hash of the legacy Trip columns the current production site reads (title, description, image, price, highlights,
+ * location) plus updatedAt, so any write to these rows during the approval is detected (the run then fails). */
+async function tripPublicFieldsHash() {
+  const rows = await prisma.trip.findMany({ where: { id: { in: [...LAUNCH_LOAD_TRIP_IDS] } }, orderBy: { id: "asc" }, select: { id: true, title: true, description: true, imageUrl: true, priceCents: true, highlights: true, location: true, updatedAt: true } });
+  return createHash("sha256").update(JSON.stringify(rows)).digest("hex").slice(0, 16);
 }
 
 main()

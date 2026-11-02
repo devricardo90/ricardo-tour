@@ -11,6 +11,7 @@ import { normalizeTripImage } from "@/lib/image-utils";
 import { getLocalizedField } from "@/lib/localized-field";
 import { asLocalizedText } from "@/lib/types";
 import { hasCompletePartnerLabel } from "@/lib/catalog/operation-type";
+import { withApprovedCopy } from "@/lib/catalog/launch-trip-copy";
 
 /**
  * Initial launch catalog (Owner decision, RT-53), in display order. Canonical database ids, verified against the database:
@@ -139,7 +140,7 @@ function byLaunchOrder<T extends { id: string }>(trips: T[]) {
 /**
  * RT-116 (Owner, 28/10/2026): the catalog rows still point to legacy /images/trips covers of unknown origin, which must
  * never be shown again. The three own tours use their own OWNER_ATTESTED cover instead (same files as their galleries).
- * Code only: the rows are not changed (no hosted write); RT-119 replaces Trip.imageUrl when the catalog is loaded.
+ * Code only: the rows are not changed (no hosted write; option R, Owner 01/11/2026, keeps it that way in the release).
  */
 export const OWN_TOUR_COVERS: Readonly<Record<string, string>> = {
   cmlhxkpy9000028zq27rhytew: "/media/tours/cristo-pao-selaron/pao-01-IMG_1162-mirante.webp",
@@ -163,7 +164,15 @@ export async function getPublicTrips() {
     where: { id: { in: [...LAUNCH_TRIP_IDS] }, isPublished: true },
     include: { partner: { select: { status: true, publicLabel: true } } },
   });
-  return byLaunchOrder(rows.filter((row) => evaluatePublicTrip(row).included).map(withOwnCover));
+  return byLaunchOrder(rows.filter((row) => evaluatePublicTrip(row).included).map(toPublicRow).filter((row) => row !== null));
+}
+
+/**
+ * Option R (Owner 01/11/2026): what visitors see of a launch tour row: its own cover and its approved name and summary,
+ * never the legacy Trip.imageUrl/title/description (the rows themselves are not changed by the release).
+ */
+function toPublicRow<T extends { id: string; title: unknown; description?: unknown; imageUrl?: string | null }>(row: T): T | null {
+  return withApprovedCopy(withOwnCover(row));
 }
 
 /** One public trip by id, or null when it is not part of the public catalog (RT-54 uses this to 404 hidden records). */
@@ -177,7 +186,7 @@ export async function getPublicTripById(id: string) {
       partner: { select: { status: true, publicLabel: true } },
     },
   });
-  return row && evaluatePublicTrip(row).included ? withOwnCover(row) : null;
+  return row && evaluatePublicTrip(row).included ? toPublicRow(row) : null;
 }
 
 export type TripBrowseParams = {

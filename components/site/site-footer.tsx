@@ -8,6 +8,7 @@ import { isConciergeEnabled } from "@/lib/ai-concierge/launch";
 import { navHashes, resolveSiteChromeCopy, type AnchorMode } from "@/components/site/site-chrome-copy";
 import { PUBLIC_CONTACT } from "@/lib/public-contact";
 import { LEGAL_PATHS, legalPagesAvailable } from "@/lib/legal/publication";
+import { companyIdentificationLine } from "@/lib/legal/company-identification";
 
 // Public-site footer (RT-52, generalized from the RT-35 Home footer): charcoal closing band.
 // Verified destinations only: Home section links, the /contato route, the canonical email and WhatsApp from
@@ -21,6 +22,7 @@ const headingClass = "text-[12px] font-medium uppercase tracking-[0.16em] text-[
 export function SiteFooter({ locale, anchorMode = "home", homeHref = "#top-of-home" }: { locale: string; anchorMode?: AnchorMode; homeHref?: string }) {
   const t = resolveSiteChromeCopy(locale);
   const f = t.footer;
+  const companyIdentification = companyIdentificationLine();
   const links: { label: string; hash: string; href?: string | null; action?: "concierge" }[] = [
     { label: t.nav.experiences, hash: navHashes.experiences },
     { label: f.plan, hash: navHashes.plan, href: t.planPath },
@@ -105,6 +107,10 @@ export function SiteFooter({ locale, anchorMode = "home", homeHref = "#top-of-ho
             </p>
           </div>
         </div>
+        {/* Supplier identification (Decreto 7.962/2013, art. 2º): rendered only once the address is confirmed (Q1). */}
+        {companyIdentification ? (
+          <p data-testid="footer-company-identification" className="mt-2 text-[12px] text-[var(--site-on-dark-subtle,#9DA3A5)]">{companyIdentification}</p>
+        ) : null}
       </div>
     </footer>
   );

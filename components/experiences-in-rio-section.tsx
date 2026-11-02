@@ -1,5 +1,6 @@
 import { getPublicTrips } from "@/lib/catalog/public-trips";
 import { priceOnRequest } from "@/lib/catalog/price-on-request";
+import { approvedTripLocation } from "@/lib/catalog/launch-trip-copy";
 import { isCityOnly, parseDescription } from "@/lib/catalog/trip-presentation";
 import { Link } from "@/i18n/routing";
 import { OptimizedImage } from "@/components/ui/optimized-image";
@@ -93,6 +94,7 @@ export async function ExperiencesInRioSection({ locale }: ExperiencesInRioSectio
               );
               const price = (trip.priceCents / 100).toFixed(2).replace(".", ",");
               const onRequest = priceOnRequest(trip.id, locale);
+              const place = approvedTripLocation(trip.id, locale) ?? (isCityOnly(trip.location, trip.city) ? null : trip.location);
 
               return (
                 <li key={trip.id} className="w-[82%] shrink-0 snap-start md:w-auto md:shrink">
@@ -117,10 +119,10 @@ export async function ExperiencesInRioSection({ locale }: ExperiencesInRioSectio
                           <p className="mb-2 text-xs font-medium uppercase tracking-[0.14em] text-[#C8A86B]">{category}</p>
                         ) : null}
                         <h3 className="text-[20px] font-semibold leading-[1.1] text-[#F4F0E8]">{title}</h3>
-                        {!isCityOnly(trip.location, trip.city) ? (
+                        {place ? (
                           <div className="mt-2 flex items-center gap-1 text-[13px] text-[#9DA3A5]">
                             <MapPin className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
-                            <span>{trip.location}</span>
+                            <span>{place}</span>
                           </div>
                         ) : null}
                       </div>

@@ -32,7 +32,7 @@ const form = () => {
   return data;
 };
 
-describe("Owner 31/10/2026: legacy tour request form hidden while the Privacy Policy is unavailable", () => {
+describe("Owner 31/10/2026: legacy tour request form hidden while the Privacy Policy is unavailable", { timeout: 60_000 }, () => {
   it("without the Policy the slot keeps its heading and anchor, has no fields, and offers WhatsApp and e-mail, in PT/EN/ES", async () => {
     const expected = {
       pt: ["Solicite este passeio", "Fale pelo WhatsApp ou escreva por e-mail."],

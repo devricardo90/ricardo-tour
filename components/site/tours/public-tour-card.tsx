@@ -6,6 +6,7 @@ import { getLocalizedField } from "@/lib/localized-field";
 import { asLocalizedText } from "@/lib/types";
 import { displayLocation, formatPriceBRL, formatTripDuration, parseTripDescription } from "@/lib/catalog/trip-presentation";
 import { priceOnRequest } from "@/lib/catalog/price-on-request";
+import { approvedTripLocation } from "@/lib/catalog/launch-trip-copy";
 import type { ToursCopy } from "@/components/site/tours/tours-copy";
 
 type CardTrip = {
@@ -25,7 +26,7 @@ export function PublicTourCard({ trip, locale, t, priority = false }: { trip: Ca
   const title = getLocalizedField<string>(asLocalizedText(trip.title), locale).trim();
   const onRequest = priceOnRequest(trip.id, locale);
   const { summary, duration } = parseTripDescription(getLocalizedField<string>(asLocalizedText(trip.description), locale) ?? "");
-  const place = displayLocation(trip.location, trip.city);
+  const place = approvedTripLocation(trip.id, locale) ?? displayLocation(trip.location, trip.city);
   const durationLabel = formatTripDuration(duration, locale);
 
   return (

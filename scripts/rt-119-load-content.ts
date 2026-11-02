@@ -6,7 +6,7 @@
  * `--allow-replace-approved` is required to overwrite OWNER_APPROVED content (the approval is then invalidated).
  * Refuses any database other than a local throw-away one (localhost:5433/rt119_* or rt_s11_*): running against the hosted
  * database is NOT authorized (it belongs to the release procedure: backup, dry run reviewed by the Owner, written
- * authorization; see docs/ops/rt-s11-catalog-release-procedure.md — the Trip copy (plan A) runs BEFORE the approval act).
+ * authorization; see docs/ops/rt-s11-catalog-release-procedure.md). Writes only the RT-113 content tables, never Trip.
  * Usage: DATABASE_URL=<local rt119_*|rt_s11_*> npx tsx scripts/rt-119-load-content.ts [--apply] [--trip=<id>] [--allow-replace-approved]
  */
 import { prisma } from "@/lib/prisma";

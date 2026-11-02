@@ -1,8 +1,23 @@
+import { PROTOTYPE_OFFER } from "@/lib/catalog/mock/tour-content.mock";
+
 /**
- * The legacy Trip.priceCents value is not authorized for public display for any of the four own-catalog tours. Local
- * cards/details therefore show a quote-on-request label and JSON-LD omits Offer pricing. This does not replace the
- * commercial decisions in the Manual, modify Trip rows, or authorize publication.
+ * Owner, 01/11/2026: public display of the approved group fares of the three launch tours is expressly authorized
+ * (RT-121 tables of 28/10/2026, texts approved in the Owner gate of 30/10/2026). The fares come only from the approved
+ * tables in code (PROTOTYPE_OFFER.approvedPricing), never from Trip.priceCents. This does NOT open bookings or payments:
+ * the public request form also needs the legal documents published (lib/booking/public-request.ts) and the legacy booking
+ * API stays blocked (BOOKING_PRICE_NOT_APPROVED_TRIP_IDS).
  * LOCAL ONLY: reaching production requires the Owner's release authorization (main auto-deploys production).
+ */
+export const PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS: ReadonlySet<string> = new Set([
+  "cmlhxkpy9000028zq27rhytew", // TOUR-01 Cristo Redentor + Selarón + Pão de Açúcar
+  "cmli1a6im000034zqqzc9sppb", // TOUR-02 Rocinha
+  "cmlibniq40000z4zqkbujnutt", // TOUR-03 Centro Histórico e Cultural
+]);
+
+/**
+ * The legacy Trip.priceCents value is not authorized for public display for any of the four own-catalog tours: no card,
+ * detail, price filter or JSON-LD Offer ever uses it. The three launch tours show their approved fare instead
+ * (approvedPublicPrice); a tour without one shows a quote-on-request label. This does not modify Trip rows.
  */
 export const PRICE_ON_REQUEST_TRIP_IDS: ReadonlySet<string> = new Set([
   "cmlhxkpy9000028zq27rhytew", // TOUR-01 Cristo Redentor + Pão de Açúcar
@@ -43,8 +58,30 @@ export function publicOfferPriceCents(tripId: string, priceCents: number): numbe
   return PRICE_ON_REQUEST_TRIP_IDS.has(tripId) ? null : priceCents;
 }
 
-/** Returns the quote-on-request texts for a tour whose price must not be shown, or null when the stored price applies. */
+type Lang = keyof typeof LABELS;
+const toLang = (locale: string): Lang => (locale === "en" || locale === "es" ? locale : "pt");
+
+/**
+ * The approved fare line for a card (the Owner-approved compact lines, e.g. "Grupo de 4 adultos" / "R$ 650/pessoa"), or
+ * null when the tour's public price is not authorized or not confirmed in that language. Source: code tables only.
+ */
+export function approvedPublicPrice(tripId: string, locale: string): { label: string; value: string } | null {
+  if (!PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS.has(tripId)) return null;
+  const offer = PROTOTYPE_OFFER[tripId];
+  const l = toLang(locale);
+  const label = offer?.mobilePriceLines?.lead[l]?.trim();
+  const value = offer?.mobilePriceLines?.value[l]?.trim();
+  if (!offer?.approvedPricing || offer.priceStatusByLocale?.[l] !== "CONFIRMED" || !label || !value) return null;
+  return { label, value };
+}
+
+/**
+ * Price texts for a public card or the legacy detail: the approved fare when authorized; otherwise the quote-on-request
+ * texts for a tour whose stored price must not be shown; null only when the stored price applies (no own tour).
+ */
 export function priceOnRequest(tripId: string, locale: string): { label: string; value: string } | null {
+  const approved = approvedPublicPrice(tripId, locale);
+  if (approved) return approved;
   if (!PRICE_ON_REQUEST_TRIP_IDS.has(tripId)) return null;
-  return LABELS[(locale === "en" || locale === "es" ? locale : "pt") as keyof typeof LABELS];
+  return LABELS[toLang(locale)];
 }

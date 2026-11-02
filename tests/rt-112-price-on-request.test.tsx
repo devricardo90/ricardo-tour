@@ -18,14 +18,16 @@ const PREMIUM = "cmljo0s1u0000t0zqa0bpd23p";
 const OWN_TOURS = [CRISTO, ROCINHA, CENTRO, PREMIUM];
 const trip = (id: string, priceCents: number) => ({ id, title: { pt: "Passeio", en: "Tour", es: "Tour" }, description: { pt: "Resumo" }, city: "Rio de Janeiro", priceCents, imageUrl: null });
 
-describe("local quote-on-request labels for the four tours (Owner, 18/10/2026)", () => {
-  it("applies the PT/EN/ES quote label to all four own tours", () => {
+describe("stored price of the four own tours never shown (Owner, 18/10/2026; approved fares 01/11/2026)", () => {
+  it("never uses the stored price of the four own tours; TOUR-04 keeps the quote label, the launch tours their approved fare", () => {
     expect([...PRICE_ON_REQUEST_TRIP_IDS]).toEqual(OWN_TOURS);
-    for (const id of OWN_TOURS) {
-      expect(priceOnRequest(id, "pt")?.value).toBe("Orçamento sob consulta");
-      expect(priceOnRequest(id, "en")?.value).toBe("Quote on request");
-      expect(priceOnRequest(id, "es")?.value).toBe("Presupuesto a consultar");
-    }
+    expect(priceOnRequest(PREMIUM, "pt")?.value).toBe("Orçamento sob consulta");
+    expect(priceOnRequest(PREMIUM, "en")?.value).toBe("Quote on request");
+    expect(priceOnRequest(PREMIUM, "es")?.value).toBe("Presupuesto a consultar");
+    // Owner 01/11/2026: public display of the approved fares authorized for the three launch tours (code tables only).
+    expect(priceOnRequest(CRISTO, "pt")).toEqual({ label: "Grupo de 4 adultos", value: "R$ 650/pessoa" });
+    expect(priceOnRequest(ROCINHA, "en")).toEqual({ label: "Group of 4 adults", value: "R$ 195/person" });
+    expect(priceOnRequest(CENTRO, "es")).toEqual({ label: "Grupo de 4 adultos · 4 h", value: "R$ 260/persona" });
   });
 
   it("public listing cards show the quote label instead of any stored amount for all four tours", () => {

@@ -23,10 +23,10 @@ const render = (offer: NonNullable<ReturnType<typeof buildPublicOffer>>, id: str
   renderToStaticMarkup(<TourDetailPrototype offer={offer} content={publicView(id, locale)} locale={locale} reviewMode={false} showProvisionalPrices={false} />).replace(/[  ]/g, " ");
 
 describe("Sprint 10 public tour presentation gate", () => {
-  it("covers only the three own tours and authorizes no public price yet", () => {
+  it("covers only the three own tours; public prices authorized for exactly those three (Owner 01/11/2026)", () => {
     expect([...PUBLIC_DESIGN_TRIP_IDS].sort()).toEqual([CRISTO, CENTRO, ROCINHA].sort());
     expect(PUBLIC_DESIGN_TRIP_IDS.has(PREMIUM)).toBe(false);
-    expect(PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS.size).toBe(0);
+    expect([...PRICE_PUBLICATION_AUTHORIZED_TRIP_IDS].sort()).toEqual([CRISTO, CENTRO, ROCINHA].sort());
   });
 
   it("publishes the design only for locales whose title and pitch are CONFIRMED", () => {
@@ -120,8 +120,8 @@ describe("Sprint 10 public tour presentation gate", () => {
     // A PROVISIONAL clip never goes public, even with verified rights.
     const provisionalClip = { ...PROTOTYPE_OFFER[ROCINHA], video: { ...PROTOTYPE_OFFER[ROCINHA].video!, status: "PROVISIONAL" as const } };
     expect(buildPublicOffer(provisionalClip, "pt", attestedView, { pricePublicationAuthorized: false })!.video).toBeNull();
-    // TOUR-01's clip is still PROVISIONAL (not reviewed by the Owner).
-    expect(PROTOTYPE_OFFER[CRISTO].video?.status).toBe("PROVISIONAL");
+    // Owner 01/11/2026: publication of the TOUR-01 Pão de Açúcar clip expressly authorized.
+    expect(PROTOTYPE_OFFER[CRISTO].video?.status).toBe("CONFIRMED");
   });
 
   it("renders the approved Rocinha clip on the public page: poster, no autoplay, no preload, mobile rendition, no chips", () => {
