@@ -141,11 +141,12 @@ function byLaunchOrder<T extends { id: string }>(trips: T[]) {
  * RT-116 (Owner, 28/10/2026): the catalog rows still point to legacy /images/trips covers of unknown origin, which must
  * never be shown again. The three own tours use their own OWNER_ATTESTED cover instead (same files as their galleries).
  * Code only: the rows are not changed (no hosted write; option R, Owner 01/11/2026, keeps it that way in the release).
+ * Owner 14/11/2026: TOUR-03 uses the approved Candelária photo (its gallery cover) instead of the Real Gabinete photo.
  */
 export const OWN_TOUR_COVERS: Readonly<Record<string, string>> = {
   cmlhxkpy9000028zq27rhytew: "/media/tours/cristo-pao-selaron/pao-01-IMG_1162-mirante.webp",
   cmli1a6im000034zqqzc9sppb: "/media/tours/favela-rocinha/rocinha-01-panorama-bandeira.jpg",
-  cmlibniq40000z4zqkbujnutt: "/media/tours/centro-historico-cultural/centro-historico-img-1337.webp",
+  cmlibniq40000z4zqkbujnutt: "/media/tours/centro-historico-cultural/centro-historico-img-1802.webp",
 };
 
 function withOwnCover<T extends { id: string; imageUrl?: string | null }>(row: T): T {

@@ -79,6 +79,7 @@ describe("public/ ships no orphan legacy media (Owner 30/10/2026)", { timeout: 1
     for (const file of ["images/ricardo-tour-logo.png", "cadastro/cadastur.png", "logos/logo-turismo.webp", "images/about/ricardo-guia-home.webp", "images/placeholder.svg"]) {
       expect(existsSync(path.join(pub, file)), file).toBe(true);
     }
-    expect(walk(path.join(pub, "media")).length).toBe(26);
+    // 25 since the Owner removed the Real Gabinete photo (TOUR-03 img-1337) from the gallery and the card (14/11/2026).
+    expect(walk(path.join(pub, "media")).length).toBe(25);
   });
 });

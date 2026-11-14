@@ -54,6 +54,21 @@ describe("Owner 01/11/2026, option R: approved card copy over untouched legacy r
     expect(LEGACY[2].title.pt).toBe("Confeitaria Colombo + City Tour Rio");
   });
 
+  it("each launch tour card uses its own approved cover; TOUR-03 uses the Candelária photo of its gallery (Owner 14/11/2026)", async () => {
+    const { getPublicTrips, getPublicTripById } = await import("@/lib/catalog/public-trips");
+    const { CENTRO_MEDIA_PREVIEW } = await import("@/lib/catalog/drafts/centro-historico-media");
+    const expected = {
+      cmlhxkpy9000028zq27rhytew: "/media/tours/cristo-pao-selaron/pao-01-IMG_1162-mirante.webp",
+      cmli1a6im000034zqqzc9sppb: "/media/tours/favela-rocinha/rocinha-01-panorama-bandeira.jpg",
+      cmlibniq40000z4zqkbujnutt: "/media/tours/centro-historico-cultural/centro-historico-img-1802.webp",
+    } as Record<string, string>;
+    for (const trip of await getPublicTrips()) expect(trip.imageUrl).toBe(expected[trip.id]);
+    expect((await getPublicTripById("cmlibniq40000z4zqkbujnutt"))?.imageUrl).toBe(expected.cmlibniq40000z4zqkbujnutt);
+    // Same file as the TOUR-03 gallery cover; the removed Real Gabinete photo is used nowhere in the catalog.
+    expect(CENTRO_MEDIA_PREVIEW.images.find((image) => image.isCover)?.src).toBe(expected.cmlibniq40000z4zqkbujnutt);
+    expect(JSON.stringify(await getPublicTrips())).not.toContain("img-1337");
+  });
+
   it("Home section and listing show only the approved names and fares, no old copy, old cover or stored price, in PT/EN/ES", async () => {
     const { ExperiencesInRioSection } = await import("@/components/experiences-in-rio-section");
     const { default: ToursPage } = await import("@/app/[locale]/(site)/tours/page");
