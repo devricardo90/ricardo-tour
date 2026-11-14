@@ -165,8 +165,8 @@ describe("RT-114 mock data integrity", () => {
     const record = MOCK_TOUR_CONTENT[id];
     const offer = PROTOTYPE_OFFER[id];
     expect(record.status).toBe("DRAFT");
+    // Owner 14/11/2026: the Real Gabinete photo (img-1337) left the gallery; the others keep positions 1–5.
     expect(record.images.map((image) => image.src)).toEqual([
-      "/media/tours/centro-historico-cultural/centro-historico-img-1337.webp",
       "/media/tours/centro-historico-cultural/centro-historico-img-1802.webp",
       "/media/tours/centro-historico-cultural/centro-historico-img-1328.webp",
       "/media/tours/centro-historico-cultural/centro-historico-img-1321.webp",
@@ -174,9 +174,13 @@ describe("RT-114 mock data integrity", () => {
       "/media/tours/centro-historico-cultural/centro-historico-img-1136.webp",
     ]);
     expect(record.images.every((image) => image.alt.pt && image.alt.en && image.alt.es)).toBe(true);
-    // Owner 28/10/2026: the six own photos are authorised; the unverified Museu do Amanhã photo left the selection.
+    // Owner 28/10/2026: own photos authorised; the unverified Museu do Amanhã photo left the selection.
     expect(record.images.every((image) => image.rightsStatus === "OWNER_ATTESTED")).toBe(true);
-    expect(record.images).toHaveLength(6);
+    expect(record.images).toHaveLength(5);
+    expect(record.images.map((image) => image.position)).toEqual([1, 2, 3, 4, 5]);
+    expect(record.images.filter((image) => image.isCover).map((image) => image.src)).toEqual(["/media/tours/centro-historico-cultural/centro-historico-img-1802.webp"]);
+    // Each remaining photo keeps the alt it had before the removal.
+    expect(record.images.map((image) => image.alt.pt)).toEqual(["Igreja da Candelária, no Centro do Rio", "Igreja histórica no Centro do Rio", "Palácio Tiradentes, no Centro do Rio", "Região comercial do SAARA", "Interior de igreja histórica no Centro do Rio"]);
     expect(toTourContentView(record, "pt", "public")).toBeNull();
     expect(record.itinerary).toHaveLength(6);
     expect(record.languages).toEqual(["pt", "es", "en"]);

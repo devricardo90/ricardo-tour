@@ -15,13 +15,12 @@ const RIGHTS = `Owner, 28/10/2026: own photo of Ricardo Tour, authorised for com
 
 // Owner, 28/10/2026 (RT-116): material without proven rights is out of the public selection. The Museu do Amanhã
 // photo (Pexels; photographer and licence never verified) was removed from the gallery and from the repository.
+// Owner, 14/11/2026: the Real Gabinete photo (img-1337, former position 0 and gallery cover) leaves the gallery, with no
+// replacement. The remaining photos keep their positions (1–5) so a content load touches only the removed rows; the
+// Candelária photo becomes the gallery cover. The Home/listing card cover (OWN_TOUR_COVERS) is a separate decision.
 const images: TourContentRecord["images"] = [
   {
-    position: 0, src: `${DIR}/centro-historico-img-1337.webp`, isCover: true, rightsStatus: "OWNER_ATTESTED", rightsNote: RIGHTS,
-    alt: { pt: "Fachada do Real Gabinete Português de Leitura, com o nome da instituição acima da entrada", en: "Facade of the Royal Portuguese Reading Room, with its name above the entrance", es: "Fachada del Real Gabinete Portugués de Lectura, con su nombre sobre la entrada" },
-  },
-  {
-    position: 1, src: `${DIR}/centro-historico-img-1802.webp`, isCover: false, rightsStatus: "OWNER_ATTESTED", rightsNote: RIGHTS,
+    position: 1, src: `${DIR}/centro-historico-img-1802.webp`, isCover: true, rightsStatus: "OWNER_ATTESTED", rightsNote: RIGHTS,
     alt: { pt: "Fachada da Igreja da Candelária no centro do Rio", en: "Facade of Candelária Church in central Rio", es: "Fachada de la iglesia de la Candelaria en el centro de Río" },
   },
   {

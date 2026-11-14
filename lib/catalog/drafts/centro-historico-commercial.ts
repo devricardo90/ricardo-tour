@@ -1,8 +1,9 @@
 import type { LocalizedText, TourContentRecord } from "@/lib/catalog/tour-content";
 import { CENTRO_MEDIA_PREVIEW } from "@/lib/catalog/drafts/centro-historico-media";
 
+// Matched by order (cover first, then position). Owner 14/11/2026: the Real Gabinete photo left the gallery, so its alt
+// left this list too; every remaining photo keeps the alt it had.
 const CENTRO_IMAGE_ALT = [
-  { pt: "Real Gabinete Português de Leitura, no Centro do Rio", en: "Royal Portuguese Reading Room in downtown Rio", es: "Real Gabinete Portugués de Lectura, en el centro de Río" },
   { pt: "Igreja da Candelária, no Centro do Rio", en: "Candelária Church in downtown Rio", es: "Iglesia de la Candelária, en el centro de Río" },
   { pt: "Igreja histórica no Centro do Rio", en: "Historic church in downtown Rio", es: "Iglesia histórica en el centro de Río" },
   { pt: "Palácio Tiradentes, no Centro do Rio", en: "Tiradentes Palace in downtown Rio", es: "Palacio Tiradentes, en el centro de Río" },
