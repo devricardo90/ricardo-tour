@@ -148,20 +148,7 @@ export async function applyLoad(prisma: PrismaClient, next: TourContentRecord, p
   if (plan.tripId !== next.tripId) throw new Error("plan was built for another trip");
   const tripId = next.tripId;
   const fields = {
-    source: next.source,
-    summary: jsonOrNull(next.summary),
-    description: jsonOrNull(next.description),
-    durationLabel: jsonOrNull(next.durationLabel),
-    meetingPoint: jsonOrNull(next.meetingPoint),
-    startTimeNote: jsonOrNull(next.startTimeNote),
-    languages: next.languages,
-    inclusions: jsonOrNull(next.inclusions),
-    exclusions: jsonOrNull(next.exclusions),
-    requirements: jsonOrNull(next.requirements),
-    accessibility: jsonOrNull(next.accessibility),
-    weatherPolicy: jsonOrNull(next.weatherPolicy),
-    operationalConditions: jsonOrNull(next.operationalConditions),
-    optionalServicesNote: jsonOrNull(next.optionalServicesNote),
+    ...contentRowData(next),
     status: "DRAFT" as const,
     approvedAt: null,
     approvedContentHash: null,
@@ -180,36 +167,71 @@ export async function applyLoad(prisma: PrismaClient, next: TourContentRecord, p
     const stops = next.itinerary.map((s) => s.position);
     await tx.tripItineraryStop.deleteMany({ where: { tripId, position: { notIn: stops } } });
     for (const s of next.itinerary) {
-      const data = { title: json(s.title) as Prisma.InputJsonValue, description: jsonOrNull(s.description), durationMinutes: s.durationMinutes ?? null };
+      const data = stopRowData(s);
       await tx.tripItineraryStop.upsert({ where: { tripId_position: { tripId, position: s.position } }, create: { id: `${tripId}_stop_${s.position}`, tripId, position: s.position, ...data }, update: data });
     }
 
     const faq = (next.faq ?? []).map((f, position) => ({ ...f, position }));
     await tx.tripFaqItem.deleteMany({ where: { tripId, position: { notIn: faq.map((f) => f.position) } } });
     for (const f of faq) {
-      const data = { question: f.question as Prisma.InputJsonValue, answer: f.answer as Prisma.InputJsonValue };
+      const data = faqRowData(f);
       await tx.tripFaqItem.upsert({ where: { tripId_position: { tripId, position: f.position } }, create: { id: `${tripId}_faq_${f.position}`, tripId, position: f.position, ...data }, update: data });
     }
 
     await tx.tripImage.deleteMany({ where: { tripId, position: { notIn: next.images.map((m) => m.position) } } });
     for (const m of next.images) {
-      const data = {
-        src: m.src,
-        alt: m.alt as Prisma.InputJsonValue,
-        isCover: m.isCover,
-        focalX: m.focalX ?? null,
-        focalY: m.focalY ?? null,
-        rightsStatus: m.rightsStatus,
-        rightsNote: m.rightsNote ?? null,
-        credit: jsonOrNull(m.credit),
-        mediaType: m.mediaType ?? ("IMAGE" as const),
-        posterSrc: m.posterSrc ?? null,
-        mobileSrc: m.mobileSrc ?? null,
-        durationSeconds: m.durationSeconds ?? null,
-      };
+      const data = mediaRowData(m);
       await tx.tripImage.upsert({ where: { tripId_position: { tripId, position: m.position } }, create: { id: `${tripId}_media_${m.position}`, tripId, position: m.position, ...data }, update: data });
     }
   }, { timeout: 30_000, maxWait: 10_000 });
+}
+
+/** The TripContent text columns written for a record (shared by the full load and the diff-only update). */
+export function contentRowData(next: TourContentRecord) {
+  return {
+    source: next.source,
+    summary: jsonOrNull(next.summary),
+    description: jsonOrNull(next.description),
+    durationLabel: jsonOrNull(next.durationLabel),
+    meetingPoint: jsonOrNull(next.meetingPoint),
+    startTimeNote: jsonOrNull(next.startTimeNote),
+    languages: next.languages,
+    inclusions: jsonOrNull(next.inclusions),
+    exclusions: jsonOrNull(next.exclusions),
+    requirements: jsonOrNull(next.requirements),
+    accessibility: jsonOrNull(next.accessibility),
+    weatherPolicy: jsonOrNull(next.weatherPolicy),
+    operationalConditions: jsonOrNull(next.operationalConditions),
+    optionalServicesNote: jsonOrNull(next.optionalServicesNote),
+  };
+}
+
+/** The TripItineraryStop columns written for one stop. */
+export function stopRowData(s: TourContentRecord["itinerary"][number]) {
+  return { title: json(s.title) as Prisma.InputJsonValue, description: jsonOrNull(s.description), durationMinutes: s.durationMinutes ?? null };
+}
+
+/** The TripFaqItem columns written for one question. */
+export function faqRowData(f: NonNullable<TourContentRecord["faq"]>[number]) {
+  return { question: f.question as Prisma.InputJsonValue, answer: f.answer as Prisma.InputJsonValue };
+}
+
+/** The TripImage columns written for one media item (shared by the full load and the media-only update). */
+export function mediaRowData(m: TourContentRecord["images"][number]) {
+  return {
+    src: m.src,
+    alt: m.alt as Prisma.InputJsonValue,
+    isCover: m.isCover,
+    focalX: m.focalX ?? null,
+    focalY: m.focalY ?? null,
+    rightsStatus: m.rightsStatus,
+    rightsNote: m.rightsNote ?? null,
+    credit: jsonOrNull(m.credit),
+    mediaType: m.mediaType ?? ("IMAGE" as const),
+    posterSrc: m.posterSrc ?? null,
+    mobileSrc: m.mobileSrc ?? null,
+    durationSeconds: m.durationSeconds ?? null,
+  };
 }
 
 /** Fingerprint helper re-exported for scripts (e.g. to show what an approval would bind to). */
