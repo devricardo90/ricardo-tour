@@ -4,29 +4,29 @@
  * Default is a DRY RUN (plan + per-field diff per tour, no write). `--apply` writes each tour in its own transaction,
  * always as DRAFT (loading is not an approval). `--trip=<id>` limits the run to one launch tour.
  * `--allow-replace-approved` is required to overwrite OWNER_APPROVED content (the approval is then invalidated).
- * Refuses any database other than a local throw-away one (localhost:5433/rt119_* or rt_s11_*): running against the hosted
- * database is NOT authorized (it belongs to the release procedure: backup, dry run reviewed by the Owner, written
- * authorization; see docs/ops/rt-s11-catalog-release-procedure.md). Writes only the RT-113 content tables, never Trip.
+ * By default refuses any database other than a local throw-away one (localhost:5433/rt119_* or rt_s11_*). The isolated
+ * preview database is accepted only as described in lib/catalog/content-script-target.ts (RT_DB_TARGET=preview +
+ * --target=preview + allowlisted host + one --trip); every preview run needs the Owner's written authorization (dry run
+ * reviewed first; see docs/ops/rt-s11-catalog-release-procedure.md). Production is always refused. Writes only the RT-113
+ * content tables, never Trip.
  * Usage: DATABASE_URL=<local rt119_*|rt_s11_*> npx tsx scripts/rt-119-load-content.ts [--apply] [--trip=<id>] [--allow-replace-approved]
  */
 import { prisma } from "@/lib/prisma";
 import { loadTourContentRecord, contentFingerprint } from "@/lib/catalog/tour-content";
 import { applyLoad, launchLoadRecord, LAUNCH_LOAD_TRIP_IDS, planLoad } from "@/lib/catalog/content-load";
+import { resolveContentScriptTarget } from "@/lib/catalog/content-script-target";
 import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
-const url = new URL(process.env.DATABASE_URL ?? "");
-if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "5433" || !/^\/(rt119_|rt_s11_)/.test(url.pathname) || url.searchParams.has("host") || url.searchParams.has("hostaddr") || /neon|aws|vercel|supabase/i.test(url.href)) {
-  throw new Error("Refusing to run: only a local throw-away database localhost:5433/rt119_* or rt_s11_* is allowed (hosted load not authorized)");
-}
+// Default: local throw-away database only. Preview only when declared twice, allowlisted and limited to one tour; never production.
+const { target, trip: only } = resolveContentScriptTarget({ env: process.env, argv: process.argv, launchTripIds: LAUNCH_LOAD_TRIP_IDS, script: "scripts/rt-119-load-content.ts" });
 assertDatabaseAccess({ operation: "write", label: "scripts/rt-119-load-content.ts" }); // RT-104: deny by default
 
 const apply = process.argv.includes("--apply");
 const allowReplaceApproved = process.argv.includes("--allow-replace-approved");
-const only = process.argv.find((a) => a.startsWith("--trip="))?.slice("--trip=".length);
-if (only && !(LAUNCH_LOAD_TRIP_IDS as readonly string[]).includes(only)) throw new Error(`--trip=${only} is not a launch tour`);
 
 async function main() {
   const ids = only ? [only] : [...LAUNCH_LOAD_TRIP_IDS];
+  console.log(JSON.stringify({ target, trips: ids }));
   // Plan every tour first: one refused plan stops the whole run before any write.
   const plans = [];
   for (const id of ids) {

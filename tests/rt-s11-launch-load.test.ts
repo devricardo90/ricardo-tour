@@ -112,8 +112,13 @@ describe("Owner 01/11/2026, option R: approved card copy from code, no Trip writ
     expect(approve).not.toMatch(/tripCopyDiff|s11-launch-trip-copy/);
     expect(approve).toContain("--confirm-owner-approval");
     expect(approve).toContain("Trip public fields changed during the approval");
+    // Owner 15/11/2026 (A1): the default block lives in lib/catalog/content-script-target.ts (local only by default, preview
+    // only when declared twice + allowlisted + one tour, production always refused; tests/rt-s11-content-script-target.test.ts).
+    const target = read("lib/catalog/content-script-target.ts");
+    expect(target).toMatch(/only a local throw-away database .* is allowed by default/);
+    expect(target).toContain("production is never a target of this script");
     for (const file of ["scripts/rt-119-load-content.ts", "scripts/s11-approve-launch-content.ts"]) {
-      expect(read(file)).toMatch(/Refusing to run: only a local throw-away database/);
+      expect(read(file)).toContain("resolveContentScriptTarget(");
       expect(read(file)).not.toMatch(/\.trip\.(update|upsert|create|delete)/);
     }
     expect(read("lib/catalog/content-load.ts")).not.toMatch(/\.trip\.(update|upsert|create|delete)/);

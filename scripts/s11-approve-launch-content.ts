@@ -8,28 +8,31 @@
  * approved card copy from code), so there is no Trip step before the approval. This script never writes Trip either:
  * it prints a fingerprint of the Trip public fields before and after, and the run fails if they differ.
  * Default is a DRY RUN (what would be approved, no write). Writing needs `--apply --confirm-owner-approval`.
- * Refuses any database other than a local throw-away one (localhost:5433/rt_s11_* or rt119_*): the hosted approval act
- * belongs to the release procedure and needs the Owner's written authorization.
- * Usage: DATABASE_URL=<local rt_s11_*> npx tsx scripts/s11-approve-launch-content.ts [--apply --confirm-owner-approval]
+ * `--trip=<id>` limits the act to one launch tour (the other tours are not written).
+ * By default refuses any database other than a local throw-away one (localhost:5433/rt_s11_* or rt119_*). The isolated
+ * preview database is accepted only as described in lib/catalog/content-script-target.ts (declared twice, allowlisted,
+ * one --trip) and only with the Owner's written authorization. Production is always refused.
+ * Usage: DATABASE_URL=<local rt_s11_*> npx tsx scripts/s11-approve-launch-content.ts [--trip=<id>] [--apply --confirm-owner-approval]
  */
 import { createHash } from "node:crypto";
 import { prisma } from "@/lib/prisma";
 import { LAUNCH_LOAD_TRIP_IDS } from "@/lib/catalog/content-load";
 import { approveTourContent } from "@/lib/catalog/content-approval";
 import { contentFingerprint, loadTourContentRecord, validateTourContent } from "@/lib/catalog/tour-content";
+import { resolveContentScriptTarget } from "@/lib/catalog/content-script-target";
 import { assertDatabaseAccess } from "../lib/db/guard-runtime.mjs";
 
-const url = new URL(process.env.DATABASE_URL ?? "");
-if (!["localhost", "127.0.0.1"].includes(url.hostname) || url.port !== "5433" || !/^\/(rt_s11_|rt119_)/.test(url.pathname) || url.searchParams.has("host") || url.searchParams.has("hostaddr") || /neon|aws|vercel|supabase/i.test(url.href)) {
-  throw new Error("Refusing to run: only a local throw-away database localhost:5433/rt_s11_* or rt119_* is allowed (hosted approval not authorized)");
-}
+// Default: local throw-away database only. Preview only when declared twice, allowlisted and limited to one tour; never production.
+const { target, trip: only } = resolveContentScriptTarget({ env: process.env, argv: process.argv, launchTripIds: LAUNCH_LOAD_TRIP_IDS, script: "scripts/s11-approve-launch-content.ts" });
+const ids: string[] = only ? [only] : [...LAUNCH_LOAD_TRIP_IDS];
 const apply = process.argv.includes("--apply");
 if (apply && !process.argv.includes("--confirm-owner-approval")) throw new Error("--apply requires --confirm-owner-approval (the approval is an explicit Owner act)");
 assertDatabaseAccess({ operation: apply ? "write" : "read", label: "scripts/s11-approve-launch-content.ts" }); // RT-104
 
 async function main() {
+  console.log(JSON.stringify({ target, trips: ids }));
   const problems: string[] = [];
-  for (const id of LAUNCH_LOAD_TRIP_IDS) {
+  for (const id of ids) {
     const trip = await prisma.trip.findUnique({ where: { id }, select: { id: true } });
     const record = await loadTourContentRecord(id);
     if (!trip) problems.push(`${id}: Trip row missing`);
@@ -51,7 +54,7 @@ async function main() {
     return;
   }
   const before = await tripPublicFieldsHash();
-  for (const id of LAUNCH_LOAD_TRIP_IDS) {
+  for (const id of ids) {
     const result = await approveTourContent(prisma, id);
     console.log(`approved ${id}: fingerprint ${result.fingerprint}, media authorized ${result.authorizedMedia}, not authorized ${result.unauthorizedMedia}`);
   }
