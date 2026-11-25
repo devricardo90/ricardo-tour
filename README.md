@@ -1,158 +1,120 @@
-# Rick Travel
+# Ricardo Tour
 
-Rick Travel is a production tourism web platform for showcasing tours, handling booking requests, and managing basic admin operations for a real tourism business.
+Ricardo Tour is a multilingual tourism platform built for a travel business in Rio de Janeiro, Brazil. Travelers can explore guided experiences, compare tour details, and send a request to the team.
 
-[Live demo](https://rick-travel.vercel.app)
+## Project Overview
 
-![Rick Travel production showcase](docs/assets/rick-travel-hero.png)
+Ricardo Souza developed the application as a full-stack product for the business. It combines a localized storefront, server-side workflows for tour inquiries and reservations, and a protected administration area.
 
-## Overview
+## Live Website
 
-Rick Travel is a real tourism application used as both a product foundation and a professional portfolio project. It is not a generic clone or isolated study project: the repository contains the public tourism experience, booking flow, authentication, protected admin area, operational documentation, and validation evidence for a production deployment.
+**[Visit ricardotour.com](https://www.ricardotour.com/en)** · [Tour catalog](https://www.ricardotour.com/en/tours) · [Português](https://www.ricardotour.com/pt) · [Español](https://www.ricardotour.com/es)
 
-The project is intentionally treated as an evolving product. The current goal is to keep the public booking journey stable while expanding administrative capabilities in controlled slices.
+## Application Screenshots
 
-## What the project does
+![Ricardo Tour English homepage on desktop, showing the globe at 4% journey progress](docs/assets/screenshots/production-home-desktop.webp)
 
-- Public tour catalog
-- Tour detail pages with localized public routes
-- Booking request flow for authenticated users
-- Email/password authentication through Better Auth
-- Protected admin area
-- Admin tour visibility
-- Admin bookings management
-- Booking confirmation and cancellation actions for admins
-- Contact submissions visibility in the protected admin area
+*English homepage at 4% journey progress, desktop viewport 1440 × 900.*
 
-## Current Production Status
+| Mobile homepage | Tour details |
+| :--: | :--: |
+| <img src="docs/assets/screenshots/production-home-mobile.webp" width="215" alt="Ricardo Tour English homepage on mobile, showing the globe at 4% journey progress"> | <img src="docs/assets/screenshots/production-tour-detail.webp" width="560" alt="Christ the Redeemer and Sugarloaf tour page with price and contact action"> |
+| English homepage at 4%, 390 × 844 | Production, 1440 × 900 |
 
-- Production app is deployed on Vercel.
-- Public tour browsing is validated.
-- Booking request flow exists and has been validated through the manual-confirmation product path.
-- Admin area is protected.
-- Admin booking confirm/cancel flow exists.
-- Contact submissions can be viewed in the protected admin area.
-- Some visual, content, and operational polish may continue as the product evolves.
+## Business Context
 
-The project is production-oriented, but it should still be read as a real product under active improvement rather than a finished commercial platform with every workflow fully automated.
+Ricardo Tour offers guided experiences and personalized travel support in Rio de Janeiro. The website gives travelers a place to research itineraries and gives the team the information it needs to follow up in its day-to-day operations.
 
-## Key Validated Flows
+## Key Features
 
-- Public homepage loads
-- Tour catalog and public navigation work
-- Tour detail pages open
-- Booking request flow works
-- Login and admin protection work
-- Admin dashboard and admin routes are protected
-- Admin bookings list is available
-- Admin can confirm pending bookings
-- Admin can cancel eligible bookings
-- Admin can view contact submissions
+- **Public storefront** with a cinematic introduction to Rio, a tour catalog, and detail pages showing itineraries, inclusions, and pricing where published.
+- **Tour inquiries** with a public request form and a WhatsApp contact option on the tour detail page.
+- **Account and administration features** implemented in the repository, including sign-in, a customer reservations area, and protected tools for tours, bookings, and contact submissions.
 
-## Live Demo
+## Technology Stack
 
-- **Web App:** [https://rick-travel.vercel.app](https://rick-travel.vercel.app)
+| Area | Technology |
+| --- | --- |
+| Runtime and UI | Node.js 22, Next.js 16.2.4 (App Router), React 19.2.0 |
+| Language and styling | TypeScript 5.9.3, Tailwind CSS 4.1.16 |
+| Data | PostgreSQL, Prisma 7.8.0 |
+| Authentication and localization | Better Auth 1.5.6, next-intl 4.9.1 |
+| Quality and hosting | ESLint, Vitest 4.1.5, Playwright 1.59.1, Vercel |
 
-## Tech Stack
+Dependency versions reflect the npm lockfile for this repository.
 
-- Next.js App Router
-- React
-- TypeScript
-- Tailwind CSS
-- Prisma
-- PostgreSQL / Neon
-- Better Auth
-- Vercel
-- Server Actions
+## System Architecture
 
-## Architecture
+| Path | Responsibility |
+| --- | --- |
+| `app/[locale]/(site)/` | Localized storefront and tour catalog |
+| `app/[locale]/(public)/reservas/` | Authenticated customer reservations |
+| `app/[locale]/admin/` | Protected tools for tours, bookings, and contacts |
+| `app/actions/` and `app/api/` | Server Actions and Route Handlers |
+| `lib/services/`, `lib/auth.ts`, and `lib/authz.ts` | Business logic, sessions, and authorization |
+| `prisma/` | PostgreSQL schema and migration history |
+| `i18n/` and `messages/` | Locale routing and interface copy |
 
-```text
-app/
-  [locale]/(public)/  Public localized tourism routes
-  [locale]/admin/     Protected admin area
-  actions/            Server Actions for admin and contact workflows
-  api/                Public and authenticated API routes
-lib/
-  auth.ts             Better Auth server configuration
-  auth-client.ts      Client-side auth integration
-  authz.ts            Session and admin authorization guards
-  services/           Business and data services
-prisma/
-  schema.prisma       Prisma data model
-  migrations/         Database migrations
-docs/ops/             Operational evidence and execution tracking
+## Internationalization
+
+The public interface supports Portuguese, English, and Spanish. Portuguese is the default locale. Localized routes and language metadata support navigation and discovery across the three versions. Tour descriptions depend on the translations available for each listing.
+
+## Authentication & Security
+
+Better Auth provides email and password sign-in and session management. Server-side guards enforce administrator access to protected operations. The server controls role assignment and validates redirect destinations within the site.
+
+## Booking Management
+
+1. A traveler opens a tour and submits a request or contacts the team on WhatsApp.
+2. The public form records a tour inquiry. The team follows up to arrange dates and details.
+3. In the separate account-based reservation workflow, customers can view their bookings. Authorized staff can review and confirm pending bookings or cancel eligible bookings.
+
+## Getting Started
+
+Use Node.js 22, npm, and a local PostgreSQL database. The repository includes a Docker Compose configuration for PostgreSQL.
+
+```sh
+npm ci
 ```
 
-The public web routes handle the tourism storefront, tour discovery, booking journey, and localized content. The authentication and authorization layer protects private user and admin areas. Prisma owns the data access layer, PostgreSQL stores product and operational data, and Vercel runs the deployed Next.js application against managed environment configuration.
+Copy [`.env.example`](.env.example) to `.env` and set `DATABASE_URL`, `BETTER_AUTH_SECRET`, and `BETTER_AUTH_URL` for your local environment. Use `http://localhost:3000` as the auth URL for the default development port.
 
-## Delivery Discipline - Protocolo Rick
+With `DATABASE_URL` pointing to your local development database, apply the checked-in migrations and start the application.
 
-This project follows the Protocolo Rick execution model:
-
-- No implementation starts without minimum discovery and planning artifacts
-- Backlog is treated as the source of truth
-- Documentation evolves together with code
-- Features are delivered in controlled slices with explicit validation criteria
-- Deploy decisions, scope changes, and deferred items are documented before execution
-
-Source of truth:
-
-- [docs/ops/backlog.md](docs/ops/backlog.md)
-- [docs/ops/status.md](docs/ops/status.md)
-
-## Local Development
-
-### Requirements
-
-- Node.js 22
-- npm
-- PostgreSQL-compatible database for full local runtime behavior
-
-### Install and Run
-
-```powershell
-npm install
+```sh
+npx prisma migrate deploy
 npm run dev
 ```
 
-Local development requires environment variables for database access, authentication, email/provider configuration, and deployment-specific URLs. Use `.env.example` as the reference contract and do not commit real `.env` files or production secrets.
+Open `http://localhost:3000`. A fresh database needs tour data before the catalog can display tours.
 
-### Build and Validate
+## Testing & Quality
 
-```powershell
-npm run build
+```sh
 npm run lint
 npm run typecheck
 npm test
-```
-
-`npm install` runs Prisma generation through the configured `postinstall` script. Prisma migrations and seed execution should only be run against an explicitly selected local or controlled environment.
-
-## Useful Commands
-
-```powershell
-npm run dev
 npm run build
-npm run lint
-npm run typecheck
-npm test
-npm run test:e2e
-npm run check:env -- --target=local
-npm run check:db
-npm run optimize-images
 ```
 
-Some commands depend on a correctly configured database and provider environment.
+Use `npx playwright install chromium` to install the browser for the public suite. Run `npm run test:e2e:public` against a running instance by setting `PLAYWRIGHT_BASE_URL`, for example `http://localhost:3000`. The suite checks public navigation and pages without submitting forms. Run `npm run test:e2e` for the broader suite with an isolated test database and configured test accounts.
 
-## Limitations
+## Deployment
 
-- Production-oriented portfolio project
-- Admin workflow is intentionally basic and evolving
-- Payment processing is not part of the active validated MVP flow
-- External provider behavior depends on environment configuration
-- Some content and images may continue to be refined
+| Environment | Purpose |
+| --- | --- |
+| Production | Official public site hosted on Vercel at [ricardotour.com](https://www.ricardotour.com/en). |
+| Preview | Vercel review environment for branch changes. Availability depends on the branch and access permissions. |
+| Local | Next.js development server and a developer-managed database. |
+
+## Project Roadmap
+
+| Status | Scope |
+| --- | --- |
+| Live | Multilingual public site, tour discovery, and tour inquiry entry points. |
+| In development | Preparing the commercial catalog for the operator’s three own tours. |
+| Planned | Publishing the updated catalog as tour content, translations, and operational readiness are approved. |
 
 ## Author
 
-Ricardo Souza | [devricardo90](https://github.com/devricardo90)
+**Ricardo Souza** · Full-stack developer · [GitHub](https://github.com/devricardo90)
